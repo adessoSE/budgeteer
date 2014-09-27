@@ -5,7 +5,7 @@
     <title>AdminLTE | Widgets</title>
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
-    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet"
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet"
           type="text/css"/>
     <!-- Ionicons -->
     <link href="//code.ionicframework.com/ionicons/1.5.2/css/ionicons.min.css" rel="stylesheet" type="text/css"/>
@@ -126,11 +126,10 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="box box-primary">
-                        <div class="box-header">
-                            <h3 class="box-title">Chart View
-                                <small>Selected budgets burned in the last 12 weeks</small>
-                            </h3>
+                        <div class="box-header" style="cursor: move;">
+                            <i class="fa fa-line-chart"></i>
 
+                            <h3 class="box-title">Budget burned in the last 12 weeks</h3>
                             <div class="box-tools pull-right">
                                 <button class="btn btn-default btn-sm" data-widget="collapse"><i
                                         class="fa fa-minus"></i></button>
@@ -148,11 +147,9 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="box box-primary">
-                        <div class="box-header">
-                            <h3 class="box-title">List View
-                                <small>Selected budgets burned each week for all time</small>
-                            </h3>
-
+                        <div class="box-header" style="cursor: move;">
+                            <i class="fa fa-list"></i>
+                            <h3 class="box-title">Budget burned in all time</h3>
                             <div class="box-tools pull-right">
                                 <button class="btn btn-default btn-sm" data-widget="collapse"><i
                                         class="fa fa-minus"></i></button>
@@ -173,7 +170,7 @@
                                 </thead>
                                 <tbody>
                                 <tr>
-                                    <td>Week #39</td>
+                                    <td>2014 Week #39</td>
                                     <td>01.09.2014 - 07.09.2014</td>
                                     <td>80.00</td>
                                     <td>7.900</td>
@@ -181,7 +178,7 @@
                                     <td>0</td>
                                 </tr>
                                 <tr>
-                                    <td>Week #40</td>
+                                    <td>2014 Week #40</td>
                                     <td>01.09.2014 - 07.09.2014</td>
                                     <td>80.00</td>
                                     <td>7.900</td>
@@ -189,7 +186,7 @@
                                     <td class="text-red">-100</td>
                                 </tr>
                                 <tr>
-                                    <td>Week #41</td>
+                                    <td>2014 Week #41</td>
                                     <td>01.09.2014 - 07.09.2014</td>
                                     <td>80.00</td>
                                     <td>7.900</td>
@@ -197,7 +194,7 @@
                                     <td class="text-red">-100</td>
                                 </tr>
                                 <tr>
-                                    <td>Week #42</td>
+                                    <td>2014 Week #42</td>
                                     <td>01.09.2014 - 07.09.2014</td>
                                     <td>80.00</td>
                                     <td>7.900</td>
@@ -205,7 +202,7 @@
                                     <td class="text-red">-100</td>
                                 </tr>
                                 <tr>
-                                    <td>Week #43</td>
+                                    <td>2014 Week #43</td>
                                     <td>01.09.2014 - 07.09.2014</td>
                                     <td>80.00</td>
                                     <td>7.900</td>
@@ -294,7 +291,7 @@
                 column: {
                     stacking: 'normal',
                     events: {
-                        legendItemClick: function(){
+                        legendItemClick: function () {
                             return false;
                         }
                     }
@@ -305,7 +302,7 @@
                         enabled: false
                     },
                     events: {
-                        legendItemClick: function(){
+                        legendItemClick: function () {
                             return false;
                         }
                     }

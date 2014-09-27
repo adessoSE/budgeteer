@@ -1,0 +1,16 @@
+.showcase {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.showcase h3 {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 0 0 10px 0;
+    white-space: nowrap;
+    padding: 0;
+}
+
+.push-right{
+    margin-left: 20px;
+}
