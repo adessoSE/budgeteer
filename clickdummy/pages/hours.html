@@ -94,7 +94,8 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            Budget Details
+            Hours
+            <small>Filter and aggregate the hours booked by project members</small>
             <div class="btn-group" style="margin-left:20px">
                 <button type="button" class="btn btn-default">Select Display Unit</button>
                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
@@ -126,7 +127,7 @@
             <div class="col-md-12">
                 <div class="box box-primary">
                     <div class="box-header">
-                        <h3 class="box-title">Implementation of Feature XYZ</h3>
+                        <h3 class="box-title">List of booked hours</h3>
 
                         <div class="box-tools pull-right">
                             <button class="btn btn-default btn-sm" data-widget="collapse"><i
@@ -134,145 +135,100 @@
                         </div>
                     </div>
                     <div class="box-body">
+
                         <div class="row">
-                            <div class="progress" style="margin-left:20px; margin-right:20px">
-                                <div class="progress-bar progress-bar-green" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
-                                    <span class="sr-only">40% Complete (success)</span>
+                            <div class="col-xs-3">
+                                <div class="form-group" style="width:200px">
+                                    <label>Name Filter</label>
+                                    <select class="form-control">
+                                        <option>Tom Hombergs</option>
+                                        <option>Martha Pfahl</option>
+                                        <option>Rainer Zufall</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-xs-9">
+                                <div class="form-group">
+                                    <label>Date Range Filter</label>
+
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </div>
+                                        <input type="text" class="form-control pull-right" id="dateRangePicker">
+                                    </div>
+                                    <!-- /.input group -->
                                 </div>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-xs-4">
-                                <dl>
-                                    <dt>Full Budget</dt>
-                                    <dd>€300.000</dd>
-                                </dl>
-                                <dl>
-                                    <dt>Starting Date</dt>
-                                    <dd>01.01.2014</dd>
-                                </dl>
-                            </div>
-                            <div class="col-xs-4">
-                                <dl>
-                                    <dt>Budget Spent</dt>
-                                    <dd>€255.000 (85%)</dd>
-                                </dl>
-                                <dl>
-                                    <dt>Last updated</dt>
-                                    <dd>25.09.2014 15:00</dd>
-                                </dl>
-                            </div>
-                            <div class="col-xs-4">
-                                <dl>
-                                    <dt>Budget Remaining</dt>
-                                    <dd>€45.000 (15%)</dd>
-                                </dl>
-                                <dl>
-                                    <dt>Average Daily Rate</dt>
-                                    <dd>€1150</dd>
-                                </dl>
+                            <div class="col-xs-12">
+
+                                <p class="pull-right">Total burned budget with current filter: <strong>€120.000</strong>
+                                </p>
+
+                                <table id="hoursTable" class="table table-bordered table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Daily Rate</th>
+                                        <th>Date</th>
+                                        <th>Hours</th>
+                                        <th>Budget Burned (€)</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>Tom Hombergs</td>
+                                        <td>€790</td>
+                                        <td>25.09.2014</td>
+                                        <td>8.00</td>
+                                        <td>790</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Tom Hombergs</td>
+                                        <td>€790</td>
+                                        <td>26.09.2014</td>
+                                        <td>4.5</td>
+                                        <td>600</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Rainer Zufall</td>
+                                        <td>€1250</td>
+                                        <td>27.09.2014</td>
+                                        <td>11.00</td>
+                                        <td>600</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Martha Pfahl</td>
+                                        <td>€650</td>
+                                        <td>28.09.2014</td>
+                                        <td>8.50</td>
+                                        <td>600</td>
+                                    </tr>
+
+                                    </tbody>
+                                    <tfoot>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Daily Rate</th>
+                                        <th>Date</th>
+                                        <th>Hours</th>
+                                        <th>Budget Burned</th>
+                                    </tr>
+                                    </tfoot>
+                                </table>
+
                             </div>
                         </div>
-
-                        <span class="badge bg-light-blue">Side Project</span>
-                        <span class="badge bg-light-blue">Contract #4711</span>
-                        <span class="badge bg-light-blue">Private</span>
-
                     </div>
-                    <!-- /.box-body -->
+
                 </div>
+                <!-- /.box-body -->
             </div>
         </div>
-
-        <div class="row">
-            <div class="col-lg-4 col-xs-6">
-                <!-- small box -->
-                <div class="small-box bg-aqua">
-                    <div class="inner">
-                        <h3><a href="#" style="color:white">Week Report</a></h3>
-                        <br/>
-                        <br/>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-person-stalker"></i>
-                    </div>
-                    <a href="#" class="small-box-footer">
-                       Monitor the budget aggregated by week <i class="fa fa-arrow-circle-right"></i>
-                    </a>
-                </div>
-            </div>
-            <!-- ./col -->
-            <div class="col-lg-4 col-xs-6">
-                <!-- small box -->
-                <div class="small-box bg-green">
-                    <div class="inner">
-                        <h3><a href="hours.html" style="color:white">Gap Report</a></h3>
-                        <br/>
-                        <br/>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-calculator"></i>
-                    </div>
-                    <a href="hours.html" class="small-box-footer">
-                       Compare target hours with actual hours booked <i class="fa fa-arrow-circle-right"></i>
-                    </a>
-                </div>
-            </div>
-            <!-- ./col -->
-            <div class="col-lg-4 col-xs-6">
-                <!-- small box -->
-                <div class="small-box bg-yellow">
-                    <div class="inner">
-                        <h3><a href="hours.html" style="color:white">Hours</a></h3>
-                        <br/>
-                        <br/>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-clock"></i>
-                    </div>
-                    <a href="hours.html#" class="small-box-footer">
-                        List all Hours booked on this Budget <i class="fa fa-arrow-circle-right"></i>
-                    </a>
-                </div>
-            </div>
-            <!-- ./col -->
-        </div>
-        <div class="row">
-            <div class="col-lg-4 col-xs-6">
-                <!-- small box -->
-                <div class="small-box bg-aqua">
-                    <div class="inner">
-                        <h3><a href="#" style="color:white">Month Report</a></h3>
-                        <br/>
-                        <br/>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-person-stalker"></i>
-                    </div>
-                    <a href="#" class="small-box-footer">
-                        Monitor the budget aggregated by month <i class="fa fa-arrow-circle-right"></i>
-                    </a>
-                </div>
-            </div>
-            <!-- ./col -->
-            <div class="col-lg-4 col-xs-6">
-                <!-- small box -->
-                <div class="small-box bg-green">
-                    <div class="inner">
-                        <h3><a href="hours.html" style="color:white">Admin</a></h3>
-                        <br/>
-                        <br/>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-calculator"></i>
-                    </div>
-                    <a href="hours.html" class="small-box-footer">
-                        Edit the Budget master data <i class="fa fa-arrow-circle-right"></i>
-                    </a>
-                </div>
-            </div>
-            <!-- ./col -->
-        </div>
+</div>
 
 </section>
 <!-- /.content -->
