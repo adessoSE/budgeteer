@@ -91,187 +91,204 @@
 
 <!-- Right side column. Contains the navbar and content of the page -->
 <aside class="right-side">
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-        <h1>
-            Budget Details
-            <div class="btn-group" style="margin-left:20px">
-                <button type="button" class="btn btn-default">Select Display Unit</button>
-                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                    <span class="caret"></span>
-                    <span class="sr-only">Toggle Dropdown</span>
-                </button>
-                <ul class="dropdown-menu" role="menu">
-                    <li><a href="#">Euros (€)</a></li>
-                    <li><a href="#">Man-Days (€500)</a></li>
-                    <li><a href="#">Man-Days (€650)</a></li>
-                    <li><a href="#">Man-Days (€790)</a></li>
-                    <li><a href="#">Man-Days (€1250)</a></li>
-                </ul>
-            </div>
-        </h1>
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Budget Details
+        <div class="btn-group" style="margin-left:20px">
+            <button type="button" class="btn btn-default">Select Display Unit</button>
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                <span class="caret"></span>
+                <span class="sr-only">Toggle Dropdown</span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+                <li><a href="#">Euros (€)</a></li>
+                <li><a href="#">Man-Days (€500)</a></li>
+                <li><a href="#">Man-Days (€650)</a></li>
+                <li><a href="#">Man-Days (€790)</a></li>
+                <li><a href="#">Man-Days (€1250)</a></li>
+            </ul>
+        </div>
+    </h1>
 
-        <ol class="breadcrumb">
-            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-            <li class="active">
-                Hours Overview
-            </li>
-        </ol>
-    </section>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">
+            Hours Overview
+        </li>
+    </ol>
+</section>
 
-    <!-- Main content -->
-    <section class="content">
+<!-- Main content -->
+<section class="content">
 
-        <div class="row">
-            <div class="col-md-12">
-                <div class="box box-primary">
-                    <div class="box-header">
-                        <h3 class="box-title">Implementation of Feature XYZ</h3>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-primary">
+                <div class="box-header">
+                    <h3 class="box-title">Implementation of Feature XYZ</h3>
 
-                        <div class="box-tools pull-right">
-                            <button class="btn btn-default btn-sm" data-widget="collapse"><i
-                                    class="fa fa-minus"></i></button>
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-default btn-sm" data-widget="collapse"><i
+                                class="fa fa-minus"></i></button>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <div class="row">
+                        <div class="progress" style="margin-left:20px; margin-right:20px">
+                            <div class="progress-bar progress-bar-green" role="progressbar" aria-valuenow="40"
+                                 aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+                                <span class="sr-only">40% Complete (success)</span>
+                            </div>
                         </div>
                     </div>
-                    <div class="box-body">
-                        <div class="row">
-                            <div class="progress" style="margin-left:20px; margin-right:20px">
-                                <div class="progress-bar progress-bar-green" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
-                                    <span class="sr-only">40% Complete (success)</span>
+                    <div class="row">
+                        <div class="col-xs-4">
+                            <dl>
+                                <dt>Full Budget</dt>
+                                <dd>€300.000</dd>
+                            </dl>
+                            <dl>
+                                <dt>Starting Date</dt>
+                                <dd>01.01.2014</dd>
+                            </dl>
+                        </div>
+                        <div class="col-xs-4">
+                            <dl>
+                                <dt>Budget Spent</dt>
+                                <dd>€255.000 (85%)</dd>
+                            </dl>
+                            <dl>
+                                <dt>Last updated</dt>
+                                <dd>25.09.2014 15:00</dd>
+                            </dl>
+                        </div>
+                        <div class="col-xs-4">
+                            <dl>
+                                <dt>Budget Remaining</dt>
+                                <dd>€45.000 (15%)</dd>
+                            </dl>
+                            <dl>
+                                <dt>Average Daily Rate</dt>
+                                <dd>€1150</dd>
+                            </dl>
+                        </div>
+                    </div>
+
+                    <span class="badge bg-light-blue">Side Project</span>
+                    <span class="badge bg-light-blue">Contract #4711</span>
+                    <span class="badge bg-light-blue">Private</span>
+
+                </div>
+                <!-- /.box-body -->
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-primary">
+                <div class="box-header">
+                    <h3 class="box-title">Budget Options <small>What information about this budget are you interested in?</small></h3>
+
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-default btn-sm" data-widget="collapse"><i
+                                class="fa fa-minus"></i></button>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-lg-4 col-xs-6">
+                            <!-- small box -->
+                            <div class="small-box bg-aqua">
+                                <div class="inner">
+                                    <h3><a href="week-report.html" style="color:white">Week Report</a></h3>
+                                    <br/>
+                                    <br/>
                                 </div>
+                                <div class="icon">
+                                    <i class="ion ion-person-stalker"></i>
+                                </div>
+                                <a href="week-report.html" class="small-box-footer">
+                                    Monitor the budget aggregated by week <i class="fa fa-arrow-circle-right"></i>
+                                </a>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-xs-4">
-                                <dl>
-                                    <dt>Full Budget</dt>
-                                    <dd>€300.000</dd>
-                                </dl>
-                                <dl>
-                                    <dt>Starting Date</dt>
-                                    <dd>01.01.2014</dd>
-                                </dl>
-                            </div>
-                            <div class="col-xs-4">
-                                <dl>
-                                    <dt>Budget Spent</dt>
-                                    <dd>€255.000 (85%)</dd>
-                                </dl>
-                                <dl>
-                                    <dt>Last updated</dt>
-                                    <dd>25.09.2014 15:00</dd>
-                                </dl>
-                            </div>
-                            <div class="col-xs-4">
-                                <dl>
-                                    <dt>Budget Remaining</dt>
-                                    <dd>€45.000 (15%)</dd>
-                                </dl>
-                                <dl>
-                                    <dt>Average Daily Rate</dt>
-                                    <dd>€1150</dd>
-                                </dl>
+                        <!-- ./col -->
+                        <div class="col-lg-4 col-xs-6">
+                            <!-- small box -->
+                            <div class="small-box bg-green">
+                                <div class="inner">
+                                    <h3><a href="hours.html" style="color:white">Gap Report</a></h3>
+                                    <br/>
+                                    <br/>
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-calculator"></i>
+                                </div>
+                                <a href="hours.html" class="small-box-footer">
+                                    Compare target hours with actual hours booked <i
+                                        class="fa fa-arrow-circle-right"></i>
+                                </a>
                             </div>
                         </div>
-
-                        <span class="badge bg-light-blue">Side Project</span>
-                        <span class="badge bg-light-blue">Contract #4711</span>
-                        <span class="badge bg-light-blue">Private</span>
-
+                        <!-- ./col -->
+                        <div class="col-lg-4 col-xs-6">
+                            <!-- small box -->
+                            <div class="small-box bg-yellow">
+                                <div class="inner">
+                                    <h3><a href="hours.html" style="color:white">Hours</a></h3>
+                                    <br/>
+                                    <br/>
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-clock"></i>
+                                </div>
+                                <a href="hours.html#" class="small-box-footer">
+                                    List all Hours booked on this budget <i class="fa fa-arrow-circle-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <!-- ./col -->
                     </div>
-                    <!-- /.box-body -->
+                    <div class="row">
+                        <div class="col-lg-4 col-xs-6">
+                            <!-- small box -->
+                            <div class="small-box bg-aqua">
+                                <div class="inner">
+                                    <h3><a href="month-report.html" style="color:white">Month Report</a></h3>
+                                    <br/>
+                                    <br/>
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-person-stalker"></i>
+                                </div>
+                                <a href="month-report.html" class="small-box-footer">
+                                    Monitor the budget aggregated by month <i class="fa fa-arrow-circle-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <!-- ./col -->
+                        <div class="col-lg-4 col-xs-6">
+                            <!-- small box -->
+                            <div class="small-box bg-green">
+                                <div class="inner">
+                                    <h3><a href="hours.html" style="color:white">Edit Budget</a></h3>
+                                    <br/>
+                                    <br/>
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-calculator"></i>
+                                </div>
+                                <a href="hours.html" class="small-box-footer">
+                                    Edit the budget master data <i class="fa fa-arrow-circle-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <!-- ./col -->
+                    </div>
                 </div>
             </div>
-        </div>
-
-        <div class="row">
-            <div class="col-lg-4 col-xs-6">
-                <!-- small box -->
-                <div class="small-box bg-aqua">
-                    <div class="inner">
-                        <h3><a href="#" style="color:white">Week Report</a></h3>
-                        <br/>
-                        <br/>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-person-stalker"></i>
-                    </div>
-                    <a href="#" class="small-box-footer">
-                       Monitor the budget aggregated by week <i class="fa fa-arrow-circle-right"></i>
-                    </a>
-                </div>
-            </div>
-            <!-- ./col -->
-            <div class="col-lg-4 col-xs-6">
-                <!-- small box -->
-                <div class="small-box bg-green">
-                    <div class="inner">
-                        <h3><a href="hours.html" style="color:white">Gap Report</a></h3>
-                        <br/>
-                        <br/>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-calculator"></i>
-                    </div>
-                    <a href="hours.html" class="small-box-footer">
-                       Compare target hours with actual hours booked <i class="fa fa-arrow-circle-right"></i>
-                    </a>
-                </div>
-            </div>
-            <!-- ./col -->
-            <div class="col-lg-4 col-xs-6">
-                <!-- small box -->
-                <div class="small-box bg-yellow">
-                    <div class="inner">
-                        <h3><a href="hours.html" style="color:white">Hours</a></h3>
-                        <br/>
-                        <br/>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-clock"></i>
-                    </div>
-                    <a href="hours.html#" class="small-box-footer">
-                        List all Hours booked on this Budget <i class="fa fa-arrow-circle-right"></i>
-                    </a>
-                </div>
-            </div>
-            <!-- ./col -->
-        </div>
-        <div class="row">
-            <div class="col-lg-4 col-xs-6">
-                <!-- small box -->
-                <div class="small-box bg-aqua">
-                    <div class="inner">
-                        <h3><a href="#" style="color:white">Month Report</a></h3>
-                        <br/>
-                        <br/>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-person-stalker"></i>
-                    </div>
-                    <a href="#" class="small-box-footer">
-                        Monitor the budget aggregated by month <i class="fa fa-arrow-circle-right"></i>
-                    </a>
-                </div>
-            </div>
-            <!-- ./col -->
-            <div class="col-lg-4 col-xs-6">
-                <!-- small box -->
-                <div class="small-box bg-green">
-                    <div class="inner">
-                        <h3><a href="hours.html" style="color:white">Admin</a></h3>
-                        <br/>
-                        <br/>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-calculator"></i>
-                    </div>
-                    <a href="hours.html" class="small-box-footer">
-                        Edit the Budget master data <i class="fa fa-arrow-circle-right"></i>
-                    </a>
-                </div>
-            </div>
-            <!-- ./col -->
         </div>
 
 </section>
