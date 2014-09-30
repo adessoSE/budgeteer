@@ -9,8 +9,13 @@
           type="text/css"/>
     <!-- Ionicons -->
     <link href="//code.ionicframework.com/ionicons/1.5.2/css/ionicons.min.css" rel="stylesheet" type="text/css"/>
+    <!-- daterange picker -->
+    <link href="../css/daterangepicker/daterangepicker-bs3.css" rel="stylesheet" type="text/css"/>
+    <!-- DATA TABLES -->
+    <link href="../css/datatables/dataTables.bootstrap.css" rel="stylesheet" type="text/css"/>
     <!-- Theme style -->
     <link href="../css/AdminLTE.css" rel="stylesheet" type="text/css"/>
+    <link href="../css/AdminLTE-custom.css" rel="stylesheet" type="text/css"/>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -89,28 +94,14 @@
 <aside class="right-side">
 <!-- Content Header (Page header) -->
 <section class="content-header">
-    <h1 style="float:left">
-        Budget Overview
+    <h1>
+        Person Details
     </h1>
 
-    <div class="btn-group" style="margin-left:20px">
-        <button type="button" class="btn btn-default">Select Display Unit</button>
-        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-            <span class="caret"></span>
-            <span class="sr-only">Toggle Dropdown</span>
-        </button>
-        <ul class="dropdown-menu" role="menu">
-            <li><a href="#">Euros (€)</a></li>
-            <li><a href="#">Man-Days (€500)</a></li>
-            <li><a href="#">Man-Days (€650)</a></li>
-            <li><a href="#">Man-Days (€790)</a></li>
-            <li><a href="#">Man-Days (€1250)</a></li>
-        </ul>
-    </div>
     <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active">
-            Budget Overview
+            Person Overview
         </li>
     </ol>
 </section>
@@ -119,97 +110,94 @@
 <section class="content">
 
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-6">
             <div class="box box-primary">
                 <div class="box-header">
-                    <i class="fa fa-list"></i>
-                    <h3 class="box-title">Budget List</h3>
+                    <i class="fa fa-info-circle"></i>
+
+                    <h3 class="box-title">Highlights</h3>
+
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-default btn-sm" data-widget="collapse"><i
+                                class="fa fa-minus"></i></button>
+                    </div>
                 </div>
                 <div class="box-body">
-                    <p class="pull-left">
-                        Click on a tag to filter budgets: <span class="badge bg-light-blue">Side Project</span> <span
-                            class="badge bg-light-gray">Inactive Tag</span> <span class="badge bg-light-gray">Inactive Tag2</span>
-                    </p>
-
-                    <p class="pull-right">
-                        <button class="btn btn-default btn-sm">Reset Filter</button>
-                    </p>
-                    <table class="table table-hover">
-                        <tbody>
-                        <tr>
-                            <th>Budget Title</th>
-                            <th style="width:50px">Status</th>
-                            <th style="width:50px">Last Updated</th>
-                            <th>Progress</th>
-                            <th style="width:150px">Remaining Budget</th>
-                        </tr>
-                        <tr>
-                            <td><strong>Aggregated Budget</strong></td>
-                            <td></td>
-                            <td></td>
-                            <td>
-                                €125.000 of 223.000€ spent
-                                <div class="progress xs">
-                                    <div class="progress-bar progress-bar-green" style="width: 60%"></div>
+                    <div class="row">
+                        <div class="col-lg-6 col-xs-6">
+                            <div class="showcase bg-aqua">
+                                <div class="inner">
+                                    <h3><a href="week-report.html" style="color:white">Tom Hombergs</a></h3>
                                 </div>
-                            </td>
-                            <td>€98.000</td>
-                        </tr>
-                        <tr>
-                            <td><a href="budget-details.html">Implementation of Feature XYZ</a>
-                            </td>
-                            <td><span class="badge bg-green">completed</span></td>
-                            <td>28.09.2014</td>
-                            <td>
-                                €25.000 of 23.000€ spent
-                                <div class="progress xs">
-                                    <div class="progress-bar progress-bar-danger" style="width: 110%"></div>
+                                Name
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-xs-6">
+                            <div class="showcase bg-aqua">
+                                <div class="inner">
+                                    <h3><a href="week-report.html" style="color:white">€1.250,48</a></h3>
                                 </div>
-                            </td>
-                            <td>-€2.000</td>
-                        </tr>
-                        <tr>
-                            <td><a href="budget-details.html">Quality Assurance</a></td>
-                            <td><span class="badge bg-light-gray">inactive</span></td>
-                            <td>28.09.2014</td>
-                            <td>
-                                0 of 50 man-days spent
-                                <div class="progress xs">
-                                    <div class="progress-bar progress-bar-light-blue" style="width: 2%"></div>
+                                Avg. Daily Rate
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-xs-6">
+                            <div class="showcase bg-aqua">
+                                <div class="inner">
+                                    <h3><a href="week-report.html" style="color:white">01.01.2014</a></h3>
                                 </div>
-                            </td>
-                            <td>50 man-days</td>
-                        </tr>
-                        <tr>
-                            <td><a href="budget-details.html">Documentation</a></td>
-                            <td><span class="badge bg-yellow">in progress</span></td>
-                            <td>28.09.2014</td>
-                            <td>
-                                23 of 30 man-days spent
-                                <div class="progress xs">
-                                    <div class="progress-bar progress-bar-yellow" style="width: 70%"></div>
+                                First Booked
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-xs-6">
+                            <div class="showcase bg-aqua">
+                                <div class="inner">
+                                    <h3><a href="week-report.html" style="color:white">29.09.2014</a></h3>
                                 </div>
-                            </td>
-                            <td>7 man-days</td>
-                        </tr>
-                        <tr>
-                            <td><a href="budget-details.html">Project Management</a></td>
-                            <td><span class="badge bg-yellow">in progress</span></td>
-                            <td>28.09.2014</td>
-                            <td>
-                                23 of 30 man-days spent
-                                <div class="progress xs">
-                                    <div class="progress-bar progress-bar-yellow" style="width: 70%"></div>
+                                Last Booked
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-xs-6">
+                            <div class="showcase bg-aqua">
+                                <div class="inner">
+                                    <h3><a href="week-report.html" style="color:white">950.5</a></h3>
                                 </div>
-                            </td>
-                            <td>7 man-days</td>
-                        </tr>
-
-                        </tbody>
-                    </table>
+                                Hours Booked
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-xs-6">
+                            <div class="showcase bg-aqua">
+                                <div class="inner">
+                                    <h3><a href="week-report.html" style="color:white">€255.000</a></h3>
+                                </div>
+                                Budget Burned
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <!-- /.box-body -->
             </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="box box-primary">
+                <div class="box-header">
+                    <i class="fa fa-info-circle"></i>
+
+                    <h3 class="box-title">Budget Distribution</h3>
+
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-default btn-sm" data-widget="collapse"><i
+                                class="fa fa-minus"></i></button>
+                    </div>
+                </div>
+                <div class="box-body" id="budgetsChart">
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -277,7 +265,8 @@
                                     <i class="ion ion-clock"></i>
                                 </div>
                                 <a href="hours.html#" class="small-box-footer">
-                                    List all Hours booked on the above budgets <i class="fa fa-arrow-circle-right"></i>
+                                    List all Hours booked on the above budgets <i
+                                        class="fa fa-arrow-circle-right"></i>
                                 </a>
                             </div>
                         </div>
@@ -287,20 +276,37 @@
                             <!-- small box -->
                             <div class="small-box bg-green">
                                 <div class="inner">
-                                    <h3><a href="editBudget.html" style="color:white">New Budget</a></h3>
+                                    <h3><a href="editPerson.html" style="color:white">Edit Person</a></h3>
                                     <br/>
                                     <br/>
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-edit"></i>
                                 </div>
-                                <a href="editBudget.html" class="small-box-footer">
-                                    Create a new budget to monitor <i class="fa fa-arrow-circle-right"></i>
+                                <a href="editPerson.html" class="small-box-footer">
+                                    Edit the master data of this person <i class="fa fa-arrow-circle-right"></i>
                                 </a>
                             </div>
                         </div>
                         <!-- ./col -->
+                        <div class="col-lg-4 col-xs-6">
+                            <!-- small box -->
+                            <div class="small-box bg-red">
+                                <div class="inner">
+                                    <h3><a href="hours.html" style="color:white">Delete Person</a></h3>
+                                    <br/>
+                                    <br/>
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-close-round"></i>
+                                </div>
+                                <a href="hours.html" class="small-box-footer">
+                                    Remove this person from monitoring <i class="fa fa-arrow-circle-right"></i>
+                                </a>
+                            </div>
+                        </div>
                     </div>
+                    <!-- ./col -->
                 </div>
             </div>
         </div>
@@ -316,9 +322,63 @@
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="../js/highcharts/highcharts.js"></script>
+<!-- date-range-picker -->
+<script src="../js/plugins/daterangepicker/daterangepicker.js" type="text/javascript"></script>
 <!-- AdminLTE App -->
 <script src="../js/AdminLTE/app.js" type="text/javascript"></script>
+<!-- DATA TABES SCRIPT -->
+<script src="../js/plugins/datatables/jquery.dataTables.js" type="text/javascript"></script>
+<script src="../js/plugins/datatables/dataTables.bootstrap.js" type="text/javascript"></script>
 
+<script type="text/javascript">
+    $(function () {
+        $('#budgetsChart').highcharts({
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: 0,
+                plotShadow: false,
+                spacingBottom: 0,
+                spacingTop: 50,
+                spacingLeft: 0,
+                spacingRight: 0,
+                margin: [0, 0, 0, 0],
+                height: 200,
+            },
+            title: {
+                text: '',
+                align: 'center',
+                verticalAlign: 'middle',
+                y: 50
+            },
+            tooltip: {
+                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+            },
+            legend: {
+                enabled: true,
+                align: 'right',
+                verticalAlign: 'top',
+                layout: 'vertical'
+            },
+            credits: {
+                enabled: false
+            },
+            series: [
+                {
+                    type: 'pie',
+                    name: 'Budget Share',
+                    innerSize: '50%',
+                    data: [
+                        ['Side Project', 45.0],
+                        ['Budget A', 26.8],
+                        ['Feature XYZ', 12.8],
+                        ['Project Managment', 8.5]
+                    ]
+                }
+            ]
+        });
+    });
+</script>
 </body>
 </html>
 
