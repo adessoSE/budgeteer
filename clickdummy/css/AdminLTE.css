@@ -521,14 +521,14 @@ body > .header .navbar .nav > li > a > .label {
 body > .header .navbar .nav > li > a:hover > .label {
   top: 3px;
 }
-body > .header .logo {
+body > .header a.logo {
   float: left;
-  font-size: 20px;
+  font-size: 30px;
   line-height: 50px;
   text-align: center;
   padding: 0 10px;
   width: 220px;
-  font-family: 'Kaushan Script', cursive;
+  font-family: 'Jockey One', sans-serif;
   font-weight: 500;
   height: 50px;
   display: block;
