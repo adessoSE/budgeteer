@@ -35,6 +35,33 @@
         <div class="navbar-right">
             <ul class="nav navbar-nav">
 
+                <li clss="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        Budget Display Unit
+                        <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-check-square-o"></i>
+                                EUR (€)
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-square-o"></i>
+                                Man-days (€790)
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-square-o"></i>
+                                Man-days (€1200)
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
                 <!-- Notifications: style can be found in dropdown.less -->
                 <li class="dropdown notifications-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -53,7 +80,8 @@
                                 </li>
                                 <li>
                                     <a href="#">
-                                        <i class="fa fa-warning warning"></i> Missing budget total for "Implementation of Feature XYZ"
+                                        <i class="fa fa-warning warning"></i> Missing budget total for "Implementation
+                                        of Feature XYZ"
                                     </a>
                                 </li>
                                 <li>
@@ -63,7 +91,8 @@
                                 </li>
                                 <li>
                                     <a href="#">
-                                        <i class="fa fa-warning warning"></i> Missing budget total for "Implementation of Feature XYZ"
+                                        <i class="fa fa-warning warning"></i> Missing budget total for "Implementation
+                                        of Feature XYZ"
                                     </a>
                                 </li>
                                 <li>
@@ -73,7 +102,8 @@
                                 </li>
                                 <li>
                                     <a href="#">
-                                        <i class="fa fa-warning warning"></i> Missing budget total for "Implementation of Feature XYZ"
+                                        <i class="fa fa-warning warning"></i> Missing budget total for "Implementation
+                                        of Feature XYZ"
                                     </a>
                                 </li>
                             </ul>
@@ -84,7 +114,7 @@
                 <li class="dropdown">
                     <a href="#">
                         <i class="fa fa-power-off"></i>
-                        <span>Sign Out</span>
+                        <span><b>Sign Out</b></span>
                     </a>
                 </li>
             </ul>
@@ -93,137 +123,137 @@
 </header>
 <div class="wrapper row-offcanvas row-offcanvas-left">
 
-<!-- Right side column. Contains the navbar and content of the page -->
-<aside class="right-side">
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-        <h1>
-            Dashboard
-        </h1>
-        <ol class="breadcrumb">
-            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-            <li class="active">Widgets</li>
-        </ol>
-    </section>
+    <!-- Right side column. Contains the navbar and content of the page -->
+    <aside class="right-side">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>
+                Dashboard
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li class="active">Widgets</li>
+            </ol>
+        </section>
 
-    <!-- Main content -->
-    <section class="content">
-        <h4 class="page-header">
-            Welcome to Budgeteer. Where do you want to go today?
-        </h4>
-        <!-- Small boxes (Stat box) -->
-        <div class="row">
-            <div class="col-lg-3 col-xs-6">
-                <!-- small box -->
-                <div class="small-box bg-aqua">
-                    <div class="inner">
-                        <h3><a href="people.html" style="color:white">People</a></h3>
-                        <br/>
-                        <br/>
+        <!-- Main content -->
+        <section class="content">
+            <h4 class="page-header">
+                Welcome to Budgeteer. Where do you want to go today?
+            </h4>
+            <!-- Small boxes (Stat box) -->
+            <div class="row">
+                <div class="col-lg-3 col-xs-6">
+                    <!-- small box -->
+                    <div class="small-box bg-aqua">
+                        <div class="inner">
+                            <h3><a href="people.html" style="color:white">People</a></h3>
+                            <br/>
+                            <br/>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-person-stalker"></i>
+                        </div>
+                        <a href="people.html" class="small-box-footer">
+                            Administrate the project members <i class="fa fa-arrow-circle-right"></i>
+                        </a>
                     </div>
-                    <div class="icon">
-                        <i class="ion ion-person-stalker"></i>
+                </div>
+                <!-- ./col -->
+                <div class="col-lg-3 col-xs-6">
+                    <!-- small box -->
+                    <div class="small-box bg-green">
+                        <div class="inner">
+                            <h3><a href="budgets.html" style="color:white">Budgets</a></h3>
+                            <br/>
+                            <br/>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-calculator"></i>
+                        </div>
+                        <a href="budgets.html" class="small-box-footer">
+                            Monitor your budgets <i class="fa fa-arrow-circle-right"></i>
+                        </a>
                     </div>
-                    <a href="people.html" class="small-box-footer">
-                        Administrate the project members <i class="fa fa-arrow-circle-right"></i>
-                    </a>
+                </div>
+                <!-- ./col -->
+                <div class="col-lg-3 col-xs-6">
+                    <!-- small box -->
+                    <div class="small-box bg-yellow">
+                        <div class="inner">
+                            <h3><a href="hours.html" style="color:white">Hours</a></h3>
+                            <br/>
+                            <br/>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-clock"></i>
+                        </div>
+                        <a href="hours.html#" class="small-box-footer">
+                            List hours booked on budgets <i class="fa fa-arrow-circle-right"></i>
+                        </a>
+                    </div>
+                </div>
+                <!-- ./col -->
+                <div class="col-lg-3 col-xs-6">
+                    <!-- small box -->
+                    <div class="small-box bg-yellow">
+                        <div class="inner">
+                            <h3><a href="import.html" style="color:white">Import</a></h3>
+                            <br/>
+                            <br/>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-database"></i>
+                        </div>
+                        <a href="import.html" class="small-box-footer">
+                            Import data to update your budgets <i class="fa fa-arrow-circle-right"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
-            <!-- ./col -->
-            <div class="col-lg-3 col-xs-6">
-                <!-- small box -->
-                <div class="small-box bg-green">
-                    <div class="inner">
-                        <h3><a href="budgets.html" style="color:white">Budgets</a></h3>
-                        <br/>
-                        <br/>
+            <!-- /.row -->
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="box box-solid">
+                        <div class="box-header" style="cursor: move;">
+                            <i class="fa fa-line-chart"></i>
+
+                            <h3 class="box-title">Burned Budget
+                                <small>click on a bar for a report of the week</small>
+                            </h3>
+                        </div>
+                        <div class="box-body" id="burnChart">
+
+                        </div>
+                        <!-- /.box-body -->
                     </div>
-                    <div class="icon">
-                        <i class="ion ion-calculator"></i>
-                    </div>
-                    <a href="budgets.html" class="small-box-footer">
-                        Monitor your budgets <i class="fa fa-arrow-circle-right"></i>
-                    </a>
+                    <!-- /.box -->
                 </div>
-            </div>
-            <!-- ./col -->
-            <div class="col-lg-3 col-xs-6">
-                <!-- small box -->
-                <div class="small-box bg-yellow">
-                    <div class="inner">
-                        <h3><a href="hours.html" style="color:white">Hours</a></h3>
-                        <br/>
-                        <br/>
+                <div class="col-md-6">
+                    <div class="box box-solid">
+                        <div class="box-header" style="cursor: move;">
+                            <i class="fa fa-line-chart"></i>
+
+                            <h3 class="box-title">Average Man-Day Rate
+                                <small>click on a point for a report of the day</small>
+                            </h3>
+                        </div>
+                        <div class="box-body" id="rateChart">
+
+                        </div>
+                        <!-- /.box-body -->
                     </div>
-                    <div class="icon">
-                        <i class="ion ion-clock"></i>
-                    </div>
-                    <a href="hours.html#" class="small-box-footer">
-                        List hours booked on budgets <i class="fa fa-arrow-circle-right"></i>
-                    </a>
+                    <!-- /.box -->
                 </div>
+                <!-- /.col -->
             </div>
-            <!-- ./col -->
-            <div class="col-lg-3 col-xs-6">
-                <!-- small box -->
-                <div class="small-box bg-yellow">
-                    <div class="inner">
-                        <h3><a href="import.html" style="color:white">Import</a></h3>
-                        <br/>
-                        <br/>
-                    </div>
-                    <div class="icon">
-                        <i class="fa fa-database"></i>
-                    </div>
-                    <a href="import.html" class="small-box-footer">
-                        Import data to update your budgets <i class="fa fa-arrow-circle-right"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-        <!-- /.row -->
+            <!-- /.row -->
 
-        <div class="row">
-            <div class="col-md-6">
-                <div class="box box-solid">
-                    <div class="box-header" style="cursor: move;">
-                        <i class="fa fa-line-chart"></i>
-
-                        <h3 class="box-title">Burned Budget
-                            <small>click on a bar for a report of the week</small>
-                        </h3>
-                    </div>
-                    <div class="box-body" id="burnChart">
-
-                    </div>
-                    <!-- /.box-body -->
-                </div>
-                <!-- /.box -->
-            </div>
-            <div class="col-md-6">
-                <div class="box box-solid">
-                    <div class="box-header" style="cursor: move;">
-                        <i class="fa fa-line-chart"></i>
-
-                        <h3 class="box-title">Average Man-Day Rate
-                            <small>click on a point for a report of the day</small>
-                        </h3>
-                    </div>
-                    <div class="box-body" id="rateChart">
-
-                    </div>
-                    <!-- /.box-body -->
-                </div>
-                <!-- /.box -->
-            </div>
-            <!-- /.col -->
-        </div>
-        <!-- /.row -->
-
-    </section>
-    <!-- /.content -->
-</aside>
-<!-- /.right-side -->
+        </section>
+        <!-- /.content -->
+    </aside>
+    <!-- /.right-side -->
 </div>
 <!-- ./wrapper -->
 
