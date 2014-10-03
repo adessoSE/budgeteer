@@ -11,8 +11,9 @@ public abstract class BasePage extends WebPage {
     @SuppressWarnings("unchecked")
     public BasePage() {
         BreadcrumbsPanel breadcrumbs = new BreadcrumbsPanel("breadcrumbsPanel", getBreadcrumbsModel());
+        long loggedInUserId = ((BudgeteerSession) getSession()).getLoggedInUserId();
         add(breadcrumbs);
-        add(new NotificationDropdown("notificationDropdown", new NotificationModel(1l)));
+        add(new NotificationDropdown("notificationDropdown", new NotificationModel(loggedInUserId)));
     }
 
     /**

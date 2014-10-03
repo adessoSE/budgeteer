@@ -1,7 +1,10 @@
 package org.wickedsource.budgeteer.web.base;
 
+import org.apache.wicket.Session;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.request.Request;
+import org.apache.wicket.request.Response;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
@@ -29,6 +32,11 @@ public class BudgeteerApplication extends WebApplication implements ApplicationC
 
         mountPage("dashboard", DashboardPage.class);
         mountPage("people", PeopleOverviewPage.class);
+    }
+
+    @Override
+    public Session newSession(Request request, Response response) {
+        return new BudgeteerSession(request);
     }
 
     @Override
