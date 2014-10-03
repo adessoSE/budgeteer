@@ -5,8 +5,12 @@ import org.apache.wicket.Session;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.resource.loader.IStringResourceLoader;
 import org.wickedsource.budgeteer.web.base.BasePage;
+import org.wickedsource.budgeteer.web.components.PropertyLoader;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
 
 public class BreadcrumbsModel implements IModel<List<Breadcrumb>> {
 
@@ -44,24 +48,6 @@ public class BreadcrumbsModel implements IModel<List<Breadcrumb>> {
      * Reads the breadcrumb title from the properties file of the given page class.
      */
     private String getBreadcrumbTitle(Class<? extends BasePage> clazz) {
-        String resourceValue = null;
-        List<IStringResourceLoader> resourceLoaders = Application.get()
-                .getResourceSettings()
-                .getStringResourceLoaders();
-        Locale locale = Session.get().getLocale();
-        String style = Session.get().getStyle();
-
-        for (IStringResourceLoader stringResourceLoader : resourceLoaders) {
-            resourceValue = stringResourceLoader.loadStringResource(clazz, BREADCRUMB_TITLE_KEY, locale, style, null);
-            if (resourceValue != null) {
-                break;
-            }
-        }
-
-        if (resourceValue == null) {
-            throw new RuntimeException(String.format("Property %s could not be found for class %s!", BREADCRUMB_TITLE_KEY, clazz.getName()));
-        } else {
-            return resourceValue.toString();
-        }
+        return PropertyLoader.getProperty(clazz, BREADCRUMB_TITLE_KEY);
     }
 }

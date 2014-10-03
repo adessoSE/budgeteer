@@ -3,6 +3,8 @@ package org.wickedsource.budgeteer.web.base;
 import org.apache.wicket.markup.html.WebPage;
 import org.wickedsource.budgeteer.web.components.breadcrumb.BreadcrumbsModel;
 import org.wickedsource.budgeteer.web.components.breadcrumb.BreadcrumbsPanel;
+import org.wickedsource.budgeteer.web.components.notification.NotificationDropdown;
+import org.wickedsource.budgeteer.web.components.notification.NotificationModel;
 
 public abstract class BasePage extends WebPage {
 
@@ -10,6 +12,7 @@ public abstract class BasePage extends WebPage {
     public BasePage() {
         BreadcrumbsPanel breadcrumbs = new BreadcrumbsPanel("breadcrumbsPanel", getBreadcrumbsModel());
         add(breadcrumbs);
+        add(new NotificationDropdown("notificationDropdown", new NotificationModel(1l)));
     }
 
     /**

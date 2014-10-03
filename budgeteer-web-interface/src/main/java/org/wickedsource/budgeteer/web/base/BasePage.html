@@ -35,54 +35,9 @@
         <div class="navbar-right">
             <ul class="nav navbar-nav">
 
-                <li class="dropdown notifications-menu">
-
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <i class="fa fa-warning"></i>
-                        <span class="label label-warning">10</span>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li class="header">Please fix the following issues to enable correct budget monitoring.</li>
-                        <li>
-                            <!-- inner menu: contains the actual data -->
-                            <ul class="menu">
-                                <li>
-                                    <a href="#">
-                                        <i class="fa fa-warning warning"></i> Missing daily rate for Tom Hombergs
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <i class="fa fa-warning warning"></i> Missing budget total for "Implementation
-                                        of Feature XYZ"
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <i class="fa fa-warning warning"></i> Missing daily rate for Tom Hombergs
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <i class="fa fa-warning warning"></i> Missing budget total for "Implementation
-                                        of Feature XYZ"
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <i class="fa fa-warning warning"></i> Missing daily rate for Tom Hombergs
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <i class="fa fa-warning warning"></i> Missing budget total for "Implementation
-                                        of Feature XYZ"
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
+                <li class="dropdown notifications-menu" wicket:id="notificationDropdown">
                 </li>
+
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         Budget Display Unit
@@ -128,7 +83,7 @@
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <h1>
-                Dashboard
+                <wicket:message key="page.title">PAGE TITLE</wicket:message>
             </h1>
 
             <div wicket:id="breadcrumbsPanel">BREADCRUMBS</div>

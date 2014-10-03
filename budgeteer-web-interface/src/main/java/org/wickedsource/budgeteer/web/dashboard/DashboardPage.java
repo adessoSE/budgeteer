@@ -1,5 +1,6 @@
 package org.wickedsource.budgeteer.web.dashboard;
 
+
 import org.wickedsource.budgeteer.web.base.BasePage;
 import org.wickedsource.budgeteer.web.components.breadcrumb.BreadcrumbsModel;
 

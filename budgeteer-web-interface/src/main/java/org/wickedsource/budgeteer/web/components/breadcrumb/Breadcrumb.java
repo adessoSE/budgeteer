@@ -1,9 +1,7 @@
 package org.wickedsource.budgeteer.web.components.breadcrumb;
 
-import org.wickedsource.budgeteer.web.base.BasePage;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.wickedsource.budgeteer.web.base.BasePage;
 
 public class Breadcrumb {
 
@@ -16,7 +14,7 @@ public class Breadcrumb {
         this.targetPage = targetPage;
     }
 
-    public Class<? extends BasePage> getTargetPage() {
+    public Class<?> getTargetPage() {
         return targetPage;
     }
 
