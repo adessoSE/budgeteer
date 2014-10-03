@@ -1,8 +1,9 @@
 package org.wickedsource.budgeteer.service.notification;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Notification {
+public class Notification implements Serializable {
 
     private Date date;
 

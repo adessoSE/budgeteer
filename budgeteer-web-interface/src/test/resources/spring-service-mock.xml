@@ -4,7 +4,8 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
     http://www.mockito.org/spring/mockito http://www.mockito.org/spring/mockito.xsd">
 
-    <mockito:mock id="notificationService"
-                  class="org.wickedsource.budgeteer.service.notification.NotificationService"/>
+    <mockito:mock id="notificationService" class="org.wickedsource.budgeteer.service.notification.NotificationService"/>
+
+    <mockito:mock id="settingsService" class="org.wickedsource.budgeteer.service.settings.SettingsService"/>
 
 </beans>
