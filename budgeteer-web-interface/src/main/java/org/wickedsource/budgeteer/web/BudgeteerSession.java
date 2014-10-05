@@ -1,4 +1,4 @@
-package org.wickedsource.budgeteer.web.usecase.base;
+package org.wickedsource.budgeteer.web;
 
 import org.apache.wicket.protocol.http.WebSession;
 import org.apache.wicket.request.Request;

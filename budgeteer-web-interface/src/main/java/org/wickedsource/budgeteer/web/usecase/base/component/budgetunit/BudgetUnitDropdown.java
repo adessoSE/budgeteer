@@ -10,9 +10,9 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.service.settings.BudgetUnit;
 import org.wickedsource.budgeteer.service.settings.SettingsService;
+import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.fontawesome.FontAwesomeIcon;
 import org.wickedsource.budgeteer.web.fontawesome.FontAwesomeIconType;
-import org.wickedsource.budgeteer.web.usecase.base.BudgeteerSession;
 
 public class BudgetUnitDropdown extends Panel {
 

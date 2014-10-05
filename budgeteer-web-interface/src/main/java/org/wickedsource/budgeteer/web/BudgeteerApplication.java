@@ -1,18 +1,25 @@
-package org.wickedsource.budgeteer.web.usecase.base;
+package org.wickedsource.budgeteer.web;
 
 import com.googlecode.wickedcharts.wicket6.JavaScriptResourceRegistry;
+import org.apache.wicket.IPageFactory;
 import org.apache.wicket.Session;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
+import org.reflections.Reflections;
+import org.reflections.scanners.TypeAnnotationsScanner;
+import org.reflections.util.ClasspathHelper;
+import org.reflections.util.ConfigurationBuilder;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.wickedsource.budgeteer.web.usecase.dashboard.DashboardPage;
-import org.wickedsource.budgeteer.web.usecase.people.PeopleOverviewPage;
+
+import java.util.Set;
 
 @Component
 public class BudgeteerApplication extends WebApplication implements ApplicationContextAware {
@@ -27,16 +34,31 @@ public class BudgeteerApplication extends WebApplication implements ApplicationC
     @Override
     public void init() {
         super.init();
-
         getMarkupSettings().setStripWicketTags(true);
         getComponentInstantiationListeners().add(new SpringComponentInjector(this, context));
         initWickedCharts();
-
-        mountPage("dashboard", DashboardPage.class);
-        mountPage("people", PeopleOverviewPage.class);
+        mountPages();
     }
 
-    private void initWickedCharts(){
+    /**
+     * Scans the classpath for all pages annotated with the Mount annotation and mounts them.
+     */
+    @SuppressWarnings("unchecked")
+    private void mountPages() {
+        Reflections reflections = new Reflections(
+                new ConfigurationBuilder().setUrls(
+                        ClasspathHelper.forPackage("org.wickedsource.budgeteer")).setScanners(
+                        new TypeAnnotationsScanner()));
+        Set<Class<?>> pagesToMount = reflections.getTypesAnnotatedWith(Scope.class);
+
+        for (Class<?> page : pagesToMount) {
+            Class<? extends WebPage> pageClass = (Class<? extends WebPage>) page;
+            Mount mount = pageClass.getAnnotation(Mount.class);
+            mountPage(mount.value(), pageClass);
+        }
+    }
+
+    private void initWickedCharts() {
         JavaScriptResourceRegistry.getInstance().setHighchartsReference("js/highcharts/highcharts.js");
         JavaScriptResourceRegistry.getInstance().setJQueryReference("js/jquery/jquery.min.js");
     }
@@ -49,6 +71,11 @@ public class BudgeteerApplication extends WebApplication implements ApplicationC
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.context = applicationContext;
+    }
+
+    @Override
+    protected IPageFactory newPageFactory() {
+        return new SpringPageFactory(this.context);
     }
 }
 

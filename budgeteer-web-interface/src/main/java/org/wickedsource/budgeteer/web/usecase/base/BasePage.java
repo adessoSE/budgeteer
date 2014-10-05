@@ -1,6 +1,7 @@
 package org.wickedsource.budgeteer.web.usecase.base;
 
 import org.apache.wicket.markup.html.WebPage;
+import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.usecase.base.component.breadcrumb.BreadcrumbsModel;
 import org.wickedsource.budgeteer.web.usecase.base.component.breadcrumb.BreadcrumbsPanel;
 import org.wickedsource.budgeteer.web.usecase.base.component.budgetunit.BudgetUnitDropdown;
