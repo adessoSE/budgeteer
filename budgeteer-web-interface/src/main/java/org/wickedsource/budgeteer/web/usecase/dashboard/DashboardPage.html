@@ -9,14 +9,14 @@
                 <!-- small box -->
                 <div class="small-box bg-aqua">
                     <div class="inner">
-                        <h3><a href="/org/wickedsource/budgeteer/web/people/PeopleOverviewPage.html" style="color:white">People</a></h3>
+                        <h3><a wicket:id="peopleLink1" style="color:white">People</a></h3>
                         <br/>
                         <br/>
                     </div>
                     <div class="icon">
                         <i class="ion ion-person-stalker"></i>
                     </div>
-                    <a href="/org/wickedsource/budgeteer/web/people/PeopleOverviewPage.html" class="small-box-footer">
+                    <a wicket:id="peopleLink2" class="small-box-footer">
                         Administrate the project members <i class="fa fa-arrow-circle-right"></i>
                     </a>
                 </div>
@@ -86,7 +86,7 @@
                         <small>click on a bar for a report of the week</small>
                     </h3>
                 </div>
-                <div class="box-body" id="burnChart">
+                <div class="box-body" wicket:id="burnedBudgetChart">
 
                 </div>
                 <!-- /.box-body -->
@@ -98,11 +98,11 @@
                 <div class="box-header" style="cursor: move;">
                     <i class="fa fa-line-chart"></i>
 
-                    <h3 class="box-title">Average Man-Day Rate
+                    <h3 class="box-title">Average Daily Rate
                         <small>click on a point for a report of the day</small>
                     </h3>
                 </div>
-                <div class="box-body" id="rateChart">
+                <div class="box-body" wicket:id="averageDailyRateChart">
 
                 </div>
                 <!-- /.box-body -->

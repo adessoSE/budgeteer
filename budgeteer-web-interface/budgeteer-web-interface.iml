@@ -55,6 +55,11 @@
     <orderEntry type="library" scope="TEST" name="Gradle: spring-test-4.1.1.RELEASE" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: springockito-1.0.9" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: mockito-all-1.9.0" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: wicked-charts-wicket6-1.5.0" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: jackson-annotations-2.0.5" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: jackson-core-2.0.5" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: jackson-databind-2.0.5" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: wicked-charts-highcharts-1.5.0" level="project" />
   </component>
 </module>
 

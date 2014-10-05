@@ -8,4 +8,6 @@
 
     <mockito:mock id="settingsService" class="org.wickedsource.budgeteer.service.settings.SettingsService"/>
 
+    <mockito:mock id="statisticsService" class="org.wickedsource.budgeteer.service.statistics.StatisticsService"/>
+
 </beans>

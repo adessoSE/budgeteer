@@ -27,6 +27,11 @@
           <element id="library" level="project" name="Gradle: spring-aop-4.1.1.RELEASE" />
           <element id="library" level="project" name="Gradle: spring-expression-4.1.1.RELEASE" />
           <element id="library" level="project" name="Gradle: spring-web-4.1.1.RELEASE" />
+          <element id="library" level="project" name="Gradle: wicked-charts-wicket6-1.5.0" />
+          <element id="library" level="project" name="Gradle: jackson-annotations-2.0.5" />
+          <element id="library" level="project" name="Gradle: jackson-core-2.0.5" />
+          <element id="library" level="project" name="Gradle: jackson-databind-2.0.5" />
+          <element id="library" level="project" name="Gradle: wicked-charts-highcharts-1.5.0" />
         </element>
       </element>
       <element id="directory" name="META-INF">
