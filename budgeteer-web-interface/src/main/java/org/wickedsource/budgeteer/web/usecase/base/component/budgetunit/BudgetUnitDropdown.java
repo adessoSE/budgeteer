@@ -1,7 +1,6 @@
 package org.wickedsource.budgeteer.web.usecase.base.component.budgetunit;
 
 import org.apache.wicket.injection.Injector;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -11,7 +10,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.service.settings.BudgetUnit;
 import org.wickedsource.budgeteer.service.settings.SettingsService;
-import org.wickedsource.budgeteer.web.fontawesome.FontAwesomeIconBehavior;
+import org.wickedsource.budgeteer.web.fontawesome.FontAwesomeIcon;
 import org.wickedsource.budgeteer.web.fontawesome.FontAwesomeIconType;
 import org.wickedsource.budgeteer.web.usecase.base.BudgeteerSession;
 
@@ -38,13 +37,11 @@ public class BudgetUnitDropdown extends Panel {
                 };
                 item.add(link);
 
-                WebMarkupContainer checkboxIcon = new WebMarkupContainer("checkboxIcon");
                 if (item.getModelObject().isActive()) {
-                    checkboxIcon.add(new FontAwesomeIconBehavior(FontAwesomeIconType.CHECK_SQUARE_O));
+                    link.add(new FontAwesomeIcon("checkboxIcon", FontAwesomeIconType.CHECK_SQUARE_O));
                 } else {
-                    checkboxIcon.add(new FontAwesomeIconBehavior(FontAwesomeIconType.SQUARE_O));
+                    link.add(new FontAwesomeIcon("checkboxIcon", FontAwesomeIconType.SQUARE_O));
                 }
-                link.add(checkboxIcon);
 
                 Label unitTitle = new Label("unitTitle", item.getModelObject().getUnitTitle());
                 unitTitle.setRenderBodyOnly(true);
