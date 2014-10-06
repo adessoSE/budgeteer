@@ -1,4 +1,4 @@
-package org.wickedsource.budgeteer.web.usecase.dashboard.chart.budgetburned;
+package org.wickedsource.budgeteer.web.usecase.dashboard.component.budgetburnedchart;
 
 import com.googlecode.wickedcharts.highcharts.options.*;
 import com.googlecode.wickedcharts.highcharts.options.series.Series;

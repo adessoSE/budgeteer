@@ -1,4 +1,4 @@
-package org.wickedsource.budgeteer.web.usecase.dashboard.chart.budgetburned;
+package org.wickedsource.budgeteer.web.usecase.dashboard.component.budgetburnedchart;
 
 import com.googlecode.wickedcharts.highcharts.theme.Theme;
 import com.googlecode.wickedcharts.wicket6.highcharts.Chart;

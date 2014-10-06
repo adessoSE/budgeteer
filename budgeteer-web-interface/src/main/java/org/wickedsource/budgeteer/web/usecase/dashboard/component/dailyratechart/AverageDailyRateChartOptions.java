@@ -1,4 +1,4 @@
-package org.wickedsource.budgeteer.web.usecase.dashboard.chart.dailyrate;
+package org.wickedsource.budgeteer.web.usecase.dashboard.component.dailyratechart;
 
 import com.googlecode.wickedcharts.highcharts.options.*;
 import com.googlecode.wickedcharts.highcharts.options.series.Series;

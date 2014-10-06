@@ -1,4 +1,4 @@
-package org.wickedsource.budgeteer.web.usecase.dashboard.chart.dailyrate;
+package org.wickedsource.budgeteer.web.usecase.dashboard.component.dailyratechart;
 
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.model.LoadableDetachableModel;
