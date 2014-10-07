@@ -10,4 +10,6 @@
 
     <mockito:mock id="statisticsService" class="org.wickedsource.budgeteer.service.statistics.StatisticsService"/>
 
+    <mockito:mock id="peopleService" class="org.wickedsource.budgeteer.service.people.PeopleService"/>
+
 </beans>

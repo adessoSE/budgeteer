@@ -1,12 +1,12 @@
 package org.wickedsource.budgeteer.service.notification;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Component
+@Service
 public class NotificationService {
 
     /**

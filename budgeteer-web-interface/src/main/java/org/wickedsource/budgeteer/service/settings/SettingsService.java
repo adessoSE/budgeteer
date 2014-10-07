@@ -1,11 +1,11 @@
 package org.wickedsource.budgeteer.service.settings;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
+@Service
 public class SettingsService {
 
     /**
