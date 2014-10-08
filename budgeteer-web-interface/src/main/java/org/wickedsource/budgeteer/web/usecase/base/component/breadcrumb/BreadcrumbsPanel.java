@@ -19,17 +19,22 @@ public class BreadcrumbsPanel extends Panel {
     }
 
     private ListView<Breadcrumb> createBreadcrumbsList(final IModel<List<Breadcrumb>> model) {
-        ListView<Breadcrumb> breadcrumbsList = new ListView<Breadcrumb>("breadcrumbsList", model) {
+        return new ListView<Breadcrumb>("breadcrumbsList", model) {
             @Override
             protected void populateItem(ListItem<Breadcrumb> item) {
-                Link link = new BookmarkablePageLink("breadcrumbLink", item.getModelObject().getTargetPage());
+                Link link;
+                if (item.getModelObject().getParameters() != null) {
+                    link = new BookmarkablePageLink("breadcrumbLink", item.getModelObject().getTargetPage(), item.getModelObject().getParameters());
+                } else {
+                    link = new BookmarkablePageLink("breadcrumbLink", item.getModelObject().getTargetPage());
+                }
+
                 Label label = new Label("breadcrumbTitle", item.getModelObject().getTitle());
                 label.setRenderBodyOnly(true);
                 link.add(label);
                 item.add(link);
             }
         };
-        return breadcrumbsList;
     }
 
 }

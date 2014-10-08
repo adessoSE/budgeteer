@@ -26,9 +26,8 @@ public class PeopleOverviewTable extends Panel {
         return new ListView<Person>(id, model) {
             @Override
             protected void populateItem(ListItem<Person> item) {
-                PageParameters parameters = new PageParameters();
-                parameters.add("id", item.getModelObject().getId());
-                Link link = new BookmarkablePageLink<PersonDetailsPage>("personLink", PersonDetailsPage.class);
+                PageParameters parameters = PersonDetailsPage.createParameters(item.getModelObject().getId());
+                Link link = new BookmarkablePageLink<PersonDetailsPage>("personLink", PersonDetailsPage.class, parameters);
                 item.add(link);
                 item.add(new Label("dailyRate", item.getModelObject().getAverageDailyRate()));
                 item.add(new Label("lastBooked", item.getModelObject().getLastBooked()));
