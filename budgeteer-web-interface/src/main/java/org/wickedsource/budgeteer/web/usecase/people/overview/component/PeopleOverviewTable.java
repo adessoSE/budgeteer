@@ -8,7 +8,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.wickedsource.budgeteer.service.people.Person;
+import org.wickedsource.budgeteer.service.people.PersonBaseData;
 import org.wickedsource.budgeteer.web.usecase.people.details.PersonDetailsPage;
 
 import java.util.List;
@@ -16,16 +16,16 @@ import java.util.List;
 
 public class PeopleOverviewTable extends Panel {
 
-    public PeopleOverviewTable(String id, IModel<List<Person>> model) {
+    public PeopleOverviewTable(String id, IModel<List<PersonBaseData>> model) {
         super(id, model);
         setRenderBodyOnly(true);
         add(createPersonList("personList", model));
     }
 
-    private ListView<Person> createPersonList(String id, IModel<List<Person>> model) {
-        return new ListView<Person>(id, model) {
+    private ListView<PersonBaseData> createPersonList(String id, IModel<List<PersonBaseData>> model) {
+        return new ListView<PersonBaseData>(id, model) {
             @Override
-            protected void populateItem(ListItem<Person> item) {
+            protected void populateItem(ListItem<PersonBaseData> item) {
                 PageParameters parameters = PersonDetailsPage.createParameters(item.getModelObject().getId());
                 Link link = new BookmarkablePageLink<PersonDetailsPage>("personLink", PersonDetailsPage.class, parameters);
                 item.add(link);

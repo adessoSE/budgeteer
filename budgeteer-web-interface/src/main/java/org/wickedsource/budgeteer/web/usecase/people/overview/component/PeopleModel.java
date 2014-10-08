@@ -4,11 +4,11 @@ import org.apache.wicket.injection.Injector;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.service.people.PeopleService;
-import org.wickedsource.budgeteer.service.people.Person;
+import org.wickedsource.budgeteer.service.people.PersonBaseData;
 
 import java.util.List;
 
-public class PeopleModel extends LoadableDetachableModel<List<Person>> {
+public class PeopleModel extends LoadableDetachableModel<List<PersonBaseData>> {
 
     @SpringBean
     private PeopleService service;
@@ -21,7 +21,7 @@ public class PeopleModel extends LoadableDetachableModel<List<Person>> {
     }
 
     @Override
-    protected List<Person> load() {
-        return service.getPeople(this.userId);
+    protected List<PersonBaseData> load() {
+        return service.loadtPeopleBaseData(this.userId);
     }
 }

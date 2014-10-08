@@ -2,7 +2,7 @@ package org.wickedsource.budgeteer.service.people;
 
 import java.util.Date;
 
-public class Person {
+public class PersonBaseData {
 
     private long id;
 

@@ -13,18 +13,34 @@ public class PeopleService {
      * Returns all people the given user can make use of to manage budgets.
      *
      * @param userId id of the logged in user.
-     * @return list of Person objects for all people the given user can make use of to manage budgets.
+     * @return list of PersonBaseData objects for all people the given user can make use of to manage budgets.
      */
-    public List<Person> getPeople(long userId) {
-        List<Person> list = new ArrayList<Person>();
+    public List<PersonBaseData> loadtPeopleBaseData(long userId) {
+        List<PersonBaseData> list = new ArrayList<PersonBaseData>();
         for (int i = 0; i < 20; i++) {
-            list.add(createPerson());
+            list.add(createPersonBaseData());
         }
         return list;
     }
 
-    private Person createPerson() {
-        Person person = new Person();
+    /**
+     * Returns detailed data about the person with the given id.
+     * @param personId id of the person whose data to load.
+     * @return the detailed data of the specified person.
+     */
+    public PersonDetailData loadPersonDetailData(long personId) {
+        PersonDetailData data = new PersonDetailData();
+        data.setAverageDailyRate(100.0);
+        data.setName("Tom Hombergs");
+        data.setBudgetBurned(100000.00);
+        data.setFirstBookedDate(new Date());
+        data.setHoursBooked(100.0);
+        data.setLastBookedDate(new Date());
+        return data;
+    }
+
+    private PersonBaseData createPersonBaseData() {
+        PersonBaseData person = new PersonBaseData();
         person.setId(1);
         person.setAverageDailyRate(1250.54);
         person.setLastBooked(new Date());

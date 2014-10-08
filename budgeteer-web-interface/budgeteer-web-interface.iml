@@ -6,10 +6,6 @@
         <webroots>
           <root url="file://$MODULE_DIR$/src/main/webapp" relative="" />
         </webroots>
-        <sourceRoots>
-          <root url="file://$MODULE_DIR$/src/main/java" />
-          <root url="file://$MODULE_DIR$/src/main/resources" />
-        </sourceRoots>
       </configuration>
     </facet>
   </component>
@@ -66,6 +62,9 @@
     <orderEntry type="library" exported="" name="Gradle: javassist-3.16.1-GA" level="project" />
     <orderEntry type="library" exported="" name="Gradle: xml-apis-1.0.b2" level="project" />
     <orderEntry type="library" exported="" name="Gradle: dom4j-1.6.1" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: wicketstuff-lazymodel-6.17.0" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: objenesis-1.2" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: cglib-nodep-2.2.2" level="project" />
   </component>
 </module>
 
