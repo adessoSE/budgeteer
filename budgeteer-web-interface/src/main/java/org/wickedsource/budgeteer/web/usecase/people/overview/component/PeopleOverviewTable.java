@@ -1,4 +1,4 @@
-package org.wickedsource.budgeteer.web.usecase.people.component;
+package org.wickedsource.budgeteer.web.usecase.people.overview.component;
 
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -9,9 +9,10 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.wickedsource.budgeteer.service.people.Person;
-import org.wickedsource.budgeteer.web.usecase.people.PersonDetailsPage;
+import org.wickedsource.budgeteer.web.usecase.people.details.PersonDetailsPage;
 
 import java.util.List;
+
 
 public class PeopleOverviewTable extends Panel {
 

@@ -1,0 +1,94 @@
+<wicket:extend>
+    <div class="form-box wide" id="login-box">
+        <div class="header">Edit Person Details
+            <div class="box-tools pull-right">
+                <button class="btn bg-olive btn-sm" onclick="window.history.back()"><i class="fa fa-times"></i></button>
+            </div>
+        </div>
+        <form action="../index.html" method="post">
+            <div class="body bg-gray">
+                <div class="alert alert-warning alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <p>Missing daily rate for budget Implementation of Feature XYZ between 01.01.2014 and 31.12.2014</p>
+                </div>
+                <div class="alert alert-warning alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <p>Missing daily rate for budget Project Management between 01.01.2014 and 31.12.2014</p>
+                </div>
+                <div class="form-group">
+                    <label for="titleInput">Name</label>
+                    <input type="text" name="name" id="titleInput" class="form-control"/>
+
+                    <p class="help-block">The full name of the person as it should be displayed in the dashboard.</p>
+                </div>
+                <div class="form-group">
+                    <label for="importKeyInput">Import Key</label>
+                    <input type="text" name="name" id="importKeyInput" class="form-control"/>
+
+                    <p class="help-block">The unique key that identifies this person when importing data. </p>
+                </div>
+                <div class="form-group">
+                    <p class="help-block">Define daily rates for different budgets and different date ranges in the
+                        table
+                        below.</p>
+                    <table class="table table-condensed">
+                        <thead>
+                        <tr>
+                            <th>Rate</th>
+                            <th>Budget</th>
+                            <th>Date Range</th>
+                            <th>Options</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>€790</td>
+                            <td>Project Management</td>
+                            <td>01.01.2014 - 01.02.2014</td>
+                            <td>
+                                <button type="button" class="btn btn-default btn-no-padding"><i
+                                        class="fa fa-minus-circle"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>€1200</td>
+                            <td>Implementation of Feature XYZ</td>
+                            <td>01.01.2014 - 31.12.2014</td>
+                            <td>
+                                <button type="button" class="btn btn-default btn-no-padding"><i
+                                        class="fa fa-minus-circle"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input type="text" style="width:50px"/></td>
+                            <td>
+                                <select>
+                                    <option>Project Management</option>
+                                    <option>Implementation of Feature XYZ</option>
+                                    <option>Feature 123</option>
+                                </select>
+                            </td>
+                            <td><input type="text" id="dateRangePicker" style="width:100%"/></td>
+                            <td>
+                                <button type="button" class="btn btn-default btn-no-padding"><i
+                                        class="fa fa-plus-circle"></i></button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="footer">
+                <div class="row">
+                    <div class="col-lg-3">
+                        <button type="submit" class="btn bg-olive btn-block">Cancel</button>
+                    </div>
+                    <div class="col-lg-9">
+                        <button type="submit" class="btn bg-olive btn-block">Create Person / Save Changes</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</wicket:extend>

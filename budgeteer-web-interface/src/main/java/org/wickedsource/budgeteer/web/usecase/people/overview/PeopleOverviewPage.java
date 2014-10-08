@@ -1,17 +1,13 @@
-package org.wickedsource.budgeteer.web.usecase.people;
+package org.wickedsource.budgeteer.web.usecase.people.overview;
 
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.usecase.base.BasePage;
 import org.wickedsource.budgeteer.web.usecase.base.component.breadcrumb.BreadcrumbsModel;
 import org.wickedsource.budgeteer.web.usecase.dashboard.DashboardPage;
-import org.wickedsource.budgeteer.web.usecase.people.component.PeopleModel;
-import org.wickedsource.budgeteer.web.usecase.people.component.PeopleOverviewTable;
+import org.wickedsource.budgeteer.web.usecase.people.overview.component.PeopleModel;
+import org.wickedsource.budgeteer.web.usecase.people.overview.component.PeopleOverviewTable;
 
-@Component
-@Scope("prototype")
 @Mount("people")
 public class PeopleOverviewPage extends BasePage {
 

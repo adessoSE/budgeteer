@@ -1,8 +1,6 @@
 package org.wickedsource.budgeteer.web.usecase.dashboard;
 
 
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.usecase.base.BasePage;
@@ -13,8 +11,6 @@ import org.wickedsource.budgeteer.web.usecase.dashboard.component.dailyratechart
 import org.wickedsource.budgeteer.web.usecase.dashboard.component.dailyratechart.AverageDailyRateChartModel;
 import org.wickedsource.budgeteer.web.wickedcharts.BudgeteerChartTheme;
 
-@Component
-@Scope("prototype")
 @Mount("dashboard")
 public class DashboardPage extends BasePage {
 

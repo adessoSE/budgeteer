@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.budgeteer.service.people.PeopleService;
 import org.wickedsource.budgeteer.service.people.Person;
 import org.wickedsource.budgeteer.web.AbstractWebTestTemplate;
+import org.wickedsource.budgeteer.web.usecase.people.overview.component.PeopleModel;
+import org.wickedsource.budgeteer.web.usecase.people.overview.component.PeopleOverviewTable;
 
 import java.util.ArrayList;
 import java.util.Date;

@@ -1,6 +1,7 @@
 package org.wickedsource.budgeteer.web.usecase.base;
 
 import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.usecase.base.component.breadcrumb.BreadcrumbsModel;
 import org.wickedsource.budgeteer.web.usecase.base.component.breadcrumb.BreadcrumbsPanel;
@@ -11,8 +12,17 @@ import org.wickedsource.budgeteer.web.usecase.base.component.notification.Notifi
 
 public abstract class BasePage extends WebPage {
 
-    @SuppressWarnings("unchecked")
+    public BasePage(PageParameters parameters){
+        super(parameters);
+        addComponents();
+    }
+
     public BasePage() {
+        addComponents();
+    }
+
+    @SuppressWarnings("unchecked")
+    private void addComponents() {
         BreadcrumbsPanel breadcrumbs = new BreadcrumbsPanel("breadcrumbsPanel", getBreadcrumbsModel());
         long loggedInUserId = ((BudgeteerSession) getSession()).getLoggedInUserId();
         add(breadcrumbs);
@@ -24,4 +34,5 @@ public abstract class BasePage extends WebPage {
      * Expects a BreadcrumbsModel to be returned that contains all pages that should be displayed in the breadcrumbs.
      */
     protected abstract BreadcrumbsModel getBreadcrumbsModel();
+
 }

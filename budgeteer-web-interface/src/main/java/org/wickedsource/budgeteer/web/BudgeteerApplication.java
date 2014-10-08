@@ -1,7 +1,6 @@
 package org.wickedsource.budgeteer.web;
 
 import com.googlecode.wickedcharts.wicket6.JavaScriptResourceRegistry;
-import org.apache.wicket.IPageFactory;
 import org.apache.wicket.Session;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
@@ -15,7 +14,6 @@ import org.reflections.util.ConfigurationBuilder;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.wickedsource.budgeteer.web.usecase.dashboard.DashboardPage;
 
@@ -49,7 +47,7 @@ public class BudgeteerApplication extends WebApplication implements ApplicationC
                 new ConfigurationBuilder().setUrls(
                         ClasspathHelper.forPackage("org.wickedsource.budgeteer")).setScanners(
                         new TypeAnnotationsScanner()));
-        Set<Class<?>> pagesToMount = reflections.getTypesAnnotatedWith(Scope.class);
+        Set<Class<?>> pagesToMount = reflections.getTypesAnnotatedWith(Mount.class);
 
         for (Class<?> page : pagesToMount) {
             Class<? extends WebPage> pageClass = (Class<? extends WebPage>) page;
@@ -73,10 +71,6 @@ public class BudgeteerApplication extends WebApplication implements ApplicationC
         this.context = applicationContext;
     }
 
-    @Override
-    protected IPageFactory newPageFactory() {
-        return new SpringPageFactory(this.context);
-    }
 }
 
 
