@@ -29,7 +29,7 @@ public class BreadcrumbsPanel extends Panel {
                     link = new BookmarkablePageLink("breadcrumbLink", item.getModelObject().getTargetPage());
                 }
 
-                Label label = new Label("breadcrumbTitle", item.getModelObject().getTitle());
+                Label label = new Label("breadcrumbTitle", item.getModelObject().getTitleModel());
                 label.setRenderBodyOnly(true);
                 link.add(label);
                 item.add(link);

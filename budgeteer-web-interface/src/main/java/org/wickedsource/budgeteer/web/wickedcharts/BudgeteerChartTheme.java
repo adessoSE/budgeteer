@@ -3,6 +3,7 @@ package org.wickedsource.budgeteer.web.wickedcharts;
 import com.googlecode.wickedcharts.highcharts.options.CreditOptions;
 import com.googlecode.wickedcharts.highcharts.options.ExportingOptions;
 import com.googlecode.wickedcharts.highcharts.options.Legend;
+import com.googlecode.wickedcharts.highcharts.options.Title;
 import com.googlecode.wickedcharts.highcharts.options.color.HexColor;
 import com.googlecode.wickedcharts.highcharts.theme.Theme;
 
@@ -25,5 +26,7 @@ public class BudgeteerChartTheme extends Theme {
         setLegend(new Legend().setEnabled(false));
 
         setExporting(new ExportingOptions().setEnabled(false));
+
+        setTitle(new Title().setText(""));
     }
 }

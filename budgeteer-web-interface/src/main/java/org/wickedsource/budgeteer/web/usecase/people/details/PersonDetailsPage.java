@@ -6,7 +6,12 @@ import org.wickedsource.budgeteer.web.usecase.base.BasePage;
 import org.wickedsource.budgeteer.web.usecase.base.component.breadcrumb.Breadcrumb;
 import org.wickedsource.budgeteer.web.usecase.base.component.breadcrumb.BreadcrumbsModel;
 import org.wickedsource.budgeteer.web.usecase.dashboard.DashboardPage;
+import org.wickedsource.budgeteer.web.usecase.people.details.component.highlightspanel.PersonHighlightsModel;
+import org.wickedsource.budgeteer.web.usecase.people.details.component.highlightspanel.PersonHighlightsPanel;
+import org.wickedsource.budgeteer.web.usecase.people.details.component.highlightspanel.budgetdistributionchart.BudgetDistributionChart;
+import org.wickedsource.budgeteer.web.usecase.people.details.component.highlightspanel.budgetdistributionchart.BudgetDistributionChartModel;
 import org.wickedsource.budgeteer.web.usecase.people.overview.PeopleOverviewPage;
+import org.wickedsource.budgeteer.web.wickedcharts.BudgeteerChartTheme;
 
 @Mount("people/details/${id}")
 public class PersonDetailsPage extends BasePage {
@@ -14,6 +19,8 @@ public class PersonDetailsPage extends BasePage {
 
     public PersonDetailsPage(PageParameters parameters) {
         super(parameters);
+        add(new PersonHighlightsPanel("highlightsPanel", new PersonHighlightsModel(getPersonId())));
+        add(new BudgetDistributionChart("distributionChart", new BudgetDistributionChartModel(getPersonId()), new BudgeteerChartTheme()));
     }
 
     /**
@@ -28,11 +35,15 @@ public class PersonDetailsPage extends BasePage {
         return parameters;
     }
 
+    private long getPersonId() {
+        return getPageParameters().get("id").toLong();
+    }
+
     @Override
     @SuppressWarnings("unchecked")
     protected BreadcrumbsModel getBreadcrumbsModel() {
         BreadcrumbsModel model = new BreadcrumbsModel(DashboardPage.class, PeopleOverviewPage.class);
-        model.addBreadcrumb(new Breadcrumb(PersonDetailsPage.class, getPageParameters(), "Tom Hombergs"));
+        model.addBreadcrumb(new Breadcrumb(PersonDetailsPage.class, getPageParameters(), new PersonNameModel(getPersonId())));
         return model;
     }
 

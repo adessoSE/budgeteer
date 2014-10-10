@@ -1,4 +1,4 @@
-package org.wickedsource.budgeteer.web.usecase.dashboard.component.budgetburnedchart;
+package org.wickedsource.budgeteer.web.usecase.dashboard.component.burnedbudgetchart;
 
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.model.LoadableDetachableModel;

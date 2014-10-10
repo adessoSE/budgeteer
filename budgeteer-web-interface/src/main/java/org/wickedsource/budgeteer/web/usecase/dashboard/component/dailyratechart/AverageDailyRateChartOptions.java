@@ -16,8 +16,6 @@ public class AverageDailyRateChartOptions extends Options {
                 .setType(SeriesType.LINE)
                 .setHeight(300));
 
-        setTitle(new Title(""));
-
         setxAxis(new Axis()
                 .setType(AxisType.DATETIME));
 

@@ -1,4 +1,4 @@
-package org.wickedsource.budgeteer.web.usecase.people.details.component;
+package org.wickedsource.budgeteer.web.usecase.people.details.component.highlightspanel;
 
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;

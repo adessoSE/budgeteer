@@ -1,4 +1,4 @@
-package org.wickedsource.budgeteer.web.usecase.people.details.component;
+package org.wickedsource.budgeteer.web.usecase.people.details.component.highlightspanel;
 
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.model.IObjectClassAwareModel;

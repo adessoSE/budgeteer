@@ -41,4 +41,18 @@ public class StatisticsService {
         return list;
     }
 
+    /**
+     * Returns the share of all budgets the given person has booked on.
+     *
+     * @param personId id of the person whose budget share to calculate
+     * @return list of BudgetShare objects, totaling 100%
+     */
+    public List<BudgetShare> getBudgetDistribution(long personId) {
+        List<BudgetShare> shares = new ArrayList<BudgetShare>();
+        for (int i = 0; i < 5; i++) {
+            shares.add(new BudgetShare(random.nextDouble(), "Budget " + i));
+        }
+        return shares;
+    }
+
 }

@@ -1,4 +1,4 @@
-package org.wickedsource.budgeteer.web.usecase.dashboard.component.budgetburnedchart;
+package org.wickedsource.budgeteer.web.usecase.dashboard.component.burnedbudgetchart;
 
 import com.googlecode.wickedcharts.highcharts.options.*;
 import com.googlecode.wickedcharts.highcharts.options.series.Series;
@@ -19,8 +19,6 @@ public class BurnedBudgetChartOptions extends Options {
         setChart(new ChartOptions()
                 .setType(SeriesType.COLUMN)
                 .setHeight(300));
-
-        setTitle(new Title(""));
 
         setxAxis(new Axis()
                 .setCategories(getWeekLabels()));

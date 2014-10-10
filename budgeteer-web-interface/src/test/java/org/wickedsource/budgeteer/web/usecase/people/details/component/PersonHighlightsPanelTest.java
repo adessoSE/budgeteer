@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.budgeteer.service.people.PeopleService;
 import org.wickedsource.budgeteer.service.people.PersonDetailData;
 import org.wickedsource.budgeteer.web.AbstractWebTestTemplate;
+import org.wickedsource.budgeteer.web.usecase.people.details.component.highlightspanel.PersonHighlightsModel;
+import org.wickedsource.budgeteer.web.usecase.people.details.component.highlightspanel.PersonHighlightsPanel;
 
 import java.util.Date;
 

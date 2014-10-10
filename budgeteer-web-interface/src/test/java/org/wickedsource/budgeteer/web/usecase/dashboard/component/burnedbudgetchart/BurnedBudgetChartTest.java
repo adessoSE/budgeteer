@@ -1,4 +1,4 @@
-package org.wickedsource.budgeteer.web.usecase.dashboard.component.budgetburnedchart;
+package org.wickedsource.budgeteer.web.usecase.dashboard.component.burnedbudgetchart;
 
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.Test;
