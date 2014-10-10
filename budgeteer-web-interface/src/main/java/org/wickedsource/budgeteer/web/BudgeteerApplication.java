@@ -52,7 +52,9 @@ public class BudgeteerApplication extends WebApplication implements ApplicationC
         for (Class<?> page : pagesToMount) {
             Class<? extends WebPage> pageClass = (Class<? extends WebPage>) page;
             Mount mount = pageClass.getAnnotation(Mount.class);
-            mountPage(mount.value(), pageClass);
+            for (String mountUrl : mount.value()) {
+                mountPage(mountUrl, pageClass);
+            }
         }
     }
 

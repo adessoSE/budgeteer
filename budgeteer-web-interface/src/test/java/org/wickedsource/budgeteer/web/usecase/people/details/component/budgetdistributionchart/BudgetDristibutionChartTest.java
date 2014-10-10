@@ -1,4 +1,4 @@
-package org.wickedsource.budgeteer.web.usecase.people.details.component.highlightspanel.budgetdistributionchart;
+package org.wickedsource.budgeteer.web.usecase.people.details.component.budgetdistributionchart;
 
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.Test;

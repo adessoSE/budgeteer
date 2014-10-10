@@ -1,4 +1,4 @@
-package org.wickedsource.budgeteer.web.usecase.people.details.component.highlightspanel.budgetdistributionchart;
+package org.wickedsource.budgeteer.web.usecase.people.details.component.budgetdistributionchart;
 
 import com.googlecode.wickedcharts.highcharts.theme.Theme;
 import com.googlecode.wickedcharts.wicket6.highcharts.Chart;

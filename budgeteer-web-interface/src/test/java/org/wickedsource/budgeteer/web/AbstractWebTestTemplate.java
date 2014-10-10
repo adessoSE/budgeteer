@@ -27,9 +27,13 @@ public abstract class AbstractWebTestTemplate {
 
     protected void assertLink(String id, Class<? extends WebPage> pageClass) {
         TagTester tagTester = getTester().getTagById(id);
-        String mountUrl = pageClass.getAnnotation(Mount.class).value();
         String href = tagTester.getAttribute("href").replaceFirst("\\./", "");
-        Assert.assertEquals(mountUrl, href);
+        for (String mountUrl : pageClass.getAnnotation(Mount.class).value()) {
+            if (mountUrl.equals(href)) {
+                return;
+            }
+        }
+        Assert.fail(String.format("Link points to Url %s instead of one of the expected urls specified in the @Mount annotation on class %s", href, pageClass));
     }
 
 }

@@ -23,7 +23,7 @@ public class PeopleOverviewTableTest extends AbstractWebTestTemplate {
     @Test
     public void testRender() {
         WicketTester tester = getTester();
-        when(service.loadtPeopleBaseData(1l)).thenReturn(createPersons());
+        when(service.loadPeopleBaseData(1l)).thenReturn(createPersons());
         PeopleModel model = new PeopleModel(1l);
         PeopleOverviewTable table = new PeopleOverviewTable("table", model);
         tester.startComponentInPage(table);

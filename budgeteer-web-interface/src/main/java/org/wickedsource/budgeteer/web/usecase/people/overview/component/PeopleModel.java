@@ -22,6 +22,6 @@ public class PeopleModel extends LoadableDetachableModel<List<PersonBaseData>> {
 
     @Override
     protected List<PersonBaseData> load() {
-        return service.loadtPeopleBaseData(this.userId);
+        return service.loadPeopleBaseData(this.userId);
     }
 }

@@ -12,4 +12,5 @@
 
     <mockito:mock id="peopleService" class="org.wickedsource.budgeteer.service.people.PeopleService"/>
 
+    <mockito:mock id="budgetService" class="org.wickedsource.budgeteer.service.budget.BudgetService"/>
 </beans>

@@ -6,10 +6,6 @@
         <webroots>
           <root url="file://$MODULE_DIR$/src/main/webapp" relative="" />
         </webroots>
-        <sourceRoots>
-          <root url="file://$MODULE_DIR$/src/main/java" />
-          <root url="file://$MODULE_DIR$/src/main/resources" />
-        </sourceRoots>
       </configuration>
     </facet>
   </component>
@@ -69,6 +65,7 @@
     <orderEntry type="library" exported="" name="Gradle: wicketstuff-lazymodel-6.17.0" level="project" />
     <orderEntry type="library" exported="" name="Gradle: objenesis-1.2" level="project" />
     <orderEntry type="library" exported="" name="Gradle: cglib-nodep-2.2.2" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: commons-lang3-3.3.2" level="project" />
   </component>
 </module>
 

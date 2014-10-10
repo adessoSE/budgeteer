@@ -6,10 +6,10 @@ import org.wickedsource.budgeteer.web.usecase.base.BasePage;
 import org.wickedsource.budgeteer.web.usecase.base.component.breadcrumb.Breadcrumb;
 import org.wickedsource.budgeteer.web.usecase.base.component.breadcrumb.BreadcrumbsModel;
 import org.wickedsource.budgeteer.web.usecase.dashboard.DashboardPage;
+import org.wickedsource.budgeteer.web.usecase.people.details.component.budgetdistributionchart.BudgetDistributionChart;
+import org.wickedsource.budgeteer.web.usecase.people.details.component.budgetdistributionchart.BudgetDistributionChartModel;
 import org.wickedsource.budgeteer.web.usecase.people.details.component.highlightspanel.PersonHighlightsModel;
 import org.wickedsource.budgeteer.web.usecase.people.details.component.highlightspanel.PersonHighlightsPanel;
-import org.wickedsource.budgeteer.web.usecase.people.details.component.highlightspanel.budgetdistributionchart.BudgetDistributionChart;
-import org.wickedsource.budgeteer.web.usecase.people.details.component.highlightspanel.budgetdistributionchart.BudgetDistributionChartModel;
 import org.wickedsource.budgeteer.web.usecase.people.overview.PeopleOverviewPage;
 import org.wickedsource.budgeteer.web.wickedcharts.BudgeteerChartTheme;
 

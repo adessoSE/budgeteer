@@ -10,6 +10,6 @@ public @interface Mount {
     /**
      * The url the annotated page should be mounted to.
      */
-    String value();
+    String[] value();
 
 }

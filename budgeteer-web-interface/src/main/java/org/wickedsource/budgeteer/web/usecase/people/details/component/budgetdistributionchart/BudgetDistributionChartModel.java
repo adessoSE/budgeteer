@@ -1,4 +1,4 @@
-package org.wickedsource.budgeteer.web.usecase.people.details.component.highlightspanel.budgetdistributionchart;
+package org.wickedsource.budgeteer.web.usecase.people.details.component.budgetdistributionchart;
 
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.model.LoadableDetachableModel;
