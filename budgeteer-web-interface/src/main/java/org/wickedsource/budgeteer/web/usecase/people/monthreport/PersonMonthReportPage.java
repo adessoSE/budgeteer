@@ -1,4 +1,4 @@
-package org.wickedsource.budgeteer.web.usecase.people.weekreport;
+package org.wickedsource.budgeteer.web.usecase.people.monthreport;
 
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
@@ -16,25 +16,25 @@ import org.wickedsource.budgeteer.web.usecase.base.component.breadcrumb.Breadcru
 import org.wickedsource.budgeteer.web.usecase.dashboard.DashboardPage;
 import org.wickedsource.budgeteer.web.usecase.people.details.PersonDetailsPage;
 import org.wickedsource.budgeteer.web.usecase.people.details.PersonNameModel;
+import org.wickedsource.budgeteer.web.usecase.people.monthreport.component.monthreporttable.PersonMonthlyAggregatedRecordsModel;
+import org.wickedsource.budgeteer.web.usecase.people.monthreport.component.targetactualchart.PersonMonthlyAggregationModel;
 import org.wickedsource.budgeteer.web.usecase.people.overview.PeopleOverviewPage;
-import org.wickedsource.budgeteer.web.usecase.people.weekreport.component.targetactualchart.PersonWeeklyAggregationModel;
-import org.wickedsource.budgeteer.web.usecase.people.weekreport.component.weekreporttable.PersonWeeklyAggregatedRecordsModel;
 
 import java.util.List;
 
-@Mount("people/weeks/${id}")
-public class PersonWeekReportPage extends BasePage {
+@Mount("people/months/${id}")
+public class PersonMonthReportPage extends BasePage {
 
-    public PersonWeekReportPage(PageParameters parameters) {
+    public PersonMonthReportPage(PageParameters parameters) {
         super(parameters);
         PersonNameModel personNameModel = new PersonNameModel(getPersonId());
         add(new Label("personName", personNameModel));
         add(new Label("personName2", personNameModel));
 
-        IModel<TargetAndActual> model = new PersonWeeklyAggregationModel(getPersonId());
-        add(new TargetAndActualChart("targetAndActualChart", model, new BudgeteerChartTheme(), TargetAndActualChartOptions.Mode.WEEKLY));
+        IModel<TargetAndActual> model = new PersonMonthlyAggregationModel(getPersonId());
+        add(new TargetAndActualChart("targetAndActualChart", model, new BudgeteerChartTheme(), TargetAndActualChartOptions.Mode.MONTHLY));
 
-        IModel<List<AggregatedRecord>> tableModel = new PersonWeeklyAggregatedRecordsModel(getPersonId());
+        IModel<List<AggregatedRecord>> tableModel = new PersonMonthlyAggregatedRecordsModel(getPersonId());
         add(new AggregatedRecordTable("table", tableModel));
     }
 
@@ -60,7 +60,7 @@ public class PersonWeekReportPage extends BasePage {
     protected BreadcrumbsModel getBreadcrumbsModel() {
         BreadcrumbsModel model = new BreadcrumbsModel(DashboardPage.class, PeopleOverviewPage.class);
         model.addBreadcrumb(new Breadcrumb(PersonDetailsPage.class, PersonDetailsPage.createParameters(getPersonId()), new PersonNameModel(getPersonId())));
-        model.addBreadcrumb(new Breadcrumb(PersonWeekReportPage.class, getPageParameters(), getString("breadcrumb.title")));
+        model.addBreadcrumb(new Breadcrumb(PersonMonthReportPage.class, getPageParameters(), getString("breadcrumb.title")));
         return model;
     }
 }

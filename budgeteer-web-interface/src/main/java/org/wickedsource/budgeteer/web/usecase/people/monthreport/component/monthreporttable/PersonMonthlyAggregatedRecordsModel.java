@@ -1,4 +1,4 @@
-package org.wickedsource.budgeteer.web.usecase.people.weekreport.component.weekreporttable;
+package org.wickedsource.budgeteer.web.usecase.people.monthreport.component.monthreporttable;
 
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.model.LoadableDetachableModel;
@@ -8,20 +8,20 @@ import org.wickedsource.budgeteer.service.hours.AggregationService;
 
 import java.util.List;
 
-public class PersonWeekReportModel extends LoadableDetachableModel<List<AggregatedRecord>> {
+public class PersonMonthlyAggregatedRecordsModel extends LoadableDetachableModel<List<AggregatedRecord>> {
 
     @SpringBean
     private AggregationService service;
 
     private long personId;
 
-    public PersonWeekReportModel(long personId) {
+    public PersonMonthlyAggregatedRecordsModel(long personId) {
         Injector.get().inject(this);
         this.personId = personId;
     }
 
     @Override
     protected List<AggregatedRecord> load() {
-        return service.getWeeklyAggregationForPerson(personId);
+        return service.getMonthlyAggregationForPerson(personId);
     }
 }

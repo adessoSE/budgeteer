@@ -5,6 +5,7 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.wickedsource.budgeteer.web.Mount;
+import org.wickedsource.budgeteer.web.charts.BudgeteerChartTheme;
 import org.wickedsource.budgeteer.web.usecase.base.BasePage;
 import org.wickedsource.budgeteer.web.usecase.base.component.breadcrumb.Breadcrumb;
 import org.wickedsource.budgeteer.web.usecase.base.component.breadcrumb.BreadcrumbsModel;
@@ -14,9 +15,9 @@ import org.wickedsource.budgeteer.web.usecase.people.details.component.budgetdis
 import org.wickedsource.budgeteer.web.usecase.people.details.component.highlightspanel.PersonHighlightsModel;
 import org.wickedsource.budgeteer.web.usecase.people.details.component.highlightspanel.PersonHighlightsPanel;
 import org.wickedsource.budgeteer.web.usecase.people.edit.EditPersonPage;
+import org.wickedsource.budgeteer.web.usecase.people.monthreport.PersonMonthReportPage;
 import org.wickedsource.budgeteer.web.usecase.people.overview.PeopleOverviewPage;
 import org.wickedsource.budgeteer.web.usecase.people.weekreport.PersonWeekReportPage;
-import org.wickedsource.budgeteer.web.wickedcharts.BudgeteerChartTheme;
 
 @Mount("people/details/${id}")
 public class PersonDetailsPage extends BasePage {
@@ -30,6 +31,8 @@ public class PersonDetailsPage extends BasePage {
         add(createEditPersonLink("editPersonLink2"));
         add(new BookmarkablePageLink<PersonWeekReportPage>("weekReportLink1", PersonWeekReportPage.class, PersonWeekReportPage.createParameters(getPersonId())));
         add(new BookmarkablePageLink<PersonWeekReportPage>("weekReportLink2", PersonWeekReportPage.class, PersonWeekReportPage.createParameters(getPersonId())));
+        add(new BookmarkablePageLink<PersonWeekReportPage>("monthReportLink1", PersonMonthReportPage.class, PersonMonthReportPage.createParameters(getPersonId())));
+        add(new BookmarkablePageLink<PersonWeekReportPage>("monthReportLink2", PersonMonthReportPage.class, PersonMonthReportPage.createParameters(getPersonId())));
     }
 
     private Link createEditPersonLink(String id) {

@@ -3,7 +3,7 @@ package org.wickedsource.budgeteer.web.usecase.dashboard.component.burnedbudgetc
 import com.googlecode.wickedcharts.highcharts.options.*;
 import com.googlecode.wickedcharts.highcharts.options.series.Series;
 import org.wickedsource.budgeteer.web.PropertyLoader;
-import org.wickedsource.budgeteer.web.wickedcharts.ChartUtils;
+import org.wickedsource.budgeteer.web.charts.ChartUtils;
 
 public class BurnedBudgetChartOptions extends Options {
 

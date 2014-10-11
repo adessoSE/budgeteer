@@ -1,5 +1,7 @@
-package org.wickedsource.budgeteer.web.wickedcharts;
+package org.wickedsource.budgeteer.web.charts;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -22,6 +24,19 @@ public class ChartUtils {
             labels.add(String.format(weekLabelFormat, currentWeek));
             c.add(Calendar.WEEK_OF_YEAR, -1);
             currentWeek = c.get(Calendar.WEEK_OF_YEAR);
+        }
+        Collections.reverse(labels);
+        return labels;
+    }
+
+    private final static DateFormat monthFormat = new SimpleDateFormat("MMM ''yy");
+
+    public static List<String> getMonthLabels(int numberOfMonths) {
+        List<String> labels = new ArrayList<String>();
+        Calendar c = Calendar.getInstance();
+        for (int i = 0; i < numberOfMonths; i++) {
+            labels.add(monthFormat.format(c.getTime()));
+            c.add(Calendar.MONTH, -1);
         }
         Collections.reverse(labels);
         return labels;

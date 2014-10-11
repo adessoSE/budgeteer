@@ -1,4 +1,4 @@
-package org.wickedsource.budgeteer.web.usecase.people.weekreport.component.weekreporttable;
+package org.wickedsource.budgeteer.web.component.aggregatedrecordtable;
 
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.basic.Label;
@@ -13,9 +13,9 @@ import java.util.List;
 import static org.wicketstuff.lazymodel.LazyModel.from;
 import static org.wicketstuff.lazymodel.LazyModel.model;
 
-public class PersonWeekReportTable extends Panel {
+public class AggregatedRecordTable extends Panel {
 
-    public PersonWeekReportTable(String id, IModel<List<AggregatedRecord>> model) {
+    public AggregatedRecordTable(String id, IModel<List<AggregatedRecord>> model) {
         super(id, model);
         setRenderBodyOnly(true);
         add(createList("list"));

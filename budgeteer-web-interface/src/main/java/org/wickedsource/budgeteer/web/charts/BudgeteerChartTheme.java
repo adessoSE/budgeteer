@@ -1,4 +1,4 @@
-package org.wickedsource.budgeteer.web.wickedcharts;
+package org.wickedsource.budgeteer.web.charts;
 
 import com.googlecode.wickedcharts.highcharts.options.CreditOptions;
 import com.googlecode.wickedcharts.highcharts.options.ExportingOptions;

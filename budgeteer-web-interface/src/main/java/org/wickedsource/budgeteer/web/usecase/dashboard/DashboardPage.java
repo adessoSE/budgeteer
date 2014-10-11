@@ -3,13 +3,13 @@ package org.wickedsource.budgeteer.web.usecase.dashboard;
 
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.Mount;
+import org.wickedsource.budgeteer.web.charts.BudgeteerChartTheme;
 import org.wickedsource.budgeteer.web.usecase.base.BasePage;
 import org.wickedsource.budgeteer.web.usecase.base.component.breadcrumb.BreadcrumbsModel;
 import org.wickedsource.budgeteer.web.usecase.dashboard.component.burnedbudgetchart.BurnedBudgetChart;
 import org.wickedsource.budgeteer.web.usecase.dashboard.component.burnedbudgetchart.BurnedBudgetChartModel;
 import org.wickedsource.budgeteer.web.usecase.dashboard.component.dailyratechart.AverageDailyRateChart;
 import org.wickedsource.budgeteer.web.usecase.dashboard.component.dailyratechart.AverageDailyRateChartModel;
-import org.wickedsource.budgeteer.web.wickedcharts.BudgeteerChartTheme;
 
 @Mount("dashboard")
 public class DashboardPage extends BasePage {

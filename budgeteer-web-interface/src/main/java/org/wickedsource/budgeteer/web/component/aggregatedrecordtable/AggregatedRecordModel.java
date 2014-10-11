@@ -1,4 +1,4 @@
-package org.wickedsource.budgeteer.web.usecase.people.weekreport.component.weekreporttable;
+package org.wickedsource.budgeteer.web.component.aggregatedrecordtable;
 
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.IObjectClassAwareModel;

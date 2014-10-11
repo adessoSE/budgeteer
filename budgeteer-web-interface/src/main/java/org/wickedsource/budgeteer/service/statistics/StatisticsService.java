@@ -84,4 +84,32 @@ public class StatisticsService {
         return targetAndActual;
     }
 
+    /**
+     * Returns the actual and target budget valued for the given person from the last numberOfMonths months.
+     *
+     * @param personId      ID of the person whose data to load.
+     * @param numberOfMonths the number of months to go back into the past.
+     * @return the week statistics for the last numberOfWeeks weeks
+     */
+    public TargetAndActual getMonthStatsForPerson(long personId, int numberOfMonths) {
+        TargetAndActual targetAndActual = new TargetAndActual();
+
+        for (int i = 0; i < 5; i++) {
+            BudgeteerSeries series = new BudgeteerSeries();
+            series.setName("Budget " + i);
+            for (int j = 0; j < numberOfMonths; j++) {
+                series.getValues().add(random.nextDouble());
+            }
+            targetAndActual.getActualSeries().add(series);
+        }
+
+        BudgeteerSeries series = new BudgeteerSeries();
+        series.setName("Target");
+        for (int j = 0; j < numberOfMonths; j++) {
+            series.getValues().add(random.nextDouble());
+        }
+        targetAndActual.setTargetSeries(series);
+
+        return targetAndActual;
+    }
 }

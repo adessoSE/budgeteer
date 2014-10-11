@@ -1,4 +1,4 @@
-package org.wickedsource.budgeteer.web.usecase.people.weekreport.component.targetactualchart;
+package org.wickedsource.budgeteer.web.component.targetactualchart;
 
 import com.googlecode.wickedcharts.highcharts.options.*;
 import com.googlecode.wickedcharts.highcharts.options.color.HexColor;
@@ -7,19 +7,32 @@ import org.apache.wicket.model.IModel;
 import org.wickedsource.budgeteer.service.statistics.BudgeteerSeries;
 import org.wickedsource.budgeteer.service.statistics.TargetAndActual;
 import org.wickedsource.budgeteer.web.PropertyLoader;
-import org.wickedsource.budgeteer.web.wickedcharts.ChartUtils;
+import org.wickedsource.budgeteer.web.charts.ChartUtils;
 
 public class TargetAndActualChartOptions extends Options {
 
-    public TargetAndActualChartOptions(IModel<TargetAndActual> model) {
+    public enum Mode {
+        MONTHLY,
+
+        WEEKLY;
+    }
+
+    public TargetAndActualChartOptions(IModel<TargetAndActual> model, Mode mode) {
         setChart(new ChartOptions()
                 .setType(SeriesType.COLUMN)
                 .setHeight(300));
 
         setxAxis(new Axis()
                 .setLabels(new Labels()
-                        .setRotation(-70))
-                .setCategories(ChartUtils.getWeekLabels(12, PropertyLoader.getProperty(TargetAndActualChart.class, "chart.weekLabelFormat"))));
+                        .setRotation(-70)));
+
+        switch (mode) {
+            case MONTHLY:
+                getxAxis().get(0).setCategories(ChartUtils.getMonthLabels(12));
+                break;
+            case WEEKLY:
+                getxAxis().get(0).setCategories(ChartUtils.getWeekLabels(12, PropertyLoader.getProperty(TargetAndActualChart.class, "chart.weekLabelFormat")));
+        }
 
         setyAxis(new Axis()
                 .setTitle(new Title("")));

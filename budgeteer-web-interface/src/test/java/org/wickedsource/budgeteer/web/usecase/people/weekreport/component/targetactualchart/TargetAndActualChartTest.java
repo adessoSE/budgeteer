@@ -5,23 +5,21 @@ import org.junit.Test;
 import org.wickedsource.budgeteer.service.statistics.BudgeteerSeries;
 import org.wickedsource.budgeteer.service.statistics.TargetAndActual;
 import org.wickedsource.budgeteer.web.AbstractWebTestTemplate;
-import org.wickedsource.budgeteer.web.wickedcharts.BudgeteerChartTheme;
+import org.wickedsource.budgeteer.web.charts.BudgeteerChartTheme;
+import org.wickedsource.budgeteer.web.component.targetactualchart.TargetAndActualChart;
+import org.wickedsource.budgeteer.web.component.targetactualchart.TargetAndActualChartOptions;
 
 import java.util.Random;
 
-public class TargetAndActualChartTest extends AbstractWebTestTemplate{
-
-//    @Autowired
-//    private StatisticsService service;
+public class TargetAndActualChartTest extends AbstractWebTestTemplate {
 
     private Random random = new Random();
 
     @Test
     public void testRender() {
         WicketTester tester = getTester();
-//        when(service.getWeekStatsForPerson(1l, 12)).thenReturn(createTargetAndActual(1l, 12));
-        WeeklyTargetAndActualModel model = new WeeklyTargetAndActualModel(1l);
-        tester.startComponentInPage(new TargetAndActualChart("chart", model, new BudgeteerChartTheme()));
+        PersonWeeklyAggregationModel model = new PersonWeeklyAggregationModel(1l);
+        tester.startComponentInPage(new TargetAndActualChart("chart", model, new BudgeteerChartTheme(), TargetAndActualChartOptions.Mode.WEEKLY));
     }
 
     public TargetAndActual createTargetAndActual(long personId, int numberOfWeeks) {

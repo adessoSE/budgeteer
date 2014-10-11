@@ -3,7 +3,7 @@ package org.wickedsource.budgeteer.web.usecase.dashboard.component.burnedbudgetc
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.Test;
 import org.wickedsource.budgeteer.web.AbstractWebTestTemplate;
-import org.wickedsource.budgeteer.web.wickedcharts.BudgeteerChartTheme;
+import org.wickedsource.budgeteer.web.charts.BudgeteerChartTheme;
 
 public class BurnedBudgetChartTest extends AbstractWebTestTemplate {
 
