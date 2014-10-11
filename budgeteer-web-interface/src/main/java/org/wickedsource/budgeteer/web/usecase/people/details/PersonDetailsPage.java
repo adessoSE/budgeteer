@@ -1,6 +1,7 @@
 package org.wickedsource.budgeteer.web.usecase.people.details;
 
 import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.wickedsource.budgeteer.web.Mount;
@@ -14,6 +15,7 @@ import org.wickedsource.budgeteer.web.usecase.people.details.component.highlight
 import org.wickedsource.budgeteer.web.usecase.people.details.component.highlightspanel.PersonHighlightsPanel;
 import org.wickedsource.budgeteer.web.usecase.people.edit.EditPersonPage;
 import org.wickedsource.budgeteer.web.usecase.people.overview.PeopleOverviewPage;
+import org.wickedsource.budgeteer.web.usecase.people.weekreport.PersonWeekReportPage;
 import org.wickedsource.budgeteer.web.wickedcharts.BudgeteerChartTheme;
 
 @Mount("people/details/${id}")
@@ -26,6 +28,8 @@ public class PersonDetailsPage extends BasePage {
         add(new BudgetDistributionChart("distributionChart", new BudgetDistributionChartModel(getPersonId()), new BudgeteerChartTheme()));
         add(createEditPersonLink("editPersonLink1"));
         add(createEditPersonLink("editPersonLink2"));
+        add(new BookmarkablePageLink<PersonWeekReportPage>("weekReportLink1", PersonWeekReportPage.class, PersonWeekReportPage.createParameters(getPersonId())));
+        add(new BookmarkablePageLink<PersonWeekReportPage>("weekReportLink2", PersonWeekReportPage.class, PersonWeekReportPage.createParameters(getPersonId())));
     }
 
     private Link createEditPersonLink(String id) {

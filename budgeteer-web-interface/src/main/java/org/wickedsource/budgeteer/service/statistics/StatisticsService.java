@@ -45,14 +45,43 @@ public class StatisticsService {
      * Returns the share of all budgets the given person has booked on.
      *
      * @param personId id of the person whose budget share to calculate
-     * @return list of BudgetShare objects, totaling 100%
+     * @return list of BudgetValue objects, totaling 100%
      */
-    public List<BudgetShare> getBudgetDistribution(long personId) {
-        List<BudgetShare> shares = new ArrayList<BudgetShare>();
+    public List<BudgetValue> getBudgetDistribution(long personId) {
+        List<BudgetValue> shares = new ArrayList<BudgetValue>();
         for (int i = 0; i < 5; i++) {
-            shares.add(new BudgetShare(random.nextDouble(), "Budget " + i));
+            shares.add(new BudgetValue(random.nextDouble(), "Budget " + i));
         }
         return shares;
+    }
+
+    /**
+     * Returns the actual and target budget valued for the given person from the last numberOfWeeks weeks.
+     *
+     * @param personId      ID of the person whose data to load.
+     * @param numberOfWeeks the number of weeks to go back into the past.
+     * @return the week statistics for the last numberOfWeeks weeks
+     */
+    public TargetAndActual getWeekStatsForPerson(long personId, int numberOfWeeks) {
+        TargetAndActual targetAndActual = new TargetAndActual();
+
+        for (int i = 0; i < 5; i++) {
+            BudgeteerSeries series = new BudgeteerSeries();
+            series.setName("Budget " + i);
+            for (int j = 0; j < numberOfWeeks; j++) {
+                series.getValues().add(random.nextDouble());
+            }
+            targetAndActual.getActualSeries().add(series);
+        }
+
+        BudgeteerSeries series = new BudgeteerSeries();
+        series.setName("Target");
+        for (int j = 0; j < numberOfWeeks; j++) {
+            series.getValues().add(random.nextDouble());
+        }
+        targetAndActual.setTargetSeries(series);
+
+        return targetAndActual;
     }
 
 }

@@ -3,11 +3,7 @@ package org.wickedsource.budgeteer.web.usecase.dashboard.component.burnedbudgetc
 import com.googlecode.wickedcharts.highcharts.options.*;
 import com.googlecode.wickedcharts.highcharts.options.series.Series;
 import org.wickedsource.budgeteer.web.PropertyLoader;
-
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.List;
+import org.wickedsource.budgeteer.web.wickedcharts.ChartUtils;
 
 public class BurnedBudgetChartOptions extends Options {
 
@@ -21,7 +17,7 @@ public class BurnedBudgetChartOptions extends Options {
                 .setHeight(300));
 
         setxAxis(new Axis()
-                .setCategories(getWeekLabels()));
+                .setCategories(ChartUtils.getWeekLabels(model.getNumberOfWeeks(), PropertyLoader.getProperty(BurnedBudgetChart.class, "chart.weekLabelFormat"))));
 
         setyAxis(new Axis()
                 .setTitle(new Title("")));
@@ -31,20 +27,6 @@ public class BurnedBudgetChartOptions extends Options {
                 .setData(model.getObject())
                 .setName(PropertyLoader.getProperty(BurnedBudgetChart.class, "chart.seriesName")));
 
-    }
-
-    private List<String> getWeekLabels() {
-        String weekLabelFormat = PropertyLoader.getProperty(BurnedBudgetChart.class, "chart.weekLabelFormat");
-        List<String> labels = new ArrayList<String>();
-        Calendar c = Calendar.getInstance();
-        int currentWeek = c.get(Calendar.WEEK_OF_YEAR);
-        for (int i = 0; i < model.getNumberOfWeeks(); i++) {
-            labels.add(String.format(weekLabelFormat, currentWeek));
-            c.add(Calendar.WEEK_OF_YEAR, -1);
-            currentWeek = c.get(Calendar.WEEK_OF_YEAR);
-        }
-        Collections.reverse(labels);
-        return labels;
     }
 
 }

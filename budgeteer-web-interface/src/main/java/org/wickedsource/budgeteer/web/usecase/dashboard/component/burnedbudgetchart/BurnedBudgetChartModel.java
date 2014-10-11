@@ -27,7 +27,7 @@ public class BurnedBudgetChartModel extends LoadableDetachableModel<List<Double>
         return service.getBudgetBurnedInPreviousWeeks(userId, numberOfWeeks);
     }
 
-    public long getNumberOfWeeks() {
+    public int getNumberOfWeeks() {
         return this.numberOfWeeks;
     }
 }

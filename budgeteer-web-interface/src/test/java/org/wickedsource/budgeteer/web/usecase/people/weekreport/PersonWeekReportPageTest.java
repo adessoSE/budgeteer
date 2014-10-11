@@ -1,4 +1,4 @@
-package org.wickedsource.budgeteer.web.usecase.people.details;
+package org.wickedsource.budgeteer.web.usecase.people.weekreport;
 
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.Test;
@@ -11,17 +11,17 @@ import java.util.Date;
 
 import static org.mockito.Mockito.when;
 
-public class PersonDetailsPageTest extends AbstractWebTestTemplate {
+public class PersonWeekReportPageTest extends AbstractWebTestTemplate {
 
     @Autowired
     private PeopleService service;
 
     @Test
-    public void render() {
+    public void test() {
         WicketTester tester = getTester();
         when(service.loadPersonDetailData(1l)).thenReturn(createPerson());
-        tester.startPage(PersonDetailsPage.class, PersonDetailsPage.createParameters(1l));
-        tester.assertRenderedPage(PersonDetailsPage.class);
+        tester.startPage(PersonWeekReportPage.class, PersonWeekReportPage.createParameters(1l));
+        tester.assertRenderedPage(PersonWeekReportPage.class);
     }
 
     private PersonDetailData createPerson() {

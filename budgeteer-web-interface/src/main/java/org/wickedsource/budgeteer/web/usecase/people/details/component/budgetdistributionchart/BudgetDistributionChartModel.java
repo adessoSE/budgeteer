@@ -3,12 +3,12 @@ package org.wickedsource.budgeteer.web.usecase.people.details.component.budgetdi
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.wickedsource.budgeteer.service.statistics.BudgetShare;
+import org.wickedsource.budgeteer.service.statistics.BudgetValue;
 import org.wickedsource.budgeteer.service.statistics.StatisticsService;
 
 import java.util.List;
 
-public class BudgetDistributionChartModel extends LoadableDetachableModel<List<BudgetShare>> {
+public class BudgetDistributionChartModel extends LoadableDetachableModel<List<BudgetValue>> {
 
     @SpringBean
     private StatisticsService service;
@@ -21,7 +21,7 @@ public class BudgetDistributionChartModel extends LoadableDetachableModel<List<B
     }
 
     @Override
-    protected List<BudgetShare> load() {
+    protected List<BudgetValue> load() {
         return service.getBudgetDistribution(personId);
     }
 }

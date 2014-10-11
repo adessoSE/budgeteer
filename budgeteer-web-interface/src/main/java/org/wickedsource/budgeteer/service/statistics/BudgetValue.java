@@ -1,12 +1,15 @@
 package org.wickedsource.budgeteer.service.statistics;
 
-public class BudgetShare {
+/**
+ * A numeric value that belongs to a certain budget.
+ */
+public class BudgetValue {
 
     private String budgetName;
 
     private Double share;
 
-    public BudgetShare(Double share, String budgetName) {
+    public BudgetValue(Double share, String budgetName) {
         this.share = share;
         this.budgetName = budgetName;
     }
