@@ -1,5 +1,7 @@
 package org.wickedsource.budgeteer.web.usecase.people.edit;
 
+import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
 import org.wickedsource.budgeteer.web.Mount;
@@ -10,22 +12,30 @@ public class EditPersonPage extends FormPage {
 
     private IEditPersonPageStrategy strategy;
 
+    private Class<? extends WebPage> backlinkPage;
+
+    private PageParameters backlinkParameters;
+
     /**
      * Use this constructor to create a page with a form to edit an existing user.
      *
      * @param parameters page parameters containing the id of the user to edit.
      */
-    public EditPersonPage(PageParameters parameters) {
+    public EditPersonPage(PageParameters parameters, Class<? extends WebPage> backlinkPage, PageParameters backlinkParameters) {
         super(parameters);
-        strategy = new CreateStrategy(this);
+        this.backlinkPage = backlinkPage;
+        this.backlinkParameters = backlinkParameters;
+        strategy = new UpdateStrategy(this);
         addComponents();
     }
 
     /**
      * Use this constructor to create a page with a form to create a new user.
      */
-    public EditPersonPage() {
-        strategy = new UpdateStrategy(this);
+    public EditPersonPage(Class<? extends WebPage> backlinkPage, PageParameters backlinkParameters) {
+        this.backlinkPage = backlinkPage;
+        this.backlinkParameters = backlinkParameters;
+        strategy = new CreateStrategy(this);
         addComponents();
     }
 
@@ -34,6 +44,17 @@ public class EditPersonPage extends FormPage {
         add(strategy.createSubmitButtonLabel("submitButtonTitle"));
         add(strategy.createNotificationListView("notificationList", getPersonId()));
         add(strategy.createForm("form", getPersonId()));
+        add(createBacklink("backlink1"));
+        add(createBacklink("backlink2"));
+    }
+
+    private Link createBacklink(String id){
+        return new Link(id){
+            @Override
+            public void onClick() {
+                setResponsePage(backlinkPage, backlinkParameters);
+            }
+        };
     }
 
     /**

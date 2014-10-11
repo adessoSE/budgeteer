@@ -27,7 +27,7 @@ public class EditPersonForm extends Form<PersonWithRates> {
     private PersonRate addedRate = new PersonRate();
 
     /**
-     * Use this constructor to create a form that creates a new user.
+     * Use this constructor for a form that creates a new user.
      */
     public EditPersonForm(String id) {
         super(id, new PersonWithRatesModel(new PersonWithRates()));
@@ -36,7 +36,7 @@ public class EditPersonForm extends Form<PersonWithRates> {
     }
 
     /**
-     * Use this constructor to create a form that edits and existing user.
+     * Use this constructor for a form that edits and existing user.
      */
     public EditPersonForm(String id, PersonWithRates person) {
         super(id, new PersonWithRatesModel(person));

@@ -19,27 +19,27 @@
 /**
  * use if you need some pixels of room before an element
  */
-.push-right{
+.push-right {
     margin-left: 20px;
 }
 
 /**
  *  to be used with form-box to create a wider than normal form-box
  */
-.wide{
-    width:600px;
+.wide {
+    width: 600px;
 }
 
 .wide .body > .form-group, .form-box .footer > .form-group {
     margin-top: 10px;
-    margin-bottom: 5px:
+    margin-bottom: 5px :
 }
 
-.btn-no-padding{
+.btn-no-padding {
     padding: 1px 6px;
 }
 
-.navbar-nav > .notifications-menu > .dropdown-menu{
+.navbar-nav > .notifications-menu > .dropdown-menu {
     width: 450px;
 }
 
@@ -55,15 +55,18 @@
     text-align: center;
     font-weight: bold;
 }
+
 #dropzone.in {
     width: 600px;
     height: 200px;
     line-height: 200px;
     font-size: larger;
 }
+
 #dropzone.hover {
     background: lawngreen;
 }
+
 #dropzone.fade {
     -webkit-transition: all 0.3s ease-out;
     -moz-transition: all 0.3s ease-out;
@@ -71,4 +74,8 @@
     -o-transition: all 0.3s ease-out;
     transition: all 0.3s ease-out;
     opacity: 1;
+}
+
+.small-box h3 a {
+    color: white;
 }

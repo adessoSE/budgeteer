@@ -1,5 +1,7 @@
 package org.wickedsource.budgeteer.web.usecase.people.details;
 
+import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.usecase.base.BasePage;
@@ -10,6 +12,7 @@ import org.wickedsource.budgeteer.web.usecase.people.details.component.budgetdis
 import org.wickedsource.budgeteer.web.usecase.people.details.component.budgetdistributionchart.BudgetDistributionChartModel;
 import org.wickedsource.budgeteer.web.usecase.people.details.component.highlightspanel.PersonHighlightsModel;
 import org.wickedsource.budgeteer.web.usecase.people.details.component.highlightspanel.PersonHighlightsPanel;
+import org.wickedsource.budgeteer.web.usecase.people.edit.EditPersonPage;
 import org.wickedsource.budgeteer.web.usecase.people.overview.PeopleOverviewPage;
 import org.wickedsource.budgeteer.web.wickedcharts.BudgeteerChartTheme;
 
@@ -21,6 +24,18 @@ public class PersonDetailsPage extends BasePage {
         super(parameters);
         add(new PersonHighlightsPanel("highlightsPanel", new PersonHighlightsModel(getPersonId())));
         add(new BudgetDistributionChart("distributionChart", new BudgetDistributionChartModel(getPersonId()), new BudgeteerChartTheme()));
+        add(createEditPersonLink("editPersonLink1"));
+        add(createEditPersonLink("editPersonLink2"));
+    }
+
+    private Link createEditPersonLink(String id) {
+        return new Link(id) {
+            @Override
+            public void onClick() {
+                WebPage page = new EditPersonPage(EditPersonPage.createParameters(getPersonId()), PersonDetailsPage.class, getPageParameters());
+                setResponsePage(page);
+            }
+        };
     }
 
     /**

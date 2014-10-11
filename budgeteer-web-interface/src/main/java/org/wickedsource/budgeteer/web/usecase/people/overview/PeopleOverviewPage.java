@@ -1,6 +1,7 @@
 package org.wickedsource.budgeteer.web.usecase.people.overview;
 
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.markup.html.link.Link;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.usecase.base.BasePage;
@@ -17,8 +18,18 @@ public class PeopleOverviewPage extends BasePage {
         PeopleModel model = new PeopleModel(BudgeteerSession.get().getLoggedInUserId());
         PeopleOverviewTable table = new PeopleOverviewTable("peopleOverviewTable", model);
         add(table);
-        add(new BookmarkablePageLink<EditPersonPage>("newPersonLink1", EditPersonPage.class));
-        add(new BookmarkablePageLink<EditPersonPage>("newPersonLink2", EditPersonPage.class));
+        add(createNewPersonLink("newPersonLink1"));
+        add(createNewPersonLink("newPersonLink2"));
+    }
+
+    private Link createNewPersonLink(String id) {
+        return new Link(id) {
+            @Override
+            public void onClick() {
+                WebPage page = new EditPersonPage(null, PeopleOverviewPage.class, getPageParameters());
+                setResponsePage(page);
+            }
+        };
     }
 
     @SuppressWarnings("unchecked")

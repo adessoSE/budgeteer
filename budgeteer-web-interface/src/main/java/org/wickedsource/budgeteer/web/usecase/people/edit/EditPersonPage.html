@@ -3,7 +3,7 @@
         <div class="header"><span wicket:id="pageTitle">Edit Person Detail</span>
 
             <div class="box-tools pull-right">
-                <button class="btn bg-olive btn-sm" onclick="window.history.back()"><i class="fa fa-times"></i></button>
+                <button wicket:id="backlink1" class="btn bg-olive btn-sm"><i class="fa fa-times"></i></button>
             </div>
         </div>
         <div class="body bg-gray">
@@ -69,7 +69,7 @@
         <div class="footer">
             <div class="row">
                 <div class="col-lg-3">
-                    <button type="button" class="btn bg-olive btn-block" onclick="window.history.back()">Cancel</button>
+                    <button wicket:id="backlink2" type="button" class="btn bg-olive btn-block">Cancel</button>
                 </div>
                 <div class="col-lg-9">
                     <button type="submit" class="btn bg-olive btn-block"><span wicket:id="submitButtonTitle">Create Person / Save Changes</span>

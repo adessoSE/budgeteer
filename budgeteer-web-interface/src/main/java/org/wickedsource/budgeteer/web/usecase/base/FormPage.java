@@ -5,7 +5,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 public abstract class FormPage extends WebPage {
 
-    public FormPage(PageParameters parameters){
+    public FormPage(PageParameters parameters) {
         super(parameters);
     }
 
