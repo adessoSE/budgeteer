@@ -38,7 +38,9 @@ public class PersonRate implements Serializable {
         this.dateRange = dateRange;
     }
 
+
     @Override
+    @SuppressWarnings("EqualsWhichDoesntCheckParameterClass")
     public boolean equals(Object obj) {
         return EqualsBuilder.reflectionEquals(this, obj);
     }
@@ -48,11 +50,4 @@ public class PersonRate implements Serializable {
         return HashCodeBuilder.reflectionHashCode(this);
     }
 
-    public static PersonRate copy(PersonRate rate){
-        PersonRate copy = new PersonRate();
-        copy.setDateRange(rate.getDateRange());
-        copy.setRate(rate.getRate());
-        copy.setBudget(rate.getBudget());
-        return copy;
-    }
 }

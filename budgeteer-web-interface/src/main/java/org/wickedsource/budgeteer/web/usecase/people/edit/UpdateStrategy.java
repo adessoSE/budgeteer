@@ -1,9 +1,12 @@
 package org.wickedsource.budgeteer.web.usecase.people.edit;
 
 import org.apache.wicket.injection.Injector;
+import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.StringResourceModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.service.notification.Notification;
 import org.wickedsource.budgeteer.service.people.PeopleService;
@@ -22,8 +25,14 @@ public class UpdateStrategy implements IEditPersonPageStrategy {
 
     private EditPersonPage page;
 
-    public UpdateStrategy(EditPersonPage page) {
+    private Class<? extends WebPage> backlinkPage;
+
+    private PageParameters backlinkParameters;
+
+    public UpdateStrategy(EditPersonPage page, Class<? extends WebPage> backlinkPage, PageParameters backlinkParameters) {
         Injector.get().inject(this);
+        this.backlinkPage = backlinkPage;
+        this.backlinkParameters = backlinkParameters;
         this.page = page;
     }
 
@@ -45,6 +54,21 @@ public class UpdateStrategy implements IEditPersonPageStrategy {
     @Override
     public EditPersonForm createForm(String id, long personId) {
         PersonWithRates person = service.loadPersonWithRates(personId);
-        return new EditPersonForm(id, person);
+        return new EditPersonForm(id, person, this);
+    }
+
+    @Override
+    public Link createBacklink(String id) {
+        return new Link(id) {
+            @Override
+            public void onClick() {
+                setResponsePage(backlinkPage, backlinkParameters);
+            }
+        };
+    }
+
+    @Override
+    public void goBack(){
+        page.setResponsePage(backlinkPage, backlinkParameters);
     }
 }

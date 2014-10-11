@@ -2,14 +2,19 @@ package org.wickedsource.budgeteer.web.usecase.people.edit.component.form;
 
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.IObjectClassAwareModel;
+import org.apache.wicket.model.Model;
 import org.wickedsource.budgeteer.service.people.PersonRate;
 
-public class RatesModel implements IModel<PersonRate>, IObjectClassAwareModel<PersonRate> {
+public class PersonRateModel implements IModel<PersonRate>, IObjectClassAwareModel<PersonRate> {
 
     private IModel<PersonRate> wrappedModel;
 
-    public RatesModel(IModel<PersonRate> wrappedModel) {
+    public PersonRateModel(IModel<PersonRate> wrappedModel) {
         this.wrappedModel = wrappedModel;
+    }
+
+    public PersonRateModel(PersonRate rate) {
+        this.wrappedModel = Model.of(rate);
     }
 
     @Override

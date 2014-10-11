@@ -6,15 +6,17 @@
                 <button wicket:id="backlink1" class="btn bg-olive btn-sm"><i class="fa fa-times"></i></button>
             </div>
         </div>
-        <div class="body bg-gray">
+        <form wicket:id="form">
+            <div class="body bg-gray">
 
-            <div wicket:id="notificationList" class="alert alert-warning alert-dismissable">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                <p wicket:id="text">Missing daily rate for budget Implementation of Feature XYZ between 01.01.2014 and
-                    31.12.2014</p>
-            </div>
+                <div wicket:id="notificationList" class="alert alert-warning alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <p wicket:id="text">Missing daily rate for budget Implementation of Feature XYZ between 01.01.2014
+                        and 31.12.2014</p>
+                </div>
 
-            <form wicket:id="form">
+                <div wicket:id="feedback"></div>
+
                 <div class="form-group">
                     <label for="titleInput">Name</label>
                     <input wicket:id="name" type="text" name="name" id="titleInput" class="form-control"/>
@@ -48,35 +50,44 @@
                             <td wicket:id="budget">Project Management</td>
                             <td><span wicket:id="startDate"></span> - <span wicket:id="endDate"></span></td>
                             <td>
-                                <button wicket:id="deleteButton" type="submit" class="btn btn-default btn-no-padding"><i
-                                        class="fa fa-minus-circle" data-toggle="tooltip" title="Remove this Rate"></i></button>
+                                <button wicket:id="deleteButton" type="submit"
+                                        class="btn btn-default btn-no-padding"><i
+                                        class="fa fa-minus-circle" data-toggle="tooltip"
+                                        title="Remove this Rate"></i>
+                                </button>
                             </td>
                         </tr>
-                        <tr>
-                            <td><input wicket:id="rateField"type="number"/></td>
-                            <td><select wicket:id="budgetField"></select></td>
-                            <td><input wicket:id="dateRangeField" type="text"/></td>
-                            <td>
-                                <button wicket:id="addButton" type="submit" class="btn btn-default btn-no-padding"><i
-                                        class="fa fa-plus-circle" data-toggle="tooltip" title="Add this Rate"></i></button>
-                            </td>
-                        </tr>
+                        <form wicket:id="addRateForm">
+                            <tr>
+                                <td><input wicket:id="rateField" type="number"/></td>
+                                <td><select wicket:id="budgetField"></select></td>
+                                <td><input wicket:id="dateRangeField" type="text"/></td>
+                                <td>
+                                    <button wicket:id="submitButton" type="submit"
+                                            class="btn btn-default btn-no-padding">
+                                        <i class="fa fa-plus-circle" data-toggle="tooltip"
+                                           title="Add this Rate"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </form>
                         </tbody>
                     </table>
                 </div>
-            </form>
-        </div>
-        <div class="footer">
-            <div class="row">
-                <div class="col-lg-3">
-                    <button wicket:id="backlink2" type="button" class="btn bg-olive btn-block">Cancel</button>
-                </div>
-                <div class="col-lg-9">
-                    <button type="submit" class="btn bg-olive btn-block"><span wicket:id="submitButtonTitle">Create Person / Save Changes</span>
-                    </button>
+            </div>
+            <div class="footer">
+                <div class="row">
+                    <div class="col-lg-3">
+                        <button wicket:id="backlink2" type="button" class="btn bg-olive btn-block">Cancel</button>
+                    </div>
+                    <div class="col-lg-9">
+                        <button wicket:id="submitButton" type="submit" class="btn bg-olive btn-block"><span
+                                wicket:id="submitButtonTitle">Create Person / Save Changes</span>
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
+        </form>
 
 
     </div>

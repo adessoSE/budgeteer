@@ -1,6 +1,7 @@
 package org.wickedsource.budgeteer.web.usecase.people.edit;
 
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListView;
 import org.wickedsource.budgeteer.service.notification.Notification;
 import org.wickedsource.budgeteer.web.usecase.people.edit.component.form.EditPersonForm;
@@ -20,4 +21,7 @@ public interface IEditPersonPageStrategy extends Serializable {
 
     public EditPersonForm createForm(String id, long personId);
 
+    public Link createBacklink(String id);
+
+    void goBack();
 }

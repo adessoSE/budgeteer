@@ -68,6 +68,14 @@ public class PeopleService {
         return person;
     }
 
+    /**
+     * Saves the given data about a person and his/her daily rates in the database.
+     *
+     * @param person the data to save in the database.
+     */
+    public void savePersonWithRates(PersonWithRates person) {
+    }
+
     private PersonBaseData createPersonBaseData() {
         PersonBaseData person = new PersonBaseData();
         person.setId(1);

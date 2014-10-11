@@ -1,20 +1,16 @@
 package org.wickedsource.budgeteer.web.usecase.people.edit;
 
 import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
 import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.usecase.base.FormPage;
+import org.wickedsource.budgeteer.web.usecase.people.edit.component.form.EditPersonForm;
 
 @Mount({"people/edit/${id}", "people/edit"})
 public class EditPersonPage extends FormPage {
 
     private IEditPersonPageStrategy strategy;
-
-    private Class<? extends WebPage> backlinkPage;
-
-    private PageParameters backlinkParameters;
 
     /**
      * Use this constructor to create a page with a form to edit an existing user.
@@ -23,9 +19,7 @@ public class EditPersonPage extends FormPage {
      */
     public EditPersonPage(PageParameters parameters, Class<? extends WebPage> backlinkPage, PageParameters backlinkParameters) {
         super(parameters);
-        this.backlinkPage = backlinkPage;
-        this.backlinkParameters = backlinkParameters;
-        strategy = new UpdateStrategy(this);
+        strategy = new UpdateStrategy(this, backlinkPage, backlinkParameters);
         addComponents();
     }
 
@@ -33,28 +27,17 @@ public class EditPersonPage extends FormPage {
      * Use this constructor to create a page with a form to create a new user.
      */
     public EditPersonPage(Class<? extends WebPage> backlinkPage, PageParameters backlinkParameters) {
-        this.backlinkPage = backlinkPage;
-        this.backlinkParameters = backlinkParameters;
-        strategy = new CreateStrategy(this);
+        strategy = new CreateStrategy(this, backlinkPage, backlinkParameters);
         addComponents();
     }
 
     private void addComponents() {
+        EditPersonForm form = strategy.createForm("form", getPersonId());
+        add(form);
         add(strategy.createPageTitleLabel("pageTitle"));
-        add(strategy.createSubmitButtonLabel("submitButtonTitle"));
-        add(strategy.createNotificationListView("notificationList", getPersonId()));
-        add(strategy.createForm("form", getPersonId()));
-        add(createBacklink("backlink1"));
-        add(createBacklink("backlink2"));
-    }
-
-    private Link createBacklink(String id){
-        return new Link(id){
-            @Override
-            public void onClick() {
-                setResponsePage(backlinkPage, backlinkParameters);
-            }
-        };
+        form.add(strategy.createNotificationListView("notificationList", getPersonId()));
+        add(strategy.createBacklink("backlink1"));
+        form.add(strategy.createBacklink("backlink2"));
     }
 
     /**

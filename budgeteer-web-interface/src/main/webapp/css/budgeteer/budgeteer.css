@@ -27,7 +27,7 @@
  *  to be used with form-box to create a wider than normal form-box
  */
 .wide {
-    width: 600px;
+    width: 800px;
 }
 
 .wide .body > .form-group, .form-box .footer > .form-group {

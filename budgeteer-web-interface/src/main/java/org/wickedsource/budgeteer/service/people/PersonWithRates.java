@@ -5,6 +5,8 @@ import java.util.List;
 
 public class PersonWithRates implements Serializable {
 
+    private long personId;
+
     private String name;
 
     private String importKey;
@@ -33,5 +35,13 @@ public class PersonWithRates implements Serializable {
 
     public void setRates(List<PersonRate> rates) {
         this.rates = rates;
+    }
+
+    public long getPersonId() {
+        return personId;
+    }
+
+    public void setPersonId(long personId) {
+        this.personId = personId;
     }
 }

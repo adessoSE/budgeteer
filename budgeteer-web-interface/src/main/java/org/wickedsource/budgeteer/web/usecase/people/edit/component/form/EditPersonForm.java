@@ -2,19 +2,19 @@ package org.wickedsource.budgeteer.web.usecase.people.edit.component.form;
 
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.*;
+import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
 import org.wickedsource.budgeteer.service.budget.BudgetService;
+import org.wickedsource.budgeteer.service.people.PeopleService;
 import org.wickedsource.budgeteer.service.people.PersonRate;
 import org.wickedsource.budgeteer.service.people.PersonWithRates;
-import org.wickedsource.budgeteer.web.BudgeteerSession;
-import org.wickedsource.budgeteer.web.usecase.base.component.daterange.DateRangeInputField;
-
-import java.util.List;
+import org.wickedsource.budgeteer.web.usecase.people.edit.IEditPersonPageStrategy;
 
 import static org.wicketstuff.lazymodel.LazyModel.from;
 import static org.wicketstuff.lazymodel.LazyModel.model;
@@ -24,13 +24,17 @@ public class EditPersonForm extends Form<PersonWithRates> {
     @SpringBean
     private BudgetService budgetService;
 
-    private PersonRate addedRate = new PersonRate();
+    @SpringBean
+    private PeopleService peopleService;
+
+    private IEditPersonPageStrategy strategy;
 
     /**
      * Use this constructor for a form that creates a new user.
      */
-    public EditPersonForm(String id) {
+    public EditPersonForm(String id, IEditPersonPageStrategy strategy) {
         super(id, new PersonWithRatesModel(new PersonWithRates()));
+        this.strategy = strategy;
         Injector.get().inject(this);
         addComponents();
     }
@@ -38,33 +42,47 @@ public class EditPersonForm extends Form<PersonWithRates> {
     /**
      * Use this constructor for a form that edits and existing user.
      */
-    public EditPersonForm(String id, PersonWithRates person) {
+    public EditPersonForm(String id, PersonWithRates person, IEditPersonPageStrategy strategy) {
         super(id, new PersonWithRatesModel(person));
+        this.strategy = strategy;
         addComponents();
     }
 
     private void addComponents() {
-        add(new TextField<String>("name", model(from(getModel()).getName())));
-        add(new TextField<String>("importKey", model(from(getModel()).getImportKey())));
+        setOutputMarkupId(true);
+        add(new FeedbackPanel("feedback"));
+        add(new RequiredTextField<String>("name", model(from(getModel()).getName())));
+        add(new RequiredTextField<String>("importKey", model(from(getModel()).getImportKey())));
         add(createRatesList("ratesList"));
-        add(new NumberTextField<Double>("rateField", model(from(addedRate).getRate())));
-        add(new DateRangeInputField("dateRangeField", model(from(addedRate).getDateRange())));
 
-        DropDownChoice<BudgetBaseData> budgetChoice = new DropDownChoice<BudgetBaseData>("budgetField", model(from(addedRate).getBudget()), getBudgetChoices());
-        budgetChoice.setChoiceRenderer(new BudgetBaseDataChoiceRenderer());
-        add(budgetChoice);
-
-        Button addButton = new Button("addButton") {
+        add(new AddRateNestedForm("addRateForm") {
             @Override
-            public void onSubmit() {
-                EditPersonForm.this.getModelObject().getRates().add(PersonRate.copy(addedRate));
+            protected void onSubmit() {
+                PersonRate addedRate = getModelObject();
+                boolean error = false;
+                if (addedRate.getRate() == null) {
+                    error("Please provide a rate.");
+                    error = true;
+                }
+                if (addedRate.getBudget() == null) {
+                    error("Please provide a budget.");
+                    error = true;
+                }
+                if (addedRate.getDateRange() == null) {
+                    error("Please provide a date range.");
+                    error = true;
+                }
+                if (!error) {
+                    EditPersonForm.this.getModelObject().getRates().add(addedRate);
+                    setModel(new PersonRateModel(new PersonRate()));
+                }
             }
-        };
-        add(addButton);
-    }
+        });
 
-    private List<? extends BudgetBaseData> getBudgetChoices() {
-        return budgetService.loadBudgetBaseData(BudgeteerSession.get().getLoggedInUserId());
+        Button submitButton = new Button("submitButton");
+        submitButton.add(strategy.createSubmitButtonLabel("submitButtonTitle"));
+
+        add(submitButton);
     }
 
     private ListView<PersonRate> createRatesList(String id) {
@@ -88,9 +106,16 @@ public class EditPersonForm extends Form<PersonWithRates> {
             @Override
             protected ListItem<PersonRate> newItem(int index, IModel<PersonRate> itemModel) {
                 // wrap into Model that can be used with LazyModel
-                return super.newItem(index, new RatesModel(itemModel));
+                return super.newItem(index, new PersonRateModel(itemModel));
             }
         };
     }
+
+    @Override
+    protected void onSubmit() {
+        peopleService.savePersonWithRates(getModelObject());
+        strategy.goBack();
+    }
+
 
 }
