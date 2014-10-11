@@ -5,7 +5,8 @@
                 <div class="box-header" style="cursor: move;">
                     <i class="fa fa-line-chart"></i>
 
-                    <h3 class="box-title">Budget burned in the last 12 weeks</h3>
+                    <h3 class="box-title">Budget planned for and burned by <span wicket:id="personName"></span> in the
+                        last 12 weeks</h3>
 
                     <div class="box-tools pull-right">
                         <button class="btn btn-default btn-sm" data-widget="collapse"><i
@@ -27,7 +28,7 @@
                 <div class="box-header" style="cursor: move;">
                     <i class="fa fa-list"></i>
 
-                    <h3 class="box-title">Budget burned in all time</h3>
+                    <h3 class="box-title">Budget burned by <span wicket:id="personName2"></span> in all time</h3>
 
                     <div class="box-tools pull-right">
                         <button class="btn btn-default btn-sm" data-widget="collapse"><i
@@ -36,70 +37,7 @@
                 </div>
                 <div class="box-body">
 
-                    <table id="hoursTable" class="table table-bordered table-hover">
-                        <thead>
-                        <tr>
-                            <th>Week</th>
-                            <th>Date</th>
-                            <th>Hours</th>
-                            <th>Budget Planned</th>
-                            <th>Budget Burned</th>
-                            <th>Difference</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>2014 Week #39</td>
-                            <td>01.09.2014 - 07.09.2014</td>
-                            <td>80.00</td>
-                            <td>7.900</td>
-                            <td>7.900</td>
-                            <td>0</td>
-                        </tr>
-                        <tr>
-                            <td>2014 Week #40</td>
-                            <td>01.09.2014 - 07.09.2014</td>
-                            <td>80.00</td>
-                            <td>7.900</td>
-                            <td>8.900</td>
-                            <td class="text-red">-100</td>
-                        </tr>
-                        <tr>
-                            <td>2014 Week #41</td>
-                            <td>01.09.2014 - 07.09.2014</td>
-                            <td>80.00</td>
-                            <td>7.900</td>
-                            <td>8.900</td>
-                            <td class="text-red">-100</td>
-                        </tr>
-                        <tr>
-                            <td>2014 Week #42</td>
-                            <td>01.09.2014 - 07.09.2014</td>
-                            <td>80.00</td>
-                            <td>7.900</td>
-                            <td>8.900</td>
-                            <td class="text-red">-100</td>
-                        </tr>
-                        <tr>
-                            <td>2014 Week #43</td>
-                            <td>01.09.2014 - 07.09.2014</td>
-                            <td>80.00</td>
-                            <td>7.900</td>
-                            <td>8.900</td>
-                            <td class="text-red">-100</td>
-                        </tr>
-                        </tbody>
-                        <tfoot>
-                        <tr>
-                            <th>Week</th>
-                            <th>Date</th>
-                            <th>Hours</th>
-                            <th>Budget Planned</th>
-                            <th>Budget Burned</th>
-                            <th>Difference</th>
-                        </tr>
-                        </tfoot>
-                    </table>
+                    <div wicket:id="table"></div>
 
                 </div>
 
