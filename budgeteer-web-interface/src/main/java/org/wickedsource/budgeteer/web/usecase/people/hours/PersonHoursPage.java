@@ -16,7 +16,9 @@ public class PersonHoursPage extends PersonBasePage {
 
     public PersonHoursPage(PageParameters parameters) {
         super(parameters);
-        add(new FilterPanel("filter"));
+        FilterPanel filterPanel = new FilterPanel("filter");
+        filterPanel.setPersonFilterEnabled(false);
+        add(filterPanel);
     }
 
     protected BreadcrumbsModel getBreadcrumbsModel() {

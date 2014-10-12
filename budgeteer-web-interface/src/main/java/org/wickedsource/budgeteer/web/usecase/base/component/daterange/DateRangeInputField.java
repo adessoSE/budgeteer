@@ -46,7 +46,9 @@ public class DateRangeInputField extends TextField<DateRange> {
         ResourceReference cssResource = new PackageResourceReference(DateRangeInputField.class, "daterangepicker-bs3.css");
         container.getHeaderResponse().render(CssReferenceHeaderItem.forReference(cssResource));
         // activate daterangepicker on this input field
-        container.getHeaderResponse().render(JavaScriptHeaderItem.forScript(String.format("window.onload = function(){$('#%s').daterangepicker();};", getMarkupId()), "activate-daterangepicker"));
+        container.getHeaderResponse().render(JavaScriptHeaderItem.forScript(String.format("window.onload = function () {\n" +
+                "    $('#%s').daterangepicker();\n" +
+                "}", getMarkupId(), getMarkupId(), getMarkupId()), "activate-daterangepicker"));
     }
 
 }

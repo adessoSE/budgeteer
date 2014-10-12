@@ -1,12 +1,10 @@
 package org.wickedsource.budgeteer.web.component.hourstable;
 
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
-import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.event.Broadcast;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.IModel;
 import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
 import org.wickedsource.budgeteer.service.people.PersonBaseData;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
@@ -19,7 +17,7 @@ import static org.wicketstuff.lazymodel.LazyModel.model;
 
 public class FilterPanel extends Panel {
 
-    private boolean nameFilterEnabled = true;
+    private boolean personFilterEnabled = true;
 
     private boolean budgetFilterEnabled = true;
 
@@ -27,46 +25,64 @@ public class FilterPanel extends Panel {
 
     public FilterPanel(String id) {
         super(id, model(from(new Filter())));
-        add(createPersonSelect("personSelect"));
-        add(createBudgetSelect("budgetSelect"));
-        add(new DateRangeInputField("daterangeInput", model(from(getFilterModel()).getSelectedDaterange())));
-    }
-
-    private DropDownChoice<PersonBaseData> createPersonSelect(String id) {
-        DropDownChoice<PersonBaseData> select = new DropDownChoice<PersonBaseData>(id, model(from(getFilterModel()).getSelectedPerson()), new PersonListModel(BudgeteerSession.get().getLoggedInUserId()));
-        select.add(createSendFilterBehavior());
-        select.setChoiceRenderer(new PersonBaseDataChoiceRenderer());
-        return select;
-    }
-
-    private DropDownChoice<BudgetBaseData> createBudgetSelect(String id) {
-        DropDownChoice<BudgetBaseData> select = new DropDownChoice<BudgetBaseData>(id, model(from(getFilterModel()).getSelectedBudget()), new BudgetListModel(BudgeteerSession.get().getLoggedInUserId()));
-        select.add(createSendFilterBehavior());
-        select.setChoiceRenderer(new BudgetBaseDataChoiceRenderer());
-        return select;
-    }
-
-    private Behavior createSendFilterBehavior() {
-        return new AjaxFormComponentUpdatingBehavior("onchange") {
+        Form<Filter> form = new Form<Filter>("filterForm", model(from(new Filter()))) {
             @Override
-            protected void onUpdate(AjaxRequestTarget target) {
-                send(getPage(), Broadcast.BREADTH, getFilterModel().getObject());
-                setResponsePage(getPage());
+            protected void onSubmit() {
+                send(getPage(), Broadcast.BREADTH, getModel().getObject());
             }
         };
+        form.add(createPersonFilter("personFilterContainer", form));
+        form.add(createBudgetFilter("budgetFilterContainer", form));
+        form.add(createDaterangeFilter("daterangeFilterContainer", form));
+        add(form);
     }
 
-    @SuppressWarnings("unchecked")
-    public IModel<Filter> getFilterModel() {
-        return (IModel<Filter>) getDefaultModel();
+    private WebMarkupContainer createPersonFilter(String id, Form<Filter> form) {
+        WebMarkupContainer container = new WebMarkupContainer(id) {
+            @Override
+            public boolean isVisible() {
+                return isPersonFilterEnabled();
+            }
+        };
+        container.setVisible(isPersonFilterEnabled());
+        DropDownChoice<PersonBaseData> select = new DropDownChoice<PersonBaseData>("personSelect", model(from(form.getModel()).getSelectedPerson()), new PersonListModel(BudgeteerSession.get().getLoggedInUserId()));
+        select.setChoiceRenderer(new PersonBaseDataChoiceRenderer());
+        container.add(select);
+        return container;
     }
 
-    public boolean isNameFilterEnabled() {
-        return nameFilterEnabled;
+    private WebMarkupContainer createBudgetFilter(String id, Form<Filter> form) {
+        WebMarkupContainer container = new WebMarkupContainer(id) {
+            @Override
+            public boolean isVisible() {
+                return isBudgetFilterEnabled();
+            }
+        };
+        container.setVisible(isBudgetFilterEnabled());
+        DropDownChoice<BudgetBaseData> select = new DropDownChoice<BudgetBaseData>("budgetSelect", model(from(form.getModel()).getSelectedBudget()), new BudgetListModel(BudgeteerSession.get().getLoggedInUserId()));
+        select.setChoiceRenderer(new BudgetBaseDataChoiceRenderer());
+        container.add(select);
+        return container;
     }
 
-    public void setNameFilterEnabled(boolean nameFilterEnabled) {
-        this.nameFilterEnabled = nameFilterEnabled;
+    private WebMarkupContainer createDaterangeFilter(String id, Form<Filter> form) {
+        WebMarkupContainer container = new WebMarkupContainer(id) {
+            @Override
+            public boolean isVisible() {
+                return isDaterangeFilterEnabled();
+            }
+        };
+        DateRangeInputField field = new DateRangeInputField("daterangeInput", model(from(form.getModel()).getSelectedDaterange()));
+        container.add(field);
+        return container;
+    }
+
+    public boolean isPersonFilterEnabled() {
+        return personFilterEnabled;
+    }
+
+    public void setPersonFilterEnabled(boolean personFilterEnabled) {
+        this.personFilterEnabled = personFilterEnabled;
     }
 
     public boolean isBudgetFilterEnabled() {
