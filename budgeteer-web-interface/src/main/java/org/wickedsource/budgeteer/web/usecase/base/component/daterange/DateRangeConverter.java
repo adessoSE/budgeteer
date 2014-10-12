@@ -17,7 +17,7 @@ public class DateRangeConverter implements IConverter<DateRange> {
     private static DateFormat format = new SimpleDateFormat("MM/dd/yyyy");
 
     @Override
-    public DateRange convertToObject(String value, Locale locale) throws ConversionException {
+    public DateRange convertToObject(String value, Locale locale){
         try {
             Pattern pattern = Pattern.compile("^([0-9]{2}/[0-9]{2}/[0-9]{4}) - ([0-9]{2}/[0-9]{2}/[0-9]{4})$");
             Matcher matcher = pattern.matcher(value);

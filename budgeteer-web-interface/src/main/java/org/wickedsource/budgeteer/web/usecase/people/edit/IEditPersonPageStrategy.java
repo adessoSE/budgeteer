@@ -13,15 +13,15 @@ import java.io.Serializable;
  */
 public interface IEditPersonPageStrategy extends Serializable {
 
-    public Label createPageTitleLabel(String id);
+    Label createPageTitleLabel(String id);
 
-    public Label createSubmitButtonLabel(String id);
+    Label createSubmitButtonLabel(String id);
 
-    public ListView<Notification> createNotificationListView(String id, long personId);
+    ListView<Notification> createNotificationListView(String id, long personId);
 
-    public EditPersonForm createForm(String id, long personId);
+    EditPersonForm createForm(String id, long personId);
 
-    public Link createBacklink(String id);
+    Link createBacklink(String id);
 
     void goBack();
 }

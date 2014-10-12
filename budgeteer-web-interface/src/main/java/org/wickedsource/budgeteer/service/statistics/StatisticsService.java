@@ -9,7 +9,7 @@ import java.util.Random;
 @Service
 public class StatisticsService {
 
-    Random random = new Random();
+    private Random random = new Random();
 
     /**
      * Returns the budget burned in each of the last numberOfWeeks weeks. All of the user's budgets are aggregated.

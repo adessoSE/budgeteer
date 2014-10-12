@@ -32,8 +32,7 @@ public class NotificationDropdown extends Panel {
     }
 
     private Label createDropDownHeader(String wicketId) {
-        Label label = new Label(wicketId, getModel().getHeaderModel());
-        return label;
+        return new Label(wicketId, getModel().getHeaderModel());
     }
 
     private WebMarkupContainer createDropdownMenu(String wicketId) {

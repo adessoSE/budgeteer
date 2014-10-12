@@ -10,7 +10,6 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.wickedsource.budgeteer.service.budget.BudgetService;
 import org.wickedsource.budgeteer.service.people.PeopleService;
 import org.wickedsource.budgeteer.service.people.PersonRate;
 import org.wickedsource.budgeteer.service.people.PersonWithRates;
@@ -20,9 +19,6 @@ import static org.wicketstuff.lazymodel.LazyModel.from;
 import static org.wicketstuff.lazymodel.LazyModel.model;
 
 public class EditPersonForm extends Form<PersonWithRates> {
-
-    @SpringBean
-    private BudgetService budgetService;
 
     @SpringBean
     private PeopleService peopleService;

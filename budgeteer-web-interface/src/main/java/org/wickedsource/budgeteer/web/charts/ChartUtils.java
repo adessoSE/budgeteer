@@ -9,6 +9,10 @@ import java.util.List;
 
 public class ChartUtils {
 
+    private ChartUtils(){
+
+    }
+
     /**
      * Creates a list of labels for the last numberOfWeeks weeks, including the current week. This list can be used for labels in a chart.
      *
@@ -31,6 +35,12 @@ public class ChartUtils {
 
     private final static DateFormat monthFormat = new SimpleDateFormat("MMM ''yy");
 
+    /**
+     * Creates a list of labels for the last numberOfMonths months, including the current month. This list can be used for labels in a chart.
+     *
+     * @param numberOfMonths the number of months to go back into the past.
+     * @return list of month labels.
+     */
     public static List<String> getMonthLabels(int numberOfMonths) {
         List<String> labels = new ArrayList<String>();
         Calendar c = Calendar.getInstance();

@@ -7,11 +7,7 @@ import org.wickedsource.budgeteer.web.charts.ChartUtils;
 
 public class BurnedBudgetChartOptions extends Options {
 
-    private BurnedBudgetChartModel model;
-
     public BurnedBudgetChartOptions(BurnedBudgetChartModel model) {
-        this.model = model;
-
         setChart(new ChartOptions()
                 .setType(SeriesType.COLUMN)
                 .setHeight(300));

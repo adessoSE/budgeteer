@@ -1,4 +1,4 @@
-package org.wickedsource.budgeteer.web.usecase.people.component;
+package org.wickedsource.budgeteer.web.usecase.people.overview;
 
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.Test;

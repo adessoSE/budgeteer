@@ -3,12 +3,17 @@ package org.wickedsource.budgeteer.web;
 import org.apache.wicket.Application;
 import org.apache.wicket.Component;
 import org.apache.wicket.Session;
+import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.resource.loader.IStringResourceLoader;
 
 import java.util.List;
 import java.util.Locale;
 
 public class PropertyLoader {
+
+    private PropertyLoader(){
+
+    }
 
     /**
      * Loads the value of the given property key from the resource bundle that belongs to the given Wicket component class.
@@ -33,9 +38,9 @@ public class PropertyLoader {
         }
 
         if (resourceValue == null) {
-            throw new RuntimeException(String.format("Property %s could not be found for class %s!", propertyKey, propertySource.getName()));
+            throw new WicketRuntimeException(String.format("Property %s could not be found for class %s!", propertyKey, propertySource.getName()));
         } else {
-            return resourceValue.toString();
+            return resourceValue;
         }
     }
 }
