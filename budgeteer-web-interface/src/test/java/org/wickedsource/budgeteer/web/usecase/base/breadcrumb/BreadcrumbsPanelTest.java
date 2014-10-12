@@ -3,6 +3,7 @@ package org.wickedsource.budgeteer.web.usecase.base.breadcrumb;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.Test;
+import org.wickedsource.budgeteer.web.AbstractWebTestTemplate;
 import org.wickedsource.budgeteer.web.usecase.base.component.breadcrumb.Breadcrumb;
 import org.wickedsource.budgeteer.web.usecase.base.component.breadcrumb.BreadcrumbsPanel;
 import org.wickedsource.budgeteer.web.usecase.dashboard.DashboardPage;
@@ -10,12 +11,11 @@ import org.wickedsource.budgeteer.web.usecase.dashboard.DashboardPage;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BreadcrumbsPanelTest {
+public class BreadcrumbsPanelTest extends AbstractWebTestTemplate {
 
     @Test
     public void testRender() {
-
-        WicketTester tester = new WicketTester();
+        WicketTester tester = getTester();
         BreadcrumbsPanel panel = new BreadcrumbsPanel("breadcrumbs", new DummyBreadcrumbsModel());
         tester.startComponentInPage(panel);
     }

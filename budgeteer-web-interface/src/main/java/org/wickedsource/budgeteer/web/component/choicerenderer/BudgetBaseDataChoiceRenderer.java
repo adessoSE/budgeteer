@@ -1,4 +1,4 @@
-package org.wickedsource.budgeteer.web.usecase.people.edit.component.form;
+package org.wickedsource.budgeteer.web.component.choicerenderer;
 
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.wickedsource.budgeteer.service.budget.BudgetBaseData;

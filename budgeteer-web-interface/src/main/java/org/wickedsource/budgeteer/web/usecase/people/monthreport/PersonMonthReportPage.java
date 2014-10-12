@@ -10,10 +10,10 @@ import org.wickedsource.budgeteer.web.charts.BudgeteerChartTheme;
 import org.wickedsource.budgeteer.web.component.aggregatedrecordtable.AggregatedRecordTable;
 import org.wickedsource.budgeteer.web.component.targetactualchart.TargetAndActualChart;
 import org.wickedsource.budgeteer.web.component.targetactualchart.TargetAndActualChartOptions;
-import org.wickedsource.budgeteer.web.usecase.base.BasePage;
 import org.wickedsource.budgeteer.web.usecase.base.component.breadcrumb.Breadcrumb;
 import org.wickedsource.budgeteer.web.usecase.base.component.breadcrumb.BreadcrumbsModel;
 import org.wickedsource.budgeteer.web.usecase.dashboard.DashboardPage;
+import org.wickedsource.budgeteer.web.usecase.people.PersonBasePage;
 import org.wickedsource.budgeteer.web.usecase.people.details.PersonDetailsPage;
 import org.wickedsource.budgeteer.web.usecase.people.details.PersonNameModel;
 import org.wickedsource.budgeteer.web.usecase.people.monthreport.component.monthreporttable.PersonMonthlyAggregatedRecordsModel;
@@ -23,7 +23,7 @@ import org.wickedsource.budgeteer.web.usecase.people.overview.PeopleOverviewPage
 import java.util.List;
 
 @Mount("people/months/${id}")
-public class PersonMonthReportPage extends BasePage {
+public class PersonMonthReportPage extends PersonBasePage {
 
     public PersonMonthReportPage(PageParameters parameters) {
         super(parameters);
@@ -37,23 +37,6 @@ public class PersonMonthReportPage extends BasePage {
         IModel<List<AggregatedRecord>> tableModel = new PersonMonthlyAggregatedRecordsModel(getPersonId());
         add(new AggregatedRecordTable("table", tableModel));
     }
-
-    /**
-     * Creates a valid PageParameters object to pass into the constructor of this page class.
-     *
-     * @param personId id of the person whose details to display.
-     * @return a valid PageParameters object.
-     */
-    public static PageParameters createParameters(long personId) {
-        PageParameters parameters = new PageParameters();
-        parameters.add("id", personId);
-        return parameters;
-    }
-
-    private long getPersonId() {
-        return getPageParameters().get("id").toLong();
-    }
-
 
     @Override
     @SuppressWarnings("unchecked")

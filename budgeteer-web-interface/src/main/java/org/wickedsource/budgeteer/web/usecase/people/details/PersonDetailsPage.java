@@ -6,22 +6,22 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.charts.BudgeteerChartTheme;
-import org.wickedsource.budgeteer.web.usecase.base.BasePage;
 import org.wickedsource.budgeteer.web.usecase.base.component.breadcrumb.Breadcrumb;
 import org.wickedsource.budgeteer.web.usecase.base.component.breadcrumb.BreadcrumbsModel;
 import org.wickedsource.budgeteer.web.usecase.dashboard.DashboardPage;
+import org.wickedsource.budgeteer.web.usecase.people.PersonBasePage;
 import org.wickedsource.budgeteer.web.usecase.people.details.component.budgetdistributionchart.BudgetDistributionChart;
 import org.wickedsource.budgeteer.web.usecase.people.details.component.budgetdistributionchart.BudgetDistributionChartModel;
 import org.wickedsource.budgeteer.web.usecase.people.details.component.highlightspanel.PersonHighlightsModel;
 import org.wickedsource.budgeteer.web.usecase.people.details.component.highlightspanel.PersonHighlightsPanel;
 import org.wickedsource.budgeteer.web.usecase.people.edit.EditPersonPage;
+import org.wickedsource.budgeteer.web.usecase.people.hours.PersonHoursPage;
 import org.wickedsource.budgeteer.web.usecase.people.monthreport.PersonMonthReportPage;
 import org.wickedsource.budgeteer.web.usecase.people.overview.PeopleOverviewPage;
 import org.wickedsource.budgeteer.web.usecase.people.weekreport.PersonWeekReportPage;
 
 @Mount("people/details/${id}")
-public class PersonDetailsPage extends BasePage {
-
+public class PersonDetailsPage extends PersonBasePage {
 
     public PersonDetailsPage(PageParameters parameters) {
         super(parameters);
@@ -33,6 +33,8 @@ public class PersonDetailsPage extends BasePage {
         add(new BookmarkablePageLink<PersonWeekReportPage>("weekReportLink2", PersonWeekReportPage.class, PersonWeekReportPage.createParameters(getPersonId())));
         add(new BookmarkablePageLink<PersonWeekReportPage>("monthReportLink1", PersonMonthReportPage.class, PersonMonthReportPage.createParameters(getPersonId())));
         add(new BookmarkablePageLink<PersonWeekReportPage>("monthReportLink2", PersonMonthReportPage.class, PersonMonthReportPage.createParameters(getPersonId())));
+        add(new BookmarkablePageLink<PersonWeekReportPage>("hoursLink1", PersonHoursPage.class, PersonHoursPage.createParameters(getPersonId())));
+        add(new BookmarkablePageLink<PersonWeekReportPage>("hoursLink2", PersonHoursPage.class, PersonHoursPage.createParameters(getPersonId())));
     }
 
     private Link createEditPersonLink(String id) {
@@ -43,22 +45,6 @@ public class PersonDetailsPage extends BasePage {
                 setResponsePage(page);
             }
         };
-    }
-
-    /**
-     * Creates a valid PageParameters object to pass into the constructor of this page class.
-     *
-     * @param personId id of the person whose details to display.
-     * @return a valid PageParameters object.
-     */
-    public static PageParameters createParameters(long personId) {
-        PageParameters parameters = new PageParameters();
-        parameters.add("id", personId);
-        return parameters;
-    }
-
-    private long getPersonId() {
-        return getPageParameters().get("id").toLong();
     }
 
     @Override

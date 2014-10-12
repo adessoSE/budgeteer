@@ -1,0 +1,37 @@
+<wicket:panel>
+
+    <div class="col-xs-3">
+        <div class="form-group">
+            <label>Name Filter</label>
+            <select wicket:id="personSelect" class="form-control">
+                <option>Tom Hombergs</option>
+                <option>Martha Pfahl</option>
+                <option>Rainer Zufall</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="col-xs-3">
+        <div class="form-group">
+            <label>Budget Filter</label>
+            <select wicket:id="budgetSelect" class="form-control">
+                <option>Project Management</option>
+                <option>Implementation of Feature XYZ</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="col-xs-6">
+        <div class="form-group">
+            <label>Date Range Filter</label>
+
+            <div class="input-group">
+                <div class="input-group-addon">
+                    <i class="fa fa-calendar"></i>
+                </div>
+                <input wicket:id="daterangeInput" type="text" class="form-control" id="dateRangePicker">
+            </div>
+        </div>
+    </div>
+
+</wicket:panel>

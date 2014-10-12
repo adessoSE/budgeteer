@@ -1,8 +1,9 @@
 package org.wickedsource.budgeteer.service.people;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class PersonBaseData {
+public class PersonBaseData implements Serializable {
 
     private long id;
 

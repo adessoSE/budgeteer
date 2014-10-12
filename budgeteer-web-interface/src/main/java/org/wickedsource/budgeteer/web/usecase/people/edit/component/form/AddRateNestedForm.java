@@ -10,6 +10,7 @@ import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
 import org.wickedsource.budgeteer.service.budget.BudgetService;
 import org.wickedsource.budgeteer.service.people.PersonRate;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
+import org.wickedsource.budgeteer.web.component.choicerenderer.BudgetBaseDataChoiceRenderer;
 import org.wickedsource.budgeteer.web.usecase.base.component.daterange.DateRangeInputField;
 
 import java.util.List;

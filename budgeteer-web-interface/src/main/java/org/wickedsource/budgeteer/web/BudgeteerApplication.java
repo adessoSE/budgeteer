@@ -34,6 +34,7 @@ public class BudgeteerApplication extends WebApplication implements ApplicationC
         getMarkupSettings().setStripWicketTags(true);
         getComponentInstantiationListeners().add(new SpringComponentInjector(this, context));
         initWickedCharts();
+        getJavaScriptLibrarySettings().setJQueryReference(BudgeteerReferences.getJQueryReference());
         mountPages();
     }
 
@@ -58,8 +59,8 @@ public class BudgeteerApplication extends WebApplication implements ApplicationC
     }
 
     private void initWickedCharts() {
-        JavaScriptResourceRegistry.getInstance().setHighchartsReference("js/highcharts/highcharts.js");
-        JavaScriptResourceRegistry.getInstance().setJQueryReference("js/jquery/jquery.min.js");
+        JavaScriptResourceRegistry.getInstance().setHighchartsReference(BudgeteerReferences.getHighchartsReference());
+        JavaScriptResourceRegistry.getInstance().setJQueryReference(BudgeteerReferences.getJQueryReference());
     }
 
     @Override
@@ -68,7 +69,7 @@ public class BudgeteerApplication extends WebApplication implements ApplicationC
     }
 
     @Override
-    public void setApplicationContext(ApplicationContext applicationContext){
+    public void setApplicationContext(ApplicationContext applicationContext) {
         this.context = applicationContext;
     }
 

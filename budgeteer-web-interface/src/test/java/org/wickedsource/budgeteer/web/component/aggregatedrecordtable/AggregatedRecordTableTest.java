@@ -1,7 +1,6 @@
 package org.wickedsource.budgeteer.web.component.aggregatedrecordtable;
 
 import org.apache.wicket.util.tester.WicketTester;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.budgeteer.service.hours.AggregatedRecord;
@@ -24,9 +23,6 @@ public class AggregatedRecordTableTest extends AbstractWebTestTemplate {
     private Random random = new Random();
 
     @Test
-    @Ignore
-    // this test seems to destroy the Wicket application, so that Injector.get() will return null
-    // when run together with other tests - why?
     public void render() {
         WicketTester tester = getTester();
         when(service.getWeeklyAggregationForPerson(1l)).thenReturn(getWeeklyAggregationForPerson(1l));

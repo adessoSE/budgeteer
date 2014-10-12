@@ -1,7 +1,10 @@
 package org.wickedsource.budgeteer.web.usecase.base;
 
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.wickedsource.budgeteer.web.BudgeteerReferences;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.usecase.base.component.breadcrumb.BreadcrumbsModel;
 import org.wickedsource.budgeteer.web.usecase.base.component.breadcrumb.BreadcrumbsPanel;
@@ -12,7 +15,7 @@ import org.wickedsource.budgeteer.web.usecase.base.component.notification.Notifi
 
 public abstract class BasePage extends WebPage {
 
-    public BasePage(PageParameters parameters){
+    public BasePage(PageParameters parameters) {
         super(parameters);
         addComponents();
     }
@@ -28,6 +31,12 @@ public abstract class BasePage extends WebPage {
         add(breadcrumbs);
         add(new NotificationDropdown("notificationDropdown", new NotificationModel(loggedInUserId)));
         add(new BudgetUnitDropdown("budgetUnitDropdown", new BudgetUnitModel(loggedInUserId)));
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        response.render(JavaScriptReferenceHeaderItem.forReference(BudgeteerReferences.getJQueryReference()));
     }
 
     /**
