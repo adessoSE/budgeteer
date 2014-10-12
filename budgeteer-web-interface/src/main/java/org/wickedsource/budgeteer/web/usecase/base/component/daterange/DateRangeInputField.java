@@ -10,7 +10,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.util.convert.IConverter;
-import org.wickedsource.budgeteer.service.people.DateRange;
+import org.wickedsource.budgeteer.service.common.DateRange;
 import org.wickedsource.budgeteer.web.BudgeteerReferences;
 
 public class DateRangeInputField extends TextField<DateRange> {

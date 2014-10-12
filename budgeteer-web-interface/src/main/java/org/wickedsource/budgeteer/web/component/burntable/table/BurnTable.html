@@ -1,0 +1,39 @@
+<wicket:panel>
+
+    <p class="pull-right">Total burned budget with current filter: <strong wicket:id="total">€120.000</strong>
+    </p>
+
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th>Budget</th>
+            <th>Name</th>
+            <th>Daily Rate</th>
+            <th>Date</th>
+            <th>Hours</th>
+            <th>Budget Burned</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr wicket:id="recordList">
+            <td wicket:id="budget">Project Management</td>
+            <td wicket:id="person">Tom Hombergs</td>
+            <td wicket:id="dailyRate">€790</td>
+            <td wicket:id="date">25.09.2014</td>
+            <td wicket:id="hours">8.00</td>
+            <td wicket:id="burnedBudget">790</td>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+            <th>Budget</th>
+            <th>Name</th>
+            <th>Daily Rate</th>
+            <th>Date</th>
+            <th>Hours</th>
+            <th>Budget Burned</th>
+        </tr>
+        </tfoot>
+    </table>
+
+</wicket:panel>

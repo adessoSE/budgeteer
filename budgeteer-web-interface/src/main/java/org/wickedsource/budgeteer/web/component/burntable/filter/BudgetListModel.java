@@ -1,4 +1,4 @@
-package org.wickedsource.budgeteer.web.component.hourstable;
+package org.wickedsource.budgeteer.web.component.burntable.filter;
 
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.model.LoadableDetachableModel;
@@ -22,6 +22,6 @@ public class BudgetListModel extends LoadableDetachableModel<List<BudgetBaseData
 
     @Override
     protected List<BudgetBaseData> load() {
-        return service.loadBudgetBaseData(userId);
+        return service.loadBudgetBaseDataForUser(userId);
     }
 }

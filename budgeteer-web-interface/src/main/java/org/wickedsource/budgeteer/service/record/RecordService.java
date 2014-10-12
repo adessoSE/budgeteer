@@ -1,4 +1,4 @@
-package org.wickedsource.budgeteer.service.hours;
+package org.wickedsource.budgeteer.service.record;
 
 import org.springframework.stereotype.Service;
 
@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Random;
 
 @Service
-public class AggregationService {
+public class RecordService {
 
     private Random random = new Random();
 
@@ -52,6 +52,39 @@ public class AggregationService {
             list.add(record);
         }
         return list;
+    }
+
+    /**
+     * Loads the records from the database that match the given filter. If a filter criterion is left empty (null) it
+     * will not be applied.
+     *
+     * @param filter the filter to apply when loading records.
+     * @return filtered list of records.
+     */
+    public List<SingleRecord> getFilteredRecords(RecordFilter filter) {
+        int size = 50;
+        if (filter.getPerson() != null) {
+            size -= 5;
+        }
+        if (filter.getBudget() != null) {
+            size -= 5;
+        }
+        if (filter.getDateRange() != null) {
+            size -= 5;
+        }
+
+        List<SingleRecord> records = new ArrayList<SingleRecord>();
+        for (int i = 0; i < size; i++) {
+            SingleRecord record = new SingleRecord();
+            record.setHours(8d);
+            record.setBudgetBurned(500d);
+            record.setBudgetName("Budget 1");
+            record.setDailyRate(500d);
+            record.setDate(new Date());
+            record.setPersonName("Tom");
+            records.add(record);
+        }
+        return records;
     }
 
 }

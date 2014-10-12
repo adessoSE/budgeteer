@@ -1,12 +1,14 @@
-package org.wickedsource.budgeteer.web.component.hourstable;
+package org.wickedsource.budgeteer.web.component.burntable.filter;
 
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.IModel;
 import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
 import org.wickedsource.budgeteer.service.people.PersonBaseData;
+import org.wickedsource.budgeteer.service.record.RecordFilter;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.component.choicerenderer.BudgetBaseDataChoiceRenderer;
 import org.wickedsource.budgeteer.web.component.choicerenderer.PersonBaseDataChoiceRenderer;
@@ -23,9 +25,11 @@ public class FilterPanel extends Panel {
 
     private boolean daterangeFilterEnabled = true;
 
-    public FilterPanel(String id) {
-        super(id, model(from(new Filter())));
-        Form<Filter> form = new Form<Filter>("filterForm", model(from(new Filter()))) {
+    @SuppressWarnings("unchecked")
+    public FilterPanel(String id, RecordFilter filter) {
+        super(id, model(from(filter)));
+        IModel<RecordFilter> model = (IModel<RecordFilter>) getDefaultModel();
+        Form<RecordFilter> form = new Form<RecordFilter>("filterForm", model) {
             @Override
             protected void onSubmit() {
                 send(getPage(), Broadcast.BREADTH, getModel().getObject());
@@ -37,7 +41,7 @@ public class FilterPanel extends Panel {
         add(form);
     }
 
-    private WebMarkupContainer createPersonFilter(String id, Form<Filter> form) {
+    private WebMarkupContainer createPersonFilter(String id, Form<RecordFilter> form) {
         WebMarkupContainer container = new WebMarkupContainer(id) {
             @Override
             public boolean isVisible() {
@@ -45,13 +49,15 @@ public class FilterPanel extends Panel {
             }
         };
         container.setVisible(isPersonFilterEnabled());
-        DropDownChoice<PersonBaseData> select = new DropDownChoice<PersonBaseData>("personSelect", model(from(form.getModel()).getSelectedPerson()), new PersonListModel(BudgeteerSession.get().getLoggedInUserId()));
-        select.setChoiceRenderer(new PersonBaseDataChoiceRenderer());
-        container.add(select);
+        DropDownChoice<PersonBaseData> field = new DropDownChoice<PersonBaseData>("personSelect", model(from(form.getModel()).getPerson()), new PersonListModel(BudgeteerSession.get().getLoggedInUserId()));
+        field.setChoiceRenderer(new PersonBaseDataChoiceRenderer());
+        field.setRequired(false);
+        field.setNullValid(true);
+        container.add(field);
         return container;
     }
 
-    private WebMarkupContainer createBudgetFilter(String id, Form<Filter> form) {
+    private WebMarkupContainer createBudgetFilter(String id, Form<RecordFilter> form) {
         WebMarkupContainer container = new WebMarkupContainer(id) {
             @Override
             public boolean isVisible() {
@@ -59,20 +65,23 @@ public class FilterPanel extends Panel {
             }
         };
         container.setVisible(isBudgetFilterEnabled());
-        DropDownChoice<BudgetBaseData> select = new DropDownChoice<BudgetBaseData>("budgetSelect", model(from(form.getModel()).getSelectedBudget()), new BudgetListModel(BudgeteerSession.get().getLoggedInUserId()));
-        select.setChoiceRenderer(new BudgetBaseDataChoiceRenderer());
-        container.add(select);
+        DropDownChoice<BudgetBaseData> field = new DropDownChoice<BudgetBaseData>("budgetSelect", model(from(form.getModel()).getBudget()), new BudgetListModel(BudgeteerSession.get().getLoggedInUserId()));
+        field.setChoiceRenderer(new BudgetBaseDataChoiceRenderer());
+        field.setRequired(false);
+        field.setNullValid(true);
+        container.add(field);
         return container;
     }
 
-    private WebMarkupContainer createDaterangeFilter(String id, Form<Filter> form) {
+    private WebMarkupContainer createDaterangeFilter(String id, Form<RecordFilter> form) {
         WebMarkupContainer container = new WebMarkupContainer(id) {
             @Override
             public boolean isVisible() {
                 return isDaterangeFilterEnabled();
             }
         };
-        DateRangeInputField field = new DateRangeInputField("daterangeInput", model(from(form.getModel()).getSelectedDaterange()));
+        DateRangeInputField field = new DateRangeInputField("daterangeInput", model(from(form.getModel()).getDateRange()));
+        field.setRequired(false);
         container.add(field);
         return container;
     }

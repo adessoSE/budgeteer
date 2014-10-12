@@ -2,6 +2,7 @@ package org.wickedsource.budgeteer.service.people;
 
 import org.springframework.stereotype.Service;
 import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
+import org.wickedsource.budgeteer.service.common.DateRange;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -85,4 +86,13 @@ public class PeopleService {
         return person;
     }
 
+    /**
+     * Loads the base data of a single person from the database.
+     *
+     * @param personId ID of the person to load.
+     * @return base data of the specified person.
+     */
+    public PersonBaseData loadPersonBaseData(long personId) {
+        return createPersonBaseData();
+    }
 }

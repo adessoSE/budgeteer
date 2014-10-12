@@ -14,13 +14,23 @@ public class BudgetService {
      * @param userId ID of the logged in user
      * @return list of all budgets the user is qualified for
      */
-    public List<BudgetBaseData> loadBudgetBaseData(long userId) {
+    public List<BudgetBaseData> loadBudgetBaseDataForUser(long userId) {
         List<BudgetBaseData> list = new ArrayList<BudgetBaseData>();
         list.add(new BudgetBaseData(1, "Budget 1"));
         list.add(new BudgetBaseData(2, "Budget 2"));
         list.add(new BudgetBaseData(3, "Budget 3"));
         list.add(new BudgetBaseData(4, "Budget 4"));
         return list;
+    }
+
+    /**
+     * Loads the base data of a single budget from the database.
+     *
+     * @param budgetId ID of the budget to load.
+     * @return base data of the specified budget.
+     */
+    public BudgetBaseData loadBudgetBaseData(long budgetId) {
+        return new BudgetBaseData(1, "Budget 1");
     }
 
 

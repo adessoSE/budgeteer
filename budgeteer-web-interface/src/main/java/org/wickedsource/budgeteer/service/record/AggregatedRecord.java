@@ -1,4 +1,4 @@
-package org.wickedsource.budgeteer.service.hours;
+package org.wickedsource.budgeteer.service.record;
 
 import java.util.Date;
 

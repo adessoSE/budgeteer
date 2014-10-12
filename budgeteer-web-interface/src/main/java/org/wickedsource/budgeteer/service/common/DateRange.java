@@ -1,4 +1,4 @@
-package org.wickedsource.budgeteer.service.people;
+package org.wickedsource.budgeteer.service.common;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -25,6 +25,7 @@ public class DateRange implements Serializable {
         return endDate;
     }
 
+    @SuppressWarnings("EqualsWhichDoesntCheckParameterClass")
     @Override
     public boolean equals(Object obj) {
         return EqualsBuilder.reflectionEquals(this, obj);

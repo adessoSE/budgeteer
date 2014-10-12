@@ -41,7 +41,7 @@ public abstract class AddRateNestedForm extends Form<PersonRate> {
     }
 
     private List<? extends BudgetBaseData> getBudgetChoices() {
-        return budgetService.loadBudgetBaseData(BudgeteerSession.get().getLoggedInUserId());
+        return budgetService.loadBudgetBaseDataForUser(BudgeteerSession.get().getLoggedInUserId());
     }
 
 }

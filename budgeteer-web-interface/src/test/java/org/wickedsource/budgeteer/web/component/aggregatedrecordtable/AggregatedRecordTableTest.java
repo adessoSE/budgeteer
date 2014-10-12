@@ -3,8 +3,8 @@ package org.wickedsource.budgeteer.web.component.aggregatedrecordtable;
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.wickedsource.budgeteer.service.hours.AggregatedRecord;
-import org.wickedsource.budgeteer.service.hours.AggregationService;
+import org.wickedsource.budgeteer.service.record.AggregatedRecord;
+import org.wickedsource.budgeteer.service.record.RecordService;
 import org.wickedsource.budgeteer.web.AbstractWebTestTemplate;
 import org.wickedsource.budgeteer.web.usecase.people.weekreport.component.weekreporttable.PersonWeeklyAggregatedRecordsModel;
 
@@ -18,7 +18,7 @@ import static org.mockito.Mockito.when;
 public class AggregatedRecordTableTest extends AbstractWebTestTemplate {
 
     @Autowired
-    private AggregationService service;
+    private RecordService service;
 
     private Random random = new Random();
 

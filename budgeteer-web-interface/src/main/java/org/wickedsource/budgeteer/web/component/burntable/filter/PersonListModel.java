@@ -1,4 +1,4 @@
-package org.wickedsource.budgeteer.web.component.hourstable;
+package org.wickedsource.budgeteer.web.component.burntable.filter;
 
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.model.LoadableDetachableModel;

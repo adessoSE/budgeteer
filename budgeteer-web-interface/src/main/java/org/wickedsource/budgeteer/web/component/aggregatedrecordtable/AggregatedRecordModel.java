@@ -2,7 +2,7 @@ package org.wickedsource.budgeteer.web.component.aggregatedrecordtable;
 
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.IObjectClassAwareModel;
-import org.wickedsource.budgeteer.service.hours.AggregatedRecord;
+import org.wickedsource.budgeteer.service.record.AggregatedRecord;
 
 /**
  * Wrapping model to be used with LazyModel.

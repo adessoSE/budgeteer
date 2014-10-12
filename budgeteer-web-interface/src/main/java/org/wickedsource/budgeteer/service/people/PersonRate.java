@@ -3,6 +3,7 @@ package org.wickedsource.budgeteer.service.people;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
+import org.wickedsource.budgeteer.service.common.DateRange;
 
 import java.io.Serializable;
 
