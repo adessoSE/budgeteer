@@ -14,7 +14,6 @@ public class BurnTableWithFilter extends Panel {
         super(id);
 
         filterPanel = new FilterPanel("filter", initialFilter);
-        filterPanel.setPersonFilterEnabled(false);
         add(filterPanel);
 
         FilteredRecordsModel tableModel = new FilteredRecordsModel(initialFilter);

@@ -1,6 +1,7 @@
 package org.wickedsource.budgeteer.web.usecase.dashboard;
 
 
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.charts.BudgeteerChartTheme;
@@ -10,6 +11,8 @@ import org.wickedsource.budgeteer.web.usecase.dashboard.component.burnedbudgetch
 import org.wickedsource.budgeteer.web.usecase.dashboard.component.burnedbudgetchart.BurnedBudgetChartModel;
 import org.wickedsource.budgeteer.web.usecase.dashboard.component.dailyratechart.AverageDailyRateChart;
 import org.wickedsource.budgeteer.web.usecase.dashboard.component.dailyratechart.AverageDailyRateChartModel;
+import org.wickedsource.budgeteer.web.usecase.hours.HoursPage;
+import org.wickedsource.budgeteer.web.usecase.people.overview.PeopleOverviewPage;
 
 @Mount("dashboard")
 public class DashboardPage extends BasePage {
@@ -21,6 +24,12 @@ public class DashboardPage extends BasePage {
 
         AverageDailyRateChartModel avgDailyRateModel = new AverageDailyRateChartModel(BudgeteerSession.get().getLoggedInUserId(), 30);
         add(new AverageDailyRateChart("averageDailyRateChart", avgDailyRateModel, theme));
+
+        add(new BookmarkablePageLink<PeopleOverviewPage>("peopleLink1", PeopleOverviewPage.class));
+        add(new BookmarkablePageLink<PeopleOverviewPage>("peopleLink2", PeopleOverviewPage.class));
+
+        add(new BookmarkablePageLink<PeopleOverviewPage>("hoursLink1", HoursPage.class));
+        add(new BookmarkablePageLink<PeopleOverviewPage>("hoursLink2", HoursPage.class));
     }
 
     @SuppressWarnings("unchecked")
