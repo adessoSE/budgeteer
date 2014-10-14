@@ -52,14 +52,27 @@ public class BudgetService {
      * @return list of budgets that match the filter.
      */
     public List<BudgetDetailData> loadBudgetsDetailData(long userId, BudgetTagFilter filter) {
+        int count = 10;
+
+        if (filter.getCombinationMode() == BudgetTagFilter.TagCombinationMode.AND) {
+            for (int i = 0; i < filter.getSelectedTags().size(); i++) {
+                count -= 1;
+            }
+        } else if (filter.getCombinationMode() == BudgetTagFilter.TagCombinationMode.OR) {
+            for (int i = 0; i < filter.getSelectedTags().size(); i++) {
+                count += 1;
+            }
+        }
+
         List<BudgetDetailData> list = new ArrayList<BudgetDetailData>();
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < count; i++) {
             BudgetDetailData data = new BudgetDetailData();
             data.setLastUpdated(new Date());
             data.setName("Budget " + i);
             data.setSpent(random.nextDouble());
             data.setTotal(random.nextDouble());
             data.setTags(Arrays.asList("Active"));
+            list.add(data);
         }
         return list;
     }

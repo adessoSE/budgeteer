@@ -7,6 +7,8 @@ import org.wickedsource.budgeteer.web.usecase.base.BasePage;
 import org.wickedsource.budgeteer.web.usecase.base.component.breadcrumb.BreadcrumbsModel;
 import org.wickedsource.budgeteer.web.usecase.budgets.overview.filter.BudgetTagFilterPanel;
 import org.wickedsource.budgeteer.web.usecase.budgets.overview.filter.BudgetTagsModel;
+import org.wickedsource.budgeteer.web.usecase.budgets.overview.table.BudgetOverviewTable;
+import org.wickedsource.budgeteer.web.usecase.budgets.overview.table.FilteredBudgetModel;
 import org.wickedsource.budgeteer.web.usecase.dashboard.DashboardPage;
 
 import static org.wicketstuff.lazymodel.LazyModel.from;
@@ -20,6 +22,7 @@ public class BudgetsOverviewPage extends BasePage {
         BudgetTagFilter filter = new BudgetTagFilter();
         filter.setSelectedTags(tagsModel.getObject());
         add(new BudgetTagFilterPanel("tagFilter", tagsModel, model(from(filter))));
+        add(new BudgetOverviewTable("budgetTable", new FilteredBudgetModel(BudgeteerSession.get().getLoggedInUserId(), model(from(filter)))));
     }
 
     @SuppressWarnings("unchecked")

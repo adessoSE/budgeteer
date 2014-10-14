@@ -5,6 +5,8 @@ import java.util.List;
 
 public class BudgetDetailData {
 
+    private long id;
+
     private String name;
 
     private List<String> tags;
@@ -14,6 +16,14 @@ public class BudgetDetailData {
     private Double spent;
 
     private Date lastUpdated;
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public long getId() {
+        return id;
+    }
 
     public Date getLastUpdated() {
         return lastUpdated;
@@ -53,5 +63,22 @@ public class BudgetDetailData {
 
     public void setSpent(Double spent) {
         this.spent = spent;
+    }
+
+    public Double getRemaining() {
+        return this.total - this.spent;
+    }
+
+    public Double getProgress() {
+        return this.getRemaining() / this.total;
+    }
+
+    /**
+     * Gets the progress in percent rounded to two decimal places.
+     *
+     * @return the progress in percent.
+     */
+    public Double getProgressInPercent() {
+        return getProgress() * 100;
     }
 }
