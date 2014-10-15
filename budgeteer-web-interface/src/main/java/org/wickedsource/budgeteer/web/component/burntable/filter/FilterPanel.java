@@ -12,7 +12,7 @@ import org.wickedsource.budgeteer.service.record.RecordFilter;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.component.choicerenderer.BudgetBaseDataChoiceRenderer;
 import org.wickedsource.budgeteer.web.component.choicerenderer.PersonBaseDataChoiceRenderer;
-import org.wickedsource.budgeteer.web.usecase.base.component.daterange.DateRangeInputField;
+import org.wickedsource.budgeteer.web.component.daterange.DateRangeInputField;
 
 import static org.wicketstuff.lazymodel.LazyModel.from;
 import static org.wicketstuff.lazymodel.LazyModel.model;

@@ -1,4 +1,4 @@
-package org.wickedsource.budgeteer.web.usecase.base.component.money;
+package org.wickedsource.budgeteer.web.component.money;
 
 import org.apache.wicket.util.convert.ConversionException;
 import org.apache.wicket.util.convert.IConverter;

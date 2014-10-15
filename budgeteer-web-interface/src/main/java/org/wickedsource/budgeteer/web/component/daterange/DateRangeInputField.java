@@ -1,4 +1,4 @@
-package org.wickedsource.budgeteer.web.usecase.base.component.daterange;
+package org.wickedsource.budgeteer.web.component.daterange;
 
 
 import org.apache.wicket.markup.head.CssReferenceHeaderItem;
