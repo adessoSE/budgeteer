@@ -3,6 +3,7 @@ package org.wickedsource.budgeteer.web.usecase.people.details;
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.wickedsource.budgeteer.service.MoneyUtil;
 import org.wickedsource.budgeteer.service.people.PeopleService;
 import org.wickedsource.budgeteer.service.people.PersonDetailData;
 import org.wickedsource.budgeteer.web.AbstractWebTestTemplate;
@@ -26,9 +27,9 @@ public class PersonDetailsPageTest extends AbstractWebTestTemplate {
 
     private PersonDetailData createPerson() {
         PersonDetailData data = new PersonDetailData();
-        data.setAverageDailyRate(100.0);
+        data.setAverageDailyRate(MoneyUtil.createMoney(100.0));
         data.setName("Tom Hombergs");
-        data.setBudgetBurned(100000.00);
+        data.setBudgetBurned(MoneyUtil.createMoney(100000.00));
         data.setFirstBookedDate(new Date());
         data.setHoursBooked(100.0);
         data.setLastBookedDate(new Date());

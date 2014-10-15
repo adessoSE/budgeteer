@@ -53,13 +53,13 @@ public class TargetAndActualChartOptions extends Options {
                 addSeries(new Series<Double>() {
                 }
                         .setName(series.getName())
-                        .setData(series.getValues()));
+                        .setData(series.getValuesAsDouble()));
             }
 
             addSeries(new Series<Double>() {
             }
                     .setName("Plan")
-                    .setData(model.getObject().getTargetSeries().getValues())
+                    .setData(model.getObject().getTargetSeries().getValuesAsDouble())
                     .setType(SeriesType.LINE));
         }
 

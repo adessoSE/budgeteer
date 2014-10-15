@@ -4,7 +4,6 @@ import org.apache.wicket.injection.Injector;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.NumberTextField;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
 import org.wickedsource.budgeteer.service.budget.BudgetService;
@@ -12,6 +11,7 @@ import org.wickedsource.budgeteer.service.people.PersonRate;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.component.choicerenderer.BudgetBaseDataChoiceRenderer;
 import org.wickedsource.budgeteer.web.usecase.base.component.daterange.DateRangeInputField;
+import org.wickedsource.budgeteer.web.usecase.base.component.money.MoneyTextField;
 
 import java.util.List;
 
@@ -27,7 +27,7 @@ public abstract class AddRateNestedForm extends Form<PersonRate> {
         super(id, model(from(new PersonRate())));
         Injector.get().inject(this);
 
-        NumberTextField rateField = new NumberTextField<Double>("rateField", model(from(getModel()).getRate()));
+        MoneyTextField rateField = new MoneyTextField("rateField", model(from(getModel()).getRate()));
         add(rateField);
 
         DateRangeInputField dateRangeField = new DateRangeInputField("dateRangeField", model(from(getModel()).getDateRange()));

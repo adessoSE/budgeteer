@@ -1,12 +1,14 @@
 package org.wickedsource.budgeteer.service.people;
 
+import org.joda.money.Money;
+
 import java.util.Date;
 
 public class PersonDetailData {
 
     private String name;
 
-    private Double averageDailyRate;
+    private Money averageDailyRate;
 
     private Date firstBookedDate;
 
@@ -14,7 +16,7 @@ public class PersonDetailData {
 
     private Double hoursBooked;
 
-    private Double budgetBurned;
+    private Money budgetBurned;
 
     public String getName() {
         return name;
@@ -24,11 +26,11 @@ public class PersonDetailData {
         this.name = name;
     }
 
-    public Double getAverageDailyRate() {
+    public Money getAverageDailyRate() {
         return averageDailyRate;
     }
 
-    public void setAverageDailyRate(Double averageDailyRate) {
+    public void setAverageDailyRate(Money averageDailyRate) {
         this.averageDailyRate = averageDailyRate;
     }
 
@@ -56,11 +58,11 @@ public class PersonDetailData {
         this.hoursBooked = hoursBooked;
     }
 
-    public Double getBudgetBurned() {
+    public Money getBudgetBurned() {
         return budgetBurned;
     }
 
-    public void setBudgetBurned(Double budgetBurned) {
+    public void setBudgetBurned(Money budgetBurned) {
         this.budgetBurned = budgetBurned;
     }
 }

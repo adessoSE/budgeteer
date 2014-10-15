@@ -1,6 +1,8 @@
 package org.wickedsource.budgeteer.service.statistics;
 
+import org.joda.money.Money;
 import org.springframework.stereotype.Service;
+import org.wickedsource.budgeteer.service.MoneyUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,10 +20,10 @@ public class StatisticsService {
      * @param numberOfWeeks the number of weeks to look back into the past
      * @return list of values each being the monetary value of the budget burned in one week. The last entry belongs to the current week. A week is considered to start on Monday and end on Sunday.
      */
-    public List<Double> getBudgetBurnedInPreviousWeeks(long userId, int numberOfWeeks) {
-        List<Double> list = new ArrayList<Double>();
+    public List<Money> getBudgetBurnedInPreviousWeeks(long userId, int numberOfWeeks) {
+        List<Money> list = new ArrayList<Money>();
         for (int i = 0; i < numberOfWeeks; i++) {
-            list.add(random.nextDouble());
+            list.add(MoneyUtil.createMoneyFromCents(random.nextInt(100000)));
         }
         return list;
     }
@@ -33,10 +35,10 @@ public class StatisticsService {
      * @param numberOfDays the number of days to look back into the past
      * @return list of values each being the monetary value of the average daily rate that was earned for all people working on the user's budgets.
      */
-    public List<Double> getAvgDailyRateForPreviousDays(long userId, int numberOfDays) {
-        List<Double> list = new ArrayList<Double>();
+    public List<Money> getAvgDailyRateForPreviousDays(long userId, int numberOfDays) {
+        List<Money> list = new ArrayList<Money>();
         for (int i = 0; i < numberOfDays; i++) {
-            list.add(random.nextDouble());
+            list.add(MoneyUtil.createMoneyFromCents(random.nextInt(100000)));
         }
         return list;
     }
@@ -50,7 +52,7 @@ public class StatisticsService {
     public List<BudgetValue> getBudgetDistribution(long personId) {
         List<BudgetValue> shares = new ArrayList<BudgetValue>();
         for (int i = 0; i < 5; i++) {
-            shares.add(new BudgetValue(random.nextDouble(), "Budget " + i));
+            shares.add(new BudgetValue(MoneyUtil.createMoneyFromCents(random.nextInt(100000)), "Budget " + i));
         }
         return shares;
     }
@@ -69,7 +71,7 @@ public class StatisticsService {
             BudgeteerSeries series = new BudgeteerSeries();
             series.setName("Budget " + i);
             for (int j = 0; j < numberOfWeeks; j++) {
-                series.getValues().add(random.nextDouble());
+                series.getValues().add(MoneyUtil.createMoneyFromCents(random.nextInt(100000)));
             }
             targetAndActual.getActualSeries().add(series);
         }
@@ -77,7 +79,7 @@ public class StatisticsService {
         BudgeteerSeries series = new BudgeteerSeries();
         series.setName("Target");
         for (int j = 0; j < numberOfWeeks; j++) {
-            series.getValues().add(random.nextDouble());
+            series.getValues().add(MoneyUtil.createMoneyFromCents(random.nextInt(100000)));
         }
         targetAndActual.setTargetSeries(series);
 
@@ -87,7 +89,7 @@ public class StatisticsService {
     /**
      * Returns the actual and target budget valued for the given person from the last numberOfMonths months.
      *
-     * @param personId      ID of the person whose data to load.
+     * @param personId       ID of the person whose data to load.
      * @param numberOfMonths the number of months to go back into the past.
      * @return the week statistics for the last numberOfWeeks weeks
      */
@@ -98,7 +100,7 @@ public class StatisticsService {
             BudgeteerSeries series = new BudgeteerSeries();
             series.setName("Budget " + i);
             for (int j = 0; j < numberOfMonths; j++) {
-                series.getValues().add(random.nextDouble());
+                series.getValues().add(MoneyUtil.createMoneyFromCents(random.nextInt(100000)));
             }
             targetAndActual.getActualSeries().add(series);
         }
@@ -106,7 +108,7 @@ public class StatisticsService {
         BudgeteerSeries series = new BudgeteerSeries();
         series.setName("Target");
         for (int j = 0; j < numberOfMonths; j++) {
-            series.getValues().add(random.nextDouble());
+            series.getValues().add(MoneyUtil.createMoneyFromCents(random.nextInt(100000)));
         }
         targetAndActual.setTargetSeries(series);
 

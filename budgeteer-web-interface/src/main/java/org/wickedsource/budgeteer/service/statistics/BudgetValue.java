@@ -1,5 +1,7 @@
 package org.wickedsource.budgeteer.service.statistics;
 
+import org.joda.money.Money;
+
 /**
  * A numeric value that belongs to a certain budget.
  */
@@ -7,9 +9,9 @@ public class BudgetValue {
 
     private String budgetName;
 
-    private Double share;
+    private Money share;
 
-    public BudgetValue(Double share, String budgetName) {
+    public BudgetValue(Money share, String budgetName) {
         this.share = share;
         this.budgetName = budgetName;
     }
@@ -18,7 +20,7 @@ public class BudgetValue {
         return budgetName;
     }
 
-    public Double getShare() {
+    public Money getShare() {
         return share;
     }
 }

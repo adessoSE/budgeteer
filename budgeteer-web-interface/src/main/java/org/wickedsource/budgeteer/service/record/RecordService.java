@@ -1,6 +1,7 @@
 package org.wickedsource.budgeteer.service.record;
 
 import org.springframework.stereotype.Service;
+import org.wickedsource.budgeteer.service.MoneyUtil;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -25,8 +26,8 @@ public class RecordService {
             record.setAggregationPeriodTitle("Week #" + i);
             record.setAggregationPeriodStart(new Date());
             record.setAggregationPeriodEnd(new Date());
-            record.setBudgetBurned(random.nextDouble());
-            record.setBudgetPlanned(random.nextDouble());
+            record.setBudgetBurned(MoneyUtil.createMoneyFromCents(random.nextInt(100000)));
+            record.setBudgetPlanned(MoneyUtil.createMoneyFromCents(random.nextInt(100000)));
             record.setHours(random.nextDouble());
             list.add(record);
         }
@@ -46,8 +47,8 @@ public class RecordService {
             record.setAggregationPeriodTitle("2014/" + i);
             record.setAggregationPeriodStart(new Date());
             record.setAggregationPeriodEnd(new Date());
-            record.setBudgetBurned(random.nextDouble());
-            record.setBudgetPlanned(random.nextDouble());
+            record.setBudgetBurned(MoneyUtil.createMoneyFromCents(random.nextInt(100000)));
+            record.setBudgetPlanned(MoneyUtil.createMoneyFromCents(random.nextInt(100000)));
             record.setHours(random.nextDouble());
             list.add(record);
         }
@@ -77,9 +78,9 @@ public class RecordService {
         for (int i = 0; i < size; i++) {
             SingleRecord record = new SingleRecord();
             record.setHours(8d);
-            record.setBudgetBurned(500d);
+            record.setBudgetBurned(MoneyUtil.createMoney(500d));
             record.setBudgetName("Budget 1");
-            record.setDailyRate(500d);
+            record.setDailyRate(MoneyUtil.createMoney(500d));
             record.setDate(new Date());
             record.setPersonName("Tom");
             records.add(record);

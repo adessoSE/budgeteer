@@ -2,6 +2,7 @@ package org.wickedsource.budgeteer.service.people;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.joda.money.Money;
 import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
 import org.wickedsource.budgeteer.service.common.DateRange;
 
@@ -9,17 +10,9 @@ import java.io.Serializable;
 
 public class PersonRate implements Serializable {
 
-    private Double rate;
+    private Money rate;
 
     private BudgetBaseData budget;
-
-    public Double getRate() {
-        return rate;
-    }
-
-    public void setRate(Double rate) {
-        this.rate = rate;
-    }
 
     private DateRange dateRange;
 
@@ -29,6 +22,14 @@ public class PersonRate implements Serializable {
 
     public void setBudget(BudgetBaseData budget) {
         this.budget = budget;
+    }
+
+    public Money getRate() {
+        return rate;
+    }
+
+    public void setRate(Money rate) {
+        this.rate = rate;
     }
 
     public DateRange getDateRange() {

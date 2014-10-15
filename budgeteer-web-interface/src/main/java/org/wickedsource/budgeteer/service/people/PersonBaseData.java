@@ -1,5 +1,7 @@
 package org.wickedsource.budgeteer.service.people;
 
+import org.joda.money.Money;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -9,7 +11,7 @@ public class PersonBaseData implements Serializable {
 
     private String name;
 
-    private Double averageDailyRate;
+    private Money averageDailyRate;
 
     private Date lastBooked;
 
@@ -29,11 +31,11 @@ public class PersonBaseData implements Serializable {
         this.name = name;
     }
 
-    public Double getAverageDailyRate() {
+    public Money getAverageDailyRate() {
         return averageDailyRate;
     }
 
-    public void setAverageDailyRate(Double averageDailyRate) {
+    public void setAverageDailyRate(Money averageDailyRate) {
         this.averageDailyRate = averageDailyRate;
     }
 

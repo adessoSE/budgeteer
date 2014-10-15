@@ -7112,7 +7112,7 @@
 		 *  @default []
 		 *  
 		 *  @example
-		 *    // Currency type detection plug-in:
+		 *    // MoneyUtil type detection plug-in:
 		 *    jQuery.fn.dataTableExt.aTypes.push(
 		 *      function ( sData ) {
 		 *        var sValidChars = "0123456789.-";

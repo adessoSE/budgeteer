@@ -4,6 +4,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.wickedsource.budgeteer.service.MoneyUtil;
 import org.wickedsource.budgeteer.service.budget.BudgetDetailData;
 import org.wickedsource.budgeteer.service.budget.BudgetService;
 import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
@@ -35,8 +36,8 @@ public class BudgetOverviewTableTest extends AbstractWebTestTemplate {
             BudgetDetailData data = new BudgetDetailData();
             data.setLastUpdated(new Date());
             data.setName("Budget " + i);
-            data.setSpent(random.nextDouble());
-            data.setTotal(random.nextDouble());
+            data.setSpent(MoneyUtil.createMoneyFromCents(random.nextInt(5000)));
+            data.setTotal(MoneyUtil.createMoneyFromCents(random.nextInt(5000)));
             data.setTags(Arrays.asList("Active"));
         }
         return list;

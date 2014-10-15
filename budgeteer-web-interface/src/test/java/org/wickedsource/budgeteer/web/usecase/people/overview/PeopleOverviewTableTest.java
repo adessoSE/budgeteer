@@ -3,6 +3,7 @@ package org.wickedsource.budgeteer.web.usecase.people.overview;
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.wickedsource.budgeteer.service.MoneyUtil;
 import org.wickedsource.budgeteer.service.people.PeopleService;
 import org.wickedsource.budgeteer.service.people.PersonBaseData;
 import org.wickedsource.budgeteer.web.AbstractWebTestTemplate;
@@ -34,7 +35,7 @@ public class PeopleOverviewTableTest extends AbstractWebTestTemplate {
         for (int i = 0; i < 20; i++) {
             PersonBaseData person = new PersonBaseData();
             person.setId(1);
-            person.setAverageDailyRate(1250.54);
+            person.setAverageDailyRate(MoneyUtil.createMoney(1250.54));
             person.setLastBooked(new Date());
             person.setName("Martha Pfahl");
             list.add(person);

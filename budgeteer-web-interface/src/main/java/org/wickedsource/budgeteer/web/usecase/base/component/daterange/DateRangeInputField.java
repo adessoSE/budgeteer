@@ -25,7 +25,9 @@ public class DateRangeInputField extends TextField<DateRange> {
         setOutputMarkupId(true);
     }
 
+
     @Override
+    @SuppressWarnings("unchecked")
     public <DateRange> IConverter<DateRange> getConverter(Class<DateRange> type) {
         return (IConverter<DateRange>) new DateRangeConverter();
     }

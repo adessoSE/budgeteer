@@ -1,5 +1,7 @@
 package org.wickedsource.budgeteer.service.record;
 
+import org.joda.money.Money;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -9,13 +11,13 @@ public class SingleRecord implements Serializable {
 
     private String personName;
 
-    private Double dailyRate;
+    private Money dailyRate;
 
     private Date date;
 
     private Double hours;
 
-    private Double budgetBurned;
+    private Money budgetBurned;
 
     public String getBudgetName() {
         return budgetName;
@@ -33,11 +35,11 @@ public class SingleRecord implements Serializable {
         this.personName = personName;
     }
 
-    public Double getDailyRate() {
+    public Money getDailyRate() {
         return dailyRate;
     }
 
-    public void setDailyRate(Double dailyRate) {
+    public void setDailyRate(Money dailyRate) {
         this.dailyRate = dailyRate;
     }
 
@@ -57,11 +59,11 @@ public class SingleRecord implements Serializable {
         this.hours = hours;
     }
 
-    public Double getBudgetBurned() {
+    public Money getBudgetBurned() {
         return budgetBurned;
     }
 
-    public void setBudgetBurned(Double budgetBurned) {
+    public void setBudgetBurned(Money budgetBurned) {
         this.budgetBurned = budgetBurned;
     }
 }

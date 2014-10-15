@@ -1,6 +1,7 @@
 package org.wickedsource.budgeteer.service.budget;
 
 import org.springframework.stereotype.Service;
+import org.wickedsource.budgeteer.service.MoneyUtil;
 
 import java.util.*;
 
@@ -69,8 +70,8 @@ public class BudgetService {
             BudgetDetailData data = new BudgetDetailData();
             data.setLastUpdated(new Date());
             data.setName("Budget " + i);
-            data.setSpent(random.nextDouble());
-            data.setTotal(random.nextDouble());
+            data.setSpent(MoneyUtil.createMoneyFromCents(random.nextInt(100000)));
+            data.setTotal(MoneyUtil.createMoneyFromCents(random.nextInt(100000)));
             data.setTags(Arrays.asList("Active"));
             list.add(data);
         }

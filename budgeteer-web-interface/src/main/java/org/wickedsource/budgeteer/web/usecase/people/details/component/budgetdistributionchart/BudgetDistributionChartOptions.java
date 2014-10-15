@@ -7,6 +7,7 @@ import com.googlecode.wickedcharts.highcharts.options.SeriesType;
 import com.googlecode.wickedcharts.highcharts.options.series.Point;
 import com.googlecode.wickedcharts.highcharts.options.series.PointSeries;
 import com.googlecode.wickedcharts.highcharts.options.series.Series;
+import org.wickedsource.budgeteer.service.MoneyUtil;
 import org.wickedsource.budgeteer.service.statistics.BudgetValue;
 
 import java.util.Arrays;
@@ -28,7 +29,7 @@ public class BudgetDistributionChartOptions extends Options {
                 .setInnerSize(new PixelOrPercent(50, PixelOrPercent.Unit.PERCENT));
 
         for (BudgetValue share : model.getObject()) {
-            series.addPoint(new Point(share.getBudgetName(), share.getShare()));
+            series.addPoint(new Point(share.getBudgetName(), MoneyUtil.toDouble(share.getShare())));
         }
 
         addSeries(series);

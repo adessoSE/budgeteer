@@ -3,6 +3,7 @@ package org.wickedsource.budgeteer.web.usecase.dashboard.component.dailyratechar
 import com.googlecode.wickedcharts.highcharts.options.*;
 import com.googlecode.wickedcharts.highcharts.options.series.Series;
 import org.apache.wicket.injection.Injector;
+import org.wickedsource.budgeteer.service.MoneyUtil;
 import org.wickedsource.budgeteer.web.PropertyLoader;
 
 import java.util.Calendar;
@@ -24,7 +25,7 @@ public class AverageDailyRateChartOptions extends Options {
 
         addSeries(new Series<Double>() {
         }
-                .setData(model.getObject())
+                .setData(MoneyUtil.toDouble(model.getObject()))
                 .setPointInterval(24 * 60 * 60 * 1000)
                 .setPointStart(getStartTimestamp(model.getNumberOfDays()))
                 .setName(PropertyLoader.getProperty(AverageDailyRateChart.class, "chart.seriesName")));

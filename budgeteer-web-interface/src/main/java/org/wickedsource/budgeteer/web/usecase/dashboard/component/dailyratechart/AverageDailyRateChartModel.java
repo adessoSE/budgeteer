@@ -3,11 +3,12 @@ package org.wickedsource.budgeteer.web.usecase.dashboard.component.dailyratechar
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.joda.money.Money;
 import org.wickedsource.budgeteer.service.statistics.StatisticsService;
 
 import java.util.List;
 
-public class AverageDailyRateChartModel extends LoadableDetachableModel<List<Double>> {
+public class AverageDailyRateChartModel extends LoadableDetachableModel<List<Money>> {
 
     @SpringBean
     private StatisticsService service;
@@ -23,7 +24,7 @@ public class AverageDailyRateChartModel extends LoadableDetachableModel<List<Dou
     }
 
     @Override
-    protected List<Double> load() {
+    protected List<Money> load() {
         return service.getAvgDailyRateForPreviousDays(userId, numberOfDays);
     }
 

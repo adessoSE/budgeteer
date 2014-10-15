@@ -6,6 +6,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.joda.money.Money;
 import org.wickedsource.budgeteer.service.record.AggregatedRecord;
 
 import java.util.List;
@@ -35,10 +36,10 @@ public class AggregatedRecordTable extends Panel {
                 Label differenceLabel = new Label("difference", model(from(item.getModel()).getDifference())) {
                     @Override
                     protected void onConfigure() {
-                        IModel<Double> model = (IModel<Double>) getDefaultModel();
-                        if (model.getObject() > 0) {
+                        IModel<Money> model = (IModel<Money>) getDefaultModel();
+                        if (model.getObject().isPositive()) {
                             add(new AttributeAppender("class", "text-green"));
-                        } else if (model.getObject() < 0) {
+                        } else if (model.getObject().isNegative()) {
                             add(new AttributeAppender("class", "text-red"));
                         }
                     }

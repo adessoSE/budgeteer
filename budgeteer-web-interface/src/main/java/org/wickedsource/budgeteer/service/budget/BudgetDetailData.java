@@ -1,5 +1,7 @@
 package org.wickedsource.budgeteer.service.budget;
 
+import org.joda.money.Money;
+
 import java.util.Date;
 import java.util.List;
 
@@ -11,9 +13,9 @@ public class BudgetDetailData {
 
     private List<String> tags;
 
-    private Double total;
+    private Money total;
 
-    private Double spent;
+    private Money spent;
 
     private Date lastUpdated;
 
@@ -49,28 +51,28 @@ public class BudgetDetailData {
         this.tags = tags;
     }
 
-    public Double getTotal() {
+    public Money getTotal() {
         return total;
     }
 
-    public void setTotal(Double total) {
+    public void setTotal(Money total) {
         this.total = total;
     }
 
-    public Double getSpent() {
+    public Money getSpent() {
         return spent;
     }
 
-    public void setSpent(Double spent) {
+    public void setSpent(Money spent) {
         this.spent = spent;
     }
 
-    public Double getRemaining() {
-        return this.total - this.spent;
+    public Money getRemaining() {
+        return this.total.minus(this.spent);
     }
 
     public Double getProgress() {
-        return this.getRemaining() / this.total;
+        return this.getRemaining().getAmount().doubleValue() / this.total.getAmount().doubleValue();
     }
 
     /**

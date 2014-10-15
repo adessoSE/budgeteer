@@ -1,5 +1,7 @@
 package org.wickedsource.budgeteer.service.record;
 
+import org.joda.money.Money;
+
 import java.util.Date;
 
 public class AggregatedRecord {
@@ -12,9 +14,9 @@ public class AggregatedRecord {
 
     private Double hours;
 
-    private Double budgetPlanned;
+    private Money budgetPlanned;
 
-    private Double budgetBurned;
+    private Money budgetBurned;
 
     public String getAggregationPeriodTitle() {
         return aggregationPeriodTitle;
@@ -48,23 +50,23 @@ public class AggregatedRecord {
         this.hours = hours;
     }
 
-    public Double getBudgetPlanned() {
+    public Money getBudgetPlanned() {
         return budgetPlanned;
     }
 
-    public void setBudgetPlanned(Double budgetPlanned) {
+    public void setBudgetPlanned(Money budgetPlanned) {
         this.budgetPlanned = budgetPlanned;
     }
 
-    public Double getBudgetBurned() {
+    public Money getBudgetBurned() {
         return budgetBurned;
     }
 
-    public void setBudgetBurned(Double budgetBurned) {
+    public void setBudgetBurned(Money budgetBurned) {
         this.budgetBurned = budgetBurned;
     }
 
-    public Double getDifference() {
-        return budgetPlanned - budgetBurned;
+    public Money getDifference() {
+        return budgetPlanned.minus(budgetBurned);
     }
 }
