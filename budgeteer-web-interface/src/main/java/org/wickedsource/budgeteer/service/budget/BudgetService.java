@@ -46,6 +46,21 @@ public class BudgetService {
     }
 
     /**
+     * Loads the detail data of a single budget.
+     * @param budgetId ID ID of the budget to load.
+     * @return detail data for the requested budget.
+     */
+    public BudgetDetailData loadBudgetDetailData(long budgetId){
+        BudgetDetailData data = new BudgetDetailData();
+        data.setLastUpdated(new Date());
+        data.setName("Budget Title");
+        data.setSpent(MoneyUtil.createMoneyFromCents(random.nextInt(100000)));
+        data.setTotal(MoneyUtil.createMoneyFromCents(random.nextInt(100000)));
+        data.setTags(Arrays.asList("Active"));
+        return data;
+    }
+
+    /**
      * Loads all budgets the given user has access to that match the given filter.
      *
      * @param userId ID of the logged in user

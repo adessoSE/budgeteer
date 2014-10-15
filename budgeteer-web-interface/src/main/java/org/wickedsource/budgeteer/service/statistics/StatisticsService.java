@@ -3,6 +3,7 @@ package org.wickedsource.budgeteer.service.statistics;
 import org.joda.money.Money;
 import org.springframework.stereotype.Service;
 import org.wickedsource.budgeteer.service.MoneyUtil;
+import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +59,7 @@ public class StatisticsService {
     }
 
     /**
-     * Returns the actual and target budget valued for the given person from the last numberOfWeeks weeks.
+     * Returns the actual and target budget values for the given person from the last numberOfWeeks weeks.
      *
      * @param personId      ID of the person whose data to load.
      * @param numberOfWeeks the number of weeks to go back into the past.
@@ -87,11 +88,11 @@ public class StatisticsService {
     }
 
     /**
-     * Returns the actual and target budget valued for the given person from the last numberOfMonths months.
+     * Returns the actual and target budget values for the given person from the last numberOfMonths months.
      *
      * @param personId       ID of the person whose data to load.
      * @param numberOfMonths the number of months to go back into the past.
-     * @return the week statistics for the last numberOfWeeks weeks
+     * @return the month statistics for the last numberOfMonth months
      */
     public TargetAndActual getMonthStatsForPerson(long personId, int numberOfMonths) {
         TargetAndActual targetAndActual = new TargetAndActual();
@@ -113,5 +114,49 @@ public class StatisticsService {
         targetAndActual.setTargetSeries(series);
 
         return targetAndActual;
+    }
+
+    /**
+     * Returns the actual and target budget values for a set of given budgets aggregated by week.
+     *
+     * @param budgetFilter  The filter that identified the budgets whose data to load.
+     * @param numberOfWeeks the number of weeks to go back into the past.
+     * @return the week statistics for the last numberOfWeeks weeks
+     */
+    public TargetAndActual getWeekStatsForBudgets(BudgetTagFilter budgetFilter, int numberOfWeeks) {
+        return getWeekStatsForPerson(1l, numberOfWeeks);
+    }
+
+    /**
+     * Returns the actual and target budget values for a set of given budgets from the last numberOfMonths months.
+     *
+     * @param budgetFilter   The filter that identified the budgets whose data to load.
+     * @param numberOfMonths the number of months to go back into the past.
+     * @return the month statistics for the last numberOfMonths months
+     */
+    public TargetAndActual getMonthStatsForBudgets(BudgetTagFilter budgetFilter, int numberOfMonths) {
+        return getMonthStatsForPerson(1l, numberOfMonths);
+    }
+
+    /**
+     * Returns the actual and target budget values for a single budget aggregated by week.
+     *
+     * @param budgetId      ID of the budget whose data to load
+     * @param numberOfWeeks the number of weeks to go back into the past.
+     * @return the week statistics for the last numberOfWeeks weeks
+     */
+    public TargetAndActual getWeekStatsForBudget(long budgetId, int numberOfWeeks) {
+        return getWeekStatsForPerson(1l, numberOfWeeks);
+    }
+
+    /**
+     * Returns the actual and target budget values for a single budget from the last numberOfMonths months.
+     *
+     * @param budgetId       ID of the budget whose data to load
+     * @param numberOfMonths the number of months to go back into the past.
+     * @return the month statistics for the last numberOfMonths months
+     */
+    public TargetAndActual getMonthStatsForBudget(long budgetId, int numberOfMonths) {
+        return getMonthStatsForPerson(1l, numberOfMonths);
     }
 }

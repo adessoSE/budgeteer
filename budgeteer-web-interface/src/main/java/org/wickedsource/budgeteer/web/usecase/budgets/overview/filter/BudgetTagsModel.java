@@ -15,8 +15,8 @@ public class BudgetTagsModel extends LoadableDetachableModel<List<String>> {
     private long userId;
 
     public BudgetTagsModel(long userId) {
-        this.userId = userId;
         Injector.get().inject(this);
+        this.userId = userId;
     }
 
     @Override
