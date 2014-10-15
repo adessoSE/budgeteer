@@ -9,6 +9,7 @@ import org.apache.wicket.model.IModel;
 import org.wickedsource.budgeteer.service.record.RecordFilter;
 import org.wickedsource.budgeteer.service.record.SingleRecord;
 import org.wickedsource.budgeteer.web.component.burntable.filter.FilteredRecordsModel;
+import org.wickedsource.budgeteer.web.component.money.MoneyLabel;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class BurnTable extends Panel {
     public BurnTable(String id, FilteredRecordsModel model) {
         super(id, model);
         add(createList("recordList", model));
-        add(new Label("total", new TotalBudgetModel(model)));
+        add(new MoneyLabel("total", new TotalBudgetModel(model), true));
     }
 
     @Override
@@ -40,10 +41,10 @@ public class BurnTable extends Panel {
             protected void populateItem(ListItem<SingleRecord> item) {
                 item.add(new Label("budget", model(from(item.getModel()).getBudgetName())));
                 item.add(new Label("person", model(from(item.getModel()).getPersonName())));
-                item.add(new Label("dailyRate", model(from(item.getModel()).getDailyRate())));
+                item.add(new MoneyLabel("dailyRate", model(from(item.getModel()).getDailyRate())));
                 item.add(new Label("date", model(from(item.getModel()).getDate())));
                 item.add(new Label("hours", model(from(item.getModel()).getHours())));
-                item.add(new Label("burnedBudget", model(from(item.getModel()).getBudgetBurned())));
+                item.add(new MoneyLabel("burnedBudget", model(from(item.getModel()).getBudgetBurned())));
             }
 
             @Override

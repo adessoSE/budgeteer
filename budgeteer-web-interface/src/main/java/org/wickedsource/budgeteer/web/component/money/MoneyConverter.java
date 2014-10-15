@@ -11,6 +11,15 @@ import java.util.Locale;
 
 public class MoneyConverter implements IConverter<Money> {
 
+    private boolean prependCurrencySymbol;
+
+    public MoneyConverter() {
+    }
+
+    public MoneyConverter(boolean prependCurrencySymbol){
+        this.prependCurrencySymbol = prependCurrencySymbol;
+    }
+
     @Override
     public Money convertToObject(String value, Locale locale) throws ConversionException {
         try {
@@ -25,6 +34,10 @@ public class MoneyConverter implements IConverter<Money> {
     @Override
     public String convertToString(Money value, Locale locale) {
         NumberFormat format = NumberFormat.getInstance(locale);
-        return format.format(value.getAmount().doubleValue());
+        String formatted = format.format(value.getAmount().doubleValue());
+        if(prependCurrencySymbol){
+            formatted = value.getCurrencyUnit().getSymbol() + " " + formatted;
+        }
+        return formatted;
     }
 }

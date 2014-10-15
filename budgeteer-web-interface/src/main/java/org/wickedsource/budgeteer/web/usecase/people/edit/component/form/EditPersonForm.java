@@ -13,6 +13,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.service.people.PeopleService;
 import org.wickedsource.budgeteer.service.people.PersonRate;
 import org.wickedsource.budgeteer.service.people.PersonWithRates;
+import org.wickedsource.budgeteer.web.component.money.MoneyLabel;
 import org.wickedsource.budgeteer.web.usecase.people.edit.IEditPersonPageStrategy;
 
 import static org.wicketstuff.lazymodel.LazyModel.from;
@@ -85,7 +86,7 @@ public class EditPersonForm extends Form<PersonWithRates> {
         return new ListView<PersonRate>(id, model(from(getModel()).getRates())) {
             @Override
             protected void populateItem(final ListItem<PersonRate> item) {
-                item.add(new Label("rate", model(from(item.getModel()).getRate())));
+                item.add(new MoneyLabel("rate", model(from(item.getModel()).getRate())));
                 item.add(new Label("budget", model(from(item.getModel()).getBudget().getName())));
                 item.add(new Label("startDate", model(from(item.getModel()).getDateRange().getStartDate())));
                 item.add(new Label("endDate", model(from(item.getModel()).getDateRange().getEndDate())));

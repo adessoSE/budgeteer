@@ -5,6 +5,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.protocol.http.WebSession;
 
 public class ProgressBar extends Panel {
 
@@ -17,7 +18,7 @@ public class ProgressBar extends Panel {
         Label bar = new Label(id, new AbstractReadOnlyModel<String>() {
             @Override
             public String getObject() {
-                return String.format("%.2f%%", getModel().getObject());
+                return String.format(WebSession.get().getLocale(),"%.2f%%", getModel().getObject());
             }
         });
         bar.add(new AttributeAppender("class", new AbstractReadOnlyModel<String>() {

@@ -9,6 +9,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.wickedsource.budgeteer.service.budget.BudgetDetailData;
 import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
+import org.wickedsource.budgeteer.web.component.money.MoneyLabel;
 import org.wickedsource.budgeteer.web.usecase.budgets.details.BudgetDetailsPage;
 
 import java.util.List;
@@ -24,9 +25,9 @@ public class BudgetOverviewTable extends Panel {
 
         IModel<BudgetDetailData> totalModel = new TotalBudgetDetailsModel(model);
         add(new Label("totalLastUpdated", model(from(totalModel).getLastUpdated())));
-        add(new Label("totalAmount", model(from(totalModel).getTotal())));
-        add(new Label("totalSpent", model(from(totalModel).getSpent())));
-        add(new Label("totalRemaining", model(from(totalModel).getRemaining())));
+        add(new MoneyLabel("totalAmount", model(from(totalModel).getTotal())));
+        add(new MoneyLabel("totalSpent", model(from(totalModel).getSpent())));
+        add(new MoneyLabel("totalRemaining", model(from(totalModel).getRemaining())));
         add(new ProgressBar("totalProgressBar", model(from(totalModel).getProgressInPercent())));
     }
 
@@ -49,9 +50,9 @@ public class BudgetOverviewTable extends Panel {
                 link.add(linkTitle);
                 item.add(link);
                 item.add(new Label("lastUpdated", model(from(item.getModel()).getLastUpdated())));
-                item.add(new Label("amount", model(from(item.getModel()).getTotal())));
-                item.add(new Label("spent", model(from(item.getModel()).getSpent())));
-                item.add(new Label("remaining", model(from(item.getModel()).getRemaining())));
+                item.add(new MoneyLabel("amount", model(from(item.getModel()).getTotal())));
+                item.add(new MoneyLabel("spent", model(from(item.getModel()).getSpent())));
+                item.add(new MoneyLabel("remaining", model(from(item.getModel()).getRemaining())));
                 item.add(new ProgressBar("progressBar", model(from(item.getModel()).getProgressInPercent())));
             }
 

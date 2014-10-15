@@ -9,9 +9,13 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.wickedsource.budgeteer.service.people.PersonBaseData;
+import org.wickedsource.budgeteer.web.component.money.MoneyLabel;
 import org.wickedsource.budgeteer.web.usecase.people.details.PersonDetailsPage;
 
 import java.util.List;
+
+import static org.wicketstuff.lazymodel.LazyModel.from;
+import static org.wicketstuff.lazymodel.LazyModel.model;
 
 
 public class PeopleOverviewTable extends Panel {
@@ -29,7 +33,7 @@ public class PeopleOverviewTable extends Panel {
                 PageParameters parameters = PersonDetailsPage.createParameters(item.getModelObject().getId());
                 Link link = new BookmarkablePageLink<PersonDetailsPage>("personLink", PersonDetailsPage.class, parameters);
                 item.add(link);
-                item.add(new Label("dailyRate", item.getModelObject().getAverageDailyRate()));
+                item.add(new MoneyLabel("dailyRate", model(from(item.getModelObject()).getAverageDailyRate())));
                 item.add(new Label("lastBooked", item.getModelObject().getLastBooked()));
             }
         };
