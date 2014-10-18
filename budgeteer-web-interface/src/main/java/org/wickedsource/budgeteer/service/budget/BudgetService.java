@@ -84,6 +84,7 @@ public class BudgetService {
         List<BudgetDetailData> list = new ArrayList<BudgetDetailData>();
         for (int i = 0; i < count; i++) {
             BudgetDetailData data = new BudgetDetailData();
+            data.setId(i);
             data.setLastUpdated(new Date());
             data.setName("Budget " + i);
             data.setSpent(MoneyUtil.createMoneyFromCents(random.nextInt(100000)));

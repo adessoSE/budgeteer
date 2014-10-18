@@ -14,7 +14,7 @@ import org.reflections.util.ConfigurationBuilder;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
-import org.wickedsource.budgeteer.web.usecase.dashboard.DashboardPage;
+import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 
 import java.util.Set;
 
