@@ -23,9 +23,9 @@ import static org.wicketstuff.lazymodel.LazyModel.from;
 import static org.wicketstuff.lazymodel.LazyModel.model;
 
 @Mount("budgets/weeks")
-public class MultiBudgetWeekReportPage extends BasePage {
+public class BudgetWeekReportPage extends BasePage {
 
-    public MultiBudgetWeekReportPage(PageParameters parameters) {
+    public BudgetWeekReportPage(PageParameters parameters) {
         super(parameters);
 
         IModel<TargetAndActual> model = new MultiBudgetsWeeklyAggregationModel(model(from(BudgeteerSession.get().getBudgetFilter())));
@@ -38,6 +38,6 @@ public class MultiBudgetWeekReportPage extends BasePage {
     @Override
     @SuppressWarnings("unchecked")
     protected BreadcrumbsModel getBreadcrumbsModel() {
-        return new BreadcrumbsModel(DashboardPage.class, BudgetsOverviewPage.class, MultiBudgetWeekReportPage.class);
+        return new BreadcrumbsModel(DashboardPage.class, BudgetsOverviewPage.class, BudgetWeekReportPage.class);
     }
 }

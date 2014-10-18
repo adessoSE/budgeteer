@@ -129,4 +129,31 @@ public class RecordService {
         return records;
     }
 
+    /**
+     * Loads the records from the database that match the given filter.
+     *
+     * @param filter the filter to apply when loading records.
+     * @return filtered list of records.
+     */
+    public List<SingleRecord> getFilteredRecords(BudgetTagFilter filter) {
+        int size = 50;
+        for (int i = 0; i < filter.getSelectedTags().size(); i++) {
+            size -= 5;
+        }
+
+        List<SingleRecord> records = new ArrayList<SingleRecord>();
+        for (int i = 0; i < size; i++) {
+            SingleRecord record = new SingleRecord();
+            record.setHours(8d);
+            record.setBudgetBurned(MoneyUtil.createMoney(500d));
+            record.setBudgetName("Budget 1");
+            record.setDailyRate(MoneyUtil.createMoney(500d));
+            record.setDate(new Date());
+            record.setPersonName("Tom");
+            records.add(record);
+        }
+
+        return records;
+    }
+
 }

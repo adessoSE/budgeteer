@@ -1,0 +1,48 @@
+<wicket:extend>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-primary">
+                <div class="box-header" style="cursor: move;">
+                    <i class="fa fa-line-chart"></i>
+
+                    <h3 class="box-title">Budget planned and burned for selected budgets in the
+                        last 12 months</h3>
+
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-default btn-sm" data-widget="collapse"><i
+                                class="fa fa-minus"></i></button>
+                    </div>
+                </div>
+                <div class="box-body" wicket:id="targetAndActualChart">
+
+                </div>
+
+            </div>
+            <!-- /.box-body -->
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-primary">
+                <div class="box-header" style="cursor: move;">
+                    <i class="fa fa-list"></i>
+
+                    <h3 class="box-title">Budget burned for selected budgets in all time</h3>
+
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-default btn-sm" data-widget="collapse"><i
+                                class="fa fa-minus"></i></button>
+                    </div>
+                </div>
+                <div class="box-body">
+
+                    <div wicket:id="table"></div>
+
+                </div>
+
+            </div>
+            <!-- /.box-body -->
+        </div>
+    </div>
+</wicket:extend>
