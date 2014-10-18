@@ -9,7 +9,7 @@ import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
 import org.wickedsource.budgeteer.service.statistics.StatisticsService;
 import org.wickedsource.budgeteer.service.statistics.TargetAndActual;
 
-public class MultiBudgetsWeeklyAggregationModel extends LoadableDetachableModel<TargetAndActual> implements IObjectClassAwareModel<TargetAndActual> {
+public class BudgetsWeeklyAggregationModel extends LoadableDetachableModel<TargetAndActual> implements IObjectClassAwareModel<TargetAndActual> {
 
     @SpringBean
     private StatisticsService service;
@@ -18,12 +18,12 @@ public class MultiBudgetsWeeklyAggregationModel extends LoadableDetachableModel<
 
     private IModel<BudgetTagFilter> filterModel;
 
-    public MultiBudgetsWeeklyAggregationModel(long budgetId) {
+    public BudgetsWeeklyAggregationModel(long budgetId) {
         Injector.get().inject(this);
         this.budgetId = budgetId;
     }
 
-    public MultiBudgetsWeeklyAggregationModel(IModel<BudgetTagFilter> filterModel) {
+    public BudgetsWeeklyAggregationModel(IModel<BudgetTagFilter> filterModel) {
         this.filterModel = filterModel;
         Injector.get().inject(this);
     }

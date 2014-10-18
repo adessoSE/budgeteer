@@ -10,7 +10,7 @@ import org.wickedsource.budgeteer.service.record.RecordService;
 
 import java.util.List;
 
-public class MultiBudgetsWeeklyAggregatedRecordsModel extends LoadableDetachableModel<List<AggregatedRecord>> {
+public class BudgetsMonthlyAggregatedRecordsModel extends LoadableDetachableModel<List<AggregatedRecord>> {
 
     @SpringBean
     private RecordService service;
@@ -19,12 +19,12 @@ public class MultiBudgetsWeeklyAggregatedRecordsModel extends LoadableDetachable
 
     private IModel<BudgetTagFilter> filterModel;
 
-    public MultiBudgetsWeeklyAggregatedRecordsModel(long budgetId) {
+    public BudgetsMonthlyAggregatedRecordsModel(long budgetId) {
         Injector.get().inject(this);
         this.budgetId = budgetId;
     }
 
-    public MultiBudgetsWeeklyAggregatedRecordsModel(IModel<BudgetTagFilter> filterModel) {
+    public BudgetsMonthlyAggregatedRecordsModel(IModel<BudgetTagFilter> filterModel) {
         Injector.get().inject(this);
         this.filterModel = filterModel;
     }
@@ -32,9 +32,9 @@ public class MultiBudgetsWeeklyAggregatedRecordsModel extends LoadableDetachable
     @Override
     protected List<AggregatedRecord> load() {
         if (budgetId != 0) {
-            return service.getWeeklyAggregationForBudget(budgetId);
+            return service.getMonthlyAggregationForBudget(budgetId);
         } else if (filterModel != null && filterModel.getObject() != null) {
-            return service.getWeeklyAggregationForBudgets(filterModel.getObject());
+            return service.getMonthlyAggregationForBudgets(filterModel.getObject());
         } else {
             throw new IllegalStateException("Neither budgetId nor filter specified. Specify at least one of these attributes in the constructor!");
         }

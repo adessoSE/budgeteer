@@ -1,5 +1,6 @@
 package org.wickedsource.budgeteer.web.pages.budgets.details;
 
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.charts.BudgeteerChartTheme;
@@ -11,7 +12,9 @@ import org.wickedsource.budgeteer.web.pages.budgets.details.chart.PeopleDistribu
 import org.wickedsource.budgeteer.web.pages.budgets.details.highlights.BudgetHighlightsModel;
 import org.wickedsource.budgeteer.web.pages.budgets.details.highlights.BudgetHighlightsPanel;
 import org.wickedsource.budgeteer.web.pages.budgets.details.highlights.BudgetNameModel;
+import org.wickedsource.budgeteer.web.pages.budgets.monthreport.single.SingleBudgetMonthReportPage;
 import org.wickedsource.budgeteer.web.pages.budgets.overview.BudgetsOverviewPage;
+import org.wickedsource.budgeteer.web.pages.budgets.weekreport.single.SingleBudgetWeekReportPage;
 import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 
 @Mount("budgets/details/${id}")
@@ -21,6 +24,10 @@ public class BudgetDetailsPage extends BudgetBasePage {
         super(parameters);
         add(new BudgetHighlightsPanel("highlightsPanel", new BudgetHighlightsModel(getBudgetId())));
         add(new PeopleDistributionChart("distributionChart", new PeopleDistributionChartModel(getBudgetId()), new BudgeteerChartTheme()));
+        add(new BookmarkablePageLink<SingleBudgetWeekReportPage>("weekReportLink1", SingleBudgetWeekReportPage.class, SingleBudgetWeekReportPage.createParameters(getBudgetId())));
+        add(new BookmarkablePageLink<SingleBudgetWeekReportPage>("weekReportLink2", SingleBudgetWeekReportPage.class, SingleBudgetWeekReportPage.createParameters(getBudgetId())));
+        add(new BookmarkablePageLink<SingleBudgetMonthReportPage>("monthReportLink1", SingleBudgetMonthReportPage.class, SingleBudgetMonthReportPage.createParameters(getBudgetId())));
+        add(new BookmarkablePageLink<SingleBudgetMonthReportPage>("monthReportLink2", SingleBudgetMonthReportPage.class, SingleBudgetMonthReportPage.createParameters(getBudgetId())));
     }
 
     @Override

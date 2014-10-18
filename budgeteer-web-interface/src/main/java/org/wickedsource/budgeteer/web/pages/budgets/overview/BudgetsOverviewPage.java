@@ -6,12 +6,12 @@ import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.pages.base.basepage.BasePage;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
-import org.wickedsource.budgeteer.web.pages.budgets.monthreport.MultiBudgetMonthReportPage;
+import org.wickedsource.budgeteer.web.pages.budgets.monthreport.multi.MultiBudgetMonthReportPage;
 import org.wickedsource.budgeteer.web.pages.budgets.overview.filter.BudgetTagFilterPanel;
 import org.wickedsource.budgeteer.web.pages.budgets.overview.filter.BudgetTagsModel;
 import org.wickedsource.budgeteer.web.pages.budgets.overview.table.BudgetOverviewTable;
 import org.wickedsource.budgeteer.web.pages.budgets.overview.table.FilteredBudgetModel;
-import org.wickedsource.budgeteer.web.pages.budgets.weekreport.MultiBudgetWeekReportPage;
+import org.wickedsource.budgeteer.web.pages.budgets.weekreport.multi.MultiBudgetWeekReportPage;
 import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 
 import static org.wicketstuff.lazymodel.LazyModel.from;

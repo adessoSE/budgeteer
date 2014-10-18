@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
 import org.wickedsource.budgeteer.web.AbstractWebTestTemplate;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
+import org.wickedsource.budgeteer.web.pages.budgets.monthreport.multi.MultiBudgetMonthReportPage;
 
 public class MultiBudgetMonthReportPageTest extends AbstractWebTestTemplate {
 
