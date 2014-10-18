@@ -18,7 +18,7 @@ public class BudgetHighlightsPanel extends Panel {
         add(new MoneyLabel("total", model(from(model).getTotal()), true));
         add(new MoneyLabel("remaining", model(from(model).getRemaining()), true));
         add(new PercentageLabel("progress", model(from(model).getProgress())));
-        add(new Label("avgDailyRate", model(from(model).getAvgDailyRate())));
+        add(new MoneyLabel("avgDailyRate", model(from(model).getAvgDailyRate()), true));
         add(new Label("lastUpdated", model(from(model).getLastUpdated())));
     }
 
