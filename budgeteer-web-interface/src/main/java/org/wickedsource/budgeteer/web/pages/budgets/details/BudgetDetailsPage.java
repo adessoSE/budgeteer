@@ -7,11 +7,12 @@ import org.wickedsource.budgeteer.web.charts.BudgeteerChartTheme;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.Breadcrumb;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
 import org.wickedsource.budgeteer.web.pages.budgets.BudgetBasePage;
+import org.wickedsource.budgeteer.web.pages.budgets.BudgetNameModel;
 import org.wickedsource.budgeteer.web.pages.budgets.details.chart.PeopleDistributionChart;
 import org.wickedsource.budgeteer.web.pages.budgets.details.chart.PeopleDistributionChartModel;
 import org.wickedsource.budgeteer.web.pages.budgets.details.highlights.BudgetHighlightsModel;
 import org.wickedsource.budgeteer.web.pages.budgets.details.highlights.BudgetHighlightsPanel;
-import org.wickedsource.budgeteer.web.pages.budgets.details.highlights.BudgetNameModel;
+import org.wickedsource.budgeteer.web.pages.budgets.hours.BudgetHoursPage;
 import org.wickedsource.budgeteer.web.pages.budgets.monthreport.single.SingleBudgetMonthReportPage;
 import org.wickedsource.budgeteer.web.pages.budgets.overview.BudgetsOverviewPage;
 import org.wickedsource.budgeteer.web.pages.budgets.weekreport.single.SingleBudgetWeekReportPage;
@@ -28,6 +29,8 @@ public class BudgetDetailsPage extends BudgetBasePage {
         add(new BookmarkablePageLink<SingleBudgetWeekReportPage>("weekReportLink2", SingleBudgetWeekReportPage.class, SingleBudgetWeekReportPage.createParameters(getBudgetId())));
         add(new BookmarkablePageLink<SingleBudgetMonthReportPage>("monthReportLink1", SingleBudgetMonthReportPage.class, SingleBudgetMonthReportPage.createParameters(getBudgetId())));
         add(new BookmarkablePageLink<SingleBudgetMonthReportPage>("monthReportLink2", SingleBudgetMonthReportPage.class, SingleBudgetMonthReportPage.createParameters(getBudgetId())));
+        add(new BookmarkablePageLink<BudgetHoursPage>("hoursLink1", BudgetHoursPage.class, BudgetHoursPage.createParameters(getBudgetId())));
+        add(new BookmarkablePageLink<BudgetHoursPage>("hoursLink2", BudgetHoursPage.class, BudgetHoursPage.createParameters(getBudgetId())));
     }
 
     @Override

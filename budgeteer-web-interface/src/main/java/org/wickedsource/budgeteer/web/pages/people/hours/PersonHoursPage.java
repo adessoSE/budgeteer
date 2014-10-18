@@ -9,8 +9,8 @@ import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.Breadcrumb
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
 import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 import org.wickedsource.budgeteer.web.pages.people.PersonBasePage;
+import org.wickedsource.budgeteer.web.pages.people.PersonNameModel;
 import org.wickedsource.budgeteer.web.pages.people.details.PersonDetailsPage;
-import org.wickedsource.budgeteer.web.pages.people.details.PersonNameModel;
 import org.wickedsource.budgeteer.web.pages.people.overview.PeopleOverviewPage;
 
 @Mount("people/hours/${id}")

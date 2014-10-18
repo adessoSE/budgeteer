@@ -1,4 +1,4 @@
-package org.wickedsource.budgeteer.web.pages.people.details;
+package org.wickedsource.budgeteer.web.pages.people;
 
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.model.LoadableDetachableModel;

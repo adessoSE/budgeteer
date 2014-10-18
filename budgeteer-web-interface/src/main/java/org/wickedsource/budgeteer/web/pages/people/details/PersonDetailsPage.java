@@ -10,6 +10,7 @@ import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.Breadcrumb
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
 import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 import org.wickedsource.budgeteer.web.pages.people.PersonBasePage;
+import org.wickedsource.budgeteer.web.pages.people.PersonNameModel;
 import org.wickedsource.budgeteer.web.pages.people.details.chart.BudgetDistributionChart;
 import org.wickedsource.budgeteer.web.pages.people.details.chart.BudgetDistributionChartModel;
 import org.wickedsource.budgeteer.web.pages.people.details.highlights.PersonHighlightsModel;
