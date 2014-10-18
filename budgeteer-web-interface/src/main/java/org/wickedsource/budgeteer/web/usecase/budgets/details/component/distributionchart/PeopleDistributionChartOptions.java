@@ -1,4 +1,4 @@
-package org.wickedsource.budgeteer.web.usecase.people.details.component.budgetdistributionchart;
+package org.wickedsource.budgeteer.web.usecase.budgets.details.component.distributionchart;
 
 import com.googlecode.wickedcharts.highcharts.options.ChartOptions;
 import com.googlecode.wickedcharts.highcharts.options.Options;
@@ -12,9 +12,9 @@ import org.wickedsource.budgeteer.service.statistics.Share;
 
 import java.util.Arrays;
 
-public class BudgetDistributionChartOptions extends Options {
+public class PeopleDistributionChartOptions extends Options {
 
-    public BudgetDistributionChartOptions(BudgetDistributionChartModel model) {
+    public PeopleDistributionChartOptions(PeopleDistributionChartModel model) {
 
         setChart(new ChartOptions()
                 .setHeight(200)

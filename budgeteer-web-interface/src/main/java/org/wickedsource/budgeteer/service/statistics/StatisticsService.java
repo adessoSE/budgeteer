@@ -48,12 +48,26 @@ public class StatisticsService {
      * Returns the share of all budgets the given person has booked on.
      *
      * @param personId id of the person whose budget share to calculate
-     * @return list of BudgetValue objects, totaling 100%
+     * @return list of Share objects, totaling 100%
      */
-    public List<BudgetValue> getBudgetDistribution(long personId) {
-        List<BudgetValue> shares = new ArrayList<BudgetValue>();
+    public List<Share> getBudgetDistribution(long personId) {
+        List<Share> shares = new ArrayList<Share>();
         for (int i = 0; i < 5; i++) {
-            shares.add(new BudgetValue(MoneyUtil.createMoneyFromCents(random.nextInt(100000)), "Budget " + i));
+            shares.add(new Share(MoneyUtil.createMoneyFromCents(random.nextInt(100000)), "Budget " + i));
+        }
+        return shares;
+    }
+
+    /**
+     * Returns the share of all people that have worked on the given budget.
+     *
+     * @param budgetId id of the budget whose person share to calculate
+     * @return list of Share objects, totaling 100%
+     */
+    public List<Share> getPeopleDistribution(long budgetId) {
+        List<Share> shares = new ArrayList<Share>();
+        for (int i = 0; i < 5; i++) {
+            shares.add(new Share(MoneyUtil.createMoneyFromCents(random.nextInt(100000)), "Person " + i));
         }
         return shares;
     }

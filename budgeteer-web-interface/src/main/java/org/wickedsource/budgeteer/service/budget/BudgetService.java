@@ -32,7 +32,7 @@ public class BudgetService {
      * @return base data of the specified budget.
      */
     public BudgetBaseData loadBudgetBaseData(long budgetId) {
-        return new BudgetBaseData(1, "Budget 1");
+        return new BudgetBaseData(1, "Budget " + budgetId);
     }
 
     /**
@@ -57,6 +57,7 @@ public class BudgetService {
         data.setSpent(MoneyUtil.createMoneyFromCents(random.nextInt(100000)));
         data.setTotal(MoneyUtil.createMoneyFromCents(random.nextInt(100000)));
         data.setTags(Arrays.asList("Active"));
+        data.setAvgDailyRate(MoneyUtil.createMoneyFromCents(random.nextInt(100000)));
         return data;
     }
 

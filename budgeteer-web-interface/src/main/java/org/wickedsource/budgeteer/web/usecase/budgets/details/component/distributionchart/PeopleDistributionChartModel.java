@@ -1,4 +1,4 @@
-package org.wickedsource.budgeteer.web.usecase.people.details.component.budgetdistributionchart;
+package org.wickedsource.budgeteer.web.usecase.budgets.details.component.distributionchart;
 
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.model.LoadableDetachableModel;
@@ -8,20 +8,20 @@ import org.wickedsource.budgeteer.service.statistics.StatisticsService;
 
 import java.util.List;
 
-public class BudgetDistributionChartModel extends LoadableDetachableModel<List<Share>> {
+public class PeopleDistributionChartModel extends LoadableDetachableModel<List<Share>> {
 
     @SpringBean
     private StatisticsService service;
 
-    private long personId;
+    private long budgetId;
 
-    public BudgetDistributionChartModel(long personId) {
+    public PeopleDistributionChartModel(long budgetId) {
         Injector.get().inject(this);
-        this.personId = personId;
+        this.budgetId = budgetId;
     }
 
     @Override
     protected List<Share> load() {
-        return service.getBudgetDistribution(personId);
+        return service.getPeopleDistribution(budgetId);
     }
 }

@@ -1,4 +1,4 @@
-package org.wickedsource.budgeteer.web.usecase.budgets.overview.table;
+package org.wickedsource.budgeteer.web.usecase.budgets.overview.table.progressbar;
 
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.basic.Label;

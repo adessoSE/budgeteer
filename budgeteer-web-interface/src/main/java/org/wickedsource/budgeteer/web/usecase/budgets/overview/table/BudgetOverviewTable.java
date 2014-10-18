@@ -11,6 +11,7 @@ import org.wickedsource.budgeteer.service.budget.BudgetDetailData;
 import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
 import org.wickedsource.budgeteer.web.component.money.MoneyLabel;
 import org.wickedsource.budgeteer.web.usecase.budgets.details.BudgetDetailsPage;
+import org.wickedsource.budgeteer.web.usecase.budgets.overview.table.progressbar.ProgressBar;
 
 import java.util.List;
 

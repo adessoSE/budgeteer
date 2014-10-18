@@ -1,4 +1,4 @@
-package org.wickedsource.budgeteer.web.usecase.budgets.overview.table;
+package org.wickedsource.budgeteer.web.usecase.budgets.overview.table.progressbar;
 
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.Test;

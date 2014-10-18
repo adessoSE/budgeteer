@@ -19,6 +19,16 @@ public class BudgetDetailData {
 
     private Date lastUpdated;
 
+    private Money avgDailyRate;
+
+    public Money getAvgDailyRate() {
+        return avgDailyRate;
+    }
+
+    public void setAvgDailyRate(Money avgDailyRate) {
+        this.avgDailyRate = avgDailyRate;
+    }
+
     public void setId(long id) {
         this.id = id;
     }

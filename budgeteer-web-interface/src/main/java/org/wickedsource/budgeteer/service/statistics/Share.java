@@ -2,16 +2,13 @@ package org.wickedsource.budgeteer.service.statistics;
 
 import org.joda.money.Money;
 
-/**
- * A numeric value that belongs to a certain budget.
- */
-public class BudgetValue {
+public class Share {
 
     private String budgetName;
 
     private Money share;
 
-    public BudgetValue(Money share, String budgetName) {
+    public Share(Money share, String budgetName) {
         this.share = share;
         this.budgetName = budgetName;
     }
