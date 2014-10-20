@@ -1,4 +1,4 @@
-package org.wickedsource.budgeteer.web.pages.people.edit.notificationlist;
+package org.wickedsource.budgeteer.web.pages.people.edit;
 
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.model.LoadableDetachableModel;
@@ -8,14 +8,14 @@ import org.wickedsource.budgeteer.service.notification.NotificationService;
 
 import java.util.List;
 
-public class PersonNotificationModel extends LoadableDetachableModel<List<Notification>> {
+public class PersonNotificationsModel extends LoadableDetachableModel<List<Notification>> {
 
     @SpringBean
     private NotificationService service;
 
     private long personId;
 
-    public PersonNotificationModel(long personId) {
+    public PersonNotificationsModel(long personId) {
         Injector.get().inject(this);
         this.personId = personId;
     }

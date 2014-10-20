@@ -18,8 +18,8 @@ public class EditPersonPage extends DialogPage {
      * @param parameters page parameters containing the id of the user to edit.
      */
     public EditPersonPage(PageParameters parameters, Class<? extends WebPage> backlinkPage, PageParameters backlinkParameters) {
-        super(parameters);
-        strategy = new UpdateStrategy(this, backlinkPage, backlinkParameters);
+        super(parameters, backlinkPage, backlinkParameters);
+        strategy = new UpdateStrategy(this);
         addComponents();
     }
 
@@ -27,7 +27,8 @@ public class EditPersonPage extends DialogPage {
      * Use this constructor to create a page with a form to create a new user.
      */
     public EditPersonPage(Class<? extends WebPage> backlinkPage, PageParameters backlinkParameters) {
-        strategy = new CreateStrategy(this, backlinkPage, backlinkParameters);
+        super(backlinkPage, backlinkParameters);
+        strategy = new CreateStrategy(this);
         addComponents();
     }
 
@@ -35,9 +36,9 @@ public class EditPersonPage extends DialogPage {
         EditPersonForm form = strategy.createForm("form", getPersonId());
         add(form);
         add(strategy.createPageTitleLabel("pageTitle"));
-        form.add(strategy.createNotificationListView("notificationList", getPersonId()));
-        add(strategy.createBacklink("backlink1"));
-        form.add(strategy.createBacklink("backlink2"));
+        form.add(strategy.createNotificationList("notificationList", getPersonId()));
+        add(createBacklink("backlink1"));
+        form.add(createBacklink("backlink2"));
     }
 
     /**

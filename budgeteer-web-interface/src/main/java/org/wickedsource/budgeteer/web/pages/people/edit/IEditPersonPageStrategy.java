@@ -1,9 +1,7 @@
 package org.wickedsource.budgeteer.web.pages.people.edit;
 
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.list.ListView;
-import org.wickedsource.budgeteer.service.notification.Notification;
+import org.apache.wicket.markup.html.panel.Panel;
 import org.wickedsource.budgeteer.web.pages.people.edit.personrateform.EditPersonForm;
 
 import java.io.Serializable;
@@ -17,11 +15,8 @@ public interface IEditPersonPageStrategy extends Serializable {
 
     Label createSubmitButtonLabel(String id);
 
-    ListView<Notification> createNotificationListView(String id, long personId);
+    Panel createNotificationList(String id, long personId);
 
     EditPersonForm createForm(String id, long personId);
 
-    Link createBacklink(String id);
-
-    void goBack();
 }

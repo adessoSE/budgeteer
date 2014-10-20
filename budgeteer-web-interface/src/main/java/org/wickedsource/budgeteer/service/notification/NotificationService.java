@@ -29,6 +29,16 @@ public class NotificationService {
         return createNotifications();
     }
 
+    /**
+     * Returns all notifications currently available concerning the given budget.
+     *
+     * @param budgetId id of the budget about which notifications should be returned.
+     * @return list of notifications concerning the given budget.
+     */
+    public List<Notification> getNotificationsForBudget(long budgetId) {
+        return createNotifications();
+    }
+
     private List<Notification> createNotifications() {
         List<Notification> notifications = new ArrayList<Notification>();
         notifications.add(new Notification("Notification", NotificationType.MISSING_BUDGET_TOTAL, new Date()));

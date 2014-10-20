@@ -8,6 +8,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.wickedsource.budgeteer.service.record.RecordFilter;
 import org.wickedsource.budgeteer.service.record.SingleRecord;
+import org.wickedsource.budgeteer.web.ClassAwareWrappingModel;
 import org.wickedsource.budgeteer.web.components.burntable.filter.FilteredRecordsModel;
 import org.wickedsource.budgeteer.web.components.money.MoneyLabel;
 
@@ -50,7 +51,7 @@ public class BurnTable extends Panel {
             @Override
             protected ListItem<SingleRecord> newItem(int index, IModel<SingleRecord> itemModel) {
                 // wrap model to work with LazyModel
-                return super.newItem(index, new SingleRecordModel(itemModel));
+                return super.newItem(index, new ClassAwareWrappingModel<SingleRecord>(itemModel, SingleRecord.class));
             }
         };
     }

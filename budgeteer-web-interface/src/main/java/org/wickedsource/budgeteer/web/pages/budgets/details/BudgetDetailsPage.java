@@ -1,6 +1,8 @@
 package org.wickedsource.budgeteer.web.pages.budgets.details;
 
+import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.charts.BudgeteerChartTheme;
@@ -12,6 +14,7 @@ import org.wickedsource.budgeteer.web.pages.budgets.details.chart.PeopleDistribu
 import org.wickedsource.budgeteer.web.pages.budgets.details.chart.PeopleDistributionChartModel;
 import org.wickedsource.budgeteer.web.pages.budgets.details.highlights.BudgetHighlightsModel;
 import org.wickedsource.budgeteer.web.pages.budgets.details.highlights.BudgetHighlightsPanel;
+import org.wickedsource.budgeteer.web.pages.budgets.edit.EditBudgetPage;
 import org.wickedsource.budgeteer.web.pages.budgets.hours.BudgetHoursPage;
 import org.wickedsource.budgeteer.web.pages.budgets.monthreport.single.SingleBudgetMonthReportPage;
 import org.wickedsource.budgeteer.web.pages.budgets.overview.BudgetsOverviewPage;
@@ -31,6 +34,18 @@ public class BudgetDetailsPage extends BudgetBasePage {
         add(new BookmarkablePageLink<SingleBudgetMonthReportPage>("monthReportLink2", SingleBudgetMonthReportPage.class, SingleBudgetMonthReportPage.createParameters(getBudgetId())));
         add(new BookmarkablePageLink<BudgetHoursPage>("hoursLink1", BudgetHoursPage.class, BudgetHoursPage.createParameters(getBudgetId())));
         add(new BookmarkablePageLink<BudgetHoursPage>("hoursLink2", BudgetHoursPage.class, BudgetHoursPage.createParameters(getBudgetId())));
+        add(createEditLink("editLink1"));
+        add(createEditLink("editLink2"));
+    }
+
+    private Link createEditLink(String id){
+        return new Link(id){
+            @Override
+            public void onClick() {
+                WebPage page = new EditBudgetPage(EditBudgetPage.createParameters(getBudgetId()), BudgetDetailsPage.class, getPageParameters());
+                setResponsePage(page);
+            }
+        };
     }
 
     @Override

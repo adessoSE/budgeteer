@@ -1,0 +1,54 @@
+<wicket:extend>
+    <div class="form-box wide" id="login-box">
+        <div class="header">Edit Budget Details
+            <div class="box-tools pull-right">
+                <button wicket:id="cancelButton1" class="btn bg-olive btn-sm"><i class="fa fa-times"></i></button>
+            </div>
+        </div>
+        <form wicket:id="form" method="post">
+            <div class="body bg-gray">
+                <div wicket:id="notificationList"></div>
+                <div wicket:id="feedback"></div>
+                <div class="form-group">
+                    <label for="titleInput">Budget Title</label>
+                    <input wicket:id="name"type="text" name="name" id="titleInput" class="form-control"/>
+
+                    <p class="help-block">The full title of the budget to be displayed where enough space is
+                        available.</p>
+                </div>
+                <div class="form-group">
+                    <label for="totalInput">Budget Total</label>
+                    <input wicket:id="total" type="number" name="name" id="totalInput" class="form-control"/>
+                    <p class="help-block">The total money available in this budget.</p>
+                </div>
+                <div class="form-group">
+                    <label for="importKeyInput">Import Key</label>
+                    <input wicket:id="importKey" type="text" name="name" id="importKeyInput" class="form-control"/>
+
+                    <p class="help-block">The unique key that identifies this budget when importing data. </p>
+                </div>
+                <div class="form-group">
+                    <label for="tagsInput">Tags</label>
+                    <input wicket:id="tagsInput" type="text" name="name" id="tagsInput" class="form-control"
+                           placeholder="Enter tags or click one of the already used tags below to add it."/>
+
+                    <p class="help-block">
+                        <span wicket:id="tagsList" class="badge bg-light-blue pointer"><span wicket:id="tag"></span></span>
+                    </p>
+                    <p class="help-block">Tags allow grouping of budgets so you can monitor groups of budgets instead of only single budgets.</p>
+                </div>
+            </div>
+            <div class="footer">
+                <div class="row">
+                    <div class="col-lg-3">
+                        <button wicket:id="cancelButton2" type="button" class="btn bg-olive btn-block">Cancel</button>
+                    </div>
+                    <div class="col-lg-9">
+                        <button type="submit" class="btn bg-olive btn-block">Create Budget / Save Changes</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</wicket:extend>

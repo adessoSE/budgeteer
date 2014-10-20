@@ -79,3 +79,7 @@
 .small-box h3 a {
     color: white;
 }
+
+.pointer{
+    cursor: pointer;
+}

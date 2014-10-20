@@ -14,6 +14,7 @@ import org.wickedsource.budgeteer.service.people.PeopleService;
 import org.wickedsource.budgeteer.service.people.PersonRate;
 import org.wickedsource.budgeteer.service.people.PersonWithRates;
 import org.wickedsource.budgeteer.web.components.money.MoneyLabel;
+import org.wickedsource.budgeteer.web.pages.people.edit.EditPersonPage;
 import org.wickedsource.budgeteer.web.pages.people.edit.IEditPersonPageStrategy;
 
 import static org.wicketstuff.lazymodel.LazyModel.from;
@@ -111,7 +112,7 @@ public class EditPersonForm extends Form<PersonWithRates> {
     @Override
     protected void onSubmit() {
         peopleService.savePersonWithRates(getModelObject());
-        strategy.goBack();
+        ((EditPersonPage) getPage()).goBack();
     }
 
 

@@ -1,5 +1,4 @@
-package org.wickedsource.budgeteer.web.components.daterange;
-
+package org.wickedsource.budgeteer.web.pages.budgets.edit.tagsfield;
 
 import org.apache.wicket.markup.head.CssReferenceHeaderItem;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -10,26 +9,20 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.util.convert.IConverter;
-import org.wickedsource.budgeteer.service.common.DateRange;
 import org.wickedsource.budgeteer.web.BudgeteerReferences;
 
-public class DateRangeInputField extends TextField<DateRange> {
+import java.util.List;
 
-    public DateRangeInputField(String id) {
-        super(id);
-        setOutputMarkupId(true);
-    }
+public class TagsTextField extends TextField<List<String>> {
 
-    public DateRangeInputField(String id, IModel<DateRange> model) {
+    public TagsTextField(String id, IModel<List<String>> model) {
         super(id, model);
-        setOutputMarkupId(true);
     }
-
 
     @Override
     @SuppressWarnings("unchecked")
-    public <DateRange> IConverter<DateRange> getConverter(Class<DateRange> type) {
-        return (IConverter<DateRange>) new DateRangeConverter();
+    public <List> IConverter<List> getConverter(Class<List> type) {
+        return (IConverter<List>) new TagsConverter();
     }
 
     @Override
@@ -41,16 +34,19 @@ public class DateRangeInputField extends TextField<DateRange> {
     public void renderHead(HtmlHeaderContainer container) {
         // jquery resource
         container.getHeaderResponse().render(JavaScriptReferenceHeaderItem.forReference(BudgeteerReferences.getJQueryReference()));
-        // include daterangepicker.js
-        ResourceReference jsResource = new PackageResourceReference(DateRangeInputField.class, "daterangepicker.js");
+        // include javascript
+        ResourceReference jsResource = new PackageResourceReference(TagsTextField.class, "bootstrap-tagsinput.min.js");
         container.getHeaderResponse().render(JavaScriptReferenceHeaderItem.forReference(jsResource));
         // include css
-        ResourceReference cssResource = new PackageResourceReference(DateRangeInputField.class, "daterangepicker-bs3.css");
+        ResourceReference cssResource = new PackageResourceReference(TagsTextField.class, "bootstrap-tagsinput.css");
         container.getHeaderResponse().render(CssReferenceHeaderItem.forReference(cssResource));
-        // activate daterangepicker on this input field
+        // activate tagsinput on this input field
         container.getHeaderResponse().render(JavaScriptHeaderItem.forScript(String.format("window.onload = function () {\n" +
-                "    $('#%s').daterangepicker();\n" +
-                "}", getMarkupId()), "activate-daterangepicker"));
+                "     $('#%s').tagsinput({\n" +
+                "            tagClass: function (item) {\n" +
+                "                return 'badge bg-light-blue';\n" +
+                "            }\n" +
+                "        });\n" +
+                "}", getMarkupId()), "activate-tagsinput"));
     }
-
 }

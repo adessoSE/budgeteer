@@ -47,10 +47,11 @@ public class BudgetService {
 
     /**
      * Loads the detail data of a single budget.
+     *
      * @param budgetId ID ID of the budget to load.
      * @return detail data for the requested budget.
      */
-    public BudgetDetailData loadBudgetDetailData(long budgetId){
+    public BudgetDetailData loadBudgetDetailData(long budgetId) {
         BudgetDetailData data = new BudgetDetailData();
         data.setLastUpdated(new Date());
         data.setName("Budget Title");
@@ -93,6 +94,31 @@ public class BudgetService {
             list.add(data);
         }
         return list;
+    }
+
+    /**
+     * Loads the data of a budget to edit in the UI.
+     *
+     * @param budgetId ID of the budget whose data to load.
+     * @return data object containing the data that can be changed in the UI.
+     */
+    public EditBudgetData loadBudgetToEdit(long budgetId) {
+        EditBudgetData data = new EditBudgetData();
+        data.setId(budgetId);
+        data.setImportKey("123");
+        data.setTags(Arrays.asList("Tag1", "Tag2", "Tag3"));
+        data.setTitle("Budget 123");
+        data.setTotal(MoneyUtil.createMoney(10000d));
+        return data;
+    }
+
+    /**
+     * Stores the data to the given budget.
+     *
+     * @param data the data to store in the database.
+     */
+    public void editBudget(EditBudgetData data) {
+
     }
 
 }

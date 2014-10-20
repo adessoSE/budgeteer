@@ -9,6 +9,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.wickedsource.budgeteer.service.budget.BudgetDetailData;
 import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
+import org.wickedsource.budgeteer.web.ClassAwareWrappingModel;
 import org.wickedsource.budgeteer.web.components.money.MoneyLabel;
 import org.wickedsource.budgeteer.web.pages.budgets.details.BudgetDetailsPage;
 import org.wickedsource.budgeteer.web.pages.budgets.overview.table.progressbar.ProgressBar;
@@ -59,7 +60,7 @@ public class BudgetOverviewTable extends Panel {
 
             @Override
             protected ListItem<BudgetDetailData> newItem(int index, IModel<BudgetDetailData> itemModel) {
-                return super.newItem(index, new ClassAwareBudgetDetailDataModel(itemModel));
+                return super.newItem(index, new ClassAwareWrappingModel<BudgetDetailData>(itemModel, BudgetDetailData.class));
             }
         };
     }

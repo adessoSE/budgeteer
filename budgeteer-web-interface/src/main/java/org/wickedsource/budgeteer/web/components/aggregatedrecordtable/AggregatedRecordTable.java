@@ -8,6 +8,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.joda.money.Money;
 import org.wickedsource.budgeteer.service.record.AggregatedRecord;
+import org.wickedsource.budgeteer.web.ClassAwareWrappingModel;
 import org.wickedsource.budgeteer.web.components.money.MoneyLabel;
 
 import java.util.List;
@@ -50,7 +51,7 @@ public class AggregatedRecordTable extends Panel {
 
             @Override
             protected ListItem<AggregatedRecord> newItem(int index, IModel<AggregatedRecord> itemModel) {
-                return super.newItem(index, new AggregatedRecordModel(itemModel));
+                return super.newItem(index, new ClassAwareWrappingModel<AggregatedRecord>(itemModel, AggregatedRecord.class));
             }
         };
     }
