@@ -3,15 +3,14 @@ package org.wickedsource.budgeteer.web.pages.base.basepage.budgetunitchoice;
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.wickedsource.budgeteer.service.settings.BudgetUnit;
-import org.wickedsource.budgeteer.service.settings.SettingsService;
+import org.wickedsource.budgeteer.service.budget.BudgetService;
 
 import java.util.List;
 
-public class BudgetUnitModel extends LoadableDetachableModel<List<BudgetUnit>> {
+public class BudgetUnitModel extends LoadableDetachableModel<List<Double>> {
 
     @SpringBean
-    private SettingsService service;
+    private BudgetService service;
 
     private long userId;
 
@@ -21,7 +20,9 @@ public class BudgetUnitModel extends LoadableDetachableModel<List<BudgetUnit>> {
     }
 
     @Override
-    protected List<BudgetUnit> load() {
-        return service.getBudgetUnits(userId);
+    protected List<Double> load() {
+        return service.loadBudgetUnits(userId);
     }
+
+
 }

@@ -10,6 +10,7 @@ import org.apache.wicket.model.IModel;
 import org.wickedsource.budgeteer.service.budget.BudgetDetailData;
 import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
 import org.wickedsource.budgeteer.web.ClassAwareWrappingModel;
+import org.wickedsource.budgeteer.web.components.money.BudgetUnitMoneyModel;
 import org.wickedsource.budgeteer.web.components.money.MoneyLabel;
 import org.wickedsource.budgeteer.web.pages.budgets.details.BudgetDetailsPage;
 import org.wickedsource.budgeteer.web.pages.budgets.overview.table.progressbar.ProgressBar;
@@ -27,9 +28,9 @@ public class BudgetOverviewTable extends Panel {
 
         IModel<BudgetDetailData> totalModel = new TotalBudgetDetailsModel(model);
         add(new Label("totalLastUpdated", model(from(totalModel).getLastUpdated())));
-        add(new MoneyLabel("totalAmount", model(from(totalModel).getTotal())));
-        add(new MoneyLabel("totalSpent", model(from(totalModel).getSpent())));
-        add(new MoneyLabel("totalRemaining", model(from(totalModel).getRemaining())));
+        add(new MoneyLabel("totalAmount", new BudgetUnitMoneyModel(model(from(totalModel).getTotal()))));
+        add(new MoneyLabel("totalSpent", new BudgetUnitMoneyModel(model(from(totalModel).getSpent()))));
+        add(new MoneyLabel("totalRemaining", new BudgetUnitMoneyModel(model(from(totalModel).getRemaining()))));
         add(new ProgressBar("totalProgressBar", model(from(totalModel).getProgressInPercent())));
     }
 
@@ -52,9 +53,9 @@ public class BudgetOverviewTable extends Panel {
                 link.add(linkTitle);
                 item.add(link);
                 item.add(new Label("lastUpdated", model(from(item.getModel()).getLastUpdated())));
-                item.add(new MoneyLabel("amount", model(from(item.getModel()).getTotal())));
-                item.add(new MoneyLabel("spent", model(from(item.getModel()).getSpent())));
-                item.add(new MoneyLabel("remaining", model(from(item.getModel()).getRemaining())));
+                item.add(new MoneyLabel("amount", new BudgetUnitMoneyModel(model(from(item.getModel()).getTotal()))));
+                item.add(new MoneyLabel("spent", new BudgetUnitMoneyModel(model(from(item.getModel()).getSpent()))));
+                item.add(new MoneyLabel("remaining", new BudgetUnitMoneyModel(model(from(item.getModel()).getRemaining()))));
                 item.add(new ProgressBar("progressBar", model(from(item.getModel()).getProgressInPercent())));
             }
 

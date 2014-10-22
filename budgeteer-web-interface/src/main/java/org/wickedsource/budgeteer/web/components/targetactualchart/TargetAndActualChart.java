@@ -7,8 +7,20 @@ import org.wickedsource.budgeteer.service.statistics.TargetAndActual;
 
 public class TargetAndActualChart extends Chart {
 
+    private IModel<TargetAndActual> model;
+
+    private TargetAndActualChartOptions.Mode mode;
+
     public TargetAndActualChart(String id, IModel<TargetAndActual> model, Theme theme, TargetAndActualChartOptions.Mode mode) {
         super(id, new TargetAndActualChartOptions(model, mode), theme);
+        this.model = model;
+        this.mode = mode;
     }
 
+    @Override
+    protected void onBeforeRender() {
+        super.onBeforeRender();
+        // resetting options to force re-rendering with new parameters
+        setOptions(new TargetAndActualChartOptions(model, mode));
+    }
 }

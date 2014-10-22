@@ -9,6 +9,7 @@ import org.apache.wicket.model.IModel;
 import org.joda.money.Money;
 import org.wickedsource.budgeteer.service.record.AggregatedRecord;
 import org.wickedsource.budgeteer.web.ClassAwareWrappingModel;
+import org.wickedsource.budgeteer.web.components.money.BudgetUnitMoneyModel;
 import org.wickedsource.budgeteer.web.components.money.MoneyLabel;
 
 import java.util.List;
@@ -33,9 +34,9 @@ public class AggregatedRecordTable extends Panel {
                 item.add(new Label("startDate", model(from(item.getModel()).getAggregationPeriodStart())));
                 item.add(new Label("endDate", model(from(item.getModel()).getAggregationPeriodEnd())));
                 item.add(new Label("hours", model(from(item.getModel()).getHours())));
-                item.add(new MoneyLabel("budgetBurned", model(from(item.getModel()).getBudgetBurned())));
-                item.add(new MoneyLabel("budgetPlanned", model(from(item.getModel()).getBudgetPlanned())));
-                Label differenceLabel = new MoneyLabel("difference", model(from(item.getModel()).getDifference())) {
+                item.add(new MoneyLabel("budgetBurned", new BudgetUnitMoneyModel(model(from(item.getModel()).getBudgetBurned()))));
+                item.add(new MoneyLabel("budgetPlanned", new BudgetUnitMoneyModel(model(from(item.getModel()).getBudgetPlanned()))));
+                Label differenceLabel = new MoneyLabel("difference", new BudgetUnitMoneyModel(model(from(item.getModel()).getDifference()))) {
                     @Override
                     protected void onConfigure() {
                         IModel<Money> model = (IModel<Money>) getDefaultModel();

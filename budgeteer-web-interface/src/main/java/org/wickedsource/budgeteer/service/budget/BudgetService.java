@@ -121,4 +121,19 @@ public class BudgetService {
 
     }
 
+    /**
+     * Returns the units in which the user can have his budget values displayed. One unit is active, the others are
+     * inactive.
+     *
+     * @param userId id of the user for whom to liad the budget units.
+     * @return a list containing all available budget units, one of which is currently active.
+     */
+    public List<Double> loadBudgetUnits(long userId) {
+        List<Double> units = new ArrayList<Double>();
+        units.add(1d);
+        units.add(500d);
+        units.add(790d);
+        return units;
+    }
+
 }

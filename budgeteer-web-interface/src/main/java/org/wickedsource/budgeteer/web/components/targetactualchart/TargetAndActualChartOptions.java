@@ -4,8 +4,10 @@ import com.googlecode.wickedcharts.highcharts.options.*;
 import com.googlecode.wickedcharts.highcharts.options.color.HexColor;
 import com.googlecode.wickedcharts.highcharts.options.series.Series;
 import org.apache.wicket.model.IModel;
+import org.wickedsource.budgeteer.service.MoneyUtil;
 import org.wickedsource.budgeteer.service.statistics.BudgeteerSeries;
 import org.wickedsource.budgeteer.service.statistics.TargetAndActual;
+import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.PropertyLoader;
 import org.wickedsource.budgeteer.web.charts.ChartUtils;
 
@@ -53,13 +55,13 @@ public class TargetAndActualChartOptions extends Options {
                 addSeries(new Series<Double>() {
                 }
                         .setName(series.getName())
-                        .setData(series.getValuesAsDouble()));
+                        .setData(MoneyUtil.toDouble(series.getValues(), BudgeteerSession.get().getSelectedBudgetUnit())));
             }
 
             addSeries(new Series<Double>() {
             }
                     .setName("Plan")
-                    .setData(model.getObject().getTargetSeries().getValuesAsDouble())
+                    .setData(MoneyUtil.toDouble(model.getObject().getTargetSeries().getValues(), BudgeteerSession.get().getSelectedBudgetUnit()))
                     .setType(SeriesType.LINE));
         }
 

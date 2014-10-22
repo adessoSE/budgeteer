@@ -7,43 +7,48 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.wickedsource.budgeteer.service.settings.BudgetUnit;
-import org.wickedsource.budgeteer.service.settings.SettingsService;
+import org.wickedsource.budgeteer.service.MoneyUtil;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.components.fontawesome.FontAwesomeIcon;
 import org.wickedsource.budgeteer.web.components.fontawesome.FontAwesomeIconType;
 
+import java.util.List;
+
 public class BudgetUnitChoice extends Panel {
 
-    @SpringBean
-    private SettingsService settingsService;
-
-    public BudgetUnitChoice(String id, IModel<?> model) {
+    public BudgetUnitChoice(String id, IModel<List<Double>> model) {
         super(id, model);
         Injector.get().inject(this);
         add(createBudgetList("unitList"));
     }
 
-    private ListView<BudgetUnit> createBudgetList(String wicketId) {
-        return new ListView<BudgetUnit>(wicketId, getModel()) {
+    private ListView<Double> createBudgetList(String wicketId) {
+        return new ListView<Double>(wicketId, getModel()) {
             @Override
-            protected void populateItem(ListItem<BudgetUnit> item) {
-                Link<BudgetUnit> link = new Link<BudgetUnit>("link", item.getModel()) {
+            protected void populateItem(final ListItem<Double> item) {
+                final BudgeteerSession session = BudgeteerSession.get();
+                Link<Double> link = new Link<Double>("link", item.getModel()) {
                     @Override
                     public void onClick() {
-                        settingsService.activateBudgetUnit(BudgeteerSession.get().getLoggedInUserId(), getModelObject());
+                        session.setSelectedBudgetUnit(item.getModelObject());
                     }
                 };
                 item.add(link);
 
-                if (item.getModelObject().isActive()) {
+                if (session.getSelectedBudgetUnit() == null || item.getModelObject().equals(session.getSelectedBudgetUnit())) {
                     link.add(new FontAwesomeIcon("checkboxIcon", FontAwesomeIconType.CHECK_SQUARE_O));
                 } else {
                     link.add(new FontAwesomeIcon("checkboxIcon", FontAwesomeIconType.SQUARE_O));
                 }
 
-                Label unitTitle = new Label("unitTitle", item.getModelObject().getUnitTitle());
+                String unitname = "";
+                if (link.getModelObject().equals(1d)) {
+                    unitname = getString("unitname.money");
+                } else {
+                    unitname = String.format(getString("unitname.manday"), MoneyUtil.createMoney(item.getModelObject()));
+                }
+
+                Label unitTitle = new Label("unitTitle", unitname);
                 unitTitle.setRenderBodyOnly(true);
                 link.add(unitTitle);
             }

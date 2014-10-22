@@ -1,7 +1,6 @@
 package org.wickedsource.budgeteer.service.statistics;
 
 import org.joda.money.Money;
-import org.wickedsource.budgeteer.service.MoneyUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +27,4 @@ public class BudgeteerSeries {
         this.values = values;
     }
 
-    public List<Double> getValuesAsDouble() {
-        return MoneyUtil.toDouble(values);
-    }
 }
