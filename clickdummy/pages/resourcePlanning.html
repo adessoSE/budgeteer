@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>AdminLTE | Widgets</title>
+    <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet"
+          type="text/css"/>
+    <link href='http://fonts.googleapis.com/css?family=Jockey+One' rel='stylesheet' type='text/css'>
+    <link href="../css/daterangepicker/daterangepicker-bs3.css" rel="stylesheet" type="text/css"/>
+    <!-- Ionicons -->
+    <link href="//code.ionicframework.com/ionicons/1.5.2/css/ionicons.min.css" rel="stylesheet" type="text/css"/>
+    <!-- Theme style -->
+    <link href="../css/AdminLTE.css" rel="stylesheet" type="text/css"/>
+    <link href="../css/AdminLTE-custom.css" rel="stylesheet" type="text/css"/>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="skin-blue">
+<!-- header logo: style can be found in header.less -->
+<header class="header">
+    <a href="/" class="logo">
+        <i class="glyphicon glyphicon-coins"></i>
+        <img src="../img/coins.png"/>
+        Budgeteer
+    </a>
+    <!-- Header Navbar: style can be found in header.less -->
+    <nav class="navbar navbar-static-top" role="navigation">
+
+        <div class="navbar-right">
+            <ul class="nav navbar-nav">
+
+                <li class="dropdown notifications-menu">
+
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-warning"></i>
+                        <span class="label label-warning">10</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class="header">Please fix the following issues to enable correct budget monitoring.</li>
+                        <li>
+                            <!-- inner menu: contains the actual data -->
+                            <ul class="menu">
+                                <li>
+                                    <a href="#">
+                                        <i class="fa fa-warning warning"></i> Missing daily rate for Tom Hombergs
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <i class="fa fa-warning warning"></i> Missing budget total for "Implementation
+                                        of Feature XYZ"
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <i class="fa fa-warning warning"></i> Missing daily rate for Tom Hombergs
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <i class="fa fa-warning warning"></i> Missing budget total for "Implementation
+                                        of Feature XYZ"
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <i class="fa fa-warning warning"></i> Missing daily rate for Tom Hombergs
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <i class="fa fa-warning warning"></i> Missing budget total for "Implementation
+                                        of Feature XYZ"
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        Budget Display Unit
+                        <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-check-square-o"></i>
+                                EUR (€)
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-square-o"></i>
+                                Man-days (€790)
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-square-o"></i>
+                                Man-days (€1200)
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <!-- Notifications: style can be found in dropdown.less -->
+                <!-- User Account: style can be found in dropdown.less -->
+                <li class="dropdown">
+                    <a href="#">
+                        <i class="fa fa-power-off"></i>
+                        <span><b>Sign Out</b></span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+<div class="wrapper row-offcanvas row-offcanvas-left">
+
+    <!-- Right side column. Contains the navbar and content of the page -->
+    <aside class="right-side">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>
+                Resource Planning
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li class="active">Resource Planning</li>
+            </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box box-primary">
+                        <div class="box-header">
+                            <i class="fa fa-list"></i>
+
+                            <h3 class="box-title">Planning filter</h3>
+
+                            <div class="box-tools pull-right">
+                                <button class="btn btn-default btn-sm" data-widget="collapse"><i
+                                        class="fa fa-minus"></i></button>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="form-group">
+                                        <label for="dateRangePicker">Date Range</label>
+
+                                        <div class="input-group">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-calendar"></i>
+                                            </div>
+                                            <input type="text" class="form-control pull-right" id="dateRangePicker">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>Filter by Person</label>
+                                        <select class="form-control">
+                                            <option>Tom Hombergs</option>
+                                            <option>Martha Pfahl</option>
+                                            <option>Rainer Zufall</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label>Filter by Budget</label>
+                                        <select class="form-control">
+                                            <option>Implementation of Feature XYZ</option>
+                                            <option>Project Management</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="box box-primary">
+                                <div class="box-header">
+                                    <i class="fa fa-list"></i>
+
+                                    <h3 class="box-title">Resource Plan</h3>
+
+                                    <div class="box-tools pull-right">
+                                        <button class="btn btn-default btn-sm" data-widget="collapse"><i
+                                                class="fa fa-minus"></i></button>
+                                    </div>
+                                </div>
+                                <div class="box-body">
+                                    <table id="hoursTable" class="table table-bordered table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th>Person</th>
+                                            <th>Budget</th>
+                                            <th>Daily Rate</th>
+                                            <th>#1</th>
+                                            <th>#2</th>
+                                            <th>#3</th>
+                                            <th>#3</th>
+                                            <th>#3</th>
+                                            <th>#3</th>
+                                            <th>#3</th>
+                                            <th>#3</th>
+                                            <th>#3</th>
+                                            <th>#3</th>
+                                            <th>#3</th>
+                                            <th>#3</th>
+                                            <th>#3</th>
+                                            <th>#3</th>
+                                            <th>#3</th>
+                                            <th>#3</th>
+                                            <th>#3</th>
+                                            <th>#3</th>
+                                            <th>#3</th>
+                                            <th>#3</th>
+                                            <th>#3</th>
+                                            <th>#3</th>
+                                            <th>#3</th>
+                                            <th>#3</th>
+                                            <th>#3</th>
+                                            <th>#3</th>
+                                            <th>#3</th>
+                                            <th>#3</th>
+                                            <th>#3</th>
+                                            <th>#3</th>
+                                            <th>#3</th>
+                                            <th>#3</th>
+                                            <th>#3</th>
+                                            <th>#3</th>
+                                            <th>#3</th>
+                                            <th>#3</th>
+                                            <th>#3</th>
+                                            <th>#3</th>
+                                            <th>#3</th>
+                                            <th>#3</th>
+                                            <th>#3</th>
+                                            <th>#3</th>
+                                            <th>#3</th>
+                                            <th>#3</th>
+                                            <th>#3</th>
+                                            <th>#3</th>
+                                            <th>#3</th>
+                                            <th>#3</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>Tom Hombergs</td>
+                                            <td>Project Management</td>
+                                            <td>€1200</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+        <!-- /.content -->
+    </aside>
+    <!-- /.right-side -->
+</div>
+<!-- ./wrapper -->
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="../js/plugins/daterangepicker/daterangepicker.js" type="text/javascript"></script>
+<!-- AdminLTE App -->
+<script src="../js/AdminLTE/app.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+
+    $('#dateRangePicker').daterangepicker({
+        showWeekNumbers: true
+    });
+
+    // disable side bar
+    if ($(window).width() <= 992) {
+        $('.row-offcanvas').toggleClass('active');
+        $('.left-side').removeClass("collapse-left");
+        $(".right-side").removeClass("strech");
+        $('.row-offcanvas').toggleClass("relative");
+    } else {
+        //Else, enable content streching
+        $('.left-side').toggleClass("collapse-left");
+        $(".right-side").toggleClass("strech");
+    }
+
+</script>
+</body>
+</html>
