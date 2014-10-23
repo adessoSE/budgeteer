@@ -5,15 +5,15 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
-import org.wickedsource.budgeteer.service.record.AggregatedRecord;
-import org.wickedsource.budgeteer.service.record.RecordService;
+import org.wickedsource.budgeteer.service.record.AggregatedWorkingRecord;
+import org.wickedsource.budgeteer.service.record.WorkingRecordService;
 
 import java.util.List;
 
-public class BudgetsWeeklyAggregatedRecordsModel extends LoadableDetachableModel<List<AggregatedRecord>> {
+public class BudgetsWeeklyAggregatedRecordsModel extends LoadableDetachableModel<List<AggregatedWorkingRecord>> {
 
     @SpringBean
-    private RecordService service;
+    private WorkingRecordService service;
 
     private long budgetId;
 
@@ -30,7 +30,7 @@ public class BudgetsWeeklyAggregatedRecordsModel extends LoadableDetachableModel
     }
 
     @Override
-    protected List<AggregatedRecord> load() {
+    protected List<AggregatedWorkingRecord> load() {
         if (budgetId != 0) {
             return service.getWeeklyAggregationForBudget(budgetId);
         } else if (filterModel != null && filterModel.getObject() != null) {

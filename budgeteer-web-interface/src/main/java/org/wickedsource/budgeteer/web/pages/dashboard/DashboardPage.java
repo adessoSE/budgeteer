@@ -13,6 +13,7 @@ import org.wickedsource.budgeteer.web.pages.dashboard.burnedbudgetchart.BurnedBu
 import org.wickedsource.budgeteer.web.pages.dashboard.dailyratechart.AverageDailyRateChart;
 import org.wickedsource.budgeteer.web.pages.dashboard.dailyratechart.AverageDailyRateChartModel;
 import org.wickedsource.budgeteer.web.pages.hours.HoursPage;
+import org.wickedsource.budgeteer.web.pages.imports.ImportsOverviewPage;
 import org.wickedsource.budgeteer.web.pages.people.overview.PeopleOverviewPage;
 
 @Mount("dashboard")
@@ -34,6 +35,9 @@ public class DashboardPage extends BasePage {
 
         add(new BookmarkablePageLink<BudgetsOverviewPage>("budgetsLink1", BudgetsOverviewPage.class));
         add(new BookmarkablePageLink<BudgetsOverviewPage>("budgetsLink2", BudgetsOverviewPage.class));
+
+        add(new BookmarkablePageLink<ImportsOverviewPage>("importsLink1", ImportsOverviewPage.class));
+        add(new BookmarkablePageLink<ImportsOverviewPage>("importsLink2", ImportsOverviewPage.class));
     }
 
     @SuppressWarnings("unchecked")

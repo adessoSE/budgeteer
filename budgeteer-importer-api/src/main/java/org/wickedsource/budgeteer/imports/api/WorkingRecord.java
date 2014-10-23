@@ -1,11 +1,11 @@
-package org.wickedsource.budgeteer.service.record;
+package org.wickedsource.budgeteer.imports.api;
 
 import org.joda.money.Money;
 
 import java.io.Serializable;
 import java.util.Date;
 
-public class SingleRecord implements Serializable {
+public class WorkingRecord implements Serializable {
 
     private String budgetName;
 

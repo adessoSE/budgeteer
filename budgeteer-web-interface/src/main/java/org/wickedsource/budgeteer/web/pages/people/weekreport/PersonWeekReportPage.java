@@ -3,7 +3,7 @@ package org.wickedsource.budgeteer.web.pages.people.weekreport;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.wickedsource.budgeteer.service.record.AggregatedRecord;
+import org.wickedsource.budgeteer.service.record.AggregatedWorkingRecord;
 import org.wickedsource.budgeteer.service.statistics.TargetAndActual;
 import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.charts.BudgeteerChartTheme;
@@ -34,7 +34,7 @@ public class PersonWeekReportPage extends BasePage {
         IModel<TargetAndActual> model = new PersonWeeklyAggregationModel(getPersonId());
         add(new TargetAndActualChart("targetAndActualChart", model, new BudgeteerChartTheme(), TargetAndActualChartOptions.Mode.WEEKLY));
 
-        IModel<List<AggregatedRecord>> tableModel = new PersonWeeklyAggregatedRecordsModel(getPersonId());
+        IModel<List<AggregatedWorkingRecord>> tableModel = new PersonWeeklyAggregatedRecordsModel(getPersonId());
         add(new AggregatedRecordTable("table", tableModel));
     }
 

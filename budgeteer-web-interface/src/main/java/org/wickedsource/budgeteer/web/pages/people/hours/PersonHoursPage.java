@@ -2,7 +2,7 @@ package org.wickedsource.budgeteer.web.pages.people.hours;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.wickedsource.budgeteer.service.people.PersonBaseData;
-import org.wickedsource.budgeteer.service.record.RecordFilter;
+import org.wickedsource.budgeteer.service.record.WorkingRecordFilter;
 import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.components.burntable.BurnTableWithFilter;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.Breadcrumb;
@@ -19,7 +19,7 @@ public class PersonHoursPage extends PersonBasePage {
     public PersonHoursPage(PageParameters parameters) {
         super(parameters);
 
-        RecordFilter filter = new RecordFilter();
+        WorkingRecordFilter filter = new WorkingRecordFilter();
         filter.setPerson(new PersonBaseData());
         filter.getPerson().setId(getPersonId());
 

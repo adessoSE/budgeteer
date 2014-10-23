@@ -6,8 +6,8 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.wickedsource.budgeteer.service.record.RecordFilter;
-import org.wickedsource.budgeteer.service.record.SingleRecord;
+import org.wickedsource.budgeteer.imports.api.WorkingRecord;
+import org.wickedsource.budgeteer.service.record.WorkingRecordFilter;
 import org.wickedsource.budgeteer.web.ClassAwareWrappingModel;
 import org.wickedsource.budgeteer.web.components.burntable.filter.FilteredRecordsModel;
 import org.wickedsource.budgeteer.web.components.money.BudgetUnitMoneyModel;
@@ -30,17 +30,17 @@ public class BurnTable extends Panel {
     public void onEvent(IEvent<?> event) {
         super.onEvent(event);
         Object payload = event.getPayload();
-        if (payload instanceof RecordFilter) {
-            RecordFilter filter = (RecordFilter) payload;
+        if (payload instanceof WorkingRecordFilter) {
+            WorkingRecordFilter filter = (WorkingRecordFilter) payload;
             FilteredRecordsModel model = (FilteredRecordsModel) getDefaultModel();
             model.setFilter(filter);
         }
     }
 
-    private ListView<SingleRecord> createList(String id, IModel<List<SingleRecord>> model) {
-        return new ListView<SingleRecord>(id, model) {
+    private ListView<WorkingRecord> createList(String id, IModel<List<WorkingRecord>> model) {
+        return new ListView<WorkingRecord>(id, model) {
             @Override
-            protected void populateItem(ListItem<SingleRecord> item) {
+            protected void populateItem(ListItem<WorkingRecord> item) {
                 item.add(new Label("budget", model(from(item.getModel()).getBudgetName())));
                 item.add(new Label("person", model(from(item.getModel()).getPersonName())));
                 item.add(new MoneyLabel("dailyRate", model(from(item.getModel()).getDailyRate())));
@@ -50,9 +50,9 @@ public class BurnTable extends Panel {
             }
 
             @Override
-            protected ListItem<SingleRecord> newItem(int index, IModel<SingleRecord> itemModel) {
+            protected ListItem<WorkingRecord> newItem(int index, IModel<WorkingRecord> itemModel) {
                 // wrap model to work with LazyModel
-                return super.newItem(index, new ClassAwareWrappingModel<SingleRecord>(itemModel, SingleRecord.class));
+                return super.newItem(index, new ClassAwareWrappingModel<WorkingRecord>(itemModel, WorkingRecord.class));
             }
         };
     }

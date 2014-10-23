@@ -3,35 +3,35 @@ package org.wickedsource.budgeteer.web.components.burntable.filter;
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.wickedsource.budgeteer.service.record.RecordFilter;
-import org.wickedsource.budgeteer.service.record.RecordService;
-import org.wickedsource.budgeteer.service.record.SingleRecord;
+import org.wickedsource.budgeteer.imports.api.WorkingRecord;
+import org.wickedsource.budgeteer.service.record.WorkingRecordFilter;
+import org.wickedsource.budgeteer.service.record.WorkingRecordService;
 
 import java.util.List;
 
-public class FilteredRecordsModel extends LoadableDetachableModel<List<SingleRecord>> {
+public class FilteredRecordsModel extends LoadableDetachableModel<List<WorkingRecord>> {
 
     @SpringBean
-    private RecordService service;
+    private WorkingRecordService service;
 
-    private RecordFilter filter;
+    private WorkingRecordFilter filter;
 
-    public FilteredRecordsModel(RecordFilter filter) {
+    public FilteredRecordsModel(WorkingRecordFilter filter) {
         Injector.get().inject(this);
         this.filter = filter;
     }
 
 
     @Override
-    protected List<SingleRecord> load() {
+    protected List<WorkingRecord> load() {
         return service.getFilteredRecords(filter);
     }
 
-    public RecordFilter getFilter() {
+    public WorkingRecordFilter getFilter() {
         return filter;
     }
 
-    public void setFilter(RecordFilter filter) {
+    public void setFilter(WorkingRecordFilter filter) {
         this.filter = filter;
     }
 }

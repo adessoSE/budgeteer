@@ -1,7 +1,7 @@
 package org.wickedsource.budgeteer.web.components.burntable;
 
 import org.apache.wicket.markup.html.panel.Panel;
-import org.wickedsource.budgeteer.service.record.RecordFilter;
+import org.wickedsource.budgeteer.service.record.WorkingRecordFilter;
 import org.wickedsource.budgeteer.web.components.burntable.filter.FilterPanel;
 import org.wickedsource.budgeteer.web.components.burntable.filter.FilteredRecordsModel;
 import org.wickedsource.budgeteer.web.components.burntable.table.BurnTable;
@@ -10,7 +10,7 @@ public class BurnTableWithFilter extends Panel {
 
     private FilterPanel filterPanel;
 
-    public BurnTableWithFilter(String id, RecordFilter initialFilter) {
+    public BurnTableWithFilter(String id, WorkingRecordFilter initialFilter) {
         super(id);
 
         filterPanel = new FilterPanel("filter", initialFilter);

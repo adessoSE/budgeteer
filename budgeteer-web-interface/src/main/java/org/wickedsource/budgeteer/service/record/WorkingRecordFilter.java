@@ -6,7 +6,7 @@ import org.wickedsource.budgeteer.service.people.PersonBaseData;
 
 import java.io.Serializable;
 
-public class RecordFilter implements Serializable{
+public class WorkingRecordFilter implements Serializable{
 
     private PersonBaseData person;
 

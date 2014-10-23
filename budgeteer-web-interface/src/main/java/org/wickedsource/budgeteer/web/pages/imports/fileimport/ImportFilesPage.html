@@ -1,0 +1,61 @@
+<wicket:extend>
+
+    <div class="form-box wide" id="login-box">
+        <div class="header">Import Working Hours from Excel files
+            <div class="box-tools pull-right">
+                <button class="btn bg-olive btn-sm"><i class="fa fa-times"></i></button>
+            </div>
+        </div>
+        <form action="../index.html" method="post">
+            <div class="body bg-gray">
+                <div class="alert alert-danger">Some of the data you want to import seems to have been imported before.
+                    Do you wish to overwrite the old data with the new data or simply add the new data to the new data to
+                    the database?
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <button type="submit" class="btn btn-danger btn-block">Replace the old data</button>
+                        </div>
+                        <div class="col-lg-6">
+                            <button type="submit" class="btn btn-danger btn-block">Don't replace, add new data on top</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="box box-primary">
+                    <div class="box-header">
+                        <h3 class="box-title">Select an Import File Format</h3>
+                    </div>
+                    <div class="box-body">
+                        <select wicket:id="importerChoice" class="form-control" id="presetInput">
+                            <option>aproda Report #4</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="box box-primary">
+                    <div class="box-header">
+                        <h3 class="box-title">Select Files to Upload</h3>
+                    </div>
+                    <div class="box-body">
+                        <input id="fileupload" type="file" name="files[]" data-url="server/php/" multiple>
+                    </div>
+                </div>
+            </div>
+            <div class="footer">
+                <div class="row">
+                    <div class="col-lg-3">
+                        <button type="submit" class="btn bg-olive btn-block">Cancel</button>
+                    </div>
+                    <div class="col-lg-3">
+                        <button type="submit" class="btn bg-olive btn-block" data-toggle="tooltip" title
+                                data-original-title="Download an example file to see the format needed for import first hand."
+                                disabled><i class="fa fa-download"></i>&nbsp;&nbsp;&nbsp;Example File
+                        </button>
+                    </div>
+                    <div class="col-lg-6">
+                        <button type="submit" class="btn bg-olive btn-block">Start Import</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</wicket:extend>

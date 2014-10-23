@@ -1,6 +1,6 @@
 package org.wickedsource.budgeteer.web.pages.hours;
 
-import org.wickedsource.budgeteer.service.record.RecordFilter;
+import org.wickedsource.budgeteer.service.record.WorkingRecordFilter;
 import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.components.burntable.BurnTableWithFilter;
 import org.wickedsource.budgeteer.web.pages.base.basepage.BasePage;
@@ -11,7 +11,7 @@ import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 public class HoursPage extends BasePage {
 
     public HoursPage() {
-        BurnTableWithFilter table = new BurnTableWithFilter("burnTable", new RecordFilter());
+        BurnTableWithFilter table = new BurnTableWithFilter("burnTable", new WorkingRecordFilter());
         add(table);
     }
 

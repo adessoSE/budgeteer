@@ -8,7 +8,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
 import org.wickedsource.budgeteer.service.people.PersonBaseData;
-import org.wickedsource.budgeteer.service.record.RecordFilter;
+import org.wickedsource.budgeteer.service.record.WorkingRecordFilter;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.components.budget.BudgetBaseDataChoiceRenderer;
 import org.wickedsource.budgeteer.web.components.daterange.DateRangeInputField;
@@ -26,10 +26,10 @@ public class FilterPanel extends Panel {
     private boolean daterangeFilterEnabled = true;
 
     @SuppressWarnings("unchecked")
-    public FilterPanel(String id, RecordFilter filter) {
+    public FilterPanel(String id, WorkingRecordFilter filter) {
         super(id, model(from(filter)));
-        IModel<RecordFilter> model = (IModel<RecordFilter>) getDefaultModel();
-        Form<RecordFilter> form = new Form<RecordFilter>("filterForm", model) {
+        IModel<WorkingRecordFilter> model = (IModel<WorkingRecordFilter>) getDefaultModel();
+        Form<WorkingRecordFilter> form = new Form<WorkingRecordFilter>("filterForm", model) {
             @Override
             protected void onSubmit() {
                 send(getPage(), Broadcast.BREADTH, getModel().getObject());
@@ -41,7 +41,7 @@ public class FilterPanel extends Panel {
         add(form);
     }
 
-    private WebMarkupContainer createPersonFilter(String id, Form<RecordFilter> form) {
+    private WebMarkupContainer createPersonFilter(String id, Form<WorkingRecordFilter> form) {
         WebMarkupContainer container = new WebMarkupContainer(id) {
             @Override
             public boolean isVisible() {
@@ -57,7 +57,7 @@ public class FilterPanel extends Panel {
         return container;
     }
 
-    private WebMarkupContainer createBudgetFilter(String id, Form<RecordFilter> form) {
+    private WebMarkupContainer createBudgetFilter(String id, Form<WorkingRecordFilter> form) {
         WebMarkupContainer container = new WebMarkupContainer(id) {
             @Override
             public boolean isVisible() {
@@ -73,7 +73,7 @@ public class FilterPanel extends Panel {
         return container;
     }
 
-    private WebMarkupContainer createDaterangeFilter(String id, Form<RecordFilter> form) {
+    private WebMarkupContainer createDaterangeFilter(String id, Form<WorkingRecordFilter> form) {
         WebMarkupContainer container = new WebMarkupContainer(id) {
             @Override
             public boolean isVisible() {
