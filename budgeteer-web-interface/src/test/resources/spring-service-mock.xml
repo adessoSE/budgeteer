@@ -18,4 +18,6 @@
 
     <mockito:mock id="userService" class="org.wickedsource.budgeteer.service.user.UserService"/>
 
+    <mockito:mock id="projectService" class="org.wickedsource.budgeteer.service.project.ProjectService"/>
+
 </beans>

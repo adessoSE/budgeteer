@@ -14,6 +14,8 @@ import org.reflections.util.ConfigurationBuilder;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
+import org.wickedsource.budgeteer.web.components.security.BudgeteerAuthorizationStrategy;
+import org.wickedsource.budgeteer.web.components.security.BudgeteerUnauthorizedComponentInstantiationListener;
 import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 
 import java.util.Set;
@@ -36,6 +38,9 @@ public class BudgeteerApplication extends WebApplication implements ApplicationC
         initWickedCharts();
         getJavaScriptLibrarySettings().setJQueryReference(BudgeteerReferences.getJQueryReference());
         mountPages();
+
+        getSecuritySettings().setAuthorizationStrategy(new BudgeteerAuthorizationStrategy());
+        getSecuritySettings().setUnauthorizedComponentInstantiationListener(new BudgeteerUnauthorizedComponentInstantiationListener());
     }
 
     /**

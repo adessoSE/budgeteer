@@ -3,7 +3,9 @@ package org.wickedsource.budgeteer.web.pages.base.dialogpage;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.wickedsource.budgeteer.web.components.security.NeedsLogin;
 
+@NeedsLogin
 public abstract class DialogPageWithBacklink extends WebPage {
 
     private Class<? extends WebPage> backlinkPage;

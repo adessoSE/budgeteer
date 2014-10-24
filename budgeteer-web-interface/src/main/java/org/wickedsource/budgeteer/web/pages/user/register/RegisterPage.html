@@ -1,0 +1,31 @@
+<wicket:extend>
+
+    <div class="form-box wide" id="login-box">
+        <div class="header">Create a Budgeteer account
+        </div>
+        <form wicket:id="registrationForm" method="post">
+            <div class="body bg-gray">
+                <div wicket:id="feedback"></div>
+                <div class="form-group">
+                    <input wicket:id="username" type="text" id="username" placeholder="Username" class="form-control"/>
+                </div>
+                <div class="form-group">
+                    <input wicket:id="password"type="password" id="password" placeholder="Password" class="form-control"/>
+                </div>
+                <div class="form-group">
+                    <input wicket:id="passwordConfirmation" type="password" id="retypePassword" placeholder="Retype password" class="form-control"/>
+                </div>
+            </div>
+            <div class="footer">
+                <div class="row">
+                    <button class="btn bg-olive btn-block" type="submit">Create account</button>
+                </div>
+                <p class="margin text-center">
+                    <a wicket:id="loginLink" class="text-center">Go to Login</a>
+                </p>
+            </div>
+        </form>
+
+    </div>
+
+</wicket:extend>

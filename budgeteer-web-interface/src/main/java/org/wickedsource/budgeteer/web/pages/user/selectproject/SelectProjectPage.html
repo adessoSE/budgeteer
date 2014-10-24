@@ -1,0 +1,44 @@
+<wicket:extend>
+
+    <div class="form-box wide" id="login-box">
+        <div class="header">Choose Project
+            <div class="box-tools pull-right">
+                <button wicket:id="backlink1" class="btn bg-olive btn-sm"><i class="fa fa-times"></i></button>
+            </div>
+        </div>
+        <div class="body bg-gray">
+
+            <form wicket:id="newProjectForm">
+                <h4>Create a new Project</h4>
+
+                <div wicket:id="feedback"></div>
+                <div class="input-group margin">
+                    <input wicket:id="projectName" type="text" name="name" id="projectName" placeholder="Project Name"
+                           class="form-control"/>
+                <span class="input-group-btn">
+                  <button class="btn bg-olive btn-flat" type="submit">Go!</button>
+                 </span>
+                </div>
+            </form>
+
+            <form wicket:id="chooseProjectForm">
+                <h4>Or select an existing one</h4>
+
+                <div class="input-group margin">
+                    <select wicket:id="projectChoice" placeholder="Project Name" class="form-control">
+                    </select>
+                <span class="input-group-btn">
+                  <button class="btn bg-olive btn-flat" type="submit">Go!</button>
+                 </span>
+                </div>
+            </form>
+        </div>
+        <div class="footer">
+            <div class="row">
+                <button wicket:id="backlink2" type="button" class="btn bg-olive btn-block">Cancel</button>
+            </div>
+        </div>
+
+    </div>
+
+</wicket:extend>

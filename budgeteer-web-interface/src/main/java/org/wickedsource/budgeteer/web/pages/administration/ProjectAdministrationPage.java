@@ -19,7 +19,7 @@ import org.wickedsource.budgeteer.web.pages.base.basepage.BasePage;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
 import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 import org.wickedsource.budgeteer.web.pages.user.login.LoginPage;
-import org.wickedsource.budgeteer.web.pages.user.projectselection.SelectProjectPage;
+import org.wickedsource.budgeteer.web.pages.user.selectproject.SelectProjectPage;
 
 import java.util.List;
 

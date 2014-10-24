@@ -3,6 +3,7 @@ package org.wickedsource.budgeteer.web;
 import org.apache.wicket.protocol.http.WebSession;
 import org.apache.wicket.request.Request;
 import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
+import org.wickedsource.budgeteer.service.user.User;
 
 public class BudgeteerSession extends WebSession {
 
@@ -10,10 +11,28 @@ public class BudgeteerSession extends WebSession {
 
     private Double selectedBudgetUnit = 1d;
 
+    private User loggedInUser;
+
     private long projectId;
 
     public BudgeteerSession(Request request) {
         super(request);
+    }
+
+    public User getLoggedInUser() {
+        return loggedInUser;
+    }
+
+    public boolean isLoggedIn() {
+        return this.loggedInUser != null;
+    }
+
+    public void login(User loggedInUser) {
+        this.loggedInUser = loggedInUser;
+    }
+
+    public void logout() {
+        replaceSession();
     }
 
     /**
@@ -23,7 +42,7 @@ public class BudgeteerSession extends WebSession {
         return this.projectId;
     }
 
-    public void setProjectId(long projectId){
+    public void setProjectId(long projectId) {
         this.projectId = projectId;
     }
 

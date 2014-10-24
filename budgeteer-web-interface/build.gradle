@@ -1,4 +1,5 @@
 apply plugin: 'war'
+apply plugin: 'jacoco'
 
 sourceCompatibility = 1.7
 version = '1.0-SNAPSHOT'
@@ -6,6 +7,7 @@ version = '1.0-SNAPSHOT'
 repositories {
     mavenCentral()
 }
+
 
 sourceSets {
     main {
@@ -22,6 +24,7 @@ sourceSets {
 dependencies {
     compile group: 'org.apache.wicket', name: 'wicket-core', version: '6.17.0'
     compile group: 'org.apache.wicket', name: 'wicket-spring', version: '6.17.0'
+    compile group: 'org.wicketstuff', name: 'wicketstuff-lazymodel', version: '6.17.0'
     compile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.6.4'
     compile group: 'org.springframework', name: 'spring-beans', version: '4.1.1.RELEASE'
     compile group: 'org.springframework', name: 'spring-context', version: '4.1.1.RELEASE'
@@ -29,7 +32,6 @@ dependencies {
     compile group: 'log4j', name: 'log4j', version: '1.2.16'
     compile group: 'com.googlecode.wicked-charts', name: 'wicked-charts-wicket6', version: '1.5.0'
     compile group: 'org.reflections', name: 'reflections', version: '0.9.9-RC1'
-    compile group: 'org.wicketstuff', name: 'wicketstuff-lazymodel', version: '6.17.0'
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.3.2'
     compile group: 'org.joda', name: 'joda-money', version: '0.9.1'
 
