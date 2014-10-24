@@ -10,6 +10,8 @@ public class BudgeteerSession extends WebSession {
 
     private Double selectedBudgetUnit = 1d;
 
+    private long projectId;
+
     public BudgeteerSession(Request request) {
         super(request);
     }
@@ -18,7 +20,11 @@ public class BudgeteerSession extends WebSession {
      * Returns the ID of the project the user currently browses.
      */
     public long getProjectId() {
-        return 1l;
+        return this.projectId;
+    }
+
+    public void setProjectId(long projectId){
+        this.projectId = projectId;
     }
 
     public static BudgeteerSession get() {

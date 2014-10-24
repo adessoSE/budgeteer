@@ -4,11 +4,11 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
 import org.wickedsource.budgeteer.web.Mount;
-import org.wickedsource.budgeteer.web.pages.base.dialogpage.DialogPage;
+import org.wickedsource.budgeteer.web.pages.base.dialogpage.DialogPageWithBacklink;
 import org.wickedsource.budgeteer.web.pages.people.edit.personrateform.EditPersonForm;
 
 @Mount({"people/edit/${id}", "people/edit"})
-public class EditPersonPage extends DialogPage {
+public class EditPersonPage extends DialogPageWithBacklink {
 
     private IEditPersonPageStrategy strategy;
 

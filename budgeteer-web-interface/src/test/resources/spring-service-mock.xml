@@ -16,4 +16,6 @@
 
     <mockito:mock id="importsService" class="org.wickedsource.budgeteer.service.imports.ImportsService"/>
 
+    <mockito:mock id="userService" class="org.wickedsource.budgeteer.service.user.UserService"/>
+
 </beans>

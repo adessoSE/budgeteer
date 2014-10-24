@@ -3,9 +3,11 @@ package org.wickedsource.budgeteer.web.pages.base.basepage;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
 import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.wickedsource.budgeteer.web.BudgeteerReferences;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
+import org.wickedsource.budgeteer.web.pages.administration.ProjectAdministrationPage;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsPanel;
 import org.wickedsource.budgeteer.web.pages.base.basepage.budgetunitchoice.BudgetUnitChoice;
@@ -31,6 +33,7 @@ public abstract class BasePage extends WebPage {
         add(breadcrumbs);
         add(new NotificationDropdown("notificationDropdown", new NotificationModel(projectId)));
         add(new BudgetUnitChoice("budgetUnitDropdown", new BudgetUnitModel(projectId)));
+        add(new BookmarkablePageLink<ProjectAdministrationPage>("administrationLink", ProjectAdministrationPage.class));
     }
 
     @Override
