@@ -31,6 +31,7 @@ public class BudgetOverviewTable extends Panel {
         add(new MoneyLabel("totalAmount", new BudgetUnitMoneyModel(model(from(totalModel).getTotal()))));
         add(new MoneyLabel("totalSpent", new BudgetUnitMoneyModel(model(from(totalModel).getSpent()))));
         add(new MoneyLabel("totalRemaining", new BudgetUnitMoneyModel(model(from(totalModel).getRemaining()))));
+        add(new MoneyLabel("totalUnplanned", new BudgetUnitMoneyModel(model(from(totalModel).getUnplanned()))));
         add(new ProgressBar("totalProgressBar", model(from(totalModel).getProgressInPercent())));
     }
 
@@ -56,6 +57,7 @@ public class BudgetOverviewTable extends Panel {
                 item.add(new MoneyLabel("amount", new BudgetUnitMoneyModel(model(from(item.getModel()).getTotal()))));
                 item.add(new MoneyLabel("spent", new BudgetUnitMoneyModel(model(from(item.getModel()).getSpent()))));
                 item.add(new MoneyLabel("remaining", new BudgetUnitMoneyModel(model(from(item.getModel()).getRemaining()))));
+                item.add(new MoneyLabel("unplanned", new BudgetUnitMoneyModel(model(from(item.getModel()).getUnplanned()))));
                 item.add(new ProgressBar("progressBar", model(from(item.getModel()).getProgressInPercent())));
             }
 

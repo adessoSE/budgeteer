@@ -66,7 +66,7 @@ public class BudgetService {
      * Loads all budgets the given user has access to that match the given filter.
      *
      * @param projectId ID of the project
-     * @param filter the filter to apply when loading the budgets
+     * @param filter    the filter to apply when loading the budgets
      * @return list of budgets that match the filter.
      */
     public List<BudgetDetailData> loadBudgetsDetailData(long projectId, BudgetTagFilter filter) {
@@ -90,6 +90,7 @@ public class BudgetService {
             data.setName("Budget " + i);
             data.setSpent(MoneyUtil.createMoneyFromCents(random.nextInt(100000)));
             data.setTotal(MoneyUtil.createMoneyFromCents(random.nextInt(100000)));
+            data.setUnplanned(MoneyUtil.createMoneyFromCents(random.nextInt(100000)));
             data.setTags(Arrays.asList("Active"));
             list.add(data);
         }

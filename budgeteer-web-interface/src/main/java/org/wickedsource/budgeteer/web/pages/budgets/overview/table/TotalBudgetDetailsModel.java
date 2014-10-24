@@ -22,10 +22,12 @@ public class TotalBudgetDetailsModel extends LoadableDetachableModel<BudgetDetai
         BudgetDetailData totalData = new BudgetDetailData();
         totalData.setTotal(MoneyUtil.createMoney(0d));
         totalData.setSpent(MoneyUtil.createMoney(0d));
+        totalData.setUnplanned(MoneyUtil.createMoney(0d));
         totalData.setLastUpdated(new Date(0));
         for (BudgetDetailData singleData : wrappedModel.getObject()) {
             totalData.setTotal(totalData.getTotal().plus(singleData.getTotal()));
             totalData.setSpent(totalData.getSpent().plus(singleData.getSpent()));
+            totalData.setUnplanned(totalData.getUnplanned().plus(singleData.getUnplanned()));
             if (singleData.getLastUpdated().after(totalData.getLastUpdated())) {
                 totalData.setLastUpdated(singleData.getLastUpdated());
             }

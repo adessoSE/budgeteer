@@ -21,6 +21,16 @@ public class BudgetDetailData {
 
     private Money avgDailyRate;
 
+    private Money unplanned;
+
+    public Money getUnplanned() {
+        return unplanned;
+    }
+
+    public void setUnplanned(Money unplanned) {
+        this.unplanned = unplanned;
+    }
+
     public Money getAvgDailyRate() {
         return avgDailyRate;
     }
