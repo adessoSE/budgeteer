@@ -28,7 +28,7 @@ public class ImportsOverviewPage extends BasePage {
     private ImportsService importsService;
 
     public ImportsOverviewPage() {
-        add(createImportsList("importsList", new ImportsModel(BudgeteerSession.get().getLoggedInUserId())));
+        add(createImportsList("importsList", new ImportsModel(BudgeteerSession.get().getProjectId())));
 
         add(createImportLink("importLink1"));
         add(createImportLink("importLink2"));

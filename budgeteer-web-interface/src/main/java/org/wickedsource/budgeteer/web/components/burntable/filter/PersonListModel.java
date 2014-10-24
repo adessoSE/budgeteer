@@ -13,15 +13,15 @@ public class PersonListModel extends LoadableDetachableModel<List<PersonBaseData
     @SpringBean
     private PeopleService service;
 
-    private long userId;
+    private long projectId;
 
-    public PersonListModel(long userId) {
+    public PersonListModel(long projectId) {
         Injector.get().inject(this);
-        this.userId = userId;
+        this.projectId = projectId;
     }
 
     @Override
     protected List<PersonBaseData> load() {
-        return service.loadPeopleBaseData(userId);
+        return service.loadPeopleBaseData(projectId);
     }
 }

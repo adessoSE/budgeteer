@@ -13,15 +13,15 @@ public class ImportsModel extends LoadableDetachableModel<List<Import>> {
     @SpringBean
     private ImportsService service;
 
-    private long userId;
+    private long projectId;
 
-    public ImportsModel(long userId) {
-        this.userId = userId;
+    public ImportsModel(long projectId) {
+        this.projectId = projectId;
         Injector.get().inject(this);
     }
 
     @Override
     protected List<Import> load() {
-        return service.loadImports(userId);
+        return service.loadImports(projectId);
     }
 }

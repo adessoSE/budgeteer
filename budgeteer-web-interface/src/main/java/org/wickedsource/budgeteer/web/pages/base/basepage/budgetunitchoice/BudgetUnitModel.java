@@ -12,16 +12,16 @@ public class BudgetUnitModel extends LoadableDetachableModel<List<Double>> {
     @SpringBean
     private BudgetService service;
 
-    private long userId;
+    private long projectId;
 
-    public BudgetUnitModel(long userId) {
+    public BudgetUnitModel(long projectId) {
         Injector.get().inject(this);
-        this.userId = userId;
+        this.projectId = projectId;
     }
 
     @Override
     protected List<Double> load() {
-        return service.loadBudgetUnits(userId);
+        return service.loadBudgetUnits(projectId);
     }
 
 

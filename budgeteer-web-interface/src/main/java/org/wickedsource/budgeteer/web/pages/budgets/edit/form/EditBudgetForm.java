@@ -43,7 +43,7 @@ public class EditBudgetForm extends Form<EditBudgetData> {
         MoneyTextField totalField = new MoneyTextField("total", model(from(model).getTotal()));
         totalField.setRequired(true);
         add(totalField);
-        add(createTagsList("tagsList", new BudgetTagsModel(BudgeteerSession.get().getLoggedInUserId()), tagsField));
+        add(createTagsList("tagsList", new BudgetTagsModel(BudgeteerSession.get().getProjectId()), tagsField));
         add(new NotificationListPanel("notificationList", new BudgetNotificationsModel(model.getObject().getId())));
     }
 

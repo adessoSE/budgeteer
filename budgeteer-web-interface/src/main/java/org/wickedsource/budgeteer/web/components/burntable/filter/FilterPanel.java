@@ -49,7 +49,7 @@ public class FilterPanel extends Panel {
             }
         };
         container.setVisible(isPersonFilterEnabled());
-        DropDownChoice<PersonBaseData> field = new DropDownChoice<PersonBaseData>("personSelect", model(from(form.getModel()).getPerson()), new PersonListModel(BudgeteerSession.get().getLoggedInUserId()));
+        DropDownChoice<PersonBaseData> field = new DropDownChoice<PersonBaseData>("personSelect", model(from(form.getModel()).getPerson()), new PersonListModel(BudgeteerSession.get().getProjectId()));
         field.setChoiceRenderer(new PersonBaseDataChoiceRenderer());
         field.setRequired(false);
         field.setNullValid(true);
@@ -65,7 +65,7 @@ public class FilterPanel extends Panel {
             }
         };
         container.setVisible(isBudgetFilterEnabled());
-        DropDownChoice<BudgetBaseData> field = new DropDownChoice<BudgetBaseData>("budgetSelect", model(from(form.getModel()).getBudget()), new BudgetListModel(BudgeteerSession.get().getLoggedInUserId()));
+        DropDownChoice<BudgetBaseData> field = new DropDownChoice<BudgetBaseData>("budgetSelect", model(from(form.getModel()).getBudget()), new BudgetListModel(BudgeteerSession.get().getProjectId()));
         field.setChoiceRenderer(new BudgetBaseDataChoiceRenderer());
         field.setRequired(false);
         field.setNullValid(true);

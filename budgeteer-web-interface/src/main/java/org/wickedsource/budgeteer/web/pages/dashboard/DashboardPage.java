@@ -21,10 +21,10 @@ public class DashboardPage extends BasePage {
 
     public DashboardPage() {
         BudgeteerChartTheme theme = new BudgeteerChartTheme();
-        BurnedBudgetChartModel burnedBudgetModel = new BurnedBudgetChartModel(BudgeteerSession.get().getLoggedInUserId(), 8);
+        BurnedBudgetChartModel burnedBudgetModel = new BurnedBudgetChartModel(BudgeteerSession.get().getProjectId(), 8);
         add(new BurnedBudgetChart("burnedBudgetChart", burnedBudgetModel, theme));
 
-        AverageDailyRateChartModel avgDailyRateModel = new AverageDailyRateChartModel(BudgeteerSession.get().getLoggedInUserId(), 30);
+        AverageDailyRateChartModel avgDailyRateModel = new AverageDailyRateChartModel(BudgeteerSession.get().getProjectId(), 30);
         add(new AverageDailyRateChart("averageDailyRateChart", avgDailyRateModel, theme));
 
         add(new BookmarkablePageLink<PeopleOverviewPage>("peopleLink1", PeopleOverviewPage.class));

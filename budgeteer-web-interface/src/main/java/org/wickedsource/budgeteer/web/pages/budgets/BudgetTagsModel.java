@@ -13,15 +13,15 @@ public class BudgetTagsModel extends LoadableDetachableModel<List<String>> {
     @SpringBean
     private BudgetService service;
 
-    private long userId;
+    private long projectId;
 
-    public BudgetTagsModel(long userId) {
+    public BudgetTagsModel(long projectId) {
         Injector.get().inject(this);
-        this.userId = userId;
+        this.projectId = projectId;
     }
 
     @Override
     protected List<String> load() {
-        return new ArrayList<String>(service.loadBudgetTags(userId));
+        return new ArrayList<String>(service.loadBudgetTags(projectId));
     }
 }

@@ -41,7 +41,7 @@ public abstract class PersonRateForm extends Form<PersonRate> {
     }
 
     private List<? extends BudgetBaseData> getBudgetChoices() {
-        return budgetService.loadBudgetBaseDataForUser(BudgeteerSession.get().getLoggedInUserId());
+        return budgetService.loadBudgetBaseDataForUser(BudgeteerSession.get().getProjectId());
     }
 
 }

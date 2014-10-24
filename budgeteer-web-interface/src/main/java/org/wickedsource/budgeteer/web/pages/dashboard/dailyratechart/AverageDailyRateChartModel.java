@@ -13,19 +13,19 @@ public class AverageDailyRateChartModel extends LoadableDetachableModel<List<Mon
     @SpringBean
     private StatisticsService service;
 
-    private long userId;
+    private long projectId;
 
     private int numberOfDays;
 
-    public AverageDailyRateChartModel(long userId, int numberOfDays) {
-        this.userId = userId;
+    public AverageDailyRateChartModel(long projectId, int numberOfDays) {
+        this.projectId = projectId;
         this.numberOfDays = numberOfDays;
         Injector.get().inject(this);
     }
 
     @Override
     protected List<Money> load() {
-        return service.getAvgDailyRateForPreviousDays(userId, numberOfDays);
+        return service.getAvgDailyRateForPreviousDays(projectId, numberOfDays);
     }
 
     public int getNumberOfDays() {

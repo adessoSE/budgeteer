@@ -27,10 +27,10 @@ public abstract class BasePage extends WebPage {
     @SuppressWarnings("unchecked")
     private void addComponents() {
         BreadcrumbsPanel breadcrumbs = new BreadcrumbsPanel("breadcrumbsPanel", getBreadcrumbsModel());
-        long loggedInUserId = ((BudgeteerSession) getSession()).getLoggedInUserId();
+        long projectId = ((BudgeteerSession) getSession()).getProjectId();
         add(breadcrumbs);
-        add(new NotificationDropdown("notificationDropdown", new NotificationModel(loggedInUserId)));
-        add(new BudgetUnitChoice("budgetUnitDropdown", new BudgetUnitModel(loggedInUserId)));
+        add(new NotificationDropdown("notificationDropdown", new NotificationModel(projectId)));
+        add(new BudgetUnitChoice("budgetUnitDropdown", new BudgetUnitModel(projectId)));
     }
 
     @Override

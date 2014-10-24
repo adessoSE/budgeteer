@@ -21,14 +21,14 @@ import static org.wicketstuff.lazymodel.LazyModel.model;
 public class BudgetsOverviewPage extends BasePage {
 
     public BudgetsOverviewPage() {
-        BudgetTagsModel tagsModel = new BudgetTagsModel(BudgeteerSession.get().getLoggedInUserId());
+        BudgetTagsModel tagsModel = new BudgetTagsModel(BudgeteerSession.get().getProjectId());
         if (BudgeteerSession.get().getBudgetFilter() == null) {
             BudgetTagFilter filter = new BudgetTagFilter();
             filter.setSelectedTags(tagsModel.getObject());
             BudgeteerSession.get().setBudgetFilter(filter);
         }
         add(new BudgetTagFilterPanel("tagFilter", tagsModel, model(from(BudgeteerSession.get().getBudgetFilter()))));
-        add(new BudgetOverviewTable("budgetTable", new FilteredBudgetModel(BudgeteerSession.get().getLoggedInUserId(), model(from(BudgeteerSession.get().getBudgetFilter())))));
+        add(new BudgetOverviewTable("budgetTable", new FilteredBudgetModel(BudgeteerSession.get().getProjectId(), model(from(BudgeteerSession.get().getBudgetFilter())))));
 
         add(new BookmarkablePageLink<MultiBudgetWeekReportPage>("weekReportLink1", MultiBudgetWeekReportPage.class));
         add(new BookmarkablePageLink<MultiBudgetWeekReportPage>("weekReportLink2", MultiBudgetWeekReportPage.class));

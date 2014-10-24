@@ -14,7 +14,10 @@ public class BudgeteerSession extends WebSession {
         super(request);
     }
 
-    public long getLoggedInUserId() {
+    /**
+     * Returns the ID of the project the user currently browses.
+     */
+    public long getProjectId() {
         return 1l;
     }
 

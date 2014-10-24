@@ -17,11 +17,11 @@ public class StatisticsService {
     /**
      * Returns the budget burned in each of the last numberOfWeeks weeks. All of the user's budgets are aggregated.
      *
-     * @param userId        the id of the user whose budgets to consider
+     * @param projectId ID of the project whose budgets to consider
      * @param numberOfWeeks the number of weeks to look back into the past
      * @return list of values each being the monetary value of the budget burned in one week. The last entry belongs to the current week. A week is considered to start on Monday and end on Sunday.
      */
-    public List<Money> getBudgetBurnedInPreviousWeeks(long userId, int numberOfWeeks) {
+    public List<Money> getBudgetBurnedInPreviousWeeks(long projectId, int numberOfWeeks) {
         List<Money> list = new ArrayList<Money>();
         for (int i = 0; i < numberOfWeeks; i++) {
             list.add(MoneyUtil.createMoneyFromCents(random.nextInt(100000)));
@@ -32,11 +32,11 @@ public class StatisticsService {
     /**
      * Returns the average daily rate calculated for each of the last numberOfDays days. The average is calculated over all of the user's budgets.
      *
-     * @param userId       the id of the user whose budgets to consider
+     * @param projectId ID of the project whose budgets to consider
      * @param numberOfDays the number of days to look back into the past
      * @return list of values each being the monetary value of the average daily rate that was earned for all people working on the user's budgets.
      */
-    public List<Money> getAvgDailyRateForPreviousDays(long userId, int numberOfDays) {
+    public List<Money> getAvgDailyRateForPreviousDays(long projectId, int numberOfDays) {
         List<Money> list = new ArrayList<Money>();
         for (int i = 0; i < numberOfDays; i++) {
             list.add(MoneyUtil.createMoneyFromCents(random.nextInt(100000)));

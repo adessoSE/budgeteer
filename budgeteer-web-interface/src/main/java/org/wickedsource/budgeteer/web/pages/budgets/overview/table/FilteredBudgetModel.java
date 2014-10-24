@@ -15,19 +15,19 @@ public class FilteredBudgetModel extends LoadableDetachableModel<List<BudgetDeta
     @SpringBean
     private BudgetService service;
 
-    private long userId;
+    private long projectId;
 
     private IModel<BudgetTagFilter> filterModel;
 
-    public FilteredBudgetModel(long userId, IModel<BudgetTagFilter> filterModel) {
+    public FilteredBudgetModel(long projectId, IModel<BudgetTagFilter> filterModel) {
         Injector.get().inject(this);
         this.filterModel = filterModel;
-        this.userId = userId;
+        this.projectId = projectId;
     }
 
     @Override
     protected List<BudgetDetailData> load() {
-        return service.loadBudgetsDetailData(userId, filterModel.getObject());
+        return service.loadBudgetsDetailData(projectId, filterModel.getObject());
     }
 
     public void setFilter(IModel<BudgetTagFilter> filterModel) {

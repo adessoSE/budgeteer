@@ -15,10 +15,10 @@ public class PeopleService {
     /**
      * Returns all people the given user can make use of to manage budgets.
      *
-     * @param userId id of the logged in user.
+     * @param projectId ID of the project.
      * @return list of PersonBaseData objects for all people the given user can make use of to manage budgets.
      */
-    public List<PersonBaseData> loadPeopleBaseData(long userId) {
+    public List<PersonBaseData> loadPeopleBaseData(long projectId) {
         List<PersonBaseData> list = new ArrayList<PersonBaseData>();
         for (int i = 0; i < 20; i++) {
             list.add(createPersonBaseData());

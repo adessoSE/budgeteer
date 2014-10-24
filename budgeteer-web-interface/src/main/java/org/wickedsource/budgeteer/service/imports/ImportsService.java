@@ -19,10 +19,10 @@ public class ImportsService {
     /**
      * Loads all data imports the given user has made from the database.
      *
-     * @param userId ID of the user whose imports to load.
+     * @param projectId ID of the project whose imports to load
      * @return list of import objects.
      */
-    public List<Import> loadImports(long userId) {
+    public List<Import> loadImports(long projectId) {
         List<Import> list = new ArrayList<Import>();
         for (int i = 0; i < 20; i++) {
             Import importRecord = new Import();

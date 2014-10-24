@@ -12,7 +12,7 @@ import org.wickedsource.budgeteer.web.pages.people.overview.table.PeopleOverview
 public class PeopleOverviewPage extends BasePage {
 
     public PeopleOverviewPage() {
-        PeopleModel model = new PeopleModel(BudgeteerSession.get().getLoggedInUserId());
+        PeopleModel model = new PeopleModel(BudgeteerSession.get().getProjectId());
         PeopleOverviewTable table = new PeopleOverviewTable("peopleOverviewTable", model);
         add(table);
     }

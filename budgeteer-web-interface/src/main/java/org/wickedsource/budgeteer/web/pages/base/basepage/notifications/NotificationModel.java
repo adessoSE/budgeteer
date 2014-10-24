@@ -17,16 +17,16 @@ public class NotificationModel extends LoadableDetachableModel<List<Notification
     @SpringBean
     private NotificationService service;
 
-    private long userId;
+    private long projectId;
 
-    public NotificationModel(long userId) {
+    public NotificationModel(long projectId) {
         Injector.get().inject(this);
-        this.userId = userId;
+        this.projectId = projectId;
     }
 
     @Override
     protected List<Notification> load() {
-        return service.getNotifications(userId);
+        return service.getNotifications(projectId);
     }
 
     public IModel<Integer> getNotificationCountModel() {

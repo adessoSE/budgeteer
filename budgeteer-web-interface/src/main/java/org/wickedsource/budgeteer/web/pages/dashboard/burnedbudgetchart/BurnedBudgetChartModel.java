@@ -13,19 +13,19 @@ public class BurnedBudgetChartModel extends LoadableDetachableModel<List<Money>>
     @SpringBean
     private StatisticsService service;
 
-    private long userId;
+    private long projectId;
 
     private int numberOfWeeks;
 
-    public BurnedBudgetChartModel(long userId, int numberOfWeeks) {
+    public BurnedBudgetChartModel(long projectId, int numberOfWeeks) {
         Injector.get().inject(this);
-        this.userId = userId;
+        this.projectId = projectId;
         this.numberOfWeeks = numberOfWeeks;
     }
 
     @Override
     protected List<Money> load() {
-        return service.getBudgetBurnedInPreviousWeeks(userId, numberOfWeeks);
+        return service.getBudgetBurnedInPreviousWeeks(projectId, numberOfWeeks);
     }
 
     public int getNumberOfWeeks() {

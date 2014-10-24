@@ -13,10 +13,10 @@ public class BudgetService {
     /**
      * Loads all Budgets that the given user is qualified for and returns base data about them.
      *
-     * @param userId ID of the logged in user
+     * @param projectId ID of the project
      * @return list of all budgets the user is qualified for
      */
-    public List<BudgetBaseData> loadBudgetBaseDataForUser(long userId) {
+    public List<BudgetBaseData> loadBudgetBaseDataForUser(long projectId) {
         List<BudgetBaseData> list = new ArrayList<BudgetBaseData>();
         list.add(new BudgetBaseData(1, "Budget 1"));
         list.add(new BudgetBaseData(2, "Budget 2"));
@@ -38,10 +38,10 @@ public class BudgetService {
     /**
      * Loads all tags applied to any budget of the given user.
      *
-     * @param userId ID of the logged in user
+     * @param projectId ID of the project
      * @return all tags applied to any budget of the given user.
      */
-    public List<String> loadBudgetTags(long userId) {
+    public List<String> loadBudgetTags(long projectId) {
         return Arrays.asList("Active", "Completed", "Project 1", "Project 2");
     }
 
@@ -65,11 +65,11 @@ public class BudgetService {
     /**
      * Loads all budgets the given user has access to that match the given filter.
      *
-     * @param userId ID of the logged in user
+     * @param projectId ID of the project
      * @param filter the filter to apply when loading the budgets
      * @return list of budgets that match the filter.
      */
-    public List<BudgetDetailData> loadBudgetsDetailData(long userId, BudgetTagFilter filter) {
+    public List<BudgetDetailData> loadBudgetsDetailData(long projectId, BudgetTagFilter filter) {
         int count = 10;
 
         if (filter.getCombinationMode() == BudgetTagFilter.TagCombinationMode.AND) {
@@ -125,10 +125,10 @@ public class BudgetService {
      * Returns the units in which the user can have his budget values displayed. One unit is active, the others are
      * inactive.
      *
-     * @param userId id of the user for whom to liad the budget units.
+     * @param projectId ID of the project whose budgets to load
      * @return a list containing all available budget units, one of which is currently active.
      */
-    public List<Double> loadBudgetUnits(long userId) {
+    public List<Double> loadBudgetUnits(long projectId) {
         List<Double> units = new ArrayList<Double>();
         units.add(1d);
         units.add(500d);

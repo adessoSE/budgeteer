@@ -12,10 +12,10 @@ public class NotificationService {
     /**
      * Returns all notifications currently available for the given user
      *
-     * @param userId the ID of the user whose notifications to get
+     * @param projectId ID of the project whose notificationsto load
      * @return list of notifications
      */
-    public List<Notification> getNotifications(long userId) {
+    public List<Notification> getNotifications(long projectId) {
         return createNotifications();
     }
 
