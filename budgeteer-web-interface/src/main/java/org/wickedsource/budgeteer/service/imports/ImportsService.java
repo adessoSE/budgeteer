@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.wickedsource.budgeteer.imports.api.Importer;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -50,6 +52,15 @@ public class ImportsService {
      */
     public List<? extends Importer> getAvailableImporters() {
         return new ArrayList(importerRegistry.getWorkingRecordsImporters());
+    }
+
+    /**
+     * Imports the data from the given inputstreams using the given importer.
+     *
+     * @param importer     an importer that understands the format of the files represented by the input streams.
+     * @param inputStreams the input streams of the files to import.
+     */
+    public void doImport(Importer importer, List<InputStream> inputStreams) throws IOException{
     }
 
 }

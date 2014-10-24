@@ -8,12 +8,12 @@ import org.wickedsource.budgeteer.service.imports.ImportsService;
 
 import java.util.List;
 
-public class ImportersModel extends LoadableDetachableModel<List<? extends Importer>> {
+public class ImportersListModel extends LoadableDetachableModel<List<? extends Importer>> {
 
     @SpringBean
     private ImportsService service;
 
-    public ImportersModel() {
+    public ImportersListModel() {
         Injector.get().inject(this);
     }
 
