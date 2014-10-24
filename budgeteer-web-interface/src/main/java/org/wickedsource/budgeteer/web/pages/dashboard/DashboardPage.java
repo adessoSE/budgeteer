@@ -1,6 +1,7 @@
 package org.wickedsource.budgeteer.web.pages.dashboard;
 
 
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.Mount;
@@ -23,6 +24,8 @@ public class DashboardPage extends BasePage {
         BudgeteerChartTheme theme = new BudgeteerChartTheme();
         BurnedBudgetChartModel burnedBudgetModel = new BurnedBudgetChartModel(BudgeteerSession.get().getProjectId(), 8);
         add(new BurnedBudgetChart("burnedBudgetChart", burnedBudgetModel, theme));
+
+        add(new Label("username", new UsernameModel()));
 
         AverageDailyRateChartModel avgDailyRateModel = new AverageDailyRateChartModel(BudgeteerSession.get().getProjectId(), 30);
         add(new AverageDailyRateChart("averageDailyRateChart", avgDailyRateModel, theme));
