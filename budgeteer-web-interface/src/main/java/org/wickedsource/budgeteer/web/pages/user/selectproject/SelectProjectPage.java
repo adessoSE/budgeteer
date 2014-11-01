@@ -1,5 +1,6 @@
 package org.wickedsource.budgeteer.web.pages.user.selectproject;
 
+import org.apache.wicket.feedback.ContainerFeedbackMessageFilter;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
@@ -43,7 +44,7 @@ public class SelectProjectPage extends DialogPageWithBacklink {
                 setResponsePage(DashboardPage.class);
             }
         };
-        form.add(new FeedbackPanel("feedback"));
+        form.add(new FeedbackPanel("feedback", new ContainerFeedbackMessageFilter(form)));
         form.add(new RequiredTextField<String>("projectName", form.getModel()));
         return form;
     }
@@ -57,6 +58,8 @@ public class SelectProjectPage extends DialogPageWithBacklink {
             }
         };
         DropDownChoice<ProjectBaseData> choice = new DropDownChoice<ProjectBaseData>("projectChoice", form.getModel(), new ProjectsForUserModel(BudgeteerSession.get().getLoggedInUser().getId()), new ProjectChoiceRenderer());
+        choice.setRequired(true);
+        form.add(new FeedbackPanel("feedback", new ContainerFeedbackMessageFilter(form)));
         form.add(choice);
         return form;
     }

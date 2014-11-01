@@ -5,11 +5,13 @@ import org.springframework.stereotype.Service;
 import org.wickedsource.budgeteer.service.MoneyUtil;
 import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 @Service
+@Transactional
 public class StatisticsService {
 
     private Random random = new Random();

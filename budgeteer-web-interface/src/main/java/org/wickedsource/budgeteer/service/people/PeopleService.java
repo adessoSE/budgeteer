@@ -5,11 +5,13 @@ import org.wickedsource.budgeteer.service.MoneyUtil;
 import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
 import org.wickedsource.budgeteer.service.common.DateRange;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Service
+@Transactional
 public class PeopleService {
 
     /**

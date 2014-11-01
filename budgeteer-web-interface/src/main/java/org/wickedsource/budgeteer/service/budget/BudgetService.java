@@ -3,9 +3,11 @@ package org.wickedsource.budgeteer.service.budget;
 import org.springframework.stereotype.Service;
 import org.wickedsource.budgeteer.service.MoneyUtil;
 
+import javax.transaction.Transactional;
 import java.util.*;
 
 @Service
+@Transactional
 public class BudgetService {
 
     private Random random = new Random();

@@ -5,12 +5,14 @@ import org.wickedsource.budgeteer.imports.api.WorkingRecord;
 import org.wickedsource.budgeteer.service.MoneyUtil;
 import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
 @Service
+@Transactional
 public class WorkingRecordService {
 
     private Random random = new Random();
