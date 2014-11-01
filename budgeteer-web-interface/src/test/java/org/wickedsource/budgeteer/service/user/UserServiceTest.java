@@ -1,19 +1,13 @@
 package org.wickedsource.budgeteer.service.user;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mockito;
-import org.mockito.internal.util.MockUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
 import org.wickedsource.budgeteer.persistence.project.ProjectRepository;
 import org.wickedsource.budgeteer.persistence.user.UserEntity;
 import org.wickedsource.budgeteer.persistence.user.UserRepository;
+import org.wickedsource.budgeteer.service.ServiceTestTemplate;
 import org.wickedsource.budgeteer.service.UnknownEntityException;
 
 import java.util.ArrayList;
@@ -22,9 +16,7 @@ import java.util.List;
 
 import static org.mockito.Mockito.*;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:spring-service.xml", "classpath:spring-repository-mock.xml"})
-public class UserServiceTest {
+public class UserServiceTest extends ServiceTestTemplate{
 
     @Autowired
     private UserRepository userRepository;
@@ -37,19 +29,6 @@ public class UserServiceTest {
 
     @Autowired
     private PasswordHasher passwordHasher;
-
-    @Autowired
-    private ApplicationContext context;
-
-    @Before
-    public void resetMocks() {
-        for (String name : context.getBeanDefinitionNames()) {
-            Object bean = context.getBean(name);
-            if (new MockUtil().isMock(bean)) {
-                Mockito.reset(bean);
-            }
-        }
-    }
 
     @Test
     public void testRegisterUser() {
