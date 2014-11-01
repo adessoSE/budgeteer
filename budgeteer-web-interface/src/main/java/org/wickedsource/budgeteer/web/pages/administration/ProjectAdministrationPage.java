@@ -10,6 +10,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.wickedsource.budgeteer.service.project.ProjectService;
 import org.wickedsource.budgeteer.service.user.User;
 import org.wickedsource.budgeteer.service.user.UserService;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
@@ -30,7 +31,11 @@ import static org.wicketstuff.lazymodel.LazyModel.model;
 public class ProjectAdministrationPage extends BasePage {
 
     @SpringBean
-    private UserService service;
+    private UserService userService;
+
+
+    @SpringBean
+    private ProjectService projectService;
 
     public ProjectAdministrationPage() {
         add(createUserList("userList", new UsersInProjectModel(BudgeteerSession.get().getProjectId())));
@@ -46,7 +51,7 @@ public class ProjectAdministrationPage extends BasePage {
                 item.add(new Link("deleteButton") {
                     @Override
                     public void onClick() {
-                        service.removeUserFromProject(BudgeteerSession.get().getProjectId(), item.getModelObject().getId());
+                        userService.removeUserFromProject(BudgeteerSession.get().getProjectId(), item.getModelObject().getId());
                     }
                 });
             }
@@ -62,7 +67,7 @@ public class ProjectAdministrationPage extends BasePage {
         Form<User> form = new Form<User>(id, new Model<User>(new User())) {
             @Override
             protected void onSubmit() {
-                service.addUserToProject(BudgeteerSession.get().getProjectId(), getModelObject().getId());
+                userService.addUserToProject(BudgeteerSession.get().getProjectId(), getModelObject().getId());
             }
         };
 
@@ -76,7 +81,7 @@ public class ProjectAdministrationPage extends BasePage {
         return new Link(id) {
             @Override
             public void onClick() {
-                service.deleteProject(BudgeteerSession.get().getProjectId());
+                projectService.deleteProject(BudgeteerSession.get().getProjectId());
                 SelectProjectPage page = new SelectProjectPage(LoginPage.class, new PageParameters());
                 setResponsePage(page);
             }

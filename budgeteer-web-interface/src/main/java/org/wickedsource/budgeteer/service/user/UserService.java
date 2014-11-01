@@ -2,17 +2,22 @@ package org.wickedsource.budgeteer.service.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
+import org.wickedsource.budgeteer.persistence.project.ProjectRepository;
 import org.wickedsource.budgeteer.persistence.user.UserEntity;
 import org.wickedsource.budgeteer.persistence.user.UserRepository;
+import org.wickedsource.budgeteer.service.UnknownEntityException;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class UserService {
 
     @Autowired
-    private UserRepository repository;
+    private UserRepository userRepository;
+
+    @Autowired
+    private ProjectRepository projectRepository;
 
     @Autowired
     private PasswordHasher passwordHasher;
@@ -27,14 +32,7 @@ public class UserService {
      * @return list of all users with access to the given project.
      */
     public List<User> getUsersInProject(long projectId) {
-        List<User> users = new ArrayList<User>();
-        for (int i = 1; i <= 5; i++) {
-            User user = new User();
-            user.setId(i);
-            user.setName("User " + i);
-            users.add(user);
-        }
-        return users;
+        return mapper.toDTO(userRepository.findInProject(projectId));
     }
 
     /**
@@ -44,7 +42,7 @@ public class UserService {
      * @return list of all users that currently DO NOT have access to the given project.
      */
     public List<User> getUsersNotInProject(long projectId) {
-        return getUsersInProject(projectId);
+        return mapper.toDTO(userRepository.findNotInProject(projectId));
     }
 
     /**
@@ -54,26 +52,35 @@ public class UserService {
      * @param userId    ID of the user whose access to remove.
      */
     public void removeUserFromProject(long projectId, long userId) {
-
-    }
-
-    /**
-     * Deletes the given project and all its data from the database.
-     *
-     * @param projectId ID of the project to delete.
-     */
-    public void deleteProject(long projectId) {
-
+        ProjectEntity project = projectRepository.findOne(projectId);
+        if (project == null) {
+            throw new UnknownEntityException(ProjectEntity.class, projectId);
+        }
+        UserEntity user = userRepository.findOne(userId);
+        if (user == null) {
+            throw new UnknownEntityException(UserEntity.class, userId);
+        }
+        user.getAuthorizedProjects().remove(project);
+        project.getAuthorizedUsers().remove(user);
     }
 
     /**
      * Adds the given user to the given project so that this user now has access to it.
      *
      * @param projectId ID of the project.
-     * @param id        ID of the user.
+     * @param userId    ID of the user.
      */
-    public void addUserToProject(long projectId, long id) {
-
+    public void addUserToProject(long projectId, long userId) {
+        ProjectEntity project = projectRepository.findOne(projectId);
+        if (project == null) {
+            throw new UnknownEntityException(ProjectEntity.class, projectId);
+        }
+        UserEntity user = userRepository.findOne(userId);
+        if (user == null) {
+            throw new UnknownEntityException(UserEntity.class, userId);
+        }
+        user.getAuthorizedProjects().add(project);
+        project.getAuthorizedUsers().add(user);
     }
 
     /**
@@ -85,7 +92,7 @@ public class UserService {
      * @throws InvalidLoginCredentialsException in case of invalid credentials
      */
     public User login(String username, String password) throws InvalidLoginCredentialsException {
-        UserEntity entity = repository.findByNameAndPassword(username, passwordHasher.hash(password));
+        UserEntity entity = userRepository.findByNameAndPassword(username, passwordHasher.hash(password));
         if (entity == null) {
             throw new InvalidLoginCredentialsException();
         }
@@ -102,6 +109,6 @@ public class UserService {
         UserEntity user = new UserEntity();
         user.setName(username);
         user.setPassword(passwordHasher.hash(password));
-        repository.save(user);
+        userRepository.save(user);
     }
 }

@@ -38,4 +38,13 @@ public class ProjectService {
         return list;
     }
 
+    /**
+     * Deletes the given project and all its data from the database.
+     *
+     * @param projectId ID of the project to delete.
+     */
+    public void deleteProject(long projectId) {
+
+    }
+
 }

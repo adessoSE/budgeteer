@@ -6,4 +6,6 @@
 
     <mockito:mock id="userRepository" class="org.wickedsource.budgeteer.persistence.user.UserRepository"/>
 
+    <mockito:mock id="projectRepository" class="org.wickedsource.budgeteer.persistence.project.ProjectRepository"/>
+
 </beans>
