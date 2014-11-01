@@ -1,12 +1,25 @@
 package org.wickedsource.budgeteer.service.project;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
+import org.wickedsource.budgeteer.persistence.project.ProjectRepository;
+import org.wickedsource.budgeteer.persistence.user.UserEntity;
+import org.wickedsource.budgeteer.persistence.user.UserRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class ProjectService {
+
+    @Autowired
+    private ProjectRepository projectRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private ProjectBaseDataMapper mapper;
 
     /**
      * Creates a new empty project with the given name.
@@ -15,10 +28,10 @@ public class ProjectService {
      * @return the base data of the newly create project.
      */
     public ProjectBaseData createProject(String projectName) {
-        ProjectBaseData project = new ProjectBaseData();
-        project.setId(1l);
+        ProjectEntity project = new ProjectEntity();
         project.setName(projectName);
-        return project;
+        ProjectEntity savedProject = projectRepository.save(project);
+        return mapper.toDTO(savedProject);
     }
 
     /**
@@ -28,14 +41,8 @@ public class ProjectService {
      * @return list of all projects the user has access to.
      */
     public List<ProjectBaseData> getProjectsForUser(long userId) {
-        List<ProjectBaseData> list = new ArrayList<ProjectBaseData>();
-        for (int i = 1; i <= 5; i++) {
-            ProjectBaseData project = new ProjectBaseData();
-            project.setId(i);
-            project.setName("Project " + i);
-            list.add(project);
-        }
-        return list;
+        UserEntity user = userRepository.findOne(userId);
+        return mapper.toDTO(user.getAuthorizedProjects());
     }
 
     /**
@@ -44,7 +51,7 @@ public class ProjectService {
      * @param projectId ID of the project to delete.
      */
     public void deleteProject(long projectId) {
-
+        projectRepository.delete(projectId);
     }
 
 }

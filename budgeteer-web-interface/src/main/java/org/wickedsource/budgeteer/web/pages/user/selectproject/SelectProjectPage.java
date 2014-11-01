@@ -10,6 +10,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.service.project.ProjectBaseData;
 import org.wickedsource.budgeteer.service.project.ProjectService;
+import org.wickedsource.budgeteer.service.user.UserService;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.pages.base.dialogpage.DialogPageWithBacklink;
@@ -20,6 +21,9 @@ public class SelectProjectPage extends DialogPageWithBacklink {
 
     @SpringBean
     private ProjectService projectService;
+
+    @SpringBean
+    private UserService userService;
 
     public SelectProjectPage(Class<? extends WebPage> backlinkPage, PageParameters backlinkParameters) {
         super(backlinkPage, backlinkParameters);
@@ -34,6 +38,7 @@ public class SelectProjectPage extends DialogPageWithBacklink {
             @Override
             protected void onSubmit() {
                 ProjectBaseData project = projectService.createProject(getModelObject());
+                userService.addUserToProject(project.getId(), BudgeteerSession.get().getLoggedInUser().getId());
                 BudgeteerSession.get().setProjectId(project.getId());
                 setResponsePage(DashboardPage.class);
             }
