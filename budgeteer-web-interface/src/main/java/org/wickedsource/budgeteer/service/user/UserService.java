@@ -1,13 +1,24 @@
 package org.wickedsource.budgeteer.service.user;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.wickedsource.budgeteer.web.pages.user.login.InvalidLoginCredentialsException;
+import org.wickedsource.budgeteer.persistence.user.UserEntity;
+import org.wickedsource.budgeteer.persistence.user.UserRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class UserService {
+
+    @Autowired
+    private UserRepository repository;
+
+    @Autowired
+    private PasswordHasher passwordHasher;
+
+    @Autowired
+    private UserMapper mapper;
 
     /**
      * Returns a list of all users that currently have access to the given project.
@@ -74,10 +85,11 @@ public class UserService {
      * @throws InvalidLoginCredentialsException in case of invalid credentials
      */
     public User login(String username, String password) throws InvalidLoginCredentialsException {
-        User user = new User();
-        user.setName("username");
-        user.setId(1l);
-        return user;
+        UserEntity entity = repository.findByNameAndPassword(username, passwordHasher.hash(password));
+        if (entity == null) {
+            throw new InvalidLoginCredentialsException();
+        }
+        return mapper.toDTO(entity);
     }
 
     /**
@@ -87,6 +99,9 @@ public class UserService {
      * @param password the users password
      */
     public void registerUser(String username, String password) {
-
+        UserEntity user = new UserEntity();
+        user.setName(username);
+        user.setPassword(passwordHasher.hash(password));
+        repository.save(user);
     }
 }

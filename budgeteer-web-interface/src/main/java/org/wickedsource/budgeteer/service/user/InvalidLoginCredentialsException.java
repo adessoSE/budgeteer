@@ -1,4 +1,4 @@
-package org.wickedsource.budgeteer.web.pages.user.login;
+package org.wickedsource.budgeteer.service.user;
 
 public class InvalidLoginCredentialsException extends Exception {
 }

@@ -51,6 +51,7 @@ dependencies {
     compile group: 'org.reflections', name: 'reflections', version: '0.9.9-RC1'
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.3.2'
     compile group: 'org.joda', name: 'joda-money', version: '0.9.1'
+    compile group: 'commons-codec', name: 'commons-codec', version: '1.9'
 
     compile project(':budgeteer-importer-api')
     compile project(':budgeteer-aproda-importer')
