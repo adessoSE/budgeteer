@@ -1,0 +1,15 @@
+<dataset>
+
+    <PROJECT id="1" name="project1"/>
+
+    <BUDGET id="1" name="Budget 1" total="100000" import_key="budget1" project_id="1"/>
+    <BUDGET_TAG budget_id="1" tag="Tag 1"/>
+    <BUDGET_TAG budget_id="1" tag="Tag 2"/>
+    <BUDGET_TAG budget_id="1" tag="Tag 3"/>
+
+    <PERSON id="1" name="person1" import_key="person1" project_id="1"/>
+
+    <PLAN_RECORD id="1" person_id="1" budget_id="1" date="2015-01-01" planned_minutes="480" daily_rate="50000"/>
+    <PLAN_RECORD id="2" person_id="1" budget_id="1" date="2015-08-15" planned_minutes="960" daily_rate="60000"/>
+
+</dataset>

@@ -1,26 +1,36 @@
 package org.wickedsource.budgeteer.service.budget;
 
+import org.joda.money.Money;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.persistence.budget.BudgetEntity;
 import org.wickedsource.budgeteer.persistence.budget.BudgetRepository;
+import org.wickedsource.budgeteer.persistence.budget.BudgetTagEntity;
+import org.wickedsource.budgeteer.persistence.person.DailyRateRepository;
+import org.wickedsource.budgeteer.persistence.record.RecordRepository;
 import org.wickedsource.budgeteer.service.UnknownEntityException;
 
 import javax.transaction.Transactional;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Service
 @Transactional
 public class BudgetService {
-
-    private Random random = new Random();
 
     @Autowired
     private BudgetRepository budgetRepository;
 
     @Autowired
     private BudgetBaseDataMapper budgetBaseDataMapper;
+
+    @Autowired
+    private RecordRepository recordRepository;
+
+    @Autowired
+    private DailyRateRepository rateRepository;
 
     /**
      * Loads all Budgets that the given user is qualified for and returns base data about them.
@@ -51,7 +61,7 @@ public class BudgetService {
      * @return all tags assigned to any budget of the given user.
      */
     public List<String> loadBudgetTags(long projectId) {
-        return new ArrayList<String>(budgetRepository.getAllTagsInProject(projectId));
+        return budgetRepository.getAllTagsInProject(projectId);
     }
 
     /**
@@ -61,14 +71,43 @@ public class BudgetService {
      * @return detail data for the requested budget.
      */
     public BudgetDetailData loadBudgetDetailData(long budgetId) {
+        BudgetEntity budget = budgetRepository.findOne(budgetId);
+        return enrichBudgetEntity(budget);
+    }
+
+    private BudgetDetailData enrichBudgetEntity(BudgetEntity entity) {
+        Date lastUpdated = recordRepository.getLatestWordRecordDate(entity.getId());
+        double spentBudgetInCents = recordRepository.getSpentBudget(entity.getId());
+        double plannedBudgetInCents = recordRepository.getPlannedBudget(entity.getId());
+        double avgDailyRateInCents = recordRepository.getAverageDailyRate(entity.getId());
+
         BudgetDetailData data = new BudgetDetailData();
-        data.setLastUpdated(new Date());
-        data.setName("Budget Title");
-        data.setSpent(MoneyUtil.createMoneyFromCents(random.nextInt(100000)));
-        data.setTotal(MoneyUtil.createMoneyFromCents(random.nextInt(100000)));
-        data.setTags(Arrays.asList("Active"));
-        data.setAvgDailyRate(MoneyUtil.createMoneyFromCents(random.nextInt(100000)));
+        data.setLastUpdated(lastUpdated);
+        data.setName(entity.getName());
+        data.setSpent(MoneyUtil.createMoneyFromCents(Math.round(spentBudgetInCents)));
+        data.setTotal(entity.getTotal());
+        data.setTags(mapEntitiesToTags(entity.getTags()));
+        data.setAvgDailyRate(MoneyUtil.createMoneyFromCents(Math.round(avgDailyRateInCents)));
+        data.setUnplanned(entity.getTotal().minusMinor(Math.round(plannedBudgetInCents)));
         return data;
+    }
+
+    private List<String> mapEntitiesToTags(List<BudgetTagEntity> tagEntities) {
+        List<String> tags = new ArrayList<String>();
+        for (BudgetTagEntity entity : tagEntities) {
+            tags.add(entity.getTag());
+        }
+        return tags;
+    }
+
+    private List<BudgetTagEntity> mapTagsToEntities(List<String> tags) {
+        List<BudgetTagEntity> entities = new ArrayList<BudgetTagEntity>();
+        for (String tag : tags) {
+            BudgetTagEntity entity = new BudgetTagEntity();
+            entity.setTag(tag);
+            entities.add(entity);
+        }
+        return entities;
     }
 
     /**
@@ -79,31 +118,13 @@ public class BudgetService {
      * @return list of budgets that match the filter.
      */
     public List<BudgetDetailData> loadBudgetsDetailData(long projectId, BudgetTagFilter filter) {
-        int count = 10;
-
-        if (filter.getCombinationMode() == BudgetTagFilter.TagCombinationMode.AND) {
-            for (int i = 0; i < filter.getSelectedTags().size(); i++) {
-                count -= 1;
-            }
-        } else if (filter.getCombinationMode() == BudgetTagFilter.TagCombinationMode.OR) {
-            for (int i = 0; i < filter.getSelectedTags().size(); i++) {
-                count += 1;
-            }
+        List<BudgetEntity> budgets = budgetRepository.findByAtLeastOneTag(projectId, filter.getSelectedTags());
+        List<BudgetDetailData> dataList = new ArrayList<BudgetDetailData>();
+        for (BudgetEntity entity : budgets) {
+            // TODO: 4 additional database queries per loop! These can yet be optimized to 4 queries total!
+            dataList.add(enrichBudgetEntity(entity));
         }
-
-        List<BudgetDetailData> list = new ArrayList<BudgetDetailData>();
-        for (int i = 0; i < count; i++) {
-            BudgetDetailData data = new BudgetDetailData();
-            data.setId(i);
-            data.setLastUpdated(new Date());
-            data.setName("Budget " + i);
-            data.setSpent(MoneyUtil.createMoneyFromCents(random.nextInt(100000)));
-            data.setTotal(MoneyUtil.createMoneyFromCents(random.nextInt(100000)));
-            data.setUnplanned(MoneyUtil.createMoneyFromCents(random.nextInt(100000)));
-            data.setTags(Arrays.asList("Active"));
-            list.add(data);
-        }
-        return list;
+        return dataList;
     }
 
     /**
@@ -121,7 +142,7 @@ public class BudgetService {
         data.setId(budget.getId());
         data.setTotal(budget.getTotal());
         data.setTitle(budget.getName());
-        data.setTags(budget.getTags());
+        data.setTags(mapEntitiesToTags(budget.getTags()));
         data.setImportKey(budget.getImportKey());
         return data;
     }
@@ -138,7 +159,7 @@ public class BudgetService {
             throw new UnknownEntityException(BudgetEntity.class, data.getId());
         }
         budget.setImportKey(data.getImportKey());
-        budget.setTags(data.getTags());
+        budget.setTags(mapTagsToEntities(data.getTags()));
         budget.setTotal(data.getTotal());
         budget.setName(data.getTitle());
     }
@@ -153,8 +174,10 @@ public class BudgetService {
     public List<Double> loadBudgetUnits(long projectId) {
         List<Double> units = new ArrayList<Double>();
         units.add(1d);
-        units.add(500d);
-        units.add(790d);
+        List<Money> rates = rateRepository.getDistinctRatesInCents(projectId);
+        for (Money rate : rates) {
+            units.add(rate.getAmount().doubleValue());
+        }
         return units;
     }
 

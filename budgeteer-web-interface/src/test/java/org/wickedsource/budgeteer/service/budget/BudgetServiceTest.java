@@ -6,12 +6,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.persistence.budget.BudgetEntity;
 import org.wickedsource.budgeteer.persistence.budget.BudgetRepository;
+import org.wickedsource.budgeteer.persistence.budget.BudgetTagEntity;
+import org.wickedsource.budgeteer.persistence.person.DailyRateRepository;
+import org.wickedsource.budgeteer.persistence.record.RecordRepository;
 import org.wickedsource.budgeteer.service.ServiceTestTemplate;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
+import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import static org.mockito.Mockito.*;
 
@@ -22,6 +25,12 @@ public class BudgetServiceTest extends ServiceTestTemplate {
 
     @Autowired
     private BudgetService budgetService;
+
+    @Autowired
+    private RecordRepository recordRepository;
+
+    @Autowired
+    private DailyRateRepository rateRepository;
 
     @Test
     public void testLoadBudgetBaseDataForProject() throws Exception {
@@ -42,7 +51,7 @@ public class BudgetServiceTest extends ServiceTestTemplate {
 
     @Test
     public void testLoadBudgetTags() throws Exception {
-        Set<String> tags = new HashSet<String>();
+        List<String> tags = new ArrayList<String>();
         tags.add("1");
         tags.add("2");
         when(budgetRepository.getAllTagsInProject(1l)).thenReturn(tags);
@@ -54,12 +63,31 @@ public class BudgetServiceTest extends ServiceTestTemplate {
 
     @Test
     public void testLoadBudgetDetailData() throws Exception {
-        Assert.fail();
+        Date date = new Date();
+        when(budgetRepository.findOne(1l)).thenReturn(createBudgetEntity());
+        when(recordRepository.getLatestWordRecordDate(1l)).thenReturn(date);
+        when(recordRepository.getSpentBudget(1l)).thenReturn(100000.0);
+        when(recordRepository.getPlannedBudget(1l)).thenReturn(200000.0);
+        when(recordRepository.getAverageDailyRate(1l)).thenReturn(50000.0);
+        BudgetDetailData data = budgetService.loadBudgetDetailData(1l);
+        Assert.assertEquals(100000.0d, data.getSpent().getAmountMinor().doubleValue(), 1d);
+        Assert.assertEquals(-100000.0d, data.getUnplanned().getAmountMinor().doubleValue(), 1d);
+        Assert.assertEquals(50000.0d, data.getAvgDailyRate().getAmountMinor().doubleValue(), 1d);
     }
 
     @Test
     public void testLoadBudgetsDetailData() throws Exception {
-        Assert.fail();
+        Date date = new Date();
+        when(budgetRepository.findByAtLeastOneTag(1l, Arrays.asList("1", "2", "3"))).thenReturn(Arrays.asList(createBudgetEntity()));
+        when(recordRepository.getLatestWordRecordDate(1l)).thenReturn(date);
+        when(recordRepository.getSpentBudget(1l)).thenReturn(100000.0);
+        when(recordRepository.getPlannedBudget(1l)).thenReturn(200000.0);
+        when(recordRepository.getAverageDailyRate(1l)).thenReturn(50000.0);
+        List<BudgetDetailData> data = budgetService.loadBudgetsDetailData(1l, new BudgetTagFilter(Arrays.asList("1", "2", "3")));
+        Assert.assertEquals(1, data.size());
+        Assert.assertEquals(100000.0d, data.get(0).getSpent().getAmountMinor().doubleValue(), 1d);
+        Assert.assertEquals(-100000.0d, data.get(0).getUnplanned().getAmountMinor().doubleValue(), 1d);
+        Assert.assertEquals(50000.0d, data.get(0).getAvgDailyRate().getAmountMinor().doubleValue(), 1d);
     }
 
     @Test
@@ -70,7 +98,7 @@ public class BudgetServiceTest extends ServiceTestTemplate {
 
         verify(budgetRepository, times(1)).findOne(1l);
         Assert.assertEquals(budget.getTotal(), data.getTotal());
-        Assert.assertEquals(budget.getTags(), data.getTags());
+        Assert.assertEquals(mapEntitiesToTags(budget.getTags()), data.getTags());
         Assert.assertEquals(budget.getImportKey(), data.getImportKey());
         Assert.assertEquals(budget.getName(), data.getTitle());
         Assert.assertEquals(budget.getId(), data.getId());
@@ -92,14 +120,27 @@ public class BudgetServiceTest extends ServiceTestTemplate {
 
         Assert.assertEquals(1l, budget.getId());
         Assert.assertEquals(data.getImportKey(), budget.getImportKey());
-        Assert.assertEquals(data.getTags(), budget.getTags());
+        Assert.assertEquals(data.getTags(), mapEntitiesToTags(budget.getTags()));
         Assert.assertEquals(data.getTitle(), budget.getName());
         Assert.assertEquals(data.getTotal(), budget.getTotal());
     }
 
+    private List<String> mapEntitiesToTags(List<BudgetTagEntity> tagEntities) {
+        List<String> tags = new ArrayList<String>();
+        for (BudgetTagEntity entity : tagEntities) {
+            tags.add(entity.getTag());
+        }
+        return tags;
+    }
+
     @Test
     public void testLoadBudgetUnits() throws Exception {
-        Assert.fail();
+        when(rateRepository.getDistinctRatesInCents(1l)).thenReturn(Arrays.asList(MoneyUtil.createMoney(100d), MoneyUtil.createMoney(200d)));
+        List<Double> units = budgetService.loadBudgetUnits(1l);
+        Assert.assertEquals(3, units.size());
+        Assert.assertTrue(units.contains(1d));
+        Assert.assertTrue(units.contains(100d));
+        Assert.assertTrue(units.contains(200d));
     }
 
     private BudgetEntity createBudgetEntity() {
@@ -107,7 +148,9 @@ public class BudgetServiceTest extends ServiceTestTemplate {
         budget.setId(1l);
         budget.setTotal(MoneyUtil.createMoneyFromCents(100000));
         budget.setName("Budget 123");
-        budget.setTags(Arrays.asList("Tag1", "Tag2", "Tag3"));
+        budget.getTags().add(new BudgetTagEntity("Tag1"));
+        budget.getTags().add(new BudgetTagEntity("Tag2"));
+        budget.getTags().add(new BudgetTagEntity("Tag3"));
         budget.setImportKey("budget123");
         return budget;
     }

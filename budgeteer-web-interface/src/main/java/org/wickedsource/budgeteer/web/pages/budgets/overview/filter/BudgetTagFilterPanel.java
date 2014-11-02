@@ -26,8 +26,6 @@ public class BudgetTagFilterPanel extends Panel {
         };
         form.add(createTagButtonList("tagButtonList", tagsModel));
         form.add(createResetButton("resetButton", tagsModel));
-        form.add(createAndButton("andButton"));
-        form.add(createOrButton("orButton"));
         add(form);
     }
 
@@ -36,49 +34,8 @@ public class BudgetTagFilterPanel extends Panel {
             @Override
             public void onSubmit() {
                 getFilter().setSelectedTags(tagsModel.getObject());
-                getFilter().setCombinationMode(BudgetTagFilter.TagCombinationMode.OR);
             }
         };
-    }
-
-    private Button createAndButton(String id) {
-        Button button = new Button(id) {
-            @Override
-            public void onSubmit() {
-                getFilter().setCombinationMode(BudgetTagFilter.TagCombinationMode.AND);
-            }
-        };
-        button.add(new AttributeAppender("class", new AbstractReadOnlyModel<String>() {
-            @Override
-            public String getObject() {
-                if (getFilter().getCombinationMode() == BudgetTagFilter.TagCombinationMode.AND) {
-                    return " active";
-                } else {
-                    return "";
-                }
-            }
-        }));
-        return button;
-    }
-
-    private Button createOrButton(String id) {
-        Button button = new Button(id) {
-            @Override
-            public void onSubmit() {
-                getFilter().setCombinationMode(BudgetTagFilter.TagCombinationMode.OR);
-            }
-        };
-        button.add(new AttributeAppender("class", new AbstractReadOnlyModel<String>() {
-            @Override
-            public String getObject() {
-                if (getFilter().getCombinationMode() == BudgetTagFilter.TagCombinationMode.OR) {
-                    return " active";
-                } else {
-                    return "";
-                }
-            }
-        }));
-        return button;
     }
 
     private ListView<String> createTagButtonList(String id, IModel<List<String>> tagsModel) {

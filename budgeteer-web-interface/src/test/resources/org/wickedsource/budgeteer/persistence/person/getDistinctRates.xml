@@ -1,0 +1,14 @@
+<dataset>
+
+    <PROJECT id="1" name="project1"/>
+
+    <BUDGET id="1" name="Budget 1" total="100000" import_key="budget1" project_id="1"/>
+
+    <PERSON id="1" name="person1" import_key="person1" project_id="1"/>
+    <PERSON id="2" name="person2" import_key="person2" project_id="1"/>
+
+    <DAILY_RATE id="1" date_start="2015-01-01" date_end="2015-12-31" person_id="1" budget_id="1" rate="50000"/>
+    <DAILY_RATE id="2" date_start="2015-01-01" date_end="2015-12-31" person_id="2" budget_id="1" rate="60000"/>
+    <DAILY_RATE id="3" date_start="2016-01-01" date_end="2016-12-31" person_id="2" budget_id="1" rate="50000"/>
+
+</dataset>

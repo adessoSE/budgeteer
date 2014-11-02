@@ -1,7 +1,9 @@
 package org.wickedsource.budgeteer.persistence.budget;
 
 import org.joda.money.Money;
+import org.wickedsource.budgeteer.persistence.person.DailyRateEntity;
 import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
+import org.wickedsource.budgeteer.persistence.record.WorkRecordEntity;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -28,12 +30,33 @@ public class BudgetEntity {
     @JoinColumn(name = "projectId")
     private ProjectEntity project;
 
-    @ElementCollection
-    @CollectionTable(name = "BUDGET_TAGS")
-    private List<String> tags = new ArrayList<String>();
+    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "budget")
+    private List<BudgetTagEntity> tags = new ArrayList<BudgetTagEntity>();
+
+    @OneToMany
+    private List<WorkRecordEntity> records = new ArrayList<WorkRecordEntity>();
+
+    @OneToMany
+    private List<DailyRateEntity> dailyRates = new ArrayList<DailyRateEntity>();
 
     @Column(nullable = false)
     private String importKey;
+
+    public List<WorkRecordEntity> getRecords() {
+        return records;
+    }
+
+    public void setRecords(List<WorkRecordEntity> records) {
+        this.records = records;
+    }
+
+    public List<DailyRateEntity> getDailyRates() {
+        return dailyRates;
+    }
+
+    public void setDailyRates(List<DailyRateEntity> dailyRates) {
+        this.dailyRates = dailyRates;
+    }
 
     public String getImportKey() {
         return importKey;
@@ -43,11 +66,11 @@ public class BudgetEntity {
         this.importKey = importKey;
     }
 
-    public List<String> getTags() {
+    public List<BudgetTagEntity> getTags() {
         return tags;
     }
 
-    public void setTags(List<String> tags) {
+    public void setTags(List<BudgetTagEntity> tags) {
         this.tags = tags;
     }
 

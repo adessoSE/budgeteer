@@ -23,6 +23,10 @@ public class BudgetDetailData {
 
     private Money unplanned;
 
+    public BudgetDetailData(){
+
+    }
+
     public Money getUnplanned() {
         return unplanned;
     }
