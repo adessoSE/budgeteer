@@ -3,7 +3,7 @@ package org.wickedsource.budgeteer.web.pages.people.details.component;
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.wickedsource.budgeteer.service.MoneyUtil;
+import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.service.people.PeopleService;
 import org.wickedsource.budgeteer.service.people.PersonDetailData;
 import org.wickedsource.budgeteer.web.AbstractWebTestTemplate;

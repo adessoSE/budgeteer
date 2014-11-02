@@ -1,7 +1,11 @@
 package org.wickedsource.budgeteer.service.budget;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.wickedsource.budgeteer.service.MoneyUtil;
+import org.wickedsource.budgeteer.MoneyUtil;
+import org.wickedsource.budgeteer.persistence.budget.BudgetEntity;
+import org.wickedsource.budgeteer.persistence.budget.BudgetRepository;
+import org.wickedsource.budgeteer.service.UnknownEntityException;
 
 import javax.transaction.Transactional;
 import java.util.*;
@@ -12,19 +16,21 @@ public class BudgetService {
 
     private Random random = new Random();
 
+    @Autowired
+    private BudgetRepository budgetRepository;
+
+    @Autowired
+    private BudgetBaseDataMapper budgetBaseDataMapper;
+
     /**
      * Loads all Budgets that the given user is qualified for and returns base data about them.
      *
      * @param projectId ID of the project
      * @return list of all budgets the user is qualified for
      */
-    public List<BudgetBaseData> loadBudgetBaseDataForUser(long projectId) {
-        List<BudgetBaseData> list = new ArrayList<BudgetBaseData>();
-        list.add(new BudgetBaseData(1, "Budget 1"));
-        list.add(new BudgetBaseData(2, "Budget 2"));
-        list.add(new BudgetBaseData(3, "Budget 3"));
-        list.add(new BudgetBaseData(4, "Budget 4"));
-        return list;
+    public List<BudgetBaseData> loadBudgetBaseDataForProject(long projectId) {
+        List<BudgetEntity> budgets = budgetRepository.findByProjectId(projectId);
+        return budgetBaseDataMapper.map(budgets);
     }
 
     /**
@@ -34,17 +40,18 @@ public class BudgetService {
      * @return base data of the specified budget.
      */
     public BudgetBaseData loadBudgetBaseData(long budgetId) {
-        return new BudgetBaseData(1, "Budget " + budgetId);
+        BudgetEntity budget = budgetRepository.findOne(budgetId);
+        return budgetBaseDataMapper.map(budget);
     }
 
     /**
-     * Loads all tags applied to any budget of the given user.
+     * Loads all tags assigned to any budget of the given user.
      *
      * @param projectId ID of the project
-     * @return all tags applied to any budget of the given user.
+     * @return all tags assigned to any budget of the given user.
      */
     public List<String> loadBudgetTags(long projectId) {
-        return Arrays.asList("Active", "Completed", "Project 1", "Project 2");
+        return new ArrayList<String>(budgetRepository.getAllTagsInProject(projectId));
     }
 
     /**
@@ -106,12 +113,16 @@ public class BudgetService {
      * @return data object containing the data that can be changed in the UI.
      */
     public EditBudgetData loadBudgetToEdit(long budgetId) {
+        BudgetEntity budget = budgetRepository.findOne(budgetId);
+        if (budget == null) {
+            throw new UnknownEntityException(BudgetEntity.class, budgetId);
+        }
         EditBudgetData data = new EditBudgetData();
-        data.setId(budgetId);
-        data.setImportKey("123");
-        data.setTags(Arrays.asList("Tag1", "Tag2", "Tag3"));
-        data.setTitle("Budget 123");
-        data.setTotal(MoneyUtil.createMoney(10000d));
+        data.setId(budget.getId());
+        data.setTotal(budget.getTotal());
+        data.setTitle(budget.getName());
+        data.setTags(budget.getTags());
+        data.setImportKey(budget.getImportKey());
         return data;
     }
 
@@ -121,7 +132,15 @@ public class BudgetService {
      * @param data the data to store in the database.
      */
     public void editBudget(EditBudgetData data) {
-
+        assert data != null;
+        BudgetEntity budget = budgetRepository.findOne(data.getId());
+        if (budget == null) {
+            throw new UnknownEntityException(BudgetEntity.class, data.getId());
+        }
+        budget.setImportKey(data.getImportKey());
+        budget.setTags(data.getTags());
+        budget.setTotal(data.getTotal());
+        budget.setName(data.getTitle());
     }
 
     /**

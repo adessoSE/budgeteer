@@ -4,7 +4,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.wickedsource.budgeteer.service.MoneyUtil;
+import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.service.budget.BudgetDetailData;
 import org.wickedsource.budgeteer.service.budget.BudgetService;
 import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;

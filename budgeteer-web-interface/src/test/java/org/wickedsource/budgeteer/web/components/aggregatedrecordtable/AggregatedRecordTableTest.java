@@ -3,7 +3,7 @@ package org.wickedsource.budgeteer.web.components.aggregatedrecordtable;
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.wickedsource.budgeteer.service.MoneyUtil;
+import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.service.record.AggregatedWorkingRecord;
 import org.wickedsource.budgeteer.service.record.WorkingRecordService;
 import org.wickedsource.budgeteer.web.AbstractWebTestTemplate;

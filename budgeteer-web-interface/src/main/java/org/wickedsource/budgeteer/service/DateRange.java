@@ -1,4 +1,4 @@
-package org.wickedsource.budgeteer.service.common;
+package org.wickedsource.budgeteer.service;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;

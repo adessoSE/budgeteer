@@ -22,6 +22,6 @@ public class BudgetListModel extends LoadableDetachableModel<List<BudgetBaseData
 
     @Override
     protected List<BudgetBaseData> load() {
-        return service.loadBudgetBaseDataForUser(projectId);
+        return service.loadBudgetBaseDataForProject(projectId);
     }
 }

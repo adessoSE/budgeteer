@@ -2,26 +2,16 @@ package org.wickedsource.budgeteer.service.user;
 
 import org.springframework.stereotype.Component;
 import org.wickedsource.budgeteer.persistence.user.UserEntity;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.wickedsource.budgeteer.service.AbstractMapper;
 
 @Component
-public class UserMapper {
+public class UserMapper extends AbstractMapper<UserEntity, User>{
 
-    public List<User> toDTO(List<UserEntity> entities) {
-        List<User> result = new ArrayList<User>();
-        for (UserEntity entity : entities) {
-            result.add(toDTO(entity));
-        }
-        return result;
-    }
-
-    public User toDTO(UserEntity entity) {
+    @Override
+    public User map(UserEntity entity) {
         User user = new User();
         user.setId(entity.getId());
         user.setName(entity.getName());
         return user;
     }
-
 }

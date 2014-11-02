@@ -1,4 +1,4 @@
-package org.wickedsource.budgeteer.service;
+package org.wickedsource.budgeteer;
 
 import org.joda.money.CurrencyUnit;
 import org.joda.money.Money;

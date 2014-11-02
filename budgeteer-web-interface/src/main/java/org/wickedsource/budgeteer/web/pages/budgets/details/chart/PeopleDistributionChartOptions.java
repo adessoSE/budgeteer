@@ -7,7 +7,7 @@ import com.googlecode.wickedcharts.highcharts.options.SeriesType;
 import com.googlecode.wickedcharts.highcharts.options.series.Point;
 import com.googlecode.wickedcharts.highcharts.options.series.PointSeries;
 import com.googlecode.wickedcharts.highcharts.options.series.Series;
-import org.wickedsource.budgeteer.service.MoneyUtil;
+import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.service.statistics.Share;
 
 import java.util.Arrays;

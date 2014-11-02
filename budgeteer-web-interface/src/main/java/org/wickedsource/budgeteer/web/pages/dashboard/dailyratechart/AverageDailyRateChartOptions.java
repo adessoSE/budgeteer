@@ -3,7 +3,7 @@ package org.wickedsource.budgeteer.web.pages.dashboard.dailyratechart;
 import com.googlecode.wickedcharts.highcharts.options.*;
 import com.googlecode.wickedcharts.highcharts.options.series.Series;
 import org.apache.wicket.injection.Injector;
-import org.wickedsource.budgeteer.service.MoneyUtil;
+import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.web.PropertyLoader;
 
 import java.util.Calendar;

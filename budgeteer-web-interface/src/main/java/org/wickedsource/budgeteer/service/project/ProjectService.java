@@ -33,7 +33,7 @@ public class ProjectService {
         ProjectEntity project = new ProjectEntity();
         project.setName(projectName);
         ProjectEntity savedProject = projectRepository.save(project);
-        return mapper.toDTO(savedProject);
+        return mapper.map(savedProject);
     }
 
     /**
@@ -44,7 +44,7 @@ public class ProjectService {
      */
     public List<ProjectBaseData> getProjectsForUser(long userId) {
         UserEntity user = userRepository.findOne(userId);
-        return mapper.toDTO(user.getAuthorizedProjects());
+        return mapper.map(user.getAuthorizedProjects());
     }
 
     /**

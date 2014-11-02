@@ -2,7 +2,7 @@ package org.wickedsource.budgeteer.web.components.daterange;
 
 import org.apache.wicket.util.convert.ConversionException;
 import org.apache.wicket.util.convert.IConverter;
-import org.wickedsource.budgeteer.service.common.DateRange;
+import org.wickedsource.budgeteer.service.DateRange;
 
 import java.text.DateFormat;
 import java.text.ParseException;

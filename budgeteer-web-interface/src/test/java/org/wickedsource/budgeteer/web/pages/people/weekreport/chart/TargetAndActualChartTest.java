@@ -2,7 +2,7 @@ package org.wickedsource.budgeteer.web.pages.people.weekreport.chart;
 
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.Test;
-import org.wickedsource.budgeteer.service.MoneyUtil;
+import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.service.statistics.BudgeteerSeries;
 import org.wickedsource.budgeteer.service.statistics.TargetAndActual;
 import org.wickedsource.budgeteer.web.AbstractWebTestTemplate;

@@ -34,7 +34,7 @@ public class UserService {
      * @return list of all users with access to the given project.
      */
     public List<User> getUsersInProject(long projectId) {
-        return mapper.toDTO(userRepository.findInProject(projectId));
+        return mapper.map(userRepository.findInProject(projectId));
     }
 
     /**
@@ -44,7 +44,7 @@ public class UserService {
      * @return list of all users that currently DO NOT have access to the given project.
      */
     public List<User> getUsersNotInProject(long projectId) {
-        return mapper.toDTO(userRepository.findNotInProject(projectId));
+        return mapper.map(userRepository.findNotInProject(projectId));
     }
 
     /**
@@ -98,7 +98,7 @@ public class UserService {
         if (entity == null) {
             throw new InvalidLoginCredentialsException();
         }
-        return mapper.toDTO(entity);
+        return mapper.map(entity);
     }
 
     /**

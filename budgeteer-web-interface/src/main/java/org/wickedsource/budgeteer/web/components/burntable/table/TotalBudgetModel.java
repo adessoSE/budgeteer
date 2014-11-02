@@ -3,8 +3,8 @@ package org.wickedsource.budgeteer.web.components.burntable.table;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.joda.money.Money;
+import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.imports.api.WorkingRecord;
-import org.wickedsource.budgeteer.service.MoneyUtil;
 
 import java.util.List;
 

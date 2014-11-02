@@ -1,9 +1,9 @@
 package org.wickedsource.budgeteer.service.people;
 
 import org.springframework.stereotype.Service;
-import org.wickedsource.budgeteer.service.MoneyUtil;
+import org.wickedsource.budgeteer.MoneyUtil;
+import org.wickedsource.budgeteer.service.DateRange;
 import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
-import org.wickedsource.budgeteer.service.common.DateRange;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;

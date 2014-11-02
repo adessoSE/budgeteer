@@ -2,7 +2,7 @@ package org.wickedsource.budgeteer.web.pages.dashboard.burnedbudgetchart;
 
 import com.googlecode.wickedcharts.highcharts.options.*;
 import com.googlecode.wickedcharts.highcharts.options.series.Series;
-import org.wickedsource.budgeteer.service.MoneyUtil;
+import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.PropertyLoader;
 import org.wickedsource.budgeteer.web.charts.ChartUtils;

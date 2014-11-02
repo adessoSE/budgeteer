@@ -8,4 +8,6 @@
 
     <mockito:mock id="projectRepository" class="org.wickedsource.budgeteer.persistence.project.ProjectRepository"/>
 
+    <mockito:mock id="budgetRepository" class="org.wickedsource.budgeteer.persistence.budget.BudgetRepository"/>
+
 </beans>

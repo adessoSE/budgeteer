@@ -3,7 +3,7 @@ package org.wickedsource.budgeteer.web.pages.budgets.overview.table;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.IObjectClassAwareModel;
 import org.apache.wicket.model.LoadableDetachableModel;
-import org.wickedsource.budgeteer.service.MoneyUtil;
+import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.service.budget.BudgetDetailData;
 
 import java.util.Date;

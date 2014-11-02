@@ -2,7 +2,7 @@ package org.wickedsource.budgeteer.service.statistics;
 
 import org.joda.money.Money;
 import org.springframework.stereotype.Service;
-import org.wickedsource.budgeteer.service.MoneyUtil;
+import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
 
 import javax.transaction.Transactional;
