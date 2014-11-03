@@ -7,7 +7,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.joda.money.Money;
-import org.wickedsource.budgeteer.service.record.AggregatedWorkingRecord;
+import org.wickedsource.budgeteer.service.record.AggregatedRecord;
 import org.wickedsource.budgeteer.web.ClassAwareWrappingModel;
 import org.wickedsource.budgeteer.web.components.money.BudgetUnitMoneyModel;
 import org.wickedsource.budgeteer.web.components.money.MoneyLabel;
@@ -19,17 +19,17 @@ import static org.wicketstuff.lazymodel.LazyModel.model;
 
 public class AggregatedRecordTable extends Panel {
 
-    public AggregatedRecordTable(String id, IModel<List<AggregatedWorkingRecord>> model) {
+    public AggregatedRecordTable(String id, IModel<List<AggregatedRecord>> model) {
         super(id, model);
         setRenderBodyOnly(true);
         add(createList("list"));
     }
 
     @SuppressWarnings("unchecked")
-    private ListView<AggregatedWorkingRecord> createList(String id) {
-        return new ListView<AggregatedWorkingRecord>(id, (IModel<List<AggregatedWorkingRecord>>) getDefaultModel()) {
+    private ListView<AggregatedRecord> createList(String id) {
+        return new ListView<AggregatedRecord>(id, (IModel<List<AggregatedRecord>>) getDefaultModel()) {
             @Override
-            protected void populateItem(ListItem<AggregatedWorkingRecord> item) {
+            protected void populateItem(ListItem<AggregatedRecord> item) {
                 item.add(new Label("title", model(from(item.getModel()).getAggregationPeriodTitle())));
                 item.add(new Label("startDate", model(from(item.getModel()).getAggregationPeriodStart())));
                 item.add(new Label("endDate", model(from(item.getModel()).getAggregationPeriodEnd())));
@@ -51,8 +51,8 @@ public class AggregatedRecordTable extends Panel {
             }
 
             @Override
-            protected ListItem<AggregatedWorkingRecord> newItem(int index, IModel<AggregatedWorkingRecord> itemModel) {
-                return super.newItem(index, new ClassAwareWrappingModel<AggregatedWorkingRecord>(itemModel, AggregatedWorkingRecord.class));
+            protected ListItem<AggregatedRecord> newItem(int index, IModel<AggregatedRecord> itemModel) {
+                return super.newItem(index, new ClassAwareWrappingModel<AggregatedRecord>(itemModel, AggregatedRecord.class));
             }
         };
     }

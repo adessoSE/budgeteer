@@ -4,7 +4,7 @@ import org.joda.money.Money;
 
 import java.util.Date;
 
-public class AggregatedWorkingRecord {
+public class AggregatedRecord {
 
     private String aggregationPeriodTitle;
 

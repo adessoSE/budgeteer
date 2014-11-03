@@ -12,7 +12,7 @@
 
     <mockito:mock id="budgetService" class="org.wickedsource.budgeteer.service.budget.BudgetService"/>
 
-    <mockito:mock id="aggregationService" class="org.wickedsource.budgeteer.service.record.WorkingRecordService"/>
+    <mockito:mock id="aggregationService" class="org.wickedsource.budgeteer.service.record.RecordService"/>
 
     <mockito:mock id="importsService" class="org.wickedsource.budgeteer.service.imports.ImportsService"/>
 

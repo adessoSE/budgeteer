@@ -3,15 +3,15 @@ package org.wickedsource.budgeteer.web.pages.people.weekreport.table;
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.wickedsource.budgeteer.service.record.AggregatedWorkingRecord;
-import org.wickedsource.budgeteer.service.record.WorkingRecordService;
+import org.wickedsource.budgeteer.service.record.AggregatedRecord;
+import org.wickedsource.budgeteer.service.record.RecordService;
 
 import java.util.List;
 
-public class PersonWeeklyAggregatedRecordsModel extends LoadableDetachableModel<List<AggregatedWorkingRecord>> {
+public class PersonWeeklyAggregatedRecordsModel extends LoadableDetachableModel<List<AggregatedRecord>> {
 
     @SpringBean
-    private WorkingRecordService service;
+    private RecordService service;
 
     private long personId;
 
@@ -21,7 +21,7 @@ public class PersonWeeklyAggregatedRecordsModel extends LoadableDetachableModel<
     }
 
     @Override
-    protected List<AggregatedWorkingRecord> load() {
+    protected List<AggregatedRecord> load() {
         return service.getWeeklyAggregationForPerson(personId);
     }
 }

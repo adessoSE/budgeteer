@@ -2,7 +2,7 @@ package org.wickedsource.budgeteer.service.record;
 
 import org.springframework.stereotype.Service;
 import org.wickedsource.budgeteer.MoneyUtil;
-import org.wickedsource.budgeteer.imports.api.WorkingRecord;
+import org.wickedsource.budgeteer.imports.api.WorkRecord;
 import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
 
 import javax.transaction.Transactional;
@@ -13,7 +13,7 @@ import java.util.Random;
 
 @Service
 @Transactional
-public class WorkingRecordService {
+public class RecordService {
 
     private Random random = new Random();
 
@@ -23,10 +23,10 @@ public class WorkingRecordService {
      * @param personId ID of the person whose target and actual records to load
      * @return one record for each week from the current week to the first week that person booked hours
      */
-    public List<AggregatedWorkingRecord> getWeeklyAggregationForPerson(long personId) {
-        List<AggregatedWorkingRecord> list = new ArrayList<AggregatedWorkingRecord>();
+    public List<AggregatedRecord> getWeeklyAggregationForPerson(long personId) {
+        List<AggregatedRecord> list = new ArrayList<AggregatedRecord>();
         for (int i = 0; i < 20; i++) {
-            AggregatedWorkingRecord record = new AggregatedWorkingRecord();
+            AggregatedRecord record = new AggregatedRecord();
             record.setAggregationPeriodTitle("Week #" + i);
             record.setAggregationPeriodStart(new Date());
             record.setAggregationPeriodEnd(new Date());
@@ -44,10 +44,10 @@ public class WorkingRecordService {
      * @param personId ID of the person whose target and actual records to load
      * @return one record for each month from the current month to the first month that person booked hours
      */
-    public List<AggregatedWorkingRecord> getMonthlyAggregationForPerson(long personId) {
-        List<AggregatedWorkingRecord> list = new ArrayList<AggregatedWorkingRecord>();
+    public List<AggregatedRecord> getMonthlyAggregationForPerson(long personId) {
+        List<AggregatedRecord> list = new ArrayList<AggregatedRecord>();
         for (int i = 0; i < 20; i++) {
-            AggregatedWorkingRecord record = new AggregatedWorkingRecord();
+            AggregatedRecord record = new AggregatedRecord();
             record.setAggregationPeriodTitle("2014/" + i);
             record.setAggregationPeriodStart(new Date());
             record.setAggregationPeriodEnd(new Date());
@@ -65,7 +65,7 @@ public class WorkingRecordService {
      * @param budgetId ID of the budget whose target and actual records to load
      * @return one record for each week from the current week to the first week that was booked in the given budget
      */
-    public List<AggregatedWorkingRecord> getWeeklyAggregationForBudget(long budgetId) {
+    public List<AggregatedRecord> getWeeklyAggregationForBudget(long budgetId) {
         return getWeeklyAggregationForPerson(budgetId);
     }
 
@@ -75,7 +75,7 @@ public class WorkingRecordService {
      * @param budgetId ID of the budget whose target and actual records to load
      * @return one record for each month from the current month to the first month that was booked in the given budget.
      */
-    public List<AggregatedWorkingRecord> getMonthlyAggregationForBudget(long budgetId) {
+    public List<AggregatedRecord> getMonthlyAggregationForBudget(long budgetId) {
         return getMonthlyAggregationForPerson(budgetId);
     }
 
@@ -85,7 +85,7 @@ public class WorkingRecordService {
      * @param budgetFilter filter that identifies the set of budgets whose data to load
      * @return one record for each week from the current week to the first week that was booked in the given budget
      */
-    public List<AggregatedWorkingRecord> getWeeklyAggregationForBudgets(BudgetTagFilter budgetFilter) {
+    public List<AggregatedRecord> getWeeklyAggregationForBudgets(BudgetTagFilter budgetFilter) {
         return getWeeklyAggregationForPerson(1l);
     }
 
@@ -95,7 +95,7 @@ public class WorkingRecordService {
      * @param budgetFilter filter that identifies the set of budgets whose data to load
      * @return one record for each month from the current month to the first month that was booked in the given budget.
      */
-    public List<AggregatedWorkingRecord> getMonthlyAggregationForBudgets(BudgetTagFilter budgetFilter) {
+    public List<AggregatedRecord> getMonthlyAggregationForBudgets(BudgetTagFilter budgetFilter) {
         return getMonthlyAggregationForPerson(1l);
     }
 
@@ -106,7 +106,7 @@ public class WorkingRecordService {
      * @param filter the filter to apply when loading records.
      * @return filtered list of records.
      */
-    public List<WorkingRecord> getFilteredRecords(WorkingRecordFilter filter) {
+    public List<WorkRecord> getFilteredRecords(WorkRecordFilter filter) {
         int size = 50;
         if (filter.getPerson() != null) {
             size -= 5;
@@ -118,9 +118,9 @@ public class WorkingRecordService {
             size -= 5;
         }
 
-        List<WorkingRecord> records = new ArrayList<WorkingRecord>();
+        List<WorkRecord> records = new ArrayList<WorkRecord>();
         for (int i = 0; i < size; i++) {
-            WorkingRecord record = new WorkingRecord();
+            WorkRecord record = new WorkRecord();
             record.setHours(8d);
             record.setBudgetBurned(MoneyUtil.createMoney(500d));
             record.setBudgetName("Budget 1");
@@ -138,15 +138,15 @@ public class WorkingRecordService {
      * @param filter the filter to apply when loading records.
      * @return filtered list of records.
      */
-    public List<WorkingRecord> getFilteredRecords(BudgetTagFilter filter) {
+    public List<WorkRecord> getFilteredRecords(BudgetTagFilter filter) {
         int size = 50;
         for (int i = 0; i < filter.getSelectedTags().size(); i++) {
             size -= 5;
         }
 
-        List<WorkingRecord> records = new ArrayList<WorkingRecord>();
+        List<WorkRecord> records = new ArrayList<WorkRecord>();
         for (int i = 0; i < size; i++) {
-            WorkingRecord record = new WorkingRecord();
+            WorkRecord record = new WorkRecord();
             record.setHours(8d);
             record.setBudgetBurned(MoneyUtil.createMoney(500d));
             record.setBudgetName("Budget 1");

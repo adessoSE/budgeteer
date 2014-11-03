@@ -1,15 +1,15 @@
 package org.wickedsource.budgeteer.aproda;
 
-import org.wickedsource.budgeteer.imports.api.WorkingRecord;
-import org.wickedsource.budgeteer.imports.api.WorkingRecordsImporter;
+import org.wickedsource.budgeteer.imports.api.WorkRecord;
+import org.wickedsource.budgeteer.imports.api.WorkRecordsImporter;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class AprodaWorkingRecordsImporter implements WorkingRecordsImporter {
+public class AprodaWorkRecordsImporter implements WorkRecordsImporter {
 
     @Override
-    public List<WorkingRecord> importFile(byte[] file) {
+    public List<WorkRecord> importFile(byte[] file) {
         return null;
     }
 

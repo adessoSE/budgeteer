@@ -4,8 +4,8 @@ import org.apache.wicket.util.tester.WicketTester;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.budgeteer.MoneyUtil;
-import org.wickedsource.budgeteer.service.record.AggregatedWorkingRecord;
-import org.wickedsource.budgeteer.service.record.WorkingRecordService;
+import org.wickedsource.budgeteer.service.record.AggregatedRecord;
+import org.wickedsource.budgeteer.service.record.RecordService;
 import org.wickedsource.budgeteer.web.AbstractWebTestTemplate;
 import org.wickedsource.budgeteer.web.pages.people.weekreport.table.PersonWeeklyAggregatedRecordsModel;
 
@@ -19,7 +19,7 @@ import static org.mockito.Mockito.when;
 public class AggregatedRecordTableTest extends AbstractWebTestTemplate {
 
     @Autowired
-    private WorkingRecordService service;
+    private RecordService service;
 
     private Random random = new Random();
 
@@ -32,10 +32,10 @@ public class AggregatedRecordTableTest extends AbstractWebTestTemplate {
         tester.startComponentInPage(table);
     }
 
-    private List<AggregatedWorkingRecord> getWeeklyAggregationForPerson(long personId) {
-        List<AggregatedWorkingRecord> list = new ArrayList<AggregatedWorkingRecord>();
+    private List<AggregatedRecord> getWeeklyAggregationForPerson(long personId) {
+        List<AggregatedRecord> list = new ArrayList<AggregatedRecord>();
         for (int i = 0; i < 20; i++) {
-            AggregatedWorkingRecord record = new AggregatedWorkingRecord();
+            AggregatedRecord record = new AggregatedRecord();
             record.setAggregationPeriodTitle("Week #" + i);
             record.setAggregationPeriodStart(new Date());
             record.setAggregationPeriodStart(new Date());

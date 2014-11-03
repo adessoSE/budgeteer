@@ -3,7 +3,7 @@ package org.wickedsource.budgeteer.service.record;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class WorkingRecordServiceTest {
+public class RecordServiceTest {
     @Test
     public void testGetWeeklyAggregationForPerson() throws Exception {
         Assert.fail();

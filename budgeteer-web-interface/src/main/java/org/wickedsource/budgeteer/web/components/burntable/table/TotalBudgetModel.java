@@ -4,22 +4,22 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.joda.money.Money;
 import org.wickedsource.budgeteer.MoneyUtil;
-import org.wickedsource.budgeteer.imports.api.WorkingRecord;
+import org.wickedsource.budgeteer.imports.api.WorkRecord;
 
 import java.util.List;
 
 public class TotalBudgetModel extends AbstractReadOnlyModel<Money> {
 
-    private IModel<List<WorkingRecord>> model;
+    private IModel<List<WorkRecord>> model;
 
-    public TotalBudgetModel(IModel<List<WorkingRecord>> model) {
+    public TotalBudgetModel(IModel<List<WorkRecord>> model) {
         this.model = model;
     }
 
     @Override
     public Money getObject() {
         Money sum = MoneyUtil.createMoney(0d);
-        for (WorkingRecord record : model.getObject()) {
+        for (WorkRecord record : model.getObject()) {
             sum = sum.plus(record.getBudgetBurned());
         }
         return sum;

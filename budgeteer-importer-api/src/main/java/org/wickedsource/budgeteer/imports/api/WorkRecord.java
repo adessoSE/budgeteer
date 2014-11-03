@@ -5,7 +5,7 @@ import org.joda.money.Money;
 import java.io.Serializable;
 import java.util.Date;
 
-public class WorkingRecord implements Serializable {
+public class WorkRecord implements Serializable {
 
     private String budgetName;
 

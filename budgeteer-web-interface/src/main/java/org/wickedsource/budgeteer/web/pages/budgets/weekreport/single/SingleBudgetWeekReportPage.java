@@ -2,7 +2,7 @@ package org.wickedsource.budgeteer.web.pages.budgets.weekreport.single;
 
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.wickedsource.budgeteer.service.record.AggregatedWorkingRecord;
+import org.wickedsource.budgeteer.service.record.AggregatedRecord;
 import org.wickedsource.budgeteer.service.statistics.TargetAndActual;
 import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.charts.BudgeteerChartTheme;
@@ -27,7 +27,7 @@ public class SingleBudgetWeekReportPage extends BudgetBasePage {
         IModel<TargetAndActual> model = new BudgetsWeeklyAggregationModel(getBudgetId());
         add(new TargetAndActualChart("targetAndActualChart", model, new BudgeteerChartTheme(), TargetAndActualChartOptions.Mode.WEEKLY));
 
-        IModel<List<AggregatedWorkingRecord>> tableModel = new BudgetsWeeklyAggregatedRecordsModel(getBudgetId());
+        IModel<List<AggregatedRecord>> tableModel = new BudgetsWeeklyAggregatedRecordsModel(getBudgetId());
         add(new AggregatedRecordTable("table", tableModel));
     }
 
