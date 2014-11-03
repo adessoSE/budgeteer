@@ -6,7 +6,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.wickedsource.budgeteer.imports.api.WorkRecord;
+import org.wickedsource.budgeteer.service.record.WorkRecord;
 import org.wickedsource.budgeteer.service.record.WorkRecordFilter;
 import org.wickedsource.budgeteer.web.ClassAwareWrappingModel;
 import org.wickedsource.budgeteer.web.components.burntable.filter.FilteredRecordsModel;

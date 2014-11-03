@@ -11,8 +11,6 @@ apply plugin: 'war'
 apply plugin: 'jacoco'
 apply plugin: 'spring-boot'
 
-sourceCompatibility = 1.7
-
 repositories {
     mavenCentral()
 }

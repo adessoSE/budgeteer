@@ -2,7 +2,6 @@ package org.wickedsource.budgeteer.service.record;
 
 import org.springframework.stereotype.Service;
 import org.wickedsource.budgeteer.MoneyUtil;
-import org.wickedsource.budgeteer.imports.api.WorkRecord;
 import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
 
 import javax.transaction.Transactional;

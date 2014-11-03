@@ -4,7 +4,7 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.joda.money.Money;
 import org.wickedsource.budgeteer.MoneyUtil;
-import org.wickedsource.budgeteer.imports.api.WorkRecord;
+import org.wickedsource.budgeteer.service.record.WorkRecord;
 
 import java.util.List;
 
