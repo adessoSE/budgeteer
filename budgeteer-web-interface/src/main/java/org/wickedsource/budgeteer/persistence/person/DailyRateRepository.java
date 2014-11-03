@@ -12,4 +12,7 @@ public interface DailyRateRepository extends CrudRepository<DailyRateEntity, Lon
     @Query("select distinct r.rate from DailyRateEntity r where r.budget.project.id=:projectId")
     List<Money> getDistinctRatesInCents(@Param("projectId") long projectId);
 
+    @Query("select distinct r from DailyRateEntity r join fetch r.budget join fetch r.person where r.budget.project.id = :projectId")
+    List<DailyRateEntity> findByProjectIdFetch (@Param("projectId") long ProjectId);
+
 }

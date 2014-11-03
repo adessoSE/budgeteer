@@ -1,5 +1,6 @@
 package org.wickedsource.budgeteer.persistence.record;
 
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -37,5 +38,9 @@ public interface RecordRepository extends CrudRepository<WorkRecordEntity, Long>
 
     @Query("select max(record.date) from WorkRecordEntity record where record.budget.id=:budgetId")
     public Date getLatestWordRecordDate(@Param("budgetId") long budgetId);
+
+    @Modifying
+    @Query("delete from WorkRecordEntity r where r.importRecord.id = :importId")
+    public void deleteByImport(@Param("importId") long importId);
 
 }

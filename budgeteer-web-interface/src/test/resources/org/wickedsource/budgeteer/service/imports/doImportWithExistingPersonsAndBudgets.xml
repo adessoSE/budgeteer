@@ -1,0 +1,11 @@
+<dataset>
+
+    <PROJECT id="1" name="project1"/>
+
+    <BUDGET id="1" name="Budget 1" total="100000" import_key="Budget1" project_id="1"/>
+    <BUDGET id="2" name="Budget 2" total="100000" import_key="Budget2" project_id="1"/>
+
+    <PERSON id="1" name="Max Mustermann" import_key="Mustermann, Max" project_id="1"/>
+    <PERSON id="2" name="Klara Fall" import_key="Fall, Klara" project_id="1"/>
+
+</dataset>

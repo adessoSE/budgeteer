@@ -1,5 +1,7 @@
 package org.wickedsource.budgeteer.persistence.imports;
 
+import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -19,6 +21,18 @@ public class ImportEntity {
     private Date endDate;
 
     private String importType;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "projectId")
+    private ProjectEntity project;
+
+    public ProjectEntity getProject() {
+        return project;
+    }
+
+    public void setProject(ProjectEntity project) {
+        this.project = project;
+    }
 
     public long getId() {
         return id;

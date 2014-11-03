@@ -8,8 +8,10 @@ import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.wickedsource.budgeteer.imports.api.ImportException;
 import org.wickedsource.budgeteer.imports.api.Importer;
 import org.wickedsource.budgeteer.service.imports.ImportsService;
+import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.pages.base.dialogpage.DialogPageWithBacklink;
 
@@ -40,10 +42,12 @@ public class ImportFilesPage extends DialogPageWithBacklink {
                     for (FileUpload file : bean.getFilesToImport()) {
                         files.add(file.getInputStream());
                     }
-                    service.doImport(bean.getImporter(), files);
+                    service.doImport(BudgeteerSession.get().getProjectId(), bean.getImporter(), files);
                     info(getString("message.success"));
                 } catch (IOException e) {
                     error(getString("message.ioError"));
+                } catch (ImportException e){
+                    error(getString("message.importError"));
                 }
             }
         };

@@ -19,9 +19,12 @@ public abstract class ServiceTestTemplate {
     @Before
     public void resetMocks() {
         for (String name : context.getBeanDefinitionNames()) {
-            Object bean = context.getBean(name);
-            if (new MockUtil().isMock(bean)) {
-                Mockito.reset(bean);
+            if (!"workRecordDatabaseImporter".equals(name)) {
+                // ecluding workRecordDatabaseImporter since it is a prototype bean and has no default constructor
+                Object bean = context.getBean(name);
+                if (new MockUtil().isMock(bean)) {
+                    Mockito.reset(bean);
+                }
             }
         }
     }
