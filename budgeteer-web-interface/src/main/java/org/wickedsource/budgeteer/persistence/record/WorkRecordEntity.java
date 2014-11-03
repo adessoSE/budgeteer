@@ -2,6 +2,7 @@ package org.wickedsource.budgeteer.persistence.record;
 
 import org.joda.money.Money;
 import org.wickedsource.budgeteer.persistence.budget.BudgetEntity;
+import org.wickedsource.budgeteer.persistence.imports.ImportEntity;
 import org.wickedsource.budgeteer.persistence.person.PersonEntity;
 
 import javax.persistence.*;
@@ -30,6 +31,18 @@ public class WorkRecordEntity {
 
     @Column(nullable = false)
     private Money dailyRate;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "importId")
+    private ImportEntity importRecord;
+
+    public ImportEntity getImportRecord() {
+        return importRecord;
+    }
+
+    public void setImportRecord(ImportEntity importRecord) {
+        this.importRecord = importRecord;
+    }
 
     public long getId() {
         return id;

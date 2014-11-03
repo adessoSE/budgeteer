@@ -9,7 +9,9 @@
 
     <PERSON id="1" name="person1" import_key="person1" project_id="1"/>
 
-    <WORK_RECORD id="1" person_id="1" budget_id="1" date="2015-01-01" spent_minutes="480" daily_rate="50000"/>
-    <WORK_RECORD id="2" person_id="1" budget_id="1" date="2015-08-15" spent_minutes="960" daily_rate="60000"/>
+    <IMPORT id="1" import_date="2015-01-01" start_date="2015-01-01" end_date="2015-01-01" import_type="Testimport"/>
+
+    <WORK_RECORD id="1" person_id="1" budget_id="1" date="2015-01-01" spent_minutes="480" daily_rate="50000" import_id="1"/>
+    <WORK_RECORD id="2" person_id="1" budget_id="1" date="2015-08-15" spent_minutes="960" daily_rate="60000" import_id="1"/>
 
 </dataset>
