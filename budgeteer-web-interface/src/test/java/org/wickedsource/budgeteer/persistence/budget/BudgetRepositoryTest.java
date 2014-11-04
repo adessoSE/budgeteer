@@ -59,4 +59,24 @@ public class BudgetRepositoryTest extends RepositoryTestTemplate {
         Assert.assertEquals(1, budgets2.size());
     }
 
+    @Test
+    @DatabaseSetup("getMissingBudgetTotals.xml")
+    @DatabaseTearDown(value = "getMissingBudgetTotals.xml", type = DatabaseOperation.DELETE_ALL)
+    public void testGetMissingBudgetTotalsForProject() {
+        List<MissingBudgetTotal> missingTotals = budgetRepository.getMissingBudgetTotalsForProject(1l);
+        Assert.assertEquals(1, missingTotals.size());
+        Assert.assertEquals(1l, missingTotals.get(0).getBudgetId());
+        Assert.assertEquals("Budget 1", missingTotals.get(0).getBudgetName());
+    }
+
+    @Test
+    @DatabaseSetup("getMissingBudgetTotals.xml")
+    @DatabaseTearDown(value = "getMissingBudgetTotals.xml", type = DatabaseOperation.DELETE_ALL)
+    public void testGetMissingBudgetTotalForBudget() {
+        MissingBudgetTotal missingTotal = budgetRepository.getMissingBudgetTotalForBudget(1l);
+        Assert.assertEquals(1l, missingTotal.getBudgetId());
+        Assert.assertEquals("Budget 1", missingTotal.getBudgetName());
+        Assert.assertNull(budgetRepository.getMissingBudgetTotalForBudget(2l));
+    }
+
 }

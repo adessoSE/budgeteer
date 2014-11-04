@@ -1,24 +1,42 @@
 package org.wickedsource.budgeteer.service.notification;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.wickedsource.budgeteer.persistence.budget.BudgetRepository;
+import org.wickedsource.budgeteer.persistence.record.RecordRepository;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
 @Transactional
 public class NotificationService {
 
+    @Autowired
+    private RecordRepository recordRepository;
+
+    @Autowired
+    private BudgetRepository budgetRepository;
+
+    @Autowired
+    private MissingDailyRateNotificationMapper missingDailyRateMapper;
+
+    @Autowired
+    private MissingBudgetTotalNotificationMapper missingBudgetTotalNotificationMapper;
+
     /**
-     * Returns all notifications currently available for the given user
+     * Returns all notifications currently available for the given project
      *
-     * @param projectId ID of the project whose notificationsto load
+     * @param projectId ID of the project whose notifications to load
      * @return list of notifications
      */
     public List<Notification> getNotifications(long projectId) {
-        return createNotifications();
+        List<Notification> notifications = new ArrayList<Notification>();
+        notifications.addAll(missingDailyRateMapper.map(recordRepository.getMissingDailyRatesForProject(projectId)));
+        notifications.addAll(missingBudgetTotalNotificationMapper.map(budgetRepository.getMissingBudgetTotalsForProject(projectId)));
+        return notifications;
     }
 
     /**
@@ -28,7 +46,7 @@ public class NotificationService {
      * @return list of notifications concerning the given person.
      */
     public List<Notification> getNotificationsForPerson(long personId) {
-        return createNotifications();
+        return Arrays.asList(missingDailyRateMapper.map(recordRepository.getMissingDailyRatesForPerson(personId)));
     }
 
     /**
@@ -38,14 +56,7 @@ public class NotificationService {
      * @return list of notifications concerning the given budget.
      */
     public List<Notification> getNotificationsForBudget(long budgetId) {
-        return createNotifications();
-    }
-
-    private List<Notification> createNotifications() {
-        List<Notification> notifications = new ArrayList<Notification>();
-        notifications.add(new Notification("Notification", NotificationType.MISSING_BUDGET_TOTAL, new Date()));
-        notifications.add(new Notification("Notification", NotificationType.MISSING_DAILY_RATE, new Date()));
-        return notifications;
+        return Arrays.asList(missingBudgetTotalNotificationMapper.map(budgetRepository.getMissingBudgetTotalForBudget(budgetId)));
     }
 
 }

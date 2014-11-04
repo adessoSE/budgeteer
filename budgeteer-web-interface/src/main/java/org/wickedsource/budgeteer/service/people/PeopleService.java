@@ -52,6 +52,7 @@ public class PeopleService {
      * @return PersonWithRates object
      */
     public PersonWithRates loadPersonWithRates(long personId) {
+        // TODO: rates must be applied to all WorkRecords!!!
         PersonWithRates person = new PersonWithRates();
         person.setName("Tom");
         person.setImportKey("Tom");

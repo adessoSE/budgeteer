@@ -6,8 +6,11 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.wickedsource.budgeteer.service.notification.Notification;
+import org.wickedsource.budgeteer.web.components.notificationlist.NotificationMessageFactory;
 
 public class NotificationDropdown extends Panel {
+
+    private NotificationMessageFactory notificationMessageFactory = new NotificationMessageFactory();
 
     public NotificationDropdown(String id, NotificationModel model) {
         super(id, model);
@@ -39,7 +42,7 @@ public class NotificationDropdown extends Panel {
         final ListView<Notification> listview = new ListView<Notification>("notificationList", getModel()) {
             @Override
             protected void populateItem(ListItem<Notification> item) {
-                Label messageLabel = new Label("notificationMessage", item.getModel().getObject().getMessage());
+                Label messageLabel = new Label("notificationMessage", notificationMessageFactory.getMessageForNotification(item.getModelObject()));
                 item.add(messageLabel);
             }
         };

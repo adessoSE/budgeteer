@@ -6,6 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
 import java.util.Date;
+import java.util.List;
 
 public interface RecordRepository extends CrudRepository<WorkRecordEntity, Long> {
 
@@ -42,5 +43,11 @@ public interface RecordRepository extends CrudRepository<WorkRecordEntity, Long>
     @Modifying
     @Query("delete from WorkRecordEntity r where r.importRecord.id = :importId")
     public void deleteByImport(@Param("importId") long importId);
+
+    @Query("select new org.wickedsource.budgeteer.persistence.record.MissingDailyRate(r.person.id, r.person.name, min(r.date), max(r.date)) from WorkRecordEntity r where r.dailyRate = 0 and r.person.project.id = :projectId group by r.person.id, r.person.name")
+    public List<MissingDailyRate> getMissingDailyRatesForProject(@Param("projectId") long projectId);
+
+    @Query("select new org.wickedsource.budgeteer.persistence.record.MissingDailyRate(r.person.id, r.person.name, min(r.date), max(r.date)) from WorkRecordEntity r where r.dailyRate = 0 and r.person.id = :personId group by r.person.id, r.person.name")
+    public MissingDailyRate getMissingDailyRatesForPerson(@Param("personId") long personId);
 
 }

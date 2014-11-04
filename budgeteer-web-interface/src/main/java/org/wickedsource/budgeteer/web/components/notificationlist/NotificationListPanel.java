@@ -11,17 +11,19 @@ import java.util.List;
 
 public class NotificationListPanel extends Panel {
 
-    public NotificationListPanel(String id, IModel<? extends List<? extends Notification>> model) {
+    private NotificationMessageFactory notificationMessageFactory = new NotificationMessageFactory();
+
+    public NotificationListPanel(String id, IModel<? extends List<Notification>> model) {
         super(id, model);
         setRenderBodyOnly(true);
         add(createNotificationList("notificationList", model));
     }
 
-    private ListView<Notification> createNotificationList(String id, IModel<? extends List<? extends Notification>> model) {
+    private ListView<Notification> createNotificationList(String id, IModel<? extends List<Notification>> model) {
         return new ListView<Notification>(id, model) {
             @Override
             protected void populateItem(ListItem<Notification> item) {
-                item.add(new Label("text", item.getModelObject().getMessage()));
+                item.add(new Label("text", notificationMessageFactory.getMessageForNotification(item.getModelObject())));
             }
         };
     }
