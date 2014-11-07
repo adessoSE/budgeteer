@@ -30,8 +30,8 @@ public class RecordRepositoryTest extends IntegrationTestTemplate {
     }
 
     @Test
-    @DatabaseSetup("getAverageDailyRateInCents.xml")
-    @DatabaseTearDown(value = "getAverageDailyRateInCents.xml", type = DatabaseOperation.DELETE_ALL)
+    @DatabaseSetup("getAverageDailyRate.xml")
+    @DatabaseTearDown(value = "getAverageDailyRate.xml", type = DatabaseOperation.DELETE_ALL)
     public void testGetAverageDailyRate() throws Exception {
         double value = repository.getAverageDailyRate(1l);
         Assert.assertEquals(56666d, value, 1d);

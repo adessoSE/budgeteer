@@ -34,7 +34,7 @@ public class PeopleOverviewTable extends Panel {
                 Link link = new BookmarkablePageLink<PersonDetailsPage>("personLink", PersonDetailsPage.class, parameters);
                 item.add(link);
                 item.add(new MoneyLabel("dailyRate", model(from(item.getModelObject()).getAverageDailyRate())));
-                item.add(new Label("lastBooked", item.getModelObject().getLastBooked()));
+                item.add(new Label("lastBookedDate", item.getModelObject().getLastBooked()));
             }
         };
     }
