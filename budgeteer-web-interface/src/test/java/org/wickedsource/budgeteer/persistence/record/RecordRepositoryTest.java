@@ -6,14 +6,15 @@ import com.github.springtestdbunit.annotation.DatabaseTearDown;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.wickedsource.budgeteer.persistence.RepositoryTestTemplate;
+import org.wickedsource.budgeteer.IntegrationTestTemplate;
+import org.wickedsource.budgeteer.MoneyUtil;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-public class RecordRepositoryTest extends RepositoryTestTemplate {
+public class RecordRepositoryTest extends IntegrationTestTemplate {
 
     private DateFormat format = new SimpleDateFormat("dd.MM.yyyy");
 
@@ -29,8 +30,8 @@ public class RecordRepositoryTest extends RepositoryTestTemplate {
     }
 
     @Test
-    @DatabaseSetup("getAverageDailyRate.xml")
-    @DatabaseTearDown(value = "getAverageDailyRate.xml", type = DatabaseOperation.DELETE_ALL)
+    @DatabaseSetup("getAverageDailyRateInCents.xml")
+    @DatabaseTearDown(value = "getAverageDailyRateInCents.xml", type = DatabaseOperation.DELETE_ALL)
     public void testGetAverageDailyRate() throws Exception {
         double value = repository.getAverageDailyRate(1l);
         Assert.assertEquals(56666d, value, 1d);
@@ -57,7 +58,7 @@ public class RecordRepositoryTest extends RepositoryTestTemplate {
     @DatabaseSetup("getMissingDailyRates.xml")
     @DatabaseTearDown(value = "getMissingDailyRates.xml", type = DatabaseOperation.DELETE_ALL)
     public void testGetMissingDailyRatesForProject() throws Exception {
-        List<MissingDailyRate> missingRates = repository.getMissingDailyRatesForProject(1l);
+        List<MissingDailyRateBean> missingRates = repository.getMissingDailyRatesForProject(1l);
         Assert.assertEquals(2, missingRates.size());
         Assert.assertEquals(1l, missingRates.get(0).getPersonId());
         Assert.assertEquals("person1", missingRates.get(0).getPersonName());
@@ -73,10 +74,21 @@ public class RecordRepositoryTest extends RepositoryTestTemplate {
     @DatabaseSetup("getMissingDailyRates.xml")
     @DatabaseTearDown(value = "getMissingDailyRates.xml", type = DatabaseOperation.DELETE_ALL)
     public void testGetMissingDailyRatesForPerson() throws Exception {
-        MissingDailyRate missingRates = repository.getMissingDailyRatesForPerson(1l);
+        MissingDailyRateBean missingRates = repository.getMissingDailyRatesForPerson(1l);
         Assert.assertEquals(1l, missingRates.getPersonId());
         Assert.assertEquals("person1", missingRates.getPersonName());
         Assert.assertEquals(format.parse("01.01.2015"), missingRates.getStartDate());
         Assert.assertEquals(format.parse("15.08.2015"), missingRates.getEndDate());
+    }
+
+    @Test
+    @DatabaseSetup("updateDailyRates.xml")
+    @DatabaseTearDown(value = "updateDailyRates.xml", type = DatabaseOperation.DELETE_ALL)
+    public void testUpdateDailyRates() throws Exception {
+        repository.updateDailyRates(1l, 1l, format.parse("01.01.2015"), format.parse("15.08.2015"), MoneyUtil.createMoneyFromCents(50000l));
+        WorkRecordEntity record = repository.findOne(1l);
+        Assert.assertEquals(MoneyUtil.createMoneyFromCents(50000l), record.getDailyRate());
+        record = repository.findOne(3l);
+        Assert.assertEquals(MoneyUtil.createMoneyFromCents(50000l), record.getDailyRate());
     }
 }

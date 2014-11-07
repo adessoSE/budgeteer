@@ -23,7 +23,7 @@ public class PersonEntity {
     @ManyToOne(optional = false)
     private ProjectEntity project;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "person", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<DailyRateEntity> dailyRates = new ArrayList<DailyRateEntity>();
 
     public long getId() {

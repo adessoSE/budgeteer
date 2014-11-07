@@ -7,7 +7,7 @@ import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.service.record.AggregatedRecord;
 import org.wickedsource.budgeteer.service.record.RecordService;
 import org.wickedsource.budgeteer.web.AbstractWebTestTemplate;
-import org.wickedsource.budgeteer.web.pages.people.weekreport.table.PersonWeeklyAggregatedRecordsModel;
+import org.wickedsource.budgeteer.web.pages.person.weekreport.table.PersonWeeklyAggregatedRecordsModel;
 
 import java.util.ArrayList;
 import java.util.Date;

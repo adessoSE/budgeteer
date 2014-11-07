@@ -4,8 +4,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.budgeteer.persistence.budget.BudgetRepository;
-import org.wickedsource.budgeteer.persistence.budget.MissingBudgetTotal;
-import org.wickedsource.budgeteer.persistence.record.MissingDailyRate;
+import org.wickedsource.budgeteer.persistence.budget.MissingBudgetTotalBean;
+import org.wickedsource.budgeteer.persistence.record.MissingDailyRateBean;
 import org.wickedsource.budgeteer.persistence.record.RecordRepository;
 import org.wickedsource.budgeteer.service.ServiceTestTemplate;
 
@@ -58,11 +58,11 @@ public class NotificationServiceTest extends ServiceTestTemplate {
         Assert.assertEquals("budget1", notification.getBudgetName());
     }
 
-    private MissingDailyRate createMissingDailyRate() {
-        return new MissingDailyRate(1l, "person1", fixedDate, fixedDate);
+    private MissingDailyRateBean createMissingDailyRate() {
+        return new MissingDailyRateBean(1l, "person1", fixedDate, fixedDate);
     }
 
-    private MissingBudgetTotal createMissingBudgetTotal() {
-        return new MissingBudgetTotal(1l, "budget1");
+    private MissingBudgetTotalBean createMissingBudgetTotal() {
+        return new MissingBudgetTotalBean(1l, "budget1");
     }
 }

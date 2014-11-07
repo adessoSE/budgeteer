@@ -4,7 +4,7 @@ import org.apache.wicket.util.tester.WicketTester;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.budgeteer.service.imports.Import;
-import org.wickedsource.budgeteer.service.imports.ImportsService;
+import org.wickedsource.budgeteer.service.imports.ImportService;
 import org.wickedsource.budgeteer.web.AbstractWebTestTemplate;
 
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ import static org.mockito.Mockito.when;
 public class ImportsOverviewPageTest extends AbstractWebTestTemplate {
 
     @Autowired
-    private ImportsService service;
+    private ImportService service;
 
     @Test
     public void render() {

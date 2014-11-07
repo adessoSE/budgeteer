@@ -6,11 +6,11 @@ import com.github.springtestdbunit.annotation.DatabaseTearDown;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.wickedsource.budgeteer.persistence.RepositoryTestTemplate;
+import org.wickedsource.budgeteer.IntegrationTestTemplate;
 
 import java.util.List;
 
-public class ImportRepositoryTest extends RepositoryTestTemplate {
+public class ImportRepositoryTest extends IntegrationTestTemplate {
 
     @Autowired
     private ImportRepository repository;

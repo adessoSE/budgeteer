@@ -33,10 +33,10 @@ public class BudgetEntity {
     @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "budget")
     private List<BudgetTagEntity> tags = new ArrayList<BudgetTagEntity>();
 
-    @OneToMany
+    @OneToMany(mappedBy = "budget")
     private List<WorkRecordEntity> records = new ArrayList<WorkRecordEntity>();
 
-    @OneToMany
+    @OneToMany(mappedBy = "budget")
     private List<DailyRateEntity> dailyRates = new ArrayList<DailyRateEntity>();
 
     @Column(nullable = false)

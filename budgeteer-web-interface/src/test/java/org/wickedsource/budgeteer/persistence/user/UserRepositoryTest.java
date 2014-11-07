@@ -3,13 +3,13 @@ package org.wickedsource.budgeteer.persistence.user;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.wickedsource.budgeteer.persistence.RepositoryTestTemplate;
+import org.wickedsource.budgeteer.IntegrationTestTemplate;
 import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
 import org.wickedsource.budgeteer.persistence.project.ProjectRepository;
 
 import java.util.List;
 
-public class UserRepositoryTest extends RepositoryTestTemplate {
+public class UserRepositoryTest extends IntegrationTestTemplate {
 
     @Autowired
     private UserRepository userRepository;

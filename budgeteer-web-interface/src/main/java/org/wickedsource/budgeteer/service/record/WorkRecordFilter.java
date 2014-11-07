@@ -2,7 +2,7 @@ package org.wickedsource.budgeteer.service.record;
 
 import org.wickedsource.budgeteer.service.DateRange;
 import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
-import org.wickedsource.budgeteer.service.people.PersonBaseData;
+import org.wickedsource.budgeteer.service.person.PersonBaseData;
 
 import java.io.Serializable;
 

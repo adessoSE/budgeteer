@@ -6,7 +6,7 @@ import com.github.springtestdbunit.annotation.DatabaseTearDown;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.wickedsource.budgeteer.persistence.RepositoryTestTemplate;
+import org.wickedsource.budgeteer.IntegrationTestTemplate;
 import org.wickedsource.budgeteer.persistence.person.PersonRepository;
 import org.wickedsource.budgeteer.persistence.project.ProjectRepository;
 import org.wickedsource.budgeteer.persistence.record.RecordRepository;
@@ -14,7 +14,7 @@ import org.wickedsource.budgeteer.persistence.record.RecordRepository;
 import java.util.Arrays;
 import java.util.List;
 
-public class BudgetRepositoryTest extends RepositoryTestTemplate {
+public class BudgetRepositoryTest extends IntegrationTestTemplate {
 
     @Autowired
     private BudgetRepository budgetRepository;
@@ -63,7 +63,7 @@ public class BudgetRepositoryTest extends RepositoryTestTemplate {
     @DatabaseSetup("getMissingBudgetTotals.xml")
     @DatabaseTearDown(value = "getMissingBudgetTotals.xml", type = DatabaseOperation.DELETE_ALL)
     public void testGetMissingBudgetTotalsForProject() {
-        List<MissingBudgetTotal> missingTotals = budgetRepository.getMissingBudgetTotalsForProject(1l);
+        List<MissingBudgetTotalBean> missingTotals = budgetRepository.getMissingBudgetTotalsForProject(1l);
         Assert.assertEquals(1, missingTotals.size());
         Assert.assertEquals(1l, missingTotals.get(0).getBudgetId());
         Assert.assertEquals("Budget 1", missingTotals.get(0).getBudgetName());
@@ -73,7 +73,7 @@ public class BudgetRepositoryTest extends RepositoryTestTemplate {
     @DatabaseSetup("getMissingBudgetTotals.xml")
     @DatabaseTearDown(value = "getMissingBudgetTotals.xml", type = DatabaseOperation.DELETE_ALL)
     public void testGetMissingBudgetTotalForBudget() {
-        MissingBudgetTotal missingTotal = budgetRepository.getMissingBudgetTotalForBudget(1l);
+        MissingBudgetTotalBean missingTotal = budgetRepository.getMissingBudgetTotalForBudget(1l);
         Assert.assertEquals(1l, missingTotal.getBudgetId());
         Assert.assertEquals("Budget 1", missingTotal.getBudgetName());
         Assert.assertNull(budgetRepository.getMissingBudgetTotalForBudget(2l));

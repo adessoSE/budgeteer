@@ -1,7 +1,7 @@
 package org.wickedsource.budgeteer.web.components.person;
 
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
-import org.wickedsource.budgeteer.service.people.PersonBaseData;
+import org.wickedsource.budgeteer.service.person.PersonBaseData;
 
 public class PersonBaseDataChoiceRenderer implements IChoiceRenderer<PersonBaseData> {
 

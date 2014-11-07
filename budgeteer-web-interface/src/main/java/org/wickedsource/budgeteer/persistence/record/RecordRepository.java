@@ -1,5 +1,6 @@
 package org.wickedsource.budgeteer.persistence.record;
 
+import org.joda.money.Money;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -44,10 +45,14 @@ public interface RecordRepository extends CrudRepository<WorkRecordEntity, Long>
     @Query("delete from WorkRecordEntity r where r.importRecord.id = :importId")
     public void deleteByImport(@Param("importId") long importId);
 
-    @Query("select new org.wickedsource.budgeteer.persistence.record.MissingDailyRate(r.person.id, r.person.name, min(r.date), max(r.date)) from WorkRecordEntity r where r.dailyRate = 0 and r.person.project.id = :projectId group by r.person.id, r.person.name")
-    public List<MissingDailyRate> getMissingDailyRatesForProject(@Param("projectId") long projectId);
+    @Query("select new org.wickedsource.budgeteer.persistence.record.MissingDailyRateBean(r.person.id, r.person.name, min(r.date), max(r.date)) from WorkRecordEntity r where r.dailyRate = 0 and r.person.project.id = :projectId group by r.person.id, r.person.name")
+    public List<MissingDailyRateBean> getMissingDailyRatesForProject(@Param("projectId") long projectId);
 
-    @Query("select new org.wickedsource.budgeteer.persistence.record.MissingDailyRate(r.person.id, r.person.name, min(r.date), max(r.date)) from WorkRecordEntity r where r.dailyRate = 0 and r.person.id = :personId group by r.person.id, r.person.name")
-    public MissingDailyRate getMissingDailyRatesForPerson(@Param("personId") long personId);
+    @Query("select new org.wickedsource.budgeteer.persistence.record.MissingDailyRateBean(r.person.id, r.person.name, min(r.date), max(r.date)) from WorkRecordEntity r where r.dailyRate = 0 and r.person.id = :personId group by r.person.id, r.person.name")
+    public MissingDailyRateBean getMissingDailyRatesForPerson(@Param("personId") long personId);
+
+    @Modifying
+    @Query("update WorkRecordEntity r set r.dailyRate = :dailyRate where r.budget.id=:budgetId and r.person.id=:personId and r.date between :fromDate and :toDate")
+    public void updateDailyRates(@Param("budgetId") long budgetId, @Param("personId") long personId, @Param("fromDate") Date fromDate, @Param("toDate") Date toDate, @Param("dailyRate") Money dailyRate);
 
 }

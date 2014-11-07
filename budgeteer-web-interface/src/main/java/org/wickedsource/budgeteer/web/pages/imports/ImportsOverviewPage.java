@@ -7,7 +7,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.service.imports.Import;
-import org.wickedsource.budgeteer.service.imports.ImportsService;
+import org.wickedsource.budgeteer.service.imports.ImportService;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.ClassAwareWrappingModel;
 import org.wickedsource.budgeteer.web.Mount;
@@ -25,7 +25,7 @@ import static org.wicketstuff.lazymodel.LazyModel.model;
 public class ImportsOverviewPage extends BasePage {
 
     @SpringBean
-    private ImportsService importsService;
+    private ImportService importService;
 
     public ImportsOverviewPage() {
         add(createImportsList("importsList", new ImportsModel(BudgeteerSession.get().getProjectId())));
@@ -55,7 +55,7 @@ public class ImportsOverviewPage extends BasePage {
                 item.add(new Link("deleteButton") {
                     @Override
                     public void onClick() {
-                        importsService.deleteImport(item.getModelObject().getId());
+                        importService.deleteImport(item.getModelObject().getId());
                     }
                 });
             }

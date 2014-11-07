@@ -8,13 +8,13 @@
 
     <mockito:mock id="statisticsService" class="org.wickedsource.budgeteer.service.statistics.StatisticsService"/>
 
-    <mockito:mock id="peopleService" class="org.wickedsource.budgeteer.service.people.PeopleService"/>
+    <mockito:mock id="peopleService" class="org.wickedsource.budgeteer.service.person.PersonService"/>
 
     <mockito:mock id="budgetService" class="org.wickedsource.budgeteer.service.budget.BudgetService"/>
 
     <mockito:mock id="aggregationService" class="org.wickedsource.budgeteer.service.record.RecordService"/>
 
-    <mockito:mock id="importsService" class="org.wickedsource.budgeteer.service.imports.ImportsService"/>
+    <mockito:mock id="importsService" class="org.wickedsource.budgeteer.service.imports.ImportService"/>
 
     <mockito:mock id="userService" class="org.wickedsource.budgeteer.service.user.UserService"/>
 

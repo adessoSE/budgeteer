@@ -15,7 +15,7 @@ import org.wickedsource.budgeteer.web.pages.dashboard.dailyratechart.AverageDail
 import org.wickedsource.budgeteer.web.pages.dashboard.dailyratechart.AverageDailyRateChartModel;
 import org.wickedsource.budgeteer.web.pages.hours.HoursPage;
 import org.wickedsource.budgeteer.web.pages.imports.ImportsOverviewPage;
-import org.wickedsource.budgeteer.web.pages.people.overview.PeopleOverviewPage;
+import org.wickedsource.budgeteer.web.pages.person.overview.PeopleOverviewPage;
 
 @Mount("dashboard")
 public class DashboardPage extends BasePage {

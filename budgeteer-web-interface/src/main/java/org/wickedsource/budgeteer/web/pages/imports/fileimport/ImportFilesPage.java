@@ -10,7 +10,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.imports.api.ImportException;
 import org.wickedsource.budgeteer.imports.api.Importer;
-import org.wickedsource.budgeteer.service.imports.ImportsService;
+import org.wickedsource.budgeteer.service.imports.ImportService;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.pages.base.dialogpage.DialogPageWithBacklink;
@@ -27,7 +27,7 @@ import static org.wicketstuff.lazymodel.LazyModel.model;
 public class ImportFilesPage extends DialogPageWithBacklink {
 
     @SpringBean
-    private ImportsService service;
+    private ImportService service;
 
     public ImportFilesPage(Class<? extends WebPage> backlinkPage, PageParameters backlinkParameters) {
         super(backlinkPage, backlinkParameters);

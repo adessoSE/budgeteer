@@ -1,24 +1,16 @@
 package org.wickedsource.budgeteer.service.imports;
 
 
-import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestExecutionListeners;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
-import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
-import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
+import org.wickedsource.budgeteer.IntegrationTestTemplate;
 import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.aproda.AprodaWorkRecordsImporter;
 import org.wickedsource.budgeteer.imports.api.ImportException;
-import org.wickedsource.budgeteer.persistence.RepositoryTestConfiguration;
 import org.wickedsource.budgeteer.persistence.budget.BudgetRepository;
 import org.wickedsource.budgeteer.persistence.imports.ImportEntity;
 import org.wickedsource.budgeteer.persistence.imports.ImportRepository;
@@ -26,7 +18,6 @@ import org.wickedsource.budgeteer.persistence.person.PersonRepository;
 import org.wickedsource.budgeteer.persistence.record.RecordRepository;
 import org.wickedsource.budgeteer.persistence.record.WorkRecordEntity;
 
-import javax.transaction.Transactional;
 import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -35,21 +26,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {RepositoryTestConfiguration.class})
-@Transactional
-@TestExecutionListeners({
-        DbUnitTestExecutionListener.class,
-        DirtiesContextTestExecutionListener.class,
-        DependencyInjectionTestExecutionListener.class,
-        TransactionalTestExecutionListener.class
-})
-public class ImportServiceIntegrationTest {
+public class ImportServiceIntegrationTest extends IntegrationTestTemplate{
 
     private DateFormat format = new SimpleDateFormat("dd.MM.yyyy");
 
     @Autowired
-    private ImportsService importService;
+    private ImportService importService;
 
     @Autowired
     private RecordRepository recordRepository;

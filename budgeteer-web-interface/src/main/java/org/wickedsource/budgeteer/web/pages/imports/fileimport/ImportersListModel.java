@@ -4,14 +4,14 @@ import org.apache.wicket.injection.Injector;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.imports.api.Importer;
-import org.wickedsource.budgeteer.service.imports.ImportsService;
+import org.wickedsource.budgeteer.service.imports.ImportService;
 
 import java.util.List;
 
 public class ImportersListModel extends LoadableDetachableModel<List<? extends Importer>> {
 
     @SpringBean
-    private ImportsService service;
+    private ImportService service;
 
     public ImportersListModel() {
         Injector.get().inject(this);

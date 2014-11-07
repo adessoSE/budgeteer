@@ -7,19 +7,19 @@ import org.joda.money.Money;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.wickedsource.budgeteer.IntegrationTestTemplate;
 import org.wickedsource.budgeteer.MoneyUtil;
-import org.wickedsource.budgeteer.persistence.RepositoryTestTemplate;
 
 import java.util.List;
 
-public class DailyRateRepositoryTest extends RepositoryTestTemplate {
+public class DailyRateRepositoryTest extends IntegrationTestTemplate {
 
     @Autowired
     private DailyRateRepository rateRepository;
 
     @Test
-    @DatabaseSetup("getDistinctRates.xml")
-    @DatabaseTearDown(value = "getDistinctRates.xml", type = DatabaseOperation.DELETE_ALL)
+    @DatabaseSetup("personWithRates.xml")
+    @DatabaseTearDown(value = "personWithRates.xml", type = DatabaseOperation.DELETE_ALL)
     public void testGetDistinctRates() {
         List<Money> rates = rateRepository.getDistinctRatesInCents(1l);
         Assert.assertEquals(2, rates.size());
