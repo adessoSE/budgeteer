@@ -37,6 +37,9 @@ public class WorkRecordEntity {
     private int day;
 
     @Column(nullable = false)
+    private int week;
+
+    @Column(nullable = false)
     private int spentMinutes;
 
     @Column(nullable = false)
@@ -89,6 +92,7 @@ public class WorkRecordEntity {
         this.year = c.get(Calendar.YEAR);
         this.month = c.get(Calendar.MONTH);
         this.day = c.get(Calendar.DAY_OF_MONTH);
+        this.week = c.get(Calendar.WEEK_OF_YEAR);
     }
 
     public int getSpentMinutes() {
