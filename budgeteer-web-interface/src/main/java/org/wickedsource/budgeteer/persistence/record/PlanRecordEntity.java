@@ -5,6 +5,7 @@ import org.wickedsource.budgeteer.persistence.budget.BudgetEntity;
 import org.wickedsource.budgeteer.persistence.person.PersonEntity;
 
 import javax.persistence.*;
+import java.util.Calendar;
 import java.util.Date;
 
 @Entity
@@ -24,6 +25,15 @@ public class PlanRecordEntity {
     @Temporal(TemporalType.DATE)
     @Column(nullable = false)
     private Date date;
+
+    @Column(nullable = false)
+    private int year;
+
+    @Column(nullable = false)
+    private int month;
+
+    @Column(nullable = false)
+    private int day;
 
     @Column(nullable = false)
     private int plannedMinutes;
@@ -60,7 +70,12 @@ public class PlanRecordEntity {
     }
 
     public void setDate(Date date) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
         this.date = date;
+        this.year = c.get(Calendar.YEAR);
+        this.month = c.get(Calendar.MONTH);
+        this.day = c.get(Calendar.DAY_OF_MONTH);
     }
 
     public int getPlannedMinutes() {
