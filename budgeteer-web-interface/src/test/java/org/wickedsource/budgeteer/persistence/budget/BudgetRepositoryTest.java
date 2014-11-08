@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.budgeteer.IntegrationTestTemplate;
 import org.wickedsource.budgeteer.persistence.person.PersonRepository;
 import org.wickedsource.budgeteer.persistence.project.ProjectRepository;
-import org.wickedsource.budgeteer.persistence.record.RecordRepository;
+import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
 
 import java.util.Arrays;
 import java.util.List;
@@ -23,7 +23,7 @@ public class BudgetRepositoryTest extends IntegrationTestTemplate {
     private ProjectRepository projectRepository;
 
     @Autowired
-    private RecordRepository recordRepository;
+    private WorkRecordRepository workRecordRepository;
 
     @Autowired
     private PersonRepository personRepository;

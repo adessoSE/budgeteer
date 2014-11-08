@@ -8,7 +8,8 @@ import org.wickedsource.budgeteer.persistence.budget.BudgetEntity;
 import org.wickedsource.budgeteer.persistence.budget.BudgetRepository;
 import org.wickedsource.budgeteer.persistence.budget.BudgetTagEntity;
 import org.wickedsource.budgeteer.persistence.person.DailyRateRepository;
-import org.wickedsource.budgeteer.persistence.record.RecordRepository;
+import org.wickedsource.budgeteer.persistence.record.PlanRecordRepository;
+import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
 import org.wickedsource.budgeteer.service.ServiceTestTemplate;
 
 import java.util.ArrayList;
@@ -27,7 +28,10 @@ public class BudgetServiceTest extends ServiceTestTemplate {
     private BudgetService budgetService;
 
     @Autowired
-    private RecordRepository recordRepository;
+    private WorkRecordRepository workRecordRepository;
+
+    @Autowired
+    private PlanRecordRepository planRecordRepository;
 
     @Autowired
     private DailyRateRepository rateRepository;
@@ -65,10 +69,10 @@ public class BudgetServiceTest extends ServiceTestTemplate {
     public void testLoadBudgetDetailData() throws Exception {
         Date date = new Date();
         when(budgetRepository.findOne(1l)).thenReturn(createBudgetEntity());
-        when(recordRepository.getLatestWordRecordDate(1l)).thenReturn(date);
-        when(recordRepository.getSpentBudget(1l)).thenReturn(100000.0);
-        when(recordRepository.getPlannedBudget(1l)).thenReturn(200000.0);
-        when(recordRepository.getAverageDailyRate(1l)).thenReturn(50000.0);
+        when(workRecordRepository.getLatestWordRecordDate(1l)).thenReturn(date);
+        when(workRecordRepository.getSpentBudget(1l)).thenReturn(100000.0);
+        when(planRecordRepository.getPlannedBudget(1l)).thenReturn(200000.0);
+        when(workRecordRepository.getAverageDailyRate(1l)).thenReturn(50000.0);
         BudgetDetailData data = budgetService.loadBudgetDetailData(1l);
         Assert.assertEquals(100000.0d, data.getSpent().getAmountMinor().doubleValue(), 1d);
         Assert.assertEquals(-100000.0d, data.getUnplanned().getAmountMinor().doubleValue(), 1d);
@@ -79,10 +83,10 @@ public class BudgetServiceTest extends ServiceTestTemplate {
     public void testLoadBudgetsDetailData() throws Exception {
         Date date = new Date();
         when(budgetRepository.findByAtLeastOneTag(1l, Arrays.asList("1", "2", "3"))).thenReturn(Arrays.asList(createBudgetEntity()));
-        when(recordRepository.getLatestWordRecordDate(1l)).thenReturn(date);
-        when(recordRepository.getSpentBudget(1l)).thenReturn(100000.0);
-        when(recordRepository.getPlannedBudget(1l)).thenReturn(200000.0);
-        when(recordRepository.getAverageDailyRate(1l)).thenReturn(50000.0);
+        when(workRecordRepository.getLatestWordRecordDate(1l)).thenReturn(date);
+        when(workRecordRepository.getSpentBudget(1l)).thenReturn(100000.0);
+        when(planRecordRepository.getPlannedBudget(1l)).thenReturn(200000.0);
+        when(workRecordRepository.getAverageDailyRate(1l)).thenReturn(50000.0);
         List<BudgetDetailData> data = budgetService.loadBudgetsDetailData(1l, new BudgetTagFilter(Arrays.asList("1", "2", "3")));
         Assert.assertEquals(1, data.size());
         Assert.assertEquals(100000.0d, data.get(0).getSpent().getAmountMinor().doubleValue(), 1d);

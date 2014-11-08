@@ -11,7 +11,7 @@ import org.wickedsource.budgeteer.imports.api.Importer;
 import org.wickedsource.budgeteer.imports.api.WorkRecordsImporter;
 import org.wickedsource.budgeteer.persistence.imports.ImportEntity;
 import org.wickedsource.budgeteer.persistence.imports.ImportRepository;
-import org.wickedsource.budgeteer.persistence.record.RecordRepository;
+import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
 
 import javax.transaction.Transactional;
 import java.io.InputStream;
@@ -29,7 +29,7 @@ public class ImportService implements ApplicationContextAware {
     private ImportRepository importRepository;
 
     @Autowired
-    private RecordRepository recordRepository;
+    private WorkRecordRepository workRecordRepository;
 
     private ApplicationContext applicationContext;
 
@@ -60,7 +60,7 @@ public class ImportService implements ApplicationContextAware {
      * @param importId ID of the import whose records shall be deleted.
      */
     public void deleteImport(long importId) {
-        recordRepository.deleteByImport(importId);
+        workRecordRepository.deleteByImport(importId);
         importRepository.delete(importId);
     }
 

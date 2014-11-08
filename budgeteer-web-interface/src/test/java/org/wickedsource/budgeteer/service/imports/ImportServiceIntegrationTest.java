@@ -15,8 +15,8 @@ import org.wickedsource.budgeteer.persistence.budget.BudgetRepository;
 import org.wickedsource.budgeteer.persistence.imports.ImportEntity;
 import org.wickedsource.budgeteer.persistence.imports.ImportRepository;
 import org.wickedsource.budgeteer.persistence.person.PersonRepository;
-import org.wickedsource.budgeteer.persistence.record.RecordRepository;
 import org.wickedsource.budgeteer.persistence.record.WorkRecordEntity;
+import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
 
 import java.io.InputStream;
 import java.text.DateFormat;
@@ -34,7 +34,7 @@ public class ImportServiceIntegrationTest extends IntegrationTestTemplate{
     private ImportService importService;
 
     @Autowired
-    private RecordRepository recordRepository;
+    private WorkRecordRepository workRecordRepository;
 
     @Autowired
     private BudgetRepository budgetRepository;
@@ -92,23 +92,23 @@ public class ImportServiceIntegrationTest extends IntegrationTestTemplate{
     }
 
     private void assertImportedRecords(boolean hasDailyRate) {
-        Iterator<WorkRecordEntity> iterator = recordRepository.findAll().iterator();
+        Iterator<WorkRecordEntity> iterator = workRecordRepository.findAll().iterator();
         while (iterator.hasNext()) {
             WorkRecordEntity record = iterator.next();
             Assert.assertNotNull(record.getBudget());
             Assert.assertNotNull(record.getPerson());
             Assert.assertNotNull(record.getDate());
-            Assert.assertNotNull(record.getSpentMinutes());
+            Assert.assertNotNull(record.getMinutes());
             if (hasDailyRate) {
-                Assert.assertNotEquals(MoneyUtil.createMoneyFromCents(0), recordRepository.findAll().iterator().next().getDailyRate());
+                Assert.assertNotEquals(MoneyUtil.createMoneyFromCents(0), workRecordRepository.findAll().iterator().next().getDailyRate());
             } else {
-                Assert.assertEquals(MoneyUtil.createMoneyFromCents(0), recordRepository.findAll().iterator().next().getDailyRate());
+                Assert.assertEquals(MoneyUtil.createMoneyFromCents(0), workRecordRepository.findAll().iterator().next().getDailyRate());
             }
         }
     }
 
     private void assertCounts() {
-        Assert.assertEquals(16, recordRepository.count());
+        Assert.assertEquals(16, workRecordRepository.count());
         Assert.assertEquals(2, budgetRepository.count());
         Assert.assertEquals(2, personRepository.count());
         Assert.assertEquals(1, importRepository.count());

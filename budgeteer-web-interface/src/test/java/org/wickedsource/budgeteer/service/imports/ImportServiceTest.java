@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.budgeteer.persistence.imports.ImportEntity;
 import org.wickedsource.budgeteer.persistence.imports.ImportRepository;
-import org.wickedsource.budgeteer.persistence.record.RecordRepository;
+import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
 import org.wickedsource.budgeteer.service.ServiceTestTemplate;
 
 import java.util.Arrays;
@@ -20,7 +20,7 @@ public class ImportServiceTest extends ServiceTestTemplate {
     private ImportRepository importRepository;
 
     @Autowired
-    private RecordRepository recordRepository;
+    private WorkRecordRepository workRecordRepository;
 
     @Autowired
     private ImportService importService;
@@ -37,7 +37,7 @@ public class ImportServiceTest extends ServiceTestTemplate {
     public void testDeleteImport() throws Exception {
         importService.deleteImport(1l);
         verify(importRepository, times(1)).delete(1l);
-        verify(recordRepository, times(1)).deleteByImport(1l);
+        verify(workRecordRepository, times(1)).deleteByImport(1l);
     }
 
     private ImportEntity createImportEntity() {

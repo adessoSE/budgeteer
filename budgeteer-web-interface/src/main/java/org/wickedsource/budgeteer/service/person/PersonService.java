@@ -6,7 +6,7 @@ import org.wickedsource.budgeteer.persistence.budget.BudgetRepository;
 import org.wickedsource.budgeteer.persistence.person.DailyRateEntity;
 import org.wickedsource.budgeteer.persistence.person.PersonEntity;
 import org.wickedsource.budgeteer.persistence.person.PersonRepository;
-import org.wickedsource.budgeteer.persistence.record.RecordRepository;
+import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
 import org.wickedsource.budgeteer.service.DateRange;
 import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
 
@@ -31,7 +31,7 @@ public class PersonService {
     private BudgetRepository budgetRepository;
 
     @Autowired
-    private RecordRepository recordRepository;
+    private WorkRecordRepository workRecordRepository;
 
     /**
      * Returns all people the given user can make use of to manage budgets.
@@ -102,7 +102,7 @@ public class PersonService {
             rateEntity.setDateStart(rate.getDateRange().getStartDate());
             rateEntity.setDateEnd(rate.getDateRange().getEndDate());
             dailyRates.add(rateEntity);
-            recordRepository.updateDailyRates(rate.getBudget().getId(), person.getPersonId(), rate.getDateRange().getStartDate(), rate.getDateRange().getEndDate(), rate.getRate());
+            workRecordRepository.updateDailyRates(rate.getBudget().getId(), person.getPersonId(), rate.getDateRange().getStartDate(), rate.getDateRange().getEndDate(), rate.getRate());
         }
 
         personEntity.setDailyRates(dailyRates);

@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.budgeteer.persistence.budget.BudgetRepository;
 import org.wickedsource.budgeteer.persistence.budget.MissingBudgetTotalBean;
 import org.wickedsource.budgeteer.persistence.record.MissingDailyRateBean;
-import org.wickedsource.budgeteer.persistence.record.RecordRepository;
+import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
 import org.wickedsource.budgeteer.service.ServiceTestTemplate;
 
 import java.util.Arrays;
@@ -20,7 +20,7 @@ public class NotificationServiceTest extends ServiceTestTemplate {
     private Date fixedDate = new Date();
 
     @Autowired
-    private RecordRepository recordRepository;
+    private WorkRecordRepository workRecordRepository;
 
     @Autowired
     private BudgetRepository budgetRepository;
@@ -30,7 +30,7 @@ public class NotificationServiceTest extends ServiceTestTemplate {
 
     @Test
     public void testGetNotifications() throws Exception {
-        when(recordRepository.getMissingDailyRatesForProject(1l)).thenReturn(Arrays.asList(createMissingDailyRate()));
+        when(workRecordRepository.getMissingDailyRatesForProject(1l)).thenReturn(Arrays.asList(createMissingDailyRate()));
         when(budgetRepository.getMissingBudgetTotalsForProject(1l)).thenReturn(Arrays.asList(createMissingBudgetTotal()));
         List<Notification> notifications = service.getNotifications(1l);
         Assert.assertEquals(2, notifications.size());
@@ -38,7 +38,7 @@ public class NotificationServiceTest extends ServiceTestTemplate {
 
     @Test
     public void testGetNotificationsForPerson() throws Exception {
-        when(recordRepository.getMissingDailyRatesForPerson(1l)).thenReturn(createMissingDailyRate());
+        when(workRecordRepository.getMissingDailyRatesForPerson(1l)).thenReturn(createMissingDailyRate());
         List<Notification> notifications = service.getNotificationsForPerson(1l);
         Assert.assertEquals(1, notifications.size());
         MissingDailyRateNotification notification = (MissingDailyRateNotification) notifications.get(0);

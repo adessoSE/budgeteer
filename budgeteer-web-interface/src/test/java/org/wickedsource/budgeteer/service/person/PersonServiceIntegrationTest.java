@@ -10,8 +10,8 @@ import org.wickedsource.budgeteer.IntegrationTestTemplate;
 import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.persistence.person.PersonEntity;
 import org.wickedsource.budgeteer.persistence.person.PersonRepository;
-import org.wickedsource.budgeteer.persistence.record.RecordRepository;
 import org.wickedsource.budgeteer.persistence.record.WorkRecordEntity;
+import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
 import org.wickedsource.budgeteer.service.DateRange;
 import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
 
@@ -29,7 +29,7 @@ public class PersonServiceIntegrationTest extends IntegrationTestTemplate {
     private PersonRepository personRepository;
 
     @Autowired
-    private RecordRepository recordRepository;
+    private WorkRecordRepository workRecordRepository;
 
     @Test
     @DatabaseSetup("personWithRates.xml")
@@ -66,11 +66,11 @@ public class PersonServiceIntegrationTest extends IntegrationTestTemplate {
         PersonEntity personEntity = personRepository.findOne(1l);
         Assert.assertEquals(2, personEntity.getDailyRates().size());
 
-        WorkRecordEntity record = recordRepository.findOne(1l);
+        WorkRecordEntity record = workRecordRepository.findOne(1l);
         Assert.assertEquals(MoneyUtil.createMoneyFromCents(32100l), record.getDailyRate());
-        record = recordRepository.findOne(2l);
+        record = workRecordRepository.findOne(2l);
         Assert.assertEquals(MoneyUtil.createMoneyFromCents(12300l), record.getDailyRate());
-        record = recordRepository.findOne(3l);
+        record = workRecordRepository.findOne(3l);
         Assert.assertEquals(MoneyUtil.createMoneyFromCents(32100l), record.getDailyRate());
     }
 

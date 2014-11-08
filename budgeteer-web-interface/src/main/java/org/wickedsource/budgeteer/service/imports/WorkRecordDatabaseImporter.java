@@ -16,8 +16,8 @@ import org.wickedsource.budgeteer.persistence.person.PersonEntity;
 import org.wickedsource.budgeteer.persistence.person.PersonRepository;
 import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
 import org.wickedsource.budgeteer.persistence.project.ProjectRepository;
-import org.wickedsource.budgeteer.persistence.record.RecordRepository;
 import org.wickedsource.budgeteer.persistence.record.WorkRecordEntity;
+import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
 
 import javax.annotation.PostConstruct;
 import java.util.*;
@@ -39,7 +39,7 @@ public class WorkRecordDatabaseImporter {
     private ImportRepository importRepository;
 
     @Autowired
-    private RecordRepository recordRepository;
+    private WorkRecordRepository workRecordRepository;
 
     @Autowired
     private DailyRateRepository rateRepository;
@@ -88,7 +88,7 @@ public class WorkRecordDatabaseImporter {
 
             entity.setPerson(getPersonForRecord(record));
             entity.setBudget(getBudgetForRecord(record));
-            entity.setSpentMinutes(record.getMinutesWorked());
+            entity.setMinutes(record.getMinutesWorked());
             entity.setDate(record.getDate());
             entity.setDailyRate(getDailyRateForRecord(record));
             entity.setImportRecord(importRecord);
@@ -101,7 +101,7 @@ public class WorkRecordDatabaseImporter {
             }
             entitiesToImport.add(entity);
         }
-        recordRepository.save(entitiesToImport);
+        workRecordRepository.save(entitiesToImport);
         importRecord.setStartDate(earliestRecordDate);
         importRecord.setEndDate(latestRecordDate);
     }
