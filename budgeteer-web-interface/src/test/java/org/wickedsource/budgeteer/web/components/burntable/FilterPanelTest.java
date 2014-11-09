@@ -11,7 +11,7 @@ public class FilterPanelTest extends AbstractWebTestTemplate {
     @Test
     public void render() {
         WicketTester tester = getTester();
-        FilterPanel panel = new FilterPanel("panel", new WorkRecordFilter());
+        FilterPanel panel = new FilterPanel("panel", new WorkRecordFilter(1l));
         tester.startComponentInPage(panel);
     }
 }

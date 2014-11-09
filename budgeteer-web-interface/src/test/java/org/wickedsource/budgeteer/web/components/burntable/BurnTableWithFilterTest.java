@@ -10,7 +10,7 @@ public class BurnTableWithFilterTest extends AbstractWebTestTemplate {
     @Test
     public void render() {
         WicketTester tester = getTester();
-        BurnTableWithFilter table = new BurnTableWithFilter("panel", new WorkRecordFilter());
+        BurnTableWithFilter table = new BurnTableWithFilter("panel", new WorkRecordFilter(1l));
         tester.startComponentInPage(table);
     }
 }

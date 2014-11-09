@@ -8,11 +8,11 @@ public class BudgetTagFilter implements Serializable {
 
     private List<String> selectedTags = new ArrayList<String>();
 
-    public BudgetTagFilter() {
-    }
+    private long projectId;
 
-    public BudgetTagFilter(List<String> selectedTags) {
+    public BudgetTagFilter(List<String> selectedTags, long projectId) {
         this.selectedTags = selectedTags;
+        this.projectId = projectId;
     }
 
     public List<String> getSelectedTags() {
@@ -35,4 +35,11 @@ public class BudgetTagFilter implements Serializable {
         return selectedTags.contains(tag);
     }
 
+    public long getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(long projectId) {
+        this.projectId = projectId;
+    }
 }

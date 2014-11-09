@@ -11,7 +11,7 @@ public class BurnTableTest extends AbstractWebTestTemplate {
     @Test
     public void render() {
         WicketTester tester = getTester();
-        BurnTable table = new BurnTable("table", new FilteredRecordsModel(new WorkRecordFilter()));
+        BurnTable table = new BurnTable("table", new FilteredRecordsModel(new WorkRecordFilter(1l)));
         tester.startComponentInPage(table);
     }
 

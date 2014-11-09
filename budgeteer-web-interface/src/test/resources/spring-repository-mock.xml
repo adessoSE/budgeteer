@@ -19,4 +19,5 @@
     <mockito:mock id="importRepository" class="org.wickedsource.budgeteer.persistence.imports.ImportRepository"/>
 
     <mockito:mock id="personRepository" class="org.wickedsource.budgeteer.persistence.person.PersonRepository"/>
+
 </beans>

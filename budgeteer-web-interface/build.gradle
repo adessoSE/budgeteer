@@ -58,7 +58,9 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-web:1.1.8.RELEASE"
     compile "org.springframework.boot:spring-boot-starter-logging:1.1.8.RELEASE"
     compile "org.springframework.boot:spring-boot-starter-data-jpa:1.1.8.RELEASE"
-//    compile "org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.0.Final"
+
+    compile(group: 'com.mysema.querydsl', name: 'querydsl-apt', version: '3.5.1')
+    compile(group: 'com.mysema.querydsl', name: 'querydsl-jpa', version: '3.5.1')
 
     providedCompile "org.springframework.boot:spring-boot-starter-tomcat:1.1.8.RELEASE"
 
@@ -67,7 +69,46 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
     testCompile group: 'org.springframework', name: 'spring-test', version: '4.1.1.RELEASE'
     testCompile group: 'org.kubek2k', name: 'springockito', version: '1.0.9'
+    testCompile group: 'org.kubek2k', name: 'springockito-annotations', version: '1.0.9'
     testCompile "org.springframework.boot:spring-boot-starter-test"
     testCompile 'com.github.springtestdbunit:spring-test-dbunit:1.1.0'
     testCompile 'org.dbunit:dbunit:2.5.0'
 }
+
+sourceSets {
+    generated {
+        java {
+            srcDirs = ['src/main/generated']
+        }
+    }
+}
+
+configurations {
+    querydslapt
+}
+
+task generateQueryDSL(type: JavaCompile, group: 'build', description: 'Generates the QueryDSL query types') {
+    source = sourceSets.main.java
+    classpath = configurations.compile + configurations.querydslapt
+    options.compilerArgs = [
+            "-proc:only",
+            "-processor", "com.mysema.query.apt.jpa.JPAAnnotationProcessor"
+    ]
+    destinationDir = sourceSets.generated.java.srcDirs.iterator().next()
+}
+
+compileJava {
+    dependsOn generateQueryDSL
+    source generateQueryDSL.destinationDir
+}
+
+compileGeneratedJava {
+    dependsOn generateQueryDSL
+    options.warnings = false
+    classpath += sourceSets.main.runtimeClasspath
+}
+
+clean {
+    delete sourceSets.generated.java.srcDirs
+}
+

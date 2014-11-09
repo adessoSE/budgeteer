@@ -25,7 +25,7 @@ public class BudgetOverviewTableTest extends AbstractWebTestTemplate {
     public void render() {
         WicketTester tester = getTester();
         when(service.loadBudgetsDetailData(anyLong(), any(BudgetTagFilter.class))).thenReturn(createTestData());
-        FilteredBudgetModel model = new FilteredBudgetModel(1, Model.of(new BudgetTagFilter()));
+        FilteredBudgetModel model = new FilteredBudgetModel(1, Model.of(new BudgetTagFilter(Collections.EMPTY_LIST, 1l)));
         BudgetOverviewTable table = new BudgetOverviewTable("table", model);
         tester.startComponentInPage(table);
     }

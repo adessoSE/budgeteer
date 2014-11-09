@@ -87,7 +87,7 @@ public class BudgetServiceTest extends ServiceTestTemplate {
         when(workRecordRepository.getSpentBudget(1l)).thenReturn(100000.0);
         when(planRecordRepository.getPlannedBudget(1l)).thenReturn(200000.0);
         when(workRecordRepository.getAverageDailyRate(1l)).thenReturn(50000.0);
-        List<BudgetDetailData> data = budgetService.loadBudgetsDetailData(1l, new BudgetTagFilter(Arrays.asList("1", "2", "3")));
+        List<BudgetDetailData> data = budgetService.loadBudgetsDetailData(1l, new BudgetTagFilter(Arrays.asList("1", "2", "3"), 1l));
         Assert.assertEquals(1, data.size());
         Assert.assertEquals(100000.0d, data.get(0).getSpent().getAmountMinor().doubleValue(), 1d);
         Assert.assertEquals(-100000.0d, data.get(0).getUnplanned().getAmountMinor().doubleValue(), 1d);

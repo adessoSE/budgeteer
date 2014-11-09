@@ -23,8 +23,7 @@ public class BudgetsOverviewPage extends BasePage {
     public BudgetsOverviewPage() {
         BudgetTagsModel tagsModel = new BudgetTagsModel(BudgeteerSession.get().getProjectId());
         if (BudgeteerSession.get().getBudgetFilter() == null) {
-            BudgetTagFilter filter = new BudgetTagFilter();
-            filter.setSelectedTags(tagsModel.getObject());
+            BudgetTagFilter filter = new BudgetTagFilter(tagsModel.getObject(), BudgeteerSession.get().getProjectId());
             BudgeteerSession.get().setBudgetFilter(filter);
         }
         add(new BudgetTagFilterPanel("tagFilter", tagsModel, model(from(BudgeteerSession.get().getBudgetFilter()))));

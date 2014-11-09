@@ -2,6 +2,7 @@ package org.wickedsource.budgeteer.service;
 
 import org.junit.Before;
 import org.junit.runner.RunWith;
+import org.kubek2k.springockito.annotations.SpringockitoContextLoader;
 import org.mockito.Mockito;
 import org.mockito.internal.util.MockUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:spring-service.xml", "classpath:spring-repository-mock.xml"})
+@ContextConfiguration(loader = SpringockitoContextLoader.class, locations = {"classpath:spring-service.xml", "classpath:spring-repository-mock.xml"})
 public abstract class ServiceTestTemplate {
 
     @Autowired

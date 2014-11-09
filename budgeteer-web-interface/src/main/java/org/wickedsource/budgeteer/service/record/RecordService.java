@@ -1,20 +1,30 @@
 package org.wickedsource.budgeteer.service.record;
 
+import com.mysema.query.types.Predicate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.wickedsource.budgeteer.MoneyUtil;
+import org.wickedsource.budgeteer.ListUtil;
+import org.wickedsource.budgeteer.persistence.record.MonthlyAggregatedRecordBean;
+import org.wickedsource.budgeteer.persistence.record.PlanRecordRepository;
+import org.wickedsource.budgeteer.persistence.record.WeeklyAggregatedRecordBean;
+import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
 import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Random;
 
 @Service
 @Transactional
 public class RecordService {
 
-    private Random random = new Random();
+    @Autowired
+    private WorkRecordRepository workRecordRepository;
+
+    @Autowired
+    private PlanRecordRepository planRecordRepository;
+
+    @Autowired
+    private RecordJoiner recordJoiner;
 
     /**
      * Loads the actual budget burned by the given person and the budget planned for this person aggregated by week.
@@ -23,19 +33,11 @@ public class RecordService {
      * @return one record for each week from the current week to the first week that person booked hours
      */
     public List<AggregatedRecord> getWeeklyAggregationForPerson(long personId) {
-        List<AggregatedRecord> list = new ArrayList<AggregatedRecord>();
-        for (int i = 0; i < 20; i++) {
-            AggregatedRecord record = new AggregatedRecord();
-            record.setAggregationPeriodTitle("Week #" + i);
-            record.setAggregationPeriodStart(new Date());
-            record.setAggregationPeriodEnd(new Date());
-            record.setBudgetBurned(MoneyUtil.createMoneyFromCents(random.nextInt(100000)));
-            record.setBudgetPlanned(MoneyUtil.createMoneyFromCents(random.nextInt(100000)));
-            record.setHours(random.nextDouble());
-            list.add(record);
-        }
-        return list;
+        List<WeeklyAggregatedRecordBean> planRecords = planRecordRepository.aggregateByWeekAndPerson(personId);
+        List<WeeklyAggregatedRecordBean> workRecords = workRecordRepository.aggregateByWeekAndPerson(personId);
+        return recordJoiner.joinWeekly(workRecords, planRecords);
     }
+
 
     /**
      * Loads the actual budget burned by the given person and the budget planned for this person aggregated by month.
@@ -44,18 +46,9 @@ public class RecordService {
      * @return one record for each month from the current month to the first month that person booked hours
      */
     public List<AggregatedRecord> getMonthlyAggregationForPerson(long personId) {
-        List<AggregatedRecord> list = new ArrayList<AggregatedRecord>();
-        for (int i = 0; i < 20; i++) {
-            AggregatedRecord record = new AggregatedRecord();
-            record.setAggregationPeriodTitle("2014/" + i);
-            record.setAggregationPeriodStart(new Date());
-            record.setAggregationPeriodEnd(new Date());
-            record.setBudgetBurned(MoneyUtil.createMoneyFromCents(random.nextInt(100000)));
-            record.setBudgetPlanned(MoneyUtil.createMoneyFromCents(random.nextInt(100000)));
-            record.setHours(random.nextDouble());
-            list.add(record);
-        }
-        return list;
+        List<MonthlyAggregatedRecordBean> planRecords = planRecordRepository.aggregateByMonthAndPerson(personId);
+        List<MonthlyAggregatedRecordBean> workRecords = workRecordRepository.aggregateByMonthAndPerson(personId);
+        return recordJoiner.joinMonthly(workRecords, planRecords);
     }
 
     /**
@@ -65,7 +58,9 @@ public class RecordService {
      * @return one record for each week from the current week to the first week that was booked in the given budget
      */
     public List<AggregatedRecord> getWeeklyAggregationForBudget(long budgetId) {
-        return getWeeklyAggregationForPerson(budgetId);
+        List<WeeklyAggregatedRecordBean> planRecords = planRecordRepository.aggregateByWeekAndBudget(budgetId);
+        List<WeeklyAggregatedRecordBean> workRecords = workRecordRepository.aggregateByWeekAndBudget(budgetId);
+        return recordJoiner.joinWeekly(workRecords, planRecords);
     }
 
     /**
@@ -75,7 +70,9 @@ public class RecordService {
      * @return one record for each month from the current month to the first month that was booked in the given budget.
      */
     public List<AggregatedRecord> getMonthlyAggregationForBudget(long budgetId) {
-        return getMonthlyAggregationForPerson(budgetId);
+        List<MonthlyAggregatedRecordBean> planRecords = planRecordRepository.aggregateByMonthAndBudget(budgetId);
+        List<MonthlyAggregatedRecordBean> workRecords = workRecordRepository.aggregateByMonthAndBudget(budgetId);
+        return recordJoiner.joinMonthly(workRecords, planRecords);
     }
 
     /**
@@ -85,7 +82,9 @@ public class RecordService {
      * @return one record for each week from the current week to the first week that was booked in the given budget
      */
     public List<AggregatedRecord> getWeeklyAggregationForBudgets(BudgetTagFilter budgetFilter) {
-        return getWeeklyAggregationForPerson(1l);
+        List<WeeklyAggregatedRecordBean> planRecords = planRecordRepository.aggregateByWeekAndBudgetTags(budgetFilter.getProjectId(), budgetFilter.getSelectedTags());
+        List<WeeklyAggregatedRecordBean> workRecords = workRecordRepository.aggregateByWeekAndBudgetTags(budgetFilter.getProjectId(), budgetFilter.getSelectedTags());
+        return recordJoiner.joinWeekly(workRecords, planRecords);
     }
 
     /**
@@ -95,7 +94,9 @@ public class RecordService {
      * @return one record for each month from the current month to the first month that was booked in the given budget.
      */
     public List<AggregatedRecord> getMonthlyAggregationForBudgets(BudgetTagFilter budgetFilter) {
-        return getMonthlyAggregationForPerson(1l);
+        List<MonthlyAggregatedRecordBean> planRecords = planRecordRepository.aggregateByMonthAndBudgetTags(budgetFilter.getProjectId(), budgetFilter.getSelectedTags());
+        List<MonthlyAggregatedRecordBean> workRecords = workRecordRepository.aggregateByMonthAndBudgetTags(budgetFilter.getProjectId(), budgetFilter.getSelectedTags());
+        return recordJoiner.joinMonthly(workRecords, planRecords);
     }
 
     /**
@@ -106,56 +107,8 @@ public class RecordService {
      * @return filtered list of records.
      */
     public List<WorkRecord> getFilteredRecords(WorkRecordFilter filter) {
-        int size = 50;
-        if (filter.getPerson() != null) {
-            size -= 5;
-        }
-        if (filter.getBudget() != null) {
-            size -= 5;
-        }
-        if (filter.getDateRange() != null) {
-            size -= 5;
-        }
-
-        List<WorkRecord> records = new ArrayList<WorkRecord>();
-        for (int i = 0; i < size; i++) {
-            WorkRecord record = new WorkRecord();
-            record.setHours(8d);
-            record.setBudgetBurned(MoneyUtil.createMoney(500d));
-            record.setBudgetName("Budget 1");
-            record.setDailyRate(MoneyUtil.createMoney(500d));
-            record.setDate(new Date());
-            record.setPersonName("Tom");
-            records.add(record);
-        }
-        return records;
-    }
-
-    /**
-     * Loads the records from the database that match the given filter.
-     *
-     * @param filter the filter to apply when loading records.
-     * @return filtered list of records.
-     */
-    public List<WorkRecord> getFilteredRecords(BudgetTagFilter filter) {
-        int size = 50;
-        for (int i = 0; i < filter.getSelectedTags().size(); i++) {
-            size -= 5;
-        }
-
-        List<WorkRecord> records = new ArrayList<WorkRecord>();
-        for (int i = 0; i < size; i++) {
-            WorkRecord record = new WorkRecord();
-            record.setHours(8d);
-            record.setBudgetBurned(MoneyUtil.createMoney(500d));
-            record.setBudgetName("Budget 1");
-            record.setDailyRate(MoneyUtil.createMoney(500d));
-            record.setDate(new Date());
-            record.setPersonName("Tom");
-            records.add(record);
-        }
-
-        return records;
+        Predicate query = WorkRecordQueries.findByFilter(filter);
+        return ListUtil.toArrayList(workRecordRepository.findAll(query));
     }
 
 }

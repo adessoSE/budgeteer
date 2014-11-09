@@ -11,7 +11,7 @@ import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 public class HoursPage extends BasePage {
 
     public HoursPage() {
-        BurnTableWithFilter table = new BurnTableWithFilter("burnTable", new WorkRecordFilter());
+        BurnTableWithFilter table = new BurnTableWithFilter("burnTable", new WorkRecordFilter(1l));
         add(table);
     }
 

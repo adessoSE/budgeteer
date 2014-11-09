@@ -15,6 +15,13 @@ public class PersonBaseData implements Serializable {
 
     private Date lastBooked;
 
+    public PersonBaseData() {
+    }
+
+    public PersonBaseData(long id) {
+        this.id = id;
+    }
+
     public long getId() {
         return id;
     }

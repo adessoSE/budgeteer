@@ -8,11 +8,17 @@ import java.io.Serializable;
 
 public class WorkRecordFilter implements Serializable{
 
+    private long projectId;
+
     private PersonBaseData person;
 
     private BudgetBaseData budget;
 
     private DateRange dateRange;
+
+    public WorkRecordFilter(long projectId) {
+        this.projectId = projectId;
+    }
 
     public PersonBaseData getPerson() {
         return person;
@@ -36,5 +42,13 @@ public class WorkRecordFilter implements Serializable{
 
     public void setDateRange(DateRange dateRange) {
         this.dateRange = dateRange;
+    }
+
+    public long getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(long projectId) {
+        this.projectId = projectId;
     }
 }
