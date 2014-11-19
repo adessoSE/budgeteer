@@ -5,23 +5,23 @@ import java.util.List;
 
 public class TargetAndActual {
 
-    private List<BudgeteerSeries> actualSeries = new ArrayList<BudgeteerSeries>();
+    private List<MoneySeries> actualSeries = new ArrayList<MoneySeries>();
 
-    private BudgeteerSeries targetSeries;
+    private MoneySeries targetSeries;
 
-    public List<BudgeteerSeries> getActualSeries() {
+    public List<MoneySeries> getActualSeries() {
         return actualSeries;
     }
 
-    public void setActualSeries(List<BudgeteerSeries> actualSeries) {
+    public void setActualSeries(List<MoneySeries> actualSeries) {
         this.actualSeries = actualSeries;
     }
 
-    public BudgeteerSeries getTargetSeries() {
+    public MoneySeries getTargetSeries() {
         return targetSeries;
     }
 
-    public void setTargetSeries(BudgeteerSeries targetSeries) {
+    public void setTargetSeries(MoneySeries targetSeries) {
         this.targetSeries = targetSeries;
     }
 }

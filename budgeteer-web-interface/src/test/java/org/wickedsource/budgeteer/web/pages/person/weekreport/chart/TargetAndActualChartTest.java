@@ -3,7 +3,7 @@ package org.wickedsource.budgeteer.web.pages.person.weekreport.chart;
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.Test;
 import org.wickedsource.budgeteer.MoneyUtil;
-import org.wickedsource.budgeteer.service.statistics.BudgeteerSeries;
+import org.wickedsource.budgeteer.service.statistics.MoneySeries;
 import org.wickedsource.budgeteer.service.statistics.TargetAndActual;
 import org.wickedsource.budgeteer.web.AbstractWebTestTemplate;
 import org.wickedsource.budgeteer.web.charts.BudgeteerChartTheme;
@@ -27,7 +27,7 @@ public class TargetAndActualChartTest extends AbstractWebTestTemplate {
         TargetAndActual targetAndActual = new TargetAndActual();
 
         for (int i = 0; i < 5; i++) {
-            BudgeteerSeries series = new BudgeteerSeries();
+            MoneySeries series = new MoneySeries();
             series.setName("Budget " + i);
             for (int j = 0; j < numberOfWeeks; j++) {
                 series.getValues().add(MoneyUtil.createMoneyFromCents(random.nextInt(5000)));
@@ -35,7 +35,7 @@ public class TargetAndActualChartTest extends AbstractWebTestTemplate {
             targetAndActual.getActualSeries().add(series);
         }
 
-        BudgeteerSeries series = new BudgeteerSeries();
+        MoneySeries series = new MoneySeries();
         series.setName("Target");
         for (int j = 0; j < numberOfWeeks; j++) {
             series.getValues().add(MoneyUtil.createMoneyFromCents(random.nextInt(5000)));

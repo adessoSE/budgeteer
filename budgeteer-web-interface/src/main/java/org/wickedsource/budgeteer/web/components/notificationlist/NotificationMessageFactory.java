@@ -4,7 +4,9 @@ import org.wickedsource.budgeteer.service.notification.MissingBudgetTotalNotific
 import org.wickedsource.budgeteer.service.notification.MissingDailyRateNotification;
 import org.wickedsource.budgeteer.service.notification.Notification;
 
-public class NotificationMessageFactory {
+import java.io.Serializable;
+
+public class NotificationMessageFactory implements Serializable {
 
     private NotificationMessageAnchor anchor = new NotificationMessageAnchor();
 

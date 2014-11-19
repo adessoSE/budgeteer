@@ -4,17 +4,17 @@ import org.joda.money.Money;
 
 public class Share {
 
-    private String budgetName;
+    private String name;
 
     private Money share;
 
-    public Share(Money share, String budgetName) {
+    public Share(Money share, String name) {
         this.share = share;
-        this.budgetName = budgetName;
+        this.name = name;
     }
 
-    public String getBudgetName() {
-        return budgetName;
+    public String getName() {
+        return name;
     }
 
     public Money getShare() {

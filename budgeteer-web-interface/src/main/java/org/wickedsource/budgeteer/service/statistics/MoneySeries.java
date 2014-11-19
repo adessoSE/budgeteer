@@ -5,7 +5,7 @@ import org.joda.money.Money;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BudgeteerSeries {
+public class MoneySeries {
 
     private String name;
 
@@ -25,6 +25,10 @@ public class BudgeteerSeries {
 
     public void setValues(List<Money> values) {
         this.values = values;
+    }
+
+    public void add(Money value) {
+        values.add(value);
     }
 
 }

@@ -5,7 +5,7 @@ import com.googlecode.wickedcharts.highcharts.options.color.HexColor;
 import com.googlecode.wickedcharts.highcharts.options.series.Series;
 import org.apache.wicket.model.IModel;
 import org.wickedsource.budgeteer.MoneyUtil;
-import org.wickedsource.budgeteer.service.statistics.BudgeteerSeries;
+import org.wickedsource.budgeteer.service.statistics.MoneySeries;
 import org.wickedsource.budgeteer.service.statistics.TargetAndActual;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.PropertyLoader;
@@ -51,7 +51,7 @@ public class TargetAndActualChartOptions extends Options {
                 .setShared(true));
 
         if (model.getObject() != null) {
-            for (BudgeteerSeries series : model.getObject().getActualSeries()) {
+            for (MoneySeries series : model.getObject().getActualSeries()) {
                 addSeries(new Series<Double>() {
                 }
                         .setName(series.getName())

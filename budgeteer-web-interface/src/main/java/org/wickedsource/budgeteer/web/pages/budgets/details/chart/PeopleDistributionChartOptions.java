@@ -29,7 +29,7 @@ public class PeopleDistributionChartOptions extends Options {
                 .setInnerSize(new PixelOrPercent(50, PixelOrPercent.Unit.PERCENT));
 
         for (Share share : model.getObject()) {
-            series.addPoint(new Point(share.getBudgetName(), MoneyUtil.toDouble(share.getShare())));
+            series.addPoint(new Point(share.getName(), MoneyUtil.toDouble(share.getShare())));
         }
 
         addSeries(series);

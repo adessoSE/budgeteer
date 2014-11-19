@@ -32,6 +32,7 @@ public class PeopleOverviewTable extends Panel {
             protected void populateItem(ListItem<PersonBaseData> item) {
                 PageParameters parameters = PersonDetailsPage.createParameters(item.getModelObject().getId());
                 Link link = new BookmarkablePageLink<PersonDetailsPage>("personLink", PersonDetailsPage.class, parameters);
+                link.add(new Label("personName", item.getModelObject().getName()));
                 item.add(link);
                 item.add(new MoneyLabel("dailyRate", model(from(item.getModelObject()).getAverageDailyRate())));
                 item.add(new Label("lastBookedDate", item.getModelObject().getLastBooked()));

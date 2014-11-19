@@ -122,6 +122,9 @@ public class BudgetService {
      * @return list of budgets that match the filter.
      */
     public List<BudgetDetailData> loadBudgetsDetailData(long projectId, BudgetTagFilter filter) {
+        if (filter.getSelectedTags().isEmpty()) {
+            return new ArrayList<BudgetDetailData>();
+        }
         List<BudgetEntity> budgets = budgetRepository.findByAtLeastOneTag(projectId, filter.getSelectedTags());
         List<BudgetDetailData> dataList = new ArrayList<BudgetDetailData>();
         for (BudgetEntity entity : budgets) {

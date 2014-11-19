@@ -25,7 +25,7 @@ public class BurnedBudgetChartModel extends LoadableDetachableModel<List<Money>>
 
     @Override
     protected List<Money> load() {
-        return service.getBudgetBurnedInPreviousWeeks(projectId, numberOfWeeks);
+        return service.getWeeklyBudgetBurnedForProject(projectId, numberOfWeeks);
     }
 
     public int getNumberOfWeeks() {
