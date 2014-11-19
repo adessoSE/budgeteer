@@ -331,8 +331,12 @@ public class StatisticsService {
      */
     public TargetAndActual getWeekStatsForBudgets(BudgetTagFilter budgetFilter, int numberOfWeeks) {
         Date startDate = dateUtil.weeksAgo(numberOfWeeks);
-        List<WeeklyAggregatedRecordWithTitleBean> burnedStats = workRecordRepository.aggregateByWeekAndPersonForBudgets(budgetFilter.getProjectId(), budgetFilter.getSelectedTags(), startDate);
-        List<WeeklyAggregatedRecordBean> plannedStats = planRecordRepository.aggregateByWeekForBudgets(budgetFilter.getProjectId(), budgetFilter.getSelectedTags(), startDate);
+        List<WeeklyAggregatedRecordWithTitleBean> burnedStats = new ArrayList<WeeklyAggregatedRecordWithTitleBean>();
+        List<WeeklyAggregatedRecordBean> plannedStats = new ArrayList<WeeklyAggregatedRecordBean>();
+        if (!budgetFilter.getSelectedTags().isEmpty()) {
+            burnedStats = workRecordRepository.aggregateByWeekAndPersonForBudgets(budgetFilter.getProjectId(), budgetFilter.getSelectedTags(), startDate);
+            plannedStats = planRecordRepository.aggregateByWeekForBudgets(budgetFilter.getProjectId(), budgetFilter.getSelectedTags(), startDate);
+        }
 
         TargetAndActual targetAndActual = new TargetAndActual();
 
@@ -355,8 +359,12 @@ public class StatisticsService {
      */
     public TargetAndActual getMonthStatsForBudgets(BudgetTagFilter budgetFilter, int numberOfMonths) {
         Date startDate = dateUtil.monthsAgo(numberOfMonths);
-        List<MonthlyAggregatedRecordWithTitleBean> burnedStats = workRecordRepository.aggregateByMonthAndPersonForBudgets(budgetFilter.getProjectId(), budgetFilter.getSelectedTags(), startDate);
-        List<MonthlyAggregatedRecordBean> plannedStats = planRecordRepository.aggregateByMonthForBudgets(budgetFilter.getProjectId(), budgetFilter.getSelectedTags(), startDate);
+        List<MonthlyAggregatedRecordWithTitleBean> burnedStats = new ArrayList<MonthlyAggregatedRecordWithTitleBean>();
+        List<MonthlyAggregatedRecordBean> plannedStats = new ArrayList<MonthlyAggregatedRecordBean>();
+        if (!budgetFilter.getSelectedTags().isEmpty()) {
+            burnedStats = workRecordRepository.aggregateByMonthAndPersonForBudgets(budgetFilter.getProjectId(), budgetFilter.getSelectedTags(), startDate);
+            plannedStats = planRecordRepository.aggregateByMonthForBudgets(budgetFilter.getProjectId(), budgetFilter.getSelectedTags(), startDate);
+        }
 
         TargetAndActual targetAndActual = new TargetAndActual();
 

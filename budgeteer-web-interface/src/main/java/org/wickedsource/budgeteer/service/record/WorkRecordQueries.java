@@ -6,6 +6,10 @@ import org.wickedsource.budgeteer.persistence.record.QWorkRecordEntity;
 
 public class WorkRecordQueries {
 
+    /**
+     * @deprecated should be re-implemented using criteria api to load "flat" objects instead of a WorkRecordEntity!!!
+     */
+    @Deprecated
     public static Predicate findByFilter(WorkRecordFilter filter) {
         QWorkRecordEntity record = QWorkRecordEntity.workRecordEntity;
         BooleanExpression expression = record.budget.project.id.eq(filter.getProjectId());

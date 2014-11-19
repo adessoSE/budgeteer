@@ -13,8 +13,6 @@ public class WorkRecord implements Serializable {
 
     private Date date;
 
-    private int minutesWorked;
-
     private double hours;
 
     private Money budgetBurned;
@@ -69,12 +67,5 @@ public class WorkRecord implements Serializable {
         this.date = date;
     }
 
-    public int getMinutesWorked() {
-        return minutesWorked;
-    }
-
-    public void setMinutesWorked(int minutesWorked) {
-        this.minutesWorked = minutesWorked;
-    }
 }
 

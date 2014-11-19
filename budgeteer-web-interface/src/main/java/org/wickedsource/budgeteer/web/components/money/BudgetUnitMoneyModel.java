@@ -2,6 +2,7 @@ package org.wickedsource.budgeteer.web.components.money;
 
 import org.apache.wicket.model.IModel;
 import org.joda.money.Money;
+import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 
 import java.math.RoundingMode;
@@ -17,7 +18,11 @@ public class BudgetUnitMoneyModel implements IModel<Money> {
 
     @Override
     public Money getObject() {
-        return sourceModel.getObject().dividedBy(BudgeteerSession.get().getSelectedBudgetUnit(), RoundingMode.FLOOR);
+        if (sourceModel.getObject() == null) {
+            return MoneyUtil.createMoney(0d);
+        } else {
+            return sourceModel.getObject().dividedBy(BudgeteerSession.get().getSelectedBudgetUnit(), RoundingMode.FLOOR);
+        }
     }
 
     @Override

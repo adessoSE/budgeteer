@@ -1,6 +1,7 @@
 package org.wickedsource.budgeteer.service.record;
 
 import org.joda.money.Money;
+import org.wickedsource.budgeteer.MoneyUtil;
 
 import java.util.Date;
 
@@ -67,6 +68,8 @@ public class AggregatedRecord {
     }
 
     public Money getDifference() {
-        return budgetPlanned.minus(budgetBurned);
+        Money first = budgetPlanned != null ? budgetPlanned : MoneyUtil.createMoney(0);
+        Money second = budgetBurned != null ? budgetBurned : MoneyUtil.createMoney(0);
+        return first.minus(second);
     }
 }

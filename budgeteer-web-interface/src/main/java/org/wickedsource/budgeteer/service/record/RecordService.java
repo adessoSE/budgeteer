@@ -11,6 +11,7 @@ import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
 import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -25,6 +26,9 @@ public class RecordService {
 
     @Autowired
     private RecordJoiner recordJoiner;
+
+    @Autowired
+    private WorkRecordMapper recordMapper;
 
     /**
      * Loads the actual budget burned by the given person and the budget planned for this person aggregated by week.
@@ -82,8 +86,12 @@ public class RecordService {
      * @return one record for each week from the current week to the first week that was booked in the given budget
      */
     public List<AggregatedRecord> getWeeklyAggregationForBudgets(BudgetTagFilter budgetFilter) {
-        List<WeeklyAggregatedRecordBean> planRecords = planRecordRepository.aggregateByWeekAndBudgetTags(budgetFilter.getProjectId(), budgetFilter.getSelectedTags());
-        List<WeeklyAggregatedRecordBean> workRecords = workRecordRepository.aggregateByWeekAndBudgetTags(budgetFilter.getProjectId(), budgetFilter.getSelectedTags());
+        List<WeeklyAggregatedRecordBean> planRecords = new ArrayList<WeeklyAggregatedRecordBean>();
+        List<WeeklyAggregatedRecordBean> workRecords = new ArrayList<WeeklyAggregatedRecordBean>();
+        if (!budgetFilter.getSelectedTags().isEmpty()) {
+            planRecords = planRecordRepository.aggregateByWeekAndBudgetTags(budgetFilter.getProjectId(), budgetFilter.getSelectedTags());
+            workRecords = workRecordRepository.aggregateByWeekAndBudgetTags(budgetFilter.getProjectId(), budgetFilter.getSelectedTags());
+        }
         return recordJoiner.joinWeekly(workRecords, planRecords);
     }
 
@@ -94,8 +102,12 @@ public class RecordService {
      * @return one record for each month from the current month to the first month that was booked in the given budget.
      */
     public List<AggregatedRecord> getMonthlyAggregationForBudgets(BudgetTagFilter budgetFilter) {
-        List<MonthlyAggregatedRecordBean> planRecords = planRecordRepository.aggregateByMonthAndBudgetTags(budgetFilter.getProjectId(), budgetFilter.getSelectedTags());
-        List<MonthlyAggregatedRecordBean> workRecords = workRecordRepository.aggregateByMonthAndBudgetTags(budgetFilter.getProjectId(), budgetFilter.getSelectedTags());
+        List<MonthlyAggregatedRecordBean> planRecords = new ArrayList<MonthlyAggregatedRecordBean>();
+        List<MonthlyAggregatedRecordBean> workRecords = new ArrayList<MonthlyAggregatedRecordBean>();
+        if (!budgetFilter.getSelectedTags().isEmpty()) {
+            workRecords = workRecordRepository.aggregateByMonthAndBudgetTags(budgetFilter.getProjectId(), budgetFilter.getSelectedTags());
+            planRecords = planRecordRepository.aggregateByMonthAndBudgetTags(budgetFilter.getProjectId(), budgetFilter.getSelectedTags());
+        }
         return recordJoiner.joinMonthly(workRecords, planRecords);
     }
 
@@ -108,7 +120,7 @@ public class RecordService {
      */
     public List<WorkRecord> getFilteredRecords(WorkRecordFilter filter) {
         Predicate query = WorkRecordQueries.findByFilter(filter);
-        return ListUtil.toArrayList(workRecordRepository.findAll(query));
+        return recordMapper.map(ListUtil.toArrayList(workRecordRepository.findAll(query)));
     }
 
 }
