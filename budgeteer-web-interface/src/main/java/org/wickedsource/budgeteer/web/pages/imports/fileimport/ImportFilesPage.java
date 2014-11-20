@@ -1,5 +1,6 @@
 package org.wickedsource.budgeteer.web.pages.imports.fileimport;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
@@ -10,7 +11,9 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.wickedsource.budgeteer.aproda.AprodaWorkRecordsImporter;
 import org.wickedsource.budgeteer.imports.api.ImportException;
+import org.wickedsource.budgeteer.imports.api.ImportFile;
 import org.wickedsource.budgeteer.imports.api.Importer;
 import org.wickedsource.budgeteer.service.imports.ImportService;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
@@ -19,7 +22,6 @@ import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.pages.base.dialogpage.DialogPageWithBacklink;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +31,7 @@ public class ImportFilesPage extends DialogPageWithBacklink {
     @SpringBean
     private ImportService service;
 
-    private Importer importer;
+    private Importer importer = new AprodaWorkRecordsImporter();
 
     private List<FileUpload> fileUploads = new ArrayList<FileUpload>();
 
@@ -42,16 +44,16 @@ public class ImportFilesPage extends DialogPageWithBacklink {
             protected void onSubmit() {
                 try {
                     ImportFormBean bean = getModelObject();
-                    List<InputStream> files = new ArrayList<InputStream>();
+                    List<ImportFile> files = new ArrayList<ImportFile>();
                     for (FileUpload file : fileUploads) {
-                        files.add(file.getInputStream());
+                        files.add(new ImportFile(file.getClientFileName(), file.getInputStream()));
                     }
                     service.doImport(BudgeteerSession.get().getProjectId(), importer, files);
                     info(getString("message.success"));
                 } catch (IOException e) {
-                    error(getString("message.ioError"));
+                    error(String.format(getString("message.ioError"), e.getMessage()));
                 } catch (ImportException e) {
-                    error(getString("message.importError"));
+                    error(String.format(getString("message.importError"), e.getMessage()));
                 }
             }
         };
@@ -63,6 +65,7 @@ public class ImportFilesPage extends DialogPageWithBacklink {
         form.add(importerChoice);
         FileUploadField fileUpload = new FileUploadField("fileUpload", new PropertyModel<List<FileUpload>>(this, "fileUploads"));
         fileUpload.setRequired(true);
+        fileUpload.add(new AttributeModifier("accept", new AcceptedFileExtensionsModel(importer)));
         form.add(fileUpload);
         form.add(createBacklink("backlink2"));
     }

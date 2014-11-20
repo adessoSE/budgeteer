@@ -11,6 +11,7 @@ import org.wickedsource.budgeteer.IntegrationTestTemplate;
 import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.aproda.AprodaWorkRecordsImporter;
 import org.wickedsource.budgeteer.imports.api.ImportException;
+import org.wickedsource.budgeteer.imports.api.ImportFile;
 import org.wickedsource.budgeteer.persistence.budget.BudgetRepository;
 import org.wickedsource.budgeteer.persistence.imports.ImportEntity;
 import org.wickedsource.budgeteer.persistence.imports.ImportRepository;
@@ -18,7 +19,6 @@ import org.wickedsource.budgeteer.persistence.person.PersonRepository;
 import org.wickedsource.budgeteer.persistence.record.WorkRecordEntity;
 import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
 
-import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class ImportServiceIntegrationTest extends IntegrationTestTemplate{
+public class ImportServiceIntegrationTest extends IntegrationTestTemplate {
 
     private DateFormat format = new SimpleDateFormat("dd.MM.yyyy");
 
@@ -76,10 +76,10 @@ public class ImportServiceIntegrationTest extends IntegrationTestTemplate{
     }
 
     private void doImport() throws ImportException {
-        List<InputStream> inputStreams = new ArrayList<InputStream>();
-        inputStreams.add(getClass().getResourceAsStream("testReport1.xlsx"));
-        inputStreams.add(getClass().getResourceAsStream("testReport2.xlsx"));
-        importService.doImport(1l, new AprodaWorkRecordsImporter(), inputStreams);
+        List<ImportFile> importFiles = new ArrayList<ImportFile>();
+        importFiles.add(new ImportFile("file1", getClass().getResourceAsStream("testReport1.xlsx")));
+        importFiles.add(new ImportFile("file2", getClass().getResourceAsStream("testReport2.xlsx")));
+        importService.doImport(1l, new AprodaWorkRecordsImporter(), importFiles);
     }
 
     private void assertImportRecord() throws ParseException {

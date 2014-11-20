@@ -31,9 +31,11 @@ public class NotificationServiceTest extends ServiceTestTemplate {
     @Test
     public void testGetNotifications() throws Exception {
         when(workRecordRepository.getMissingDailyRatesForProject(1l)).thenReturn(Arrays.asList(createMissingDailyRate()));
+        when(workRecordRepository.count()).thenReturn(0l);
         when(budgetRepository.getMissingBudgetTotalsForProject(1l)).thenReturn(Arrays.asList(createMissingBudgetTotal()));
+
         List<Notification> notifications = service.getNotifications(1l);
-        Assert.assertEquals(2, notifications.size());
+        Assert.assertEquals(3, notifications.size());
     }
 
     @Test

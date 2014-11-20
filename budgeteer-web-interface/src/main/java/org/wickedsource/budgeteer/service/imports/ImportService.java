@@ -5,17 +5,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Service;
-import org.wickedsource.budgeteer.imports.api.ImportException;
-import org.wickedsource.budgeteer.imports.api.ImportedWorkRecord;
-import org.wickedsource.budgeteer.imports.api.Importer;
-import org.wickedsource.budgeteer.imports.api.WorkRecordsImporter;
+import org.wickedsource.budgeteer.imports.api.*;
 import org.wickedsource.budgeteer.persistence.imports.ImportEntity;
 import org.wickedsource.budgeteer.persistence.imports.ImportRepository;
 import org.wickedsource.budgeteer.persistence.record.PlanRecordRepository;
 import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
 
 import javax.transaction.Transactional;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -81,15 +77,15 @@ public class ImportService implements ApplicationContextAware {
     /**
      * Imports the data from the given inputstreams using the given importer.
      *
-     * @param importer     an importer that understands the format of the files represented by the input streams.
-     * @param inputStreams the input streams of the files to import.
+     * @param importer    an importer that understands the format of the files represented by the input streams.
+     * @param importFiles the files to be imported
      */
-    public void doImport(long projectId, Importer importer, List<InputStream> inputStreams) throws ImportException {
+    public void doImport(long projectId, Importer importer, List<ImportFile> importFiles) throws ImportException {
         if (importer instanceof WorkRecordsImporter) {
             WorkRecordsImporter workRecordsImporter = (WorkRecordsImporter) importer;
             WorkRecordDatabaseImporter dbImporter = applicationContext.getBean(WorkRecordDatabaseImporter.class, projectId, workRecordsImporter.getDisplayName());
-            for (InputStream in : inputStreams) {
-                List<ImportedWorkRecord> records = workRecordsImporter.importFile(in);
+            for (ImportFile file : importFiles) {
+                List<ImportedWorkRecord> records = workRecordsImporter.importFile(file);
                 dbImporter.importRecords(records);
             }
         } else {
