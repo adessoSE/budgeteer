@@ -19,7 +19,7 @@ public interface WorkRecordRepository extends CrudRepository<WorkRecordEntity, L
      * @return aggregated monetary value of the spent budget in cents.
      */
     @Query("select sum(record.minutes * record.dailyRate) / 60 / 8 from WorkRecordEntity record where record.budget.id = :budgetId")
-    double getSpentBudget(@Param("budgetId") long budgetId);
+    Double getSpentBudget(@Param("budgetId") long budgetId);
 
     /**
      * Calculates the monetary value of the average daily rate in the given budget.
@@ -28,7 +28,7 @@ public interface WorkRecordRepository extends CrudRepository<WorkRecordEntity, L
      * @return monetary value of the average daily rate in cents.
      */
     @Query("select sum(record.dailyRate * record.minutes) / sum(record.minutes) from WorkRecordEntity record where record.budget.id=:budgetId")
-    double getAverageDailyRate(@Param("budgetId") long budgetId);
+    Double getAverageDailyRate(@Param("budgetId") long budgetId);
 
     @Query("select max(record.date) from WorkRecordEntity record where record.budget.id=:budgetId")
     Date getLatestWordRecordDate(@Param("budgetId") long budgetId);

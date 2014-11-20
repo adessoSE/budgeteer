@@ -96,7 +96,7 @@ public class BudgetDetailData {
     }
 
     public Double getProgress() {
-        return this.getRemaining().getAmount().doubleValue() / this.total.getAmount().doubleValue();
+        return this.getSpent().getAmount().doubleValue() / this.total.getAmount().doubleValue();
     }
 
     /**

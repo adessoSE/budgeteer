@@ -3,6 +3,8 @@ package org.wickedsource.budgeteer.service.notification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.wickedsource.budgeteer.persistence.budget.BudgetRepository;
+import org.wickedsource.budgeteer.persistence.budget.MissingBudgetTotalBean;
+import org.wickedsource.budgeteer.persistence.record.MissingDailyRateBean;
 import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
 
 import javax.transaction.Transactional;
@@ -49,7 +51,12 @@ public class NotificationService {
      * @return list of notifications concerning the given person.
      */
     public List<Notification> getNotificationsForPerson(long personId) {
-        return Arrays.asList(missingDailyRateMapper.map(workRecordRepository.getMissingDailyRatesForPerson(personId)));
+        MissingDailyRateBean missingDailyRatesForPerson = workRecordRepository.getMissingDailyRatesForPerson(personId);
+        if (missingDailyRatesForPerson != null) {
+            return Arrays.asList(missingDailyRateMapper.map(missingDailyRatesForPerson));
+        } else {
+            return new ArrayList<Notification>();
+        }
     }
 
     /**
@@ -59,7 +66,12 @@ public class NotificationService {
      * @return list of notifications concerning the given budget.
      */
     public List<Notification> getNotificationsForBudget(long budgetId) {
-        return Arrays.asList(missingBudgetTotalNotificationMapper.map(budgetRepository.getMissingBudgetTotalForBudget(budgetId)));
+        MissingBudgetTotalBean missingBudgetTotalForBudget = budgetRepository.getMissingBudgetTotalForBudget(budgetId);
+        if (missingBudgetTotalForBudget != null) {
+            return Arrays.asList(missingBudgetTotalNotificationMapper.map(missingBudgetTotalForBudget));
+        } else {
+            return new ArrayList<Notification>();
+        }
     }
 
 }

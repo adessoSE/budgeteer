@@ -18,7 +18,7 @@ public interface PlanRecordRepository extends CrudRepository<PlanRecordEntity, L
      * @return aggregated monetary value of the planned budget in cents.
      */
     @Query("select sum(record.minutes * record.dailyRate) / 60 / 8 from PlanRecordEntity record where record.budget.id = :budgetId")
-    double getPlannedBudget(@Param("budgetId") long budgetId);
+    Double getPlannedBudget(@Param("budgetId") long budgetId);
 
     @Override
     @Modifying
