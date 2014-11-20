@@ -34,6 +34,9 @@ public class NotificationService {
      */
     public List<Notification> getNotifications(long projectId) {
         List<Notification> notifications = new ArrayList<Notification>();
+        if (workRecordRepository.count() == 0) {
+            notifications.add(new EmptyDatabaseNotification());
+        }
         notifications.addAll(missingDailyRateMapper.map(workRecordRepository.getMissingDailyRatesForProject(projectId)));
         notifications.addAll(missingBudgetTotalNotificationMapper.map(budgetRepository.getMissingBudgetTotalsForProject(projectId)));
         return notifications;
