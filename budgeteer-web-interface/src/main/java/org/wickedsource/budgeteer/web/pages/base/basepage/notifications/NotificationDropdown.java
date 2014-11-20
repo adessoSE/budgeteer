@@ -1,14 +1,19 @@
 package org.wickedsource.budgeteer.web.pages.base.basepage.notifications;
 
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.wickedsource.budgeteer.service.notification.Notification;
+import org.wickedsource.budgeteer.web.components.notificationlist.NotificationLinkFactory;
 import org.wickedsource.budgeteer.web.components.notificationlist.NotificationMessageFactory;
 
 public class NotificationDropdown extends Panel {
+
+    private NotificationLinkFactory notificationLinkFactory = new NotificationLinkFactory();
 
     private NotificationMessageFactory notificationMessageFactory = new NotificationMessageFactory();
 
@@ -41,9 +46,18 @@ public class NotificationDropdown extends Panel {
     private WebMarkupContainer createDropdownMenu(String wicketId) {
         final ListView<Notification> listview = new ListView<Notification>("notificationList", getModel()) {
             @Override
-            protected void populateItem(ListItem<Notification> item) {
+            protected void populateItem(final ListItem<Notification> item) {
+                Link link = new Link("notificationLink") {
+                    @SuppressWarnings("unchecked")
+                    @Override
+                    public void onClick() {
+                        setResponsePage(notificationLinkFactory.getLinkForNotification(item.getModelObject(), (Class<? extends WebPage>) getPage().getClass(), getPage().getPageParameters()));
+                    }
+                };
+                item.add(link);
+
                 Label messageLabel = new Label("notificationMessage", notificationMessageFactory.getMessageForNotification(item.getModelObject()));
-                item.add(messageLabel);
+                link.add(messageLabel);
             }
         };
 
