@@ -105,7 +105,8 @@ public class PersonService {
             workRecordRepository.updateDailyRates(rate.getBudget().getId(), person.getPersonId(), rate.getDateRange().getStartDate(), rate.getDateRange().getEndDate(), rate.getRate());
         }
 
-        personEntity.setDailyRates(dailyRates);
+        personEntity.getDailyRates().clear();
+        personEntity.getDailyRates().addAll(dailyRates);
         personRepository.save(personEntity);
     }
 
