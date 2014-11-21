@@ -3,10 +3,11 @@ package org.wickedsource.budgeteer.persistence.budget;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "BUDGET_TAG",
-        uniqueConstraints = {
-                @UniqueConstraint(name = "UNIQUE_BUDGET_TAG", columnNames = {"tag", "budgetId"}),
-        })
+@Table(name = "BUDGET_TAG")
+//        uniqueConstraints = {
+//                @UniqueConstraint(name = "UNIQUE_BUDGET_TAG", columnNames = {"tag", "budgetId"}),
+//        })
+
 public class BudgetTagEntity {
 
     @Id

@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EditBudgetData implements Serializable{
+public class EditBudgetData implements Serializable {
 
     private long id;
 
@@ -55,6 +55,8 @@ public class EditBudgetData implements Serializable{
     }
 
     public void setTags(List<String> tags) {
-        this.tags = new ArrayList<String>(tags);
+        if (tags != null) {
+            this.tags = new ArrayList<String>(tags);
+        }
     }
 }

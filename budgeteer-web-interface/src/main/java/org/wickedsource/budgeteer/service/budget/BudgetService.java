@@ -113,11 +113,12 @@ public class BudgetService {
         return tags;
     }
 
-    private List<BudgetTagEntity> mapTagsToEntities(List<String> tags) {
+    private List<BudgetTagEntity> mapTagsToEntities(List<String> tags, BudgetEntity budget) {
         List<BudgetTagEntity> entities = new ArrayList<BudgetTagEntity>();
         for (String tag : tags) {
             BudgetTagEntity entity = new BudgetTagEntity();
             entity.setTag(tag);
+            entity.setBudget(budget);
             entities.add(entity);
         }
         return entities;
@@ -177,10 +178,10 @@ public class BudgetService {
             throw new UnknownEntityException(BudgetEntity.class, data.getId());
         }
         budget.setImportKey(data.getImportKey());
-        budget.getTags().clear();
-        budget.getTags().addAll(mapTagsToEntities(data.getTags()));
         budget.setTotal(data.getTotal());
         budget.setName(data.getTitle());
+        budget.getTags().clear();
+        budget.getTags().addAll(mapTagsToEntities(data.getTags(), budget));
     }
 
     /**

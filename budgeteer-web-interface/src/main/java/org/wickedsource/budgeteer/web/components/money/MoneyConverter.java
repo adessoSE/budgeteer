@@ -13,18 +13,41 @@ public class MoneyConverter implements IConverter<Money> {
 
     private boolean prependCurrencySymbol;
 
+    private boolean format = true;
+
     public MoneyConverter() {
     }
 
-    public MoneyConverter(boolean prependCurrencySymbol){
+    public boolean isPrependCurrencySymbol() {
+        return prependCurrencySymbol;
+    }
+
+    public void setPrependCurrencySymbol(boolean prependCurrencySymbol) {
+        this.prependCurrencySymbol = prependCurrencySymbol;
+    }
+
+    public boolean isFormat() {
+        return format;
+    }
+
+    public void setFormat(boolean format) {
+        this.format = format;
+    }
+
+    public MoneyConverter(boolean prependCurrencySymbol) {
         this.prependCurrencySymbol = prependCurrencySymbol;
     }
 
     @Override
     public Money convertToObject(String value, Locale locale) throws ConversionException {
         try {
-            NumberFormat format = NumberFormat.getInstance(locale);
-            Number number = format.parse(value);
+            Number number;
+            if (isFormat()) {
+                NumberFormat format = NumberFormat.getInstance(locale);
+                number = format.parse(value);
+            } else {
+                number = Double.valueOf(value);
+            }
             return MoneyUtil.createMoney(number.doubleValue());
         } catch (ParseException e) {
             throw new ConversionException(e);
@@ -33,9 +56,14 @@ public class MoneyConverter implements IConverter<Money> {
 
     @Override
     public String convertToString(Money value, Locale locale) {
-        NumberFormat format = NumberFormat.getInstance(locale);
-        String formatted = format.format(value.getAmount().doubleValue());
-        if(prependCurrencySymbol){
+        String formatted;
+        if (isFormat()) {
+            NumberFormat format = NumberFormat.getInstance(locale);
+            formatted = format.format(value.getAmount().doubleValue());
+        } else {
+            formatted = String.valueOf(value.getAmount().doubleValue());
+        }
+        if (prependCurrencySymbol) {
             formatted = value.getCurrencyUnit().getSymbol() + " " + formatted;
         }
         return formatted;

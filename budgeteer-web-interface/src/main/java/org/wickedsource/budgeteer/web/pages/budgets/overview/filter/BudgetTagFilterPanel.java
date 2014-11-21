@@ -33,7 +33,7 @@ public class BudgetTagFilterPanel extends Panel {
         return new Button(id) {
             @Override
             public void onSubmit() {
-                getFilter().setSelectedTags(tagsModel.getObject());
+                getFilter().getSelectedTags().clear();
             }
         };
     }

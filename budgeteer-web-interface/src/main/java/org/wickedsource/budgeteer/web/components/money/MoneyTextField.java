@@ -15,7 +15,9 @@ public class MoneyTextField extends TextField<Money> {
     @Override
     @SuppressWarnings("unchecked")
     public <Money> IConverter<Money> getConverter(Class<Money> type) {
-        return (IConverter<Money>) new MoneyConverter();
+        MoneyConverter converter = new MoneyConverter();
+        converter.setFormat(false);
+        return (IConverter<Money>) converter;
     }
 
     @Override
