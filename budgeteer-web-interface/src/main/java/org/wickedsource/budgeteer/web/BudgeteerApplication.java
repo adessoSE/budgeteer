@@ -1,6 +1,7 @@
 package org.wickedsource.budgeteer.web;
 
 import com.googlecode.wickedcharts.wicket6.JavaScriptResourceRegistry;
+import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.Session;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
@@ -11,9 +12,11 @@ import org.reflections.Reflections;
 import org.reflections.scanners.TypeAnnotationsScanner;
 import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
+import org.wickedsource.budgeteer.boot.BudgeteerSettings;
 import org.wickedsource.budgeteer.web.components.security.BudgeteerAuthorizationStrategy;
 import org.wickedsource.budgeteer.web.components.security.BudgeteerUnauthorizedComponentInstantiationListener;
 import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
@@ -25,6 +28,9 @@ public class BudgeteerApplication extends WebApplication implements ApplicationC
 
     private ApplicationContext context;
 
+    @Autowired
+    private BudgeteerSettings settings;
+
     @Override
     public Class<? extends WebPage> getHomePage() {
         return DashboardPage.class;
@@ -33,6 +39,7 @@ public class BudgeteerApplication extends WebApplication implements ApplicationC
     @Override
     public void init() {
         super.init();
+
         getMarkupSettings().setStripWicketTags(true);
         getComponentInstantiationListeners().add(new SpringComponentInjector(this, context));
         initWickedCharts();
@@ -41,6 +48,16 @@ public class BudgeteerApplication extends WebApplication implements ApplicationC
 
         getSecuritySettings().setAuthorizationStrategy(new BudgeteerAuthorizationStrategy());
         getSecuritySettings().setUnauthorizedComponentInstantiationListener(new BudgeteerUnauthorizedComponentInstantiationListener());
+    }
+
+    @Override
+    public RuntimeConfigurationType getConfigurationType() {
+        String configuration = settings.getConfigurationType();
+        if (RuntimeConfigurationType.DEVELOPMENT.name().equalsIgnoreCase(configuration)) {
+            return RuntimeConfigurationType.DEVELOPMENT;
+        } else {
+            return RuntimeConfigurationType.DEPLOYMENT;
+        }
     }
 
     /**
