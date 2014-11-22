@@ -1,3 +1,5 @@
+import org.apache.tools.ant.filters.*
+
 buildscript {
     repositories {
         mavenCentral()
@@ -10,6 +12,7 @@ buildscript {
 apply plugin: 'war'
 apply plugin: 'jacoco'
 apply plugin: 'spring-boot'
+version = '1.0.0.BETA'
 
 repositories {
     mavenCentral()
@@ -25,6 +28,12 @@ sourceSets {
             srcDir 'src/main/resources'
         }
     }
+}
+
+processResources {
+    filter ReplaceTokens, tokens: [
+            "application.version": project.property("version")
+    ]
 }
 
 configurations {
