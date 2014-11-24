@@ -27,7 +27,8 @@ public class ProjectServiceTest extends ServiceTestTemplate {
     @Test
     public void testCreateProject() throws Exception {
         when(projectRepository.save(any(ProjectEntity.class))).thenReturn(createProjectEntity());
-        ProjectBaseData project = projectService.createProject("MyProject");
+        when(userRepository.findOne(anyLong())).thenReturn(createUserWithProjects());
+        ProjectBaseData project = projectService.createProject("MyProject", 1l);
         verify(projectRepository, times(1)).save(any(ProjectEntity.class));
         Assert.assertEquals("name", project.getName());
     }
