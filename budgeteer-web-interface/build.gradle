@@ -12,7 +12,7 @@ buildscript {
 apply plugin: 'war'
 apply plugin: 'jacoco'
 apply plugin: 'spring-boot'
-version = '1.0.0.BETA'
+version = '1.0.1.BETA-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -126,6 +126,8 @@ clean {
 }
 
 bootRun {
+    // default application configuration for running application via bootRun in development mode
+    // (in production, these properties are defined in application.properties)
     jvmArgs '-Xdebug',
             '-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=9009',
             '-Dserver.port=8080',
