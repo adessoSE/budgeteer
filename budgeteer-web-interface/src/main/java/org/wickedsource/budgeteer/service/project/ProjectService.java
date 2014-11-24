@@ -6,6 +6,7 @@ import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
 import org.wickedsource.budgeteer.persistence.project.ProjectRepository;
 import org.wickedsource.budgeteer.persistence.user.UserEntity;
 import org.wickedsource.budgeteer.persistence.user.UserRepository;
+import org.wickedsource.budgeteer.service.user.UserService;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -29,10 +30,13 @@ public class ProjectService {
      * @param projectName name of the project.
      * @return the base data of the newly create project.
      */
-    public ProjectBaseData createProject(String projectName) {
+    public ProjectBaseData createProject(String projectName, long initialUserId) {
+        UserEntity user = userRepository.findOne(initialUserId);
         ProjectEntity project = new ProjectEntity();
         project.setName(projectName);
+        project.getAuthorizedUsers().add(user);
         ProjectEntity savedProject = projectRepository.save(project);
+        user.getAuthorizedProjects().add(savedProject);
         return mapper.map(savedProject);
     }
 

@@ -13,7 +13,7 @@ import java.util.List;
 @Table(name = "BUDGET",
         uniqueConstraints = {
                 @UniqueConstraint(name = "UNIQUE_BUDGET_NAME_PER_PROJECT", columnNames = {"name", "projectId"}),
-                @UniqueConstraint(name = "UNIQUE_BUDGET_IMPORT_KEY_PER_PROJECT", columnNames = {"importKey", "projectId"})
+                @UniqueConstraint(name = "UNIQUE_IMPORT_KEY_PER_PROJECT", columnNames = {"importKey", "projectId"})
         })
 public class BudgetEntity {
 

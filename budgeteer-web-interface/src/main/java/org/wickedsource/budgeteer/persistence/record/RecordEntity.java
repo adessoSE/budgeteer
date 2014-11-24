@@ -17,25 +17,27 @@ public abstract class RecordEntity {
     private long id;
 
     @ManyToOne(optional = false)
+    @JoinColumn(name = "personId")
     private PersonEntity person;
 
     @ManyToOne(optional = false)
+    @JoinColumn(name = "budgetId")
     private BudgetEntity budget;
 
     @Temporal(TemporalType.DATE)
-    @Column(nullable = false)
+    @Column(name="recordDate", nullable = false)
     private Date date;
 
-    @Column(nullable = false)
+    @Column(name="recordYear", nullable = false)
     private int year;
 
-    @Column(nullable = false)
+    @Column(name="recordMonth", nullable = false)
     private int month;
 
-    @Column(nullable = false)
+    @Column(name="recordDay", nullable = false)
     private int day;
 
-    @Column(nullable = false)
+    @Column(name="recordWeek", nullable = false)
     private int week;
 
     @Column(nullable = false)

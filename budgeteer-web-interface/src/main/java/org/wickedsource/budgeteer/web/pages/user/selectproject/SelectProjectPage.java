@@ -38,8 +38,7 @@ public class SelectProjectPage extends DialogPageWithBacklink {
         Form<String> form = new Form<String>(id, new Model<String>("")) {
             @Override
             protected void onSubmit() {
-                ProjectBaseData project = projectService.createProject(getModelObject());
-                userService.addUserToProject(project.getId(), BudgeteerSession.get().getLoggedInUser().getId());
+                ProjectBaseData project = projectService.createProject(getModelObject(), BudgeteerSession.get().getLoggedInUser().getId());
                 BudgeteerSession.get().setProjectId(project.getId());
                 setResponsePage(DashboardPage.class);
             }

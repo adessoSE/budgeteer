@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "USER",
+@Table(name = "BUDGETEER_USER",
         uniqueConstraints = {
                 @UniqueConstraint(name = "UNIQUE_USER_NAME", columnNames = {"name"})
         })
@@ -23,7 +23,7 @@ public class UserEntity {
     @Column(nullable = false, length = 512)
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "authorizedUsers")
     private List<ProjectEntity> authorizedProjects = new ArrayList<ProjectEntity>();
 
     public long getId() {

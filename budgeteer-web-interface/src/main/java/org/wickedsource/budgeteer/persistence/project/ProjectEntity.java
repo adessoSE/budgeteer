@@ -21,6 +21,9 @@ public class ProjectEntity {
     private String name;
 
     @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "PROJECT_USER",
+            joinColumns = {@JoinColumn(name = "projectId")},
+            inverseJoinColumns = {@JoinColumn(name = "userId")})
     private List<UserEntity> authorizedUsers = new ArrayList<UserEntity>();
 
     public long getId() {
