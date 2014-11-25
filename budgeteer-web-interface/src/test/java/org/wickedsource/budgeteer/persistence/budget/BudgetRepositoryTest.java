@@ -44,7 +44,7 @@ public class BudgetRepositoryTest extends IntegrationTestTemplate {
     @DatabaseSetup("findByProjectId.xml")
     @DatabaseTearDown(value = "findByProjectId.xml", type = DatabaseOperation.DELETE_ALL)
     public void testFindByProjectId() {
-        List<BudgetEntity> budgets = budgetRepository.findByProjectId(1l);
+        List<BudgetEntity> budgets = budgetRepository.findByProjectIdOrderByNameAsc(1l);
         Assert.assertEquals(1, budgets.size());
         Assert.assertEquals("Budget 1", budgets.get(0).getName());
     }

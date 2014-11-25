@@ -167,7 +167,7 @@ public class WorkRecordDatabaseImporter {
      */
     private Map<String, PersonEntity> getPersonCache(long projectId) {
         Map<String, PersonEntity> map = new HashMap<String, PersonEntity>();
-        List<PersonEntity> persons = personRepository.findByProjectId(projectId);
+        List<PersonEntity> persons = personRepository.findByProjectIdOrderByNameAsc(projectId);
         for (PersonEntity person : persons) {
             map.put(person.getImportKey(), person);
         }
@@ -180,7 +180,7 @@ public class WorkRecordDatabaseImporter {
      */
     private Map<String, BudgetEntity> getBudgetCache(long projectId) {
         Map<String, BudgetEntity> map = new HashMap<String, BudgetEntity>();
-        List<BudgetEntity> budgets = budgetRepository.findByProjectId(projectId);
+        List<BudgetEntity> budgets = budgetRepository.findByProjectIdOrderByNameAsc(projectId);
         for (BudgetEntity budget : budgets) {
             map.put(budget.getImportKey(), budget);
         }

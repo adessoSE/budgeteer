@@ -38,7 +38,7 @@ public class BudgetServiceTest extends ServiceTestTemplate {
 
     @Test
     public void testLoadBudgetBaseDataForProject() throws Exception {
-        when(budgetRepository.findByProjectId(1l)).thenReturn(Arrays.asList(createBudgetEntity()));
+        when(budgetRepository.findByProjectIdOrderByNameAsc(1l)).thenReturn(Arrays.asList(createBudgetEntity()));
         List<BudgetBaseData> budgets = budgetService.loadBudgetBaseDataForProject(1l);
         Assert.assertEquals(1, budgets.size());
         Assert.assertEquals(1, budgets.get(0).getId());

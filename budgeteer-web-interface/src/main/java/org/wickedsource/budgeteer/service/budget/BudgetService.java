@@ -43,7 +43,7 @@ public class BudgetService {
      * @return list of all budgets the user is qualified for
      */
     public List<BudgetBaseData> loadBudgetBaseDataForProject(long projectId) {
-        List<BudgetEntity> budgets = budgetRepository.findByProjectId(projectId);
+        List<BudgetEntity> budgets = budgetRepository.findByProjectIdOrderByNameAsc(projectId);
         return budgetBaseDataMapper.map(budgets);
     }
 
@@ -134,7 +134,7 @@ public class BudgetService {
     public List<BudgetDetailData> loadBudgetsDetailData(long projectId, BudgetTagFilter filter) {
         List<BudgetEntity> budgets;
         if (filter.getSelectedTags().isEmpty()) {
-            budgets = budgetRepository.findByProjectId(projectId);
+            budgets = budgetRepository.findByProjectIdOrderByNameAsc(projectId);
         } else {
             budgets = budgetRepository.findByAtLeastOneTag(projectId, filter.getSelectedTags());
         }
