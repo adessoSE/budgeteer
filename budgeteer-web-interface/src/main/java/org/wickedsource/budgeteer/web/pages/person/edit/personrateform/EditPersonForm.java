@@ -56,25 +56,8 @@ public class EditPersonForm extends Form<PersonWithRates> {
 
         add(new PersonRateForm("addRateForm") {
             @Override
-            protected void onSubmit() {
-                PersonRate addedRate = getModelObject();
-                boolean error = false;
-                if (addedRate.getRate() == null) {
-                    error("Please provide a rate.");
-                    error = true;
-                }
-                if (addedRate.getBudget() == null) {
-                    error("Please provide a budget.");
-                    error = true;
-                }
-                if (addedRate.getDateRange() == null) {
-                    error("Please provide a date range.");
-                    error = true;
-                }
-                if (!error) {
-                    EditPersonForm.this.getModelObject().getRates().add(addedRate);
-                    setModel(new PersonRateModel(new PersonRate()));
-                }
+            protected void rateAdded(PersonRate rate) {
+                EditPersonForm.this.getModelObject().getRates().add(rate);
             }
         });
 
