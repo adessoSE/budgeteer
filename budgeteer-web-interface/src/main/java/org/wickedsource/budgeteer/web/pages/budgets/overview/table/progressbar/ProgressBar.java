@@ -37,7 +37,14 @@ public class ProgressBar extends Panel {
         bar.add(new AttributeAppender("style", new AbstractReadOnlyModel<String>() {
             @Override
             public String getObject() {
-                return String.format("width: %d%%", getModel().getObject().intValue());
+                int value = getModel().getObject().intValue();
+                if(value < 0 ){
+                    value = 0;
+                }
+                if(value > 100){
+                    value = 100;
+                }
+                return String.format("width: %d%%", value);
             }
         }));
         return bar;
