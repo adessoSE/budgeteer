@@ -35,6 +35,11 @@ public class BudgetTagFilterPanel extends Panel {
             public void onSubmit() {
                 getFilter().getSelectedTags().clear();
             }
+
+            @Override
+            public boolean isVisible() {
+                return !tagsModel.getObject().isEmpty();
+            }
         };
     }
 
