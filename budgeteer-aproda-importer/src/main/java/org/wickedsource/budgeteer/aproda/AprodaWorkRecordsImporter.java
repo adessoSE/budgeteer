@@ -89,9 +89,6 @@ public class AprodaWorkRecordsImporter implements WorkRecordsImporter {
                 if (record.getPersonName() == null || "".equals(record.getPersonName())) {
                     throw new ImportException((String.format("Missing person name in row %d and column %d of file %s", row.getRowNum() + 1, COLUMN_PERSON + 1, file.getFilename())));
                 }
-                if (record.getMinutesWorked() == 0) {
-                    throw new ImportException((String.format("Missing working hours in row %d and column %d of file %s", row.getRowNum() + 1, COLUMN_HOURS + 1, file.getFilename())));
-                }
             }
 
             return record;
