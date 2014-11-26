@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.budgeteer.persistence.budget.BudgetRepository;
 import org.wickedsource.budgeteer.persistence.budget.MissingBudgetTotalBean;
 import org.wickedsource.budgeteer.persistence.record.MissingDailyRateBean;
+import org.wickedsource.budgeteer.persistence.record.MissingDailyRateForBudgetBean;
 import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
 import org.wickedsource.budgeteer.service.ServiceTestTemplate;
 
@@ -40,14 +41,15 @@ public class NotificationServiceTest extends ServiceTestTemplate {
 
     @Test
     public void testGetNotificationsForPerson() throws Exception {
-        when(workRecordRepository.getMissingDailyRatesForPerson(1l)).thenReturn(createMissingDailyRate());
+        when(workRecordRepository.getMissingDailyRatesForPerson(1l)).thenReturn(Arrays.asList(createMissingDailyRateForBudget()));
         List<Notification> notifications = service.getNotificationsForPerson(1l);
         Assert.assertEquals(1, notifications.size());
-        MissingDailyRateNotification notification = (MissingDailyRateNotification) notifications.get(0);
+        MissingDailyRateForBudgetNotification notification = (MissingDailyRateForBudgetNotification) notifications.get(0);
         Assert.assertEquals(1l, notification.getPersonId());
         Assert.assertEquals("person1", notification.getPersonName());
         Assert.assertEquals(fixedDate, notification.getStartDate());
         Assert.assertEquals(fixedDate, notification.getEndDate());
+        Assert.assertEquals("Budget1", notification.getBudgetName());
     }
 
     @Test
@@ -62,6 +64,10 @@ public class NotificationServiceTest extends ServiceTestTemplate {
 
     private MissingDailyRateBean createMissingDailyRate() {
         return new MissingDailyRateBean(1l, "person1", fixedDate, fixedDate);
+    }
+
+    private MissingDailyRateForBudgetBean createMissingDailyRateForBudget() {
+        return new MissingDailyRateForBudgetBean(1l, "person1", fixedDate, fixedDate, "Budget1");
     }
 
     private MissingBudgetTotalBean createMissingBudgetTotal() {

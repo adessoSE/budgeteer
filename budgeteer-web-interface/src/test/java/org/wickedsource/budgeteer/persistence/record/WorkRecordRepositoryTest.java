@@ -68,11 +68,14 @@ public class WorkRecordRepositoryTest extends IntegrationTestTemplate {
     @DatabaseSetup("getMissingDailyRates.xml")
     @DatabaseTearDown(value = "getMissingDailyRates.xml", type = DatabaseOperation.DELETE_ALL)
     public void testGetMissingDailyRatesForPerson() throws Exception {
-        MissingDailyRateBean missingRates = repository.getMissingDailyRatesForPerson(1l);
-        Assert.assertEquals(1l, missingRates.getPersonId());
-        Assert.assertEquals("person1", missingRates.getPersonName());
-        Assert.assertEquals(format.parse("01.01.2015"), missingRates.getStartDate());
-        Assert.assertEquals(format.parse("15.08.2015"), missingRates.getEndDate());
+        List<MissingDailyRateForBudgetBean> missingRates = repository.getMissingDailyRatesForPerson(1l);
+        Assert.assertEquals(2, missingRates.size());
+
+        Assert.assertEquals(1l, missingRates.get(0).getPersonId());
+        Assert.assertEquals("person1", missingRates.get(0).getPersonName());
+        Assert.assertEquals(format.parse("01.01.2015"), missingRates.get(0).getStartDate());
+        Assert.assertEquals(format.parse("01.01.2015"), missingRates.get(0).getEndDate());
+        Assert.assertEquals("Budget 1", missingRates.get(0).getBudgetName());
     }
 
     @Test
