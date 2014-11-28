@@ -12,7 +12,7 @@ buildscript {
 apply plugin: 'war'
 apply plugin: 'jacoco'
 apply plugin: 'spring-boot'
-version = '1.0.1.BETA-SNAPSHOT'
+version = '1.0.2.BETA-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -40,6 +40,7 @@ configurations {
     all*.exclude group: 'org.slf4j', module: 'slf4j-log4j12'
     all*.exclude group: 'log4j', module: 'log4j'
     all*.exclude group: 'org.slf4j', module: 'log4j-over-slf4j'
+    all*.exclude group: 'org.apache.wicket', module: 'wicket'
 }
 
 dependencies {
