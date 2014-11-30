@@ -8,6 +8,8 @@ import org.wickedsource.budgeteer.persistence.budget.BudgetEntity;
 import org.wickedsource.budgeteer.persistence.budget.BudgetRepository;
 import org.wickedsource.budgeteer.persistence.budget.BudgetTagEntity;
 import org.wickedsource.budgeteer.persistence.person.DailyRateRepository;
+import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
+import org.wickedsource.budgeteer.persistence.project.ProjectRepository;
 import org.wickedsource.budgeteer.persistence.record.PlanRecordRepository;
 import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
 import org.wickedsource.budgeteer.service.UnknownEntityException;
@@ -35,6 +37,9 @@ public class BudgetService {
 
     @Autowired
     private DailyRateRepository rateRepository;
+
+    @Autowired
+    private ProjectRepository projectRepository;
 
     /**
      * Loads all Budgets that the given user is qualified for and returns base data about them.
@@ -115,11 +120,13 @@ public class BudgetService {
 
     private List<BudgetTagEntity> mapTagsToEntities(List<String> tags, BudgetEntity budget) {
         List<BudgetTagEntity> entities = new ArrayList<BudgetTagEntity>();
-        for (String tag : tags) {
-            BudgetTagEntity entity = new BudgetTagEntity();
-            entity.setTag(tag);
-            entity.setBudget(budget);
-            entities.add(entity);
+        if (tags != null) {
+            for (String tag : tags) {
+                BudgetTagEntity entity = new BudgetTagEntity();
+                entity.setTag(tag);
+                entity.setBudget(budget);
+                entities.add(entity);
+            }
         }
         return entities;
     }
@@ -171,17 +178,21 @@ public class BudgetService {
      *
      * @param data the data to store in the database.
      */
-    public void editBudget(EditBudgetData data) {
+    public void saveBudget(EditBudgetData data) {
         assert data != null;
-        BudgetEntity budget = budgetRepository.findOne(data.getId());
-        if (budget == null) {
-            throw new UnknownEntityException(BudgetEntity.class, data.getId());
+        BudgetEntity budget = new BudgetEntity();
+        if (data.getId() != 0) {
+            budget = budgetRepository.findOne(data.getId());
+        } else {
+            ProjectEntity project = projectRepository.findOne(data.getProjectId());
+            budget.setProject(project);
         }
         budget.setImportKey(data.getImportKey());
         budget.setTotal(data.getTotal());
         budget.setName(data.getTitle());
         budget.getTags().clear();
         budget.getTags().addAll(mapTagsToEntities(data.getTags(), budget));
+        budgetRepository.save(budget);
     }
 
     /**

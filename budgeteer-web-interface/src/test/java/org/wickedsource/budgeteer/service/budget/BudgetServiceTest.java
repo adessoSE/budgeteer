@@ -109,7 +109,7 @@ public class BudgetServiceTest extends ServiceTestTemplate {
     }
 
     @Test
-    public void testEditBudget() throws Exception {
+    public void testSaveBudget() throws Exception {
         BudgetEntity budget = createBudgetEntity();
         when(budgetRepository.findOne(1l)).thenReturn(budget);
 
@@ -120,7 +120,7 @@ public class BudgetServiceTest extends ServiceTestTemplate {
         data.setTitle("title");
         data.setTotal(MoneyUtil.createMoneyFromCents(123));
 
-        budgetService.editBudget(data);
+        budgetService.saveBudget(data);
 
         Assert.assertEquals(1l, budget.getId());
         Assert.assertEquals(data.getImportKey(), budget.getImportKey());

@@ -28,7 +28,7 @@ public class TotalBudgetDetailsModel extends LoadableDetachableModel<BudgetDetai
             totalData.setTotal(totalData.getTotal().plus(singleData.getTotal()));
             totalData.setSpent(totalData.getSpent().plus(singleData.getSpent()));
             totalData.setUnplanned(totalData.getUnplanned().plus(singleData.getUnplanned()));
-            if (singleData.getLastUpdated().after(totalData.getLastUpdated())) {
+            if (singleData.getLastUpdated() != null && singleData.getLastUpdated().after(totalData.getLastUpdated())) {
                 totalData.setLastUpdated(singleData.getLastUpdated());
             }
         }

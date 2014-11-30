@@ -14,22 +14,34 @@ import org.wickedsource.budgeteer.web.pages.budgets.edit.form.EditBudgetForm;
 import static org.wicketstuff.lazymodel.LazyModel.from;
 import static org.wicketstuff.lazymodel.LazyModel.model;
 
-@Mount({"budgets/edit/${id}"})
+@Mount({"budgets/edit/${id}", "budgets/edit"})
 public class EditBudgetPage extends DialogPageWithBacklink {
 
     @SpringBean
     private BudgetService service;
 
     /**
-     * Use this constructor to create a page with a form to edit an existing user.
+     * Use this constructor to create a page with a form to create a new budget.
+     */
+    public EditBudgetPage(Class<? extends WebPage> backlinkPage, PageParameters backlinkParameters) {
+        super(backlinkPage, backlinkParameters);
+        Form<EditBudgetData> form = new EditBudgetForm("form");
+        addComponents(form);
+    }
+
+    /**
+     * Use this constructor to create a page with a form to edit an existing budget.
      *
-     * @param parameters page parameters containing the id of the user to edit.
+     * @param parameters page parameters containing the id of the budget to edit.
      */
     public EditBudgetPage(PageParameters parameters, Class<? extends WebPage> backlinkPage, PageParameters backlinkParameters) {
         super(parameters, backlinkPage, backlinkParameters);
-
         EditBudgetData budgetData = service.loadBudgetToEdit(getBudgetId());
         Form<EditBudgetData> form = new EditBudgetForm("form", model(from(budgetData)));
+        addComponents(form);
+    }
+
+    private void addComponents(Form<EditBudgetData> form) {
         add(createBacklink("cancelButton1"));
         form.add(createBacklink("cancelButton2"));
         add(form);

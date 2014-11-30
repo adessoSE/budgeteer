@@ -11,6 +11,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.service.budget.BudgetService;
 import org.wickedsource.budgeteer.service.budget.EditBudgetData;
@@ -31,20 +32,30 @@ public class EditBudgetForm extends Form<EditBudgetData> {
     @SpringBean
     private BudgetService service;
 
+    public EditBudgetForm(String id){
+        super(id, new ClassAwareWrappingModel<EditBudgetData>(Model.of(new EditBudgetData(BudgeteerSession.get().getProjectId())), EditBudgetData.class));
+        addComponents();
+    }
+
+
     public EditBudgetForm(String id, IModel<EditBudgetData> model) {
         super(id, model);
         Injector.get().inject(this);
-        TagsTextField tagsField = new TagsTextField("tagsInput", model(from(model).getTags()));
+        addComponents();
+    }
+
+    private void addComponents() {
+        TagsTextField tagsField = new TagsTextField("tagsInput", model(from(getModel()).getTags()));
         tagsField.setOutputMarkupId(true);
         add(tagsField);
         add(new FeedbackPanel("feedback"));
-        add(new RequiredTextField<String>("name", model(from(model).getTitle())));
-        add(new RequiredTextField<String>("importKey", model(from(model).getImportKey())));
-        MoneyTextField totalField = new MoneyTextField("total", model(from(model).getTotal()));
+        add(new RequiredTextField<String>("name", model(from(getModel()).getTitle())));
+        add(new RequiredTextField<String>("importKey", model(from(getModel()).getImportKey())));
+        MoneyTextField totalField = new MoneyTextField("total", model(from(getModel()).getTotal()));
         totalField.setRequired(true);
         add(totalField);
         add(createTagsList("tagsList", new BudgetTagsModel(BudgeteerSession.get().getProjectId()), tagsField));
-        add(new NotificationListPanel("notificationList", new BudgetNotificationsModel(model.getObject().getId())));
+        add(new NotificationListPanel("notificationList", new BudgetNotificationsModel(getModel().getObject().getId())));
     }
 
     private ListView<String> createTagsList(String id, IModel<List<String>> model, final Component tagsField) {
@@ -73,6 +84,6 @@ public class EditBudgetForm extends Form<EditBudgetData> {
 
     @Override
     protected void onSubmit() {
-        service.editBudget(getModelObject());
+        service.saveBudget(getModelObject());
     }
 }

@@ -10,6 +10,8 @@ public class EditBudgetData implements Serializable {
 
     private long id;
 
+    private long projectId;
+
     private String title;
 
     private Money total;
@@ -17,6 +19,13 @@ public class EditBudgetData implements Serializable {
     private String importKey;
 
     private List<String> tags;
+
+    public EditBudgetData() {
+    }
+
+    public EditBudgetData(long projectId) {
+        this.projectId = projectId;
+    }
 
     public long getId() {
         return id;
@@ -58,5 +67,13 @@ public class EditBudgetData implements Serializable {
         if (tags != null) {
             this.tags = new ArrayList<String>(tags);
         }
+    }
+
+    public long getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(long projectId) {
+        this.projectId = projectId;
     }
 }

@@ -1,12 +1,15 @@
 package org.wickedsource.budgeteer.web.pages.budgets.overview;
 
+import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.link.Link;
 import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.pages.base.basepage.BasePage;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
 import org.wickedsource.budgeteer.web.pages.budgets.BudgetTagsModel;
+import org.wickedsource.budgeteer.web.pages.budgets.edit.EditBudgetPage;
 import org.wickedsource.budgeteer.web.pages.budgets.monthreport.multi.MultiBudgetMonthReportPage;
 import org.wickedsource.budgeteer.web.pages.budgets.overview.filter.BudgetTagFilterPanel;
 import org.wickedsource.budgeteer.web.pages.budgets.overview.table.BudgetOverviewTable;
@@ -33,6 +36,19 @@ public class BudgetsOverviewPage extends BasePage {
         add(new BookmarkablePageLink<MultiBudgetWeekReportPage>("weekReportLink2", MultiBudgetWeekReportPage.class));
         add(new BookmarkablePageLink<MultiBudgetMonthReportPage>("monthReportLink1", MultiBudgetMonthReportPage.class));
         add(new BookmarkablePageLink<MultiBudgetMonthReportPage>("monthReportLink2", MultiBudgetMonthReportPage.class));
+        add(createNewBudgetLink("createBudgetLink1"));
+        add(createNewBudgetLink("createBudgetLink2"));
+
+    }
+
+    private Link createNewBudgetLink(String id) {
+        return new Link(id) {
+            @Override
+            public void onClick() {
+                WebPage page = new EditBudgetPage(BudgetsOverviewPage.class, getPageParameters());
+                setResponsePage(page);
+            }
+        };
     }
 
     @SuppressWarnings("unchecked")
