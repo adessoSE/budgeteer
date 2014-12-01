@@ -212,4 +212,8 @@ public class BudgetService {
         return units;
     }
 
+    public void deleteBudget(long id) {
+        budgetRepository.delete(id);
+    }
+
 }

@@ -1,11 +1,16 @@
 package org.wickedsource.budgeteer.web.pages.budgets.details;
 
 import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.wickedsource.budgeteer.service.budget.BudgetService;
 import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.charts.BudgeteerChartTheme;
+import org.wickedsource.budgeteer.web.components.confirm.ConfirmationForm;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.Breadcrumb;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
 import org.wickedsource.budgeteer.web.pages.budgets.BudgetBasePage;
@@ -24,6 +29,9 @@ import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 @Mount("budgets/details/${id}")
 public class BudgetDetailsPage extends BudgetBasePage {
 
+    @SpringBean
+    private BudgetService budgetService;
+
     public BudgetDetailsPage(PageParameters parameters) {
         super(parameters);
         add(new BudgetHighlightsPanel("highlightsPanel", new BudgetHighlightsModel(getBudgetId())));
@@ -36,16 +44,31 @@ public class BudgetDetailsPage extends BudgetBasePage {
         add(new BookmarkablePageLink<BudgetHoursPage>("hoursLink2", BudgetHoursPage.class, BudgetHoursPage.createParameters(getBudgetId())));
         add(createEditLink("editLink1"));
         add(createEditLink("editLink2"));
+
+        Form deleteForm = new ConfirmationForm("deleteForm", this, "confirmation.delete") {
+            @Override
+            public void onSubmit() {
+                budgetService.deleteBudget(getBudgetId());
+                setResponsePage(BudgetsOverviewPage.class);
+            }
+        };
+        deleteForm.add(createSubmitLink("deleteLink1"));
+        deleteForm.add(createSubmitLink("deleteLink2"));
+        add(deleteForm);
     }
 
-    private Link createEditLink(String id){
-        return new Link(id){
+    private Link createEditLink(String id) {
+        return new Link(id) {
             @Override
             public void onClick() {
                 WebPage page = new EditBudgetPage(EditBudgetPage.createParameters(getBudgetId()), BudgetDetailsPage.class, getPageParameters());
                 setResponsePage(page);
             }
         };
+    }
+
+    private SubmitLink createSubmitLink(String id) {
+        return new SubmitLink(id);
     }
 
     @Override
