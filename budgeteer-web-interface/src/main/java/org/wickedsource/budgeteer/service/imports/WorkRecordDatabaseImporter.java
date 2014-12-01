@@ -84,6 +84,11 @@ public class WorkRecordDatabaseImporter {
     public void importRecords(List<ImportedWorkRecord> records) {
         List<WorkRecordEntity> entitiesToImport = new ArrayList<WorkRecordEntity>();
         for (ImportedWorkRecord record : records) {
+
+            // trimming import keys
+            record.setPersonName(record.getPersonName().trim());
+            record.setBudgetName(record.getBudgetName().trim());
+
             WorkRecordEntity entity = new WorkRecordEntity();
 
             entity.setPerson(getPersonForRecord(record));
