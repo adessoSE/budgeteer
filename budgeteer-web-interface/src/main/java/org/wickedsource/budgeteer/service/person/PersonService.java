@@ -119,4 +119,8 @@ public class PersonService {
     public PersonBaseData loadPersonBaseData(long personId) {
         return personBaseDataMapper.map(personRepository.findBaseDataByPersonId(personId));
     }
+
+    public void deletePerson(long personId) {
+        personRepository.delete(personId);
+    }
 }

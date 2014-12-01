@@ -52,8 +52,8 @@ public class BudgetDetailsPage extends BudgetBasePage {
                 setResponsePage(BudgetsOverviewPage.class);
             }
         };
-        deleteForm.add(createSubmitLink("deleteLink1"));
-        deleteForm.add(createSubmitLink("deleteLink2"));
+        deleteForm.add(new SubmitLink("deleteLink1"));
+        deleteForm.add(new SubmitLink("deleteLink2"));
         add(deleteForm);
     }
 
@@ -65,10 +65,6 @@ public class BudgetDetailsPage extends BudgetBasePage {
                 setResponsePage(page);
             }
         };
-    }
-
-    private SubmitLink createSubmitLink(String id) {
-        return new SubmitLink(id);
     }
 
     @Override

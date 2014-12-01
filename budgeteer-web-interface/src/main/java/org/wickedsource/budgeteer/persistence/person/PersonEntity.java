@@ -1,6 +1,7 @@
 package org.wickedsource.budgeteer.persistence.person;
 
 import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
+import org.wickedsource.budgeteer.persistence.record.WorkRecordEntity;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -25,6 +26,9 @@ public class PersonEntity {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "person", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<DailyRateEntity> dailyRates = new ArrayList<DailyRateEntity>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "person", orphanRemoval = true, cascade = CascadeType.ALL)
+    private List<WorkRecordEntity> workRecords = new ArrayList<WorkRecordEntity>();
 
     public long getId() {
         return id;
@@ -64,5 +68,13 @@ public class PersonEntity {
 
     public void setDailyRates(List<DailyRateEntity> dailyRates) {
         this.dailyRates = dailyRates;
+    }
+
+    public List<WorkRecordEntity> getWorkRecords() {
+        return workRecords;
+    }
+
+    public void setWorkRecords(List<WorkRecordEntity> workRecords) {
+        this.workRecords = workRecords;
     }
 }
