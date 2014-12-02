@@ -9,7 +9,7 @@ import java.util.List;
 @Entity
 @Table(name = "PROJECT",
         uniqueConstraints = {
-                @UniqueConstraint(name = "UNIQUE_PROJECT_NAME", columnNames = {"name"})
+                @UniqueConstraint(name = "UNIQUE_PROJECT_NAME", columnNames = {"NAME"})
         })
 public class ProjectEntity {
 
@@ -22,8 +22,8 @@ public class ProjectEntity {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "PROJECT_USER",
-            joinColumns = {@JoinColumn(name = "projectId")},
-            inverseJoinColumns = {@JoinColumn(name = "userId")})
+            joinColumns = {@JoinColumn(name = "PROJECT_ID")},
+            inverseJoinColumns = {@JoinColumn(name = "USER_ID")})
     private List<UserEntity> authorizedUsers = new ArrayList<UserEntity>();
 
     public long getId() {

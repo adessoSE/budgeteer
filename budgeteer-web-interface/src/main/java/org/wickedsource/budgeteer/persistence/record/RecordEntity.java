@@ -17,27 +17,27 @@ public abstract class RecordEntity {
     private long id;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "personId")
+    @JoinColumn(name = "PERSON_ID")
     private PersonEntity person;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "budgetId")
+    @JoinColumn(name = "BUDGET_ID")
     private BudgetEntity budget;
 
     @Temporal(TemporalType.DATE)
-    @Column(name="recordDate", nullable = false)
+    @Column(name="RECORD_DATE", nullable = false)
     private Date date;
 
-    @Column(name="recordYear", nullable = false)
+    @Column(name="RECORD_YEAR", nullable = false)
     private int year;
 
-    @Column(name="recordMonth", nullable = false)
+    @Column(name="RECORD_MONTH", nullable = false)
     private int month;
 
-    @Column(name="recordDay", nullable = false)
+    @Column(name="RECORD_DAY", nullable = false)
     private int day;
 
-    @Column(name="recordWeek", nullable = false)
+    @Column(name="RECORD_WEEK", nullable = false)
     private int week;
 
     @Column(nullable = false)
@@ -47,7 +47,7 @@ public abstract class RecordEntity {
     private Money dailyRate;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "importId")
+    @JoinColumn(name = "IMPORT_ID")
     private ImportEntity importRecord;
 
     public ImportEntity getImportRecord() {

@@ -21,11 +21,11 @@ public class DailyRateEntity {
     private Date dateStart;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name="personId")
+    @JoinColumn(name="PERSON_ID")
     private PersonEntity person;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name="budgetId")
+    @JoinColumn(name="BUDGET_ID")
     private BudgetEntity budget;
 
     private Money rate;
