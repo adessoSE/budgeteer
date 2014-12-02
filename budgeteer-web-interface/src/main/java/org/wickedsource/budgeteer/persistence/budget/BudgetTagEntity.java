@@ -3,11 +3,7 @@ package org.wickedsource.budgeteer.persistence.budget;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "BUDGET_TAG")
-//        uniqueConstraints = {
-//                @UniqueConstraint(name = "UNIQUE_BUDGET_TAG", columnNames = {"tag", "budgetId"}),
-//        })
-
+@Table(name = "BUDGET_TAG", indexes = {@Index(name="BUDGET_TAG_BUDGET_ID_IDX", columnList = "BUDGET_ID")})
 public class BudgetTagEntity {
 
     @Id
@@ -15,7 +11,7 @@ public class BudgetTagEntity {
     private long id;
 
     @ManyToOne
-    @JoinColumn(name = "budgetId")
+    @JoinColumn(name = "BUDGET_ID")
     private BudgetEntity budget;
 
     private String tag;

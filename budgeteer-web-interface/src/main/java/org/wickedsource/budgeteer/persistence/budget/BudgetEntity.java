@@ -12,8 +12,8 @@ import java.util.List;
 @Entity
 @Table(name = "BUDGET",
         uniqueConstraints = {
-                @UniqueConstraint(name = "UNIQUE_BUDGET_NAME_PER_PROJECT", columnNames = {"name", "projectId"}),
-                @UniqueConstraint(name = "UNIQUE_IMPORT_KEY_PER_PROJECT", columnNames = {"importKey", "projectId"})
+                @UniqueConstraint(name = "UNIQUE_BUDGET_NAME_PER_PROJECT", columnNames = {"PROJECT_ID", "NAME"}),
+                @UniqueConstraint(name = "UNIQUE_IMPORT_KEY_PER_PROJECT", columnNames = {"PROJECT_ID", "IMPORT_KEY"})
         })
 public class BudgetEntity {
 
@@ -27,7 +27,7 @@ public class BudgetEntity {
     private Money total;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "projectId")
+    @JoinColumn(name = "PROJECT_ID")
     private ProjectEntity project;
 
     @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "budget")
@@ -39,7 +39,7 @@ public class BudgetEntity {
     @OneToMany(mappedBy = "budget", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<DailyRateEntity> dailyRates = new ArrayList<DailyRateEntity>();
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "IMPORT_KEY")
     private String importKey;
 
     public List<WorkRecordEntity> getRecords() {

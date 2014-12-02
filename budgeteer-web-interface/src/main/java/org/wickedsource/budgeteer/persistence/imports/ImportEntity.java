@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "IMPORT")
+@Table(name = "IMPORT", indexes = {@Index(name = "IMPORT_PROJECT_ID_IDX", columnList = "PROJECT_ID")})
 public class ImportEntity {
 
     @Id
@@ -23,7 +23,7 @@ public class ImportEntity {
     private String importType;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "projectId")
+    @JoinColumn(name = "PROJECT_ID")
     private ProjectEntity project;
 
     public ProjectEntity getProject() {
