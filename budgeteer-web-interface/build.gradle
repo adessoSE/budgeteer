@@ -10,13 +10,8 @@ buildscript {
 }
 
 apply plugin: 'war'
-apply plugin: 'jacoco'
 apply plugin: 'spring-boot'
 version = '1.0.2.BETA-SNAPSHOT'
-
-repositories {
-    mavenCentral()
-}
 
 sourceSets {
     main {
@@ -24,6 +19,7 @@ sourceSets {
             srcDir 'src/main/java'
         }
         resources {
+            /* alle .java Dateien landen im war */
             srcDir 'src/main/java'
             srcDir 'src/main/resources'
         }

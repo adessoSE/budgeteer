@@ -1,11 +1,29 @@
+
 apply plugin: 'java'
 apply plugin: 'jacoco'
 
-sourceCompatibility = 1.5
-
-repositories {
-    mavenCentral()
+task wrapper(type: Wrapper) {
+    gradleVersion '2.1'
 }
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'jacoco'
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        testCompile group: 'junit', name: 'junit', version: '4.11'
+    }
+
+    compileJava {
+        sourceCompatibility = '1.6'
+        targetCompatibility = '1.6'
+    }
+}
+
 
 jacocoTestReport {
     reports {
@@ -13,8 +31,4 @@ jacocoTestReport {
         csv.enabled false
         html.destination "${buildDir}/jacocoHtml"
     }
-}
-
-dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.11'
 }
