@@ -1,0 +1,7 @@
+# gradle specific
+.gradle
+
+# binary build artefacts
+build
+bin
+target
