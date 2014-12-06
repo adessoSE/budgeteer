@@ -53,10 +53,7 @@ processResources {
 
 dependencies {
     compile project(':budgeteer-aproda-importer')
-<<<<<<< HEAD
     compile project(':budgeteer-resourceplan-importer')
-=======
->>>>>>> 577299501471718f877f8aca277077cf47e449c9
 
     compile(
             [group: 'org.apache.wicket', name: 'wicket-spring', version: "${wicket_version}"],

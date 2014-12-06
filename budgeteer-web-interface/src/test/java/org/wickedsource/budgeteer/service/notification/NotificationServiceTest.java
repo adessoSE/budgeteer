@@ -36,7 +36,7 @@ public class NotificationServiceTest extends ServiceTestTemplate {
         when(budgetRepository.getMissingBudgetTotalsForProject(1l)).thenReturn(Arrays.asList(createMissingBudgetTotal()));
 
         List<Notification> notifications = service.getNotifications(1l);
-        Assert.assertEquals(3, notifications.size());
+        Assert.assertEquals(4, notifications.size());
     }
 
     @Test
