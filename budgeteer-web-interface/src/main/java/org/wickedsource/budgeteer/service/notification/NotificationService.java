@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.wickedsource.budgeteer.persistence.budget.BudgetRepository;
 import org.wickedsource.budgeteer.persistence.budget.MissingBudgetTotalBean;
 import org.wickedsource.budgeteer.persistence.record.MissingDailyRateForBudgetBean;
+import org.wickedsource.budgeteer.persistence.record.PlanRecordRepository;
 import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
 
 import javax.transaction.Transactional;
@@ -18,6 +19,9 @@ public class NotificationService {
 
     @Autowired
     private WorkRecordRepository workRecordRepository;
+
+    @Autowired
+    private PlanRecordRepository planRecordRepository;
 
     @Autowired
     private BudgetRepository budgetRepository;
@@ -40,7 +44,10 @@ public class NotificationService {
     public List<Notification> getNotifications(long projectId) {
         List<Notification> notifications = new ArrayList<Notification>();
         if (workRecordRepository.count() == 0) {
-            notifications.add(new EmptyDatabaseNotification());
+            notifications.add(new EmptyWorkRecordsNotification());
+        }
+        if(planRecordRepository.count() == 0){
+            notifications.add(new EmptyPlanRecordsNotification());
         }
         notifications.addAll(missingDailyRateMapper.map(workRecordRepository.getMissingDailyRatesForProject(projectId)));
         notifications.addAll(missingBudgetTotalNotificationMapper.map(budgetRepository.getMissingBudgetTotalsForProject(projectId)));

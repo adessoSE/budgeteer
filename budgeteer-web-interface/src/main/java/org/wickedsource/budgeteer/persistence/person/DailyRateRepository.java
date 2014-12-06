@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Date;
 import java.util.List;
 
 public interface DailyRateRepository extends CrudRepository<DailyRateEntity, Long> {
@@ -15,4 +16,8 @@ public interface DailyRateRepository extends CrudRepository<DailyRateEntity, Lon
     @Query("select distinct r from DailyRateEntity r join fetch r.budget join fetch r.person where r.budget.project.id = :projectId")
     List<DailyRateEntity> findByProjectIdFetch (@Param("projectId") long ProjectId);
 
+    DailyRateEntity findByBudgetIdAndPersonId(long budgetId, long personId);
+
+    @Query("select r from DailyRateEntity r where r.budget.id = :budgetId and r.person.id = :personId and ((:rangeStart between r.dateStart and r.dateEnd) or (:rangeEnd between r.dateStart and r.dateEnd))")
+    DailyRateEntity findByBudgetAndPersonInDateRange(@Param("budgetId") long budgetId, @Param("personId") long personId, @Param("rangeStart") Date earliestDate, @Param("rangeEnd") Date latestDate);
 }

@@ -3,6 +3,7 @@ package org.wickedsource.budgeteer.persistence.budget;
 import org.joda.money.Money;
 import org.wickedsource.budgeteer.persistence.person.DailyRateEntity;
 import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
+import org.wickedsource.budgeteer.persistence.record.PlanRecordEntity;
 import org.wickedsource.budgeteer.persistence.record.WorkRecordEntity;
 
 import javax.persistence.*;
@@ -12,7 +13,6 @@ import java.util.List;
 @Entity
 @Table(name = "BUDGET",
         uniqueConstraints = {
-                @UniqueConstraint(name = "UNIQUE_BUDGET_NAME_PER_PROJECT", columnNames = {"PROJECT_ID", "NAME"}),
                 @UniqueConstraint(name = "UNIQUE_IMPORT_KEY_PER_PROJECT", columnNames = {"PROJECT_ID", "IMPORT_KEY"})
         })
 public class BudgetEntity {
@@ -34,7 +34,10 @@ public class BudgetEntity {
     private List<BudgetTagEntity> tags = new ArrayList<BudgetTagEntity>();
 
     @OneToMany(mappedBy = "budget", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    private List<WorkRecordEntity> records = new ArrayList<WorkRecordEntity>();
+    private List<WorkRecordEntity> workRecords = new ArrayList<WorkRecordEntity>();
+
+    @OneToMany(mappedBy = "budget", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<PlanRecordEntity> planRecords = new ArrayList<PlanRecordEntity>();
 
     @OneToMany(mappedBy = "budget", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<DailyRateEntity> dailyRates = new ArrayList<DailyRateEntity>();
@@ -42,12 +45,12 @@ public class BudgetEntity {
     @Column(nullable = false, name = "IMPORT_KEY")
     private String importKey;
 
-    public List<WorkRecordEntity> getRecords() {
-        return records;
+    public List<WorkRecordEntity> getWorkRecords() {
+        return workRecords;
     }
 
-    public void setRecords(List<WorkRecordEntity> records) {
-        this.records = records;
+    public void setWorkRecords(List<WorkRecordEntity> workRecords) {
+        this.workRecords = workRecords;
     }
 
     public List<DailyRateEntity> getDailyRates() {
@@ -104,5 +107,13 @@ public class BudgetEntity {
 
     public void setTotal(Money total) {
         this.total = total;
+    }
+
+    public List<PlanRecordEntity> getPlanRecords() {
+        return planRecords;
+    }
+
+    public void setPlanRecords(List<PlanRecordEntity> planRecords) {
+        this.planRecords = planRecords;
     }
 }

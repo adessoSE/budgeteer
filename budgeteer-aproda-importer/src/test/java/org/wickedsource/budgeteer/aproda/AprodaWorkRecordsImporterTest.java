@@ -2,6 +2,7 @@ package org.wickedsource.budgeteer.aproda;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.wickedsource.budgeteer.importer.aproda.AprodaWorkRecordsImporter;
 import org.wickedsource.budgeteer.imports.api.ImportFile;
 import org.wickedsource.budgeteer.imports.api.ImportedWorkRecord;
 

@@ -1,4 +1,4 @@
-package org.wickedsource.budgeteer.aproda;
+package org.wickedsource.budgeteer.importer.aproda;
 
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;

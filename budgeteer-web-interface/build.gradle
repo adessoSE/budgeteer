@@ -1,4 +1,4 @@
-import org.apache.tools.ant.filters.*
+import org.apache.tools.ant.filters.ReplaceTokens
 
 buildscript {
     repositories {
@@ -59,6 +59,7 @@ dependencies {
 
     compile project(':budgeteer-importer-api')
     compile project(':budgeteer-aproda-importer')
+    compile project(':budgeteer-resourceplan-importer')
 
     compile "org.springframework.boot:spring-boot-starter:1.1.8.RELEASE"
     compile "org.springframework.boot:spring-boot-starter-web:1.1.8.RELEASE"

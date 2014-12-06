@@ -15,8 +15,10 @@ public class NotificationMessageFactory implements Serializable {
         } else if (notification instanceof MissingBudgetTotalNotification) {
             MissingBudgetTotalNotification n = (MissingBudgetTotalNotification) notification;
             return String.format(anchor.getString("message.missingBudgetTotal"), n.getBudgetName());
-        } else if (notification instanceof EmptyDatabaseNotification) {
-            return anchor.getString("message.emptyDatabase");
+        } else if (notification instanceof EmptyWorkRecordsNotification) {
+            return anchor.getString("message.emptyWorkRecords");
+        } else if (notification instanceof EmptyPlanRecordsNotification) {
+            return anchor.getString("message.emptyPlanRecords");
         } else if (notification instanceof MissingDailyRateForBudgetNotification) {
             MissingDailyRateForBudgetNotification n = (MissingDailyRateForBudgetNotification) notification;
             return String.format(anchor.getString("message.missingDailyRateForBudget"), n.getBudgetName(), n.getStartDate(), n.getEndDate());

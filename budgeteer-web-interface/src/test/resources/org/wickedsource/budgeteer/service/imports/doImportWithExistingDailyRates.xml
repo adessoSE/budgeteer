@@ -8,10 +8,6 @@
     <PERSON id="1" name="Max Mustermann" import_key="Mustermann, Max" project_id="1"/>
     <PERSON id="2" name="Klara Fall" import_key="Fall, Klara" project_id="1"/>
 
-    <DAILY_RATE id="1" date_start="2014-10-01" date_end="2014-10-15" person_id="1" budget_id="1" rate="50000"/>
-    <DAILY_RATE id="2" date_start="2014-10-16" date_end="2014-10-31" person_id="1" budget_id="1" rate="60000"/>
-    <DAILY_RATE id="3" date_start="2014-01-01" date_end="2014-01-01" person_id="1" budget_id="2" rate="70000"/>
-    <DAILY_RATE id="4" date_start="2014-01-01" date_end="2014-01-01" person_id="2" budget_id="1" rate="80000"/>
-    <DAILY_RATE id="5" date_start="2014-01-01" date_end="2014-01-01" person_id="2" budget_id="2" rate="90000"/>
+    <DAILY_RATE id="1" date_start="2014-01-01" date_end="2014-10-15" person_id="1" budget_id="1" rate="50000"/>
 
 </dataset>

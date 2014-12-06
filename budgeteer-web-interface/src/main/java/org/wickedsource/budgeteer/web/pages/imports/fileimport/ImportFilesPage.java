@@ -11,7 +11,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.wickedsource.budgeteer.aproda.AprodaWorkRecordsImporter;
+import org.wickedsource.budgeteer.importer.aproda.AprodaWorkRecordsImporter;
 import org.wickedsource.budgeteer.imports.api.ImportException;
 import org.wickedsource.budgeteer.imports.api.ImportFile;
 import org.wickedsource.budgeteer.imports.api.Importer;
@@ -43,7 +43,6 @@ public class ImportFilesPage extends DialogPageWithBacklink {
             @Override
             protected void onSubmit() {
                 try {
-                    ImportFormBean bean = getModelObject();
                     List<ImportFile> files = new ArrayList<ImportFile>();
                     for (FileUpload file : fileUploads) {
                         files.add(new ImportFile(file.getClientFileName(), file.getInputStream()));

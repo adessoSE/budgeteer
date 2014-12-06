@@ -1,6 +1,7 @@
 package org.wickedsource.budgeteer.persistence.person;
 
 import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
+import org.wickedsource.budgeteer.persistence.record.PlanRecordEntity;
 import org.wickedsource.budgeteer.persistence.record.WorkRecordEntity;
 
 import javax.persistence.*;
@@ -29,6 +30,9 @@ public class PersonEntity {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "person", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<WorkRecordEntity> workRecords = new ArrayList<WorkRecordEntity>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "person", orphanRemoval = true, cascade = CascadeType.ALL)
+    private List<PlanRecordEntity> planRecords= new ArrayList<PlanRecordEntity>();
 
     public long getId() {
         return id;
@@ -76,5 +80,13 @@ public class PersonEntity {
 
     public void setWorkRecords(List<WorkRecordEntity> workRecords) {
         this.workRecords = workRecords;
+    }
+
+    public List<PlanRecordEntity> getPlanRecords() {
+        return planRecords;
+    }
+
+    public void setPlanRecords(List<PlanRecordEntity> planRecords) {
+        this.planRecords = planRecords;
     }
 }

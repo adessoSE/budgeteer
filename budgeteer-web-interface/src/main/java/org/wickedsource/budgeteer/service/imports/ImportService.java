@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Service;
+import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.imports.api.*;
 import org.wickedsource.budgeteer.persistence.imports.ImportEntity;
 import org.wickedsource.budgeteer.persistence.imports.ImportRepository;
@@ -71,7 +72,10 @@ public class ImportService implements ApplicationContextAware {
      * @return all currently registered file importers.
      */
     public List<? extends Importer> getAvailableImporters() {
-        return new ArrayList(importerRegistry.getWorkingRecordsImporters());
+        List<Importer> importers = new ArrayList<Importer>();
+        importers.addAll(importerRegistry.getWorkingRecordsImporters());
+        importers.addAll(importerRegistry.getPlanRecordsImporters());
+        return importers;
     }
 
     /**
@@ -86,6 +90,13 @@ public class ImportService implements ApplicationContextAware {
             WorkRecordDatabaseImporter dbImporter = applicationContext.getBean(WorkRecordDatabaseImporter.class, projectId, workRecordsImporter.getDisplayName());
             for (ImportFile file : importFiles) {
                 List<ImportedWorkRecord> records = workRecordsImporter.importFile(file);
+                dbImporter.importRecords(records);
+            }
+        } else if (importer instanceof PlanRecordsImporter) {
+            PlanRecordsImporter planRecordsImporter = (PlanRecordsImporter) importer;
+            PlanRecordDatabaseImporter dbImporter = applicationContext.getBean(PlanRecordDatabaseImporter.class, projectId, planRecordsImporter.getDisplayName());
+            for (ImportFile file : importFiles) {
+                List<ImportedPlanRecord> records = planRecordsImporter.importFile(file, MoneyUtil.DEFAULT_CURRENCY);
                 dbImporter.importRecords(records);
             }
         } else {
