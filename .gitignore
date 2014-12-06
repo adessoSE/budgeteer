@@ -5,3 +5,9 @@
 build
 bin
 target
+
+# IntelliJ IDEA specific
+.idea
+.idea/*
+**/*.iml
+**/build
