@@ -1,9 +1,12 @@
 import org.apache.tools.ant.filters.ReplaceTokens
 
+version = '1.0.2.BETA-SNAPSHOT'
+
 buildscript {
     repositories {
         mavenCentral()
     }
+
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:1.1.5.RELEASE")
     }
@@ -11,7 +14,21 @@ buildscript {
 
 apply plugin: 'war'
 apply plugin: 'spring-boot'
-version = '1.0.2.BETA-SNAPSHOT'
+
+configurations {
+    querydslapt
+
+    all*.exclude group: 'org.slf4j', module: 'slf4j-log4j12'
+    all*.exclude group: 'log4j', module: 'log4j'
+    all*.exclude group: 'org.slf4j', module: 'log4j-over-slf4j'
+    all*.exclude group: 'org.apache.wicket', module: 'wicket'
+}
+
+ext {
+    spring_boot_version = '1.1.8.RELEASE'
+    query_dsl_version = '3.5.1'
+    wicket_version = '6.17.0'
+}
 
 sourceSets {
     main {
@@ -32,79 +49,72 @@ processResources {
     ]
 }
 
-configurations {
-    all*.exclude group: 'org.slf4j', module: 'slf4j-log4j12'
-    all*.exclude group: 'log4j', module: 'log4j'
-    all*.exclude group: 'org.slf4j', module: 'log4j-over-slf4j'
-    all*.exclude group: 'org.apache.wicket', module: 'wicket'
-}
-
 dependencies {
-    compile group: 'org.apache.wicket', name: 'wicket-core', version: '6.17.0'
-    compile group: 'org.apache.wicket', name: 'wicket-spring', version: '6.17.0'
-    compile group: 'org.wicketstuff', name: 'wicketstuff-lazymodel', version: '6.17.0'
-    compile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.6.4'
-    compile group: 'org.springframework', name: 'spring-beans', version: '4.1.1.RELEASE'
-    compile group: 'org.springframework', name: 'spring-context', version: '4.1.1.RELEASE'
-    compile group: 'org.springframework', name: 'spring-web', version: '4.1.1.RELEASE'
-    compile "org.springframework:spring-web:4.1.1.RELEASE"
-    // spring webmvc is only included since spring boot won't start up otherwise
-    compile "org.springframework:spring-webmvc:4.1.1.RELEASE"
-    compile group: 'log4j', name: 'log4j', version: '1.2.16'
-    compile group: 'com.googlecode.wicked-charts', name: 'wicked-charts-wicket6', version: '1.5.0'
-    compile group: 'org.reflections', name: 'reflections', version: '0.9.9-RC1'
-    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.3.2'
-    compile group: 'org.joda', name: 'joda-money', version: '0.9.1'
-    compile group: 'commons-codec', name: 'commons-codec', version: '1.9'
-
-    compile project(':budgeteer-importer-api')
     compile project(':budgeteer-aproda-importer')
     compile project(':budgeteer-resourceplan-importer')
 
-    compile "org.springframework.boot:spring-boot-starter:1.1.8.RELEASE"
-    compile "org.springframework.boot:spring-boot-starter-web:1.1.8.RELEASE"
-    compile "org.springframework.boot:spring-boot-starter-logging:1.1.8.RELEASE"
-    compile "org.springframework.boot:spring-boot-starter-data-jpa:1.1.8.RELEASE"
+    compile(
+            [group: 'org.apache.wicket', name: 'wicket-spring', version: "${wicket_version}"],
+            [group: 'org.wicketstuff', name: 'wicketstuff-lazymodel', version: "${wicket_version}"],
+            [group: 'com.googlecode.wicked-charts', name: 'wicked-charts-wicket6', version: '1.5.0'],
+    )
 
-    compile "joda-time:joda-time:2.5"
+    compile group: 'org.springframework', name: 'spring-webmvc', version: '4.1.1.RELEASE'
+    compile(
+            [group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: "${spring_boot_version}"],
+            [group: 'org.springframework.boot', name: 'spring-boot-starter-logging', version: "${spring_boot_version}"],
+            [group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: "${spring_boot_version}"],
+    )
+    providedCompile(group: 'org.springframework.boot', name: 'spring-boot-starter-jetty', version: "${spring_boot_version}")
 
-    compile(group: 'com.mysema.querydsl', name: 'querydsl-apt', version: '3.5.1')
-    compile(group: 'com.mysema.querydsl', name: 'querydsl-jpa', version: '3.5.1')
+    compile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.6.4'
+    compile group: 'log4j', name: 'log4j', version: '1.2.16'
 
-    providedCompile "org.springframework.boot:spring-boot-starter-jetty:1.1.8.RELEASE"
+    compile group: 'org.reflections', name: 'reflections', version: '0.9.9-RC1'
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.3.2'
+    compile group: 'commons-codec', name: 'commons-codec', version: '1.9'
 
-    runtime "org.hsqldb:hsqldb:2.3.2"
-    runtime "mysql:mysql-connector-java:5.1.34"
-    runtime files("lib/ojdbc6.jar")
+    compile group: 'joda-time', name: 'joda-time', version: '2.5'
+    compile group: 'org.joda', name: 'joda-money', version: '0.9.1'
 
-    testCompile group: 'junit', name: 'junit', version: '4.11'
-    testCompile group: 'org.springframework', name: 'spring-test', version: '4.1.1.RELEASE'
-    testCompile group: 'org.kubek2k', name: 'springockito', version: '1.0.9'
-    testCompile group: 'org.kubek2k', name: 'springockito-annotations', version: '1.0.9'
-    testCompile "org.springframework.boot:spring-boot-starter-test"
-    testCompile 'com.github.springtestdbunit:spring-test-dbunit:1.1.0'
-    testCompile 'org.dbunit:dbunit:2.5.0'
+    compile(
+            [group: 'com.mysema.querydsl', name: 'querydsl-apt', version: "${query_dsl_version}"],
+            [group: 'com.mysema.querydsl', name: 'querydsl-jpa', version: "${query_dsl_version}"]
+    )
+
+    runtime(
+            [group: 'org.hsqldb', name: 'hsqldb', version: '2.3.2'],
+            [group: 'mysql', name: 'mysql-connector-java', version: '5.1.34'],
+            files("lib/ojdbc6.jar")
+    )
+
+    testCompile(
+            [group: 'org.kubek2k', name: 'springockito', version: '1.0.9'],
+            [group: 'org.kubek2k', name: 'springockito-annotations', version: '1.0.9'],
+            [group: 'com.github.springtestdbunit', name: 'spring-test-dbunit', version: '1.1.0'],
+            [group: 'org.dbunit', name: 'dbunit', version: '2.5.0'],
+    )
+
+    testCompile "org.springframework.boot:spring-boot-starter-test" // version?
 }
 
 sourceSets {
     generated {
         java {
-            srcDirs = ['src/main/generated']
+            srcDirs = ['src/generated/java']
         }
     }
 }
 
-configurations {
-    querydslapt
-}
-
 task generateQueryDSL(type: JavaCompile, group: 'build', description: 'Generates the QueryDSL query types') {
+
     source = sourceSets.main.java
     classpath = configurations.compile + configurations.querydslapt
     options.compilerArgs = [
             "-proc:only",
             "-processor", "com.mysema.query.apt.jpa.JPAAnnotationProcessor"
     ]
+
     destinationDir = sourceSets.generated.java.srcDirs.iterator().next()
 }
 
@@ -134,4 +144,12 @@ bootRun {
             '-Dspring.datasource.driverClassName=org.hsqldb.jdbcDriver',
             '-Dspring.datasource.username=sa',
             '-Dspring.datasource.password='
+}
+
+idea {
+    module {
+        scopes.PROVIDED.plus += [configurations.providedCompile]
+        sourceDirs += sourceSets.generated.java.srcDirs
+        downloadSources = true
+    }
 }

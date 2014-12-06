@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.Date;
 import java.util.List;
 
-public interface WorkRecordRepository extends CrudRepository<WorkRecordEntity, Long>, QueryDslPredicateExecutor, RecordRepository {
+public interface WorkRecordRepository extends CrudRepository<WorkRecordEntity, Long>, QueryDslPredicateExecutor<WorkRecordEntity>, RecordRepository {
 
     /**
      * Aggregates the monetary value of all work records in the given budget.
