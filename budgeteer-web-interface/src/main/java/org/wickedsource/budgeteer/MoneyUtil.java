@@ -11,6 +11,8 @@ public class MoneyUtil {
 
     public static CurrencyUnit DEFAULT_CURRENCY = CurrencyUnit.EUR;
 
+    public static Money ZERO = Money.of(DEFAULT_CURRENCY, 0d);
+
     public static Money createMoney(double value) {
         return Money.of(DEFAULT_CURRENCY, value);
     }

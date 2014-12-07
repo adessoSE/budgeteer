@@ -30,7 +30,7 @@ public class PersonServiceTest extends ServiceTestTemplate {
         when(personRepository.findBaseDataByProjectId(1l)).thenReturn(Arrays.asList(createPersonBaseDataBean()));
         List<PersonBaseData> data = personService.loadPeopleBaseData(1l);
         Assert.assertEquals(1, data.size());
-        Assert.assertEquals(1l, data.get(0).getId());
+        Assert.assertEquals(Long.valueOf(1), data.get(0).getId());
         Assert.assertEquals("person1", data.get(0).getName());
         Assert.assertEquals(MoneyUtil.createMoneyFromCents(10000l), data.get(0).getAverageDailyRate());
         Assert.assertEquals(fixedDate, data.get(0).getLastBooked());
@@ -54,7 +54,7 @@ public class PersonServiceTest extends ServiceTestTemplate {
     public void testLoadPersonBaseData() throws Exception {
         when(personRepository.findBaseDataByPersonId(1l)).thenReturn(createPersonBaseDataBean());
         PersonBaseData bean = personService.loadPersonBaseData(1l);
-        Assert.assertEquals(1l, bean.getId());
+        Assert.assertEquals(Long.valueOf(1), bean.getId());
         Assert.assertEquals("person1", bean.getName());
         Assert.assertEquals(MoneyUtil.createMoneyFromCents(10000l), bean.getAverageDailyRate());
         Assert.assertEquals(fixedDate, bean.getLastBooked());

@@ -4,11 +4,11 @@ import java.util.Date;
 
 public class PersonDetailDataBean {
 
-    private long id;
+    private Long id;
 
     private String name;
 
-    private long averageDailyRateInCents;
+    private Long averageDailyRateInCents;
 
     private Date firstBookedDate;
 
@@ -16,9 +16,9 @@ public class PersonDetailDataBean {
 
     private Double hoursBooked;
 
-    private long budgetBurnedInCents;
+    private Long budgetBurnedInCents;
 
-    public PersonDetailDataBean(long id, String name, long averageDailyRateInCents, Date firstBookedDate, Date lastBookedDate, Double hoursBooked, long budgetBurnedInCents) {
+    public PersonDetailDataBean(Long id, String name, Long averageDailyRateInCents, Date firstBookedDate, Date lastBookedDate, Double hoursBooked, Long budgetBurnedInCents) {
         this.id = id;
         this.name = name;
         this.averageDailyRateInCents = averageDailyRateInCents;
@@ -28,7 +28,7 @@ public class PersonDetailDataBean {
         this.budgetBurnedInCents = budgetBurnedInCents;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -36,7 +36,7 @@ public class PersonDetailDataBean {
         return name;
     }
 
-    public long getAverageDailyRateInCents() {
+    public Long getAverageDailyRateInCents() {
         return averageDailyRateInCents;
     }
 
@@ -52,7 +52,7 @@ public class PersonDetailDataBean {
         return hoursBooked;
     }
 
-    public long getBudgetBurnedInCents() {
+    public Long getBudgetBurnedInCents() {
         return budgetBurnedInCents;
     }
 }

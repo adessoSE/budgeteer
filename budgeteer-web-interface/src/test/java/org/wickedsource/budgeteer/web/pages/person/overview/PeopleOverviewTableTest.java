@@ -34,7 +34,7 @@ public class PeopleOverviewTableTest extends AbstractWebTestTemplate {
         List<PersonBaseData> list = new ArrayList<PersonBaseData>();
         for (int i = 0; i < 20; i++) {
             PersonBaseData person = new PersonBaseData();
-            person.setId(1);
+            person.setId(1l);
             person.setAverageDailyRate(MoneyUtil.createMoney(1250.54));
             person.setLastBooked(new Date());
             person.setName("Martha Pfahl");

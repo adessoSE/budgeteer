@@ -27,14 +27,14 @@ public class PersonRepositoryTest extends IntegrationTestTemplate {
         Assert.assertEquals(2, data.size());
 
         PersonBaseDataBean bean1 = data.get(0);
-        Assert.assertEquals(1l, bean1.getId());
-        Assert.assertEquals(20000l, bean1.getAverageDailyRateInCents());
+        Assert.assertEquals(Long.valueOf(1), bean1.getId());
+        Assert.assertEquals(Long.valueOf(20000), bean1.getAverageDailyRateInCents());
         Assert.assertEquals(format.parse("15.08.2015"), bean1.getLastBookedDate());
         Assert.assertEquals("person1", bean1.getName());
 
         PersonBaseDataBean bean2 = data.get(1);
-        Assert.assertEquals(2l, bean2.getId());
-        Assert.assertEquals(47500l, bean2.getAverageDailyRateInCents());
+        Assert.assertEquals(Long.valueOf(2), bean2.getId());
+        Assert.assertEquals(Long.valueOf(47500), bean2.getAverageDailyRateInCents());
         Assert.assertEquals(format.parse("15.08.2016"), bean2.getLastBookedDate());
         Assert.assertEquals("person2", bean2.getName());
     }
@@ -45,8 +45,8 @@ public class PersonRepositoryTest extends IntegrationTestTemplate {
     public void testFindBaseDataByPersonId() throws Exception {
         PersonBaseDataBean bean = personRepository.findBaseDataByPersonId(1l);
 
-        Assert.assertEquals(1l, bean.getId());
-        Assert.assertEquals(20000l, bean.getAverageDailyRateInCents());
+        Assert.assertEquals(Long.valueOf(1), bean.getId());
+        Assert.assertEquals(Long.valueOf(20000), bean.getAverageDailyRateInCents());
         Assert.assertEquals(format.parse("15.08.2015"), bean.getLastBookedDate());
         Assert.assertEquals("person1", bean.getName());
     }
@@ -57,12 +57,12 @@ public class PersonRepositoryTest extends IntegrationTestTemplate {
     public void testFindDetailDataByPersonId() throws Exception {
         PersonDetailDataBean bean = personRepository.findDetailDataByPersonId(1l);
 
-        Assert.assertEquals(1l, bean.getId());
+        Assert.assertEquals(Long.valueOf(1), bean.getId());
         Assert.assertEquals("person1", bean.getName());
-        Assert.assertEquals(20000l, bean.getAverageDailyRateInCents());
+        Assert.assertEquals(Long.valueOf(20000), bean.getAverageDailyRateInCents());
         Assert.assertEquals(format.parse("01.01.2014"), bean.getFirstBookedDate());
         Assert.assertEquals(format.parse("15.08.2015"), bean.getLastBookedDate());
-        Assert.assertEquals(60000l, bean.getBudgetBurnedInCents());
+        Assert.assertEquals(Long.valueOf(60000), bean.getBudgetBurnedInCents());
         Assert.assertEquals(24d, bean.getHoursBooked(), 1d);
 
     }

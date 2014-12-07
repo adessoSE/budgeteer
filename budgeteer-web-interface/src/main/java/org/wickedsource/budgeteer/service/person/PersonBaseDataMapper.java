@@ -12,7 +12,9 @@ public class PersonBaseDataMapper extends AbstractMapper<PersonBaseDataBean, Per
     public PersonBaseData map(PersonBaseDataBean sourceObject) {
         PersonBaseData data = new PersonBaseData();
         data.setId(sourceObject.getId());
-        data.setAverageDailyRate(MoneyUtil.createMoneyFromCents(sourceObject.getAverageDailyRateInCents()));
+        if (sourceObject.getAverageDailyRateInCents() != null) {
+            data.setAverageDailyRate(MoneyUtil.createMoneyFromCents(sourceObject.getAverageDailyRateInCents()));
+        }
         data.setLastBooked(sourceObject.getLastBookedDate());
         data.setName(sourceObject.getName());
         return data;

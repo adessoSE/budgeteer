@@ -5,22 +5,22 @@ import java.util.Date;
 
 public class PersonBaseDataBean implements Serializable {
 
-    private long id;
+    private Long id;
 
     private String name;
 
-    private long averageDailyRateInCents;
+    private Long averageDailyRateInCents;
 
     private Date lastBookedDate;
 
-    public PersonBaseDataBean(long id, String name, long averageDailyRateInCents, Date lastBookedDate) {
+    public PersonBaseDataBean(Long id, String name, Long averageDailyRateInCents, Date lastBookedDate) {
         this.id = id;
         this.name = name;
         this.averageDailyRateInCents = averageDailyRateInCents;
         this.lastBookedDate = lastBookedDate;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -28,7 +28,7 @@ public class PersonBaseDataBean implements Serializable {
         return name;
     }
 
-    public long getAverageDailyRateInCents() {
+    public Long getAverageDailyRateInCents() {
         return averageDailyRateInCents;
     }
 
