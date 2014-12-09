@@ -12,6 +12,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.service.budget.BudgetService;
 import org.wickedsource.budgeteer.service.budget.EditBudgetData;
@@ -85,5 +86,6 @@ public class EditBudgetForm extends Form<EditBudgetData> {
     @Override
     protected void onSubmit() {
         service.saveBudget(getModelObject());
+        this.info("Hat geklappt!!!");
     }
 }
