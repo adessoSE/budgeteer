@@ -1,4 +1,4 @@
-<wicket:extend>
+<wicket:extend xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
 
     <div class="form-box wide" id="login-box">
         <div class="header">Import Working Hours from Excel files
@@ -11,7 +11,7 @@
                 <div wicket:id="feedback"></div>
                 <div class="box box-primary">
                     <div class="box-header">
-                        <h3 class="box-title">Select an Import File Format</h3>
+                        <h3 class="box-title"><wicket:message key="page.importer.title">Select an Import File Format</wicket:message></h3>
                     </div>
                     <div class="box-body">
                         <select wicket:id="importerChoice" class="form-control" id="presetInput">
@@ -21,7 +21,7 @@
                 </div>
                 <div class="box box-primary">
                     <div class="box-header">
-                        <h3 class="box-title">Select Files to Upload</h3>
+                        <h3 class="box-title"><wicket:message key="page.file.title">Select Files to Upload</wicket:message></h3>
                     </div>
                     <div class="box-body">
                         <input wicket:id="fileUpload" type="file" multiple>
@@ -40,7 +40,7 @@
                         </button>
                     </div>
                     <div class="col-lg-6">
-                        <button type="submit" class="btn bg-olive btn-block">Start Import</button>
+                        <button type="submit" class="btn bg-olive btn-block"><wicket:message key="page.button.start">Start import</wicket:message></button>
                     </div>
                 </div>
             </div>

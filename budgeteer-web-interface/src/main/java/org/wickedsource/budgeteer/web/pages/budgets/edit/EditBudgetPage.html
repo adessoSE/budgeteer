@@ -1,6 +1,6 @@
 <wicket:extend xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
     <div class="form-box wide" id="login-box">
-        <div class="header">Edit Budget Details
+        <div class="header"><span wicket:it="pageTitle"><wicket:message key="page.title">Edit Budget Details</wicket:message></span>
             <div class="box-tools pull-right">
                 <button wicket:id="cancelButton1" class="btn bg-olive btn-sm"><i class="fa fa-times"></i></button>
             </div>
@@ -10,32 +10,36 @@
                 <div wicket:id="notificationList"></div>
                 <div wicket:id="feedback"></div>
                 <div class="form-group">
-                    <label for="titleInput">Budget Title</label>
+                    <label for="titleInput"><wicket:message key="page.budget.title">Budget Title</wicket:message></label>
                     <input wicket:id="name"type="text" name="name" id="titleInput" class="form-control"/>
 
-                    <p class="help-block">The full title of the budget to be displayed where enough space is
-                        available.</p>
+                    <p class="help-block"><wicket:message key="page.budget.title.hint">The full title of the budget to be displayed where enough space is
+                        available.</wicket:message></p>
                 </div>
                 <div class="form-group">
-                    <label for="totalInput">Budget Total</label>
+                    <label for="totalInput"><wicket:message key="page.budget.total">Budget Total</wicket:message></label>
                     <input wicket:id="total" type="number" name="name" id="totalInput" class="form-control"/>
-                    <p class="help-block">The total money available in this budget.</p>
+                    <p class="help-block"><wicket:message key="page.budget.total.hint">The total money available in this budget.</wicket:message></p>
                 </div>
                 <div class="form-group">
-                    <label for="importKeyInput">Import Key</label>
+                    <label for="importKeyInput"><wicket:message key="page.budget.key">Import Key</wicket:message></label>
                     <input wicket:id="importKey" type="text" name="name" id="importKeyInput" class="form-control"/>
 
-                    <p class="help-block">The unique key that identifies this budget when importing data. </p>
+                    <p class="help-block"><wicket:message key="page.budget.key.hint">The unique key that identifies this budget when importing data.</wicket:message></p>
                 </div>
                 <div class="form-group">
                     <label for="tagsInput">Tags</label>
                     <input wicket:id="tagsInput" type="text" name="name" id="tagsInput" class="form-control"
-                           placeholder="Enter tags or click one of the already used tags below to add it."/>
+                           wicket:message="placeholder:page.tags.placeholder" />
 
                     <p class="help-block">
                         <span wicket:id="tagsList" class="badge bg-light-blue pointer"><span wicket:id="tag"></span></span>
                     </p>
-                    <p class="help-block">Tags allow grouping of budgets so you can monitor groups of budgets instead of only single budgets.</p>
+                    <p class="help-block">
+                        <wicket:message key="page.tags.hint">
+                        Tags allow grouping of budgets so you can monitor groups of budgets instead of only single budgets.
+                        </wicket:message>
+                    </p>
                 </div>
             </div>
             <div class="footer">
