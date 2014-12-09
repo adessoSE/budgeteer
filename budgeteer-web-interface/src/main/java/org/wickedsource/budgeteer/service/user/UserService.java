@@ -103,14 +103,19 @@ public class UserService {
 
     /**
      * Registers a new user to the Budgeteer application.
+     * If the chosen username is already in-use, an UsernameAlreadyInUseException is thrown.
      *
      * @param username the users name
      * @param password the users password
      */
-    public void registerUser(String username, String password) {
-        UserEntity user = new UserEntity();
-        user.setName(username);
-        user.setPassword(passwordHasher.hash(password));
-        userRepository.save(user);
+    public void registerUser(String username, String password) throws UsernameAlreadyInUseException {
+        if(userRepository.findByName(username) == null) {
+            UserEntity user = new UserEntity();
+            user.setName(username);
+            user.setPassword(passwordHasher.hash(password));
+            userRepository.save(user);
+        } else {
+            throw new UsernameAlreadyInUseException();
+        }
     }
 }

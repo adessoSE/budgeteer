@@ -8,6 +8,7 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.service.user.UserService;
+import org.wickedsource.budgeteer.service.user.UsernameAlreadyInUseException;
 import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.pages.base.dialogpage.DialogPage;
 import org.wickedsource.budgeteer.web.pages.user.login.LoginPage;
@@ -30,8 +31,12 @@ public class RegisterPage extends DialogPage {
                     error(getString("message.wrongPasswordConfirmation"));
                     return;
                 }
-                service.registerUser(getModelObject().getUsername(), getModelObject().getPassword());
-                setResponsePage(LoginPage.class);
+                try {
+                    service.registerUser(getModelObject().getUsername(), getModelObject().getPassword());
+                    setResponsePage(LoginPage.class);
+                } catch(UsernameAlreadyInUseException e){
+                    this.error(getString("message.duplicateUserName"));
+                }
             }
         };
         add(form);
