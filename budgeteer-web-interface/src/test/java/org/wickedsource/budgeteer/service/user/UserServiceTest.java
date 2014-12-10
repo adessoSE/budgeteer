@@ -31,7 +31,7 @@ public class UserServiceTest extends ServiceTestTemplate{
     private PasswordHasher passwordHasher;
 
     @Test
-    public void testRegisterUser() {
+    public void testRegisterUser() throws UsernameAlreadyInUseException{
         service.registerUser("User", "Password");
         verify(userRepository, times(1)).save(any(UserEntity.class));
     }
