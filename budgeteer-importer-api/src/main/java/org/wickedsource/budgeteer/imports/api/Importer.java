@@ -9,4 +9,6 @@ public interface Importer extends Serializable {
 
     List<String> getSupportedFileExtensions();
 
+    ExampleFile getExampleFile();
+
 }

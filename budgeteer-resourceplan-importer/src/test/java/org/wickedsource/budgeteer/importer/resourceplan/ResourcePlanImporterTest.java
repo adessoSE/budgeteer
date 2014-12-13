@@ -3,6 +3,7 @@ package org.wickedsource.budgeteer.importer.resourceplan;
 import org.joda.money.CurrencyUnit;
 import org.junit.Assert;
 import org.junit.Test;
+import org.wickedsource.budgeteer.imports.api.ExampleFile;
 import org.wickedsource.budgeteer.imports.api.ImportFile;
 import org.wickedsource.budgeteer.imports.api.ImportedPlanRecord;
 
@@ -32,5 +33,14 @@ public class ResourcePlanImporterTest {
         Assert.assertEquals("Tom", records.get(22).getPersonName());
         Assert.assertEquals("Budget 2", records.get(22).getBudgetName());
         Assert.assertEquals(100000, records.get(22).getDailyRate().getAmountMinorInt());
+    }
+
+    @Test
+    public void testGetExampleFile(){
+        ResourcePlanImporter importer = new ResourcePlanImporter();
+        ExampleFile file = importer.getExampleFile();
+        Assert.assertNotNull(file.getFileName());
+        Assert.assertNotNull(file.getInputStream());
+        Assert.assertNotNull(file.getMimeType());
     }
 }

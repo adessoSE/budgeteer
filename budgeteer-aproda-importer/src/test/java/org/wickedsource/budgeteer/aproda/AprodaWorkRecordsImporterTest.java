@@ -3,6 +3,7 @@ package org.wickedsource.budgeteer.aproda;
 import org.junit.Assert;
 import org.junit.Test;
 import org.wickedsource.budgeteer.importer.aproda.AprodaWorkRecordsImporter;
+import org.wickedsource.budgeteer.imports.api.ExampleFile;
 import org.wickedsource.budgeteer.imports.api.ImportFile;
 import org.wickedsource.budgeteer.imports.api.ImportedWorkRecord;
 
@@ -25,5 +26,14 @@ public class AprodaWorkRecordsImporterTest {
         Assert.assertEquals("Budget", records.get(0).getBudgetName());
         Assert.assertEquals(540d, records.get(0).getMinutesWorked(), 1d);
         Assert.assertEquals(format.parse("06.10.2014"), records.get(0).getDate());
+    }
+
+    @Test
+    public void testGetExampleFile(){
+        AprodaWorkRecordsImporter importer = new AprodaWorkRecordsImporter();
+        ExampleFile file = importer.getExampleFile();
+        Assert.assertNotNull(file.getFileName());
+        Assert.assertNotNull(file.getInputStream());
+        Assert.assertNotNull(file.getMimeType());
     }
 }

@@ -7,10 +7,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.joda.money.CurrencyUnit;
 import org.joda.money.Money;
-import org.wickedsource.budgeteer.imports.api.ImportException;
-import org.wickedsource.budgeteer.imports.api.ImportFile;
-import org.wickedsource.budgeteer.imports.api.ImportedPlanRecord;
-import org.wickedsource.budgeteer.imports.api.PlanRecordsImporter;
+import org.wickedsource.budgeteer.imports.api.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -97,5 +94,14 @@ public class ResourcePlanImporter implements PlanRecordsImporter {
     @Override
     public List<String> getSupportedFileExtensions() {
         return Arrays.asList(".xslx");
+    }
+
+    @Override
+    public ExampleFile getExampleFile() {
+        ExampleFile file = new ExampleFile();
+        file.setFileName("resource_plan.xlsx");
+        file.setInputStream(getClass().getResourceAsStream("/example_resource_plan.xlsx"));
+        file.setMimeType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        return file;
     }
 }
