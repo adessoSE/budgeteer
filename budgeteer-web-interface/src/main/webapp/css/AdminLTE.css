@@ -57,7 +57,7 @@ body > .header {
 /*right side - contins main content*/
 .right-side {
   background-color: #f9f9f9;
-  margin-left: 220px;
+  margin-left: 0px;
 }
 /*left side - contains sidebar*/
 .left-side {
