@@ -96,8 +96,11 @@ public class ImportFilesPage extends DialogPageWithBacklink {
         form.add(createExampleFileButton("exampleFileButton"));
     }
 
+    /**
+     * Creates a button to download an example import file.
+     */
     private Link createExampleFileButton(String wicketId) {
-        Link<Void> downloadLink = new Link<Void>(wicketId) {
+        return new Link<Void>(wicketId) {
             @Override
             public void onClick() {
                 final ExampleFile downloadFile = importer.getExampleFile();
@@ -116,26 +119,6 @@ public class ImportFilesPage extends DialogPageWithBacklink {
                 response.setContentType(downloadFile.getMimeType());
             }
         };
-        return downloadLink;
-//
-//
-//        Button button = new Button(wicketId) {
-//            @Override
-//            public void onSubmit() {
-//                try {
-//                    ExampleFile exampleFile = importer.getExampleFile();
-//                    HttpServletResponse response = (HttpServletResponse) getRequestCycle().getResponse().getContainerResponse();
-//                    response.setContentType(exampleFile.getMimeType());
-//                    response.setHeader("Content-Disposition", String.format("attachment;filename=%s", exampleFile.getFileName()));
-//                    ServletOutputStream out = response.getOutputStream();
-//                    IOUtils.copy(exampleFile.getInputStream(), out);
-//                } catch (IOException e) {
-//                    throw new WicketRuntimeException(e);
-//                }
-//            }
-//        };
-//        button.setDefaultFormProcessing(false);
-//        return button;
     }
 
 }
