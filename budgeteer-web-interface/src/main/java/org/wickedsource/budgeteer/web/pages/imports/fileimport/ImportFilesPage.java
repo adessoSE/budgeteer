@@ -1,23 +1,18 @@
 package org.wickedsource.budgeteer.web.pages.imports.fileimport;
 
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
-import org.apache.wicket.markup.html.link.DownloadLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
-import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.io.IOUtils;
@@ -33,10 +28,8 @@ import org.wickedsource.budgeteer.web.ClassAwareWrappingModel;
 import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.pages.base.dialogpage.DialogPageWithBacklink;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -62,7 +55,12 @@ public class ImportFilesPage extends DialogPageWithBacklink {
                 try {
                     List<ImportFile> files = new ArrayList<ImportFile>();
                     for (FileUpload file : fileUploads) {
-                        files.add(new ImportFile(file.getClientFileName(), file.getInputStream()));
+                        if (file.getContentType().equals("application/x-zip-compressed")) {
+                            ImportFileUnzipper unzipper = new ImportFileUnzipper(file.getInputStream());
+                            files.addAll(unzipper.readImportFiles());
+                        } else {
+                            files.add(new ImportFile(file.getClientFileName(), file.getInputStream()));
+                        }
                     }
                     service.doImport(BudgeteerSession.get().getProjectId(), importer, files);
                     info(getString("message.success"));
@@ -72,6 +70,8 @@ public class ImportFilesPage extends DialogPageWithBacklink {
                     error(String.format(getString("message.importError"), e.getMessage()));
                 }
             }
+
+
         };
         add(form);
 
@@ -116,7 +116,7 @@ public class ImportFilesPage extends DialogPageWithBacklink {
                 ResourceStreamRequestHandler handler = new ResourceStreamRequestHandler(streamWriter, downloadFile.getFileName());
                 getRequestCycle().scheduleRequestHandlerAfterCurrent(handler);
                 HttpServletResponse response = (HttpServletResponse) getRequestCycle().getResponse().getContainerResponse();
-                response.setContentType(downloadFile.getMimeType());
+                response.setContentType(downloadFile.getContentType());
             }
         };
     }

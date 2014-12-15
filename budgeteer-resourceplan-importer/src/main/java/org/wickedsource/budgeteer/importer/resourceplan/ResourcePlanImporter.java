@@ -101,7 +101,7 @@ public class ResourcePlanImporter implements PlanRecordsImporter {
         ExampleFile file = new ExampleFile();
         file.setFileName("resource_plan.xlsx");
         file.setInputStream(getClass().getResourceAsStream("/example_resource_plan.xlsx"));
-        file.setMimeType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        file.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         return file;
     }
 }

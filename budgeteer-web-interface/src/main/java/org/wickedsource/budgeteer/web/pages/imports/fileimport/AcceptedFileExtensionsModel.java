@@ -12,7 +12,8 @@ public class AcceptedFileExtensionsModel extends AbstractReadOnlyModel<String> {
     private List<String> acceptedExtensions = new ArrayList<String>();
 
     public AcceptedFileExtensionsModel(Importer importer) {
-        acceptedExtensions = importer.getSupportedFileExtensions();
+        acceptedExtensions.addAll(importer.getSupportedFileExtensions());
+        acceptedExtensions.add(".zip");
     }
 
     @Override

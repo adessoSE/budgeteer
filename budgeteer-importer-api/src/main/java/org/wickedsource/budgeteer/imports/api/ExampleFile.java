@@ -10,7 +10,7 @@ public class ExampleFile {
 
     private InputStream inputStream;
 
-    private String mimeType;
+    private String contentType;
 
     private String fileName;
 
@@ -22,12 +22,12 @@ public class ExampleFile {
         this.inputStream = inputStream;
     }
 
-    public String getMimeType() {
-        return mimeType;
+    public String getContentType() {
+        return contentType;
     }
 
-    public void setMimeType(String mimeType) {
-        this.mimeType = mimeType;
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
     }
 
     public String getFileName() {

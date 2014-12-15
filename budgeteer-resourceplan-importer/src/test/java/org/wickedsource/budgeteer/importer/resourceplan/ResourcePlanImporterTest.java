@@ -41,6 +41,6 @@ public class ResourcePlanImporterTest {
         ExampleFile file = importer.getExampleFile();
         Assert.assertNotNull(file.getFileName());
         Assert.assertNotNull(file.getInputStream());
-        Assert.assertNotNull(file.getMimeType());
+        Assert.assertNotNull(file.getContentType());
     }
 }

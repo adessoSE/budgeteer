@@ -7,7 +7,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.wickedsource.budgeteer.imports.api.*;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -47,7 +46,7 @@ public class AprodaWorkRecordsImporter implements WorkRecordsImporter {
         ExampleFile file = new ExampleFile();
         file.setFileName("aproda_report.xlsx");
         file.setInputStream(getClass().getResourceAsStream("/example_aproda_report.xlsx"));
-        file.setMimeType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        file.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         return file;
     }
 
