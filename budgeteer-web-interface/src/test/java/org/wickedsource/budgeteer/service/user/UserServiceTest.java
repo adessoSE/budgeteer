@@ -16,7 +16,7 @@ import java.util.List;
 
 import static org.mockito.Mockito.*;
 
-public class UserServiceTest extends ServiceTestTemplate{
+public class UserServiceTest extends ServiceTestTemplate {
 
     @Autowired
     private UserRepository userRepository;
@@ -31,15 +31,14 @@ public class UserServiceTest extends ServiceTestTemplate{
     private PasswordHasher passwordHasher;
 
     @Test
-    public void testRegisterUser() throws Exception{
+    public void testRegisterUser() throws Exception {
         service.registerUser("User", "Password");
         verify(userRepository, times(1)).save(any(UserEntity.class));
     }
 
     @Test(expected = UsernameAlreadyInUseException.class)
-    public void testDuplicateUsernameDuringRegistration() throws Exception{
-        when(userRepository.findByName("User")).thenReturn(null, new UserEntity());
-        service.registerUser("User", "Password");
+    public void testDuplicateUsernameDuringRegistration() throws Exception {
+        when(userRepository.findByName("User")).thenReturn(new UserEntity());
         service.registerUser("User", "Password");
     }
 
@@ -97,7 +96,7 @@ public class UserServiceTest extends ServiceTestTemplate{
     }
 
     @Test
-      public void testGetUsersNotInProject() {
+    public void testGetUsersNotInProject() {
         when(userRepository.findNotInProject(1l)).thenReturn(Arrays.asList(createUserEntity()));
         List<User> users = service.getUsersNotInProject(1l);
         Assert.assertEquals(1, users.size());
