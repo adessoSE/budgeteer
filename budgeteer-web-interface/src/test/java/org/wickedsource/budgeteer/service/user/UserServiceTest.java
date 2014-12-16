@@ -31,20 +31,27 @@ public class UserServiceTest extends ServiceTestTemplate{
     private PasswordHasher passwordHasher;
 
     @Test
-    public void testRegisterUser() throws UsernameAlreadyInUseException{
+    public void testRegisterUser() throws Exception{
         service.registerUser("User", "Password");
         verify(userRepository, times(1)).save(any(UserEntity.class));
     }
 
+    @Test(expected = UsernameAlreadyInUseException.class)
+    public void testDuplicateUsernameDuringRegistration() throws Exception{
+        when(userRepository.findByName("User")).thenReturn(null, new UserEntity());
+        service.registerUser("User", "Password");
+        service.registerUser("User", "Password");
+    }
+
     @Test
-    public void testLoginSuccess() throws InvalidLoginCredentialsException {
+    public void testLoginSuccess() throws Exception {
         when(userRepository.findByNameAndPassword("user", passwordHasher.hash("password"))).thenReturn(createUserEntity());
         User user = service.login("user", "password");
         Assert.assertNotNull(user);
     }
 
     @Test(expected = InvalidLoginCredentialsException.class)
-    public void testLoginFail() throws InvalidLoginCredentialsException {
+    public void testLoginFail() throws Exception {
         when(userRepository.findByNameAndPassword("user", passwordHasher.hash("password"))).thenReturn(null);
         service.login("user", "password");
     }
