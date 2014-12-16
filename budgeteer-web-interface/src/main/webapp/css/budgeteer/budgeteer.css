@@ -32,7 +32,7 @@
 
 .wide .body > .form-group, .form-box .footer > .form-group {
     margin-top: 10px;
-    margin-bottom: 5px :
+    margin-bottom: 5px;
 }
 
 .btn-no-padding {
@@ -82,4 +82,8 @@
 
 .pointer{
     cursor: pointer;
+}
+
+.feedbackPanel{
+    margin-top: 10px;
 }
