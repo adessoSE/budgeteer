@@ -5,11 +5,11 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.service.user.UserService;
 import org.wickedsource.budgeteer.service.user.UsernameAlreadyInUseException;
 import org.wickedsource.budgeteer.web.Mount;
+import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
 import org.wickedsource.budgeteer.web.pages.base.dialogpage.DialogPage;
 import org.wickedsource.budgeteer.web.pages.user.login.LoginPage;
 
@@ -40,7 +40,7 @@ public class RegisterPage extends DialogPage {
             }
         };
         add(form);
-        form.add(new FeedbackPanel("feedback"));
+        form.add(new CustomFeedbackPanel("feedback"));
         form.add(new RequiredTextField<String>("username", model(from(form.getModel()).getUsername())));
         form.add(new PasswordTextField("password", model(from(form.getModel()).getPassword())));
         form.add(new PasswordTextField("passwordConfirmation", model(from(form.getModel()).getPasswordConfirmation())));

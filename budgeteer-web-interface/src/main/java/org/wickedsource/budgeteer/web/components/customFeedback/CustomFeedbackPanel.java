@@ -11,24 +11,14 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 
-
 /**
- * A panel that displays {@link org.apache.wicket.feedback.FeedbackMessage}s in a list view. The
- * maximum number of messages to show can be set with setMaxMessages().
- *
- * @author Jonathan Locke
- * @author Eelco Hillenius
- * @see org.apache.wicket.feedback.FeedbackMessage
- * @see org.apache.wicket.feedback.FeedbackMessages
+ * A feedbackPanel according to the struktur and style-classes of AdminLTE
  */
 public class CustomFeedbackPanel extends Panel implements IFeedback {
 
     private final class MessageListView extends ListView<FeedbackMessage> {
         private static final long serialVersionUID = 1L;
 
-        /**
-         * @see org.apache.wicket.Component#Component(String)
-         */
         public MessageListView(final String id) {
             super(id);
             setDefaultModel(newFeedbackMessagesModel());

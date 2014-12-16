@@ -9,7 +9,6 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -17,6 +16,7 @@ import org.wickedsource.budgeteer.service.budget.BudgetService;
 import org.wickedsource.budgeteer.service.budget.EditBudgetData;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.ClassAwareWrappingModel;
+import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
 import org.wickedsource.budgeteer.web.components.money.MoneyTextField;
 import org.wickedsource.budgeteer.web.components.notificationlist.NotificationListPanel;
 import org.wickedsource.budgeteer.web.pages.budgets.BudgetTagsModel;
@@ -48,7 +48,7 @@ public class EditBudgetForm extends Form<EditBudgetData> {
         TagsTextField tagsField = new TagsTextField("tagsInput", model(from(getModel()).getTags()));
         tagsField.setOutputMarkupId(true);
         add(tagsField);
-        add(new FeedbackPanel("feedback"));
+        add(new CustomFeedbackPanel("feedback"));
         add(new RequiredTextField<String>("name", model(from(getModel()).getTitle())));
         add(new RequiredTextField<String>("importKey", model(from(getModel()).getImportKey())));
         MoneyTextField totalField = new MoneyTextField("total", model(from(getModel()).getTotal()));
@@ -85,6 +85,6 @@ public class EditBudgetForm extends Form<EditBudgetData> {
     @Override
     protected void onSubmit() {
             service.saveBudget(getModelObject());
-            this.info(getString("feedback.success"));
+            this.success(getString("feedback.success"));
     }
 }

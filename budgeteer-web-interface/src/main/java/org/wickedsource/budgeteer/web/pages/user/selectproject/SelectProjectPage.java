@@ -14,6 +14,7 @@ import org.wickedsource.budgeteer.service.project.ProjectService;
 import org.wickedsource.budgeteer.service.user.UserService;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.Mount;
+import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
 import org.wickedsource.budgeteer.web.pages.base.dialogpage.DialogPageWithBacklink;
 import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 
@@ -32,6 +33,9 @@ public class SelectProjectPage extends DialogPageWithBacklink {
         add(createBacklink("backlink2"));
         add(createNewProjectForm("newProjectForm"));
         add(createChooseProjectForm("chooseProjectForm"));
+        Form feedback = new Form("feedbackForm", new Model<String>());
+        feedback.add(new CustomFeedbackPanel("feedback"));
+        add(feedback);
     }
 
     private Form<String> createNewProjectForm(String id) {
@@ -43,7 +47,6 @@ public class SelectProjectPage extends DialogPageWithBacklink {
                 setResponsePage(DashboardPage.class);
             }
         };
-        form.add(new FeedbackPanel("feedback", new ContainerFeedbackMessageFilter(form)));
         form.add(new RequiredTextField<String>("projectName", form.getModel()));
         return form;
     }
@@ -58,7 +61,6 @@ public class SelectProjectPage extends DialogPageWithBacklink {
         };
         DropDownChoice<ProjectBaseData> choice = new DropDownChoice<ProjectBaseData>("projectChoice", form.getModel(), new ProjectsForUserModel(BudgeteerSession.get().getLoggedInUser().getId()), new ProjectChoiceRenderer());
         choice.setRequired(true);
-        form.add(new FeedbackPanel("feedback", new ContainerFeedbackMessageFilter(form)));
         form.add(choice);
         return form;
     }

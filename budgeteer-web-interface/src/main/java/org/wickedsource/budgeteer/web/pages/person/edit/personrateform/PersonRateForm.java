@@ -30,12 +30,15 @@ public abstract class PersonRateForm extends Form<PersonRate> {
         Injector.get().inject(this);
 
         MoneyTextField rateField = new MoneyTextField("rateField", model(from(getModel()).getRate()));
+        rateField.setRequired(true);
         add(rateField);
 
         DateRangeInputField dateRangeField = new DateRangeInputField("dateRangeField", model(from(getModel()).getDateRange()));
+        dateRangeField.setRequired(true);
         add(dateRangeField);
 
         DropDownChoice<BudgetBaseData> budgetChoice = new DropDownChoice<BudgetBaseData>("budgetField", model(from(getModel()).getBudget()), getBudgetChoices());
+        budgetChoice.setRequired(true);
         budgetChoice.setChoiceRenderer(new BudgetBaseDataChoiceRenderer());
         add(budgetChoice);
 
