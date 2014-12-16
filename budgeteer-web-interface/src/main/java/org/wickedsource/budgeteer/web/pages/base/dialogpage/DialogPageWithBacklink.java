@@ -1,8 +1,11 @@
 package org.wickedsource.budgeteer.web.pages.base.dialogpage;
 
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.wickedsource.budgeteer.web.BudgeteerReferences;
 import org.wickedsource.budgeteer.web.components.security.NeedsLogin;
 
 @NeedsLogin
@@ -30,6 +33,12 @@ public abstract class DialogPageWithBacklink extends WebPage {
                 goBack();
             }
         };
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        response.render(JavaScriptReferenceHeaderItem.forReference(BudgeteerReferences.getJQueryReference()));
     }
 
     public void goBack(){
