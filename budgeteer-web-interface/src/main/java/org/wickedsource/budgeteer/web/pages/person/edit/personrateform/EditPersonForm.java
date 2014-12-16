@@ -7,12 +7,12 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.service.person.PersonRate;
 import org.wickedsource.budgeteer.service.person.PersonService;
 import org.wickedsource.budgeteer.service.person.PersonWithRates;
+import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
 import org.wickedsource.budgeteer.web.components.money.BudgetUnitMoneyModel;
 import org.wickedsource.budgeteer.web.components.money.MoneyLabel;
 import org.wickedsource.budgeteer.web.pages.person.edit.EditPersonPage;
@@ -49,7 +49,7 @@ public class EditPersonForm extends Form<PersonWithRates> {
 
     private void addComponents() {
         setOutputMarkupId(true);
-        add(new FeedbackPanel("feedback"));
+        add(new CustomFeedbackPanel("feedback"));
         add(new RequiredTextField<String>("name", model(from(getModel()).getName())));
         add(new RequiredTextField<String>("importKey", model(from(getModel()).getImportKey())));
         add(createRatesList("ratesList"));
@@ -63,7 +63,6 @@ public class EditPersonForm extends Form<PersonWithRates> {
 
         Button submitButton = new Button("submitButton");
         submitButton.add(strategy.createSubmitButtonLabel("submitButtonTitle"));
-
         add(submitButton);
     }
 

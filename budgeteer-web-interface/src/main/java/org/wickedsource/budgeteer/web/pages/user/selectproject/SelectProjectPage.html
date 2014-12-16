@@ -7,9 +7,10 @@
             </div>
         </div>
         <div class="body bg-gray">
-
-            <form wicket:id="newProjectForm">
+            <form wicket:id="feedbackForm">
                 <div wicket:id="feedback"></div>
+            </form>
+            <form wicket:id="newProjectForm">
                 <h4>Create a new Project</h4>
                 <div class="input-group margin">
                     <input wicket:id="projectName" type="text" name="name" id="projectName" placeholder="Project Name"
@@ -22,8 +23,6 @@
 
             <form wicket:id="chooseProjectForm">
                 <h4>Or select an existing one</h4>
-
-                <div wicket:id="feedback"></div>
                 <div class="input-group margin">
                     <select wicket:id="projectChoice" placeholder="Project Name" class="form-control">
                     </select>

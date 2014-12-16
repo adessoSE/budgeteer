@@ -9,7 +9,6 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
@@ -26,6 +25,7 @@ import org.wickedsource.budgeteer.service.imports.ImportService;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.ClassAwareWrappingModel;
 import org.wickedsource.budgeteer.web.Mount;
+import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
 import org.wickedsource.budgeteer.web.pages.base.dialogpage.DialogPageWithBacklink;
 
 import javax.servlet.http.HttpServletResponse;
@@ -63,10 +63,12 @@ public class ImportFilesPage extends DialogPageWithBacklink {
                         }
                     }
                     service.doImport(BudgeteerSession.get().getProjectId(), importer, files);
-                    info(getString("message.success"));
+                    success(getString("message.success"));
                 } catch (IOException e) {
                     error(String.format(getString("message.ioError"), e.getMessage()));
                 } catch (ImportException e) {
+                    error(String.format(getString("message.importError"), e.getMessage()));
+                } catch (IllegalArgumentException e){
                     error(String.format(getString("message.importError"), e.getMessage()));
                 }
             }
@@ -75,7 +77,7 @@ public class ImportFilesPage extends DialogPageWithBacklink {
         };
         add(form);
 
-        form.add(new FeedbackPanel("feedback"));
+        form.add(new CustomFeedbackPanel("feedback"));
 
         DropDownChoice<Importer> importerChoice = new DropDownChoice<Importer>("importerChoice", new PropertyModel<Importer>(this, "importer"), new ImportersListModel(), new ImporterChoiceRenderer());
         importerChoice.add(new AjaxFormComponentUpdatingBehavior("onchange") {
