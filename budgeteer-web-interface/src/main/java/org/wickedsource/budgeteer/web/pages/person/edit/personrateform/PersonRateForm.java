@@ -48,15 +48,34 @@ public abstract class PersonRateForm extends Form<PersonRate> {
     @Override
     protected void onSubmit() {
         PersonRate addedRate = getModelObject();
-        if (addedRate.getBudget() == ALL_BUDGETS) {
-            List<BudgetBaseData> budgetList = budgetService.loadBudgetBaseDataForProject(BudgeteerSession.get().getProjectId());
-            for (BudgetBaseData budget : budgetList) {
-                rateAdded(new PersonRate(addedRate.getRate(), budget, addedRate.getDateRange()));
-            }
-        } else {
-            rateAdded(new PersonRate(addedRate.getRate(), addedRate.getBudget(), addedRate.getDateRange()));
+        boolean error = false;
+        if (addedRate.getRate() == null) {
+            error("Please provide a rate.");
+            error = true;
         }
-        addedRate.reset();
+        if (addedRate.getBudget() == null) {
+            error("Please provide a budget.");
+            error = true;
+        }
+        if (addedRate.getDateRange() == null) {
+            error("Please provide a date range.");
+            error = true;
+        }
+        if (!error) {
+            if (addedRate.getBudget() == ALL_BUDGETS) {
+                List<BudgetBaseData> budgetList = budgetService.loadBudgetBaseDataForProject(BudgeteerSession.get().getProjectId());
+                for (BudgetBaseData budget : budgetList) {
+                    PersonRate rate = new PersonRate();
+                    rate.setDateRange(addedRate.getDateRange());
+                    rate.setBudget(budget);
+                    rate.setRate(addedRate.getRate());
+                    rateAdded(rate);
+                }
+            } else {
+                rateAdded(addedRate);
+            }
+            setModel(new PersonRateModel(new PersonRate()));
+        }
     }
 
 
