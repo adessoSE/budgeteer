@@ -1,6 +1,7 @@
+<html xmlns:wicket>
 <wicket:extend>
     <div class="form-box wide" id="login-box">
-        <div class="header"><span wicket:id="pageTitle">Edit Person Detail</span>
+        <div class="header"><span wicket:id="pageTitle">Edit Person Details</span>
 
             <div class="box-tools pull-right">
                 <button wicket:id="backlink1" class="btn bg-olive btn-sm"><i class="fa fa-times"></i></button>
@@ -14,30 +15,28 @@
                 <div wicket:id="feedback"></div>
 
                 <div class="form-group">
-                    <label for="titleInput">Name</label>
+                    <label for="titleInput"><wicket:message key="page.person.name">Name</wicket:message></label>
                     <input wicket:id="name" type="text" name="name" id="titleInput" class="form-control"/>
 
-                    <p class="help-block">The full name of the person as it should be displayed in the dashboard.</p>
+                    <p class="help-block"><wicket:message key="page.person.name.hint">The full name of the person as it should be displayed in the dashboard</wicket:message></p>
                 </div>
 
                 <div class="form-group">
-                    <label for="importKeyInput">Import Key</label>
+                    <label for="importKeyInput"><wicket:message key="page.person.importKey.title">Import Key</wicket:message></label>
                     <input wicket:id="importKey" type="text" name="name" id="importKeyInput" class="form-control"/>
 
-                    <p class="help-block">The unique key that identifies this person when importing data. </p>
+                    <p class="help-block"><wicket:message key="page.person.importKey.hint">The unique key that identifies this person when importing data.</wicket:message></p>
                 </div>
 
                 <div class="form-group">
-                    <p class="help-block">Define daily rates for different budgets and different date ranges in the
-                        table
-                        below.</p>
+                    <p class="help-block"><wicket:message key="page.person.budget.hint">Define daily rates for different budgets and different date ranges in the table below.</wicket:message></p>
                     <table class="table table-condensed">
                         <thead>
                         <tr>
-                            <th>Rate</th>
-                            <th>Budget</th>
-                            <th>Date Range</th>
-                            <th>Options</th>
+                            <th><wicket:message key="page.person.budget.table.columnDescription.rate">Rate</wicket:message></th>
+                            <th><wicket:message key="page.person.budget.table.columnDescription.budget">Budget</wicket:message></th>
+                            <th><wicket:message key="page.person.budget.table.columnDescription.date">Date Range</wicket:message></th>
+                            <th><wicket:message key="page.person.budget.table.columnDescription.options">Options</wicket:message></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -88,3 +87,4 @@
 
     </div>
 </wicket:extend>
+</html>

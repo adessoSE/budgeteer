@@ -23,38 +23,33 @@ public abstract class BasePage extends WebPage {
 
     public BasePage(PageParameters parameters) {
         super(parameters);
-        addComponents();
-    }
-
-    public BasePage() {
-        addComponents();
-    }
-
-    @SuppressWarnings("unchecked")
-    private void addComponents() {
         BreadcrumbsPanel breadcrumbs = new BreadcrumbsPanel("breadcrumbsPanel", getBreadcrumbsModel());
         long projectId = ((BudgeteerSession) getSession()).getProjectId();
         add(breadcrumbs);
-        add(new NotificationDropdown("notificationDropdown", new NotificationModel(projectId)));
+        notificationDropdown = new NotificationDropdown("notificationDropdown", new NotificationModel(projectId));
+        notificationDropdown.setOutputMarkupId(true);
+        add(notificationDropdown);
         add(new BudgetUnitChoice("budgetUnitDropdown", new BudgetUnitModel(projectId)));
         add(new BookmarkablePageLink<ProjectAdministrationPage>("administrationLink", ProjectAdministrationPage.class));
-        add(createLogoutLink("logoutLink"));
-    }
-
-    @Override
-    public void renderHead(IHeaderResponse response) {
-        super.renderHead(response);
-        response.render(JavaScriptReferenceHeaderItem.forReference(BudgeteerReferences.getJQueryReference()));
-    }
-
-    private Link createLogoutLink(String id) {
-        return new Link(id) {
+        add(new Link("logoutLink") {
             @Override
             public void onClick() {
                 BudgeteerSession.get().logout();
                 setResponsePage(LoginPage.class);
             }
-        };
+        });
+    }
+
+    public BasePage() {
+        this(null);
+    }
+
+    protected NotificationDropdown notificationDropdown;
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        response.render(JavaScriptReferenceHeaderItem.forReference(BudgeteerReferences.getJQueryReference()));
     }
 
     /**

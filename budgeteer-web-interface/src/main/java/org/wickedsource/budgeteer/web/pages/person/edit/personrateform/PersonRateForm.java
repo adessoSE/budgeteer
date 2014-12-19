@@ -30,12 +30,15 @@ public abstract class PersonRateForm extends Form<PersonRate> {
         Injector.get().inject(this);
 
         MoneyTextField rateField = new MoneyTextField("rateField", model(from(getModel()).getRate()));
+        rateField.setRequired(true);
         add(rateField);
 
         DateRangeInputField dateRangeField = new DateRangeInputField("dateRangeField", model(from(getModel()).getDateRange()));
+        dateRangeField.setRequired(true);
         add(dateRangeField);
 
         DropDownChoice<BudgetBaseData> budgetChoice = new DropDownChoice<BudgetBaseData>("budgetField", model(from(getModel()).getBudget()), getBudgetChoices());
+        budgetChoice.setRequired(true);
         budgetChoice.setChoiceRenderer(new BudgetBaseDataChoiceRenderer());
         add(budgetChoice);
 
@@ -45,34 +48,15 @@ public abstract class PersonRateForm extends Form<PersonRate> {
     @Override
     protected void onSubmit() {
         PersonRate addedRate = getModelObject();
-        boolean error = false;
-        if (addedRate.getRate() == null) {
-            error("Please provide a rate.");
-            error = true;
-        }
-        if (addedRate.getBudget() == null) {
-            error("Please provide a budget.");
-            error = true;
-        }
-        if (addedRate.getDateRange() == null) {
-            error("Please provide a date range.");
-            error = true;
-        }
-        if (!error) {
-            if (addedRate.getBudget() == ALL_BUDGETS) {
-                List<BudgetBaseData> budgetList = budgetService.loadBudgetBaseDataForProject(BudgeteerSession.get().getProjectId());
-                for (BudgetBaseData budget : budgetList) {
-                    PersonRate rate = new PersonRate();
-                    rate.setDateRange(addedRate.getDateRange());
-                    rate.setBudget(budget);
-                    rate.setRate(addedRate.getRate());
-                    rateAdded(rate);
-                }
-            } else {
-                rateAdded(addedRate);
+        if (addedRate.getBudget() == ALL_BUDGETS) {
+            List<BudgetBaseData> budgetList = budgetService.loadBudgetBaseDataForProject(BudgeteerSession.get().getProjectId());
+            for (BudgetBaseData budget : budgetList) {
+                rateAdded(new PersonRate(addedRate.getRate(), budget, addedRate.getDateRange()));
             }
-            setModel(new PersonRateModel(new PersonRate()));
+        } else {
+            rateAdded(new PersonRate(addedRate.getRate(), addedRate.getBudget(), addedRate.getDateRange()));
         }
+        addedRate.reset();
     }
 
 

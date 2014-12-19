@@ -16,6 +16,15 @@ public class PersonRate implements Serializable {
 
     private DateRange dateRange;
 
+    public PersonRate() {
+    }
+
+    public PersonRate(Money rate, BudgetBaseData budget, DateRange dateRange) {
+        this.rate = rate;
+        this.budget = budget;
+        this.dateRange = dateRange;
+    }
+
     public BudgetBaseData getBudget() {
         return budget;
     }
@@ -50,6 +59,12 @@ public class PersonRate implements Serializable {
     @Override
     public int hashCode() {
         return HashCodeBuilder.reflectionHashCode(this);
+    }
+
+    public void reset(){
+        rate = null;
+        budget = null;
+        dateRange = null;
     }
 
 }
