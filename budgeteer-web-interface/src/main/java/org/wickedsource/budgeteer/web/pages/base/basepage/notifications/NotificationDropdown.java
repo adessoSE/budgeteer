@@ -19,31 +19,12 @@ public class NotificationDropdown extends Panel {
 
     public NotificationDropdown(String id, NotificationModel model) {
         super(id, model);
-        add(createNotificationCountLabel("notificationCountLabel"));
-        add(createDropDownHeader("dropdownHeader"));
-        add(createDropdownMenu("dropdownMenu"));
+        initNotification();
+        initHeader();
+        initMenu();
     }
 
-    @SuppressWarnings("unchecked")
-    private NotificationModel getModel() {
-        return (NotificationModel) getDefaultModel();
-    }
-
-    private Label createNotificationCountLabel(String wicketId) {
-        Label label = new Label(wicketId, getModel().getNotificationCountModel()) {
-            @Override
-            public boolean isVisible() {
-                return 0 != (Integer) getDefaultModelObject();
-            }
-        };
-        return label;
-    }
-
-    private Label createDropDownHeader(String wicketId) {
-        return new Label(wicketId, getModel().getHeaderModel());
-    }
-
-    private WebMarkupContainer createDropdownMenu(String wicketId) {
+    private void initMenu() {
         final ListView<Notification> listview = new ListView<Notification>("notificationList", getModel()) {
             @Override
             protected void populateItem(final ListItem<Notification> item) {
@@ -61,7 +42,7 @@ public class NotificationDropdown extends Panel {
             }
         };
 
-        WebMarkupContainer menu = new WebMarkupContainer(wicketId) {
+        WebMarkupContainer menu = new WebMarkupContainer("dropdownMenu") {
             @Override
             public boolean isVisible() {
                 return 0 != listview.getModelObject().size();
@@ -69,7 +50,25 @@ public class NotificationDropdown extends Panel {
         };
         menu.add(listview);
 
-        return menu;
+        add(menu);
+    }
+
+    private void initHeader() {
+        add(new Label("dropdownHeader", getModel().getHeaderModel()));
+    }
+
+    private void initNotification() {
+        add(new Label("notificationCountLabel", getModel().getNotificationCountModel()) {
+            @Override
+            public boolean isVisible() {
+                return 0 != (Integer) getDefaultModelObject();
+            }
+        });
+    }
+
+    @SuppressWarnings("unchecked")
+    private NotificationModel getModel() {
+        return (NotificationModel) getDefaultModel();
     }
 
 }

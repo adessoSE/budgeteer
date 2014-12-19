@@ -1,5 +1,8 @@
 package org.wickedsource.budgeteer.web.pages.imports;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -27,8 +30,13 @@ public class ImportsOverviewPage extends BasePage {
     @SpringBean
     private ImportService importService;
 
+    private WebMarkupContainer importListContainer;
+
     public ImportsOverviewPage() {
-        add(createImportsList("importsList", new ImportsModel(BudgeteerSession.get().getProjectId())));
+        importListContainer = new WebMarkupContainer("importListContainer");
+        importListContainer.setOutputMarkupId(true);
+        importListContainer.add(createImportsList("importsList", new ImportsModel(BudgeteerSession.get().getProjectId())));
+        add(importListContainer);
 
         add(createImportLink("importLink1"));
         add(createImportLink("importLink2"));
@@ -48,14 +56,17 @@ public class ImportsOverviewPage extends BasePage {
         return new ListView<Import>(id, model) {
             @Override
             protected void populateItem(final ListItem<Import> item) {
+                final Long impId = item.getModelObject().getId();
                 item.add(new Label("importDate", model(from(item.getModel()).getImportDate())));
                 item.add(new Label("importType", model(from(item.getModel()).getImportType())));
                 item.add(new Label("startDate", model(from(item.getModel()).getStartDate())));
                 item.add(new Label("endDate", model(from(item.getModel()).getEndDate())));
-                item.add(new Link("deleteButton") {
+
+                item.add(new AjaxLink("deleteButton") {
                     @Override
-                    public void onClick() {
-                        importService.deleteImport(item.getModelObject().getId());
+                    public void onClick(AjaxRequestTarget target) {
+                        importService.deleteImport(impId);
+                        target.add(notificationDropdown, importListContainer);
                     }
                 });
             }
