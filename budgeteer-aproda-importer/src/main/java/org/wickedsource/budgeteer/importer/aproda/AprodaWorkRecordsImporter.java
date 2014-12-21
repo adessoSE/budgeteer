@@ -58,8 +58,7 @@ public class AprodaWorkRecordsImporter implements WorkRecordsImporter {
             int i = 3;
             Row row = sheet.getRow(i);
             while (row != null && row.getCell(0).getStringCellValue() != null) {
-                if (isInvoicable(row)) {
-                    // only import hours that are invoicable
+                if (isImportable(row)) {
                     ImportedWorkRecord record = parseRow(row, file);
                     resultList.add(record);
                 }
@@ -85,16 +84,8 @@ public class AprodaWorkRecordsImporter implements WorkRecordsImporter {
             record.setPersonName(personName);
             record.setMinutesWorked((int) Math.round(hours * 60));
 
-            if (isInvoicable(row)) {
-                if (record.getDate() == null) {
-                    throw new ImportException(String.format("Missing date in row %d and column %d of file %s", row.getRowNum() + 1, COLUMN_DATE + 1, file.getFilename()));
-                }
-                if (record.getBudgetName() == null || "".equals(record.getBudgetName())) {
-                    throw new ImportException(String.format("Missing budget name or id in row %d and column %d of file %s", row.getRowNum() + 1, COLUMN_BUDGET + 1, file.getFilename()));
-                }
-                if (record.getPersonName() == null || "".equals(record.getPersonName())) {
-                    throw new ImportException((String.format("Missing person name in row %d and column %d of file %s", row.getRowNum() + 1, COLUMN_PERSON + 1, file.getFilename())));
-                }
+            if (record.getDate() == null) {
+                throw new ImportException(String.format("Missing date in row %d and column %d of file %s", row.getRowNum() + 1, COLUMN_DATE + 1, file.getFilename()));
             }
 
             return record;
@@ -105,7 +96,11 @@ public class AprodaWorkRecordsImporter implements WorkRecordsImporter {
         }
     }
 
-    private boolean isInvoicable(Row row) {
-        return "ja".equalsIgnoreCase(row.getCell(COLUMN_INVOICABLE).getStringCellValue());
+    private boolean isImportable(Row row) {
+        return ("ja".equalsIgnoreCase(row.getCell(COLUMN_INVOICABLE).getStringCellValue()))
+                && (row.getCell(COLUMN_BUDGET).getStringCellValue() != null)
+                && (!"".equals(row.getCell(COLUMN_BUDGET).getStringCellValue().trim()))
+                && (row.getCell(COLUMN_PERSON).getStringCellValue() != null)
+                && (!"".equals(row.getCell(COLUMN_PERSON).getStringCellValue().trim()));
     }
 }
