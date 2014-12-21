@@ -506,4 +506,12 @@ public class WorkRecordRepositoryTest extends IntegrationTestTemplate {
         Assert.assertEquals("person2", records.get(2).getTitle());
     }
 
+    @Test
+    @DatabaseSetup("aggregateByMonthAndPersonForBudgets.xml")
+    @DatabaseTearDown(value = "aggregateByMonthAndPersonForBudgets.xml", type = DatabaseOperation.DELETE_ALL)
+    public void testDeleteByProjectId(){
+        repository.deleteByProjectId(1l);
+    }
+
+
 }

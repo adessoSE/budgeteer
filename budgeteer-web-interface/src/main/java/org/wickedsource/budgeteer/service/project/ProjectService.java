@@ -1,9 +1,15 @@
 package org.wickedsource.budgeteer.service.project;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.stereotype.Service;
+import org.wickedsource.budgeteer.persistence.budget.BudgetRepository;
+import org.wickedsource.budgeteer.persistence.imports.ImportRepository;
+import org.wickedsource.budgeteer.persistence.person.PersonRepository;
 import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
 import org.wickedsource.budgeteer.persistence.project.ProjectRepository;
+import org.wickedsource.budgeteer.persistence.record.PlanRecordRepository;
+import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
 import org.wickedsource.budgeteer.persistence.user.UserEntity;
 import org.wickedsource.budgeteer.persistence.user.UserRepository;
 import org.wickedsource.budgeteer.service.user.UserService;
@@ -20,6 +26,21 @@ public class ProjectService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private BudgetRepository budgetRepository;
+
+    @Autowired
+    private PersonRepository personRepository;
+
+    @Autowired
+    private ImportRepository importRepository;
+
+    @Autowired
+    private PlanRecordRepository planRecordRepository;
+
+    @Autowired
+    private WorkRecordRepository workRecordRepository;
 
     @Autowired
     private ProjectBaseDataMapper mapper;
@@ -57,6 +78,11 @@ public class ProjectService {
      * @param projectId ID of the project to delete.
      */
     public void deleteProject(long projectId) {
+        planRecordRepository.deleteByProjectId(projectId);
+        workRecordRepository.deleteByProjectId(projectId);
+        importRepository.deleteByProjectId(projectId);
+        budgetRepository.deleteByProjectId(projectId);
+        personRepository.deleteByProjectId(projectId);
         projectRepository.delete(projectId);
     }
 

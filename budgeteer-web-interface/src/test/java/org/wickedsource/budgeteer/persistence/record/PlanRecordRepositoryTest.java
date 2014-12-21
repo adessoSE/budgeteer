@@ -356,4 +356,11 @@ public class PlanRecordRepositoryTest extends IntegrationTestTemplate {
         Assert.assertEquals(10000l, records.get(0).getValueInCents());
     }
 
+    @Test
+    @DatabaseSetup("aggregateByMonthAndPersonForBudgets.xml")
+    @DatabaseTearDown(value = "aggregateByMonthAndPersonForBudgets.xml", type = DatabaseOperation.DELETE_ALL)
+    public void testDeleteByProjectId(){
+        repository.deleteByProjectId(1l);
+    }
+
 }

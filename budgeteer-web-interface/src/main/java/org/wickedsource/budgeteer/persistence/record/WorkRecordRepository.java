@@ -38,6 +38,11 @@ public interface WorkRecordRepository extends CrudRepository<WorkRecordEntity, L
     @Query("delete from WorkRecordEntity r where r.importRecord.id = :importId")
     void deleteByImport(@Param("importId") long importId);
 
+    @Override
+    @Modifying
+    @Query("delete from WorkRecordEntity r where r.budget.id in ( select b.id from BudgetEntity b where b.project.id = :projectId)")
+    void deleteByProjectId(@Param("projectId") long projectId);
+
     @Query("select new org.wickedsource.budgeteer.persistence.record.MissingDailyRateBean(r.person.id, r.person.name, min(r.date), max(r.date)) from WorkRecordEntity r where r.dailyRate = 0 and r.person.project.id = :projectId group by r.person.id, r.person.name")
     List<MissingDailyRateBean> getMissingDailyRatesForProject(@Param("projectId") long projectId);
 

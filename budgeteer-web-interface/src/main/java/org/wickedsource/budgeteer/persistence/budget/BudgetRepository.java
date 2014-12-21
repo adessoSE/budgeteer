@@ -1,5 +1,6 @@
 package org.wickedsource.budgeteer.persistence.budget;
 
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -30,5 +31,9 @@ public interface BudgetRepository extends CrudRepository<BudgetEntity, Long> {
      */
     @Query("select new org.wickedsource.budgeteer.persistence.budget.MissingBudgetTotalBean(b.id, b.name) from BudgetEntity b where b.total = 0 and b.id=:budgetId order by b.name")
     public MissingBudgetTotalBean getMissingBudgetTotalForBudget(@Param("budgetId") long budgetId);
+
+    @Modifying
+    @Query("delete from BudgetEntity b where b.project.id = :projectId")
+    public void deleteByProjectId(@Param("projectId") long projectId);
 
 }

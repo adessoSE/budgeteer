@@ -1,5 +1,6 @@
 package org.wickedsource.budgeteer.persistence.person;
 
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -21,4 +22,8 @@ public interface PersonRepository extends CrudRepository<PersonEntity, Long> {
 
     @Query("select p from PersonEntity p left join fetch p.dailyRates r left join fetch r.budget where p.id=:personId")
     PersonEntity findOneFetchDailyRates(@Param("personId") long personId);
+
+    @Modifying
+    @Query("delete from PersonEntity p where p.project.id = :projectId")
+    public void deleteByProjectId(@Param("projectId") long projectId);
 }

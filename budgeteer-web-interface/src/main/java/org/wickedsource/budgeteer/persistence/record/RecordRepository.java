@@ -1,6 +1,7 @@
 package org.wickedsource.budgeteer.persistence.record;
 
 import org.joda.money.Money;
+import org.springframework.data.repository.query.Param;
 
 import java.util.Date;
 import java.util.List;
@@ -8,6 +9,8 @@ import java.util.List;
 public interface RecordRepository {
 
     void deleteByImport(long importId);
+
+    void deleteByProjectId(long projectId);
 
     List<WeeklyAggregatedRecordBean> aggregateByWeekAndPerson(long personId);
 

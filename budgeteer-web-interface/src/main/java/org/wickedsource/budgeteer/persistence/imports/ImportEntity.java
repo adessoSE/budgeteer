@@ -1,9 +1,13 @@
 package org.wickedsource.budgeteer.persistence.imports;
 
 import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
+import org.wickedsource.budgeteer.persistence.record.PlanRecordEntity;
+import org.wickedsource.budgeteer.persistence.record.WorkRecordEntity;
+import org.wickedsource.budgeteer.service.record.WorkRecord;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "IMPORT", indexes = {@Index(name = "IMPORT_PROJECT_ID_IDX", columnList = "PROJECT_ID")})
@@ -73,4 +77,5 @@ public class ImportEntity {
     public void setImportType(String importType) {
         this.importType = importType;
     }
+
 }

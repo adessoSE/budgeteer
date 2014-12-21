@@ -27,6 +27,11 @@ public interface PlanRecordRepository extends CrudRepository<PlanRecordEntity, L
 
     @Override
     @Modifying
+    @Query("delete from PlanRecordEntity r where r.budget.id in ( select b.id from BudgetEntity b where b.project.id = :projectId)")
+    void deleteByProjectId(@Param("projectId") long projectId);
+
+    @Override
+    @Modifying
     @Query("update PlanRecordEntity r set r.dailyRate = :dailyRate where r.budget.id=:budgetId and r.person.id=:personId and r.date between :fromDate and :toDate")
     void updateDailyRates(@Param("budgetId") long budgetId, @Param("personId") long personId, @Param("fromDate") Date fromDate, @Param("toDate") Date toDate, @Param("dailyRate") Money dailyRate);
 
