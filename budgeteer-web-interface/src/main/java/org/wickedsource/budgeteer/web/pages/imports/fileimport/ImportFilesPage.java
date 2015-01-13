@@ -1,6 +1,7 @@
 package org.wickedsource.budgeteer.web.pages.imports.fileimport;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.WebPage;
@@ -44,6 +45,8 @@ public class ImportFilesPage extends DialogPageWithBacklink {
     private Importer importer = new AprodaWorkRecordsImporter();
 
     private List<FileUpload> fileUploads = new ArrayList<FileUpload>();
+    private CustomFeedbackPanel feedback;
+
 
     public ImportFilesPage(Class<? extends WebPage> backlinkPage, PageParameters backlinkParameters) {
         super(backlinkPage, backlinkParameters);
@@ -76,8 +79,9 @@ public class ImportFilesPage extends DialogPageWithBacklink {
 
         };
         add(form);
-
-        form.add(new CustomFeedbackPanel("feedback"));
+        feedback = new CustomFeedbackPanel("feedback");
+        feedback.setOutputMarkupId(true);
+        form.add(feedback);
 
         DropDownChoice<Importer> importerChoice = new DropDownChoice<Importer>("importerChoice", new PropertyModel<Importer>(this, "importer"), new ImportersListModel(), new ImporterChoiceRenderer());
         importerChoice.add(new AjaxFormComponentUpdatingBehavior("onchange") {
@@ -92,6 +96,12 @@ public class ImportFilesPage extends DialogPageWithBacklink {
         FileUploadField fileUpload = new FileUploadField("fileUpload", new PropertyModel<List<FileUpload>>(this, "fileUploads"));
         fileUpload.setRequired(true);
         fileUpload.add(new AttributeModifier("accept", new AcceptedFileExtensionsModel(importer)));
+        fileUpload.add(new AjaxEventBehavior("onchange") {
+            @Override
+            protected void onEvent(AjaxRequestTarget target) {
+                target.add(feedback);
+            }
+        });
         form.add(fileUpload);
 
         form.add(createBacklink("backlink2"));
