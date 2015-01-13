@@ -1,5 +1,7 @@
 package org.wickedsource.budgeteer.web.pages.person.edit.personrateform;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
@@ -61,8 +63,17 @@ public class EditPersonForm extends Form<PersonWithRates> {
             }
         });
 
-        Button submitButton = new Button("submitButton");
+        AjaxButton submitButton = new AjaxButton("submitButton"){
+            @Override
+            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                PersonWithRates model = (PersonWithRates)form.getModelObject();
+                peopleService.savePersonWithRates(model);
+                ((EditPersonPage) getPage()).goBack();
+            }
+        };
+        submitButton.setDefaultFormProcessing(false);
         submitButton.add(strategy.createSubmitButtonLabel("submitButtonTitle"));
+
         add(submitButton);
     }
 
@@ -91,12 +102,4 @@ public class EditPersonForm extends Form<PersonWithRates> {
             }
         };
     }
-
-    @Override
-    protected void onSubmit() {
-        peopleService.savePersonWithRates(getModelObject());
-        ((EditPersonPage) getPage()).goBack();
-    }
-
-
 }
