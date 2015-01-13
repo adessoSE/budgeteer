@@ -1,6 +1,6 @@
 <wicket:panel>
-    <table class="table table-hover">
-        <tbody>
+    <table class="table table-hover smallLastColumn">
+        <thead>
         <tr>
             <th>Budget Title</th>
             <th style="width:100px">Last Updated</th>
@@ -9,7 +9,10 @@
             <th style="width:100px">Remaining</th>
             <th style="width:100px">Unplanned</th>
             <th>Progress</th>
+            <th></th>
         </tr>
+        </thead>
+        <tbody>
         <tr wicket:id="budgetList">
             <td><a wicket:id="detailLink"><span wicket:id="detailLinkTitle">Implementation of Feature XYZ</span></a>
             </td>
@@ -21,6 +24,7 @@
             <td>
                 <div wicket:id="progressBar"></div>
             </td>
+            <td><button class="btn btn-default btn-sm fa fa-edit" wicket:id="editPage"> </button></td>
         </tr>
 
         <tr>
@@ -33,8 +37,8 @@
             <td>
                 <div wicket:id="totalProgressBar"></div>
             </td>
+            <td> </td>
         </tr>
-
         </tbody>
     </table>
 </wicket:panel>

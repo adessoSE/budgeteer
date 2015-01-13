@@ -87,3 +87,8 @@
 .feedbackPanel{
     margin-top: 10px;
 }
+
+/*small last column (column in which is the Edit-Button)*/
+table.smallLastColumn tr td:last-child {
+    width: 50px;
+}
