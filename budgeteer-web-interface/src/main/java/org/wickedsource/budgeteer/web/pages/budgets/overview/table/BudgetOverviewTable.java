@@ -1,8 +1,10 @@
 package org.wickedsource.budgeteer.web.pages.budgets.overview.table;
 
 import org.apache.wicket.event.IEvent;
+import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -13,6 +15,8 @@ import org.wickedsource.budgeteer.web.ClassAwareWrappingModel;
 import org.wickedsource.budgeteer.web.components.money.BudgetUnitMoneyModel;
 import org.wickedsource.budgeteer.web.components.money.MoneyLabel;
 import org.wickedsource.budgeteer.web.pages.budgets.details.BudgetDetailsPage;
+import org.wickedsource.budgeteer.web.pages.budgets.edit.EditBudgetPage;
+import org.wickedsource.budgeteer.web.pages.budgets.overview.BudgetsOverviewPage;
 import org.wickedsource.budgeteer.web.pages.budgets.overview.table.progressbar.ProgressBar;
 
 import java.util.List;
@@ -59,6 +63,14 @@ public class BudgetOverviewTable extends Panel {
                 item.add(new MoneyLabel("remaining", new BudgetUnitMoneyModel(model(from(item.getModel()).getRemaining()))));
                 item.add(new MoneyLabel("unplanned", new BudgetUnitMoneyModel(model(from(item.getModel()).getUnplanned()))));
                 item.add(new ProgressBar("progressBar", model(from(item.getModel()).getProgressInPercent())));
+                Link editPersonLink = new Link("editPage") {
+                    @Override
+                    public void onClick() {
+                        WebPage page = new EditBudgetPage(EditBudgetPage.createParameters(item.getModelObject().getId()), BudgetsOverviewPage.class,null);
+                        setResponsePage(page);
+                    }
+                };
+                item.add(editPersonLink);
             }
 
             @Override

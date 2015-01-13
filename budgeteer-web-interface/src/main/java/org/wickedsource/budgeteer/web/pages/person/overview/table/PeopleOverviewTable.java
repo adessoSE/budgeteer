@@ -1,5 +1,6 @@
 package org.wickedsource.budgeteer.web.pages.person.overview.table;
 
+import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
@@ -11,6 +12,8 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.wickedsource.budgeteer.service.person.PersonBaseData;
 import org.wickedsource.budgeteer.web.components.money.MoneyLabel;
 import org.wickedsource.budgeteer.web.pages.person.details.PersonDetailsPage;
+import org.wickedsource.budgeteer.web.pages.person.edit.EditPersonPage;
+import org.wickedsource.budgeteer.web.pages.person.overview.PeopleOverviewPage;
 
 import java.util.List;
 
@@ -30,12 +33,23 @@ public class PeopleOverviewTable extends Panel {
         return new ListView<PersonBaseData>(id, model) {
             @Override
             protected void populateItem(ListItem<PersonBaseData> item) {
-                PageParameters parameters = PersonDetailsPage.createParameters(item.getModelObject().getId());
+                final PersonBaseData modelObject = item.getModelObject();
+                final PageParameters parameters = PersonDetailsPage.createParameters(modelObject.getId());
                 Link link = new BookmarkablePageLink<PersonDetailsPage>("personLink", PersonDetailsPage.class, parameters);
-                link.add(new Label("personName", item.getModelObject().getName()));
+                link.add(new Label("personName", modelObject.getName()));
                 item.add(link);
-                item.add(new MoneyLabel("dailyRate", model(from(item.getModelObject()).getAverageDailyRate())));
-                item.add(new Label("lastBookedDate", item.getModelObject().getLastBooked()));
+                item.add(new MoneyLabel("dailyRate", model(from(modelObject).getAverageDailyRate())));
+                item.add(new Label("lastBookedDate", modelObject.getLastBooked()));
+
+                Link editPersonLink = new Link("editPage") {
+                    @Override
+                    public void onClick() {
+                        WebPage page = new EditPersonPage(EditPersonPage.createParameters(modelObject.getId()), PeopleOverviewPage.class, null);
+                        setResponsePage(page);
+                    }
+                };
+                item.add(editPersonLink);
+
             }
         };
     }
