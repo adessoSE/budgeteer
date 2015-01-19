@@ -21,4 +21,17 @@ public class BudgeteerReferences {
         return new UrlResourceReference(Url.parse("/js/highcharts/highcharts.js"));
     }
 
+    public static ResourceReference getBootstrapMultiselectJSReference() {
+        return new UrlResourceReference(Url.parse("/js/plugins/bootstrap-multiselect/bootstrap.multiselect.js"));
+    }
+
+    public static ResourceReference getAdminLteAppReference() {
+        return new UrlResourceReference(Url.parse("/js/AdminLTE/app.js"));
+    }
+
+    public static ResourceReference getBootstrapMultiselectCssReference() {
+        return new UrlResourceReference(Url.parse("/css/bootstrap-multiselect/bootstrap.multiselect.css"));
+    }
+
+
 }

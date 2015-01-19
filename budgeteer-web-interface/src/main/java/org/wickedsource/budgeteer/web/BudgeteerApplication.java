@@ -3,6 +3,9 @@ package org.wickedsource.budgeteer.web;
 import com.googlecode.wickedcharts.wicket6.JavaScriptResourceRegistry;
 import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.Session;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.filter.JavaScriptFilteredIntoFooterHeaderResponse;
+import org.apache.wicket.markup.html.IHeaderResponseDecorator;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.Request;
@@ -47,6 +50,22 @@ public class BudgeteerApplication extends WebApplication implements ApplicationC
 
         getSecuritySettings().setAuthorizationStrategy(new BudgeteerAuthorizationStrategy());
         getSecuritySettings().setUnauthorizedComponentInstantiationListener(new BudgeteerUnauthorizedComponentInstantiationListener());
+        setHeaderResponseDecorator(new JavaScriptToBucketResponseDecorator("JavaScriptContainer"));
+    }
+
+    /** * Decorates an original IHeaderResponse and renders all javascript items * (JavaScriptHeaderItem), to a specific container in the page. */
+    static class JavaScriptToBucketResponseDecorator implements IHeaderResponseDecorator {
+
+        private String bucketName;
+
+        public JavaScriptToBucketResponseDecorator(String bucketName){
+            this.bucketName = bucketName;
+        }
+
+        @Override public IHeaderResponse decorate(IHeaderResponse response){
+            return new JavaScriptFilteredIntoFooterHeaderResponse(response, bucketName);
+        }
+
     }
 
     @Override
