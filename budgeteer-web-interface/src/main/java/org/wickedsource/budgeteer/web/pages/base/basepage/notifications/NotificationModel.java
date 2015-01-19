@@ -30,7 +30,12 @@ public class NotificationModel extends LoadableDetachableModel<List<Notification
     }
 
     public IModel<Integer> getNotificationCountModel() {
-        return new PropertyModel<Integer>(getObject(), "size");
+        return new LoadableDetachableModel<Integer>() {
+            @Override
+            protected Integer load() {
+                return NotificationModel.this.getObject().size();
+            }
+        };
     }
 
     public IModel<String> getHeaderModel() {
