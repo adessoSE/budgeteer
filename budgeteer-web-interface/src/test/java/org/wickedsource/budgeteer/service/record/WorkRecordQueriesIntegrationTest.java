@@ -41,7 +41,7 @@ public class WorkRecordQueriesIntegrationTest extends IntegrationTestTemplate {
     @DatabaseTearDown(value = "findByFilter.xml", type = DatabaseOperation.DELETE_ALL)
     public void testFindByPersonFilter() throws Exception {
         WorkRecordFilter filter = new WorkRecordFilter(1l);
-        filter.setPerson(new PersonBaseData(1l));
+        filter.getPersonList().add(new PersonBaseData(1l));
         Predicate query = WorkRecordQueries.findByFilter(filter);
         List<WorkRecordEntity> records = ListUtil.toArrayList(repository.findAll(query));
         Assert.assertEquals(2, records.size());
@@ -52,7 +52,7 @@ public class WorkRecordQueriesIntegrationTest extends IntegrationTestTemplate {
     @DatabaseTearDown(value = "findByFilter.xml", type = DatabaseOperation.DELETE_ALL)
     public void testFindByBudgetFilter() throws Exception {
         WorkRecordFilter filter = new WorkRecordFilter(1l);
-        filter.setBudget(new BudgetBaseData(1l, "budget1"));
+        filter.getBudgetList().add(new BudgetBaseData(1l, "budget1"));
         Predicate query = WorkRecordQueries.findByFilter(filter);
         List<WorkRecordEntity> records = ListUtil.toArrayList(repository.findAll(query));
         Assert.assertEquals(2, records.size());
@@ -74,8 +74,8 @@ public class WorkRecordQueriesIntegrationTest extends IntegrationTestTemplate {
     @DatabaseTearDown(value = "findByFilter.xml", type = DatabaseOperation.DELETE_ALL)
     public void testFindByMixedFilter() throws Exception {
         WorkRecordFilter filter = new WorkRecordFilter(1l);
-        filter.setPerson(new PersonBaseData(1l));
-        filter.setBudget(new BudgetBaseData(1l, "budget1"));
+        filter.getPersonList().add(new PersonBaseData(1l));
+        filter.getBudgetList().add(new BudgetBaseData(1l, "budget1"));
         filter.setDateRange(new DateRange(format.parse("01.01.2015"), format.parse("02.01.2015")));
         Predicate query = WorkRecordQueries.findByFilter(filter);
         List<WorkRecordEntity> records = ListUtil.toArrayList(repository.findAll(query));

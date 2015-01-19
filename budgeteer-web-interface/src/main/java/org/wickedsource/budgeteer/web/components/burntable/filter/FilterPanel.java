@@ -1,18 +1,30 @@
 package org.wickedsource.budgeteer.web.components.burntable.filter;
 
+import org.apache.poi.util.StringUtil;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
+import org.apache.wicket.markup.html.form.ListMultipleChoice;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
+import org.wickedsource.budgeteer.service.budget.BudgetService;
 import org.wickedsource.budgeteer.service.person.PersonBaseData;
+import org.wickedsource.budgeteer.service.person.PersonService;
 import org.wickedsource.budgeteer.service.record.WorkRecordFilter;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.components.budget.BudgetBaseDataChoiceRenderer;
 import org.wickedsource.budgeteer.web.components.daterange.DateRangeInputField;
+import org.wickedsource.budgeteer.web.components.multiselect.MultiselectBehavior;
 import org.wickedsource.budgeteer.web.components.person.PersonBaseDataChoiceRenderer;
+import org.wicketstuff.lazymodel.LazyModel;
+
+import java.util.HashMap;
+import java.util.List;
 
 import static org.wicketstuff.lazymodel.LazyModel.from;
 import static org.wicketstuff.lazymodel.LazyModel.model;
@@ -24,6 +36,12 @@ public class FilterPanel extends Panel {
     private boolean budgetFilterEnabled = true;
 
     private boolean daterangeFilterEnabled = true;
+
+    @SpringBean
+    private PersonService personService;
+
+    @SpringBean
+    private BudgetService budgetService;
 
     @SuppressWarnings("unchecked")
     public FilterPanel(String id, WorkRecordFilter filter) {
@@ -49,11 +67,19 @@ public class FilterPanel extends Panel {
             }
         };
         container.setVisible(isPersonFilterEnabled());
-        DropDownChoice<PersonBaseData> field = new DropDownChoice<PersonBaseData>("personSelect", model(from(form.getModel()).getPerson()), new PersonListModel(BudgeteerSession.get().getProjectId()));
-        field.setChoiceRenderer(new PersonBaseDataChoiceRenderer());
-        field.setRequired(false);
-        field.setNullValid(true);
-        container.add(field);
+        LazyModel<List<PersonBaseData>> chosenPersons = model(from(form.getModelObject().getPersonList()));
+        List<PersonBaseData> possiblePersons = personService.loadPeopleBaseData(BudgeteerSession.get().getProjectId());
+        ListMultipleChoice<PersonBaseData> selectedPersons =
+                new ListMultipleChoice<PersonBaseData>("personSelect", chosenPersons,
+                        possiblePersons, new PersonBaseDataChoiceRenderer());
+
+
+        selectedPersons.setRequired(false);
+        HashMap<String, String> options = new HashMap<String, String>();
+        options.put("includeSelectAllOption","true");
+        options.put("buttonWidth","'250px'");
+        selectedPersons.add(new MultiselectBehavior(options));
+        container.add(selectedPersons);
         return container;
     }
 
@@ -65,11 +91,17 @@ public class FilterPanel extends Panel {
             }
         };
         container.setVisible(isBudgetFilterEnabled());
-        DropDownChoice<BudgetBaseData> field = new DropDownChoice<BudgetBaseData>("budgetSelect", model(from(form.getModel()).getBudget()), new BudgetListModel(BudgeteerSession.get().getProjectId()));
-        field.setChoiceRenderer(new BudgetBaseDataChoiceRenderer());
-        field.setRequired(false);
-        field.setNullValid(true);
-        container.add(field);
+
+        List<BudgetBaseData> possibleBudgets = budgetService.loadBudgetBaseDataForProject(BudgeteerSession.get().getProjectId());
+        LazyModel<List<BudgetBaseData>> chosenBudgets = model(from(form.getModelObject().getBudgetList()));
+        ListMultipleChoice<BudgetBaseData> selectedBudgets = new ListMultipleChoice<BudgetBaseData>("budgetSelect", chosenBudgets, possibleBudgets, new BudgetBaseDataChoiceRenderer());
+
+        HashMap<String, String> options = new HashMap<String, String>();
+        options.put("includeSelectAllOption","true");
+        options.put("buttonWidth","'250px'");
+        selectedBudgets.add(new MultiselectBehavior(options));
+        selectedBudgets.setRequired(false);
+        container.add(selectedBudgets);
         return container;
     }
 

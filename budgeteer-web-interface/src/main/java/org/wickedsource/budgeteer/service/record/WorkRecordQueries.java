@@ -3,6 +3,7 @@ package org.wickedsource.budgeteer.service.record;
 import com.mysema.query.types.Predicate;
 import com.mysema.query.types.expr.BooleanExpression;
 import org.wickedsource.budgeteer.persistence.record.QWorkRecordEntity;
+import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
 
 public class WorkRecordQueries {
 
@@ -19,13 +20,41 @@ public class WorkRecordQueries {
         if (filter.getDateRange() != null && filter.getDateRange().getEndDate() != null) {
             expression = expression.and(record.date.loe(filter.getDateRange().getEndDate()));
         }
-        if (filter.getBudget() != null && filter.getBudget().getId() >= 0l) {
-            expression = expression.and(record.budget.id.eq(filter.getBudget().getId()));
+        BooleanExpression budgetExpression = getBudgetExpression(filter, record);
+        if(budgetExpression != null) {
+            expression = expression.and(budgetExpression);
         }
-        if (filter.getPerson() != null && filter.getPerson().getId() >= 0l) {
-            expression = expression.and(record.person.id.eq(filter.getPerson().getId()));
+        BooleanExpression personExpression = getPersonExpression(filter, record);
+        if(personExpression != null) {
+            expression = expression.and(personExpression);
         }
         return expression;
+    }
+
+    private static BooleanExpression getBudgetExpression(WorkRecordFilter filter, QWorkRecordEntity record) {
+        BooleanExpression result = null;
+        for (int index = 0; index < filter.getBudgetList().size(); index++) {
+            if(index == 0){
+                result = record.budget.id.eq(filter.getBudgetList().get(index).getId());
+            } else {
+                result = result.or(record.budget.id.eq(filter.getBudgetList().get(index).getId()));
+            }
+
+        }
+        return result;
+    }
+
+    private static BooleanExpression getPersonExpression(WorkRecordFilter filter, QWorkRecordEntity record) {
+        BooleanExpression result = null;
+        for (int index = 0; index < filter.getPersonList().size(); index++) {
+            if(index == 0){
+                result = record.person.id.eq(filter.getPersonList().get(index).getId());
+            } else {
+                result = result.or(record.person.id.eq(filter.getPersonList().get(index).getId()));
+            }
+
+        }
+        return result;
     }
 
 }

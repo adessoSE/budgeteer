@@ -1,6 +1,7 @@
 package org.wickedsource.budgeteer.persistence.record;
 
 import org.joda.money.Money;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QueryDslPredicateExecutor;
@@ -10,7 +11,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.Date;
 import java.util.List;
 
-public interface WorkRecordRepository extends CrudRepository<WorkRecordEntity, Long>, QueryDslPredicateExecutor<WorkRecordEntity>, RecordRepository {
+public interface WorkRecordRepository extends CrudRepository<WorkRecordEntity, Long>, QueryDslPredicateExecutor<WorkRecordEntity>,  RecordRepository , JpaSpecificationExecutor {
 
     /**
      * Aggregates the monetary value of all work records in the given budget.

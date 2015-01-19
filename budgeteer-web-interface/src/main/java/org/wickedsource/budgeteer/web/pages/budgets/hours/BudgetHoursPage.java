@@ -21,8 +21,7 @@ public class BudgetHoursPage extends BudgetBasePage {
         super(parameters);
 
         WorkRecordFilter filter = new WorkRecordFilter(BudgeteerSession.get().getProjectId());
-        filter.setBudget(new BudgetBaseData());
-        filter.getBudget().setId(getBudgetId());
+        filter.getBudgetList().add(new BudgetBaseData(getBudgetId(), ""));
 
         BurnTableWithFilter table = new BurnTableWithFilter("burnTable", filter);
         table.setBudgetFilterEnabled(false);
