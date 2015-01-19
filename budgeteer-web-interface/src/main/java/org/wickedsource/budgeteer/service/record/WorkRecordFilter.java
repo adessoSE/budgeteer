@@ -5,14 +5,16 @@ import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
 import org.wickedsource.budgeteer.service.person.PersonBaseData;
 
 import java.io.Serializable;
+import java.util.LinkedList;
+import java.util.List;
 
 public class WorkRecordFilter implements Serializable{
 
     private long projectId;
 
-    private PersonBaseData person;
+    private List<PersonBaseData> personList = new LinkedList<PersonBaseData>();
 
-    private BudgetBaseData budget;
+    private List<BudgetBaseData> budgetList = new LinkedList<BudgetBaseData>();
 
     private DateRange dateRange;
 
@@ -20,20 +22,12 @@ public class WorkRecordFilter implements Serializable{
         this.projectId = projectId;
     }
 
-    public PersonBaseData getPerson() {
-        return person;
+    public List<PersonBaseData> getPersonList() {
+        return personList;
     }
 
-    public void setPerson(PersonBaseData person) {
-        this.person = person;
-    }
-
-    public BudgetBaseData getBudget() {
-        return budget;
-    }
-
-    public void setBudget(BudgetBaseData budget) {
-        this.budget = budget;
+    public List<BudgetBaseData> getBudgetList() {
+        return budgetList;
     }
 
     public DateRange getDateRange() {

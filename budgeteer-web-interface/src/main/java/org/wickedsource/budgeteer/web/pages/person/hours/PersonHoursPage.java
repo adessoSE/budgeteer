@@ -21,8 +21,7 @@ public class PersonHoursPage extends PersonBasePage {
         super(parameters);
 
         WorkRecordFilter filter = new WorkRecordFilter(BudgeteerSession.get().getProjectId());
-        filter.setPerson(new PersonBaseData());
-        filter.getPerson().setId(getPersonId());
+        filter.getPersonList().add(new PersonBaseData(getPersonId()));
 
         BurnTableWithFilter table = new BurnTableWithFilter("burnTable", filter);
         table.setPersonFilterEnabled(false);
