@@ -2,6 +2,7 @@ package org.wickedsource.budgeteer.web.pages.base.basepage;
 
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
+import org.apache.wicket.markup.head.filter.HeaderResponseContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
@@ -39,12 +40,15 @@ public abstract class BasePage extends WebPage {
         add(new BudgetUnitChoice("budgetUnitDropdown", new BudgetUnitModel(projectId)));
         add(new BookmarkablePageLink<ProjectAdministrationPage>("administrationLink", ProjectAdministrationPage.class));
         add(createLogoutLink("logoutLink"));
+        add(new HeaderResponseContainer("JavaScriptContainer", "JavaScriptContainer"));
     }
 
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
         response.render(JavaScriptReferenceHeaderItem.forReference(BudgeteerReferences.getJQueryReference()));
+        response.render(JavaScriptReferenceHeaderItem.forReference(BudgeteerReferences.getAdminLteAppReference()));
+        response.render(JavaScriptReferenceHeaderItem.forUrl("//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"));
     }
 
     private Link createLogoutLink(String id) {
