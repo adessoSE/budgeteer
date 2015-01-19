@@ -21,6 +21,8 @@ import org.wickedsource.budgeteer.web.pages.user.login.LoginPage;
 
 @NeedsLogin
 public abstract class BasePage extends WebPage {
+    protected NotificationDropdown notificationDropdown;
+
 
     public BasePage(PageParameters parameters) {
         super(parameters);
@@ -36,7 +38,9 @@ public abstract class BasePage extends WebPage {
         BreadcrumbsPanel breadcrumbs = new BreadcrumbsPanel("breadcrumbsPanel", getBreadcrumbsModel());
         long projectId = ((BudgeteerSession) getSession()).getProjectId();
         add(breadcrumbs);
-        add(new NotificationDropdown("notificationDropdown", new NotificationModel(projectId)));
+        notificationDropdown = new NotificationDropdown("notificationDropdown", new NotificationModel(projectId));
+        notificationDropdown.setOutputMarkupId(true);
+        add(notificationDropdown);
         add(new BudgetUnitChoice("budgetUnitDropdown", new BudgetUnitModel(projectId)));
         add(new BookmarkablePageLink<ProjectAdministrationPage>("administrationLink", ProjectAdministrationPage.class));
         add(createLogoutLink("logoutLink"));
