@@ -25,6 +25,10 @@ public class BudgeteerReferences {
         return new UrlResourceReference(Url.parse("/js/plugins/bootstrap-multiselect/bootstrap.multiselect.js"));
     }
 
+    public static ResourceReference getBootstrapDataTableJSReference() {
+        return new UrlResourceReference(Url.parse("/js/plugins/datatables/dataTables.bootstrap.js"));
+    }
+
     public static ResourceReference getAdminLteAppReference() {
         return new UrlResourceReference(Url.parse("/js/AdminLTE/app.js"));
     }
@@ -34,4 +38,7 @@ public class BudgeteerReferences {
     }
 
 
+    public static ResourceReference getJQueryDataTableJSReference() {
+        return new UrlResourceReference(Url.parse("/js/plugins/datatables/jquery.dataTables.js"));
+    }
 }
