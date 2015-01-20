@@ -1,5 +1,8 @@
 package org.wickedsource.budgeteer.service.imports;
 
+import org.apache.commons.lang3.time.DateUtils;
+
+import java.util.Calendar;
 import java.util.Date;
 
 public class Import {
@@ -38,16 +41,24 @@ public class Import {
         this.importType = importType;
     }
 
+    /**
+     * Returns a date with only the date-information available. Time-information are truncated
+     * @return date-information of the startDate
+     */
     public Date getStartDate() {
-        return startDate;
+        return DateUtils.truncate(startDate, Calendar.DATE);
     }
 
     public void setStartDate(Date startDate) {
         this.startDate = startDate;
     }
 
+    /**
+     * Returns a date with only the date-information available. Time-information are truncated
+     * @return date-information of the endDate
+     */
     public Date getEndDate() {
-        return endDate;
+        return DateUtils.truncate(endDate, Calendar.DATE);
     }
 
     public void setEndDate(Date endDate) {
