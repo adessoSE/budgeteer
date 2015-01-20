@@ -1,6 +1,7 @@
 package org.wickedsource.budgeteer.web.components.burntable.table;
 
 import org.apache.wicket.event.IEvent;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -10,6 +11,7 @@ import org.wickedsource.budgeteer.service.record.WorkRecord;
 import org.wickedsource.budgeteer.service.record.WorkRecordFilter;
 import org.wickedsource.budgeteer.web.ClassAwareWrappingModel;
 import org.wickedsource.budgeteer.web.components.burntable.filter.FilteredRecordsModel;
+import org.wickedsource.budgeteer.web.components.dataTable.DataTableBehavior;
 import org.wickedsource.budgeteer.web.components.money.BudgetUnitMoneyModel;
 import org.wickedsource.budgeteer.web.components.money.MoneyLabel;
 
@@ -22,7 +24,12 @@ public class BurnTable extends Panel {
 
     public BurnTable(String id, FilteredRecordsModel model) {
         super(id, model);
-        add(createList("recordList", model));
+        WebMarkupContainer table = new WebMarkupContainer("table");
+        table.add(new DataTableBehavior(null));
+        ListView<WorkRecord> rows = createList("recordList", model);
+        table.add(rows);
+
+        add(table);
         add(new MoneyLabel("total", new BudgetUnitMoneyModel(new TotalBudgetModel(model))));
     }
 
