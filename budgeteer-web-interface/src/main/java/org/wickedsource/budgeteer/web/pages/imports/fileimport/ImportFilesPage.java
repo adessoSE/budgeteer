@@ -45,6 +45,8 @@ public class ImportFilesPage extends DialogPageWithBacklink {
     private Importer importer = new AprodaWorkRecordsImporter();
 
     private List<FileUpload> fileUploads = new ArrayList<FileUpload>();
+    private CustomFeedbackPanel feedback;
+
 
     private CustomFeedbackPanel feedback;
 
