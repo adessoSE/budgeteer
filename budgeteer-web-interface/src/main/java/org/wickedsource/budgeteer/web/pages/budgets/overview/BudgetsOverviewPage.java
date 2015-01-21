@@ -17,6 +17,8 @@ import org.wickedsource.budgeteer.web.pages.budgets.overview.table.FilteredBudge
 import org.wickedsource.budgeteer.web.pages.budgets.weekreport.multi.MultiBudgetWeekReportPage;
 import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 
+import java.util.ArrayList;
+
 import static org.wicketstuff.lazymodel.LazyModel.from;
 import static org.wicketstuff.lazymodel.LazyModel.model;
 
@@ -26,7 +28,7 @@ public class BudgetsOverviewPage extends BasePage {
     public BudgetsOverviewPage() {
         BudgetTagsModel tagsModel = new BudgetTagsModel(BudgeteerSession.get().getProjectId());
         if (BudgeteerSession.get().getBudgetFilter() == null) {
-            BudgetTagFilter filter = new BudgetTagFilter(tagsModel.getObject(), BudgeteerSession.get().getProjectId());
+            BudgetTagFilter filter = new BudgetTagFilter(new ArrayList<String>(), BudgeteerSession.get().getProjectId());
             BudgeteerSession.get().setBudgetFilter(filter);
         }
         add(new BudgetTagFilterPanel("tagFilter", tagsModel, model(from(BudgeteerSession.get().getBudgetFilter()))));

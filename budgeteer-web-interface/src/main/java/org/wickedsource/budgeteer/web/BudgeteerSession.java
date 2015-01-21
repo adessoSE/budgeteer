@@ -32,6 +32,7 @@ public class BudgeteerSession extends WebSession {
     }
 
     public void logout() {
+        invalidate();
         replaceSession();
     }
 
