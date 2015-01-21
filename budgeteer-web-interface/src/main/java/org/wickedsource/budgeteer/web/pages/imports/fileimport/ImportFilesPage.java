@@ -45,8 +45,8 @@ public class ImportFilesPage extends DialogPageWithBacklink {
     private Importer importer = new AprodaWorkRecordsImporter();
 
     private List<FileUpload> fileUploads = new ArrayList<FileUpload>();
-    private CustomFeedbackPanel feedback;
 
+    private CustomFeedbackPanel feedback;
 
     public ImportFilesPage(Class<? extends WebPage> backlinkPage, PageParameters backlinkParameters) {
         super(backlinkPage, backlinkParameters);
@@ -71,7 +71,7 @@ public class ImportFilesPage extends DialogPageWithBacklink {
                     error(String.format(getString("message.ioError"), e.getMessage()));
                 } catch (ImportException e) {
                     error(String.format(getString("message.importError"), e.getMessage()));
-                } catch (IllegalArgumentException e){
+                } catch (IllegalArgumentException e) {
                     error(String.format(getString("message.importError"), e.getMessage()));
                 }
             }
