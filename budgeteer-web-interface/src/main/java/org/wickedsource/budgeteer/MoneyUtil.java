@@ -14,7 +14,7 @@ public class MoneyUtil {
     public static Money ZERO = Money.of(DEFAULT_CURRENCY, 0d);
 
     public static Money createMoney(double value) {
-        return Money.of(DEFAULT_CURRENCY, value);
+        return Money.of(DEFAULT_CURRENCY, value, RoundingMode.HALF_UP);
     }
 
     public static Money createMoneyFromCents(long cents) {
