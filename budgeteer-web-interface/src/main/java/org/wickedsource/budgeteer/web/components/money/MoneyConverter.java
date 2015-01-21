@@ -48,8 +48,11 @@ public class MoneyConverter implements IConverter<Money> {
             } else {
                 number = Double.valueOf(value);
             }
+
             return MoneyUtil.createMoney(number.doubleValue());
-        } catch (ParseException e) {
+        } catch (ParseException e ) {
+            throw new ConversionException(e);
+        } catch (ArithmeticException e){
             throw new ConversionException(e);
         }
     }
