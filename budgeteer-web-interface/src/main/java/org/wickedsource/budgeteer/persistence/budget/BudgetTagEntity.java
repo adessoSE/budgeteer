@@ -1,9 +1,14 @@
 package org.wickedsource.budgeteer.persistence.budget;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "BUDGET_TAG", indexes = {@Index(name="BUDGET_TAG_BUDGET_ID_IDX", columnList = "BUDGET_ID")})
+@Data
+@NoArgsConstructor
 public class BudgetTagEntity {
 
     @Id
@@ -16,26 +21,9 @@ public class BudgetTagEntity {
 
     private String tag;
 
-    public BudgetTagEntity() {
-    }
 
     public BudgetTagEntity(String tag) {
         this.tag = tag;
     }
 
-    public BudgetEntity getBudget() {
-        return budget;
-    }
-
-    public void setBudget(BudgetEntity budget) {
-        this.budget = budget;
-    }
-
-    public String getTag() {
-        return tag;
-    }
-
-    public void setTag(String tag) {
-        this.tag = tag;
-    }
 }

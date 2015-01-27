@@ -1,5 +1,10 @@
 package org.wickedsource.budgeteer.persistence.record;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
+@Data
+@AllArgsConstructor
 public class WeeklyAggregatedRecordBean {
 
     private int year;
@@ -10,26 +15,4 @@ public class WeeklyAggregatedRecordBean {
 
     private long valueInCents;
 
-    public WeeklyAggregatedRecordBean(int year, int week, Double hours, long valueInCents) {
-        this.year = year;
-        this.week = week;
-        this.hours = hours;
-        this.valueInCents = valueInCents;
-    }
-
-    public int getYear() {
-        return year;
-    }
-
-    public int getWeek() {
-        return week;
-    }
-
-    public Double getHours() {
-        return hours;
-    }
-
-    public long getValueInCents() {
-        return valueInCents;
-    }
 }

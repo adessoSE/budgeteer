@@ -1,5 +1,8 @@
 package org.wickedsource.budgeteer.service.person;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.joda.money.Money;
@@ -8,47 +11,14 @@ import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
 
 import java.io.Serializable;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class PersonRate implements Serializable {
 
     private Money rate;
-
     private BudgetBaseData budget;
-
     private DateRange dateRange;
-
-    public PersonRate() {
-    }
-
-    public PersonRate(Money rate, BudgetBaseData budget, DateRange dateRange) {
-        this.rate = rate;
-        this.budget = budget;
-        this.dateRange = dateRange;
-    }
-
-    public BudgetBaseData getBudget() {
-        return budget;
-    }
-
-    public void setBudget(BudgetBaseData budget) {
-        this.budget = budget;
-    }
-
-    public Money getRate() {
-        return rate;
-    }
-
-    public void setRate(Money rate) {
-        this.rate = rate;
-    }
-
-    public DateRange getDateRange() {
-        return dateRange;
-    }
-
-    public void setDateRange(DateRange dateRange) {
-        this.dateRange = dateRange;
-    }
-
 
     @Override
     @SuppressWarnings("EqualsWhichDoesntCheckParameterClass")

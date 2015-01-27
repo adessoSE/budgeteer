@@ -1,5 +1,6 @@
 package org.wickedsource.budgeteer.persistence.project;
 
+import lombok.Data;
 import org.wickedsource.budgeteer.persistence.user.UserEntity;
 
 import javax.persistence.*;
@@ -11,6 +12,7 @@ import java.util.List;
         uniqueConstraints = {
                 @UniqueConstraint(name = "UNIQUE_PROJECT_NAME", columnNames = {"NAME"})
         })
+@Data
 public class ProjectEntity {
 
     @Id
@@ -26,27 +28,4 @@ public class ProjectEntity {
             inverseJoinColumns = {@JoinColumn(name = "USER_ID")})
     private List<UserEntity> authorizedUsers = new ArrayList<UserEntity>();
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public List<UserEntity> getAuthorizedUsers() {
-        return authorizedUsers;
-    }
-
-    public void setAuthorizedUsers(List<UserEntity> authorizedUsers) {
-        this.authorizedUsers = authorizedUsers;
-    }
 }

@@ -1,9 +1,12 @@
 package org.wickedsource.budgeteer.service.budget;
 
+import lombok.Data;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+@Data
 public class BudgetTagFilter implements Serializable {
 
     private List<String> selectedTags = new ArrayList<String>();
@@ -35,11 +38,4 @@ public class BudgetTagFilter implements Serializable {
         return selectedTags.contains(tag);
     }
 
-    public long getProjectId() {
-        return projectId;
-    }
-
-    public void setProjectId(long projectId) {
-        this.projectId = projectId;
-    }
 }
