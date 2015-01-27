@@ -26,6 +26,7 @@ public class DataTableBehavior extends Behavior{
 
     @Override
     public void renderHead(Component component, IHeaderResponse response) {
+        response.render(CssHeaderItem.forReference(BudgeteerReferences.getDataTableCssReference()));
         response.render(JavaScriptReferenceHeaderItem.forReference(BudgeteerReferences.getJQueryReference()));
         response.render(JavaScriptReferenceHeaderItem.forReference(BudgeteerReferences.getJQueryDataTableJSReference()));
         response.render(JavaScriptReferenceHeaderItem.forReference(BudgeteerReferences.getBootstrapDataTableJSReference()));
@@ -50,6 +51,20 @@ public class DataTableBehavior extends Behavior{
             script.append("}");
         }
         script.append(");");
-       return script.toString();
+        return script.toString();
+    }
+
+    /**
+     * Returns a HashMap with the mostly used options set. E.g. Pagination oder sortable columns are enabled.
+     * @return
+     */
+    public static HashMap<String, String> getRecommendedOptions(){
+        HashMap<String, String> result = new HashMap<String, String>();
+        result.put("bPaginate", "true");
+        result.put("bLengthChange", "false");
+        result.put("bFilter", "false");
+        result.put("bSort", "true");
+        result.put("bInfo", "true");
+        return result;
     }
 }

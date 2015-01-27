@@ -1,6 +1,7 @@
 package org.wickedsource.budgeteer.web.pages.budgets.overview.table;
 
 import org.apache.wicket.event.IEvent;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -12,6 +13,7 @@ import org.apache.wicket.model.IModel;
 import org.wickedsource.budgeteer.service.budget.BudgetDetailData;
 import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
 import org.wickedsource.budgeteer.web.ClassAwareWrappingModel;
+import org.wickedsource.budgeteer.web.components.dataTable.DataTableBehavior;
 import org.wickedsource.budgeteer.web.components.money.BudgetUnitMoneyModel;
 import org.wickedsource.budgeteer.web.components.money.MoneyLabel;
 import org.wickedsource.budgeteer.web.pages.budgets.details.BudgetDetailsPage;
@@ -28,15 +30,22 @@ public class BudgetOverviewTable extends Panel {
 
     public BudgetOverviewTable(String id, FilteredBudgetModel model) {
         super(id, model);
-        add(createBudgetList("budgetList", model));
+        WebMarkupContainer table = new WebMarkupContainer("table");
+        table.add(new DataTableBehavior(DataTableBehavior.getRecommendedOptions()));
+
+
+        table.add(createBudgetList("budgetList", model));
+
 
         IModel<BudgetDetailData> totalModel = new TotalBudgetDetailsModel(model);
-        add(new Label("totalLastUpdated", model(from(totalModel).getLastUpdated())));
-        add(new MoneyLabel("totalAmount", new BudgetUnitMoneyModel(model(from(totalModel).getTotal()))));
-        add(new MoneyLabel("totalSpent", new BudgetUnitMoneyModel(model(from(totalModel).getSpent()))));
-        add(new MoneyLabel("totalRemaining", new BudgetUnitMoneyModel(model(from(totalModel).getRemaining()))));
-        add(new MoneyLabel("totalUnplanned", new BudgetUnitMoneyModel(model(from(totalModel).getUnplanned()))));
-        add(new ProgressBar("totalProgressBar", model(from(totalModel).getProgressInPercent())));
+        table.add(new Label("totalLastUpdated", model(from(totalModel).getLastUpdated())));
+        table.add(new MoneyLabel("totalAmount", new BudgetUnitMoneyModel(model(from(totalModel).getTotal()))));
+        table.add(new MoneyLabel("totalSpent", new BudgetUnitMoneyModel(model(from(totalModel).getSpent()))));
+        table.add(new MoneyLabel("totalRemaining", new BudgetUnitMoneyModel(model(from(totalModel).getRemaining()))));
+        table.add(new MoneyLabel("totalUnplanned", new BudgetUnitMoneyModel(model(from(totalModel).getUnplanned()))));
+        table.add(new ProgressBar("totalProgressBar", model(from(totalModel).getProgressInPercent())));
+
+        add(table);
     }
 
     @Override
