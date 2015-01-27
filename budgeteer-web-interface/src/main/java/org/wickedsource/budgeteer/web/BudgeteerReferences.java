@@ -34,11 +34,16 @@ public class BudgeteerReferences {
     }
 
     public static ResourceReference getBootstrapMultiselectCssReference() {
-        return new UrlResourceReference(Url.parse("/css/bootstrap-multiselect/bootstrap.multiselect.css"));
+        return new UrlResourceReference(Url.parse("/css/bootstrap-multiselect/bootstrap.multiselect.css")) ;
     }
 
 
     public static ResourceReference getJQueryDataTableJSReference() {
         return new UrlResourceReference(Url.parse("/js/plugins/datatables/jquery.dataTables.js"));
     }
+
+    public static ResourceReference getDataTableCssReference() {
+        return new UrlResourceReference(Url.parse("/css/datatables/dataTables.bootstrap.css"));
+    }
+
 }

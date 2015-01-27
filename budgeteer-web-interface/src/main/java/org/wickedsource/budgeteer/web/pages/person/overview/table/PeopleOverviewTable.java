@@ -1,5 +1,6 @@
 package org.wickedsource.budgeteer.web.pages.person.overview.table;
 
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -10,6 +11,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.wickedsource.budgeteer.service.person.PersonBaseData;
+import org.wickedsource.budgeteer.web.components.dataTable.DataTableBehavior;
 import org.wickedsource.budgeteer.web.components.money.MoneyLabel;
 import org.wickedsource.budgeteer.web.pages.person.details.PersonDetailsPage;
 import org.wickedsource.budgeteer.web.pages.person.edit.EditPersonPage;
@@ -26,7 +28,11 @@ public class PeopleOverviewTable extends Panel {
     public PeopleOverviewTable(String id, IModel<List<PersonBaseData>> model) {
         super(id, model);
         setRenderBodyOnly(true);
-        add(createPersonList("personList", model));
+        WebMarkupContainer table = new WebMarkupContainer("table");
+        table.add(new DataTableBehavior(DataTableBehavior.getRecommendedOptions()));
+
+        table.add(createPersonList("personList", model));
+        add(table);
     }
 
     private ListView<PersonBaseData> createPersonList(String id, IModel<List<PersonBaseData>> model) {
