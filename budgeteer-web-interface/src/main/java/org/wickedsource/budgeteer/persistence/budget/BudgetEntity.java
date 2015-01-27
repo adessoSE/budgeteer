@@ -1,5 +1,6 @@
 package org.wickedsource.budgeteer.persistence.budget;
 
+import lombok.Data;
 import org.joda.money.Money;
 import org.wickedsource.budgeteer.persistence.person.DailyRateEntity;
 import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
@@ -15,6 +16,7 @@ import java.util.List;
         uniqueConstraints = {
                 @UniqueConstraint(name = "UNIQUE_IMPORT_KEY_PER_PROJECT", columnNames = {"PROJECT_ID", "IMPORT_KEY"})
         })
+@Data
 public class BudgetEntity {
 
     @Id
@@ -45,75 +47,4 @@ public class BudgetEntity {
     @Column(nullable = false, name = "IMPORT_KEY")
     private String importKey;
 
-    public List<WorkRecordEntity> getWorkRecords() {
-        return workRecords;
-    }
-
-    public void setWorkRecords(List<WorkRecordEntity> workRecords) {
-        this.workRecords = workRecords;
-    }
-
-    public List<DailyRateEntity> getDailyRates() {
-        return dailyRates;
-    }
-
-    public void setDailyRates(List<DailyRateEntity> dailyRates) {
-        this.dailyRates = dailyRates;
-    }
-
-    public String getImportKey() {
-        return importKey;
-    }
-
-    public void setImportKey(String importKey) {
-        this.importKey = importKey;
-    }
-
-    public List<BudgetTagEntity> getTags() {
-        return tags;
-    }
-
-    public void setTags(List<BudgetTagEntity> tags) {
-        this.tags = tags;
-    }
-
-    public ProjectEntity getProject() {
-        return project;
-    }
-
-    public void setProject(ProjectEntity project) {
-        this.project = project;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Money getTotal() {
-        return total;
-    }
-
-    public void setTotal(Money total) {
-        this.total = total;
-    }
-
-    public List<PlanRecordEntity> getPlanRecords() {
-        return planRecords;
-    }
-
-    public void setPlanRecords(List<PlanRecordEntity> planRecords) {
-        this.planRecords = planRecords;
-    }
 }

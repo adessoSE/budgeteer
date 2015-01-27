@@ -1,5 +1,6 @@
 package org.wickedsource.budgeteer.persistence.user;
 
+import lombok.Data;
 import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
 
 import javax.persistence.*;
@@ -11,6 +12,7 @@ import java.util.List;
         uniqueConstraints = {
                 @UniqueConstraint(name = "UNIQUE_USER_NAME", columnNames = {"NAME"})
         })
+@Data
 public class UserEntity {
 
     @Id
@@ -26,35 +28,4 @@ public class UserEntity {
     @ManyToMany(fetch = FetchType.EAGER, mappedBy = "authorizedUsers")
     private List<ProjectEntity> authorizedProjects = new ArrayList<ProjectEntity>();
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public List<ProjectEntity> getAuthorizedProjects() {
-        return authorizedProjects;
-    }
-
-    public void setAuthorizedProjects(List<ProjectEntity> authorizedProjects) {
-        this.authorizedProjects = authorizedProjects;
-    }
 }
