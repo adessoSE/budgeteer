@@ -25,7 +25,7 @@ public class BurnTable extends Panel {
     public BurnTable(String id, FilteredRecordsModel model) {
         super(id, model);
         WebMarkupContainer table = new WebMarkupContainer("table");
-        table.add(new DataTableBehavior(null));
+        table.add(new DataTableBehavior(DataTableBehavior.getRecommendedOptions()));
         ListView<WorkRecord> rows = createList("recordList", model);
         table.add(rows);
 

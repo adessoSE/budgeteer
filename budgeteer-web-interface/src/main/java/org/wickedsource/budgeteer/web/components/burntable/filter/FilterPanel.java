@@ -1,16 +1,12 @@
 package org.wickedsource.budgeteer.web.components.burntable.filter;
 
-import org.apache.poi.util.StringUtil;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.ListMultipleChoice;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
 import org.wickedsource.budgeteer.service.budget.BudgetService;
 import org.wickedsource.budgeteer.service.person.PersonBaseData;
@@ -75,9 +71,9 @@ public class FilterPanel extends Panel {
 
 
         selectedPersons.setRequired(false);
-        HashMap<String, String> options = new HashMap<String, String>();
-        options.put("includeSelectAllOption","true");
+        HashMap<String, String> options = MultiselectBehavior.getRecommendedOptions();
         options.put("buttonWidth","'250px'");
+        options.remove("buttonClass");
         selectedPersons.add(new MultiselectBehavior(options));
         container.add(selectedPersons);
         return container;
@@ -96,9 +92,9 @@ public class FilterPanel extends Panel {
         LazyModel<List<BudgetBaseData>> chosenBudgets = model(from(form.getModelObject().getBudgetList()));
         ListMultipleChoice<BudgetBaseData> selectedBudgets = new ListMultipleChoice<BudgetBaseData>("budgetSelect", chosenBudgets, possibleBudgets, new BudgetBaseDataChoiceRenderer());
 
-        HashMap<String, String> options = new HashMap<String, String>();
-        options.put("includeSelectAllOption","true");
+        HashMap<String, String> options = MultiselectBehavior.getRecommendedOptions();
         options.put("buttonWidth","'250px'");
+        options.remove("buttonClass");
         selectedBudgets.add(new MultiselectBehavior(options));
         selectedBudgets.setRequired(false);
         container.add(selectedBudgets);

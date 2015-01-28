@@ -5,10 +5,12 @@ version = '1.0.3.BETA'
 buildscript {
     repositories {
         mavenCentral()
+        jcenter()
     }
 
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:1.1.5.RELEASE")
+        classpath 'org.springframework:springloaded:1.2.1.RELEASE'
     }
 }
 
@@ -96,6 +98,8 @@ dependencies {
     )
 
     testCompile "org.springframework.boot:spring-boot-starter-test" // version?
+
+    providedCompile "org.projectlombok:lombok:1.14.8"
 }
 
 sourceSets {
@@ -140,6 +144,7 @@ bootRun {
             '-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=9009',
             '-Dserver.port=8080',
             '-Dwicket.configurationType=DEVELOPMENT',
+            //'-Dspring.datasource.url=jdbc:hsqldb:file:../../database/budgeteer;shutdown=true;hsqldb.write_delay=false;',
             '-Dspring.datasource.url=jdbc:hsqldb:mem:budgeteer',
             '-Dspring.datasource.driverClassName=org.hsqldb.jdbcDriver',
             '-Dspring.datasource.username=sa',

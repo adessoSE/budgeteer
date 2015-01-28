@@ -1,23 +1,12 @@
 package org.wickedsource.budgeteer.service.statistics;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.joda.money.Money;
 
+@Getter
+@AllArgsConstructor
 public class Share {
-
-    private String name;
-
     private Money share;
-
-    public Share(Money share, String name) {
-        this.share = share;
-        this.name = name;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Money getShare() {
-        return share;
-    }
+    private String name;
 }

@@ -110,4 +110,8 @@ public interface PlanRecordRepository extends CrudRepository<PlanRecordEntity, L
     @Override
     @Query("select new org.wickedsource.budgeteer.persistence.record.MonthlyAggregatedRecordWithTitleBean(r.year, r.month, sum(r.minutes) / 60.0, sum(r.minutes * r.dailyRate) / 60 / 8, p.name ) from PlanRecordEntity r join r.person p join r.budget b join b.tags t where b.project.id=:projectId and t.tag in (:tags) and r.date >= :startDate group by r.year, r.month, p.name order by p.name, r.year, r.month")
     List<MonthlyAggregatedRecordWithTitleBean> aggregateByMonthAndPersonForBudgets(@Param("projectId") long projectId, @Param("tags") List<String> tags, @Param("startDate") Date startDate);
+
+    @Override
+    @Query("select count (pre.id) from PlanRecordEntity pre where pre.budget.project.id = :projectId")
+    Long countByProjectId(@Param("projectId") long projectId);
 }

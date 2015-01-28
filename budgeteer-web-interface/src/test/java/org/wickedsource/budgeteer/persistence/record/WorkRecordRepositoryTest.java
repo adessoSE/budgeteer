@@ -513,5 +513,13 @@ public class WorkRecordRepositoryTest extends IntegrationTestTemplate {
         repository.deleteByProjectId(1l);
     }
 
+    @Test
+    @DatabaseSetup("countByProjectId.xml")
+    @DatabaseTearDown(value = "countByProjectId.xml", type = DatabaseOperation.DELETE_ALL)
+    public void testCountByProjectId(){
+        Assert.assertEquals(6, (long) repository.countByProjectId(1l));
+        Assert.assertEquals(0, (long) repository.countByProjectId(2l));
+    }
+
 
 }

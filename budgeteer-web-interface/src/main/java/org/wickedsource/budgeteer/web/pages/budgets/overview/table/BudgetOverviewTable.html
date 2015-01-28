@@ -1,5 +1,5 @@
 <wicket:panel>
-    <table class="table table-hover smallLastColumn">
+    <table class="table table-hover smallLastColumn" wicket:id="table">
         <thead>
         <tr>
             <th>Budget Title</th>
@@ -26,19 +26,20 @@
             </td>
             <td><button class="btn btn-default btn-sm fa fa-edit" wicket:id="editPage"> </button></td>
         </tr>
-
-        <tr>
-            <td><strong>Filter Total</strong></td>
-            <td><strong wicket:id="totalLastUpdated">28.09.2014</strong></td>
-            <td><strong wicket:id="totalAmount">€400.000</strong></td>
-            <td><strong wicket:id="totalSpent">€360.000</strong></td>
-            <td><strong wicket:id="totalRemaining">€240.000</strong></td>
-            <td><strong wicket:id="totalUnplanned">€240.000</strong></td>
-            <td>
-                <div wicket:id="totalProgressBar"></div>
-            </td>
-            <td> </td>
-        </tr>
+        <tfoot>
+            <tr>
+                <td><strong>Filter Total</strong></td>
+                <td><strong wicket:id="totalLastUpdated">28.09.2014</strong></td>
+                <td><strong wicket:id="totalAmount">€400.000</strong></td>
+                <td><strong wicket:id="totalSpent">€360.000</strong></td>
+                <td><strong wicket:id="totalRemaining">€240.000</strong></td>
+                <td><strong wicket:id="totalUnplanned">€240.000</strong></td>
+                <td>
+                    <div wicket:id="totalProgressBar"></div>
+                </td>
+                <td> </td>
+            </tr>
+        </tfoot>
         </tbody>
     </table>
 </wicket:panel>

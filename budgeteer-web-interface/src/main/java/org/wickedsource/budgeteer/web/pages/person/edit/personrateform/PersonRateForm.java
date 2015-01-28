@@ -1,11 +1,10 @@
 package org.wickedsource.budgeteer.web.pages.person.edit.personrateform;
 
-import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.behavior.AbstractAjaxBehavior;
 import org.apache.wicket.injection.Injector;
-import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.html.form.*;
+import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
+import org.apache.wicket.markup.html.form.ListMultipleChoice;
 import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
@@ -17,7 +16,6 @@ import org.wickedsource.budgeteer.web.components.daterange.DateRangeInputField;
 import org.wickedsource.budgeteer.web.components.money.MoneyTextField;
 import org.wickedsource.budgeteer.web.components.multiselect.MultiselectBehavior;
 
-import java.util.HashMap;
 import java.util.List;
 
 import static org.wicketstuff.lazymodel.LazyModel.from;
@@ -66,13 +64,7 @@ public abstract class PersonRateForm extends Form<PersonRateForm.PersonRateFormM
         budgetChoice.setRequired(true);
         budgetChoice.setChoiceRenderer(new BudgetBaseDataChoiceRenderer());
 
-        HashMap<String, String> options = new HashMap<String, String>();
-        options.put("includeSelectAllOption","true");
-        options.put("buttonWidth","'180px'");
-        options.put("maxHeight","200");
-        options.put("numberDisplayed","2");
-        options.put("buttonClass","'btn btn-default btn-sm'");
-        budgetChoice.add(new MultiselectBehavior(options));
+        budgetChoice.add(new MultiselectBehavior(MultiselectBehavior.getRecommendedOptions()));
 
         add(budgetChoice);
 

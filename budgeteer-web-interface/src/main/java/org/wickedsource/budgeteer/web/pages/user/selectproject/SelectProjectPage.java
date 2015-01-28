@@ -1,11 +1,13 @@
 package org.wickedsource.budgeteer.web.pages.user.selectproject;
 
-import org.apache.wicket.feedback.ContainerFeedbackMessageFilter;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
+import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -27,15 +29,19 @@ public class SelectProjectPage extends DialogPageWithBacklink {
     @SpringBean
     private UserService userService;
 
+    private CustomFeedbackPanel feedbackPanel;
+
     public SelectProjectPage(Class<? extends WebPage> backlinkPage, PageParameters backlinkParameters) {
         super(backlinkPage, backlinkParameters);
         add(createBacklink("backlink1"));
         add(createBacklink("backlink2"));
         add(createNewProjectForm("newProjectForm"));
         add(createChooseProjectForm("chooseProjectForm"));
-        Form feedback = new Form("feedbackForm", new Model<String>());
-        feedback.add(new CustomFeedbackPanel("feedback"));
-        add(feedback);
+        Form feedbackForm = new Form("feedbackForm", new Model<String>());
+        feedbackPanel = new CustomFeedbackPanel("feedback");
+        feedbackPanel.setOutputMarkupId(true);
+        feedbackForm.add(feedbackPanel);
+        add(feedbackForm);
     }
 
     private Form<String> createNewProjectForm(String id) {
@@ -52,16 +58,49 @@ public class SelectProjectPage extends DialogPageWithBacklink {
     }
 
     private Form<ProjectBaseData> createChooseProjectForm(String id) {
-        Form<ProjectBaseData> form = new Form<ProjectBaseData>("chooseProjectForm", new Model<ProjectBaseData>(new ProjectBaseData())) {
+        LoadableDetachableModel<ProjectBaseData> defaultProjectModel = new LoadableDetachableModel<ProjectBaseData>() {
+
             @Override
-            protected void onSubmit() {
-                BudgeteerSession.get().setProjectId(getModelObject().getId());
+            protected ProjectBaseData load() {
+                return projectService.getDefaultProjectForUser(BudgeteerSession.get().getLoggedInUser().getId());
+            }
+        };
+        final Form<ProjectBaseData> form = new Form<ProjectBaseData>("chooseProjectForm", defaultProjectModel);
+
+        DropDownChoice<ProjectBaseData> choice = new DropDownChoice<ProjectBaseData>("projectChoice", form.getModel(), new ProjectsForUserModel(BudgeteerSession.get().getLoggedInUser().getId()), new ProjectChoiceRenderer());
+        choice.setRequired(true);
+        choice.add(new OnChangeAjaxBehavior() {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                target.add(feedbackPanel);
+            }
+        });
+        form.add(choice);
+
+        AjaxSubmitLink markProjectAsDefault = new AjaxSubmitLink ("markProject") {
+            @Override
+            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                try {
+                    projectService.setDefaultProject(BudgeteerSession.get().getLoggedInUser().getId(), ((ProjectBaseData) form.getModelObject()).getId());
+                    info(getString("chooseProjectForm.defaultProject.successful"));
+                } catch(Exception e){
+                    error(getString("chooseProjectForm.defaultProject.failed"));
+                }
+                target.add(form, feedbackPanel);
+            }
+        };
+
+        AjaxSubmitLink goButton = new AjaxSubmitLink ("goButton") {
+            @Override
+            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                BudgeteerSession.get().setProjectId(((ProjectBaseData) form.getModelObject()).getId());
                 setResponsePage(DashboardPage.class);
             }
         };
-        DropDownChoice<ProjectBaseData> choice = new DropDownChoice<ProjectBaseData>("projectChoice", form.getModel(), new ProjectsForUserModel(BudgeteerSession.get().getLoggedInUser().getId()), new ProjectChoiceRenderer());
-        choice.setRequired(true);
-        form.add(choice);
+
+
+        form.add(markProjectAsDefault);
+        form.add(goButton);
         return form;
     }
 
