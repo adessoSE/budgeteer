@@ -1,7 +1,6 @@
 package org.wickedsource.budgeteer.service.project;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.stereotype.Service;
 import org.wickedsource.budgeteer.persistence.budget.BudgetRepository;
 import org.wickedsource.budgeteer.persistence.imports.ImportRepository;
@@ -12,7 +11,6 @@ import org.wickedsource.budgeteer.persistence.record.PlanRecordRepository;
 import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
 import org.wickedsource.budgeteer.persistence.user.UserEntity;
 import org.wickedsource.budgeteer.persistence.user.UserRepository;
-import org.wickedsource.budgeteer.service.user.UserService;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -73,6 +71,20 @@ public class ProjectService {
     }
 
     /**
+     * Returns the default project for a given user
+     * @param userId ID of the user
+     * @return the default project respectively null if no project is set as default
+     */
+    public ProjectBaseData getDefaultProjectForUser(long userId){
+        UserEntity user = userRepository.findOne(userId);
+        ProjectEntity defaultProject = user.getDefaultProject();
+        if(defaultProject == null){
+            return null;
+        }
+        return mapper.map(defaultProject);
+    }
+
+    /**
      * Deletes the given project and all its data from the database.
      *
      * @param projectId ID of the project to delete.
@@ -86,4 +98,15 @@ public class ProjectService {
         projectRepository.delete(projectId);
     }
 
+    /**
+     * Sets the given project as the default project for the given user
+     * @param userId ID of the user for that the default project should be set
+     * @param projectId ID of the project that should become the default-project
+     */
+    public void setDefaultProject(long userId, long projectId){
+        ProjectEntity project = projectRepository.findOne(projectId);
+        UserEntity user = userRepository.findOne(userId);
+        user.setDefaultProject(project);
+        userRepository.save(user);
+    }
 }

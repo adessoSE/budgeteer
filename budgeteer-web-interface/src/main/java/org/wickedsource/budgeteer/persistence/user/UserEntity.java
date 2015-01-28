@@ -28,4 +28,7 @@ public class UserEntity {
     @ManyToMany(fetch = FetchType.EAGER, mappedBy = "authorizedUsers")
     private List<ProjectEntity> authorizedProjects = new ArrayList<ProjectEntity>();
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private ProjectEntity defaultProject;
+
 }
