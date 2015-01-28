@@ -43,10 +43,10 @@ public class NotificationService {
      */
     public List<Notification> getNotifications(long projectId) {
         List<Notification> notifications = new ArrayList<Notification>();
-        if (workRecordRepository.count() == 0) {
+        if (workRecordRepository.countByProjectId(projectId) == 0) {
             notifications.add(new EmptyWorkRecordsNotification());
         }
-        if(planRecordRepository.count() == 0){
+        if(planRecordRepository.countByProjectId(projectId) == 0){
             notifications.add(new EmptyPlanRecordsNotification());
         }
         notifications.addAll(missingDailyRateMapper.map(workRecordRepository.getMissingDailyRatesForProject(projectId)));
