@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import static org.mockito.Matchers.anyLong;
 import static org.mockito.Mockito.when;
 
 public class NotificationServiceTest extends ServiceTestTemplate {
@@ -32,7 +33,7 @@ public class NotificationServiceTest extends ServiceTestTemplate {
     @Test
     public void testGetNotifications() throws Exception {
         when(workRecordRepository.getMissingDailyRatesForProject(1l)).thenReturn(Arrays.asList(createMissingDailyRate()));
-        when(workRecordRepository.count()).thenReturn(0l);
+        when(workRecordRepository.countByProjectId(anyLong())).thenReturn(0l, 0l);
         when(budgetRepository.getMissingBudgetTotalsForProject(1l)).thenReturn(Arrays.asList(createMissingBudgetTotal()));
 
         List<Notification> notifications = service.getNotifications(1l);
