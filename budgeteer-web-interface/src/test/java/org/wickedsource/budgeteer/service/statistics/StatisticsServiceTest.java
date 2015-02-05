@@ -184,7 +184,7 @@ public class StatisticsServiceTest extends ServiceTestTemplate {
 
         Assert.assertEquals(2, targetAndActual.getActualSeries().size());
 
-        MoneySeries actualSeries1 = targetAndActual.getActualSeries().get(1);
+        MoneySeries actualSeries1 = targetAndActual.getActualSeries().get(0);
         Assert.assertEquals("Budget 2", actualSeries1.getName());
         Assert.assertEquals(5, actualSeries1.getValues().size());
         Assert.assertEquals(MoneyUtil.createMoneyFromCents(100000l), actualSeries1.getValues().get(0));
@@ -193,7 +193,7 @@ public class StatisticsServiceTest extends ServiceTestTemplate {
         Assert.assertEquals(MoneyUtil.createMoneyFromCents(0l), actualSeries1.getValues().get(3));
         Assert.assertEquals(MoneyUtil.createMoneyFromCents(500000l), actualSeries1.getValues().get(4));
 
-        MoneySeries actualSeries2 = targetAndActual.getActualSeries().get(0);
+        MoneySeries actualSeries2 = targetAndActual.getActualSeries().get(1);
         Assert.assertEquals("Budget 1", actualSeries2.getName());
         Assert.assertEquals(5, actualSeries1.getValues().size());
         Assert.assertEquals(MoneyUtil.createMoneyFromCents(100000l), actualSeries2.getValues().get(0));
@@ -220,7 +220,7 @@ public class StatisticsServiceTest extends ServiceTestTemplate {
 
         Assert.assertEquals(2, targetAndActual.getActualSeries().size());
 
-        MoneySeries actualSeries1 = targetAndActual.getActualSeries().get(1);
+        MoneySeries actualSeries1 = targetAndActual.getActualSeries().get(0);
         Assert.assertEquals("Person 2", actualSeries1.getName());
         Assert.assertEquals(5, actualSeries1.getValues().size());
         Assert.assertEquals(MoneyUtil.createMoneyFromCents(100000l), actualSeries1.getValues().get(0));
@@ -229,7 +229,7 @@ public class StatisticsServiceTest extends ServiceTestTemplate {
         Assert.assertEquals(MoneyUtil.createMoneyFromCents(0l), actualSeries1.getValues().get(3));
         Assert.assertEquals(MoneyUtil.createMoneyFromCents(500000l), actualSeries1.getValues().get(4));
 
-        MoneySeries actualSeries2 = targetAndActual.getActualSeries().get(0);
+        MoneySeries actualSeries2 = targetAndActual.getActualSeries().get(1);
         Assert.assertEquals("Person 1", actualSeries2.getName());
         Assert.assertEquals(5, actualSeries1.getValues().size());
         Assert.assertEquals(MoneyUtil.createMoneyFromCents(100000l), actualSeries2.getValues().get(0));
@@ -256,7 +256,7 @@ public class StatisticsServiceTest extends ServiceTestTemplate {
 
         Assert.assertEquals(2, targetAndActual.getActualSeries().size());
 
-        MoneySeries actualSeries1 = targetAndActual.getActualSeries().get(1);
+        MoneySeries actualSeries1 = targetAndActual.getActualSeries().get(0);
         Assert.assertEquals("Budget 2", actualSeries1.getName());
         Assert.assertEquals(5, actualSeries1.getValues().size());
         Assert.assertEquals(MoneyUtil.createMoneyFromCents(100000l), actualSeries1.getValues().get(0));
@@ -265,7 +265,7 @@ public class StatisticsServiceTest extends ServiceTestTemplate {
         Assert.assertEquals(MoneyUtil.createMoneyFromCents(0l), actualSeries1.getValues().get(3));
         Assert.assertEquals(MoneyUtil.createMoneyFromCents(500000l), actualSeries1.getValues().get(4));
 
-        MoneySeries actualSeries2 = targetAndActual.getActualSeries().get(0);
+        MoneySeries actualSeries2 = targetAndActual.getActualSeries().get(1);
         Assert.assertEquals("Budget 1", actualSeries2.getName());
         Assert.assertEquals(5, actualSeries1.getValues().size());
         Assert.assertEquals(MoneyUtil.createMoneyFromCents(100000l), actualSeries2.getValues().get(0));
@@ -331,7 +331,7 @@ public class StatisticsServiceTest extends ServiceTestTemplate {
 
         Assert.assertEquals(2, targetAndActual.getActualSeries().size());
 
-        MoneySeries actualSeries1 = targetAndActual.getActualSeries().get(1);
+        MoneySeries actualSeries1 = targetAndActual.getActualSeries().get(0);
         Assert.assertEquals("Budget 2", actualSeries1.getName());
         Assert.assertEquals(5, actualSeries1.getValues().size());
         Assert.assertEquals(MoneyUtil.createMoneyFromCents(100000l), actualSeries1.getValues().get(0));
@@ -340,7 +340,7 @@ public class StatisticsServiceTest extends ServiceTestTemplate {
         Assert.assertEquals(MoneyUtil.createMoneyFromCents(0l), actualSeries1.getValues().get(3));
         Assert.assertEquals(MoneyUtil.createMoneyFromCents(500000l), actualSeries1.getValues().get(4));
 
-        MoneySeries actualSeries2 = targetAndActual.getActualSeries().get(0);
+        MoneySeries actualSeries2 = targetAndActual.getActualSeries().get(1);
         Assert.assertEquals("Budget 1", actualSeries2.getName());
         Assert.assertEquals(5, actualSeries1.getValues().size());
         Assert.assertEquals(MoneyUtil.createMoneyFromCents(100000l), actualSeries2.getValues().get(0));
@@ -367,7 +367,7 @@ public class StatisticsServiceTest extends ServiceTestTemplate {
 
         Assert.assertEquals(2, targetAndActual.getActualSeries().size());
 
-        MoneySeries actualSeries1 = targetAndActual.getActualSeries().get(1);
+        MoneySeries actualSeries1 = targetAndActual.getActualSeries().get(0);
         Assert.assertEquals("Budget 2", actualSeries1.getName());
         Assert.assertEquals(5, actualSeries1.getValues().size());
         Assert.assertEquals(MoneyUtil.createMoneyFromCents(100000l), actualSeries1.getValues().get(0));
@@ -376,7 +376,7 @@ public class StatisticsServiceTest extends ServiceTestTemplate {
         Assert.assertEquals(MoneyUtil.createMoneyFromCents(0l), actualSeries1.getValues().get(3));
         Assert.assertEquals(MoneyUtil.createMoneyFromCents(500000l), actualSeries1.getValues().get(4));
 
-        MoneySeries actualSeries2 = targetAndActual.getActualSeries().get(0);
+        MoneySeries actualSeries2 = targetAndActual.getActualSeries().get(1);
         Assert.assertEquals("Budget 1", actualSeries2.getName());
         Assert.assertEquals(5, actualSeries1.getValues().size());
         Assert.assertEquals(MoneyUtil.createMoneyFromCents(100000l), actualSeries2.getValues().get(0));
@@ -403,7 +403,7 @@ public class StatisticsServiceTest extends ServiceTestTemplate {
 
         Assert.assertEquals(2, targetAndActual.getActualSeries().size());
 
-        MoneySeries actualSeries1 = targetAndActual.getActualSeries().get(1);
+        MoneySeries actualSeries1 = targetAndActual.getActualSeries().get(0);
         Assert.assertEquals("Budget 2", actualSeries1.getName());
         Assert.assertEquals(5, actualSeries1.getValues().size());
         Assert.assertEquals(MoneyUtil.createMoneyFromCents(100000l), actualSeries1.getValues().get(0));
@@ -412,7 +412,7 @@ public class StatisticsServiceTest extends ServiceTestTemplate {
         Assert.assertEquals(MoneyUtil.createMoneyFromCents(0l), actualSeries1.getValues().get(3));
         Assert.assertEquals(MoneyUtil.createMoneyFromCents(500000l), actualSeries1.getValues().get(4));
 
-        MoneySeries actualSeries2 = targetAndActual.getActualSeries().get(0);
+        MoneySeries actualSeries2 = targetAndActual.getActualSeries().get(1);
         Assert.assertEquals("Budget 1", actualSeries2.getName());
         Assert.assertEquals(5, actualSeries1.getValues().size());
         Assert.assertEquals(MoneyUtil.createMoneyFromCents(100000l), actualSeries2.getValues().get(0));
