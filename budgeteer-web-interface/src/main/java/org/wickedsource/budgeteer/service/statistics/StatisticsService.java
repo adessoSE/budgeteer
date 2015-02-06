@@ -333,7 +333,10 @@ public class StatisticsService {
         Date startDate = dateUtil.weeksAgo(numberOfWeeks);
         List<WeeklyAggregatedRecordWithTitleBean> burnedStats = new ArrayList<WeeklyAggregatedRecordWithTitleBean>();
         List<WeeklyAggregatedRecordBean> plannedStats = new ArrayList<WeeklyAggregatedRecordBean>();
-        if (!budgetFilter.getSelectedTags().isEmpty()) {
+        if (budgetFilter.getSelectedTags().isEmpty()) {
+            burnedStats = workRecordRepository.aggregateByWeekAndPersonForBudgets(budgetFilter.getProjectId(), startDate);
+            plannedStats = planRecordRepository.aggregateByWeekForBudgets(budgetFilter.getProjectId(), startDate);
+        }else{
             burnedStats = workRecordRepository.aggregateByWeekAndPersonForBudgets(budgetFilter.getProjectId(), budgetFilter.getSelectedTags(), startDate);
             plannedStats = planRecordRepository.aggregateByWeekForBudgets(budgetFilter.getProjectId(), budgetFilter.getSelectedTags(), startDate);
         }

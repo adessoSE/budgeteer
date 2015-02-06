@@ -38,7 +38,11 @@ public interface RecordRepository {
 
     List<WeeklyAggregatedRecordWithTitleBean> aggregateByWeekAndPersonForBudgets(long projectId, List<String> tags, Date startDate);
 
+    List<WeeklyAggregatedRecordWithTitleBean> aggregateByWeekAndPersonForBudgets(long projectId, Date startDate);
+
     List<WeeklyAggregatedRecordBean> aggregateByWeekForBudgets(long projectId, List<String> tags, Date start);
+
+    List<WeeklyAggregatedRecordBean> aggregateByWeekForBudgets(long projectId, Date start);
 
     List<MonthlyAggregatedRecordBean> aggregateByMonthForPerson(long personId, Date startDate);
 

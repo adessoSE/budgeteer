@@ -112,6 +112,10 @@ public interface WorkRecordRepository extends CrudRepository<WorkRecordEntity, L
     List<WeeklyAggregatedRecordWithTitleBean> aggregateByWeekAndPersonForBudgets(@Param("projectId") long projectId, @Param("tags") List<String> tags, @Param("startDate") Date startDate);
 
     @Override
+    @Query("select new org.wickedsource.budgeteer.persistence.record.WeeklyAggregatedRecordWithTitleBean(r.year, r.week, sum(r.minutes) / 60.0, sum(r.minutes * r.dailyRate) / 60 / 8, p.name ) from WorkRecordEntity r join r.person p join r.budget b where b.project.id=:projectId and r.date >= :startDate group by r.year, r.week, p.name order by p.name, r.year, r.week")
+    List<WeeklyAggregatedRecordWithTitleBean> aggregateByWeekAndPersonForBudgets(@Param("projectId") long projectId, @Param("startDate") Date startDate);
+
+    @Override
     @Query("select new org.wickedsource.budgeteer.persistence.record.WeeklyAggregatedRecordBean(r.year, r.week, sum(r.minutes) / 60.0, sum(r.minutes * r.dailyRate) / 60 / 8 ) from WorkRecordEntity r join r.budget b join b.tags t where b.project.id=:projectId and t.tag in (:tags) and r.date >= :startDate group by r.year, r.week order by r.year, r.week")
     List<WeeklyAggregatedRecordBean> aggregateByWeekForBudgets(@Param("projectId") long projectId, @Param("tags") List<String> tags, @Param("startDate") Date start);
 

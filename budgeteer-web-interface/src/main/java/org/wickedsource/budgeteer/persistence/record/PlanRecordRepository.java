@@ -88,6 +88,10 @@ public interface PlanRecordRepository extends CrudRepository<PlanRecordEntity, L
     List<WeeklyAggregatedRecordBean> aggregateByWeekForBudgets(@Param("projectId") long projectId, @Param("tags") List<String> tags, @Param("startDate") Date start);
 
     @Override
+    @Query("select new org.wickedsource.budgeteer.persistence.record.WeeklyAggregatedRecordBean(r.year, r.week, sum(r.minutes) / 60.0, sum(r.minutes * r.dailyRate) / 60 / 8 ) from PlanRecordEntity r join r.budget b where b.project.id=:projectId r.date >= :startDate group by r.year, r.week order by r.year, r.week")
+    List<WeeklyAggregatedRecordBean> aggregateByWeekForBudgets(@Param("projectId") long projectId, @Param("startDate") Date start);
+
+    @Override
     @Query("select new org.wickedsource.budgeteer.persistence.record.MonthlyAggregatedRecordBean(r.year, r.month, sum(r.minutes) / 60.0, sum(r.minutes * r.dailyRate) / 60 / 8 ) from PlanRecordEntity r where r.person.id=:personId and r.date >= :startDate group by r.year, r.month order by r.year, r.month")
     List<MonthlyAggregatedRecordBean> aggregateByMonthForPerson(@Param("personId") long personId, @Param("startDate") Date startDate);
 
