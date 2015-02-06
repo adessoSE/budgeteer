@@ -361,7 +361,12 @@ public class StatisticsService {
         Date startDate = dateUtil.monthsAgo(numberOfMonths);
         List<MonthlyAggregatedRecordWithTitleBean> burnedStats = new ArrayList<MonthlyAggregatedRecordWithTitleBean>();
         List<MonthlyAggregatedRecordBean> plannedStats = new ArrayList<MonthlyAggregatedRecordBean>();
-        if (!budgetFilter.getSelectedTags().isEmpty()) {
+        if(budgetFilter.getSelectedTags().isEmpty()){
+            // aggregate all budgets
+            burnedStats = workRecordRepository.aggregateByMonthAndPersonForBudgets(budgetFilter.getProjectId(), startDate);
+            plannedStats = planRecordRepository.aggregateByMonthForBudgets(budgetFilter.getProjectId(), startDate);
+        }else{
+            // aggregate only budgets with the selected tags
             burnedStats = workRecordRepository.aggregateByMonthAndPersonForBudgets(budgetFilter.getProjectId(), budgetFilter.getSelectedTags(), startDate);
             plannedStats = planRecordRepository.aggregateByMonthForBudgets(budgetFilter.getProjectId(), budgetFilter.getSelectedTags(), startDate);
         }

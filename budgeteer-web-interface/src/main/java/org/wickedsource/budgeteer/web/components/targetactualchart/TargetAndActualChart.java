@@ -18,8 +18,8 @@ public class TargetAndActualChart extends Chart {
     }
 
     @Override
-    protected void onBeforeRender() {
-        super.onBeforeRender();
+    protected void onConfigure() {
+        super.onConfigure();
         // resetting options to force re-rendering with new parameters
         setOptions(new TargetAndActualChartOptions(model, mode));
     }

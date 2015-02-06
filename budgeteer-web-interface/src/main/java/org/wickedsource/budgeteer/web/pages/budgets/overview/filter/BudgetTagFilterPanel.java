@@ -11,14 +11,15 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
+import org.wickedsource.budgeteer.web.BudgeteerSession;
 
 import java.util.List;
 
 public class BudgetTagFilterPanel extends Panel {
 
-    public BudgetTagFilterPanel(String id, IModel<List<String>> tagsModel, IModel<BudgetTagFilter> filter) {
-        super(id, filter);
-        Form<BudgetTagFilter> form = new Form<BudgetTagFilter>("filterForm", filter) {
+    public BudgetTagFilterPanel(String id, IModel<List<String>> tagsModel) {
+        super(id);
+        Form<BudgetTagFilter> form = new Form<BudgetTagFilter>("filterForm") {
             @Override
             protected void onSubmit() {
                 send(getPage(), Broadcast.BREADTH, getFilter());
@@ -77,8 +78,7 @@ public class BudgetTagFilterPanel extends Panel {
 
     @SuppressWarnings("unchecked")
     private BudgetTagFilter getFilter() {
-        IModel<BudgetTagFilter> model = (IModel<BudgetTagFilter>) getDefaultModel();
-        return model.getObject();
+       return BudgeteerSession.get().getBudgetFilter();
     }
 
 }
