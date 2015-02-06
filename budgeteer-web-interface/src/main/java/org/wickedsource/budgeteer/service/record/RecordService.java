@@ -89,9 +89,9 @@ public class RecordService {
         List<WeeklyAggregatedRecordBean> planRecords = new ArrayList<WeeklyAggregatedRecordBean>();
         List<WeeklyAggregatedRecordBean> workRecords = new ArrayList<WeeklyAggregatedRecordBean>();
         if (budgetFilter.getSelectedTags().isEmpty()) {
-            planRecords = planRecordRepository.aggregateByWeekAndBudget(budgetFilter.getProjectId());
-            workRecords = workRecordRepository.aggregateByWeekAndBudget(budgetFilter.getProjectId());
-        } else {
+            planRecords = planRecordRepository.aggregateByWeek(budgetFilter.getProjectId());
+            workRecords = workRecordRepository.aggregateByWeek(budgetFilter.getProjectId());
+        }else{
             planRecords = planRecordRepository.aggregateByWeekAndBudgetTags(budgetFilter.getProjectId(), budgetFilter.getSelectedTags());
             workRecords = workRecordRepository.aggregateByWeekAndBudgetTags(budgetFilter.getProjectId(), budgetFilter.getSelectedTags());
         }
@@ -108,9 +108,9 @@ public class RecordService {
         List<MonthlyAggregatedRecordBean> planRecords = new ArrayList<MonthlyAggregatedRecordBean>();
         List<MonthlyAggregatedRecordBean> workRecords = new ArrayList<MonthlyAggregatedRecordBean>();
         if (budgetFilter.getSelectedTags().isEmpty()) {
-            workRecords = workRecordRepository.aggregateByMonthAndBudget(budgetFilter.getProjectId());
-            planRecords = planRecordRepository.aggregateByMonthAndBudget(budgetFilter.getProjectId());
-        } else {
+            workRecords = workRecordRepository.aggregateByMonth(budgetFilter.getProjectId());
+            planRecords = planRecordRepository.aggregateByMonth(budgetFilter.getProjectId());
+        }else{
             workRecords = workRecordRepository.aggregateByMonthAndBudgetTags(budgetFilter.getProjectId(), budgetFilter.getSelectedTags());
             planRecords = planRecordRepository.aggregateByMonthAndBudgetTags(budgetFilter.getProjectId(), budgetFilter.getSelectedTags());
         }

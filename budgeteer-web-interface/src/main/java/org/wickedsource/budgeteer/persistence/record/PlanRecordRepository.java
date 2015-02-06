@@ -84,12 +84,20 @@ public interface PlanRecordRepository extends CrudRepository<PlanRecordEntity, L
     List<WeeklyAggregatedRecordWithTitleBean> aggregateByWeekAndPersonForBudgets(@Param("projectId") long projectId, @Param("tags") List<String> tags, @Param("startDate") Date startDate);
 
     @Override
+    @Query("select new org.wickedsource.budgeteer.persistence.record.WeeklyAggregatedRecordWithTitleBean(r.year, r.week, sum(r.minutes) / 60.0, sum(r.minutes * r.dailyRate) / 60 / 8, p.name ) from PlanRecordEntity r join r.person p join r.budget b where b.project.id=:projectId and r.date >= :startDate group by r.year, r.week, p.name order by p.name, r.year, r.week")
+    List<WeeklyAggregatedRecordWithTitleBean> aggregateByWeekAndPersonForBudgets(@Param("projectId") long projectId, @Param("startDate") Date startDate);
+
+    @Override
     @Query("select new org.wickedsource.budgeteer.persistence.record.WeeklyAggregatedRecordBean(r.year, r.week, sum(r.minutes) / 60.0, sum(r.minutes * r.dailyRate) / 60 / 8 ) from PlanRecordEntity r join r.budget b join b.tags t where b.project.id=:projectId and t.tag in (:tags) and r.date >= :startDate group by r.year, r.week order by r.year, r.week")
     List<WeeklyAggregatedRecordBean> aggregateByWeekForBudgets(@Param("projectId") long projectId, @Param("tags") List<String> tags, @Param("startDate") Date start);
 
     @Override
-    @Query("select new org.wickedsource.budgeteer.persistence.record.WeeklyAggregatedRecordBean(r.year, r.week, sum(r.minutes) / 60.0, sum(r.minutes * r.dailyRate) / 60 / 8 ) from PlanRecordEntity r join r.budget b where b.project.id=:projectId r.date >= :startDate group by r.year, r.week order by r.year, r.week")
+    @Query("select new org.wickedsource.budgeteer.persistence.record.WeeklyAggregatedRecordBean(r.year, r.week, sum(r.minutes) / 60.0, sum(r.minutes * r.dailyRate) / 60 / 8 ) from PlanRecordEntity r join r.budget b where b.project.id=:projectId and r.date >= :startDate group by r.year, r.week order by r.year, r.week")
     List<WeeklyAggregatedRecordBean> aggregateByWeekForBudgets(@Param("projectId") long projectId, @Param("startDate") Date start);
+
+    @Override
+    @Query("select new org.wickedsource.budgeteer.persistence.record.WeeklyAggregatedRecordBean(r.year, r.week, sum(r.minutes) / 60.0, sum(r.minutes * r.dailyRate) / 60 / 8 ) from PlanRecordEntity r join r.budget b where b.project.id=:projectId group by r.year, r.week order by r.year, r.week")
+    List<WeeklyAggregatedRecordBean> aggregateByWeek(@Param("projectId") long projectId);
 
     @Override
     @Query("select new org.wickedsource.budgeteer.persistence.record.MonthlyAggregatedRecordBean(r.year, r.month, sum(r.minutes) / 60.0, sum(r.minutes * r.dailyRate) / 60 / 8 ) from PlanRecordEntity r where r.person.id=:personId and r.date >= :startDate group by r.year, r.month order by r.year, r.month")
@@ -114,6 +122,10 @@ public interface PlanRecordRepository extends CrudRepository<PlanRecordEntity, L
     @Override
     @Query("select new org.wickedsource.budgeteer.persistence.record.MonthlyAggregatedRecordBean(r.year, r.month, sum(r.minutes) / 60.0, sum(r.minutes * r.dailyRate) / 60 / 8 ) from PlanRecordEntity r join r.budget b where b.project.id=:projectId and r.date >= :startDate group by r.year, r.month order by r.year, r.month")
     List<MonthlyAggregatedRecordBean> aggregateByMonthForBudgets(@Param("projectId") long projectId, @Param("startDate") Date startDate);
+
+    @Override
+    @Query("select new org.wickedsource.budgeteer.persistence.record.MonthlyAggregatedRecordBean(r.year, r.month, sum(r.minutes) / 60.0, sum(r.minutes * r.dailyRate) / 60 / 8 ) from PlanRecordEntity r join r.budget b where b.project.id=:projectId group by r.year, r.month order by r.year, r.month")
+    List<MonthlyAggregatedRecordBean> aggregateByMonth(@Param("projectId") long projectId);
 
     @Override
     @Query("select new org.wickedsource.budgeteer.persistence.record.MonthlyAggregatedRecordWithTitleBean(r.year, r.month, sum(r.minutes) / 60.0, sum(r.minutes * r.dailyRate) / 60 / 8, p.name ) from PlanRecordEntity r join r.person p join r.budget b join b.tags t where b.project.id=:projectId and t.tag in (:tags) and r.date >= :startDate group by r.year, r.month, p.name order by p.name, r.year, r.month")

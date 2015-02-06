@@ -18,6 +18,8 @@ public interface RecordRepository {
 
     List<WeeklyAggregatedRecordBean> aggregateByWeekAndBudget(long budgetId);
 
+    List<WeeklyAggregatedRecordBean> aggregateByWeekForBudgets(long projectId, Date start);
+
     void updateDailyRates(long budgetId, long personId, Date fromDate, Date toDate, Money dailyRate);
 
     List<MonthlyAggregatedRecordBean> aggregateByMonthAndBudget(long budgetId);
@@ -55,6 +57,10 @@ public interface RecordRepository {
     List<MonthlyAggregatedRecordBean> aggregateByMonthForBudgets(long projectId, List<String> tags, Date startDate);
 
     List<MonthlyAggregatedRecordBean> aggregateByMonthForBudgets(long projectId, Date startDate);
+
+    List<MonthlyAggregatedRecordBean> aggregateByMonth(long projectId);
+
+    List<WeeklyAggregatedRecordBean> aggregateByWeek(long projectId);
 
     List<MonthlyAggregatedRecordWithTitleBean> aggregateByMonthAndPersonForBudgets(long projectId, List<String> tags, Date startDate);
 
