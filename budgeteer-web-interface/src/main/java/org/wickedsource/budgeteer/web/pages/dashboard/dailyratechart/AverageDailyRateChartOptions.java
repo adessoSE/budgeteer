@@ -34,7 +34,7 @@ public class AverageDailyRateChartOptions extends Options {
 
     private Number getStartTimestamp(int numberOfDays) {
         Calendar c = Calendar.getInstance();
-        c.add(Calendar.DAY_OF_YEAR, -numberOfDays);
+        c.add(Calendar.DAY_OF_YEAR, -numberOfDays+1); // without the +1 the chart would be off by one day -> Issue #16
         return c.getTimeInMillis();
     }
 
