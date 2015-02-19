@@ -88,6 +88,7 @@ public class ImportService implements ApplicationContextAware {
      * @param importer    an importer that understands the format of the files represented by the input streams.
      * @param importFiles the files to be imported
      */
+    @Transactional(rollbackOn = ImportException.class)
     public void doImport(long projectId, Importer importer, List<ImportFile> importFiles) throws ImportException {
         skippedRecords = new LinkedList<List<String>>();
         if (importer instanceof WorkRecordsImporter) {

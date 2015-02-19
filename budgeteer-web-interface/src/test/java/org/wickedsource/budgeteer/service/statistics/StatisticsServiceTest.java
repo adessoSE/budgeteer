@@ -12,10 +12,7 @@ import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import static org.mockito.Mockito.*;
 
@@ -34,6 +31,13 @@ public class StatisticsServiceTest extends ServiceTestTemplate {
 
     @Autowired
     private StatisticsService service;
+
+    private static final Comparator<MoneySeries> moneySeriesComparator = new Comparator<MoneySeries>() {
+        @Override
+        public int compare(MoneySeries o1, MoneySeries o2) {
+            return o1.getName().compareTo(o2.getName());
+        }
+    };
 
     @Test
     public void testGetWeeklyBudgetBurnedForProject() throws Exception {
@@ -183,6 +187,7 @@ public class StatisticsServiceTest extends ServiceTestTemplate {
         Assert.assertEquals(MoneyUtil.createMoneyFromCents(500000l), targetSeries.get(4));
 
         Assert.assertEquals(2, targetAndActual.getActualSeries().size());
+        Collections.sort(targetAndActual.getActualSeries(), moneySeriesComparator);
 
         MoneySeries actualSeries1 = targetAndActual.getActualSeries().get(1);
         Assert.assertEquals("Budget 2", actualSeries1.getName());
@@ -219,6 +224,7 @@ public class StatisticsServiceTest extends ServiceTestTemplate {
         Assert.assertEquals(MoneyUtil.createMoneyFromCents(500000l), targetSeries.get(4));
 
         Assert.assertEquals(2, targetAndActual.getActualSeries().size());
+        Collections.sort(targetAndActual.getActualSeries(), moneySeriesComparator);
 
         MoneySeries actualSeries1 = targetAndActual.getActualSeries().get(1);
         Assert.assertEquals("Person 2", actualSeries1.getName());
@@ -255,6 +261,7 @@ public class StatisticsServiceTest extends ServiceTestTemplate {
         Assert.assertEquals(MoneyUtil.createMoneyFromCents(500000l), targetSeries.get(4));
 
         Assert.assertEquals(2, targetAndActual.getActualSeries().size());
+        Collections.sort(targetAndActual.getActualSeries(), moneySeriesComparator);
 
         MoneySeries actualSeries1 = targetAndActual.getActualSeries().get(1);
         Assert.assertEquals("Budget 2", actualSeries1.getName());
@@ -330,6 +337,7 @@ public class StatisticsServiceTest extends ServiceTestTemplate {
         Assert.assertEquals(MoneyUtil.createMoneyFromCents(500000l), targetSeries.get(4));
 
         Assert.assertEquals(2, targetAndActual.getActualSeries().size());
+        Collections.sort(targetAndActual.getActualSeries(), moneySeriesComparator);
 
         MoneySeries actualSeries1 = targetAndActual.getActualSeries().get(1);
         Assert.assertEquals("Budget 2", actualSeries1.getName());
@@ -366,6 +374,7 @@ public class StatisticsServiceTest extends ServiceTestTemplate {
         Assert.assertEquals(MoneyUtil.createMoneyFromCents(500000l), targetSeries.get(4));
 
         Assert.assertEquals(2, targetAndActual.getActualSeries().size());
+        Collections.sort(targetAndActual.getActualSeries(), moneySeriesComparator);
 
         MoneySeries actualSeries1 = targetAndActual.getActualSeries().get(1);
         Assert.assertEquals("Budget 2", actualSeries1.getName());
@@ -402,6 +411,7 @@ public class StatisticsServiceTest extends ServiceTestTemplate {
         Assert.assertEquals(MoneyUtil.createMoneyFromCents(500000l), targetSeries.get(4));
 
         Assert.assertEquals(2, targetAndActual.getActualSeries().size());
+        Collections.sort(targetAndActual.getActualSeries(), moneySeriesComparator);
 
         MoneySeries actualSeries1 = targetAndActual.getActualSeries().get(1);
         Assert.assertEquals("Budget 2", actualSeries1.getName());

@@ -18,17 +18,27 @@ public class Import {
 
     /**
      * Returns a date with only the date-information available. Time-information are truncated
+     *
      * @return date-information of the startDate
      */
     public Date getStartDate() {
-        return DateUtils.truncate(startDate, Calendar.DATE);
+        if (startDate == null) {
+            return null;
+        } else {
+            return DateUtils.truncate(startDate, Calendar.DATE);
+        }
     }
 
     /**
      * Returns a date with only the date-information available. Time-information are truncated
+     *
      * @return date-information of the endDate
      */
     public Date getEndDate() {
-        return DateUtils.truncate(endDate, Calendar.DATE);
+        if (endDate == null) {
+            return null;
+        } else {
+            return DateUtils.truncate(endDate, Calendar.DATE);
+        }
     }
 }

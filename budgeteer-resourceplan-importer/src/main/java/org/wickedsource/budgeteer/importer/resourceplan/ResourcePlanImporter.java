@@ -4,6 +4,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.joda.money.CurrencyUnit;
 import org.joda.money.Money;
@@ -33,7 +34,7 @@ public class ResourcePlanImporter implements PlanRecordsImporter {
     @Override
     public List<ImportedPlanRecord> importFile(ImportFile file, CurrencyUnit currencyUnit) throws ImportException {
         skippedRecords.add(new LinkedList<String>());
-        LinkedList<String> filenameList= new LinkedList<String>();
+        LinkedList<String> filenameList = new LinkedList<String>();
         filenameList.add(file.getFilename());
         skippedRecords.add(filenameList);
 
@@ -68,14 +69,20 @@ public class ResourcePlanImporter implements PlanRecordsImporter {
         return columns;
     }
 
-    private List<ImportedPlanRecord> parseRow(Row row, List<DateColumn> dateColumns, CurrencyUnit currencyUnit, List<List<String>> skippedRecords) {
+    private List<ImportedPlanRecord> parseRow(Row row, List<DateColumn> dateColumns, CurrencyUnit currencyUnit, List<List<String>> skippedRecords) throws ImportException {
         List<ImportedPlanRecord> recordsList = new ArrayList<ImportedPlanRecord>();
 
         for (DateColumn dateColumn : dateColumns) {
 
             Cell hoursCell = row.getCell(dateColumn.getColumnIndex());
             if (hoursCell != null) {
-                double hoursPlanned = row.getCell(dateColumn.getColumnIndex()).getNumericCellValue();
+                double hoursPlanned = 0d;
+                try {
+                    hoursPlanned = row.getCell(dateColumn.getColumnIndex()).getNumericCellValue();
+                } catch (IllegalStateException e) {
+                    CellReference ref = new CellReference(row.getCell(dateColumn.getColumnIndex()));
+                    throw new ImportException(String.format("Error importing field in row %d and column %s", row.getRowNum() + 1, ref.getCellRefParts()[2]));
+                }
                 if (hoursPlanned > 0) {
                     int minutesPlanned = (int) (hoursPlanned * 60);
                     ImportedPlanRecord record = new ImportedPlanRecord();
@@ -125,9 +132,9 @@ public class ResourcePlanImporter implements PlanRecordsImporter {
     @Override
     public List<List<String>> getSkippedRecords() {
         //if just an empty row at the beginning and the filename is in the List of skipped records, return an empty List
-        if(skippedRecords != null && skippedRecords.size() == 2){
+        if (skippedRecords != null && skippedRecords.size() == 2) {
             skippedRecords = new LinkedList<List<String>>();
         }
-        return  skippedRecords;
+        return skippedRecords;
     }
 }

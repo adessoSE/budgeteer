@@ -1,6 +1,7 @@
 package org.wickedsource.budgeteer.persistence.record;
 
 import org.joda.money.Money;
+import org.springframework.data.repository.query.Param;
 
 import java.util.Date;
 import java.util.List;
@@ -62,5 +63,7 @@ public interface RecordRepository {
     List<MonthlyAggregatedRecordWithTitleBean> aggregateByMonthAndPersonForBudgets(long projectId, Date startDate);
 
     Long countByProjectId(long projectId);
+
+    List<WeeklyAggregatedRecordBean> aggregateByWeekForBudgets(long projectId,Date start);
 
 }
