@@ -32,7 +32,7 @@ public class MoneyUtil {
     public static List<Double> toDouble(List<Money> moneyList, Double unit) {
         List<Double> doubleValues = new ArrayList<Double>();
         for (Money moneyValue : moneyList) {
-            doubleValues.add(moneyValue.dividedBy(unit, RoundingMode.FLOOR).getAmount().doubleValue());
+            doubleValues.add(toDouble(moneyValue, unit));
         }
         return doubleValues;
     }
@@ -45,4 +45,7 @@ public class MoneyUtil {
 
     }
 
+    public static Double toDouble(Money money, Double unit) {
+        return money.dividedBy(unit, RoundingMode.FLOOR).getAmount().doubleValue();
+    }
 }

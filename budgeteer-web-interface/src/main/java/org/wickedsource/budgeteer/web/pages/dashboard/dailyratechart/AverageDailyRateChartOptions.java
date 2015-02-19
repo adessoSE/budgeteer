@@ -4,6 +4,7 @@ import com.googlecode.wickedcharts.highcharts.options.*;
 import com.googlecode.wickedcharts.highcharts.options.series.Series;
 import org.apache.wicket.injection.Injector;
 import org.wickedsource.budgeteer.MoneyUtil;
+import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.PropertyLoader;
 
 import java.util.Calendar;
@@ -25,7 +26,7 @@ public class AverageDailyRateChartOptions extends Options {
 
         addSeries(new Series<Double>() {
         }
-                .setData(MoneyUtil.toDouble(model.getObject()))
+                .setData(MoneyUtil.toDouble(model.getObject(), BudgeteerSession.get().getSelectedBudgetUnit()))
                 .setPointInterval(24 * 60 * 60 * 1000)
                 .setPointStart(getStartTimestamp(model.getNumberOfDays()))
                 .setName(PropertyLoader.getProperty(AverageDailyRateChart.class, "chart.seriesName")));
