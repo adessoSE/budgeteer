@@ -1,6 +1,7 @@
 package org.wickedsource.budgeteer.web.components.aggregatedrecordtable;
 
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -9,6 +10,7 @@ import org.apache.wicket.model.IModel;
 import org.joda.money.Money;
 import org.wickedsource.budgeteer.service.record.AggregatedRecord;
 import org.wickedsource.budgeteer.web.ClassAwareWrappingModel;
+import org.wickedsource.budgeteer.web.components.dataTable.DataTableBehavior;
 import org.wickedsource.budgeteer.web.components.money.BudgetUnitMoneyModel;
 import org.wickedsource.budgeteer.web.components.money.MoneyLabel;
 
@@ -22,7 +24,10 @@ public class AggregatedRecordTable extends Panel {
     public AggregatedRecordTable(String id, IModel<List<AggregatedRecord>> model) {
         super(id, model);
         setRenderBodyOnly(true);
-        add(createList("list"));
+        WebMarkupContainer table = new WebMarkupContainer("hoursTable");
+        table.add(new DataTableBehavior(DataTableBehavior.getRecommendedOptions()));
+        table.add(createList("list"));
+        add(table);
     }
 
     @SuppressWarnings("unchecked")
