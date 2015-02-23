@@ -97,7 +97,7 @@ public class AprodaWorkRecordsImporter implements WorkRecordsImporter {
     }
 
     private boolean isImportable(Row row) {
-        return ("ja".equalsIgnoreCase(row.getCell(COLUMN_INVOICABLE).getStringCellValue()))
+        return row != null && ("ja".equalsIgnoreCase(row.getCell(COLUMN_INVOICABLE).getStringCellValue()))
                 && (row.getCell(COLUMN_BUDGET).getStringCellValue() != null)
                 && (!"".equals(row.getCell(COLUMN_BUDGET).getStringCellValue().trim()))
                 && (row.getCell(COLUMN_PERSON).getStringCellValue() != null)

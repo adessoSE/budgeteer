@@ -7,6 +7,7 @@ import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.ListMultipleChoice;
 import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.wickedsource.budgeteer.service.DateRange;
 import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
 import org.wickedsource.budgeteer.service.budget.BudgetService;
 import org.wickedsource.budgeteer.service.person.PersonRate;
@@ -75,7 +76,22 @@ public abstract class PersonRateForm extends Form<PersonRateForm.PersonRateFormM
     protected void onSubmit() {
         PersonRateFormModel addedPersonRate = getModelObject();
         for (BudgetBaseData budget : addedPersonRate.getChosenBudgets().getObject()) {
-            rateAdded(new PersonRate(addedPersonRate.getRate(), budget, addedPersonRate.getDateRange()));
+            List<PersonRate> overlappingRate = getOverlappingRates(addedPersonRate.getDateRange(), budget);
+            if(overlappingRate == null || overlappingRate.isEmpty()) {
+                rateAdded(new PersonRate(addedPersonRate.getRate(), budget, addedPersonRate.getDateRange()));
+            }else {
+                StringBuilder overlappingEntryNames = new StringBuilder();
+                overlappingEntryNames.append(System.getProperty("line.separator"));
+                for(int i=0; i < overlappingRate.size(); i++){
+                    PersonRate p = overlappingRate.get(i);
+                    overlappingEntryNames.append(p.getBudget().getName() + " " + p.getDateRange().toString());
+                    if(i < overlappingRate.size() - 1){
+                        overlappingEntryNames.append(","+System.getProperty("line.separator"));
+                    }
+                }
+                error(String.format(getString("personRateForm.overlappingRates"), overlappingEntryNames.toString()));
+                return;
+            }
         }
         addedPersonRate.getChosenBudgets().getObject().clear();
         addedPersonRate.reset();
@@ -83,4 +99,10 @@ public abstract class PersonRateForm extends Form<PersonRateForm.PersonRateFormM
 
     protected abstract void rateAdded(PersonRate rate);
 
+    /**
+     * Returns a List<PersonRate> where the startDate or the endDate is in the given dateRange (alternatively a empty List)
+     * @param dateRange the dateRange to be checked
+     * @return a List of PersonRates (if there are no PersonRates that end or start in the dateRange, a empty List will be returned)
+     */
+    protected abstract List<PersonRate> getOverlappingRates(DateRange dateRange, BudgetBaseData budget);
 }

@@ -11,6 +11,9 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.wickedsource.budgeteer.service.DateRange;
+import org.wickedsource.budgeteer.service.DateUtil;
+import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
 import org.wickedsource.budgeteer.service.person.PersonRate;
 import org.wickedsource.budgeteer.service.person.PersonService;
 import org.wickedsource.budgeteer.service.person.PersonWithRates;
@@ -19,6 +22,9 @@ import org.wickedsource.budgeteer.web.components.money.BudgetUnitMoneyModel;
 import org.wickedsource.budgeteer.web.components.money.MoneyLabel;
 import org.wickedsource.budgeteer.web.pages.person.edit.EditPersonPage;
 import org.wickedsource.budgeteer.web.pages.person.edit.IEditPersonPageStrategy;
+
+import java.util.LinkedList;
+import java.util.List;
 
 import static org.wicketstuff.lazymodel.LazyModel.from;
 import static org.wicketstuff.lazymodel.LazyModel.model;
@@ -60,6 +66,17 @@ public class EditPersonForm extends Form<PersonWithRates> {
             @Override
             protected void rateAdded(PersonRate rate) {
                 EditPersonForm.this.getModelObject().getRates().add(rate);
+            }
+
+            @Override
+            protected List<PersonRate> getOverlappingRates(DateRange dateRange, BudgetBaseData budget) {
+                List<PersonRate> result = new LinkedList<PersonRate>();
+                for(PersonRate p : EditPersonForm.this.getModelObject().getRates()){
+                    if(p.getBudget().equals(budget) && DateUtil.isDateRangeOverlapping(p.getDateRange(), dateRange)){
+                        result.add(p);
+                    }
+                }
+                return result;
             }
         });
 

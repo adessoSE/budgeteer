@@ -36,25 +36,25 @@ public class PlanRecordDatabaseImporter extends RecordDatabaseImporter {
         super.init();
     }
 
-    private Map<RecordKey, List<ImportedPlanRecord>> groupedRecords = new HashMap<RecordKey, List<ImportedPlanRecord>>();
-
     public void importRecords(List<ImportedPlanRecord> records) {
-        groupRecords(records);
+        Map<RecordKey, List<ImportedPlanRecord>> groupedRecords = groupRecords(records);
         for (RecordKey key : groupedRecords.keySet()) {
             importRecordGroup(key, groupedRecords.get(key));
         }
     }
 
-    private void groupRecords(List<ImportedPlanRecord> records) {
+    private Map<RecordKey, List<ImportedPlanRecord>> groupRecords(List<ImportedPlanRecord> records) {
+        Map<RecordKey, List<ImportedPlanRecord>> result = new HashMap<RecordKey, List<ImportedPlanRecord>>();
         for (ImportedPlanRecord record : records) {
             RecordKey key = new RecordKey(record.getPersonName(), record.getBudgetName(), record.getDailyRate());
-            List<ImportedPlanRecord> keyList = groupedRecords.get(key);
+            List<ImportedPlanRecord> keyList = result.get(key);
             if (keyList == null) {
                 keyList = new ArrayList<ImportedPlanRecord>();
-                groupedRecords.put(key, keyList);
+                result.put(key, keyList);
             }
             keyList.add(record);
         }
+        return result;
     }
 
     /**
@@ -90,12 +90,27 @@ public class PlanRecordDatabaseImporter extends RecordDatabaseImporter {
 
         if (!entitiesToImport.isEmpty()) {
             // creating daily rate or updating it with new start and end dates
-            DailyRateEntity dailyRate = dailyRateRepository.findByBudgetAndPersonInDateRange(budget.getId(), person.getId(), earliestDate, latestDate);
-            if (dailyRate == null) {
-                dailyRate = new DailyRateEntity();
-                dailyRate.setBudget(budget);
-                dailyRate.setPerson(person);
+            List<DailyRateEntity> dailyRatesThatEndAfterTheNewRate = dailyRateRepository.findByBudgetAndPersonEndingInOrAfterDateRange(budget.getId(), person.getId(), earliestDate);
+            for(int i=dailyRatesThatEndAfterTheNewRate.size() -1; i >=0; i--){
+                DailyRateEntity dailyRate = dailyRatesThatEndAfterTheNewRate.get(i);
+                //if the dailyRate in the database is completely in the future, delete it
+                if(dailyRate.getDateStart().compareTo(earliestDate) >= 0){
+                    dailyRateRepository.delete(dailyRate);
+                    dailyRatesThatEndAfterTheNewRate.remove(dailyRate);
+                    continue;
+                }
+                // if the dailyRate in our database starts in the past and continues farther to the future,
+                // alter the endDate to the beginning of the new imported record minus 1 day
+                Calendar cal = GregorianCalendar.getInstance();
+                cal.setTime(earliestDate);
+                cal.add(Calendar.DAY_OF_YEAR, -1);
+                dailyRate.setDateEnd(cal.getTime());
+                dailyRateRepository.save(dailyRate);
             }
+            // if there weren't any dailyRates in the database that were altered or they were truncated, insert a new dailyRate for the future
+            DailyRateEntity dailyRate = new DailyRateEntity();
+            dailyRate.setBudget(budget);
+            dailyRate.setPerson(person);
             dailyRate.setRate(groupKey.getDailyRate());
             dailyRate.setDateStart(earliestDate);
             dailyRate.setDateEnd(latestDate);
