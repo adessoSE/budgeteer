@@ -42,4 +42,22 @@ public class DateUtil {
         return c.getTime();
     }
 
+     /**
+     * Returns whether the date is between the start and end of the dateRange
+     * @param d date to be checked
+     * @param dateRange
+     * @return true if the date d is in the given dateRange
+     */
+     private static boolean isDateInDateRange(Date d, DateRange dateRange){
+        return d.compareTo(dateRange.getStartDate()) >= 0 && d.compareTo(dateRange.getEndDate()) <= 0;
+    }
+
+    /**
+     * Checks whether the two DateRanges are overlapping (ore one contains the other)
+     */
+    public static boolean isDateRangeOverlapping(DateRange d1, DateRange d2){
+        return ((isDateInDateRange(d1.getStartDate(), d2) || isDateInDateRange(d1.getEndDate(), d2)) ||
+                (isDateInDateRange(d2.getStartDate(), d1) && isDateInDateRange(d2.getEndDate(), d1)));
+    }
+
 }

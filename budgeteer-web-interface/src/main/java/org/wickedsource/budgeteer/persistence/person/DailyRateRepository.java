@@ -20,4 +20,12 @@ public interface DailyRateRepository extends CrudRepository<DailyRateEntity, Lon
 
     @Query("select r from DailyRateEntity r where r.budget.id = :budgetId and r.person.id = :personId and ((:rangeStart between r.dateStart and r.dateEnd) or (:rangeEnd between r.dateStart and r.dateEnd))")
     DailyRateEntity findByBudgetAndPersonInDateRange(@Param("budgetId") long budgetId, @Param("personId") long personId, @Param("rangeStart") Date earliestDate, @Param("rangeEnd") Date latestDate);
+
+    @Query("select r from DailyRateEntity r where r.budget.id = :budgetId and r.person.id = :personId and " +
+            "((r.dateStart between :rangeStart and :rangeEnd) OR (r.dateEnd between :rangeStart and :rangeEnd) OR " +
+            "((:rangeStart between r.dateStart and r.dateEnd) AND (:rangeEnd between r.dateStart and r.dateEnd)))")
+    List<DailyRateEntity> findByBudgetAndPersonWithOverlappingDateRange(@Param("budgetId") long budgetId, @Param("personId") long personId, @Param("rangeStart") Date earliestDate, @Param("rangeEnd") Date latestDate);
+
+    @Query("select r from DailyRateEntity r where r.budget.id = :budgetId and r.person.id = :personId and r.dateEnd >= :rangeStart" )
+    List<DailyRateEntity> findByBudgetAndPersonEndingInOrAfterDateRange(@Param("budgetId") long budgetId, @Param("personId") long personId, @Param("rangeStart") Date earliestDate);
 }

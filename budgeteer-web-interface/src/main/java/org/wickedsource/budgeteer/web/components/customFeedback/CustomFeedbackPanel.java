@@ -6,6 +6,7 @@ import org.apache.wicket.feedback.FeedbackMessagesModel;
 import org.apache.wicket.feedback.IFeedback;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.basic.MultiLineLabel;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -35,7 +36,7 @@ public class CustomFeedbackPanel extends Panel implements IFeedback {
             messageIcon.add(new AttributeAppender("class", new Model<String>(getFeedbackIconClass(message.getLevel()))," "));
             messageContainer.add(messageIcon);
 
-            Label text = new Label("messageText", message.getMessage());
+            MultiLineLabel text = new MultiLineLabel("messageText", message.getMessage().toString());
             messageContainer.add(text);
 
             listItem.add(messageContainer);
