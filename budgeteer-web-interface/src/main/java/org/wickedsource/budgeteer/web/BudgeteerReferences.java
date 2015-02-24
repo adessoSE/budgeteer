@@ -42,8 +42,19 @@ public class BudgeteerReferences {
         return new UrlResourceReference(Url.parse("/js/plugins/datatables/jquery.dataTables.js"));
     }
 
+    public static ResourceReference getJQueryDataTableMomentSortJSReference() {
+        return new UrlResourceReference(Url.parse("/js/plugins/datatables/dataTable.sort.datetime-moment.js"));
+    }
+    public static ResourceReference getJQueryDataTableDateRangeMomentSortJSReference() {
+        return new UrlResourceReference(Url.parse("/js/plugins/datatables/dataTable.sort.custom-moment.js"));
+    }
+
     public static ResourceReference getDataTableCssReference() {
         return new UrlResourceReference(Url.parse("/css/datatables/dataTables.bootstrap.css"));
+    }
+
+    public static ResourceReference getMomentJsReference() {
+        return new UrlResourceReference(Url.parse("/js/moment.js/moment.2.8.4.min.js"));
     }
 
 }

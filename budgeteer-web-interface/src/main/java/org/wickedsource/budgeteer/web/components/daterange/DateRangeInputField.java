@@ -2,8 +2,8 @@ package org.wickedsource.budgeteer.web.components.daterange;
 
 
 import org.apache.wicket.markup.head.CssReferenceHeaderItem;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.internal.HtmlHeaderContainer;
 import org.apache.wicket.model.IModel;
@@ -41,6 +41,7 @@ public class DateRangeInputField extends TextField<DateRange> {
     public void renderHead(HtmlHeaderContainer container) {
         // jquery resource
         container.getHeaderResponse().render(JavaScriptReferenceHeaderItem.forReference(BudgeteerReferences.getJQueryReference()));
+        container.getHeaderResponse().render(JavaScriptReferenceHeaderItem.forReference(BudgeteerReferences.getMomentJsReference()));
         // include daterangepicker.js
         ResourceReference jsResource = new PackageResourceReference(DateRangeInputField.class, "daterangepicker.js");
         container.getHeaderResponse().render(JavaScriptReferenceHeaderItem.forReference(jsResource));
@@ -48,9 +49,7 @@ public class DateRangeInputField extends TextField<DateRange> {
         ResourceReference cssResource = new PackageResourceReference(DateRangeInputField.class, "daterangepicker-bs3.css");
         container.getHeaderResponse().render(CssReferenceHeaderItem.forReference(cssResource));
         // activate daterangepicker on this input field
-        container.getHeaderResponse().render(JavaScriptHeaderItem.forScript(String.format("window.onload = function () {\n" +
-                "    $('#%s').daterangepicker();\n" +
-                "}", getMarkupId()), "activate-daterangepicker"));
+       container.getHeaderResponse().render(OnDomReadyHeaderItem.forScript(String.format("$('#%s').daterangepicker();", getMarkupId())));
     }
 
 }
