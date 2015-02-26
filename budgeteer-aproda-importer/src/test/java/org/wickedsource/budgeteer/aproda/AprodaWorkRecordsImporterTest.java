@@ -29,6 +29,35 @@ public class AprodaWorkRecordsImporterTest {
     }
 
     @Test
+    public void testGetSkippedDataSets() throws Exception {
+        AprodaWorkRecordsImporter importer = new AprodaWorkRecordsImporter();
+        InputStream in = getClass().getResourceAsStream("/aproda-testreport.xlsx");
+        List<ImportedWorkRecord> records = importer.importFile(new ImportFile("file.xslx", in));
+        List<List<String>> skippedRecords = importer.getSkippedDataSets();
+        Assert.assertEquals(26, skippedRecords.size());
+
+        Assert.assertEquals("file.xslx", skippedRecords.get(0).get(0) );
+        Assert.assertEquals("Mustermann, Max", skippedRecords.get(2).get(0));
+        Assert.assertEquals("30-Okt-2014", skippedRecords.get(2).get(1));
+        Assert.assertEquals("Dortmund", skippedRecords.get(2).get(2));
+        Assert.assertEquals("Projektinfrastruktur", skippedRecords.get(2).get(3));
+        Assert.assertEquals("Projektinfrastruktur", skippedRecords.get(2).get(4));
+        Assert.assertEquals("Budget", skippedRecords.get(2).get(5));
+        Assert.assertEquals("Erstellung Entwicklungs-VM", skippedRecords.get(2).get(6));
+        Assert.assertEquals("9.0", skippedRecords.get(2).get(7));
+        Assert.assertEquals("Nein", skippedRecords.get(2).get(8));
+        Assert.assertEquals("studentische Hilfskraft", skippedRecords.get(2).get(9));
+
+        Assert.assertEquals("", skippedRecords.get(21).get(0));
+        Assert.assertEquals("", skippedRecords.get(21).get(1));
+        Assert.assertEquals("", skippedRecords.get(21).get(2));
+        Assert.assertEquals("", skippedRecords.get(21).get(3));
+        Assert.assertEquals("8.0", skippedRecords.get(21).get(7));
+        Assert.assertEquals("Ja", skippedRecords.get(21).get(8));
+        Assert.assertEquals("studentische Hilfskraft", skippedRecords.get(22).get(9));
+    }
+
+    @Test
     public void testGetExampleFile(){
         AprodaWorkRecordsImporter importer = new AprodaWorkRecordsImporter();
         ExampleFile file = importer.getExampleFile();

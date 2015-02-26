@@ -4,12 +4,16 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
+import org.apache.wicket.markup.html.link.DownloadLink;
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
@@ -17,6 +21,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.io.IOUtils;
 import org.apache.wicket.util.resource.AbstractResourceStreamWriter;
+import org.apache.wicket.util.time.Duration;
 import org.wickedsource.budgeteer.importer.aproda.AprodaWorkRecordsImporter;
 import org.wickedsource.budgeteer.imports.api.ExampleFile;
 import org.wickedsource.budgeteer.imports.api.ImportException;
@@ -48,14 +53,17 @@ public class ImportFilesPage extends DialogPageWithBacklink {
 
     private CustomFeedbackPanel feedback;
 
+    private List<List<String>> skippedImports;
+
     public ImportFilesPage(Class<? extends WebPage> backlinkPage, PageParameters backlinkParameters) {
         super(backlinkPage, backlinkParameters);
         add(createBacklink("backlink1"));
 
-        Form<ImportFormBean> form = new Form<ImportFormBean>("importForm", new ClassAwareWrappingModel<ImportFormBean>(new Model<ImportFormBean>(new ImportFormBean()), ImportFormBean.class)) {
+        final Form<ImportFormBean> form = new Form<ImportFormBean>("importForm", new ClassAwareWrappingModel<ImportFormBean>(new Model<ImportFormBean>(new ImportFormBean()), ImportFormBean.class)) {
             @Override
             protected void onSubmit() {
                 try {
+                    skippedImports = null;
                     List<ImportFile> files = new ArrayList<ImportFile>();
                     for (FileUpload file : fileUploads) {
                         if (file.getContentType().equals("application/x-zip-compressed")) {
@@ -66,6 +74,7 @@ public class ImportFilesPage extends DialogPageWithBacklink {
                         }
                     }
                     service.doImport(BudgeteerSession.get().getProjectId(), importer, files);
+                    skippedImports = service.getSkippedRecords();
                     success(getString("message.success"));
                 } catch (IOException e) {
                     error(String.format(getString("message.ioError"), e.getMessage()));
@@ -78,6 +87,23 @@ public class ImportFilesPage extends DialogPageWithBacklink {
 
 
         };
+        WebMarkupContainer importFeedback = new WebMarkupContainer("importFeedback"){
+            @Override
+            public boolean isVisible() {
+                return skippedImports != null && !skippedImports.isEmpty();
+            }
+        };
+        IModel fileModel = new LoadableDetachableModel(){
+            @Override
+            protected Object load() {
+                return ImportReportGenerator.generateReport(skippedImports);
+            }
+        };
+        DownloadLink downloadButton = new DownloadLink("downloadButton", fileModel, "Not imported records.xlsx");
+        downloadButton = downloadButton.setCacheDuration(Duration.NONE);
+        downloadButton = downloadButton.setDeleteAfterDownload(true);
+        importFeedback.add(downloadButton);
+        form.add(importFeedback);
         add(form);
         feedback = new CustomFeedbackPanel("feedback");
         feedback.setOutputMarkupId(true);
@@ -87,7 +113,8 @@ public class ImportFilesPage extends DialogPageWithBacklink {
         importerChoice.add(new AjaxFormComponentUpdatingBehavior("onchange") {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
-                // simply update model on server side, which Wicket has done for us
+                skippedImports = null;
+                target.add(form);
             }
         });
         importerChoice.setRequired(true);

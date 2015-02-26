@@ -1,5 +1,6 @@
 package org.wickedsource.budgeteer.importer.aproda;
 
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -7,10 +8,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.wickedsource.budgeteer.imports.api.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class AprodaWorkRecordsImporter implements WorkRecordsImporter {
 
@@ -25,6 +23,8 @@ public class AprodaWorkRecordsImporter implements WorkRecordsImporter {
     private static int COLUMN_BUDGET = 5;
 
     private static int COLUMN_HOURS = 7;
+
+    private List<List<String>> skippedDataSets = new LinkedList<List<String>>();
 
     @Override
     public List<ImportedWorkRecord> importFile(ImportFile file) throws ImportException {
@@ -50,8 +50,19 @@ public class AprodaWorkRecordsImporter implements WorkRecordsImporter {
         return file;
     }
 
+    @Override
+    public List<List<String>> getSkippedDataSets() {
+        return skippedDataSets;
+    }
+
     public List<ImportedWorkRecord> read(ImportFile file) throws ImportException {
         try {
+            //Adds the name of the imported file at the beginning of the list of skipped data sets..
+            List<String> fileName = new LinkedList<String>();
+            fileName.add(file.getFilename());
+            skippedDataSets.add(fileName);
+            skippedDataSets.add(new LinkedList<String>());
+
             List<ImportedWorkRecord> resultList = new ArrayList<ImportedWorkRecord>();
             Workbook workbook = new XSSFWorkbook(file.getInputStream());
             Sheet sheet = workbook.getSheetAt(SHEET_INDEX);
@@ -61,6 +72,8 @@ public class AprodaWorkRecordsImporter implements WorkRecordsImporter {
                 if (isImportable(row)) {
                     ImportedWorkRecord record = parseRow(row, file);
                     resultList.add(record);
+                } else {
+                    skippedDataSets.add(getRowAsStrings(row, i));
                 }
                 i++;
                 row = sheet.getRow(i);
@@ -69,6 +82,22 @@ public class AprodaWorkRecordsImporter implements WorkRecordsImporter {
         } catch (IOException e) {
             throw new ImportException(e);
         }
+    }
+
+    private List<String> getRowAsStrings(Row row, int index) {
+        List<String> result = new LinkedList<String>();
+        for(short i=row.getFirstCellNum(); i<row.getLastCellNum(); i++) {
+            Cell cell = row.getCell(i);
+            if(cell == null) {
+                result.add("");
+                continue;
+            }
+            result.add(cell.toString());
+        }
+        result.add("");
+        result.add("Line: " + index);
+        result.add("Record is not importable");
+        return result;
     }
 
     private ImportedWorkRecord parseRow(Row row, ImportFile file) throws ImportException {

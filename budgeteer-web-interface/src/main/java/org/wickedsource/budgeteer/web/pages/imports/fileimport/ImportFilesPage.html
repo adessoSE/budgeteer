@@ -9,6 +9,13 @@
         <form wicket:id="importForm" method="post">
             <div class="body bg-gray">
                 <div wicket:id="feedback"></div>
+                <div wicket:id="importFeedback" class="alert alert-warning alert-dismissable">
+                    <i class="icon fa fa-warning"></i>
+                    <button class="close" type="button" data-dismiss="alert" aria-hidden="true">X</button>
+                    <span><wicket:message key="page.importer.reportFile.text">The report can be downloaded here</wicket:message></span> <br />
+                    <span><wicket:message key="page.importer.reportFile">The report can be downloaded here</wicket:message></span>
+                    <a wicket:id="downloadButton"><wicket:message key="page.import.reportFile.linkValue">here</wicket:message></a>
+                </div>
                 <div class="box box-primary">
                     <div class="box-header">
                         <h3 class="box-title"><wicket:message key="page.importer.title">Select an Import File Format</wicket:message></h3>

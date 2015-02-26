@@ -1,5 +1,6 @@
 package org.wickedsource.budgeteer.service.imports;
 
+import lombok.Getter;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -14,6 +15,7 @@ import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 @Service
@@ -34,6 +36,8 @@ public class ImportService implements ApplicationContextAware {
 
     private ApplicationContext applicationContext;
 
+    @Getter
+    private List<List<String>> listOfNotImportedRecords;
     /**
      * Loads all data imports the given user has made from the database.
      *
@@ -86,11 +90,13 @@ public class ImportService implements ApplicationContextAware {
      */
     public void doImport(long projectId, Importer importer, List<ImportFile> importFiles) throws ImportException {
         if (importer instanceof WorkRecordsImporter) {
+            listOfNotImportedRecords = new LinkedList<List<String>>();
             WorkRecordsImporter workRecordsImporter = (WorkRecordsImporter) importer;
             WorkRecordDatabaseImporter dbImporter = applicationContext.getBean(WorkRecordDatabaseImporter.class, projectId, workRecordsImporter.getDisplayName());
             for (ImportFile file : importFiles) {
                 List<ImportedWorkRecord> records = workRecordsImporter.importFile(file);
                 dbImporter.importRecords(records);
+                listOfNotImportedRecords.addAll(workRecordsImporter.getSkippedDataSets());
             }
         } else if (importer instanceof PlanRecordsImporter) {
             PlanRecordsImporter planRecordsImporter = (PlanRecordsImporter) importer;
