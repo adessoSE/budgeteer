@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 @Component
 public class DateUtil {
@@ -58,6 +59,22 @@ public class DateUtil {
     public static boolean isDateRangeOverlapping(DateRange d1, DateRange d2){
         return ((isDateInDateRange(d1.getStartDate(), d2) || isDateInDateRange(d1.getEndDate(), d2)) ||
                 (isDateInDateRange(d2.getStartDate(), d1) && isDateInDateRange(d2.getEndDate(), d1)));
+    }
+
+    public static Date getBeginOfYear(){
+        Calendar cal = new GregorianCalendar();
+        cal.setTime(new Date());
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        cal.set(Calendar.MONTH, 0);
+        return cal.getTime();
+    }
+
+    public static Date getEndOfYear(){
+        Calendar cal = new GregorianCalendar();
+        cal.setTime(new Date());
+        cal.set(Calendar.DAY_OF_MONTH, 31);
+        cal.set(Calendar.MONTH, 11);
+        return cal.getTime();
     }
 
 }

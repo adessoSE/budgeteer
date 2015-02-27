@@ -32,7 +32,7 @@ public interface Importer extends Serializable {
      * The skipped sets are returned by this method. The values of each data set was converted to Strings
      * @return List of skipped data sets or null if there weren't any because the importer didn't skipp data sets
      */
-    List<List<String>> getSkippedDataSets();
+    List<List<String>> getSkippedRecords();
 
 
 }

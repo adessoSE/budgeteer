@@ -1,7 +1,29 @@
 <wicket:extend>
-
+    <div wicket:id="feedback"></div>
     <div class="row">
-
+        <div class="col-md-12">
+            <form wicket:id="projectChangeForm">
+                <div class="box box-primary">
+                    <div class="box-header">
+                        <i class="fa fa-edit"></i>
+                        <h3 class="box-title">Project-details</h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="col-md-3">
+                            <label for="projectTitle" class="col-md-4">Project-title: </label>
+                            <input id="projectTitle" name="projectTitle" class="col-md-6" wicket:id="projectTitle">
+                        </div>
+                        <div class="col-md-8">
+                            <label for="projectStart" class="col-md-3" >Begin and End of Project: </label>
+                            <input id="projectStart" name="projectStart" class="col-md-6" type="text" wicket:id="projectStart">
+                        </div>
+                        <input type="submit" value="Save" class="btn btn-primary btn-flat">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-md-6">
             <div class="box box-primary">
                 <div class="box-header">

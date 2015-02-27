@@ -10,6 +10,7 @@ import org.joda.money.Money;
 import org.wickedsource.budgeteer.imports.api.*;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class ResourcePlanImporter implements PlanRecordsImporter {
@@ -27,13 +28,14 @@ public class ResourcePlanImporter implements PlanRecordsImporter {
     private static int FIRST_ENTRY_ROW = 1;
 
     private List<List<String>> skippedRecords = new LinkedList<List<String>>();
+    private SimpleDateFormat format = new SimpleDateFormat();
 
     @Override
     public List<ImportedPlanRecord> importFile(ImportFile file, CurrencyUnit currencyUnit) throws ImportException {
+        skippedRecords.add(new LinkedList<String>());
         LinkedList<String> filenameList= new LinkedList<String>();
         filenameList.add(file.getFilename());
         skippedRecords.add(filenameList);
-        skippedRecords.add(new LinkedList<String>());
 
         try {
             List<ImportedPlanRecord> resultList = new ArrayList<ImportedPlanRecord>();
@@ -83,27 +85,22 @@ public class ResourcePlanImporter implements PlanRecordsImporter {
                     record.setMinutesPlanned(minutesPlanned);
                     record.setDate(dateColumn.getDate());
                     recordsList.add(record);
+                } else {
+                    List<String> skippedRow = new LinkedList<String>();
+                    skippedRow.add(row.getCell(COLUMN_PERSON).getStringCellValue());
+                    skippedRow.add(row.getCell(COLUMN_BUDGET).getStringCellValue());
+                    skippedRow.add(row.getCell(COLUMN_DAILY_RATE).toString());
+                    skippedRow.add("" + 0);
+                    skippedRow.add(format.format(dateColumn.getDate()));
+                    skippedRow.add("");
+                    skippedRow.add("Column: " + dateColumn.getColumnIndex());
+                    skippedRow.add("Record without hours");
+                    skippedRecords.add(skippedRow);
                 }
-                skippedRecords.add(getRowAsString(row));
             }
         }
 
         return recordsList;
-    }
-
-    private List<String> getRowAsString(Row row) {
-        List<String> result = new LinkedList<String>();
-        for(short i=row.getFirstCellNum(); i<row.getLastCellNum(); i++) {
-            Cell cell = row.getCell(i);
-            if(cell == null) {
-                result.add("");
-                continue;
-            }
-            result.add(cell.toString());
-        }
-        result.add("");
-        result.add("Record without hours");
-        return result;
     }
 
     @Override
@@ -126,7 +123,11 @@ public class ResourcePlanImporter implements PlanRecordsImporter {
     }
 
     @Override
-    public List<List<String>> getSkippedDataSets() {
-        return skippedRecords;
+    public List<List<String>> getSkippedRecords() {
+        //if just an empty row at the beginning and the filename is in the List of skipped records, return an empty List
+        if(skippedRecords != null && skippedRecords.size() == 2){
+            skippedRecords = new LinkedList<List<String>>();
+        }
+        return  skippedRecords;
     }
 }

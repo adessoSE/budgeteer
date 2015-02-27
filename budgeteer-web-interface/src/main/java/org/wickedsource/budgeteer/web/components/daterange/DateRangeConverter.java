@@ -18,6 +18,9 @@ public class DateRangeConverter implements IConverter<DateRange> {
 
     @Override
     public DateRange convertToObject(String value, Locale locale){
+        if(value == null || (value != null && value.isEmpty())){
+            return new DateRange(null, null);
+        }
         try {
             Pattern pattern = Pattern.compile("^([0-9]{2}/[0-9]{2}/[0-9]{4}) - ([0-9]{2}/[0-9]{2}/[0-9]{4})$");
             Matcher matcher = pattern.matcher(value);
@@ -37,8 +40,11 @@ public class DateRangeConverter implements IConverter<DateRange> {
 
     @Override
     public String convertToString(DateRange value, Locale locale) {
-        String startString = format.format(value.getStartDate());
-        String endString = format.format(value.getEndDate());
-        return String.format("%s - %s", startString, endString);
+        if(value != null && value.getStartDate() != null && value.getEndDate() != null) {
+            String startString = format.format(value.getStartDate());
+            String endString = format.format(value.getEndDate());
+            return String.format("%s - %s", startString, endString);
+        }
+        return "";
     }
 }

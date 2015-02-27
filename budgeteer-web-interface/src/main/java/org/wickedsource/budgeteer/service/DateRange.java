@@ -29,7 +29,7 @@ public class DateRange implements Serializable {
     }
 
     public String toString(){
-        return formatter.format(startDate) + " - " + formatter.format(endDate);
+        return (startDate != null ? formatter.format(startDate) : "undefined") + " - " + (endDate != null ? formatter.format(endDate) : "undefined");
     }
 
     @SuppressWarnings("EqualsWhichDoesntCheckParameterClass")

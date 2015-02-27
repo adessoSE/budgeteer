@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class RecordDatabaseImporter {
+public abstract class RecordDatabaseImporter {
 
     @Autowired
     private PersonRepository personRepository;
@@ -129,4 +129,10 @@ public class RecordDatabaseImporter {
         }
         return map;
     }
+
+    /**
+     * Returns a List of Entries that were skipped during the import process according to internal rules
+     * @return List of List with the skipped values converted to strings
+     */
+    public abstract List<List<String>> getSkippedRecords();
 }
