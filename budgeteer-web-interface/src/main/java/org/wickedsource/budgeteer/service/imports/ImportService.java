@@ -37,7 +37,7 @@ public class ImportService implements ApplicationContextAware {
     private ApplicationContext applicationContext;
 
     @Getter
-    private List<List<String>> listOfNotImportedRecords;
+    private List<List<String>> skippedRecords;
     /**
      * Loads all data imports the given user has made from the database.
      *
@@ -89,14 +89,15 @@ public class ImportService implements ApplicationContextAware {
      * @param importFiles the files to be imported
      */
     public void doImport(long projectId, Importer importer, List<ImportFile> importFiles) throws ImportException {
+        skippedRecords = new LinkedList<List<String>>();
         if (importer instanceof WorkRecordsImporter) {
-            listOfNotImportedRecords = new LinkedList<List<String>>();
             WorkRecordsImporter workRecordsImporter = (WorkRecordsImporter) importer;
             WorkRecordDatabaseImporter dbImporter = applicationContext.getBean(WorkRecordDatabaseImporter.class, projectId, workRecordsImporter.getDisplayName());
             for (ImportFile file : importFiles) {
                 List<ImportedWorkRecord> records = workRecordsImporter.importFile(file);
                 dbImporter.importRecords(records);
-                listOfNotImportedRecords.addAll(workRecordsImporter.getSkippedDataSets());
+                skippedRecords.addAll(workRecordsImporter.getSkippedRecords());
+                skippedRecords.addAll(dbImporter.getSkippedRecords());
             }
         } else if (importer instanceof PlanRecordsImporter) {
             PlanRecordsImporter planRecordsImporter = (PlanRecordsImporter) importer;
@@ -104,6 +105,8 @@ public class ImportService implements ApplicationContextAware {
             for (ImportFile file : importFiles) {
                 List<ImportedPlanRecord> records = planRecordsImporter.importFile(file, MoneyUtil.DEFAULT_CURRENCY);
                 dbImporter.importRecords(records);
+                skippedRecords.addAll(planRecordsImporter.getSkippedRecords());
+                skippedRecords.addAll(dbImporter.getSkippedRecords());
             }
         } else {
             throw new IllegalArgumentException(String.format("Importer of type %s is not supported!", importer.getClass()));

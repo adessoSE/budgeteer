@@ -33,10 +33,10 @@ public class AprodaWorkRecordsImporterTest {
         AprodaWorkRecordsImporter importer = new AprodaWorkRecordsImporter();
         InputStream in = getClass().getResourceAsStream("/aproda-testreport.xlsx");
         List<ImportedWorkRecord> records = importer.importFile(new ImportFile("file.xslx", in));
-        List<List<String>> skippedRecords = importer.getSkippedDataSets();
+        List<List<String>> skippedRecords = importer.getSkippedRecords();
         Assert.assertEquals(26, skippedRecords.size());
 
-        Assert.assertEquals("file.xslx", skippedRecords.get(0).get(0) );
+        Assert.assertEquals("file.xslx", skippedRecords.get(1).get(0) );
         Assert.assertEquals("Mustermann, Max", skippedRecords.get(2).get(0));
         Assert.assertEquals("30-Okt-2014", skippedRecords.get(2).get(1));
         Assert.assertEquals("Dortmund", skippedRecords.get(2).get(2));

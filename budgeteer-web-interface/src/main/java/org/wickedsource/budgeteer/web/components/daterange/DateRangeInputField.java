@@ -1,28 +1,42 @@
 package org.wickedsource.budgeteer.web.components.daterange;
 
 
-import org.apache.wicket.markup.head.CssReferenceHeaderItem;
-import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
-import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.internal.HtmlHeaderContainer;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.request.resource.PackageResourceReference;
-import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.util.convert.IConverter;
 import org.wickedsource.budgeteer.service.DateRange;
-import org.wickedsource.budgeteer.web.BudgeteerReferences;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.HashMap;
 
 public class DateRangeInputField extends TextField<DateRange> {
 
     public DateRangeInputField(String id) {
-        super(id);
-        setOutputMarkupId(true);
+        this(id, null);
     }
 
     public DateRangeInputField(String id, IModel<DateRange> model) {
+        this(id, model, null);
+    }
+
+    /**
+     * Creates a DateRangeInputField which displays the given dateRange when opened
+     */
+    public DateRangeInputField(String id, IModel<DateRange> model, DateRange defaultRange) {
         super(id, model);
-        setOutputMarkupId(true);
+        HashMap<String, String> options = new HashMap<String, String>();
+        if(defaultRange != null && (defaultRange.getStartDate() != null || defaultRange.getEndDate() != null)){
+            DateFormat format = new SimpleDateFormat("MM/dd/yyyy");
+            options.put("format","'M/D/YYYY'");
+            if(defaultRange.getStartDate() != null){
+                options.put("startDate", "'"+format.format(defaultRange.getStartDate())+"'");
+            }
+            if(defaultRange.getEndDate() != null){
+                options.put("endDate", "'"+format.format(defaultRange.getEndDate())+"'");
+            }
+        }
+        super.add(new DateRangePickerBehavior(options));
     }
 
 
@@ -37,19 +51,5 @@ public class DateRangeInputField extends TextField<DateRange> {
         return "text";
     }
 
-    @Override
-    public void renderHead(HtmlHeaderContainer container) {
-        // jquery resource
-        container.getHeaderResponse().render(JavaScriptReferenceHeaderItem.forReference(BudgeteerReferences.getJQueryReference()));
-        container.getHeaderResponse().render(JavaScriptReferenceHeaderItem.forReference(BudgeteerReferences.getMomentJsReference()));
-        // include daterangepicker.js
-        ResourceReference jsResource = new PackageResourceReference(DateRangeInputField.class, "daterangepicker.js");
-        container.getHeaderResponse().render(JavaScriptReferenceHeaderItem.forReference(jsResource));
-        // include css
-        ResourceReference cssResource = new PackageResourceReference(DateRangeInputField.class, "daterangepicker-bs3.css");
-        container.getHeaderResponse().render(CssReferenceHeaderItem.forReference(cssResource));
-        // activate daterangepicker on this input field
-       container.getHeaderResponse().render(OnDomReadyHeaderItem.forScript(String.format("$('#%s').daterangepicker();", getMarkupId())));
-    }
 
 }

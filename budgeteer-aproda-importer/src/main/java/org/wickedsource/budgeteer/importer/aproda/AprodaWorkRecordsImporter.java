@@ -24,7 +24,7 @@ public class AprodaWorkRecordsImporter implements WorkRecordsImporter {
 
     private static int COLUMN_HOURS = 7;
 
-    private List<List<String>> skippedDataSets = new LinkedList<List<String>>();
+    private List<List<String>> skippedRecords = new LinkedList<List<String>>();
 
     @Override
     public List<ImportedWorkRecord> importFile(ImportFile file) throws ImportException {
@@ -51,17 +51,21 @@ public class AprodaWorkRecordsImporter implements WorkRecordsImporter {
     }
 
     @Override
-    public List<List<String>> getSkippedDataSets() {
-        return skippedDataSets;
+    public List<List<String>> getSkippedRecords() {
+        //if just an empty row at the beginning and the filename is in the List of skipped records, return an empty List
+        if(skippedRecords != null && skippedRecords.size() == 2){
+            skippedRecords = new LinkedList<List<String>>();
+        }
+        return skippedRecords;
     }
 
     public List<ImportedWorkRecord> read(ImportFile file) throws ImportException {
         try {
+            skippedRecords.add(new LinkedList<String>());
             //Adds the name of the imported file at the beginning of the list of skipped data sets..
             List<String> fileName = new LinkedList<String>();
             fileName.add(file.getFilename());
-            skippedDataSets.add(fileName);
-            skippedDataSets.add(new LinkedList<String>());
+            skippedRecords.add(fileName);
 
             List<ImportedWorkRecord> resultList = new ArrayList<ImportedWorkRecord>();
             Workbook workbook = new XSSFWorkbook(file.getInputStream());
@@ -73,7 +77,7 @@ public class AprodaWorkRecordsImporter implements WorkRecordsImporter {
                     ImportedWorkRecord record = parseRow(row, file);
                     resultList.add(record);
                 } else {
-                    skippedDataSets.add(getRowAsStrings(row, i));
+                    skippedRecords.add(getRowAsStrings(row, i));
                 }
                 i++;
                 row = sheet.getRow(i);

@@ -4,7 +4,9 @@ import lombok.Data;
 import org.wickedsource.budgeteer.persistence.user.UserEntity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -13,7 +15,7 @@ import java.util.List;
                 @UniqueConstraint(name = "UNIQUE_PROJECT_NAME", columnNames = {"NAME"})
         })
 @Data
-public class ProjectEntity {
+public class ProjectEntity implements Serializable {
 
     @Id
     @GeneratedValue
@@ -28,4 +30,11 @@ public class ProjectEntity {
             inverseJoinColumns = {@JoinColumn(name = "USER_ID")})
     private List<UserEntity> authorizedUsers = new ArrayList<UserEntity>();
 
+    @Column(nullable = true)
+    @Temporal(TemporalType.DATE)
+    private Date projectStart;
+
+    @Column(nullable = true)
+    @Temporal(TemporalType.DATE)
+    private Date projectEnd;
 }

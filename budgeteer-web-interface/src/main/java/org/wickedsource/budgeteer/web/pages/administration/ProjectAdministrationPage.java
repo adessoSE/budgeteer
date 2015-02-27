@@ -3,6 +3,7 @@ package org.wickedsource.budgeteer.web.pages.administration;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -10,12 +11,16 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.wickedsource.budgeteer.service.DateRange;
+import org.wickedsource.budgeteer.service.DateUtil;
 import org.wickedsource.budgeteer.service.project.ProjectService;
 import org.wickedsource.budgeteer.service.user.User;
 import org.wickedsource.budgeteer.service.user.UserService;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.ClassAwareWrappingModel;
 import org.wickedsource.budgeteer.web.Mount;
+import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
+import org.wickedsource.budgeteer.web.components.daterange.DateRangeInputField;
 import org.wickedsource.budgeteer.web.pages.base.basepage.BasePage;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
 import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
@@ -38,9 +43,27 @@ public class ProjectAdministrationPage extends BasePage {
     private ProjectService projectService;
 
     public ProjectAdministrationPage() {
+        add(new CustomFeedbackPanel("feedback"));
         add(createUserList("userList", new UsersInProjectModel(BudgeteerSession.get().getProjectId())));
         add(createDeleteProjectButton("deleteProjectButton"));
         add(createAddUserForm("addUserForm"));
+        add(createEditProjectForm("projectChangeForm"));
+    }
+
+    private Form<Project> createEditProjectForm(String formId) {
+        Form<Project> form = new Form<Project>(formId, model(from(projectService.findProjectById(BudgeteerSession.get().getProjectId())))){
+            @Override
+            protected void onSubmit() {
+                super.onSubmit();
+                Project ent = getModelObject();
+                projectService.save(ent);
+                success(getString("project.saved"));
+            }
+        };
+        form.add(new TextField<String>("projectTitle", model(from(form.getModelObject()).getName())));
+        DateRange defaultDateRange = new DateRange(DateUtil.getBeginOfYear(), DateUtil.getEndOfYear());
+        form.add(new DateRangeInputField("projectStart", model(from(form.getModelObject()).getDateRange()), defaultDateRange));
+        return form;
     }
 
     private ListView<User> createUserList(String id, IModel<List<User>> model) {
