@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 @Component
 public class DateUtil {
@@ -40,6 +41,40 @@ public class DateUtil {
         c.setTime(dateProvider.currentDate());
         c.add(Calendar.DAY_OF_YEAR, -numberOfDays + 1); // +1, because we want to have the current day included
         return c.getTime();
+    }
+
+     /**
+     * Returns whether the date is between the start and end of the dateRange
+     * @param d date to be checked
+     * @param dateRange
+     * @return true if the date d is in the given dateRange
+     */
+     private static boolean isDateInDateRange(Date d, DateRange dateRange){
+        return d.compareTo(dateRange.getStartDate()) >= 0 && d.compareTo(dateRange.getEndDate()) <= 0;
+    }
+
+    /**
+     * Checks whether the two DateRanges are overlapping (ore one contains the other)
+     */
+    public static boolean isDateRangeOverlapping(DateRange d1, DateRange d2){
+        return ((isDateInDateRange(d1.getStartDate(), d2) || isDateInDateRange(d1.getEndDate(), d2)) ||
+                (isDateInDateRange(d2.getStartDate(), d1) && isDateInDateRange(d2.getEndDate(), d1)));
+    }
+
+    public static Date getBeginOfYear(){
+        Calendar cal = new GregorianCalendar();
+        cal.setTime(new Date());
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        cal.set(Calendar.MONTH, 0);
+        return cal.getTime();
+    }
+
+    public static Date getEndOfYear(){
+        Calendar cal = new GregorianCalendar();
+        cal.setTime(new Date());
+        cal.set(Calendar.DAY_OF_MONTH, 31);
+        cal.set(Calendar.MONTH, 11);
+        return cal.getTime();
     }
 
 }

@@ -16,8 +16,8 @@ public class DataTableBehavior extends Behavior{
 
 
     /**
-     * Implements the AdminLTE-DataTable
-     * @param options @see <a href="https://github.com/almasaeed2010/AdminLTE/blob/master/pages/tables/data.html">Options</a>
+     * Implements the JQuery-DataTable
+     * @param options @see <a href="http://www.datatables.net/reference/option/">Options</a>
      */
     public DataTableBehavior(HashMap<String, String> options){
         this.options = options;
@@ -29,11 +29,22 @@ public class DataTableBehavior extends Behavior{
         response.render(CssHeaderItem.forReference(BudgeteerReferences.getDataTableCssReference()));
         response.render(JavaScriptReferenceHeaderItem.forReference(BudgeteerReferences.getJQueryReference()));
         response.render(JavaScriptReferenceHeaderItem.forReference(BudgeteerReferences.getJQueryDataTableJSReference()));
+        response.render(JavaScriptReferenceHeaderItem.forReference(BudgeteerReferences.getMomentJsReference()));
+        response.render(JavaScriptReferenceHeaderItem.forReference(BudgeteerReferences.getJQueryDataTableMomentSortJSReference()));
         response.render(JavaScriptReferenceHeaderItem.forReference(BudgeteerReferences.getBootstrapDataTableJSReference()));
+        response.render(JavaScriptReferenceHeaderItem.forReference(BudgeteerReferences.getJQueryDataTableDateRangeMomentSortJSReference()));
 
         component.setOutputMarkupId(true);
+        response.render(OnDomReadyHeaderItem.forScript(getSorting()));
         response.render(OnDomReadyHeaderItem.forScript(getScript(component)));
 
+    }
+
+    private String getSorting() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("$.fn.dataTable.moment('D.MM.YY');");
+        stringBuilder.append("$.fn.dataTable.moment('YYYY/MM');");
+        return stringBuilder.toString();
     }
 
     public String getScript(Component component) {
@@ -60,11 +71,10 @@ public class DataTableBehavior extends Behavior{
      */
     public static HashMap<String, String> getRecommendedOptions(){
         HashMap<String, String> result = new HashMap<String, String>();
-        result.put("bPaginate", "true");
-        result.put("bLengthChange", "false");
-        result.put("bFilter", "false");
-        result.put("bSort", "true");
-        result.put("bInfo", "true");
+        result.put("paging", "true");
+        result.put("lengthChange", "false");
+        result.put("ordering", "true");
+        result.put("info", "true");
         return result;
     }
 }

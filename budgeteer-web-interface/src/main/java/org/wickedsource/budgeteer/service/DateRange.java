@@ -4,6 +4,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class DateRange implements Serializable {
@@ -11,6 +12,8 @@ public class DateRange implements Serializable {
     private Date startDate;
 
     private Date endDate;
+
+    private static SimpleDateFormat formatter = new SimpleDateFormat();
 
     public DateRange(Date startDate, Date endDate) {
         this.startDate = startDate;
@@ -23,6 +26,10 @@ public class DateRange implements Serializable {
 
     public Date getEndDate() {
         return endDate;
+    }
+
+    public String toString(){
+        return (startDate != null ? formatter.format(startDate) : "undefined") + " - " + (endDate != null ? formatter.format(endDate) : "undefined");
     }
 
     @SuppressWarnings("EqualsWhichDoesntCheckParameterClass")

@@ -10,10 +10,8 @@ import org.joda.money.Money;
 import org.wickedsource.budgeteer.imports.api.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class ResourcePlanImporter implements PlanRecordsImporter {
 
@@ -29,8 +27,16 @@ public class ResourcePlanImporter implements PlanRecordsImporter {
 
     private static int FIRST_ENTRY_ROW = 1;
 
+    private List<List<String>> skippedRecords = new LinkedList<List<String>>();
+    private SimpleDateFormat format = new SimpleDateFormat();
+
     @Override
     public List<ImportedPlanRecord> importFile(ImportFile file, CurrencyUnit currencyUnit) throws ImportException {
+        skippedRecords.add(new LinkedList<String>());
+        LinkedList<String> filenameList= new LinkedList<String>();
+        filenameList.add(file.getFilename());
+        skippedRecords.add(filenameList);
+
         try {
             List<ImportedPlanRecord> resultList = new ArrayList<ImportedPlanRecord>();
             Workbook workbook = new XSSFWorkbook(file.getInputStream());
@@ -39,7 +45,7 @@ public class ResourcePlanImporter implements PlanRecordsImporter {
             int i = FIRST_ENTRY_ROW;
             Row row = sheet.getRow(i);
             while (row != null && row.getCell(0).getStringCellValue() != null) {
-                List<ImportedPlanRecord> records = parseRow(row, dateColumns, currencyUnit);
+                List<ImportedPlanRecord> records = parseRow(row, dateColumns, currencyUnit, skippedRecords);
                 resultList.addAll(records);
                 row = sheet.getRow(++i);
             }
@@ -62,7 +68,7 @@ public class ResourcePlanImporter implements PlanRecordsImporter {
         return columns;
     }
 
-    private List<ImportedPlanRecord> parseRow(Row row, List<DateColumn> dateColumns, CurrencyUnit currencyUnit) {
+    private List<ImportedPlanRecord> parseRow(Row row, List<DateColumn> dateColumns, CurrencyUnit currencyUnit, List<List<String>> skippedRecords) {
         List<ImportedPlanRecord> recordsList = new ArrayList<ImportedPlanRecord>();
 
         for (DateColumn dateColumn : dateColumns) {
@@ -79,6 +85,17 @@ public class ResourcePlanImporter implements PlanRecordsImporter {
                     record.setMinutesPlanned(minutesPlanned);
                     record.setDate(dateColumn.getDate());
                     recordsList.add(record);
+                } else {
+                    List<String> skippedRow = new LinkedList<String>();
+                    skippedRow.add(row.getCell(COLUMN_PERSON).getStringCellValue());
+                    skippedRow.add(row.getCell(COLUMN_BUDGET).getStringCellValue());
+                    skippedRow.add(row.getCell(COLUMN_DAILY_RATE).toString());
+                    skippedRow.add("" + 0);
+                    skippedRow.add(format.format(dateColumn.getDate()));
+                    skippedRow.add("");
+                    skippedRow.add("Column: " + dateColumn.getColumnIndex());
+                    skippedRow.add("Record without hours");
+                    skippedRecords.add(skippedRow);
                 }
             }
         }
@@ -103,5 +120,14 @@ public class ResourcePlanImporter implements PlanRecordsImporter {
         file.setInputStream(getClass().getResourceAsStream("/example_resource_plan.xlsx"));
         file.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         return file;
+    }
+
+    @Override
+    public List<List<String>> getSkippedRecords() {
+        //if just an empty row at the beginning and the filename is in the List of skipped records, return an empty List
+        if(skippedRecords != null && skippedRecords.size() == 2){
+            skippedRecords = new LinkedList<List<String>>();
+        }
+        return  skippedRecords;
     }
 }
