@@ -28,12 +28,13 @@ public class DateRangeInputField extends TextField<DateRange> {
         HashMap<String, String> options = new HashMap<String, String>();
         if(defaultRange != null && (defaultRange.getStartDate() != null || defaultRange.getEndDate() != null)){
             DateFormat format = new SimpleDateFormat("MM/dd/yyyy");
-            options.put("format","'M/D/YYYY'");
+            options.put("format","'MM/DD/YYYY'");
+            DateRange modelObject = model.getObject();
             if(defaultRange.getStartDate() != null){
-                options.put("startDate", "'"+format.format(defaultRange.getStartDate())+"'");
+                options.put("startDate", "'"+format.format(modelObject.getStartDate() == null ? defaultRange.getStartDate() : modelObject.getStartDate())+"'");
             }
             if(defaultRange.getEndDate() != null){
-                options.put("endDate", "'"+format.format(defaultRange.getEndDate())+"'");
+                options.put("endDate", "'"+format.format(modelObject.getEndDate() == null ? defaultRange.getEndDate() : modelObject.getEndDate())+"'");
             }
         }
         super.add(new DateRangePickerBehavior(options));
