@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.wickedsource.budgeteer.persistence.budget.BudgetRepository;
 import org.wickedsource.budgeteer.persistence.imports.ImportRepository;
+import org.wickedsource.budgeteer.persistence.person.DailyRateRepository;
 import org.wickedsource.budgeteer.persistence.person.PersonRepository;
 import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
 import org.wickedsource.budgeteer.persistence.project.ProjectRepository;
@@ -44,6 +45,9 @@ public class ProjectService {
 
     @Autowired
     private ProjectBaseDataMapper mapper;
+
+    @Autowired
+    private DailyRateRepository dailyRateRepository;
 
     /**
      * Creates a new empty project with the given name.
@@ -92,6 +96,7 @@ public class ProjectService {
      * @param projectId ID of the project to delete.
      */
     public void deleteProject(long projectId) {
+        dailyRateRepository.deleteByProjectId(projectId);
         planRecordRepository.deleteByProjectId(projectId);
         workRecordRepository.deleteByProjectId(projectId);
         importRepository.deleteByProjectId(projectId);
