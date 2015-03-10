@@ -104,11 +104,22 @@ public class PlanRecordDatabaseImporter extends RecordDatabaseImporter {
             recordEntity.setImportRecord(getImportRecord());
             recordEntity.setDailyRate(record.getDailyRate());
 
-
-            if((project.getProjectEnd() != null && record.getDate().after(project.getProjectEnd())) ||
+            //Check whether there are existing Planrecords in the Database for this Date, Budget and Person
+            List<PlanRecordEntity> existingRecords = planRecordRepository.findByPersonBudgetDate(person.getId(), budget.getId(), record.getDate());
+            if(existingRecords.size() > 1){
+                skippedRecords.add(getRecordAsString(recordEntity, "More than one Record for this Budget, Person and Date found"));
+            }
+            else if((project.getProjectEnd() != null && record.getDate().after(project.getProjectEnd())) ||
                     (project.getProjectStart() != null && record.getDate().before(project.getProjectStart()))){
                 skippedRecords.add(getRecordAsString(recordEntity));
             }else {
+                if(existingRecords.size() == 1){
+                    //update the existing record
+                    recordEntity = existingRecords.get(0);
+                    recordEntity.setMinutes(record.getMinutesPlanned());
+                    recordEntity.setImportRecord(getImportRecord());
+                    recordEntity.setDailyRate(record.getDailyRate());
+                }
                 entitiesToImport.add(recordEntity);
 
                 if (record.getDate().after(latestDate)) {
@@ -134,14 +145,17 @@ public class PlanRecordDatabaseImporter extends RecordDatabaseImporter {
     }
 
     private List<String> getRecordAsString(PlanRecordEntity recordEntity) {
+        return getRecordAsString(recordEntity, "Record is out of project-date-range");
+    }
+
+    private List<String> getRecordAsString(PlanRecordEntity recordEntity, String reason) {
         List<String> result = new LinkedList<String>();
         result.add(recordEntity.getDate() != null ? formatter.format(recordEntity.getDate()) : "");
         result.add(recordEntity.getPerson().getName());
         result.add(recordEntity.getBudget().getName());
         result.add(""+recordEntity.getMinutes());
         result.add(recordEntity.getDailyRate() != null ? recordEntity.getDailyRate().toString() : "");
-        result.add("");
-        result.add("Record is out of project-date-range");
+        result.add(reason);
         return result;
     }
 
