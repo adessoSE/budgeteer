@@ -48,12 +48,17 @@ public class PlanRecordDatabaseImporter extends RecordDatabaseImporter {
         return skippedRecords;
     }
 
-    public void importRecords(List<ImportedPlanRecord> records) {
+    public void importRecords(List<ImportedPlanRecord> records, String filename) {
         skippedRecords = new LinkedList<List<String>>();
         Map<RecordKey, List<ImportedPlanRecord>> groupedRecords = groupRecords(records);
+
+        //Because of Issue #70 all PlanRecords that are after the earliest of the imported ones, should be deleted
+        Date earliestDate = findEarliestDate(records);
+        planRecordRepository.deleteByProjectIdAndDate(getProjectId(), earliestDate);
+
         for (RecordKey key : groupedRecords.keySet()) {
             List<ImportedPlanRecord> importedPlanRecords = groupedRecords.get(key);
-            List<List<String>> skippedPlanRecords = importRecordGroup(key, importedPlanRecords);
+            List<List<String>> skippedPlanRecords = importRecordGroup(key, importedPlanRecords, filename);
             if(skippedPlanRecords != null && !skippedPlanRecords.isEmpty()){
                 skippedRecords.addAll(skippedPlanRecords);
             }
@@ -66,6 +71,17 @@ public class PlanRecordDatabaseImporter extends RecordDatabaseImporter {
         if(getImportRecord().getEndDate() == null){
             getImportRecord().setEndDate(new Date());
         }
+    }
+
+    private Date findEarliestDate(List<ImportedPlanRecord> records) {
+        if (records == null || records.isEmpty()) return null;
+        Date da = new Date(Long.MAX_VALUE);
+        for (ImportedPlanRecord pla : records) {
+            if (pla.getDate().before(da)) {
+                da = pla.getDate();
+            }
+        }
+        return da;
     }
 
     private Map<RecordKey, List<ImportedPlanRecord>> groupRecords(List<ImportedPlanRecord> records) {
@@ -85,7 +101,7 @@ public class PlanRecordDatabaseImporter extends RecordDatabaseImporter {
     /**
      * Imports a list of records with the same person, budget and daily rate.
      */
-    private List<List<String>> importRecordGroup(RecordKey groupKey, List<ImportedPlanRecord> records) {
+    private List<List<String>> importRecordGroup(RecordKey groupKey, List<ImportedPlanRecord> records, String filename) {
         List<List<String>> skippedRecords = new LinkedList<List<String>>();
         Date earliestDate = new Date(Long.MAX_VALUE);
         Date latestDate = new Date(0);
@@ -104,11 +120,11 @@ public class PlanRecordDatabaseImporter extends RecordDatabaseImporter {
             recordEntity.setImportRecord(getImportRecord());
             recordEntity.setDailyRate(record.getDailyRate());
 
-
-            if((project.getProjectEnd() != null && record.getDate().after(project.getProjectEnd())) ||
+           if((project.getProjectEnd() != null && record.getDate().after(project.getProjectEnd())) ||
                     (project.getProjectStart() != null && record.getDate().before(project.getProjectStart()))){
-                skippedRecords.add(getRecordAsString(recordEntity));
-            }else {
+                skippedRecords.add(getRecordAsString(recordEntity, filename));
+           }else {
+
                 entitiesToImport.add(recordEntity);
 
                 if (record.getDate().after(latestDate)) {
@@ -133,15 +149,19 @@ public class PlanRecordDatabaseImporter extends RecordDatabaseImporter {
         return skippedRecords;
     }
 
-    private List<String> getRecordAsString(PlanRecordEntity recordEntity) {
+    private List<String> getRecordAsString(PlanRecordEntity recordEntity, String filename) {
+        return getRecordAsString(recordEntity, filename, "Record is out of project-date-range");
+    }
+
+    private List<String> getRecordAsString(PlanRecordEntity recordEntity,String filename, String reason) {
         List<String> result = new LinkedList<String>();
+        result.add(filename);
         result.add(recordEntity.getDate() != null ? formatter.format(recordEntity.getDate()) : "");
         result.add(recordEntity.getPerson().getName());
         result.add(recordEntity.getBudget().getName());
         result.add(""+recordEntity.getMinutes());
         result.add(recordEntity.getDailyRate() != null ? recordEntity.getDailyRate().toString() : "");
-        result.add("");
-        result.add("Record is out of project-date-range");
+        result.add(reason);
         return result;
     }
 
