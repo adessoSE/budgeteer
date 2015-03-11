@@ -71,6 +71,7 @@ public class PlanRecordDatabaseImporter extends RecordDatabaseImporter {
         if(getImportRecord().getEndDate() == null){
             getImportRecord().setEndDate(new Date());
         }
+        getImportRecord().setNumberOfImportedFiles(getImportRecord().getNumberOfImportedFiles() + 1);
     }
 
     private Date findEarliestDate(List<ImportedPlanRecord> records) {

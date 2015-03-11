@@ -99,6 +99,7 @@ public class WorkRecordDatabaseImporter extends RecordDatabaseImporter {
         }
         getImportRecord().setStartDate(earliestRecordDate);
         getImportRecord().setEndDate(latestRecordDate);
+        getImportRecord().setNumberOfImportedFiles(getImportRecord().getNumberOfImportedFiles() + 1);
     }
 
     private List<String> getRecordAsString(WorkRecordEntity entity) {

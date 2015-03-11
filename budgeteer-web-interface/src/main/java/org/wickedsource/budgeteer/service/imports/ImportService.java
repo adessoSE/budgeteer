@@ -52,6 +52,7 @@ public class ImportService implements ApplicationContextAware {
             i.setId(entity.getId());
             i.setImportType(entity.getImportType());
             i.setImportDate(entity.getImportDate());
+            i.setNumberOfImportedFiles(entity.getNumberOfImportedFiles() == null ? -1 : entity.getNumberOfImportedFiles());
             i.setEndDate(entity.getEndDate());
             i.setStartDate(entity.getStartDate());
             resultList.add(i);
@@ -105,7 +106,7 @@ public class ImportService implements ApplicationContextAware {
             PlanRecordDatabaseImporter dbImporter = applicationContext.getBean(PlanRecordDatabaseImporter.class, projectId, planRecordsImporter.getDisplayName());
             for (ImportFile file : importFiles) {
                 List<ImportedPlanRecord> records = planRecordsImporter.importFile(file, MoneyUtil.DEFAULT_CURRENCY);
-                dbImporter.importRecords(records);
+                dbImporter.importRecords(records, file.getFilename());
                 skippedRecords.addAll(planRecordsImporter.getSkippedRecords());
                 skippedRecords.addAll(dbImporter.getSkippedRecords());
             }

@@ -24,6 +24,8 @@ public class ImportEntity {
 
     private String importType;
 
+    private Integer numberOfImportedFiles = 0;
+
     @ManyToOne(optional = false)
     @JoinColumn(name = "PROJECT_ID")
     private ProjectEntity project;
