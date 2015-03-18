@@ -101,6 +101,7 @@ public class ImportService implements ApplicationContextAware {
                 skippedRecords.addAll(workRecordsImporter.getSkippedRecords());
                 skippedRecords.addAll(dbImporter.getSkippedRecords());
             }
+            skippedRecords.addAll(dbImporter.findAndRemoveManuallyEditedEntries());
         } else if (importer instanceof PlanRecordsImporter) {
             PlanRecordsImporter planRecordsImporter = (PlanRecordsImporter) importer;
             PlanRecordDatabaseImporter dbImporter = applicationContext.getBean(PlanRecordDatabaseImporter.class, projectId, planRecordsImporter.getDisplayName());

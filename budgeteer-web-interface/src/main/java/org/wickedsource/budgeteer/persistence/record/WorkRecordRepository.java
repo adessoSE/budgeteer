@@ -7,6 +7,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QueryDslPredicateExecutor;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+import org.wickedsource.budgeteer.persistence.budget.BudgetEntity;
+import org.wickedsource.budgeteer.persistence.person.PersonEntity;
+import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
 
 import java.util.Date;
 import java.util.List;
@@ -50,9 +53,10 @@ public interface WorkRecordRepository extends CrudRepository<WorkRecordEntity, L
     @Query("select new org.wickedsource.budgeteer.persistence.record.MissingDailyRateForBudgetBean(r.person.id, r.person.name, min(r.date), max(r.date), b.name) from WorkRecordEntity r join r.budget b where r.dailyRate = 0 and r.person.id = :personId group by r.person.id, r.person.name, b.name")
     List<MissingDailyRateForBudgetBean> getMissingDailyRatesForPerson(@Param("personId") long personId);
 
+
     @Override
     @Modifying
-    @Query("update WorkRecordEntity r set r.dailyRate = :dailyRate where r.budget.id=:budgetId and r.person.id=:personId and r.date between :fromDate and :toDate")
+    @Query("update WorkRecordEntity r set r.dailyRate = :dailyRate where r.editedManually = false AND r.budget.id=:budgetId and r.person.id=:personId and r.date between :fromDate and :toDate")
     void updateDailyRates(@Param("budgetId") long budgetId, @Param("personId") long personId, @Param("fromDate") Date fromDate, @Param("toDate") Date toDate, @Param("dailyRate") Money dailyRate);
 
     @Override
@@ -167,4 +171,13 @@ public interface WorkRecordRepository extends CrudRepository<WorkRecordEntity, L
     @Override
     @Query("select count (wre.id) from WorkRecordEntity wre where wre.budget.project.id = :projectId")
     Long countByProjectId(@Param("projectId") long projectId);
+
+    @Query("select wr from WorkRecordEntity wr where wr.budget.project.id = :projectId AND wr.editedManually = true AND wr.date >= :startDate AND wr.date <= :endDate")
+    List<WorkRecordEntity> findManuallyEditedEntries(@Param("projectId") long projectId, @Param("startDate") Date earliestRecordDate, @Param("endDate") Date latestRecordDate);
+
+    @Query("select wr from WorkRecordEntity wr where wr.budget = :budget AND wr.person = :person AND wr.date = :recordDate AND wr.minutes = :workedMinutes AND wr.editedManually = false")
+    List<WorkRecordEntity> findDuplicateEntries(@Param("budget") BudgetEntity budget, @Param("person") PersonEntity person, @Param("recordDate") Date recordDate, @Param("workedMinutes") int workedMinutes);
+
+    @Query("select wr from WorkRecordEntity wr where wr.budget.project = :project AND wr.date >= :start and wr.date <= :end")
+    List<WorkRecordEntity> findByProjectAndDateRange(@Param("project")ProjectEntity project, @Param("start") Date start, @Param("end") Date end);
 }

@@ -4,10 +4,7 @@ import com.mysema.query.types.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.wickedsource.budgeteer.ListUtil;
-import org.wickedsource.budgeteer.persistence.record.MonthlyAggregatedRecordBean;
-import org.wickedsource.budgeteer.persistence.record.PlanRecordRepository;
-import org.wickedsource.budgeteer.persistence.record.WeeklyAggregatedRecordBean;
-import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
+import org.wickedsource.budgeteer.persistence.record.*;
 import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
 
 import javax.transaction.Transactional;
@@ -127,6 +124,14 @@ public class RecordService {
     public List<WorkRecord> getFilteredRecords(WorkRecordFilter filter) {
         Predicate query = WorkRecordQueries.findByFilter(filter);
         return recordMapper.map(ListUtil.toArrayList(workRecordRepository.findAll(query)));
+    }
+
+
+    public void saveDailyRateForWorkRecord(WorkRecord record){
+        WorkRecordEntity entity = workRecordRepository.findOne(record.getId());
+        entity.setDailyRate(record.getDailyRate());
+        entity.setEditedManually(record.isEditedManually());
+        workRecordRepository.save(entity);
     }
 
 }

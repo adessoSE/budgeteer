@@ -1,5 +1,9 @@
 package org.wickedsource.budgeteer.persistence.record;
 
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Index;
 import javax.persistence.Table;
@@ -10,5 +14,8 @@ import javax.persistence.Table;
         @Index(name = "WORK_RECORD_PERSON_ID_IDX", columnList = "PERSON_ID")
 })
 public class WorkRecordEntity extends RecordEntity {
+
+    @Column(name="EDITED_MANUALLY") @Getter @Setter
+    private boolean editedManually; // FlyWay einbauen um das hier zur DB hinzuzufügen
 
 }
