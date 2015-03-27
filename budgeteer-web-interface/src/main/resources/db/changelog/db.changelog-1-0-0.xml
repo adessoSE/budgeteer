@@ -2,6 +2,14 @@
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.3.xsd">
+
+    <changeSet id="issue#75" author="ehhc">
+        <preConditions onFail="MARK_RAN">
+            <not><tableExists tableName="BUDGET"/></not>
+        </preConditions>
+        <createSequence sequenceName="SEQ_BUDGET_ID" startValue="1"/>
+    </changeSet>
+
     <changeSet author="ehhc" id="initial-database-setup-1">
         <!-- Take care that the initial-setup is marked as ran if the budget-table already exsists -->
         <preConditions onFail="MARK_RAN">

@@ -17,6 +17,10 @@
                columnName="EDITED_MANUALLY"
                defaultValueBoolean="false" />
    </changeSet>
+    
+    <changeSet id="issue#73" author="ehhc">
+        <createSequence sequenceName="SEQ_CONTRACT_FIELD_ID" startValue="1"/>
+    </changeSet>
 
 
 </databaseChangeLog>
