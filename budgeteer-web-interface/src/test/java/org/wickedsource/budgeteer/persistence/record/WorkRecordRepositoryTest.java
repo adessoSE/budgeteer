@@ -576,4 +576,28 @@ public class WorkRecordRepositoryTest extends IntegrationTestTemplate {
         Assert.assertEquals(2, records.size());
 
     }
+
+    @Test
+    @DatabaseSetup("aggregateByMonthForBudgetsAndContract.xml")
+    @DatabaseTearDown(value = "aggregateByMonthForBudgetsAndContract.xml", type = DatabaseOperation.DELETE_ALL)
+    public void testAggregateByMonthForBudgetsAndContract() throws ParseException {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        List<MonthlyAggregatedRecordBean> records = repository.aggregateByMonthAndContract(1l, formatter.parse("2014-12-01"));
+        Assert.assertEquals(3, records.size());
+        Assert.assertEquals(40000, records.get(0).getValueInCents());
+        Assert.assertEquals(40050, records.get(1).getValueInCents());
+        Assert.assertEquals(40050, records.get(2).getValueInCents());
+    }
+
+    @Test
+    @DatabaseSetup("aggregateByMonthForBudgetsAndContract.xml")
+    @DatabaseTearDown(value = "aggregateByMonthForBudgetsAndContract.xml", type = DatabaseOperation.DELETE_ALL)
+    public void testGetRemainingBudgetForContract() throws ParseException {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        List<MonthlyAggregatedRecordBean> records = repository.getRemainingBudgetForContract(1l, formatter.parse("2014-12-01"));
+        Assert.assertEquals(3, records.size());
+        Assert.assertEquals(100000 - 40000, records.get(0).getValueInCents());
+        Assert.assertEquals(100000 - 40050, records.get(1).getValueInCents());
+        Assert.assertEquals(100000 - 40050, records.get(2).getValueInCents());
+    }
 }

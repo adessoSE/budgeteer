@@ -2,6 +2,7 @@ package org.wickedsource.budgeteer.persistence.budget;
 
 import lombok.Data;
 import org.joda.money.Money;
+import org.wickedsource.budgeteer.persistence.contract.ContractEntity;
 import org.wickedsource.budgeteer.persistence.person.DailyRateEntity;
 import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
 import org.wickedsource.budgeteer.persistence.record.PlanRecordEntity;
@@ -47,5 +48,9 @@ public class BudgetEntity {
 
     @Column(nullable = false, name = "IMPORT_KEY")
     private String importKey;
+
+    @ManyToOne
+    @JoinColumn(name="CONTRACT_ID")
+    private ContractEntity contract;
 
 }

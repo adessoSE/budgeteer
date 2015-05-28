@@ -7,6 +7,7 @@ import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.persistence.record.*;
 import org.wickedsource.budgeteer.service.DateUtil;
 import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
+import org.wickedsource.budgeteer.web.pages.contract.details.ContractDetailChart.ContractDetailBudgetChart;
 
 import javax.transaction.Transactional;
 import java.util.*;
@@ -432,5 +433,35 @@ public class StatisticsService {
         fillInMissingMonths(numberOfMonths, burnedStats, targetAndActual);
 
         return targetAndActual;
+    }
+
+    public ContractDetailBudgetChart getMonthlyBudgetBurnedForContract(long contractId, int numberOfMonths) {
+        Date startDate = dateUtil.monthsAgo(numberOfMonths);
+        ContractDetailBudgetChart result = new ContractDetailBudgetChart();
+        List<MonthlyAggregatedRecordBean> burnedMoneyOfBudgets = workRecordRepository.aggregateByMonthAndContract(contractId, startDate);
+        fillMissingMonths(numberOfMonths, burnedMoneyOfBudgets, result.getBurnedMoneyAllBudgets());
+
+        fillMissingMonths(numberOfMonths, workRecordRepository.getRemainingBudgetForContract(contractId, startDate), result.getRemainingTotalBudget());
+        return result;
+    }
+
+    protected void fillMissingMonths(int numberOfMonths, List<MonthlyAggregatedRecordBean> bean, List<Money> resultList){
+        Date startDate = dateUtil.monthsAgo(numberOfMonths);
+        Calendar c = Calendar.getInstance();
+        c.setTime(startDate);
+        for(int i = 0; i < numberOfMonths; i++){
+            boolean monthFound = false;
+            for(MonthlyAggregatedRecordBean record : bean){
+                if(record.getMonth() == c.get(Calendar.MONTH) && record.getYear() == c.get(Calendar.YEAR)){
+                    resultList.add(MoneyUtil.createMoneyFromCents(record.getValueInCents()));
+                    monthFound = true;
+                    break;
+                }
+            }
+            if(!monthFound){
+                resultList.add(MoneyUtil.createMoneyFromCents(0));
+            }
+            c.add(Calendar.MONTH, 1);
+        }
     }
 }

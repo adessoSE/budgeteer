@@ -37,4 +37,7 @@ public class ProjectEntity implements Serializable {
     @Column(nullable = true)
     @Temporal(TemporalType.DATE)
     private Date projectEnd;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "project")
+    private List<ProjectContractField> contractFields;
 }

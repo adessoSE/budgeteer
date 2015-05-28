@@ -10,7 +10,7 @@ import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 @Service
@@ -49,6 +49,7 @@ public class NotificationService {
         if(planRecordRepository.countByProjectId(projectId) == 0){
             notifications.add(new EmptyPlanRecordsNotification());
         }
+        notifications.addAll(budgetRepository.getMissingContractForProject(projectId));
         notifications.addAll(missingDailyRateMapper.map(workRecordRepository.getMissingDailyRatesForProject(projectId)));
         notifications.addAll(missingBudgetTotalNotificationMapper.map(budgetRepository.getMissingBudgetTotalsForProject(projectId)));
         return notifications;
@@ -72,12 +73,17 @@ public class NotificationService {
      * @return list of notifications concerning the given budget.
      */
     public List<Notification> getNotificationsForBudget(long budgetId) {
+        List<Notification> result = new LinkedList<Notification>();
+
         MissingBudgetTotalBean missingBudgetTotalForBudget = budgetRepository.getMissingBudgetTotalForBudget(budgetId);
         if (missingBudgetTotalForBudget != null) {
-            return Arrays.asList(missingBudgetTotalNotificationMapper.map(missingBudgetTotalForBudget));
-        } else {
-            return new ArrayList<Notification>();
+            result.add(missingBudgetTotalNotificationMapper.map(missingBudgetTotalForBudget));
         }
+        MissingContractForBudgetNotification missingContract= budgetRepository.getMissingContractForBudget(budgetId);
+        if(missingContract!= null){
+            result.add(missingContract);
+        }
+        return result;
     }
 
 }

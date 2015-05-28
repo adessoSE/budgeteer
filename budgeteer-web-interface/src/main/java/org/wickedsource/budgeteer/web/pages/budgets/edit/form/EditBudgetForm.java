@@ -5,7 +5,9 @@ import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -14,6 +16,8 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.service.budget.BudgetService;
 import org.wickedsource.budgeteer.service.budget.EditBudgetData;
+import org.wickedsource.budgeteer.service.contract.ContractBaseData;
+import org.wickedsource.budgeteer.service.contract.ContractService;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.ClassAwareWrappingModel;
 import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
@@ -31,6 +35,9 @@ public class EditBudgetForm extends Form<EditBudgetData> {
 
     @SpringBean
     private BudgetService service;
+
+    @SpringBean
+    private ContractService contractService;
 
     public EditBudgetForm(String id){
         super(id, new ClassAwareWrappingModel<EditBudgetData>(Model.of(new EditBudgetData(BudgeteerSession.get().getProjectId())), EditBudgetData.class));
@@ -54,6 +61,19 @@ public class EditBudgetForm extends Form<EditBudgetData> {
         MoneyTextField totalField = new MoneyTextField("total", model(from(getModel()).getTotal()));
         totalField.setRequired(true);
         add(totalField);
+        add(new DropDownChoice<ContractBaseData>("contract", model(from(getModel()).getContract()),
+                contractService.getContractsByProject(BudgeteerSession.get().getProjectId()),
+                new IChoiceRenderer<ContractBaseData>() {
+            @Override
+            public Object getDisplayValue(ContractBaseData object) {
+                return object == null ? getString("no.contract") : object.getContractName();
+            }
+
+            @Override
+            public String getIdValue(ContractBaseData object, int index) {
+                return object != null ? "" + object.getContractId() : "";
+            }
+        }));
         add(createTagsList("tagsList", new BudgetTagsModel(BudgeteerSession.get().getProjectId()), tagsField));
         add(new NotificationListPanel("notificationList", new BudgetNotificationsModel(getModel().getObject().getId())));
     }

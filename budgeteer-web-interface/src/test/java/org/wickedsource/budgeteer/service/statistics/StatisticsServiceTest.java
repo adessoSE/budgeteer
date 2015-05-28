@@ -3,14 +3,17 @@ package org.wickedsource.budgeteer.service.statistics;
 import org.joda.money.Money;
 import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.persistence.record.*;
 import org.wickedsource.budgeteer.service.DateProvider;
+import org.wickedsource.budgeteer.service.DateUtil;
 import org.wickedsource.budgeteer.service.ServiceTestTemplate;
 import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -431,4 +434,29 @@ public class StatisticsServiceTest extends ServiceTestTemplate {
         Assert.assertEquals(MoneyUtil.createMoneyFromCents(400000l), actualSeries2.getValues().get(3));
         Assert.assertEquals(MoneyUtil.createMoneyFromCents(500000l), actualSeries2.getValues().get(4));
     }
+
+
+    @Test
+    public void testFillMissingMonths() throws ParseException {
+        SimpleDateFormat format1 = new SimpleDateFormat("dd.MM.yyyy");
+        List<MonthlyAggregatedRecordBean> beans = new LinkedList<MonthlyAggregatedRecordBean>();
+        beans.add(new MonthlyAggregatedRecordBean(2015, 1, 15d, 100000));
+        beans.add(new MonthlyAggregatedRecordBean(2015, 2, 15d, 200000));
+        beans.add(new MonthlyAggregatedRecordBean(2015, 4, 15d, 400000));
+        beans.add(new MonthlyAggregatedRecordBean(2015, 5, 15d, 500000));
+
+        LinkedList<Money> testList = new LinkedList<Money>();
+        DateUtil dateUtil = Mockito.mock(DateUtil.class);
+        when(dateProvider.currentDate()).thenReturn(format.parse("01.05.2015"));
+        service.fillMissingMonths(5, beans, testList);
+
+        Assert.assertEquals(5, testList.size());
+        Assert.assertEquals(MoneyUtil.createMoneyFromCents(0), testList.get(0));
+        Assert.assertEquals(MoneyUtil.createMoneyFromCents(100000), testList.get(1));
+        Assert.assertEquals(MoneyUtil.createMoneyFromCents(200000), testList.get(2));
+        Assert.assertEquals(MoneyUtil.createMoneyFromCents(0), testList.get(3));
+        Assert.assertEquals(MoneyUtil.createMoneyFromCents(400000), testList.get(4));
+
+    }
+
 }

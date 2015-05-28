@@ -20,4 +20,6 @@
 
     <mockito:mock id="personRepository" class="org.wickedsource.budgeteer.persistence.person.PersonRepository"/>
 
+    <mockito:mock id="contractRepository" class="org.wickedsource.budgeteer.persistence.contract.ContractRepository"/>
+
 </beans>

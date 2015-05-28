@@ -11,9 +11,9 @@ import org.wickedsource.budgeteer.service.budget.BudgetService;
 import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.charts.BudgeteerChartTheme;
 import org.wickedsource.budgeteer.web.components.confirm.ConfirmationForm;
+import org.wickedsource.budgeteer.web.pages.base.basepage.BasePage;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.Breadcrumb;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
-import org.wickedsource.budgeteer.web.pages.budgets.BudgetBasePage;
 import org.wickedsource.budgeteer.web.pages.budgets.BudgetNameModel;
 import org.wickedsource.budgeteer.web.pages.budgets.details.chart.PeopleDistributionChart;
 import org.wickedsource.budgeteer.web.pages.budgets.details.chart.PeopleDistributionChartModel;
@@ -27,28 +27,28 @@ import org.wickedsource.budgeteer.web.pages.budgets.weekreport.single.SingleBudg
 import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 
 @Mount("budgets/details/${id}")
-public class BudgetDetailsPage extends BudgetBasePage {
+public class BudgetDetailsPage extends BasePage {
 
     @SpringBean
     private BudgetService budgetService;
 
     public BudgetDetailsPage(PageParameters parameters) {
         super(parameters);
-        add(new BudgetHighlightsPanel("highlightsPanel", new BudgetHighlightsModel(getBudgetId())));
-        add(new PeopleDistributionChart("distributionChart", new PeopleDistributionChartModel(getBudgetId()), new BudgeteerChartTheme()));
-        add(new BookmarkablePageLink<SingleBudgetWeekReportPage>("weekReportLink1", SingleBudgetWeekReportPage.class, SingleBudgetWeekReportPage.createParameters(getBudgetId())));
-        add(new BookmarkablePageLink<SingleBudgetWeekReportPage>("weekReportLink2", SingleBudgetWeekReportPage.class, SingleBudgetWeekReportPage.createParameters(getBudgetId())));
-        add(new BookmarkablePageLink<SingleBudgetMonthReportPage>("monthReportLink1", SingleBudgetMonthReportPage.class, SingleBudgetMonthReportPage.createParameters(getBudgetId())));
-        add(new BookmarkablePageLink<SingleBudgetMonthReportPage>("monthReportLink2", SingleBudgetMonthReportPage.class, SingleBudgetMonthReportPage.createParameters(getBudgetId())));
-        add(new BookmarkablePageLink<BudgetHoursPage>("hoursLink1", BudgetHoursPage.class, BudgetHoursPage.createParameters(getBudgetId())));
-        add(new BookmarkablePageLink<BudgetHoursPage>("hoursLink2", BudgetHoursPage.class, BudgetHoursPage.createParameters(getBudgetId())));
+        add(new BudgetHighlightsPanel("highlightsPanel", new BudgetHighlightsModel(getParameterId())));
+        add(new PeopleDistributionChart("distributionChart", new PeopleDistributionChartModel(getParameterId()), new BudgeteerChartTheme()));
+        add(new BookmarkablePageLink<SingleBudgetWeekReportPage>("weekReportLink1", SingleBudgetWeekReportPage.class, createParameters(getParameterId())));
+        add(new BookmarkablePageLink<SingleBudgetWeekReportPage>("weekReportLink2", SingleBudgetWeekReportPage.class, createParameters(getParameterId())));
+        add(new BookmarkablePageLink<SingleBudgetMonthReportPage>("monthReportLink1", SingleBudgetMonthReportPage.class, createParameters(getParameterId())));
+        add(new BookmarkablePageLink<SingleBudgetMonthReportPage>("monthReportLink2", SingleBudgetMonthReportPage.class, createParameters(getParameterId())));
+        add(new BookmarkablePageLink<BudgetHoursPage>("hoursLink1", BudgetHoursPage.class, createParameters(getParameterId())));
+        add(new BookmarkablePageLink<BudgetHoursPage>("hoursLink2", BudgetHoursPage.class, createParameters(getParameterId())));
         add(createEditLink("editLink1"));
         add(createEditLink("editLink2"));
 
         Form deleteForm = new ConfirmationForm("deleteForm", this, "confirmation.delete") {
             @Override
             public void onSubmit() {
-                budgetService.deleteBudget(getBudgetId());
+                budgetService.deleteBudget(getParameterId());
                 setResponsePage(BudgetsOverviewPage.class);
             }
         };
@@ -61,7 +61,7 @@ public class BudgetDetailsPage extends BudgetBasePage {
         return new Link(id) {
             @Override
             public void onClick() {
-                WebPage page = new EditBudgetPage(EditBudgetPage.createParameters(getBudgetId()), BudgetDetailsPage.class, getPageParameters());
+                WebPage page = new EditBudgetPage(BasePage.createParameters(getParameterId()), BudgetDetailsPage.class, getPageParameters());
                 setResponsePage(page);
             }
         };
@@ -70,7 +70,7 @@ public class BudgetDetailsPage extends BudgetBasePage {
     @Override
     protected BreadcrumbsModel getBreadcrumbsModel() {
         BreadcrumbsModel model = new BreadcrumbsModel(DashboardPage.class, BudgetsOverviewPage.class);
-        model.addBreadcrumb(new Breadcrumb(BudgetDetailsPage.class, getPageParameters(), new BudgetNameModel(getBudgetId())));
+        model.addBreadcrumb(new Breadcrumb(BudgetDetailsPage.class, getPageParameters(), new BudgetNameModel(getParameterId())));
         return model;
     }
 

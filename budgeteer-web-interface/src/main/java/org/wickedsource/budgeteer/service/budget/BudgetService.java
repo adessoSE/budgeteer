@@ -7,17 +7,21 @@ import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.persistence.budget.BudgetEntity;
 import org.wickedsource.budgeteer.persistence.budget.BudgetRepository;
 import org.wickedsource.budgeteer.persistence.budget.BudgetTagEntity;
+import org.wickedsource.budgeteer.persistence.contract.ContractEntity;
+import org.wickedsource.budgeteer.persistence.contract.ContractRepository;
 import org.wickedsource.budgeteer.persistence.person.DailyRateRepository;
 import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
 import org.wickedsource.budgeteer.persistence.project.ProjectRepository;
 import org.wickedsource.budgeteer.persistence.record.PlanRecordRepository;
 import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
 import org.wickedsource.budgeteer.service.UnknownEntityException;
+import org.wickedsource.budgeteer.service.contract.ContractDataMapper;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 
 @Service
 @Transactional
@@ -40,6 +44,12 @@ public class BudgetService {
 
     @Autowired
     private ProjectRepository projectRepository;
+
+    @Autowired
+    private ContractRepository contractRepository;
+
+    @Autowired
+    private ContractDataMapper contractDataMapper;
 
     /**
      * Loads all Budgets that the given user is qualified for and returns base data about them.
@@ -99,6 +109,7 @@ public class BudgetService {
         data.setTags(mapEntitiesToTags(entity.getTags()));
         data.setAvgDailyRate(toMoneyNullsafe(avgDailyRateInCents));
         data.setUnplanned(entity.getTotal().minus(toMoneyNullsafe(plannedBudgetInCents)));
+        data.setContractName(entity.getContract() == null ? null : entity.getContract().getName() );
         return data;
     }
 
@@ -170,6 +181,7 @@ public class BudgetService {
         data.setTitle(budget.getName());
         data.setTags(mapEntitiesToTags(budget.getTags()));
         data.setImportKey(budget.getImportKey());
+        data.setContract(contractDataMapper.map(budget.getContract()));
         return data;
     }
 
@@ -192,6 +204,12 @@ public class BudgetService {
         budget.setName(data.getTitle());
         budget.getTags().clear();
         budget.getTags().addAll(mapTagsToEntities(data.getTags(), budget));
+        if(data.getContract() == null) {
+            budget.setContract(null);
+        } else {
+            ContractEntity contractEntity = contractRepository.findOne(data.getContract().getContractId());
+            budget.setContract(contractEntity);
+        }
         budgetRepository.save(budget);
     }
 

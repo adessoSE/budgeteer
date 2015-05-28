@@ -180,4 +180,14 @@ public interface WorkRecordRepository extends CrudRepository<WorkRecordEntity, L
 
     @Query("select wr from WorkRecordEntity wr where wr.budget.project = :project AND wr.date >= :start and wr.date <= :end")
     List<WorkRecordEntity> findByProjectAndDateRange(@Param("project")ProjectEntity project, @Param("start") Date start, @Param("end") Date end);
+
+    @Query("select new org.wickedsource.budgeteer.persistence.record.MonthlyAggregatedRecordBean(r.year, r.month, sum(r.minutes) / 60.0, " +
+            "(select sum(((wr2.minutes * wr2.dailyRate)/ 60 / 8)) from WorkRecordEntity wr2 where wr2.budget.contract.id = :contractId AND (wr2.year < r.year OR (wr2.year = r.year AND wr2.month <= r.month)))" +
+            " ) from WorkRecordEntity r join r.budget b where b.contract.id=:contractId and r.date >= :startDate  group by r.year, r.month order by r.year, r.month")
+    List<MonthlyAggregatedRecordBean> aggregateByMonthAndContract(@Param("contractId")long contractId, @Param("startDate") Date startDate);
+
+    @Query("select new org.wickedsource.budgeteer.persistence.record.MonthlyAggregatedRecordBean(r.year, r.month, 0.0 , " +
+            "(b.contract.budget - (select sum(((wr2.minutes * wr2.dailyRate)/ 60 / 8)) from WorkRecordEntity wr2 where wr2.budget.contract.id = :contractId AND (wr2.year < r.year OR (wr2.year = r.year AND wr2.month <= r.month))))" +
+            ") from WorkRecordEntity r join r.budget b where b.contract.id=:contractId and r.date >= :startDate group by r.year, r.month, b.contract.budget order by r.year, r.month, b.contract.budget")
+    List<MonthlyAggregatedRecordBean> getRemainingBudgetForContract(@Param("contractId")long contractId, @Param("startDate") Date startDate);
 }
