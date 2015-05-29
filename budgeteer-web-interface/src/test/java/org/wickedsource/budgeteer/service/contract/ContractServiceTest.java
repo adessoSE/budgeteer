@@ -123,6 +123,16 @@ public class ContractServiceTest{
         assertEquals(333, savedContract.getYear());
         assertEquals(ContractEntity.ContractType.T_UND_M, savedContract.getType());
         assertEquals(6, savedContract.getContractAttributes().size());
+        for (int i = 0; i < 6; i++) {
+            boolean found = false;
+            for(DynamicAttributeField field : savedContract.getContractAttributes()){
+                if(field.getName().equals(field.getValue()) && field.getValue().equals("test" + i)){
+                    found = true;
+                    break;
+                }
+            }
+            assertTrue(found);
+        }
         assertEquals(1, savedContract.getBelongingBudgets().size());
         assertEquals(6, projectRepository.findOne(savedContract.getProjectId()).getContractFields().size());
     }
@@ -169,6 +179,19 @@ public class ContractServiceTest{
         }
         assertEquals(0, savedContract.getBelongingBudgets().size());
         assertEquals(7, projectRepository.findOne(savedContract.getProjectId()).getContractFields().size());
+    }
+
+    @Test
+    @DatabaseSetup("contractTest.xml")
+    @DatabaseTearDown(value = "contractTest.xml", type = DatabaseOperation.DELETE_ALL)
+    public void testGetEmptyContractModel() {
+        ContractBaseData baseData = service.getEmptyContractModel(1);
+        assertEquals(0, baseData.getContractAttributes().size());
+
+        baseData = service.getEmptyContractModel(3);
+        assertEquals(2, baseData.getContractAttributes().size());
+        assertEquals("test0", baseData.getContractAttributes().get(0).getName());
+        assertEquals("test1", baseData.getContractAttributes().get(1).getName());
     }
 
     @Test
