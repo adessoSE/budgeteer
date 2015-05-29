@@ -16,8 +16,8 @@ public class ContractFieldEntity implements Serializable{
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_CONTRACT_FIELD_ID")
     private long id;
 
-    @ManyToOne()
-    @JoinColumn(name = "CONTRACT_FIELD")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "PROJECT_CONTRACT_FIELD")
     private ProjectContractField field;
 
     @Column(name="CONTRACT_FIELD_VALUE")

@@ -9,7 +9,7 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ContractFieldData implements Serializable{
+public class DynamicAttributeField implements Serializable{
     private String name;
     private String value;
 }

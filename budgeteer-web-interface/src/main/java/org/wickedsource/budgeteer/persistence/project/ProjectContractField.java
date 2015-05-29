@@ -19,10 +19,33 @@ public class ProjectContractField implements Serializable{
     @GeneratedValue()
     private long id;
 
-    @Column(name="FIELD_NAME")
+    @Column(name="FIELD_NAME", nullable = false)
     private String fieldName;
 
     @ManyToOne
-    @JoinColumn(name = "PROJECT_ID")
+    @JoinColumn(name = "PROJECT_ID", nullable = false)
     private ProjectEntity project;
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ProjectContractField)) return false;
+
+        ProjectContractField that = (ProjectContractField) o;
+
+        if (id != that.id) return false;
+        if (!fieldName.equals(that.fieldName)) return false;
+        if (!(project.getId() == that.project.getId())) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + fieldName.hashCode();
+        result = 31 * result + (int) project.getId();
+        return result;
+    }
 }

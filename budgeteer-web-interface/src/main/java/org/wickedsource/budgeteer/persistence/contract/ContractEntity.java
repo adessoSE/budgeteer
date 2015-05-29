@@ -31,7 +31,7 @@ public class ContractEntity implements Serializable {
     @JoinColumn(name = "PROJECT_ID")
     private ProjectEntity project;
 
-    @OneToMany(orphanRemoval = true, fetch=FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
     @JoinColumn(name="CONTRACT_ID")
     private List<ContractFieldEntity> contractFields = new LinkedList<ContractFieldEntity>();
 
@@ -48,6 +48,6 @@ public class ContractEntity implements Serializable {
     @Enumerated(EnumType.ORDINAL)
     private ContractType type;
 
-    @OneToMany(mappedBy="contract", fetch = FetchType.EAGER)
-    private List<BudgetEntity> budgets;
+    @OneToMany(mappedBy="contract")
+    private List<BudgetEntity> budgets = new LinkedList<BudgetEntity>();
 }

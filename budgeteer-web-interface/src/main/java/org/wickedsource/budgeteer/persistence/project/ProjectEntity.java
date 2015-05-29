@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "PROJECT",
@@ -38,6 +39,6 @@ public class ProjectEntity implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date projectEnd;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "project")
-    private List<ProjectContractField> contractFields;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "project", fetch = FetchType.EAGER)
+    private Set<ProjectContractField> contractFields;
 }

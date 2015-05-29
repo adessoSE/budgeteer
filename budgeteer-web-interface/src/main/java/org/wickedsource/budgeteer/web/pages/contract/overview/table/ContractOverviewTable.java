@@ -10,8 +10,8 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.persistence.contract.ContractEntity;
 import org.wickedsource.budgeteer.service.contract.ContractBaseData;
-import org.wickedsource.budgeteer.service.contract.ContractFieldData;
 import org.wickedsource.budgeteer.service.contract.ContractService;
+import org.wickedsource.budgeteer.service.contract.DynamicAttributeField;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.components.dataTable.DataTableBehavior;
 import org.wickedsource.budgeteer.web.pages.contract.details.ContractDetailsPage;
@@ -45,9 +45,9 @@ public class ContractOverviewTable extends Panel{
                 item.add(new Label("internalNumber", model(from(item.getModelObject()).getInternalNumber())));
                 item.add(new Label("year", model(from(item.getModelObject()).getYear())));
                 item.add(new EnumLabel<ContractEntity.ContractType>("type", model(from(item.getModelObject()).getType())));
-                item.add(new ListView<ContractFieldData>("contractRow", model(from(item.getModelObject()).getContractAttributes())) {
+                item.add(new ListView<DynamicAttributeField>("contractRow", model(from(item.getModelObject()).getContractAttributes())) {
                     @Override
-                    protected void populateItem(ListItem<ContractFieldData> item) {
+                    protected void populateItem(ListItem<DynamicAttributeField> item) {
                         item.add(new Label("contractRowText", item.getModelObject().getValue()));
                     }
                 });

@@ -27,14 +27,14 @@ public class ContractDataMapper extends AbstractMapper<ContractEntity, ContractB
         result.setType(entity.getType());
         result.setYear(entity.getYear());
 
-        Map<String, ContractFieldData> contractAttributes = new HashMap<String, ContractFieldData>();
+        Map<String, DynamicAttributeField> contractAttributes = new HashMap<String, DynamicAttributeField>();
         for(ProjectContractField projectContractField:  entity.getProject().getContractFields()){
-            contractAttributes.put(projectContractField.getFieldName(), new ContractFieldData(projectContractField.getFieldName(), ""));
+            contractAttributes.put(projectContractField.getFieldName(), new DynamicAttributeField(projectContractField.getFieldName(), ""));
         }
         for(ContractFieldEntity fieldEntity : entity.getContractFields()){
-            contractAttributes.put(fieldEntity.getField().getFieldName(), new ContractFieldData(fieldEntity.getField().getFieldName(), fieldEntity.getValue()));
+            contractAttributes.put(fieldEntity.getField().getFieldName(), new DynamicAttributeField(fieldEntity.getField().getFieldName(), fieldEntity.getValue()));
         }
-        result.setContractAttributes(new ArrayList<ContractFieldData>(contractAttributes.values()));
+        result.setContractAttributes(new ArrayList<DynamicAttributeField>(contractAttributes.values()));
 
         result.setBelongingBudgets(new LinkedList<BudgetBaseData>());
         for(BudgetEntity budgetEntity : entity.getBudgets()){

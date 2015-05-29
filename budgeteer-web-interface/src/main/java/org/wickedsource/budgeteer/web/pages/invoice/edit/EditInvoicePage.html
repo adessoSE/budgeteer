@@ -10,7 +10,7 @@
                 <div wicket:id="feedback"></div>
                 <div class="box box-primary">
                     <div class="box-header" style="cursor: move;">
-                        <h3 class="box-title">Basic information of the contract</h3>
+                        <h3 class="box-title">Basic information of the invoice</h3>
                         <div class="box-tools pull-right">
                             <span class="btn btn-default btn-sm" data-widget="collapse">
                                 <i class="fa fa-minus"></i>
@@ -19,24 +19,32 @@
                     </div>
                     <div class="box-body">
                         <div class="form-group">
-                            <label for="contractName"><wicket:message key="page.contract.title">Contract title</wicket:message></label>
+                            <label for="invoiceName"><wicket:message key="page.invoice.title">Invoice title</wicket:message></label>
+                            <input wicket:id="invoiceName"type="text" name="name" id="invoiceName" class="form-control"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="contractName"><wicket:message key="page.invoice.contract.title">Contract title</wicket:message></label>
                             <input wicket:id="contractName"type="text" name="name" id="contractName" class="form-control"/>
                         </div>
                         <div class="form-group">
-                            <label for="internalNumber"><wicket:message key="page.contract.internalNumber">Internal-number</wicket:message></label>
+                            <label for="internalNumber"><wicket:message key="page.invoice.internalNumber">Internal-number</wicket:message></label>
                             <input wicket:id="internalNumber"type="text" name="name" id="internalNumber" class="form-control"/>
                         </div>
                         <div class="form-group">
-                            <label for="year"><wicket:message key="page.contract.year">Year of the contract</wicket:message></label>
+                            <label for="year"><wicket:message key="page.invoice.year">Year of the contract</wicket:message></label>
                             <input wicket:id="year" style="width: 100%;" type="number" step="1" min="2000" class="form-control" id="year"/>
                         </div>
                         <div class="form-group">
-                            <label><wicket:message key="page.contract.type">Type of the contract</wicket:message></label>
-                            <select wicket:id="type" class="form-control"/>
+                            <label for="month"><wicket:message key="page.invoice.month">Month of the contract</wicket:message></label>
+                            <input wicket:id="month" style="width: 100%;"  type="number" step="1" class="form-control" id="month"/>
                         </div>
                         <div class="form-group">
-                            <label for="contractName"><wicket:message key="page.contract.budget">Budget</wicket:message></label>
-                            <input wicket:id="budget" style="width: 100%;" type="number" step="0.01" class="form-control"/>
+                            <label for="sum"><wicket:message key="page.invoice.sum">Sum</wicket:message></label>
+                            <input wicket:id="sum" style="width: 100%;" type="number" step="0.01" class="form-control" id="sum"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="paid"><wicket:message key="page.incoice.paid">Paid</wicket:message></label>
+                            <input wicket:id="paid" style="width: 100%;" type="checkbox" class="form-control" id="paid"/>
                         </div>
                     </div>
                 </div>
@@ -51,7 +59,7 @@
                     </div>
                     <div class="box-body">
                         <div wicket:id="attributeTable" style="width: 100%;">
-                            <div class="form-group" wicket:id="contractAttributes">
+                            <div class="form-group" wicket:id="invoiceAttributes">
                                 <label wicket:id="attributeTitle" />
                                 <input wicket:id="attributeValue" type="text" class="form-control"/>
                             </div>
@@ -60,7 +68,7 @@
                 </div>
                 <div class="box box-primary">
                     <div class="box-header" style="cursor: move;">
-                        <h3 class="box-title"><wicket:message key="page.contract.new.attribute">Edit Contract Details</wicket:message></h3>
+                        <h3 class="box-title"><wicket:message key="page.invoice.new.attribute">Edit Contract Details</wicket:message></h3>
                         <div class="box-tools pull-right">
                             <span class="btn btn-default btn-sm" data-widget="collapse">
                                 <i class="fa fa-minus"></i>
@@ -69,7 +77,7 @@
                     </div>
                     <div class="box-body">
                         <span for="attribute_name">
-                            <wicket:message key="page.contract.new.attribute.name.of.attribute">Edit Contract Details</wicket:message>
+                            <wicket:message key="page.invoice.new.attribute.name.of.attribute">Edit Contract Details</wicket:message>
                         </span>
                         <input  id="attribute_name" wicket:id="nameOfNewAttribute" type="text"/>
                         <Button wicket:id="addAttribute"><i class="fa fa-fw fa-plus"></i></Button>

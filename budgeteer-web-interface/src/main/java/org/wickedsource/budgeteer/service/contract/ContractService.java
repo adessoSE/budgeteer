@@ -14,6 +14,7 @@ import org.wickedsource.budgeteer.web.pages.contract.overview.table.ContractOver
 import javax.transaction.Transactional;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @Transactional
@@ -51,9 +52,9 @@ public class ContractService {
     public ContractBaseData getEmptyContractModel(long projectId){
         ProjectEntity project = projectRepository.findOne(projectId);
         ContractBaseData model = new ContractBaseData(projectId);
-        List<ProjectContractField> fields = project.getContractFields();
+        Set<ProjectContractField> fields = project.getContractFields();
         for(ProjectContractField field : fields){
-            model.getContractAttributes().add(new ContractFieldData(field.getFieldName(), ""));
+            model.getContractAttributes().add(new DynamicAttributeField(field.getFieldName(), ""));
         }
         return model;
     }
@@ -75,7 +76,7 @@ public class ContractService {
         contractEntity.setType(contractBaseData.getType());
 
         //update additional information of the current contract
-        for(ContractFieldData fields : contractBaseData.getContractAttributes()){
+        for(DynamicAttributeField fields : contractBaseData.getContractAttributes()){
             if(fields.getValue() != null) {
                 boolean attributeFound = false;
                 //see, if the attribute already exists -> Update the value
@@ -92,7 +93,6 @@ public class ContractService {
                     ProjectContractField projectContractField = projectRepository.findContractFieldByName(contractBaseData.getProjectId(), fields.getName().trim());
                     if (projectContractField == null) {
                         projectContractField = new ProjectContractField(0, fields.getName().trim(), project);
-                        project.getContractFields().add(projectContractField);
                     }
                     ContractFieldEntity field = new ContractFieldEntity();
                     field.setId(0);
@@ -102,7 +102,6 @@ public class ContractService {
                 }
             }
         }
-        projectRepository.save(project);
         contractRepository.save(contractEntity);
 
         return contractEntity.getId();

@@ -22,12 +22,12 @@ public class ContractBaseData implements Serializable{
     private String internalNumber;
     private int year;
     private ContractEntity.ContractType type;
-    private List<ContractFieldData> contractAttributes;
+    private List<DynamicAttributeField> contractAttributes;
 
     private List<BudgetBaseData> belongingBudgets;
 
     public ContractBaseData(long projectId){
         this.projectId = projectId;
-        contractAttributes = new LinkedList<ContractFieldData>();
+        contractAttributes = new LinkedList<DynamicAttributeField>();
     }
 }
