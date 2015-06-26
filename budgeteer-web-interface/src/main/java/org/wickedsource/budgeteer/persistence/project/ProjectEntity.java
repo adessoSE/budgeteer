@@ -39,6 +39,10 @@ public class ProjectEntity implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date projectEnd;
 
+
+    /**
+     * List of possible dynamic fields that can be used by contracts of this project
+     */
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "project", fetch = FetchType.EAGER)
     private Set<ProjectContractField> contractFields;
 }

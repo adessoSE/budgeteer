@@ -1,18 +1,25 @@
 package org.wickedsource.budgeteer.service.contract;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.wickedsource.budgeteer.persistence.budget.BudgetEntity;
 import org.wickedsource.budgeteer.persistence.contract.ContractEntity;
 import org.wickedsource.budgeteer.persistence.contract.ContractFieldEntity;
+import org.wickedsource.budgeteer.persistence.invoice.InvoiceEntity;
 import org.wickedsource.budgeteer.persistence.project.ProjectContractField;
 import org.wickedsource.budgeteer.service.AbstractMapper;
 import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
+import org.wickedsource.budgeteer.service.invoice.InvoiceBaseData;
+import org.wickedsource.budgeteer.service.invoice.InvoiceDataMapper;
 
 import java.util.*;
 
 @Component
 public class ContractDataMapper extends AbstractMapper<ContractEntity, ContractBaseData>{
+
+    @Autowired
+    private InvoiceDataMapper invoiceDataMapper;
 
     @Override
     public ContractBaseData map(ContractEntity entity) {
@@ -26,6 +33,9 @@ public class ContractDataMapper extends AbstractMapper<ContractEntity, ContractB
         result.setProjectId(entity.getProject().getId());
         result.setType(entity.getType());
         result.setYear(entity.getYear());
+        result.setFileName(entity.getFileName());
+        result.setFile(entity.getFile());
+        result.setLink(entity.getLink());
 
         Map<String, DynamicAttributeField> contractAttributes = new HashMap<String, DynamicAttributeField>();
         for(ProjectContractField projectContractField:  entity.getProject().getContractFields()){
@@ -39,6 +49,11 @@ public class ContractDataMapper extends AbstractMapper<ContractEntity, ContractB
         result.setBelongingBudgets(new LinkedList<BudgetBaseData>());
         for(BudgetEntity budgetEntity : entity.getBudgets()){
             result.getBelongingBudgets().add(new BudgetBaseData(budgetEntity.getId(), budgetEntity.getName()));
+        }
+
+        result.setInvoices(new LinkedList<InvoiceBaseData>());
+        for(InvoiceEntity invoiceEntity: entity.getInvoices()){
+            result.getInvoices().add(invoiceDataMapper.map(invoiceEntity));
         }
 
         return result;

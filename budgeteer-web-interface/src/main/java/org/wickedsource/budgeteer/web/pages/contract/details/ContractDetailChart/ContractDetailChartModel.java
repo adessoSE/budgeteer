@@ -1,4 +1,4 @@
-package org.wickedsource.budgeteer.web.pages.contract.details.ContractDetailChart;
+package org.wickedsource.budgeteer.web.pages.contract.details.contractDetailChart;
 
 
 import lombok.Getter;
@@ -25,7 +25,7 @@ public class ContractDetailChartModel extends LoadableDetachableModel<ContractDe
 
     @Override
     protected ContractDetailBudgetChart load() {
-        return service.getMonthlyBudgetBurnedForContract(contractId, numberOfMonths);
+        return service.getMonthlyBudgetBurnedForContract(contractId, numberOfMonths); //TODO:
     }
 
 }

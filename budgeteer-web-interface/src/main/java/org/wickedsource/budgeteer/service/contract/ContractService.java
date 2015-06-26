@@ -74,10 +74,13 @@ public class ContractService {
         contractEntity.setInternalNumber(contractBaseData.getInternalNumber());
         contractEntity.setYear(contractBaseData.getYear());
         contractEntity.setType(contractBaseData.getType());
+        contractEntity.setLink(contractBaseData.getLink());
+        contractEntity.setFileName(contractBaseData.getFileName());
+        contractEntity.setFile(contractBaseData.getFile());
 
         //update additional information of the current contract
         for(DynamicAttributeField fields : contractBaseData.getContractAttributes()){
-            if(fields.getValue() != null) {
+            if(fields.getValue() != null && !fields.getValue().isEmpty()) {
                 boolean attributeFound = false;
                 //see, if the attribute already exists -> Update the value
                 for (ContractFieldEntity contractFieldEntity : contractEntity.getContractFields()) {
@@ -108,6 +111,6 @@ public class ContractService {
     }
 
     public void deleteContract(long contractId) {
-        //FIXME: TODO:
+        //FIXME:
     }
 }

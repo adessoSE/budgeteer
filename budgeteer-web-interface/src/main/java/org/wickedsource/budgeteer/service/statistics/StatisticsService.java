@@ -7,7 +7,7 @@ import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.persistence.record.*;
 import org.wickedsource.budgeteer.service.DateUtil;
 import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
-import org.wickedsource.budgeteer.web.pages.contract.details.ContractDetailChart.ContractDetailBudgetChart;
+import org.wickedsource.budgeteer.web.pages.contract.details.contractDetailChart.ContractDetailBudgetChart;
 
 import javax.transaction.Transactional;
 import java.util.*;

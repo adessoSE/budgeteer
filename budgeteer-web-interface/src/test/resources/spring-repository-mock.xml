@@ -22,4 +22,6 @@
 
     <mockito:mock id="contractRepository" class="org.wickedsource.budgeteer.persistence.contract.ContractRepository"/>
 
+    <mockito:mock id="invoiceRepository" class="org.wickedsource.budgeteer.persistence.invoice.InvoiceRepository"/>
+
 </beans>

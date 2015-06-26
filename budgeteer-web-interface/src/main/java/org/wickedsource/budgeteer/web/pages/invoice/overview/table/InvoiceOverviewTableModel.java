@@ -16,7 +16,7 @@ public class InvoiceOverviewTableModel implements Serializable{
     public List<String> getHeadline() {
         List<String> result = new LinkedList<String>();
         if(invoices.size() > 0){
-            for(DynamicAttributeField attribute : invoices.get(0).getInvoiceAttributes()){
+            for(DynamicAttributeField attribute : invoices.get(0).getDynamicInvoiceFields()){
                 result.add(attribute.getName());
             }
         }

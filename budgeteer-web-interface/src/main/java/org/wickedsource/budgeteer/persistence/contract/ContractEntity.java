@@ -3,12 +3,14 @@ package org.wickedsource.budgeteer.persistence.contract;
 import lombok.Data;
 import org.joda.money.Money;
 import org.wickedsource.budgeteer.persistence.budget.BudgetEntity;
+import org.wickedsource.budgeteer.persistence.invoice.InvoiceEntity;
 import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name="CONTRACT")
@@ -50,4 +52,25 @@ public class ContractEntity implements Serializable {
 
     @OneToMany(mappedBy="contract")
     private List<BudgetEntity> budgets = new LinkedList<BudgetEntity>();
+
+    @Column(name = "LINK")
+    private String link;
+
+    @Lob @Basic(fetch=FetchType.LAZY)
+    @Column(name = "FILE", length = 5 * 1024 * 1024) // five megabytes
+    private byte[] file;
+
+    @Column(name = "FILE_NAME")
+    private String fileName;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "contract")
+    private List<InvoiceEntity> invoices;
+
+    /**
+     * A list of possible dynamic fields that a invoice that belongs to this contract can use
+     */
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "contract", fetch = FetchType.EAGER)
+    private Set<ContractInvoiceField> invoiceFields;
+
+
 }

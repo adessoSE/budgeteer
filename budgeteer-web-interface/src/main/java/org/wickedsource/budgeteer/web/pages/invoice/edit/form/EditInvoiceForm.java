@@ -77,7 +77,7 @@ public class EditInvoiceForm  extends Form<InvoiceBaseData> {
         table = new WebMarkupContainer("attributeTable");
         table.setOutputMarkupId(true);
         table.setOutputMarkupPlaceholderTag(true);
-        table.add(new ListView<DynamicAttributeField>("invoiceAttributes", model(from(getModelObject()).getInvoiceAttributes())) {
+        table.add(new ListView<DynamicAttributeField>("invoiceAttributes", model(from(getModelObject()).getDynamicInvoiceFields())) {
             @Override
             protected void populateItem(ListItem<DynamicAttributeField> item) {
                 item.add(new Label("attributeTitle", item.getModelObject().getName()));
@@ -92,7 +92,7 @@ public class EditInvoiceForm  extends Form<InvoiceBaseData> {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 if (newAttributeField.getModelObject() != null) {
-                    ((InvoiceBaseData) form.getModelObject()).getInvoiceAttributes().add(new DynamicAttributeField(newAttributeField.getModelObject(), ""));
+                    ((InvoiceBaseData) form.getModelObject()).getDynamicInvoiceFields().add(new DynamicAttributeField(newAttributeField.getModelObject(), ""));
                     target.add(table, newAttributeField, feedbackPanel);
                 } else {
                     this.error(getString("feedback.error.nameEmpty"));

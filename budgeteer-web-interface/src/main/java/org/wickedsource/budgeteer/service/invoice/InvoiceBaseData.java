@@ -24,11 +24,11 @@ public class InvoiceBaseData implements Serializable {
     private int month;
     private boolean paid;
 
-    private List<DynamicAttributeField> invoiceAttributes;
+    private List<DynamicAttributeField> dynamicInvoiceFields;
 
     public InvoiceBaseData(long contractId, String contractName){
         this.contractId = contractId;
         this.contractName = contractName;
-        invoiceAttributes = new LinkedList<DynamicAttributeField>();
+        dynamicInvoiceFields = new LinkedList<DynamicAttributeField>();
     }
 }

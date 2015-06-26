@@ -14,13 +14,14 @@ import org.wickedsource.budgeteer.web.components.confirm.ConfirmationForm;
 import org.wickedsource.budgeteer.web.pages.base.basepage.BasePage;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.Breadcrumb;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
-import org.wickedsource.budgeteer.web.pages.contract.details.ContractDetailChart.ContractDetailChart;
-import org.wickedsource.budgeteer.web.pages.contract.details.ContractDetailChart.ContractDetailChartModel;
 import org.wickedsource.budgeteer.web.pages.contract.details.belongingObject.ContractBelongingObjectsPanel;
+import org.wickedsource.budgeteer.web.pages.contract.details.contractDetailChart.ContractDetailChart;
+import org.wickedsource.budgeteer.web.pages.contract.details.contractDetailChart.ContractDetailChartModel;
 import org.wickedsource.budgeteer.web.pages.contract.details.highlights.ContractHighlightsPanel;
 import org.wickedsource.budgeteer.web.pages.contract.edit.EditContractPage;
 import org.wickedsource.budgeteer.web.pages.contract.overview.ContractOverviewPage;
 import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
+import org.wickedsource.budgeteer.web.pages.invoice.edit.EditInvoicePage;
 
 @Mount("contracts/details/${id}")
 public class ContractDetailsPage extends BasePage {
@@ -43,7 +44,13 @@ public class ContractDetailsPage extends BasePage {
                 setResponsePage(page);
             }
         });
-
+        add(new Link("addInvoiceLink"){
+            @Override
+            public void onClick() {
+                WebPage page = new EditInvoicePage(EditInvoicePage.createNewInvoiceParameters(getParameterId()), ContractDetailsPage.class, getPageParameters());
+                setResponsePage(page);
+            }
+        });
         Form deleteForm = new ConfirmationForm("deleteForm", this, "confirmation.delete") {
             @Override
             public void onSubmit() {

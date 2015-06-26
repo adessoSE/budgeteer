@@ -1,4 +1,4 @@
-package org.wickedsource.budgeteer.web.pages.contract.details.ContractDetailChart;
+package org.wickedsource.budgeteer.web.pages.contract.details.contractDetailChart;
 
 
 import com.googlecode.wickedcharts.highcharts.options.*;

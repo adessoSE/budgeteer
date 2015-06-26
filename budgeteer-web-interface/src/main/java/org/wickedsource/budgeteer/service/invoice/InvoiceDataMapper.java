@@ -1,16 +1,13 @@
 package org.wickedsource.budgeteer.service.invoice;
 
 import org.springframework.stereotype.Component;
+import org.wickedsource.budgeteer.persistence.contract.ContractInvoiceField;
 import org.wickedsource.budgeteer.persistence.invoice.InvoiceEntity;
+import org.wickedsource.budgeteer.persistence.invoice.InvoiceFieldEntity;
 import org.wickedsource.budgeteer.service.AbstractMapper;
 import org.wickedsource.budgeteer.service.contract.DynamicAttributeField;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
-//import org.wickedsource.budgeteer.persistence.invoice.InvoiceFieldEntity;
-//import org.wickedsource.budgeteer.persistence.contract.ContractInvoiceField;
+import java.util.*;
 
 @Component
 public class InvoiceDataMapper extends AbstractMapper<InvoiceEntity, InvoiceBaseData> {
@@ -34,16 +31,13 @@ public class InvoiceDataMapper extends AbstractMapper<InvoiceEntity, InvoiceBase
         result.setMonth(entity.getMonth());
         result.setPaid(entity.isPaid());
 
-//        if(attributeFieldMap == null) {
-//            attributeFieldMap = new HashMap<String, DynamicAttributeField>();
-//            for (ContractInvoiceField contractInvoiceField : entity.getContract().getInvoiceFields()) {
-//                attributeFieldMap.put(contractInvoiceField.getFieldName(), new DynamicAttributeField(contractInvoiceField.getFieldName(), ""));
-//            }
-//        }
-//        for(InvoiceFieldEntity fieldEntity : entity.getInvoiceFields()){
-//            attributeFieldMap.put(fieldEntity.getField().getFieldName(), new DynamicAttributeField(fieldEntity.getField().getFieldName(), fieldEntity.getValue()));
-//        }
-//        result.setInvoiceAttributes(new ArrayList<DynamicAttributeField>(attributeFieldMap.values()));
+        if(attributeFieldMap == null) {
+            attributeFieldMap = new HashMap<String, DynamicAttributeField>();
+        }
+        for(InvoiceFieldEntity fieldEntity : entity.getDynamicFields()){
+            attributeFieldMap.put(fieldEntity.getField().getFieldName(), new DynamicAttributeField(fieldEntity.getField().getFieldName(), fieldEntity.getValue()));
+        }
+        result.setDynamicInvoiceFields(new ArrayList<DynamicAttributeField>(attributeFieldMap.values()));
 
         return result;
     }
@@ -56,17 +50,17 @@ public class InvoiceDataMapper extends AbstractMapper<InvoiceEntity, InvoiceBase
      */
         public List<InvoiceBaseData> map(List<InvoiceEntity> entityList, boolean differentProjects){
             List<InvoiceBaseData> result = new LinkedList<InvoiceBaseData>();
-//            Map<String, DynamicAttributeField> attributeFieldMap = new HashMap<String, DynamicAttributeField>();
-//            if(differentProjects){
-//                for(InvoiceEntity entity : entityList){
-//                    for (ContractInvoiceField contractInvoiceField : entity.getContract().getInvoiceFields()) {
-//                        attributeFieldMap.put(contractInvoiceField.getFieldName(), new DynamicAttributeField(contractInvoiceField.getFieldName(), ""));
-//                    }
-//                }
-//            }
-//            for(InvoiceEntity entity : entityList){
-//                result.add(map(entity, attributeFieldMap));
-//            }
+            Map<String, DynamicAttributeField> attributeFieldMap = new HashMap<String, DynamicAttributeField>();
+            if(differentProjects){
+                for(InvoiceEntity entity : entityList){
+                    for (ContractInvoiceField contractInvoiceField : entity.getContract().getInvoiceFields()) {
+                        attributeFieldMap.put(contractInvoiceField.getFieldName(), new DynamicAttributeField(contractInvoiceField.getFieldName(), ""));
+                    }
+                }
+            }
+            for(InvoiceEntity entity : entityList){
+                result.add(map(entity, attributeFieldMap));
+            }
             return result;
         }
  }

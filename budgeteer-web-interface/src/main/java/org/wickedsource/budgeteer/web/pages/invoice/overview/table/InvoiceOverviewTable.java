@@ -48,7 +48,7 @@ public class InvoiceOverviewTable extends Panel{
                 CheckBox paid = new CheckBox("paid", model(from(item.getModelObject()).isPaid()));
                 paid.setEnabled(false);
                 item.add(paid);
-                item.add(new ListView<DynamicAttributeField>("invoiceRow", model(from(item.getModelObject()).getInvoiceAttributes())) {
+                item.add(new ListView<DynamicAttributeField>("invoiceRow", model(from(item.getModelObject()).getDynamicInvoiceFields())) {
                     @Override
                     protected void populateItem(ListItem<DynamicAttributeField> item) {
                         item.add(new Label("invoiceRowText", item.getModelObject().getValue()));
