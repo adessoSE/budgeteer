@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.joda.money.Money;
 import org.wickedsource.budgeteer.service.contract.DynamicAttributeField;
+import org.wickedsource.budgeteer.web.components.fileUpload.FileUploadModel;
 
 import java.io.Serializable;
 import java.util.LinkedList;
@@ -23,6 +24,8 @@ public class InvoiceBaseData implements Serializable {
     private int year;
     private int month;
     private boolean paid;
+
+    private FileUploadModel fileUploadModel = new FileUploadModel();
 
     private List<DynamicAttributeField> dynamicInvoiceFields;
 

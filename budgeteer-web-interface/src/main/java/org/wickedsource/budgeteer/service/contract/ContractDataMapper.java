@@ -12,6 +12,7 @@ import org.wickedsource.budgeteer.service.AbstractMapper;
 import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
 import org.wickedsource.budgeteer.service.invoice.InvoiceBaseData;
 import org.wickedsource.budgeteer.service.invoice.InvoiceDataMapper;
+import org.wickedsource.budgeteer.web.components.fileUpload.FileUploadModel;
 
 import java.util.*;
 
@@ -33,9 +34,7 @@ public class ContractDataMapper extends AbstractMapper<ContractEntity, ContractB
         result.setProjectId(entity.getProject().getId());
         result.setType(entity.getType());
         result.setYear(entity.getYear());
-        result.setFileName(entity.getFileName());
-        result.setFile(entity.getFile());
-        result.setLink(entity.getLink());
+        result.setFileModel(new FileUploadModel(entity.getFileName(), entity.getFile(), entity.getLink()));
 
         Map<String, DynamicAttributeField> contractAttributes = new HashMap<String, DynamicAttributeField>();
         for(ProjectContractField projectContractField:  entity.getProject().getContractFields()){
@@ -51,9 +50,9 @@ public class ContractDataMapper extends AbstractMapper<ContractEntity, ContractB
             result.getBelongingBudgets().add(new BudgetBaseData(budgetEntity.getId(), budgetEntity.getName()));
         }
 
-        result.setInvoices(new LinkedList<InvoiceBaseData>());
+        result.setBelongingInvoices(new LinkedList<InvoiceBaseData>());
         for(InvoiceEntity invoiceEntity: entity.getInvoices()){
-            result.getInvoices().add(invoiceDataMapper.map(invoiceEntity));
+            result.getBelongingInvoices().add(invoiceDataMapper.map(invoiceEntity));
         }
 
         return result;

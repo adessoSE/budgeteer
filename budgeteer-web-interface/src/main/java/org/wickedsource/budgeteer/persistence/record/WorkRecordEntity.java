@@ -16,6 +16,6 @@ import javax.persistence.Table;
 public class WorkRecordEntity extends RecordEntity {
 
     @Column(name="EDITED_MANUALLY") @Getter @Setter
-    private boolean editedManually; // TODO: FlyWay einbauen um das hier zur DB hinzuzufügen
+    private boolean editedManually;
 
 }

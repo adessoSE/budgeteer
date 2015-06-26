@@ -12,11 +12,14 @@ import org.wickedsource.budgeteer.service.contract.DynamicAttributeField;
 import org.wickedsource.budgeteer.web.pages.invoice.overview.table.InvoiceOverviewTableModel;
 
 import javax.transaction.Transactional;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Set;
 
 @Service
 @Transactional
 public class InvoiceService {
+    private static final SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
 
     @Autowired
     private InvoiceDataMapper mapper;
@@ -64,11 +67,21 @@ public class InvoiceService {
        }
         //Update basic information
         invoiceEntity.setName(invoiceBaseData.getInvoiceName());
-        invoiceEntity.setSum(invoiceBaseData.getSum());
+        invoiceEntity.setInvoiceSum(invoiceBaseData.getSum());
         invoiceEntity.setInternalNumber(invoiceBaseData.getInternalNumber());
         invoiceEntity.setYear(invoiceBaseData.getYear());
         invoiceEntity.setMonth(invoiceBaseData.getMonth());
+        try {
+            String date = "01." + invoiceBaseData.getMonth() + "." + invoiceBaseData.getYear();
+            invoiceEntity.setDate(formatter.parse(date));
+        } catch (ParseException e) {
+          e.printStackTrace();
+        }
         invoiceEntity.setPaid(invoiceBaseData.isPaid());
+
+        invoiceEntity.setFileName(invoiceBaseData.getFileUploadModel().getFileName());
+        invoiceEntity.setFile(invoiceBaseData.getFileUploadModel().getFile());
+        invoiceEntity.setLink(invoiceBaseData.getFileUploadModel().getLink());
 
         //update additional information of the current contract
         for(DynamicAttributeField fields : invoiceBaseData.getDynamicInvoiceFields()){
@@ -100,5 +113,9 @@ public class InvoiceService {
         invoiceRepository.save(invoiceEntity);
         return invoiceEntity.getId();
 
+    }
+
+    public void deleteInvoice(long invoiceId) {
+        //TODO: implement delete method
     }
 }

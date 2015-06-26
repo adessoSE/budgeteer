@@ -6,6 +6,7 @@ import org.wickedsource.budgeteer.persistence.invoice.InvoiceEntity;
 import org.wickedsource.budgeteer.persistence.invoice.InvoiceFieldEntity;
 import org.wickedsource.budgeteer.service.AbstractMapper;
 import org.wickedsource.budgeteer.service.contract.DynamicAttributeField;
+import org.wickedsource.budgeteer.web.components.fileUpload.FileUploadModel;
 
 import java.util.*;
 
@@ -17,7 +18,7 @@ public class InvoiceDataMapper extends AbstractMapper<InvoiceEntity, InvoiceBase
         return map(entity, null);
     }
 
-    public InvoiceBaseData map(InvoiceEntity entity,  Map<String, DynamicAttributeField> attributeFieldMap) {
+    private InvoiceBaseData map(InvoiceEntity entity,  HashMap<String, DynamicAttributeField> attributeFieldMap) {
         if(entity == null)
             return null;
         InvoiceBaseData result = new InvoiceBaseData();
@@ -25,19 +26,25 @@ public class InvoiceDataMapper extends AbstractMapper<InvoiceEntity, InvoiceBase
         result.setContractName(entity.getContract().getName());
         result.setInvoiceName(entity.getName());
         result.setContractId(entity.getContract().getId());
-        result.setSum(entity.getSum());
+        result.setSum(entity.getInvoiceSum());
         result.setInternalNumber(entity.getInternalNumber());
         result.setYear(entity.getYear());
         result.setMonth(entity.getMonth());
         result.setPaid(entity.isPaid());
+        result.setFileUploadModel(new FileUploadModel(entity.getFileName(), entity.getFile(), entity.getLink()));
 
-        if(attributeFieldMap == null) {
-            attributeFieldMap = new HashMap<String, DynamicAttributeField>();
+        HashMap<String, DynamicAttributeField> dynamicAttributeFieldMap = new HashMap<String, DynamicAttributeField>();
+        if(attributeFieldMap != null) {
+            Iterator it = attributeFieldMap.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry pair = (Map.Entry)it.next();
+                dynamicAttributeFieldMap.put((String) pair.getKey(), new DynamicAttributeField((String) pair.getKey(), ""));
+            }
         }
         for(InvoiceFieldEntity fieldEntity : entity.getDynamicFields()){
-            attributeFieldMap.put(fieldEntity.getField().getFieldName(), new DynamicAttributeField(fieldEntity.getField().getFieldName(), fieldEntity.getValue()));
+            dynamicAttributeFieldMap.put(fieldEntity.getField().getFieldName(), new DynamicAttributeField(fieldEntity.getField().getFieldName(), fieldEntity.getValue()));
         }
-        result.setDynamicInvoiceFields(new ArrayList<DynamicAttributeField>(attributeFieldMap.values()));
+        result.setDynamicInvoiceFields(new ArrayList<DynamicAttributeField>(dynamicAttributeFieldMap.values()));
 
         return result;
     }
@@ -50,7 +57,7 @@ public class InvoiceDataMapper extends AbstractMapper<InvoiceEntity, InvoiceBase
      */
         public List<InvoiceBaseData> map(List<InvoiceEntity> entityList, boolean differentProjects){
             List<InvoiceBaseData> result = new LinkedList<InvoiceBaseData>();
-            Map<String, DynamicAttributeField> attributeFieldMap = new HashMap<String, DynamicAttributeField>();
+            HashMap<String, DynamicAttributeField> attributeFieldMap = new HashMap<String, DynamicAttributeField>();
             if(differentProjects){
                 for(InvoiceEntity entity : entityList){
                     for (ContractInvoiceField contractInvoiceField : entity.getContract().getInvoiceFields()) {

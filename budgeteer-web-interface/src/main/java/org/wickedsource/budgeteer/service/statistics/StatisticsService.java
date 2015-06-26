@@ -4,6 +4,9 @@ import org.joda.money.Money;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.wickedsource.budgeteer.MoneyUtil;
+import org.wickedsource.budgeteer.persistence.contract.ContractRepository;
+import org.wickedsource.budgeteer.persistence.contract.ContractStatisticBean;
+import org.wickedsource.budgeteer.persistence.invoice.InvoiceRepository;
 import org.wickedsource.budgeteer.persistence.record.*;
 import org.wickedsource.budgeteer.service.DateUtil;
 import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
@@ -29,6 +32,13 @@ public class StatisticsService {
 
     @Autowired
     private ShareBeanToShareMapper shareBeanToShareMapper;
+
+    @Autowired
+    private ContractRepository contractRepository;
+
+    @Autowired
+    private InvoiceRepository invoiceRepository;
+
 
     /**
      * Returns the budget burned in each of the last numberOfWeeks weeks. All of the project's budgets are aggregated.
@@ -438,14 +448,25 @@ public class StatisticsService {
     public ContractDetailBudgetChart getMonthlyBudgetBurnedForContract(long contractId, int numberOfMonths) {
         Date startDate = dateUtil.monthsAgo(numberOfMonths);
         ContractDetailBudgetChart result = new ContractDetailBudgetChart();
-        List<MonthlyAggregatedRecordBean> burnedMoneyOfBudgets = workRecordRepository.aggregateByMonthAndContract(contractId, startDate);
-        fillMissingMonths(numberOfMonths, burnedMoneyOfBudgets, result.getBurnedMoneyAllBudgets());
-
-        fillMissingMonths(numberOfMonths, workRecordRepository.getRemainingBudgetForContract(contractId, startDate), result.getRemainingTotalBudget());
-        return result;
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(startDate);
+        Calendar currentDate = Calendar.getInstance();
+        currentDate.setTime(new Date());
+        while(cal.before(currentDate)){
+            ContractStatisticBean bean = contractRepository.getContractStatisticByMonthAndYear(contractId, cal.get(Calendar.MONTH), cal.get(Calendar.YEAR));
+            result.getRemainingTotalBudget().add(MoneyUtil.createMoneyFromCents(bean.getRemainingContractBudget()));
+            result.getBurnedMoneyAllBudgets().add(MoneyUtil.createMoneyFromCents(bean.getSpendBudget()));
+            result.getBurnedMoneyInvoice().add(MoneyUtil.createMoneyFromCents(bean.getInvoicedBudget()));
+            cal.add(Calendar.MONTH, 1);
+        }
+      return result;
     }
 
     protected void fillMissingMonths(int numberOfMonths, List<MonthlyAggregatedRecordBean> bean, List<Money> resultList){
+        fillMissingMonths(numberOfMonths, bean, resultList, null);
+    }
+
+    protected void fillMissingMonths(int numberOfMonths, List<MonthlyAggregatedRecordBean> bean, List<Money> resultList, Money emptyValue){
         Date startDate = dateUtil.monthsAgo(numberOfMonths);
         Calendar c = Calendar.getInstance();
         c.setTime(startDate);
@@ -459,7 +480,11 @@ public class StatisticsService {
                 }
             }
             if(!monthFound){
-                resultList.add(MoneyUtil.createMoneyFromCents(0));
+                if(emptyValue == null) {
+                    resultList.add(MoneyUtil.createMoneyFromCents(0));
+                } else {
+                    resultList.add(emptyValue);
+                }
             }
             c.add(Calendar.MONTH, 1);
         }

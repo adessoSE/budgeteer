@@ -74,9 +74,9 @@ public class ContractService {
         contractEntity.setInternalNumber(contractBaseData.getInternalNumber());
         contractEntity.setYear(contractBaseData.getYear());
         contractEntity.setType(contractBaseData.getType());
-        contractEntity.setLink(contractBaseData.getLink());
-        contractEntity.setFileName(contractBaseData.getFileName());
-        contractEntity.setFile(contractBaseData.getFile());
+        contractEntity.setLink(contractBaseData.getFileModel().getLink());
+        contractEntity.setFileName(contractBaseData.getFileModel().getFileName());
+        contractEntity.setFile(contractBaseData.getFileModel().getFile());
 
         //update additional information of the current contract
         for(DynamicAttributeField fields : contractBaseData.getContractAttributes()){

@@ -31,22 +31,14 @@
                             <input wicket:id="year" style="width: 100%;" type="number" step="1" min="2000" class="form-control" id="year"/>
                         </div>
                         <div class="form-group">
-                            <label><wicket:message key="page.contract.type">Type of the contract</wicket:message></label>
-                            <select wicket:id="type" class="form-control"/>
+                            <label for="type"><wicket:message key="page.contract.type">Type of the contract</wicket:message></label>
+                            <select wicket:id="type" class="form-control" id="type"/>
                         </div>
                         <div class="form-group">
-                            <label for="contractName"><wicket:message key="page.contract.budget">Budget</wicket:message></label>
-                            <input wicket:id="budget" style="width: 100%;" type="number" step="0.01" class="form-control"/>
+                            <label for="budget"><wicket:message key="page.contract.budget">Budget</wicket:message></label>
+                            <input wicket:id="budget" style="width: 100%;" type="number" step="0.01" class="form-control" id="budget"/>
                         </div>
-                        <div class="form-group">
-                            <label for="contractName"><wicket:message key="page.contract.link">Link</wicket:message></label>
-                            <input wicket:id="link" style="width: 100%;"  class="form-control"/>
-                        </div>
-                        <div class="form-group">
-                            <label for="contractName"><wicket:message key="page.contract.file">File</wicket:message></label><br />
-                            <wicket:message key="page.contract.selectedFile"></wicket:message> <span wicket:id="fileName"></span> <br />
-                            <input type="file" wicket:id="fileUpload" />
-                        </div>
+                        <wicket:panel wicket:id="fileUpload"></wicket:panel>
                     </div>
                 </div>
                 <div class="box box-primary">

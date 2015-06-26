@@ -7,6 +7,7 @@ import org.joda.money.Money;
 import org.wickedsource.budgeteer.persistence.contract.ContractEntity;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -31,7 +32,7 @@ public class InvoiceEntity {
     private String name;
 
     @Column(name ="INVOICE_SUM")
-    private Money sum;
+    private Money invoiceSum;
 
     @Column(name="INTERNAL_NUMBER")
     private String internalNumber;
@@ -42,14 +43,30 @@ public class InvoiceEntity {
     @Column(name="MONTH")
     private int month;
 
+    @Column(name="DATE")
+    @Temporal(TemporalType.DATE)
+    private Date date;
+
     @Column(name = "PAID")
     private boolean paid;
 
-    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
-    @JoinColumn(name="INVOICE_ID")
+    @Column(name = "LINK")
+    private String link;
+
+    @Lob @Basic(fetch=FetchType.LAZY)
+    @Column(name = "FILE", length = 5 * 1024 * 1024) // five megabytes
+    private byte[] file;
+
+    @Column(name = "FILE_NAME")
+    private String fileName;
+
+
+
     /**
      * Dynamic invoice fields
      */
+    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
+    @JoinColumn(name="INVOICE_ID")
     private List<InvoiceFieldEntity> dynamicFields = new LinkedList<InvoiceFieldEntity>();
 
 
