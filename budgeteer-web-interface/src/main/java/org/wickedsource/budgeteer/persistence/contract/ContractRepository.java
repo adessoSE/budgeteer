@@ -13,4 +13,38 @@ public interface ContractRepository extends CrudRepository<ContractEntity, Long>
 
     @Query("select cif from ContractInvoiceField cif where cif.contract.id = :contractId AND cif.fieldName = :fieldName")
     public ContractInvoiceField findInvoiceFieldByName(@Param("contractId") long contractID, @Param("fieldName") String fieldName);
+
+
+    /**
+     * returns a ContractStatisticBean for a given contract till the given month and year.
+     * returns the remaining budget of the contract, the spend budget in budgeteer and the invoiced budget until the given date
+     */
+    @Query("select new org.wickedsource.budgeteer.persistence.contract.ContractStatisticBean(:year+0, " +
+            "(c.budget - coalesce((select sum(wr.minutes * wr.dailyRate/ 60 / 8) " +
+            "from WorkRecordEntity wr where wr.budget.contract.id = :contractId " +
+            "AND (wr.year < :year OR (wr.year = :year AND wr.month <= :month))" +
+            "),0l)" +
+            ")," +
+            "coalesce((select sum(wr.minutes * wr.dailyRate/ 60 / 8)" +
+            "from WorkRecordEntity wr where wr.budget.contract.id = :contractId "+
+            "AND (wr.year < :year OR (wr.year = :year AND wr.month <= :month))" +
+            "),0l)," +
+            "coalesce((select sum(i.invoiceSum) from InvoiceEntity i where i.contract.id = :contractId AND (i.year < :year OR (i.year = :year AND i.month <= :month) )),0l)" +
+            ",:month +0" +
+            ") from ContractEntity c where c.id = :contractId")
+    public ContractStatisticBean getContractStatisticByMonthAndYear(@Param("contractId") Long contractId, @Param("month") Integer month, @Param("year") Integer year);
+
 }
+/*    @Query("select new org.wickedsource.budgeteer.persistence.contract.ContractStatisticBean(:year+0, " +
+            "(c.budget - (select 0 + sum(wr.minutes * wr.dailyRate/ 60 / 8) " +
+            "from WorkRecordEntity wr where wr.budget.contract.id = :contractId " +
+            "AND (wr.year < :year OR (wr.year = :year AND wr.month <= :month))" +
+            ")" +
+            ")," +
+            "(select 0 + sum(wr.minutes * wr.dailyRate/ 60 / 8)" +
+            "from WorkRecordEntity wr where wr.budget.contract.id = :contractId "+
+            "AND (wr.year < :year OR (wr.year = :year AND wr.month <= :month))" +
+            ")," +
+            "(select 0 + sum(i.invoiceSum) from InvoiceEntity i where i.contract.id = :contractId AND (i.year < :year OR (i.year = :year AND i.month <= :month) ))" +
+            ",:month +1" +
+            ") from ContractEntity c where c.id = :contractId")*/

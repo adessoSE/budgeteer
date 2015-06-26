@@ -18,6 +18,7 @@ import org.wickedsource.budgeteer.service.contract.DynamicAttributeField;
 import org.wickedsource.budgeteer.service.invoice.InvoiceBaseData;
 import org.wickedsource.budgeteer.service.invoice.InvoiceService;
 import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
+import org.wickedsource.budgeteer.web.components.fileUpload.CustomFileUpload;
 import org.wickedsource.budgeteer.web.components.money.MoneyTextField;
 
 import static org.wicketstuff.lazymodel.LazyModel.from;
@@ -74,6 +75,9 @@ public class EditInvoiceForm  extends Form<InvoiceBaseData> {
 
         add(new CheckBox("paid", model(from(getModelObject()).isPaid())));
 
+        final CustomFileUpload fileUpload = new CustomFileUpload("fileUpload", model(from(getModelObject()).getFileUploadModel()));
+        add(fileUpload);
+
         table = new WebMarkupContainer("attributeTable");
         table.setOutputMarkupId(true);
         table.setOutputMarkupPlaceholderTag(true);
@@ -110,6 +114,9 @@ public class EditInvoiceForm  extends Form<InvoiceBaseData> {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 try {
+                    ((InvoiceBaseData) form.getModelObject()).getFileUploadModel().setFile(fileUpload.getFile());
+                    ((InvoiceBaseData) form.getModelObject()).getFileUploadModel().setFileName(fileUpload.getFileName());
+                    ((InvoiceBaseData) form.getModelObject()).setInvoiceId(service.save((InvoiceBaseData) form.getModelObject()));
                     service.save((InvoiceBaseData) form.getModelObject());
                     this.success(getString("feedback.success"));
                 } catch(Exception e){

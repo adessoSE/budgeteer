@@ -224,7 +224,7 @@ public class ContractServiceTest{
     @DatabaseTearDown(value = "contractTest.xml", type = DatabaseOperation.DELETE_ALL)
     public void testGetContractByIdWithInvoices() {
         ContractBaseData testObject = service.getContractById(6);
-        assertEquals(2, testObject.getInvoices().size());
+        assertEquals(2, testObject.getBelongingInvoices().size());
     }
 
     private List<DynamicAttributeField> getListOfContractFields() {

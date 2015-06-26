@@ -25,7 +25,7 @@ public class ContractDetailChartModel extends LoadableDetachableModel<ContractDe
 
     @Override
     protected ContractDetailBudgetChart load() {
-        return service.getMonthlyBudgetBurnedForContract(contractId, numberOfMonths); //TODO:
+        return service.getMonthlyBudgetBurnedForContract(contractId, numberOfMonths);
     }
 
 }

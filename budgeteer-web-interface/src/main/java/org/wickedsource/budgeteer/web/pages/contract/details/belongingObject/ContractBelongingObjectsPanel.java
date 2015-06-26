@@ -9,7 +9,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
 import org.wickedsource.budgeteer.service.contract.ContractBaseData;
-import org.wickedsource.budgeteer.web.components.dataTable.DataTableBehavior;
 import org.wickedsource.budgeteer.web.pages.base.basepage.BasePage;
 import org.wickedsource.budgeteer.web.pages.budgets.details.BudgetDetailsPage;
 
@@ -21,7 +20,6 @@ public class ContractBelongingObjectsPanel extends Panel {
     public ContractBelongingObjectsPanel(String id, IModel<ContractBaseData> model) {
         super(id, model);
         WebMarkupContainer table = new WebMarkupContainer("belongingBudgetTable");
-        table.add(new DataTableBehavior(DataTableBehavior.getRecommendedOptions()));
         table.add(new ListView<BudgetBaseData>("belongingBudgets", model(from(model.getObject()).getBelongingBudgets())) {
 
             @Override

@@ -31,7 +31,7 @@ public class EditInvoicePage extends DialogPageWithBacklink {
         if(getInvoiceId() == 0l){
             invoiceBaseData = service.getEmptyInvoiceModel(getContractId());
         } else {
-            invoiceBaseData = null;//service.getInvoiceById(getInvoiceId()); FIXME
+            invoiceBaseData = service.getInvoiceById(getInvoiceId());
         }
         EditInvoiceForm form = new EditInvoiceForm("form", model(from(invoiceBaseData)));
         addComponents(form);
@@ -61,10 +61,9 @@ public class EditInvoicePage extends DialogPageWithBacklink {
         }
     }
 
-    public static PageParameters createEditInvoiceParameters(long contractId, Long parentId) {
+    public static PageParameters createEditInvoiceParameters(long contractId) {
         PageParameters parameters = new PageParameters();
         parameters.add("invoiceId", contractId);
-        parameters.add("id", parentId);
         return parameters;
     }
 

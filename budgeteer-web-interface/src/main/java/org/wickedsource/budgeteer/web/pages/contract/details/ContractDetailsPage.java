@@ -22,6 +22,7 @@ import org.wickedsource.budgeteer.web.pages.contract.edit.EditContractPage;
 import org.wickedsource.budgeteer.web.pages.contract.overview.ContractOverviewPage;
 import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 import org.wickedsource.budgeteer.web.pages.invoice.edit.EditInvoicePage;
+import org.wickedsource.budgeteer.web.pages.invoice.overview.InvoiceOverviewPage;
 
 @Mount("contracts/details/${id}")
 public class ContractDetailsPage extends BasePage {
@@ -41,6 +42,13 @@ public class ContractDetailsPage extends BasePage {
             @Override
             public void onClick() {
                 WebPage page = new EditContractPage(createParameters(getParameterId()), ContractDetailsPage.class, getPageParameters());
+                setResponsePage(page);
+            }
+        });
+        add(new Link("showInvoices"){
+            @Override
+            public void onClick() {
+                WebPage page = new InvoiceOverviewPage(InvoiceOverviewPage.createParameters(getParameterId()));
                 setResponsePage(page);
             }
         });

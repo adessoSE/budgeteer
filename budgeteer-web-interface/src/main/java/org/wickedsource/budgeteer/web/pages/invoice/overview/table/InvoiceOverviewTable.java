@@ -10,6 +10,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.wickedsource.budgeteer.service.contract.DynamicAttributeField;
 import org.wickedsource.budgeteer.service.invoice.InvoiceBaseData;
 import org.wickedsource.budgeteer.web.components.dataTable.DataTableBehavior;
+import org.wickedsource.budgeteer.web.pages.invoice.details.InvoiceDetailsPage;
 import org.wickedsource.budgeteer.web.pages.invoice.edit.EditInvoicePage;
 
 import static org.wicketstuff.lazymodel.LazyModel.from;
@@ -37,7 +38,7 @@ public class InvoiceOverviewTable extends Panel{
         table.add(new ListView<InvoiceBaseData>("invoiceRows", model(from(data).getInvoices())) {
             @Override
             protected void populateItem(ListItem<InvoiceBaseData> item) {
-                BookmarkablePageLink<EditInvoicePage> link = new BookmarkablePageLink<EditInvoicePage>("editInvoice", EditInvoicePage.class, EditInvoicePage.createEditInvoiceParameters(item.getModelObject().getInvoiceId(), parentId));
+                BookmarkablePageLink<EditInvoicePage> link = new BookmarkablePageLink<EditInvoicePage>("showInvoice", InvoiceDetailsPage.class, InvoiceDetailsPage.createParameters(item.getModelObject().getInvoiceId()));
                 link.add(new Label("invoiceName", model(from(item.getModelObject()).getInvoiceName())));
                 item.add(new Label("contractName", model(from(item.getModelObject()).getContractName())));
                 item.add(link);

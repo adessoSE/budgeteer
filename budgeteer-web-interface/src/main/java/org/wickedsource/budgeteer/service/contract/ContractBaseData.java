@@ -7,6 +7,7 @@ import org.joda.money.Money;
 import org.wickedsource.budgeteer.persistence.contract.ContractEntity;
 import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
 import org.wickedsource.budgeteer.service.invoice.InvoiceBaseData;
+import org.wickedsource.budgeteer.web.components.fileUpload.FileUploadModel;
 
 import java.io.Serializable;
 import java.util.LinkedList;
@@ -24,10 +25,8 @@ public class ContractBaseData implements Serializable{
     private int year;
     private ContractEntity.ContractType type;
     private List<DynamicAttributeField> contractAttributes;
-    private String link;
-    private byte[] file;
-    private String fileName;
-    private List<InvoiceBaseData> invoices;
+    private FileUploadModel fileModel = new FileUploadModel();
+    private List<InvoiceBaseData> belongingInvoices;
 
     private List<BudgetBaseData> belongingBudgets;
 
