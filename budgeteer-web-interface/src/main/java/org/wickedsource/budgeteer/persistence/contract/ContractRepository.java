@@ -1,6 +1,7 @@
 package org.wickedsource.budgeteer.persistence.contract;
 
 
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -33,5 +34,10 @@ public interface ContractRepository extends CrudRepository<ContractEntity, Long>
             ",:month +0" +
             ") from ContractEntity c where c.id = :contractId")
     public ContractStatisticBean getContractStatisticByMonthAndYear(@Param("contractId") Long contractId, @Param("month") Integer month, @Param("year") Integer year);
+
+
+    @Modifying
+    @Query("delete from ContractEntity c where c.project.id = :projectId")
+    void deleteByProjectId(@Param(value = "projectId") long projectId);
 
 }

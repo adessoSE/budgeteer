@@ -18,6 +18,7 @@ import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.persistence.contract.ContractEntity;
 import org.wickedsource.budgeteer.persistence.contract.ContractInvoiceField;
 import org.wickedsource.budgeteer.persistence.contract.ContractRepository;
+import org.wickedsource.budgeteer.persistence.invoice.InvoiceRepository;
 import org.wickedsource.budgeteer.service.contract.DynamicAttributeField;
 
 import java.util.LinkedList;
@@ -39,6 +40,9 @@ public class InvoiceServiceTest{
 
     @Autowired
     private InvoiceService service;
+
+    @Autowired
+    private InvoiceRepository invoiceRepository;
 
     @Autowired
     private ContractRepository contractRepository;
@@ -238,5 +242,41 @@ public class InvoiceServiceTest{
         }
         return result;
     }
+
+
+
+    @Test
+    @DatabaseSetup("invoiceTest.xml")
+    @DatabaseTearDown(value = "invoiceTest.xml", type = DatabaseOperation.DELETE_ALL)
+    // Invoice with two InvoiceFields
+    public void testDeleteInvoice(){
+       service.deleteInvoice(3);
+        assertNotNull(contractRepository.findInvoiceFieldByName(3, "Test Contract Field"));
+        assertNotNull(contractRepository.findInvoiceFieldByName(3, "Test Contract Field 2"));
+
+        assertNull(invoiceRepository.findInvoiceFieldById(1));
+        assertNull(invoiceRepository.findInvoiceFieldById(2));
+    }
+
+    @Test
+    @DatabaseSetup("invoiceTest.xml")
+    @DatabaseTearDown(value = "invoiceTest.xml", type = DatabaseOperation.DELETE_ALL)
+    // Invoice without any InvoiceFields
+    public void testDeleteInvoiceWithoutFields(){
+        service.deleteInvoice(4);
+        assertNull(invoiceRepository.findOne(4l));
+    }
+
+    @Test
+    @DatabaseSetup("invoiceTest.xml")
+    @DatabaseTearDown(value = "invoiceTest.xml", type = DatabaseOperation.DELETE_ALL)
+    // Invoice without any InvoiceFields but with a contract containing ContractInvoiceFields
+    public void testDeleteInvoiceWithContractInvoiceFields(){
+        service.deleteInvoice(5);
+        assertNotNull(contractRepository.findInvoiceFieldByName(5, "Test Contract Field"));
+        assertNotNull(contractRepository.findInvoiceFieldByName(5, "Test Contract Field 2"));
+    }
+
+
 
 }

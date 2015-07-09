@@ -44,6 +44,12 @@ public interface WorkRecordRepository extends CrudRepository<WorkRecordEntity, L
 
     @Override
     @Modifying
+    @Query("delete from WorkRecordEntity r where r.id in (select p.id from WorkRecordEntity p where p.importRecord.project.id = :projectId )")
+    void deleteByImportAndProjectId(@Param("projectId") long projectId);
+
+
+    @Override
+    @Modifying
     @Query("delete from WorkRecordEntity r where r.budget.id in ( select b.id from BudgetEntity b where b.project.id = :projectId)")
     void deleteByProjectId(@Param("projectId") long projectId);
 
@@ -181,4 +187,7 @@ public interface WorkRecordRepository extends CrudRepository<WorkRecordEntity, L
     @Query("select wr from WorkRecordEntity wr where wr.budget.project = :project AND wr.date >= :start and wr.date <= :end")
     List<WorkRecordEntity> findByProjectAndDateRange(@Param("project")ProjectEntity project, @Param("start") Date start, @Param("end") Date end);
 
+    @Override
+    @Query("select wr from WorkRecordEntity wr where wr.budget.project.id = :projectId")
+    List<WorkRecordEntity> findByProjectId(@Param("projectId") long projectId);
 }

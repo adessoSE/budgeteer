@@ -35,6 +35,7 @@ public class ContractInvoiceField implements Serializable{
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof ContractInvoiceField)) return false;
+        if(o == null) return false;
 
         ContractInvoiceField that = (ContractInvoiceField) o;
 
@@ -48,8 +49,8 @@ public class ContractInvoiceField implements Serializable{
     @Override
     public int hashCode() {
         int result = (int) (id ^ (id >>> 32));
-        result = 31 * result + fieldName.hashCode();
-        result = 31 * result + (int) contract.getId();
+        result = 31 * result + (fieldName != null ? fieldName.hashCode() : 0);
+        result = 31 * result + (contract != null ? (int) contract.getId() : 0);
         return result;
     }
 }

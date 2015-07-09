@@ -51,4 +51,14 @@ public class ProjectContractField implements Serializable{
         result = 31 * result + (int) project.getId();
         return result;
     }
+
+
+    @Override
+    public String toString() {
+        return "ProjectContractField{" +
+                "id=" + id +
+                ", fieldName='" + fieldName + '\'' +
+                ", project=" + project.getId() + " - " + project.getName() +
+                '}';
+    }
 }

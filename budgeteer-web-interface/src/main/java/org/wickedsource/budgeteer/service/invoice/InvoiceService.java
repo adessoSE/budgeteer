@@ -116,6 +116,6 @@ public class InvoiceService {
     }
 
     public void deleteInvoice(long invoiceId) {
-        //TODO: implement delete method
+        invoiceRepository.delete(invoiceId);
     }
 }

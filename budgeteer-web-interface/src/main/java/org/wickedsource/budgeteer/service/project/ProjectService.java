@@ -3,7 +3,9 @@ package org.wickedsource.budgeteer.service.project;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.wickedsource.budgeteer.persistence.budget.BudgetRepository;
+import org.wickedsource.budgeteer.persistence.contract.ContractRepository;
 import org.wickedsource.budgeteer.persistence.imports.ImportRepository;
+import org.wickedsource.budgeteer.persistence.invoice.InvoiceRepository;
 import org.wickedsource.budgeteer.persistence.person.DailyRateRepository;
 import org.wickedsource.budgeteer.persistence.person.PersonRepository;
 import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
@@ -48,6 +50,12 @@ public class ProjectService {
 
     @Autowired
     private DailyRateRepository dailyRateRepository;
+
+    @Autowired
+    private InvoiceRepository invoiceRepository;
+
+    @Autowired
+    private ContractRepository contractRepository;
 
     /**
      * Creates a new empty project with the given name.
@@ -97,11 +105,15 @@ public class ProjectService {
      */
     public void deleteProject(long projectId) {
         dailyRateRepository.deleteByProjectId(projectId);
-        planRecordRepository.deleteByProjectId(projectId);
-        workRecordRepository.deleteByProjectId(projectId);
+        planRecordRepository.deleteByImportAndProjectId(projectId);
+        workRecordRepository.deleteByImportAndProjectId(projectId);
         importRepository.deleteByProjectId(projectId);
         budgetRepository.deleteByProjectId(projectId);
         personRepository.deleteByProjectId(projectId);
+        invoiceRepository.deleteInvoiceFieldByProjectId(projectId);
+        invoiceRepository.deleteContractInvoiceFieldByProject(projectId);
+        invoiceRepository.deleteByProjectId(projectId);
+        contractRepository.deleteByProjectId(projectId);
         projectRepository.delete(projectId);
     }
 

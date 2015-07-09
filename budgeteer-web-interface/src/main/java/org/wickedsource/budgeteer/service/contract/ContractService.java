@@ -111,6 +111,6 @@ public class ContractService {
     }
 
     public void deleteContract(long contractId) {
-        //FIXME:
+        contractRepository.delete(contractId);
     }
 }

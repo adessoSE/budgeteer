@@ -7,6 +7,8 @@ import org.joda.money.Money;
 import org.wickedsource.budgeteer.persistence.contract.ContractEntity;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -41,6 +43,8 @@ public class InvoiceEntity {
     private int year;
 
     @Column(name="MONTH")
+    @Min(value = 0)
+    @Max(value = 11)
     private int month;
 
     @Column(name="DATE")
