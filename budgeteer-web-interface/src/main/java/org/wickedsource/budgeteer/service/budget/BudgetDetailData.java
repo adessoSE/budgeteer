@@ -17,6 +17,7 @@ public class BudgetDetailData {
     private Date lastUpdated;
     private Money avgDailyRate;
     private Money unplanned;
+    private String contractName;
 
 
     public Money getRemaining() {

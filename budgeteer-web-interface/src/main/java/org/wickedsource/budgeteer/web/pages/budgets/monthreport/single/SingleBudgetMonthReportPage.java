@@ -9,8 +9,8 @@ import org.wickedsource.budgeteer.web.charts.BudgeteerChartTheme;
 import org.wickedsource.budgeteer.web.components.aggregatedrecordtable.AggregatedRecordTable;
 import org.wickedsource.budgeteer.web.components.targetactualchart.TargetAndActualChart;
 import org.wickedsource.budgeteer.web.components.targetactualchart.TargetAndActualChartOptions;
+import org.wickedsource.budgeteer.web.pages.base.basepage.BasePage;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
-import org.wickedsource.budgeteer.web.pages.budgets.BudgetBasePage;
 import org.wickedsource.budgeteer.web.pages.budgets.components.targetactualchart.BudgetsMonthlyAggregationModel;
 import org.wickedsource.budgeteer.web.pages.budgets.components.weekreporttable.BudgetsMonthlyAggregatedRecordsModel;
 import org.wickedsource.budgeteer.web.pages.budgets.overview.BudgetsOverviewPage;
@@ -19,15 +19,15 @@ import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 import java.util.List;
 
 @Mount("budgets/months/${id}")
-public class SingleBudgetMonthReportPage extends BudgetBasePage {
+public class SingleBudgetMonthReportPage extends BasePage {
 
     public SingleBudgetMonthReportPage(PageParameters parameters) {
         super(parameters);
 
-        IModel<TargetAndActual> model = new BudgetsMonthlyAggregationModel(getBudgetId());
+        IModel<TargetAndActual> model = new BudgetsMonthlyAggregationModel(getParameterId());
         add(new TargetAndActualChart("targetAndActualChart", model, new BudgeteerChartTheme(), TargetAndActualChartOptions.Mode.MONTHLY));
 
-        IModel<List<AggregatedRecord>> tableModel = new BudgetsMonthlyAggregatedRecordsModel(getBudgetId());
+        IModel<List<AggregatedRecord>> tableModel = new BudgetsMonthlyAggregatedRecordsModel(getParameterId());
         add(new AggregatedRecordTable("table", tableModel));
     }
 

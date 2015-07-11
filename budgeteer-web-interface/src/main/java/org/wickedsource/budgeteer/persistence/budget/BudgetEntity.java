@@ -2,6 +2,7 @@ package org.wickedsource.budgeteer.persistence.budget;
 
 import lombok.Data;
 import org.joda.money.Money;
+import org.wickedsource.budgeteer.persistence.contract.ContractEntity;
 import org.wickedsource.budgeteer.persistence.person.DailyRateEntity;
 import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
 import org.wickedsource.budgeteer.persistence.record.PlanRecordEntity;
@@ -20,7 +21,8 @@ import java.util.List;
 public class BudgetEntity {
 
     @Id
-    @GeneratedValue
+    @SequenceGenerator(name="SEQ_BUDGET_ID", sequenceName="SEQ_BUDGET_ID")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_BUDGET_ID")
     private long id;
 
     @Column(nullable = false)
@@ -46,5 +48,9 @@ public class BudgetEntity {
 
     @Column(nullable = false, name = "IMPORT_KEY")
     private String importKey;
+
+    @ManyToOne
+    @JoinColumn(name="CONTRACT_ID")
+    private ContractEntity contract;
 
 }

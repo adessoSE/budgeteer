@@ -12,6 +12,7 @@ public class Import {
     private long id;
     private Date importDate;
     private String importType;
+    private Integer numberOfImportedFiles = 0;
     private Date startDate;
     private Date endDate;
 

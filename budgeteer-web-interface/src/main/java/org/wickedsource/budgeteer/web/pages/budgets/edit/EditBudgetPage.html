@@ -28,6 +28,11 @@
                     <p class="help-block"><wicket:message key="page.budget.key.hint">The unique key that identifies this budget when importing data.</wicket:message></p>
                 </div>
                 <div class="form-group">
+                    <label for="contractSelect">
+                        <wicket:message key="page.tags.key.contract">Contract</wicket:message>
+                    </label>
+                    <select id="contractSelect" wicket:id="contract" class="form-control"/>
+
                     <label for="tagsInput">Tags</label>
                     <input wicket:id="tagsInput" type="text" name="name" id="tagsInput" class="form-control"
                            wicket:message="placeholder:page.tags.placeholder" />

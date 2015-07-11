@@ -11,13 +11,17 @@ public class BurnTableWithFilter extends Panel {
     private FilterPanel filterPanel;
 
     public BurnTableWithFilter(String id, WorkRecordFilter initialFilter) {
+        this(id, initialFilter, false);
+    }
+
+    public BurnTableWithFilter(String id, WorkRecordFilter initialFilter, boolean dailyRateIsEditable) {
         super(id);
 
         filterPanel = new FilterPanel("filter", initialFilter);
         add(filterPanel);
 
         FilteredRecordsModel tableModel = new FilteredRecordsModel(initialFilter);
-        BurnTable table = new BurnTable("table", tableModel);
+        BurnTable table = new BurnTable("table", tableModel, dailyRateIsEditable);
         add(table);
     }
 

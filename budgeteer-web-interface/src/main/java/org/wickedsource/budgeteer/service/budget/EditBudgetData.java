@@ -3,6 +3,7 @@ package org.wickedsource.budgeteer.service.budget;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.joda.money.Money;
+import org.wickedsource.budgeteer.service.contract.ContractBaseData;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ public class EditBudgetData implements Serializable {
     private Money total;
     private String importKey;
     private List<String> tags;
+    private ContractBaseData contract;
 
 
     public EditBudgetData(long projectId) {

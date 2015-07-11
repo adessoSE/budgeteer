@@ -1,0 +1,93 @@
+<wicket:extend xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+    <div class="form-box wide" id="login-box">
+        <div class="header"><span wicket:it="pageTitle"><wicket:message key="page.title">Edit Contract Details</wicket:message></span>
+            <div class="box-tools pull-right">
+                <button wicket:id="cancelButton1" class="btn bg-olive btn-sm"><i class="fa fa-times"></i></button>
+            </div>
+        </div>
+        <form wicket:id="form" method="post">
+            <div class="body bg-gray">
+                <div wicket:id="feedback"></div>
+                <div class="box box-primary">
+                    <div class="box-header" style="cursor: move;">
+                        <h3 class="box-title">Basic information of the contract</h3>
+                        <div class="box-tools pull-right">
+                            <span class="btn btn-default btn-sm" data-widget="collapse">
+                                <i class="fa fa-minus"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label for="contractName"><wicket:message key="page.contract.title">Contract title</wicket:message></label>
+                            <input wicket:id="contractName"type="text" name="name" id="contractName" class="form-control"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="internalNumber"><wicket:message key="page.contract.internalNumber">Internal-number</wicket:message></label>
+                            <input wicket:id="internalNumber"type="text" name="name" id="internalNumber" class="form-control"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="year"><wicket:message key="page.contract.year">Year of the contract</wicket:message></label>
+                            <input wicket:id="year" style="width: 100%;" type="number" step="1" min="2000" class="form-control" id="year"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="type"><wicket:message key="page.contract.type">Type of the contract</wicket:message></label>
+                            <select wicket:id="type" class="form-control" id="type"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="budget"><wicket:message key="page.contract.budget">Budget</wicket:message></label>
+                            <input wicket:id="budget" style="width: 100%;" type="number" step="0.01" class="form-control" id="budget"/>
+                        </div>
+                        <wicket:panel wicket:id="fileUpload"></wicket:panel>
+                    </div>
+                </div>
+                <div class="box box-primary">
+                    <div class="box-header" style="cursor: move;">
+                        <h3 class="box-title">Additional information</h3>
+                        <div class="box-tools pull-right">
+                            <span class="btn btn-default btn-sm" data-widget="collapse">
+                                <i class="fa fa-minus"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <div wicket:id="attributeTable" style="width: 100%;">
+                            <div class="form-group" wicket:id="contractAttributes">
+                                <label wicket:id="attributeTitle" />
+                                <input wicket:id="attributeValue" type="text" class="form-control"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box box-primary">
+                    <div class="box-header" style="cursor: move;">
+                        <h3 class="box-title"><wicket:message key="page.contract.new.attribute">Edit Contract Details</wicket:message></h3>
+                        <div class="box-tools pull-right">
+                            <span class="btn btn-default btn-sm" data-widget="collapse">
+                                <i class="fa fa-minus"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <span for="attribute_name">
+                            <wicket:message key="page.contract.new.attribute.name.of.attribute">Edit Contract Details</wicket:message>
+                        </span>
+                        <input  id="attribute_name" wicket:id="nameOfNewAttribute" type="text"/>
+                        <Button wicket:id="addAttribute"><i class="fa fa-fw fa-plus"></i></Button>
+                    </div>
+                </div>
+            </div>
+            <div class="footer">
+                <div class="row">
+                    <div class="col-lg-3">
+                        <button wicket:id="cancelButton2" type="button" class="btn bg-olive btn-block">Cancel</button>
+                    </div>
+                    <div class="col-lg-9">
+                        <button wicket:id="save" class="btn bg-olive btn-block">Create contract / Save Changes</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</wicket:extend>
