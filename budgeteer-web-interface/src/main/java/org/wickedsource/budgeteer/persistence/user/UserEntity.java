@@ -31,4 +31,9 @@ public class UserEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private ProjectEntity defaultProject;
 
+    @Override
+    public String toString(){
+        return "User( Id:" + id + ", name: " +name + ")";
+    }
+
 }
