@@ -117,7 +117,6 @@ public class EditInvoiceForm  extends Form<InvoiceBaseData> {
                     ((InvoiceBaseData) form.getModelObject()).getFileUploadModel().setFile(fileUpload.getFile());
                     ((InvoiceBaseData) form.getModelObject()).getFileUploadModel().setFileName(fileUpload.getFileName());
                     ((InvoiceBaseData) form.getModelObject()).setInvoiceId(service.save((InvoiceBaseData) form.getModelObject()));
-                    service.save((InvoiceBaseData) form.getModelObject());
                     this.success(getString("feedback.success"));
                 } catch(Exception e){
                     e.printStackTrace();
