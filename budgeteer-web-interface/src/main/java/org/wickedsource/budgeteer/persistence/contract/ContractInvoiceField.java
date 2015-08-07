@@ -15,7 +15,7 @@ import java.io.Serializable;
         @UniqueConstraint(name ="unique_field_name_per_contract", columnNames = {"FIELD_NAME", "CONTRACT_ID"})
 })
 /**
- * (dynamic) field that a invoice belonging to a contract can have
+ * (dynamic) field that a invoice associated with a contract can have
  *  necessary to make sure all invoices of the same contract have the same dynamic fields
  */
 public class ContractInvoiceField implements Serializable{

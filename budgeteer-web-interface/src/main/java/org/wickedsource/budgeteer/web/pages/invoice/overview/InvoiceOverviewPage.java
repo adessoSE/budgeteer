@@ -23,7 +23,7 @@ public class InvoiceOverviewPage extends BasePage {
     /**
      * Shows the overview page of all invoices beloging to the given contract or the current project
      * @param parameters if the id property of the pageparameters is 0l, the pages shows the invoices for the current project <br />
-     *                   otherwise the given id will be considered as contract id and the pages shows the invoices belonging to this contract
+     *                   otherwise the given id will be considered as contract id and the pages shows the invoices associated with this contract
      */
     public InvoiceOverviewPage(PageParameters parameters) {
         super(parameters);

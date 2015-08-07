@@ -43,7 +43,7 @@ public class ContractServiceTest{
 
 
     /**
-     * Save a new Contract belonging to a Project that does not have any ProjectContractFields
+     * Save a new Contract associated with a Project that does not have any ProjectContractFields
      */
     @Test
     @DatabaseSetup("contractTest.xml")
@@ -70,7 +70,7 @@ public class ContractServiceTest{
     }
 
     /**
-     * Save a new Contract belonging to a Project that already has some ProjectContractFields
+     * Save a new Contract associated with a Project that already has some ProjectContractFields
      */
     @Test
     @DatabaseSetup("contractTest.xml")
@@ -138,7 +138,7 @@ public class ContractServiceTest{
     }
 
     /**
-     * Update a Contract that does not has dynamic fields, but belonging to a project that has already ProjectContractFields
+     * Update a Contract that does not has dynamic fields, but is associated with a project that has already ProjectContractFields
      */
     @Test
     @DatabaseSetup("contractTest.xml")

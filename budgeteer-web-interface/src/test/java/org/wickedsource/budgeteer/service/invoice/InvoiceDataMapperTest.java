@@ -19,7 +19,7 @@ import static org.junit.Assert.assertTrue;
 public class InvoiceDataMapperTest {
 
     /**
-     * Tests whether different invoiced belonging to different contracts will get the same dynamic attributes
+     * Tests whether different invoiced associated with different contracts will get the same dynamic attributes
      */
     @Test
     public void testMapWithDifferentProjectsButSameAttributes(){

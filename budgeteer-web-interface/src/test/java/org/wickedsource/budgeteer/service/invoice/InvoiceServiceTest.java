@@ -49,7 +49,7 @@ public class InvoiceServiceTest{
 
 
     /**
-     * Save a new Invoice belonging to a Contract that does not have any ContractInvoiceFields
+     * Save a new Invoice associated with a Contract that does not have any ContractInvoiceFields
      */
     @Test
     @DatabaseSetup("invoiceTest.xml")
@@ -78,7 +78,7 @@ public class InvoiceServiceTest{
     }
 
     /**
-     * Save a new Invoice belonging to a Contract that has two ContractInvoiceFields
+     * Save a new Invoice associated with a Contract that has two ContractInvoiceFields
      */
     @Test
     @DatabaseSetup("invoiceTest.xml")

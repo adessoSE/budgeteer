@@ -15,7 +15,7 @@ import java.io.Serializable;
         @UniqueConstraint(columnNames = {"FIELD_NAME", "PROJECT_ID"})
 })
 /**
- * (dynamic) Fields that could be used by a contract belonging to a project
+ * (dynamic) Fields that could be used by a contract associated with a project
  */
 public class ProjectContractField implements Serializable{
     @Id

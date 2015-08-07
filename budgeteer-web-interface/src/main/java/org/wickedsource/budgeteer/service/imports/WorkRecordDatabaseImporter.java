@@ -125,7 +125,7 @@ public class WorkRecordDatabaseImporter extends RecordDatabaseImporter {
             WorkRecordEntity editedEntry = manuallyEditedEntries.get(i);
             List<WorkRecordEntity> duplicateEntryList = workRecordRepository.findDuplicateEntries(editedEntry.getBudget(), editedEntry.getPerson(), editedEntry.getDate(), editedEntry.getMinutes());
             if (!duplicateEntryList.isEmpty()) {
-                deletedRecordList.add(getRecordAsString(duplicateEntryList.get(0), "There was a manually edited entry belonging to this one already in the database"));
+                deletedRecordList.add(getRecordAsString(duplicateEntryList.get(0), "There was a manually edited entry associated with this one already in the database"));
                 workRecordRepository.delete(duplicateEntryList.get(0));
                 //Update the import-reference of the the manually edited record so that it belongs to the current import
                 editedEntry.setImportRecord(duplicateEntryList.get(0).getImportRecord());
@@ -134,7 +134,7 @@ public class WorkRecordDatabaseImporter extends RecordDatabaseImporter {
                 manuallyEditedEntries.remove(editedEntry);
             }
         }
-        //if there are still any manually edited records in the list, there weren't any belonging entries in the current import
+        //if there are still any manually edited records in the list, there weren't any associated entries in the current import
         // -> remove all  left manually-edited-records in the database
         for(WorkRecordEntity leftRecord : manuallyEditedEntries){
             workRecordRepository.delete(leftRecord);
