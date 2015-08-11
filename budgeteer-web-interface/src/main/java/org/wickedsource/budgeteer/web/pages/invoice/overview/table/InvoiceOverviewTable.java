@@ -38,7 +38,8 @@ public class InvoiceOverviewTable extends Panel{
         table.add(new ListView<InvoiceBaseData>("invoiceRows", model(from(data).getInvoices())) {
             @Override
             protected void populateItem(ListItem<InvoiceBaseData> item) {
-                BookmarkablePageLink<EditInvoicePage> link = new BookmarkablePageLink<EditInvoicePage>("showInvoice", InvoiceDetailsPage.class, InvoiceDetailsPage.createParameters(item.getModelObject().getInvoiceId()));
+                long invoiceId = item.getModelObject().getInvoiceId();
+                BookmarkablePageLink<EditInvoicePage> link = new BookmarkablePageLink<EditInvoicePage>("showInvoice", InvoiceDetailsPage.class, InvoiceDetailsPage.createParameters(invoiceId));
                 link.add(new Label("invoiceName", model(from(item.getModelObject()).getInvoiceName())));
                 item.add(new Label("contractName", model(from(item.getModelObject()).getContractName())));
                 item.add(link);
@@ -55,6 +56,7 @@ public class InvoiceOverviewTable extends Panel{
                         item.add(new Label("invoiceRowText", item.getModelObject().getValue()));
                     }
                 });
+                item.add(new BookmarkablePageLink<EditInvoicePage>("editLink", EditInvoicePage.class, EditInvoicePage.createEditInvoiceParameters(invoiceId)));
             }
         });
         table.add(new ListView<String>("footerRow", model(from(data).getFooter()) ) {

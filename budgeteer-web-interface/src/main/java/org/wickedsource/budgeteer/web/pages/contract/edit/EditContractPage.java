@@ -21,6 +21,9 @@ public class EditContractPage extends DialogPageWithBacklink {
     @SpringBean
     private ContractService service;
 
+    public EditContractPage(PageParameters parameters){
+        this(parameters, ContractOverviewPage.class, parameters);
+    }
     /**
      * Use this constructor to create a page with a form to create a new contract.
      */
@@ -61,7 +64,7 @@ public class EditContractPage extends DialogPageWithBacklink {
     public static PageParameters createParameters(long contractId) {
         PageParameters parameters = new PageParameters();
         parameters.add("id", contractId);
-        parameters.add("backling", ContractOverviewPage.class);
+        parameters.add("backLink", ContractOverviewPage.class);
         return parameters;
     }
 }

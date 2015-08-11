@@ -10,6 +10,7 @@
                 <th><wicket:message key="overview.table.contract.type">Type</wicket:message></th>
                 <th wicket:id="headerRow"><span wicket:id="headerItem">Contract Title</span></th>
                 <th><wicket:message key="overview.table.contract.budget">Budget</wicket:message></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -20,6 +21,9 @@
                 <td><span wicket:id="type"></span></td>
                 <td wicket:id="contractRow"><span wicket:id="contractRowText">Title</span></td>
                 <td><span wicket:id="budget"></span></td>
+                <td><span>
+                    <a wicket:id="editLink" class="btn btn-default btn-sm fa fa-edit"></a>
+                </span></td>
             </tr>
         <tfoot>
             <tr>

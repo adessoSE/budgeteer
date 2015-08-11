@@ -12,6 +12,7 @@
                 <th wicket:id="headerRow"><span wicket:id="headerItem">Invoice Attribute Title</span></th>
                 <th><wicket:message key="overview.table.invoice.sum">Sum</wicket:message></th>
                 <th><wicket:message key="overview.table.invoice.paid">Paid?</wicket:message></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -24,6 +25,10 @@
                 <td wicket:id="invoiceRow"><span wicket:id="invoiceRowText">Title</span></td>
                 <td><span wicket:id="sum"></span></td>
                 <td><input type="checkbox" wicket:id="paid" /></td>
+                <td><span>
+                    <a wicket:id="editLink" class="btn btn-default btn-sm fa fa-edit"></a>
+                </span>
+                </td>
             </tr>
         <tfoot>
             <tr>

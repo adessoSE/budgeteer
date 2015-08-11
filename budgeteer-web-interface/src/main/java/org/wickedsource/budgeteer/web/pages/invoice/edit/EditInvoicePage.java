@@ -61,9 +61,9 @@ public class EditInvoicePage extends DialogPageWithBacklink {
         }
     }
 
-    public static PageParameters createEditInvoiceParameters(long contractId) {
+    public static PageParameters createEditInvoiceParameters(long invoiceId) {
         PageParameters parameters = new PageParameters();
-        parameters.add("invoiceId", contractId);
+        parameters.add("invoiceId", invoiceId);
         return parameters;
     }
 

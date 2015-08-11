@@ -39,7 +39,8 @@ public class ContractOverviewTable extends Panel{
         table.add(new ListView<ContractBaseData>("contractRows", model(from(data).getContracts())) {
             @Override
             protected void populateItem(ListItem<ContractBaseData> item) {
-                BookmarkablePageLink<EditContractPage> link = new BookmarkablePageLink<EditContractPage>("editContract", ContractDetailsPage.class, EditContractPage.createParameters(item.getModelObject().getContractId()));
+                long contractId = item.getModelObject().getContractId();
+                BookmarkablePageLink<EditContractPage> link = new BookmarkablePageLink<EditContractPage>("editContract", ContractDetailsPage.class, EditContractPage.createParameters(contractId));
                 link.add(new Label("contractName", model(from(item.getModelObject()).getContractName())));
                 item.add(link);
                 item.add(new Label("internalNumber", model(from(item.getModelObject()).getInternalNumber())));
@@ -52,6 +53,7 @@ public class ContractOverviewTable extends Panel{
                     }
                 });
                 item.add(new Label("budget", model(from(item.getModelObject()).getBudget())));
+                item.add(new BookmarkablePageLink("editLink", EditContractPage.class, EditContractPage.createParameters(contractId)));
             }
         });
         table.add(new ListView<String>("footerRow", model(from(data).getFooter()) ) {
