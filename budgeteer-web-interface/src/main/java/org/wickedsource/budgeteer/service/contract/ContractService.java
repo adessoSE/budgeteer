@@ -44,7 +44,6 @@ public class ContractService {
 
     public List<ContractBaseData> getContractsByProject(long projectId) {
         List<ContractEntity> contracts = new LinkedList<ContractEntity>();
-        contracts.add(null);
         contracts.addAll(contractRepository.findByProjectId(projectId));
         return mapper.map(contracts);
     }

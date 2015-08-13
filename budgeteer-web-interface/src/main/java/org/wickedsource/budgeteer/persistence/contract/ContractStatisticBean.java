@@ -22,4 +22,8 @@ public class ContractStatisticBean {
      */
     private int month;
 
+    public long getDifference(){
+        return spendBudget - invoicedBudget;
+    }
+
 }

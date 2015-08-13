@@ -1,0 +1,32 @@
+<wicket:panel>
+    <table wicket:id="table" class="table table-bordered table-hover">
+        <thead>
+            <tr>
+               <th><wicket:message key="month"></wicket:message></th>
+               <th><wicket:message key="invoiced"></wicket:message></th>
+               <th><wicket:message key="spend"></wicket:message></th>
+               <th><wicket:message key="difference"></wicket:message></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr wicket:id="row">
+                <td wicket:id="month">
+                    <span wicket:id="monthSort" style="display: none;"></span>
+                    <span wicket:id="monthName"></span>
+                </td>
+                <td wicket:id="invoiced"></td>
+                <td wicket:id="spend"></td>
+                <td wicket:id="difference"></td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td>&#x3A3;</td>
+                <td wicket:id="sumInvoiced"></td>
+                <td wicket:id="sumSpend"></td>
+                <td wicket:id="sumDifference"></td>
+            </tr>
+        </tfoot>
+    </table>
+
+</wicket:panel>

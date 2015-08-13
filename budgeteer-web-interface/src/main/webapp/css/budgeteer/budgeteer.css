@@ -93,3 +93,7 @@
 table.smallLastColumn tr td:last-child {
     width: 50px;
 }
+
+.table-bordered > tfoot > tr > td {
+    border-top-width: 2px;
+}
