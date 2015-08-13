@@ -9,7 +9,9 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.wickedsource.budgeteer.service.contract.DynamicAttributeField;
 import org.wickedsource.budgeteer.service.invoice.InvoiceBaseData;
+import org.wickedsource.budgeteer.web.PropertyLoader;
 import org.wickedsource.budgeteer.web.components.dataTable.DataTableBehavior;
+import org.wickedsource.budgeteer.web.pages.base.basepage.BasePage;
 import org.wickedsource.budgeteer.web.pages.invoice.details.InvoiceDetailsPage;
 import org.wickedsource.budgeteer.web.pages.invoice.edit.EditInvoicePage;
 
@@ -45,7 +47,7 @@ public class InvoiceOverviewTable extends Panel{
                 item.add(link);
                 item.add(new Label("internalNumber", model(from(item.getModelObject()).getInternalNumber())));
                 item.add(new Label("year", model(from(item.getModelObject()).getYear())));
-                item.add(new Label("month", model(from(item.getModelObject()).getMonth())));
+                item.add(new Label("month", PropertyLoader.getProperty(BasePage.class, "monthRenderer.name." + item.getModelObject().getMonth())));
                 item.add(new Label("sum", model(from(item.getModelObject()).getSum())));
                 CheckBox paid = new CheckBox("paid", model(from(item.getModelObject()).isPaid()));
                 paid.setEnabled(false);
