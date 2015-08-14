@@ -19,7 +19,7 @@ public class DateRangePickerBehavior extends Behavior{
 
     /**
     * Implements the DateRangePicker
-    * @param options @see <a href="https://github.com/dangrossman/bootstrap-daterangepicker#options">Options</a>
+    * @param options @see <a href="http://www.daterangepicker.com/#options">Options</a>
     */
     public DateRangePickerBehavior(HashMap<String, String> options){
         this.options = options;

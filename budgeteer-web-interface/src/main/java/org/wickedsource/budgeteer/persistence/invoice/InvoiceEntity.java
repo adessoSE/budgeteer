@@ -23,7 +23,8 @@ import java.util.List;
 public class InvoiceEntity {
 
     @Id
-    @GeneratedValue
+    @SequenceGenerator(name="SEQ_INVOICE_ID", sequenceName="SEQ_INVOICE_ID")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_INVOICE_ID")
     private long id;
 
     @ManyToOne(optional = false)

@@ -147,4 +147,9 @@
         <addForeignKeyConstraint baseColumnNames="CONTRACT_ID" baseTableName="CONTRACT_INVOICE_FIELD" constraintName="FK_RERAXDSIXPNPMMJNG86O4XG3T" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="CONTRACT"/>
     </changeSet>
 
+    <changeSet id="contract_and_invoice_id_should_not_start_with_0" author="ehhc">
+        <createSequence sequenceName="SEQ_CONTRACT_ID" startValue="1"/>
+        <createSequence sequenceName="SEQ_INVOICE_ID" startValue="1"/>
+    </changeSet>
+
 </databaseChangeLog>

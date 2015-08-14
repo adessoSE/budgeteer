@@ -44,7 +44,7 @@ public abstract class PersonRateForm extends Form<PersonRateForm.PersonRateFormM
         rateField.setRequired(true);
         add(rateField);
 
-        DateRangeInputField dateRangeField = new DateRangeInputField("dateRangeField", model(from(getModel()).getDateRange()));
+        DateRangeInputField dateRangeField = new DateRangeInputField("dateRangeField", model(from(getModel()).getDateRange()), DateRangeInputField.DROP_LOCATION.UP);
         dateRangeField.setRequired(true);
         add(dateRangeField);
 
