@@ -15,6 +15,7 @@ import org.wickedsource.budgeteer.web.PropertyLoader;
 import org.wickedsource.budgeteer.web.components.dataTable.DataTableBehavior;
 import org.wickedsource.budgeteer.web.pages.base.basepage.BasePage;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
+import org.wickedsource.budgeteer.web.pages.contract.details.ContractDetailsPage;
 import org.wickedsource.budgeteer.web.pages.invoice.details.InvoiceDetailsPage;
 import org.wickedsource.budgeteer.web.pages.invoice.edit.EditInvoicePage;
 
@@ -41,7 +42,7 @@ public class InvoiceOverviewTable extends Panel{
         });
         table.add(new ListView<InvoiceBaseData>("invoiceRows", model(from(data).getInvoices())) {
             @Override
-            protected void populateItem(ListItem<InvoiceBaseData> item) {
+            protected void populateItem(final ListItem<InvoiceBaseData> item) {
                 final long invoiceId = item.getModelObject().getInvoiceId();
                 Link link = new Link("showInvoice"){
                     @Override
@@ -60,8 +61,24 @@ public class InvoiceOverviewTable extends Panel{
                 };
 
                 link.add(new Label("invoiceName", model(from(item.getModelObject()).getInvoiceName())));
-                item.add(new Label("contractName", model(from(item.getModelObject()).getContractName())));
                 item.add(link);
+                Link contractLink = new Link("contractLink"){
+                    @Override
+                    public void onClick() {
+                        WebPage page = new ContractDetailsPage(ContractDetailsPage.createParameters(item.getModelObject().getContractId())){
+
+                            @Override
+                            protected BreadcrumbsModel getBreadcrumbsModel() {
+                                BreadcrumbsModel m = breadcrumbsModel;
+                                m.addBreadcrumb(ContractDetailsPage.class, ContractDetailsPage.createParameters(item.getModelObject().getContractId()));
+                                return m;
+                            }
+                        };
+                        setResponsePage(page);
+                    }
+                };
+                contractLink.add(new Label("contractName", model(from(item.getModelObject()).getContractName())));
+                item.add(contractLink);
                 item.add(new Label("internalNumber", model(from(item.getModelObject()).getInternalNumber())));
                 item.add(new Label("year", model(from(item.getModelObject()).getYear())));
                 item.add(new Label("month", PropertyLoader.getProperty(BasePage.class, "monthRenderer.name." + item.getModelObject().getMonth())));
