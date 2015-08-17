@@ -114,11 +114,15 @@ public class ProjectService {
         invoiceRepository.deleteContractInvoiceFieldByProject(projectId);
         invoiceRepository.deleteByProjectId(projectId);
         contractRepository.deleteByProjectId(projectId);
-        List<UserEntity> userList = projectRepository.findOne(projectId).getAuthorizedUsers();
-        for(UserEntity u: userList){
-            if(u.getDefaultProject().getId() == projectId){
-                u.setDefaultProject(null);
-                userRepository.save(u);
+        if(projectRepository.findOne(projectId) != null) {
+            List<UserEntity> userList = projectRepository.findOne(projectId).getAuthorizedUsers();
+            if (userList != null) {
+                for (UserEntity u : userList) {
+                    if (u.getDefaultProject().getId() == projectId) {
+                        u.setDefaultProject(null);
+                        userRepository.save(u);
+                    }
+                }
             }
         }
         projectRepository.delete(projectId);
