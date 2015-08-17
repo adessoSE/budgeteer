@@ -44,4 +44,7 @@ public interface BudgetRepository extends CrudRepository<BudgetEntity, Long> {
     @Modifying
     @Query("delete from BudgetEntity b where b.project.id = :projectId")
     public void deleteByProjectId(@Param("projectId") long projectId);
+
+    @Query("select b from BudgetEntity b where b.contract.id = :contractId")
+    List<BudgetEntity> findByContractId(@Param("contractId") long cId);
 }

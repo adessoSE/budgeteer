@@ -20,6 +20,7 @@ import org.wickedsource.budgeteer.service.contract.ContractDataMapper;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 
@@ -110,6 +111,7 @@ public class BudgetService {
         data.setAvgDailyRate(toMoneyNullsafe(avgDailyRateInCents));
         data.setUnplanned(entity.getTotal().minus(toMoneyNullsafe(plannedBudgetInCents)));
         data.setContractName(entity.getContract() == null ? null : entity.getContract().getName() );
+        data.setContractId(entity.getContract() == null ? 0 : entity.getContract().getId() );
         return data;
     }
 
@@ -232,6 +234,17 @@ public class BudgetService {
 
     public void deleteBudget(long id) {
         budgetRepository.delete(id);
+    }
+
+    public List<BudgetDetailData> loadBudgetByContract(long cId){
+        List<BudgetDetailData> result = new LinkedList<BudgetDetailData>();
+        List<BudgetEntity> temp =budgetRepository.findByContractId(cId);
+        if(temp != null){
+            for(BudgetEntity b : temp){
+                result.add(enrichBudgetEntity(b));
+            }
+        }
+        return result;
     }
 
 }

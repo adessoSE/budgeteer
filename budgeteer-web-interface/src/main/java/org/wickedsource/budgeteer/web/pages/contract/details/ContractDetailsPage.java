@@ -12,6 +12,7 @@ import org.wickedsource.budgeteer.web.charts.BudgeteerChartTheme;
 import org.wickedsource.budgeteer.web.components.confirm.ConfirmationForm;
 import org.wickedsource.budgeteer.web.pages.base.basepage.BasePage;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
+import org.wickedsource.budgeteer.web.pages.contract.budgetOverview.BudgetForContractOverviewPage;
 import org.wickedsource.budgeteer.web.pages.contract.details.contractDetailChart.ContractDetailChart;
 import org.wickedsource.budgeteer.web.pages.contract.details.contractDetailChart.ContractDetailChartModel;
 import org.wickedsource.budgeteer.web.pages.contract.details.differenceTable.DifferenceTable;
@@ -38,6 +39,22 @@ public class ContractDetailsPage extends BasePage {
         add(new ContractHighlightsPanel("highlightsPanel", contractModel));
         add(new ContractDetailChart("comparisonChart", new ContractDetailChartModel(getParameterId(), numberOfMonths), new BudgeteerChartTheme()));
         add(new DifferenceTable("differenceTable", new DifferenceTableModel(getParameterId(), numberOfMonths)));
+ /**       add(new ListView<InvoiceBaseData>("invoices", contractModel.getObject().getBelongingInvoices()) {
+            @Override
+            protected void populateItem(final ListItem<InvoiceBaseData> item) {
+                BookmarkablePageLink<InvoiceDetailsPage> link = new BookmarkablePageLink<InvoiceDetailsPage>("link", InvoiceDetailsPage.class, InvoiceDetailsPage.createParameters(item.getModelObject().getInvoiceId()));
+                link.add(new Label("linkText", item.getModelObject().getInvoiceName()));
+                item.add(link);
+            }
+        });
+        add(new ListView<BudgetBaseData>("budgets", contractModel.getObject().getBelongingBudgets()) {
+            @Override
+            protected void populateItem(final ListItem<BudgetBaseData> item) {
+                BookmarkablePageLink<BudgetDetailsPage> link = new BookmarkablePageLink<BudgetDetailsPage>("link", BudgetDetailsPage.class, BudgetDetailsPage.createParameters(item.getModelObject().getId()));
+                link.add(new Label("linkText", item.getModelObject().getName()));
+                item.add(link);
+            }
+        }); **/
 
         add(new Link("editLink") {
             @Override
@@ -46,17 +63,40 @@ public class ContractDetailsPage extends BasePage {
                 setResponsePage(page);
             }
         });
-        add(new Link("showInvoices"){
-            @Override
-            public void onClick() {
-                WebPage page = new InvoiceOverviewPage(InvoiceOverviewPage.createParameters(getParameterId()));
-                setResponsePage(page);
-            }
-        });
         add(new Link("addInvoiceLink"){
             @Override
             public void onClick() {
                 WebPage page = new EditInvoicePage(EditInvoicePage.createNewInvoiceParameters(getParameterId()), ContractDetailsPage.class, getPageParameters());
+                setResponsePage(page);
+            }
+        });
+        add(new Link("showInvoiceLink"){
+            @Override
+            public void onClick() {
+                WebPage page = new InvoiceOverviewPage(InvoiceOverviewPage.createParameters(getParameterId())){
+
+                    @Override
+                    protected BreadcrumbsModel getBreadcrumbsModel() {
+                        BreadcrumbsModel m = ContractDetailsPage.this.getBreadcrumbsModel();
+                        m.addBreadcrumb(InvoiceOverviewPage.class, getPageParameters());
+                        return m;
+                    }
+                };
+                setResponsePage(page);
+            }
+        });
+        add(new Link("showContractLink"){
+            @Override
+            public void onClick() {
+                WebPage page = new BudgetForContractOverviewPage(BudgetForContractOverviewPage.createParameters(getParameterId())){
+
+                    @Override
+                    protected BreadcrumbsModel getBreadcrumbsModel() {
+                        BreadcrumbsModel m = ContractDetailsPage.this.getBreadcrumbsModel();
+                        m.addBreadcrumb(BudgetForContractOverviewPage.class, BudgetForContractOverviewPage.createParameters(getParameterId()));
+                        return m;
+                    }
+                };
                 setResponsePage(page);
             }
         });

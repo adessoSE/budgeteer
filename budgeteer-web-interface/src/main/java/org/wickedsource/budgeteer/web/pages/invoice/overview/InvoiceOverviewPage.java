@@ -29,9 +29,9 @@ public class InvoiceOverviewPage extends BasePage {
         super(parameters);
         InvoiceOverviewTable table;
         if(getParameterId() == 0l){
-             table = new InvoiceOverviewTable("invoiceTable", invoiceService.getInvoiceOverviewByProject(BudgeteerSession.get().getProjectId()), getParameterId());
+             table = new InvoiceOverviewTable("invoiceTable", invoiceService.getInvoiceOverviewByProject(BudgeteerSession.get().getProjectId()), getBreadcrumbsModel());
         } else {
-             table = new InvoiceOverviewTable("invoiceTable", invoiceService.getInvoiceOverviewByContract(getParameterId()), getParameterId());
+             table = new InvoiceOverviewTable("invoiceTable", invoiceService.getInvoiceOverviewByContract(getParameterId()), getBreadcrumbsModel());
         }
         add(table);
         add(new Link("createInvoiceLink") {

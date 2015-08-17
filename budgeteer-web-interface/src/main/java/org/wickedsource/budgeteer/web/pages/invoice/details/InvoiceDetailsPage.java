@@ -11,10 +11,10 @@ import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.components.confirm.ConfirmationForm;
 import org.wickedsource.budgeteer.web.pages.base.basepage.BasePage;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
+import org.wickedsource.budgeteer.web.pages.contract.details.ContractDetailsPage;
 import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 import org.wickedsource.budgeteer.web.pages.invoice.details.highlights.InvoiceHighlightsPanel;
 import org.wickedsource.budgeteer.web.pages.invoice.edit.EditInvoicePage;
-import org.wickedsource.budgeteer.web.pages.invoice.overview.InvoiceOverviewPage;
 
 @Mount("invoices/details/${id}")
 public class InvoiceDetailsPage extends BasePage {
@@ -46,7 +46,7 @@ public class InvoiceDetailsPage extends BasePage {
 
     @Override
     protected BreadcrumbsModel getBreadcrumbsModel() {
-        BreadcrumbsModel model = new BreadcrumbsModel(DashboardPage.class, InvoiceOverviewPage.class);
+        BreadcrumbsModel model = new BreadcrumbsModel(DashboardPage.class, ContractDetailsPage.class);
         model.addBreadcrumb(InvoiceDetailsPage.class, getPageParameters());
         return model;
     }

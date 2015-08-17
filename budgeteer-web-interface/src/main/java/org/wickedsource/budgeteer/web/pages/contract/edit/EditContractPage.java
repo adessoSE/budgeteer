@@ -64,7 +64,6 @@ public class EditContractPage extends DialogPageWithBacklink {
     public static PageParameters createParameters(long contractId) {
         PageParameters parameters = new PageParameters();
         parameters.add("id", contractId);
-        parameters.add("backLink", ContractOverviewPage.class);
         return parameters;
     }
 }

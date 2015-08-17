@@ -1,9 +1,11 @@
 package org.wickedsource.budgeteer.web.pages.invoice.overview.table;
 
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -12,6 +14,7 @@ import org.wickedsource.budgeteer.service.invoice.InvoiceBaseData;
 import org.wickedsource.budgeteer.web.PropertyLoader;
 import org.wickedsource.budgeteer.web.components.dataTable.DataTableBehavior;
 import org.wickedsource.budgeteer.web.pages.base.basepage.BasePage;
+import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
 import org.wickedsource.budgeteer.web.pages.invoice.details.InvoiceDetailsPage;
 import org.wickedsource.budgeteer.web.pages.invoice.edit.EditInvoicePage;
 
@@ -19,13 +22,12 @@ import static org.wicketstuff.lazymodel.LazyModel.from;
 import static org.wicketstuff.lazymodel.LazyModel.model;
 
 public class InvoiceOverviewTable extends Panel{
-    //PageParameter-Id of the OverviewPage
-    private long parentId;
+    private final BreadcrumbsModel breadcrumbsModel;
 
-    public InvoiceOverviewTable(String id, InvoiceOverviewTableModel invoiceOverviewTableModel, long parentId) {
+    public InvoiceOverviewTable(String id, InvoiceOverviewTableModel invoiceOverviewTableModel, BreadcrumbsModel breadcrumbsModel) {
         super(id);
-        this.parentId = parentId;
         addComponents(invoiceOverviewTableModel);
+        this.breadcrumbsModel = breadcrumbsModel;
     }
 
     private void addComponents(final InvoiceOverviewTableModel data) {
@@ -40,8 +42,23 @@ public class InvoiceOverviewTable extends Panel{
         table.add(new ListView<InvoiceBaseData>("invoiceRows", model(from(data).getInvoices())) {
             @Override
             protected void populateItem(ListItem<InvoiceBaseData> item) {
-                long invoiceId = item.getModelObject().getInvoiceId();
-                BookmarkablePageLink<EditInvoicePage> link = new BookmarkablePageLink<EditInvoicePage>("showInvoice", InvoiceDetailsPage.class, InvoiceDetailsPage.createParameters(invoiceId));
+                final long invoiceId = item.getModelObject().getInvoiceId();
+                Link link = new Link("showInvoice"){
+                    @Override
+                    public void onClick() {
+                        WebPage page = new InvoiceDetailsPage(InvoiceDetailsPage.createParameters(invoiceId)){
+
+                            @Override
+                            protected BreadcrumbsModel getBreadcrumbsModel() {
+                                BreadcrumbsModel m = breadcrumbsModel;
+                                m.addBreadcrumb(InvoiceDetailsPage.class, InvoiceDetailsPage.createParameters(invoiceId));
+                                return m;
+                            }
+                        };
+                        setResponsePage(page);
+                    }
+                };
+
                 link.add(new Label("invoiceName", model(from(item.getModelObject()).getInvoiceName())));
                 item.add(new Label("contractName", model(from(item.getModelObject()).getContractName())));
                 item.add(link);
