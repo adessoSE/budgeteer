@@ -10,7 +10,9 @@ import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.service.DateRange;
 import org.wickedsource.budgeteer.service.DateUtil;
 import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
@@ -18,8 +20,6 @@ import org.wickedsource.budgeteer.service.person.PersonRate;
 import org.wickedsource.budgeteer.service.person.PersonService;
 import org.wickedsource.budgeteer.service.person.PersonWithRates;
 import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
-import org.wickedsource.budgeteer.web.components.money.BudgetUnitMoneyModel;
-import org.wickedsource.budgeteer.web.components.money.MoneyLabel;
 import org.wickedsource.budgeteer.web.pages.person.edit.EditPersonPage;
 import org.wickedsource.budgeteer.web.pages.person.edit.IEditPersonPageStrategy;
 
@@ -98,7 +98,7 @@ public class EditPersonForm extends Form<PersonWithRates> {
         return new ListView<PersonRate>(id, model(from(getModel()).getRates())) {
             @Override
             protected void populateItem(final ListItem<PersonRate> item) {
-                item.add(new MoneyLabel("rate", new BudgetUnitMoneyModel(model(from(item.getModel()).getRate()))));
+                item.add(new Label("rate", Model.of(MoneyUtil.toDouble(item.getModelObject().getRate()))));
                 item.add(new Label("budget", model(from(item.getModel()).getBudget().getName())));
                 item.add(new Label("startDate", model(from(item.getModel()).getDateRange().getStartDate())));
                 item.add(new Label("endDate", model(from(item.getModel()).getDateRange().getEndDate())));

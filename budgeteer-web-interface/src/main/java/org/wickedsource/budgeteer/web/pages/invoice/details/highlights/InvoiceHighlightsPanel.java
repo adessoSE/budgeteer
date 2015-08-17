@@ -14,7 +14,6 @@ import org.apache.wicket.util.resource.AbstractResourceStreamWriter;
 import org.wickedsource.budgeteer.service.contract.DynamicAttributeField;
 import org.wickedsource.budgeteer.service.invoice.InvoiceBaseData;
 import org.wickedsource.budgeteer.web.PropertyLoader;
-import org.wickedsource.budgeteer.web.components.money.MoneyLabel;
 import org.wickedsource.budgeteer.web.pages.base.basepage.BasePage;
 
 import java.io.IOException;
@@ -37,7 +36,7 @@ public class InvoiceHighlightsPanel extends GenericPanel<InvoiceBaseData> {
         add(new Label("internalNumber", model(from(getModelObject()).getInternalNumber())));
         add(new Label("year", model(from(getModelObject()).getYear())));
         add(new Label("month", PropertyLoader.getProperty(BasePage.class, "monthRenderer.name." + getModelObject().getMonth())));
-        add(new MoneyLabel("sum", model(from(getModelObject()).getSum())));
+        add(new Label("sum", model(from(getModelObject()).getSum())));
         add(new Label("paid", (getModelObject().isPaid() ? getString("invoice.paid.yes") : getString("invoice.paid.no"))));
 
         WebMarkupContainer linkContainer = new WebMarkupContainer("linkContainer"){
