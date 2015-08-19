@@ -34,7 +34,7 @@ public class DifferenceTable extends GenericPanel<List<ContractStatisticBean>> {
                 month.add(new Label("monthName", PropertyLoader.getProperty(BasePage.class, ("monthRenderer.name." + item.getModelObject().getMonth()))));
                 item.add(month);
                 item.add(new Label("invoiced", Model.of(MoneyUtil.toDouble(MoneyUtil.createMoneyFromCents(item.getModelObject().getInvoicedBudget()), BudgeteerSession.get().getSelectedBudgetUnit()))));
-                item.add(new Label("spend", Model.of(MoneyUtil.toDouble(MoneyUtil.createMoneyFromCents(item.getModelObject().getSpendBudget()), BudgeteerSession.get().getSelectedBudgetUnit()))));
+                item.add(new Label("spend", Model.of(MoneyUtil.toDouble(MoneyUtil.createMoneyFromCents(item.getModelObject().getSpentBudget()), BudgeteerSession.get().getSelectedBudgetUnit()))));
                 item.add(new Label("difference", Model.of(MoneyUtil.toDouble(MoneyUtil.createMoneyFromCents(item.getModelObject().getDifference()), BudgeteerSession.get().getSelectedBudgetUnit()))));
             }
         });
@@ -46,7 +46,7 @@ public class DifferenceTable extends GenericPanel<List<ContractStatisticBean>> {
         long sumDifference = 0;
         for(ContractStatisticBean b : getModelObject()){
             sumInvoiced += b.getInvoicedBudget();
-            sumSpend += b.getSpendBudget();
+            sumSpend += b.getSpentBudget();
             sumDifference += b.getDifference();
         }
         table.add(new Label("sumInvoiced", Model.of(MoneyUtil.toDouble(MoneyUtil.createMoneyFromCents(sumInvoiced), BudgeteerSession.get().getSelectedBudgetUnit()))));

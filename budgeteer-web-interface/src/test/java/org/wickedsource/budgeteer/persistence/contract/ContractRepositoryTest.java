@@ -25,14 +25,14 @@ public class ContractRepositoryTest extends IntegrationTestTemplate {
         Assert.assertEquals(2, records.getMonth());
         Assert.assertEquals(2014, records.getYear());
         Assert.assertEquals(10000 - 200, records.getRemainingContractBudget());
-        Assert.assertEquals(200, records.getSpendBudget());
+        Assert.assertEquals(200, records.getSpentBudget());
         Assert.assertEquals(200, records.getInvoicedBudget());
 
         records = repository.getContractStatisticByMonthAndYear(1l, 6 ,2015);
         Assert.assertEquals(6, records.getMonth());
         Assert.assertEquals(2015, records.getYear());
         Assert.assertEquals(10000 - 400, records.getRemainingContractBudget());
-        Assert.assertEquals(400, records.getSpendBudget());
+        Assert.assertEquals(400, records.getSpentBudget());
         Assert.assertEquals(400, records.getInvoicedBudget());
 
 
@@ -40,7 +40,7 @@ public class ContractRepositoryTest extends IntegrationTestTemplate {
         Assert.assertEquals(1, records.getMonth());
         Assert.assertEquals(2016, records.getYear());
         Assert.assertEquals(10000 - 400, records.getRemainingContractBudget());
-        Assert.assertEquals(400, records.getSpendBudget());
+        Assert.assertEquals(400, records.getSpentBudget());
         Assert.assertEquals(400, records.getInvoicedBudget());
 
 
@@ -55,7 +55,7 @@ public class ContractRepositoryTest extends IntegrationTestTemplate {
         Assert.assertEquals(1, records.getMonth());
         Assert.assertEquals(2016, records.getYear());
         Assert.assertEquals(10000, records.getRemainingContractBudget());
-        Assert.assertEquals(0, records.getSpendBudget());
+        Assert.assertEquals(0, records.getSpentBudget());
         Assert.assertEquals(0, records.getInvoicedBudget());
     }
 }
