@@ -3,9 +3,11 @@ package org.wickedsource.budgeteer.persistence.contract;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Data
 @AllArgsConstructor
-public class ContractStatisticBean {
+public class ContractStatisticBean implements Serializable {
 
     private int year;
 
