@@ -14,7 +14,7 @@ public class ContractStatisticBean {
      * budgets are in cents
      */
     private long remainingContractBudget;
-    private long spendBudget;
+    private long spentBudget;
     private long invoicedBudget;
 
     /**
@@ -23,7 +23,7 @@ public class ContractStatisticBean {
     private int month;
 
     public long getDifference(){
-        return spendBudget - invoicedBudget;
+        return spentBudget - invoicedBudget;
     }
 
 }

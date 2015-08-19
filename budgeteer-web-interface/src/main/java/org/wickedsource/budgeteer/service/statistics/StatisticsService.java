@@ -465,7 +465,7 @@ public class StatisticsService {
         List<ContractStatisticBean> values = getMonthlyAggregatedStatisticsForContract(contractId, numberOfMonths);
         for(ContractStatisticBean bean : values){
             result.getRemainingTotalBudget().add(MoneyUtil.createMoneyFromCents(bean.getRemainingContractBudget()));
-            result.getBurnedMoneyAllBudgets().add(MoneyUtil.createMoneyFromCents(bean.getSpendBudget()));
+            result.getBurnedMoneyAllBudgets().add(MoneyUtil.createMoneyFromCents(bean.getSpentBudget()));
             result.getBurnedMoneyInvoice().add(MoneyUtil.createMoneyFromCents(bean.getInvoicedBudget()));
         }
         return result;
