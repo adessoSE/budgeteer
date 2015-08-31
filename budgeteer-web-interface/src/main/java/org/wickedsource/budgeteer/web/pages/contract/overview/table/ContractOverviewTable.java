@@ -7,7 +7,9 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.persistence.contract.ContractEntity;
 import org.wickedsource.budgeteer.service.contract.ContractBaseData;
 import org.wickedsource.budgeteer.service.contract.ContractService;
@@ -52,7 +54,7 @@ public class ContractOverviewTable extends Panel{
                         item.add(new Label("contractRowText", item.getModelObject().getValue()));
                     }
                 });
-                item.add(new Label("budget", model(from(item.getModelObject()).getBudget())));
+                item.add(new Label("budget", Model.of(MoneyUtil.toDouble(item.getModelObject().getBudget(), BudgeteerSession.get().getSelectedBudgetUnit()))));
                 item.add(new BookmarkablePageLink("editLink", EditContractPage.class, EditContractPage.createParameters(contractId)));
             }
         });
