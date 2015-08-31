@@ -7,13 +7,13 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.IModel;
 import org.joda.money.Money;
 import org.wickedsource.budgeteer.web.components.dataTable.CustomDataTableEventBehavior;
 import org.wickedsource.budgeteer.web.components.money.MoneyTextField;
 
-public abstract class EditableMoneyField extends Panel {
+public abstract class EditableMoneyField extends GenericPanel<Money> {
 
     private boolean isEditable;
     private Label label;
@@ -26,11 +26,11 @@ public abstract class EditableMoneyField extends Panel {
         this(id, table, model, false);
     }
     public EditableMoneyField(final String id, final MarkupContainer table, final IModel<Money> model, boolean editable) {
-        super(id);
+        super(id, model);
         this.isEditable = editable;
         container = new WebMarkupContainer("container");
         container.setOutputMarkupId(true);
-        label = new Label("label", model){
+        label = new Label("label", getModel()){
             @Override
             public boolean isVisible() {
                 return !isEditable;
@@ -39,13 +39,13 @@ public abstract class EditableMoneyField extends Panel {
         label.setOutputMarkupId(true);
         this.add(label);
 
-        form = new Form<Money>("editor", model){
+        form = new Form<Money>("editor", getModel()){
             @Override
             public boolean isVisible() {
                 return isEditable;
             }
         };
-        rateField = new MoneyTextField("input", model);
+        rateField = new MoneyTextField("input", getModel());
         rateField.setOutputMarkupId(true);
 
         AjaxButton save = new AjaxButton("save", form) {
@@ -67,7 +67,6 @@ public abstract class EditableMoneyField extends Panel {
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 isEditable = false;
                 target.add(container);
-                cancel(target, EditableMoneyField.this.form);
             }
         };
         cancel.setDefaultFormProcessing(false);
@@ -96,11 +95,6 @@ public abstract class EditableMoneyField extends Panel {
     protected abstract void cancel(AjaxRequestTarget target, Form<Money> form);
     protected abstract void convertError(AjaxRequestTarget target);
 
-    public void setModel(IModel<Money> model){
-        label.setDefaultModel(model);
-        rateField.setDefaultModel(model);
-        form.setDefaultModel(model);
-    }
 
 
 
