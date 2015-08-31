@@ -40,6 +40,12 @@ public class InvoiceDataMapper extends AbstractMapper<InvoiceEntity, InvoiceBase
                 Map.Entry pair = (Map.Entry)it.next();
                 dynamicAttributeFieldMap.put((String) pair.getKey(), new DynamicAttributeField((String) pair.getKey(), ""));
             }
+        } else {
+            if(entity.getContract().getInvoiceFields() != null){
+               for (ContractInvoiceField contractInvoiceField : entity.getContract().getInvoiceFields()) {
+                    dynamicAttributeFieldMap.put(contractInvoiceField.getFieldName(), new DynamicAttributeField(contractInvoiceField.getFieldName(), ""));
+               }
+            }
         }
         for(InvoiceFieldEntity fieldEntity : entity.getDynamicFields()){
             dynamicAttributeFieldMap.put(fieldEntity.getField().getFieldName(), new DynamicAttributeField(fieldEntity.getField().getFieldName(), fieldEntity.getValue()));

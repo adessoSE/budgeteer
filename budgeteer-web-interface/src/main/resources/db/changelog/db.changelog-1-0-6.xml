@@ -152,4 +152,8 @@
         <createSequence sequenceName="SEQ_INVOICE_ID" startValue="1"/>
     </changeSet>
 
+    <changeSet id="Issue #77" author="ehhc">
+        <createSequence sequenceName="SEQ_Contract_Invoice_field_ID" startValue="1"/>
+        <createSequence sequenceName="SEQ_Project_contract_field_ID" startValue="1"/>
+    </changeSet>
 </databaseChangeLog>

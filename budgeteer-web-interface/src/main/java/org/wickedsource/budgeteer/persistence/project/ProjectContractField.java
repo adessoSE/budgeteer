@@ -19,7 +19,8 @@ import java.io.Serializable;
  */
 public class ProjectContractField implements Serializable{
     @Id
-    @GeneratedValue()
+    @SequenceGenerator(name="SEQ_Project_contract_field_ID", sequenceName="SEQ_Project_contract_field_ID")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_Project_contract_field_ID")
     private long id;
 
     @Column(name="FIELD_NAME", nullable = false)

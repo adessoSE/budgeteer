@@ -70,8 +70,21 @@ public class ContractEntity implements Serializable {
     /**
      * A list of possible dynamic fields that a invoice that belongs to this contract can use
      */
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "contract", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "contract", fetch = FetchType.LAZY)
     private Set<ContractInvoiceField> invoiceFields;
 
-
+    @Override
+    public String toString() {
+        return "ContractEntity{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", projectId=" + project.getId() +
+                ", budget=" + budget +
+                ", internalNumber='" + internalNumber + '\'' +
+                ", year=" + year +
+                ", type=" + type +
+                ", link='" + link + '\'' +
+                ", fileName='" + fileName + '\'' +
+                '}';
+    }
 }

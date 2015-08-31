@@ -59,4 +59,7 @@ public interface ContractRepository extends CrudRepository<ContractEntity, Long>
     @Query("delete from ContractEntity c where c.project.id = :projectId")
     void deleteByProjectId(@Param(value = "projectId") long projectId);
 
+    @Query("select c from ContractEntity c join fetch c.invoiceFields where c.id = :id")
+    public ContractEntity findById(@Param("id") long id);
+
 }

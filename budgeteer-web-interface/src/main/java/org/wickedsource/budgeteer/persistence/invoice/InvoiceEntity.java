@@ -74,5 +74,20 @@ public class InvoiceEntity {
     @JoinColumn(name="INVOICE_ID")
     private List<InvoiceFieldEntity> dynamicFields = new LinkedList<InvoiceFieldEntity>();
 
-
+    @Override
+    public String toString() {
+        return "InvoiceEntity{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", invoiceSum=" + invoiceSum +
+                ", internalNumber='" + internalNumber + '\'' +
+                ", year=" + year +
+                ", month=" + month +
+                ", date=" + date +
+                ", paid=" + paid +
+                ", link='" + link + '\'' +
+                ", fileName='" + fileName + '\'' +
+                ", contractId=" + contract.getId() +
+                '}';
+    }
 }
