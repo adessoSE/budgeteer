@@ -26,6 +26,6 @@ public class DifferenceTableModel extends LoadableDetachableModel<List<ContractS
 
     @Override
     protected List<ContractStatisticBean> load() {
-        return service.getMonthlyAggregatedStatisticsForContract(contractId, numberOfMonths);
+        return service.getMonthlyStatisticsForContract(contractId, numberOfMonths);
     }
 }

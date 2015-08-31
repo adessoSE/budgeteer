@@ -453,6 +453,21 @@ public class StatisticsService {
         Calendar currentDate = Calendar.getInstance();
         currentDate.setTime(new Date());
         while(cal.before(currentDate)){
+            ContractStatisticBean bean = contractRepository.getContractStatisticAggregatedByMonthAndYear(contractId, cal.get(Calendar.MONTH), cal.get(Calendar.YEAR));
+            result.add(bean);
+            cal.add(Calendar.MONTH, 1);
+        }
+        return result;
+    }
+
+    public List<ContractStatisticBean> getMonthlyStatisticsForContract(long contractId, int numberOfMonths){
+        List<ContractStatisticBean> result = new LinkedList<ContractStatisticBean>();
+        Date startDate = dateUtil.monthsAgo(numberOfMonths);
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(startDate);
+        Calendar currentDate = Calendar.getInstance();
+        currentDate.setTime(new Date());
+        while(cal.before(currentDate)){
             ContractStatisticBean bean = contractRepository.getContractStatisticByMonthAndYear(contractId, cal.get(Calendar.MONTH), cal.get(Calendar.YEAR));
             result.add(bean);
             cal.add(Calendar.MONTH, 1);

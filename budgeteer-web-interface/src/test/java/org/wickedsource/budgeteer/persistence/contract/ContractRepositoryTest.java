@@ -21,14 +21,14 @@ public class ContractRepositoryTest extends IntegrationTestTemplate {
     @DatabaseTearDown(value = "contract.xml", type = DatabaseOperation.DELETE_ALL)
     public void testGetRemainingBudgetForContract() throws ParseException {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        ContractStatisticBean records = repository.getContractStatisticByMonthAndYear(1l, 2 ,2014);
+        ContractStatisticBean records = repository.getContractStatisticAggregatedByMonthAndYear(1l, 2, 2014);
         Assert.assertEquals(2, records.getMonth());
         Assert.assertEquals(2014, records.getYear());
         Assert.assertEquals(10000 - 200, records.getRemainingContractBudget());
         Assert.assertEquals(200, records.getSpentBudget());
         Assert.assertEquals(200, records.getInvoicedBudget());
 
-        records = repository.getContractStatisticByMonthAndYear(1l, 6 ,2015);
+        records = repository.getContractStatisticAggregatedByMonthAndYear(1l, 6, 2015);
         Assert.assertEquals(6, records.getMonth());
         Assert.assertEquals(2015, records.getYear());
         Assert.assertEquals(10000 - 400, records.getRemainingContractBudget());
@@ -36,7 +36,7 @@ public class ContractRepositoryTest extends IntegrationTestTemplate {
         Assert.assertEquals(400, records.getInvoicedBudget());
 
 
-        records = repository.getContractStatisticByMonthAndYear(1l, 1 ,2016);
+        records = repository.getContractStatisticAggregatedByMonthAndYear(1l, 1, 2016);
         Assert.assertEquals(1, records.getMonth());
         Assert.assertEquals(2016, records.getYear());
         Assert.assertEquals(10000 - 400, records.getRemainingContractBudget());
@@ -51,7 +51,7 @@ public class ContractRepositoryTest extends IntegrationTestTemplate {
     @DatabaseTearDown(value = "contract.xml", type = DatabaseOperation.DELETE_ALL)
     public void testGetRemainingBudgetForContractWithoutWorkRecordsOrInvoices() {
         ContractStatisticBean records;
-        records = repository.getContractStatisticByMonthAndYear(2l, 1 ,2016);
+        records = repository.getContractStatisticAggregatedByMonthAndYear(2l, 1, 2016);
         Assert.assertEquals(1, records.getMonth());
         Assert.assertEquals(2016, records.getYear());
         Assert.assertEquals(10000, records.getRemainingContractBudget());
