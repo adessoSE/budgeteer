@@ -113,6 +113,7 @@ public class ProjectService {
         invoiceRepository.deleteInvoiceFieldByProjectId(projectId);
         invoiceRepository.deleteContractInvoiceFieldByProject(projectId);
         invoiceRepository.deleteByProjectId(projectId);
+        contractRepository.deleteContractFieldByProjectId(projectId);
         contractRepository.deleteByProjectId(projectId);
         if(projectRepository.findOne(projectId) != null) {
             List<UserEntity> userList = projectRepository.findOne(projectId).getAuthorizedUsers();
