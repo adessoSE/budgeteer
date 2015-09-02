@@ -84,6 +84,7 @@ public class InvoiceOverviewTable extends Panel{
                 item.add(contractLink);
                 item.add(new Label("internalNumber", model(from(item.getModelObject()).getInternalNumber())));
                 item.add(new Label("year", model(from(item.getModelObject()).getYear())));
+                item.add(new Label("month_number", getMonthNumberAsString(item.getModelObject().getMonth())));
                 item.add(new Label("month", PropertyLoader.getProperty(BasePage.class, "monthRenderer.name." + item.getModelObject().getMonth())));
                 item.add(new Label("sum", Model.of(MoneyUtil.toDouble(item.getModelObject().getSum(), BudgeteerSession.get().getSelectedBudgetUnit()))));
                 CheckBox paid = new CheckBox("paid", model(from(item.getModelObject()).isPaid()));
@@ -105,5 +106,13 @@ public class InvoiceOverviewTable extends Panel{
             }
         });
         add(table);
+    }
+
+    private String getMonthNumberAsString(int month) {
+        String r = "" + month;
+        if(r.length() < 2){
+            r = "0" + r;
+        }
+        return r;
     }
 }
