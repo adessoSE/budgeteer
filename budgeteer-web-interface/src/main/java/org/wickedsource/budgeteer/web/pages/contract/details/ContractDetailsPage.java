@@ -38,7 +38,7 @@ public class ContractDetailsPage extends BasePage {
 
         add(new ContractHighlightsPanel("highlightsPanel", contractModel));
         add(new ContractDetailChart("comparisonChart", new ContractDetailChartModel(getParameterId(), numberOfMonths), new BudgeteerChartTheme()));
-        add(new DifferenceTable("differenceTable", new DifferenceTableModel(getParameterId(), numberOfMonths)));
+        add(new DifferenceTable("differenceTable", new DifferenceTableModel(getParameterId(), contractModel.getObject().getStartDate())));
  /**       add(new ListView<InvoiceBaseData>("invoices", contractModel.getObject().getBelongingInvoices()) {
             @Override
             protected void populateItem(final ListItem<InvoiceBaseData> item) {

@@ -7,6 +7,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.persistence.contract.ContractStatisticBean;
 import org.wickedsource.budgeteer.service.statistics.StatisticsService;
 
+import java.util.Date;
 import java.util.List;
 
 public class DifferenceTableModel extends LoadableDetachableModel<List<ContractStatisticBean>> {
@@ -16,16 +17,16 @@ public class DifferenceTableModel extends LoadableDetachableModel<List<ContractS
     private long contractId;
 
     @Getter
-    private int numberOfMonths;
+    private Date startDate;
 
-    public DifferenceTableModel(long contractId, int numberOfMonths) {
+    public DifferenceTableModel(long contractId, Date startDate) {
         Injector.get().inject(this);
         this.contractId = contractId;
-        this.numberOfMonths = numberOfMonths;
+        this.startDate = startDate;
     }
 
     @Override
     protected List<ContractStatisticBean> load() {
-        return service.getMonthlyStatisticsForContract(contractId, numberOfMonths);
+        return service.getMonthlyStatisticsForContract(contractId, startDate);
     }
 }

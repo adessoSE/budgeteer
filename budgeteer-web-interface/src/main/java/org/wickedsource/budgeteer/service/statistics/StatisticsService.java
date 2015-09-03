@@ -460,9 +460,8 @@ public class StatisticsService {
         return result;
     }
 
-    public List<ContractStatisticBean> getMonthlyStatisticsForContract(long contractId, int numberOfMonths){
+    public List<ContractStatisticBean> getMonthlyStatisticsForContract(long contractId, Date startDate){
         List<ContractStatisticBean> result = new LinkedList<ContractStatisticBean>();
-        Date startDate = dateUtil.monthsAgo(numberOfMonths);
         Calendar cal = Calendar.getInstance();
         cal.setTime(startDate);
         Calendar currentDate = Calendar.getInstance();
