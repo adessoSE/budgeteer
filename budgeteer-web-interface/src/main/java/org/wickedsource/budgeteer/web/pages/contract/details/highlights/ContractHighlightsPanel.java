@@ -15,6 +15,7 @@ import org.apache.wicket.util.resource.AbstractResourceStreamWriter;
 import org.wickedsource.budgeteer.persistence.contract.ContractEntity;
 import org.wickedsource.budgeteer.service.contract.ContractBaseData;
 import org.wickedsource.budgeteer.service.contract.DynamicAttributeField;
+import org.wickedsource.budgeteer.web.components.datelabel.DateLabel;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -28,7 +29,7 @@ public class ContractHighlightsPanel extends Panel {
         super(id, model);
         add(new Label("name", model(from(model.getObject()).getContractName())));
         add(new Label("internalNumber", model(from(model.getObject()).getInternalNumber())));
-        add(new Label("year", model(from(model.getObject()).getYear())));
+        add(new DateLabel("startDate", model(from(model.getObject()).getStartDate())));
         add(new EnumLabel<ContractEntity.ContractType>("type", model(from(model.getObject()).getType())));
         add(new Label("budget", model(from(model.getObject()).getBudget())));
 

@@ -16,6 +16,7 @@ import org.wickedsource.budgeteer.service.contract.ContractService;
 import org.wickedsource.budgeteer.service.contract.DynamicAttributeField;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.components.dataTable.DataTableBehavior;
+import org.wickedsource.budgeteer.web.components.datelabel.DateLabel;
 import org.wickedsource.budgeteer.web.pages.contract.details.ContractDetailsPage;
 import org.wickedsource.budgeteer.web.pages.contract.edit.EditContractPage;
 
@@ -46,7 +47,7 @@ public class ContractOverviewTable extends Panel{
                 link.add(new Label("contractName", model(from(item.getModelObject()).getContractName())));
                 item.add(link);
                 item.add(new Label("internalNumber", model(from(item.getModelObject()).getInternalNumber())));
-                item.add(new Label("year", model(from(item.getModelObject()).getYear())));
+                item.add(new DateLabel("startDate", model(from(item.getModelObject()).getStartDate())));
                 item.add(new EnumLabel<ContractEntity.ContractType>("type", model(from(item.getModelObject()).getType())));
                 item.add(new ListView<DynamicAttributeField>("contractRow", model(from(item.getModelObject()).getContractAttributes())) {
                     @Override

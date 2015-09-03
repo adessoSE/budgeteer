@@ -4,6 +4,7 @@ import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
+import org.apache.commons.lang3.time.DateUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +19,7 @@ import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.persistence.contract.ContractEntity;
 import org.wickedsource.budgeteer.persistence.project.ProjectRepository;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -106,7 +106,7 @@ public class ContractServiceTest{
         testObject.setBudget(MoneyUtil.createMoney(12));
         testObject.setContractName("Test Contract");
         testObject.setInternalNumber("Test Contract");
-        testObject.setYear(333);
+        testObject.setStartDate(new Date());
         testObject.setType(ContractEntity.ContractType.T_UND_M);
         testObject.setContractAttributes(getListOfContractFields());
         testObject.getContractAttributes().add(new DynamicAttributeField("test5", "test5"));
@@ -120,7 +120,7 @@ public class ContractServiceTest{
         assertEquals("Test Contract", savedContract.getContractName());
         assertEquals("Test Contract", savedContract.getInternalNumber());
         assertEquals(MoneyUtil.createMoney(12), savedContract.getBudget());
-        assertEquals(333, savedContract.getYear());
+        assertEquals(DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH), savedContract.getStartDate());
         assertEquals(ContractEntity.ContractType.T_UND_M, savedContract.getType());
         assertEquals(6, savedContract.getContractAttributes().size());
         for (int i = 0; i < 6; i++) {
@@ -149,7 +149,7 @@ public class ContractServiceTest{
         testObject.setBudget(MoneyUtil.createMoney(12));
         testObject.setContractName("Test Contract");
         testObject.setInternalNumber("Test Contract");
-        testObject.setYear(333);
+        testObject.setStartDate(new Date());
         testObject.setType(ContractEntity.ContractType.T_UND_M);
         testObject.setContractAttributes(getListOfContractFields());
         testObject.getContractAttributes().add(new DynamicAttributeField("test5", "test5"));
@@ -164,7 +164,7 @@ public class ContractServiceTest{
         assertEquals("Test Contract", savedContract.getContractName());
         assertEquals("Test Contract", savedContract.getInternalNumber());
         assertEquals(MoneyUtil.createMoney(12), savedContract.getBudget());
-        assertEquals(333, savedContract.getYear());
+        assertEquals(DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH), savedContract.getStartDate());
         assertEquals(ContractEntity.ContractType.T_UND_M, savedContract.getType());
         assertEquals(7, savedContract.getContractAttributes().size());
         for (int i = 0; i < 7; i++) {
@@ -215,7 +215,9 @@ public class ContractServiceTest{
         assertEquals("Test", testObject.getContractName());
         assertEquals("Test", testObject.getInternalNumber());
         assertEquals(MoneyUtil.createMoney(1), testObject.getBudget());
-        assertEquals(2015, testObject.getYear());
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.setTime(testObject.getStartDate());
+        assertEquals(2015, cal.get(Calendar.YEAR));
         assertEquals(ContractEntity.ContractType.FIXED_PRICE, testObject.getType());
     }
 

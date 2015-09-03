@@ -219,7 +219,7 @@ public class InvoiceServiceTest{
     private InvoiceBaseData getDummyInvoice(){
         InvoiceBaseData result = new InvoiceBaseData();
         result.setInvoiceId(0);
-        result.setPaid(false);
+        result.setPaidDate(null);
         result.setContractId(1);
         result.setContractName("Test");
         result.setInternalNumber("Internal Number");

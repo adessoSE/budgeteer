@@ -52,8 +52,13 @@ public class InvoiceEntity {
     @Temporal(TemporalType.DATE)
     private Date date;
 
-    @Column(name = "PAID")
-    private boolean paid;
+    @Column(name = "DUE_DATE")
+    @Temporal(TemporalType.DATE)
+    private Date dueDate;
+
+    @Column(name = "PAID_DATE")
+    @Temporal(TemporalType.DATE)
+    private Date paidDate;
 
     @Column(name = "LINK")
     private String link;
@@ -84,7 +89,6 @@ public class InvoiceEntity {
                 ", year=" + year +
                 ", month=" + month +
                 ", date=" + date +
-                ", paid=" + paid +
                 ", link='" + link + '\'' +
                 ", fileName='" + fileName + '\'' +
                 ", contractId=" + contract.getId() +

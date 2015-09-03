@@ -71,7 +71,7 @@ public class ContractService {
         contractEntity.setName(contractBaseData.getContractName());
         contractEntity.setBudget(contractBaseData.getBudget());
         contractEntity.setInternalNumber(contractBaseData.getInternalNumber());
-        contractEntity.setYear(contractBaseData.getYear());
+        contractEntity.setStartDate(contractBaseData.getStartDate());
         contractEntity.setType(contractBaseData.getType());
         contractEntity.setLink(contractBaseData.getFileModel().getLink());
         contractEntity.setFileName(contractBaseData.getFileModel().getFileName());

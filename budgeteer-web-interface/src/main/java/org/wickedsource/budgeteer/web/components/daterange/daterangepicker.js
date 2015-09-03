@@ -54,6 +54,8 @@
         this.timePickerSeconds = false;
         this.linkedCalendars = true;
         this.ranges = {};
+        this.enableEmptyDate = false;
+        this.calendarClicked = false;
 
         this.opens = 'right';
         if (this.element.hasClass('pull-right'))
@@ -257,6 +259,10 @@
             }
         }
 
+        if(typeof  options.enableEmptyDate === 'boolean'){
+            this.enableEmptyDate = options.enableEmptyDate;
+        }
+
         var start, end, range;
 
         //if no start/end dates set, check if an input element contains initial values
@@ -425,7 +431,11 @@
             this.element.val(this.startDate.format(this.locale.format) + this.locale.separator + this.endDate.format(this.locale.format));
             this.element.trigger('change');
         } else if (this.element.is('input')) {
-            this.element.val(this.startDate.format(this.locale.format));
+            if(this.enableEmptyDate && (this.element.val() == '' || !this.startDate.isValid())){
+                this.element.val('');
+            } else {
+                this.element.val(this.startDate.format(this.locale.format));
+            }
             this.element.trigger('change');
         }
 
@@ -939,7 +949,6 @@
             this.container.find('input[name=daterangepicker_start]').val(this.startDate.format(this.locale.format));
             if (this.endDate)
                 this.container.find('input[name=daterangepicker_end]').val(this.endDate.format(this.locale.format));
-
             if (this.singleDatePicker || (this.endDate && (this.startDate.isBefore(this.endDate) || this.startDate.isSame(this.endDate)))) {
                 this.container.find('button.applyBtn').removeAttr('disabled');
             } else {
@@ -1048,7 +1057,12 @@
                 this.element.val(this.startDate.format(this.locale.format) + this.locale.separator + this.endDate.format(this.locale.format));
                 this.element.trigger('change');
             } else if (this.element.is('input')) {
-                this.element.val(this.startDate.format(this.locale.format));
+                if(this.enableEmptyDate && ((!this.calendarClicked && this.element.val() == '') || !this.startDate.isValid())){
+                    this.element.val('');
+                    this.calendarClicked = false;
+                } else {
+                    this.element.val(this.startDate.format(this.locale.format));
+                }
                 this.element.trigger('change');
             }
 
@@ -1255,6 +1269,7 @@
         },
 
         clickApply: function(e) {
+            this.calendarClicked = true;
             this.hide();
             this.element.trigger('apply.daterangepicker', this);
         },
@@ -1405,6 +1420,7 @@
         },
 
         keydown: function(e) {
+            this.calendarClicked = false;
             //hide on tab or enter
             if ((e.keyCode === 9) || (e.keyCode === 13)) {
                 this.hide();

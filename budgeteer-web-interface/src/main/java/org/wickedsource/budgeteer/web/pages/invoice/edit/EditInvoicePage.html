@@ -43,8 +43,12 @@
                             <input wicket:id="sum" style="width: 100%;" type="number" step="0.01" class="form-control" id="sum"/>
                         </div>
                         <div class="form-group">
-                            <label for="paid"><wicket:message key="page.invoice.paid">Paid</wicket:message></label>
-                            <input wicket:id="paid" style="width: 100%;" type="checkbox" class="form-control" id="paid"/>
+                            <label for="paid"><wicket:message key="page.invoice.paidDate">Paid</wicket:message></label>
+                            <input wicket:id="paidDate" style="width: 100%;" type="text" class="form-control" id="paidDate"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="dueDate"><wicket:message key="page.invoice.dueDate">Paid</wicket:message></label>
+                            <input wicket:id="dueDate" style="width: 100%;" type="text" class="form-control" id="dueDate"/>
                         </div>
                         <div wicket:id="fileUpload"></div>
                     </div>
