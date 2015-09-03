@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface PlanRecordsImporter extends Importer {
 
-    List<ImportedPlanRecord> importFile(ImportFile file, CurrencyUnit currencyUnit) throws ImportException;
+    List<ImportedPlanRecord> importFile(ImportFile file, CurrencyUnit currencyUnit) throws ImportException, InvalidFileFormatException;
 
 }

@@ -11,6 +11,7 @@ import org.wickedsource.budgeteer.IntegrationTestTemplate;
 import org.wickedsource.budgeteer.importer.resourceplan.ResourcePlanImporter;
 import org.wickedsource.budgeteer.imports.api.ImportException;
 import org.wickedsource.budgeteer.imports.api.ImportFile;
+import org.wickedsource.budgeteer.imports.api.InvalidFileFormatException;
 import org.wickedsource.budgeteer.persistence.budget.BudgetRepository;
 import org.wickedsource.budgeteer.persistence.imports.ImportEntity;
 import org.wickedsource.budgeteer.persistence.imports.ImportRepository;
@@ -78,7 +79,7 @@ public class PlanRecordImportIntegrationTest extends IntegrationTestTemplate {
         assertImportRecord();
     }
 
-    private void doImport() throws ImportException {
+    private void doImport() throws ImportException, InvalidFileFormatException {
         List<ImportFile> importFiles = new ArrayList<ImportFile>();
         importFiles.add(new ImportFile("resource_plan.xlsx", getClass().getResourceAsStream("resource_plan.xlsx")));
         importService.doImport(1l, new ResourcePlanImporter(), importFiles);

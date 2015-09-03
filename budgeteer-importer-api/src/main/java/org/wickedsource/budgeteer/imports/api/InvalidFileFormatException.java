@@ -1,7 +1,16 @@
 package org.wickedsource.budgeteer.imports.api;
 
+
+
 public class InvalidFileFormatException extends Exception {
-    public InvalidFileFormatException(String message){
+    private String fileName;
+
+    public InvalidFileFormatException(String message, String fileName){
         super(message);
+        this.fileName = fileName;
+    }
+
+    public String getFileName(){
+        return fileName;
     }
 }
