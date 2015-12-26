@@ -86,8 +86,8 @@ public class RecordService {
      * @return one record for each week from the current week to the first week that was booked in the given budget
      */
     public List<AggregatedRecord> getWeeklyAggregationForBudgets(BudgetTagFilter budgetFilter) {
-        List<WeeklyAggregatedRecordBean> planRecords = new ArrayList<WeeklyAggregatedRecordBean>();
-        List<WeeklyAggregatedRecordBean> workRecords = new ArrayList<WeeklyAggregatedRecordBean>();
+        List<WeeklyAggregatedRecordBean> planRecords = new ArrayList<>();
+        List<WeeklyAggregatedRecordBean> workRecords = new ArrayList<>();
         if (budgetFilter.getSelectedTags().isEmpty()) {
             planRecords = planRecordRepository.aggregateByWeek(budgetFilter.getProjectId());
             workRecords = workRecordRepository.aggregateByWeek(budgetFilter.getProjectId());
@@ -105,8 +105,8 @@ public class RecordService {
      * @return one record for each month from the current month to the first month that was booked in the given budget.
      */
     public List<AggregatedRecord> getMonthlyAggregationForBudgets(BudgetTagFilter budgetFilter) {
-        List<MonthlyAggregatedRecordBean> planRecords = new ArrayList<MonthlyAggregatedRecordBean>();
-        List<MonthlyAggregatedRecordBean> workRecords = new ArrayList<MonthlyAggregatedRecordBean>();
+        List<MonthlyAggregatedRecordBean> planRecords = new ArrayList<>();
+        List<MonthlyAggregatedRecordBean> workRecords = new ArrayList<>();
         if (budgetFilter.getSelectedTags().isEmpty()) {
             workRecords = workRecordRepository.aggregateByMonth(budgetFilter.getProjectId());
             planRecords = planRecordRepository.aggregateByMonth(budgetFilter.getProjectId());

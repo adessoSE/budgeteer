@@ -28,6 +28,7 @@ public class PersonHoursPage extends PersonBasePage {
         add(table);
     }
 
+    @SuppressWarnings("unchecked")
     protected BreadcrumbsModel getBreadcrumbsModel() {
         BreadcrumbsModel model = new BreadcrumbsModel(DashboardPage.class, PeopleOverviewPage.class);
         model.addBreadcrumb(new Breadcrumb(PersonDetailsPage.class, PersonDetailsPage.createParameters(getPersonId()), new PersonNameModel(getPersonId())));

@@ -10,12 +10,13 @@ import org.wickedsource.budgeteer.web.AbstractWebTestTemplate;
 import org.wickedsource.budgeteer.web.PropertyLoader;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.Mockito.when;
 
 public class NotificationDropdownTest extends AbstractWebTestTemplate {
+
+    private static final List<Notification> EMPTY_NOTIFICATION_LIST = new ArrayList<>(0);
 
     @Autowired
     private NotificationService service;
@@ -23,8 +24,8 @@ public class NotificationDropdownTest extends AbstractWebTestTemplate {
     @Test
     public void testRenderFull() {
         WicketTester tester = getTester();
-        when(service.getNotifications(1l)).thenReturn(createNotifications());
-        NotificationModel model = new NotificationModel(1l);
+        when(service.getNotifications(1L)).thenReturn(createNotifications());
+        NotificationModel model = new NotificationModel(1L);
         NotificationDropdown dropdown = new NotificationDropdown("dropdown", model);
         tester.startComponentInPage(dropdown);
 
@@ -35,8 +36,8 @@ public class NotificationDropdownTest extends AbstractWebTestTemplate {
     @Test
     public void testRenderEmpty() {
         WicketTester tester = getTester();
-        when(service.getNotifications(1l)).thenReturn(Collections.EMPTY_LIST);
-        NotificationModel model = new NotificationModel(1l);
+        when(service.getNotifications(1L)).thenReturn(EMPTY_NOTIFICATION_LIST);
+        NotificationModel model = new NotificationModel(1L);
         NotificationDropdown dropdown = new NotificationDropdown("dropdown", model);
         tester.startComponentInPage(dropdown);
 
@@ -46,7 +47,7 @@ public class NotificationDropdownTest extends AbstractWebTestTemplate {
     }
 
     private List<Notification> createNotifications() {
-        List<Notification> notifications = new ArrayList<Notification>();
+        List<Notification> notifications = new ArrayList<>();
         notifications.add(new MissingDailyRateNotification());
         notifications.add(new MissingDailyRateNotification());
         return notifications;
