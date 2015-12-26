@@ -1,6 +1,9 @@
 package org.wickedsource.budgeteer.web.planning;
 
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Standard calendar in which only weekends are marked as holidays.
@@ -59,10 +62,11 @@ public class DefaultCalendar extends org.wickedsource.budgeteer.web.planning.Cal
     }
 
     private void clear(java.util.Calendar calendar) {
-        calendar.clear(java.util.Calendar.HOUR_OF_DAY);
-        calendar.clear(java.util.Calendar.MINUTE);
-        calendar.clear(java.util.Calendar.SECOND);
-        calendar.clear(java.util.Calendar.MILLISECOND);
+        calendar.set(java.util.Calendar.HOUR_OF_DAY, 0);
+        calendar.set(java.util.Calendar.MINUTE, 0);
+        calendar.set(java.util.Calendar.SECOND, 0);
+        calendar.set(java.util.Calendar.MILLISECOND, 0);
+        calendar.get(java.util.Calendar.MILLISECOND);
     }
 
     @Override
