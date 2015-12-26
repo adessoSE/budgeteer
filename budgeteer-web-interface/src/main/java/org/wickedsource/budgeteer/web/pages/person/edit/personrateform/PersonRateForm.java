@@ -3,7 +3,6 @@ package org.wickedsource.budgeteer.web.pages.person.edit.personrateform;
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.ListMultipleChoice;
 import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -16,6 +15,7 @@ import org.wickedsource.budgeteer.web.components.budget.BudgetBaseDataChoiceRend
 import org.wickedsource.budgeteer.web.components.daterange.DateRangeInputField;
 import org.wickedsource.budgeteer.web.components.money.MoneyTextField;
 import org.wickedsource.budgeteer.web.components.multiselect.MultiselectBehavior;
+import org.wickedsource.budgeteer.web.pages.base.AbstractChoiceRenderer;
 
 import java.util.List;
 
@@ -24,8 +24,8 @@ import static org.wicketstuff.lazymodel.LazyModel.model;
 
 public abstract class PersonRateForm extends Form<PersonRateForm.PersonRateFormModel> {
 
-    public static class PersonRateFormModel extends PersonRate{
-        private ListModel<BudgetBaseData> chosenBudgets = new ListModel<BudgetBaseData>();
+    public static class PersonRateFormModel extends PersonRate {
+        private ListModel<BudgetBaseData> chosenBudgets = new ListModel<>();
 
         public ListModel<BudgetBaseData> getChosenBudgets() {
             return chosenBudgets;
@@ -50,15 +50,10 @@ public abstract class PersonRateForm extends Form<PersonRateForm.PersonRateFormM
 
         List<BudgetBaseData> possibleBudgets = budgetService.loadBudgetBaseDataForProject(BudgeteerSession.get().getProjectId());
         ListMultipleChoice<BudgetBaseData> budgetChoice =
-                new ListMultipleChoice<BudgetBaseData>("budgetField", getModelObject().getChosenBudgets(), possibleBudgets, new IChoiceRenderer<BudgetBaseData>() {
+                new ListMultipleChoice<>("budgetField", getModelObject().getChosenBudgets(), possibleBudgets, new AbstractChoiceRenderer<BudgetBaseData>() {
                     @Override
                     public Object getDisplayValue(BudgetBaseData object) {
                         return object.getName();
-                    }
-
-                    @Override
-                    public String getIdValue(BudgetBaseData object, int index) {
-                        return "" + object.getId();
                     }
                 });
 
@@ -84,9 +79,9 @@ public abstract class PersonRateForm extends Form<PersonRateForm.PersonRateFormM
                 overlappingEntryNames.append(System.getProperty("line.separator"));
                 for(int i=0; i < overlappingRate.size(); i++){
                     PersonRate p = overlappingRate.get(i);
-                    overlappingEntryNames.append(p.getBudget().getName() + " " + p.getDateRange().toString());
-                    if(i < overlappingRate.size() - 1){
-                        overlappingEntryNames.append(","+System.getProperty("line.separator"));
+                    overlappingEntryNames.append(p.getBudget().getName()).append(" ").append(p.getDateRange().toString());
+                    if (i < overlappingRate.size() - 1) {
+                        overlappingEntryNames.append(",").append(System.getProperty("line.separator"));
                     }
                 }
                 error(String.format(getString("personRateForm.overlappingRates"), overlappingEntryNames.toString()));

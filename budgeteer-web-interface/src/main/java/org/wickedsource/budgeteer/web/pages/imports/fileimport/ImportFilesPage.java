@@ -110,7 +110,7 @@ public class ImportFilesPage extends DialogPageWithBacklink {
         form.add(feedback);
 
         DropDownChoice<Importer> importerChoice = new DropDownChoice<Importer>("importerChoice", new PropertyModel<Importer>(this, "importer"), new ImportersListModel(), new ImporterChoiceRenderer());
-        importerChoice.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+        importerChoice.add(new AjaxFormComponentUpdatingBehavior("change") {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 skippedImports = null;
@@ -123,7 +123,7 @@ public class ImportFilesPage extends DialogPageWithBacklink {
         FileUploadField fileUpload = new FileUploadField("fileUpload", new PropertyModel<List<FileUpload>>(this, "fileUploads"));
         fileUpload.setRequired(true);
         fileUpload.add(new AttributeModifier("accept", new AcceptedFileExtensionsModel(importer)));
-        fileUpload.add(new AjaxEventBehavior("onchange") {
+        fileUpload.add(new AjaxEventBehavior("change") {
             @Override
             protected void onEvent(AjaxRequestTarget target) {
                 target.add(feedback);
