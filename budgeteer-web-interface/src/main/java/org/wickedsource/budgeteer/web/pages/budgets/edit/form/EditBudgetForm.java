@@ -65,7 +65,7 @@ public class EditBudgetForm extends Form<EditBudgetData> {
                 Label label = new Label("tag", model(from(item.getModel())));
                 label.setRenderBodyOnly(true);
                 item.add(label);
-                item.add(new AjaxEventBehavior("onclick") {
+                item.add(new AjaxEventBehavior("click") {
                     @SuppressWarnings("unchecked")
                     @Override
                     protected void onEvent(AjaxRequestTarget target) {
