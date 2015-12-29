@@ -68,6 +68,7 @@ dependencies {
 
     compile group: 'joda-time', name: 'joda-time', version: "${joda_time_version}"
     compile group: 'org.joda', name: 'joda-money', version: "${joda_money_version}"
+    compile group: 'de.jollyday', name: 'jollyday', version: "${jollyday_version}"
 
     compile(
             [group: 'com.mysema.querydsl', name: 'querydsl-apt', version: "${query_dsl_version}"],

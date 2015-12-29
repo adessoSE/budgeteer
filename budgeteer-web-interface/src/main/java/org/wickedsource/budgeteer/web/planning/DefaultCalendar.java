@@ -1,92 +1,101 @@
 package org.wickedsource.budgeteer.web.planning;
 
+import lombok.Getter;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.joda.time.ReadablePeriod;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.joda.time.DateTimeConstants.*;
+import static org.joda.time.Period.years;
+
 /**
- * Standard calendar in which only weekends are marked as holidays.
+ * Calendar in which weekends and local holidays are marked as holidays.
  */
-public class DefaultCalendar extends org.wickedsource.budgeteer.web.planning.Calendar {
+public class DefaultCalendar extends Calendar {
 
     /**
      * Mapping the first millisecond of each day to a Day object.
      */
-    private Map<Long, Day> days = new HashMap<>();
+    private Map<Long, Day> days;
 
+    @Getter
     private Day firstDay;
 
+    @Getter
     private Day lastDay;
 
+    @Getter
     private int numberOfWorkingDays;
 
+    @Getter
     private int numberOfHolidays;
 
     public DefaultCalendar(Date start, Date end) {
-
-        java.util.Calendar startCal = java.util.Calendar.getInstance();
-        startCal.setTime(start);
-        clear(startCal);
-
-        java.util.Calendar endCal = java.util.Calendar.getInstance();
-        endCal.setTime(end);
-        clear(endCal);
-
-        firstDay = addDay(startCal);
-        startCal.add(java.util.Calendar.DAY_OF_YEAR, 1);
-
-        Day previousDay = firstDay;
-        while (startCal.before(endCal)) {
-            Day day = addDay(startCal);
-            startCal.add(java.util.Calendar.DAY_OF_YEAR, 1);
-            previousDay.setNextDay(day);
-            previousDay = day;
-        }
-        lastDay = addDay(endCal);
+        this(new LocalDate(start), new LocalDate(end), true);
     }
 
-    private Day addDay(java.util.Calendar date) {
-        int dayOfWeek = date.get(java.util.Calendar.DAY_OF_WEEK);
-        boolean isHoliday = false;
-        if (dayOfWeek == java.util.Calendar.SATURDAY
-                || dayOfWeek == java.util.Calendar.SUNDAY) {
-            isHoliday = true;
-            this.numberOfHolidays++;
-        }else{
-            this.numberOfWorkingDays++;
+    public DefaultCalendar(LocalDate start, ReadablePeriod period) {
+        this(start, start.plus(period), false);
+    }
+
+    public DefaultCalendar(LocalDate start, LocalDate end, boolean includingEnd) {
+        if (!includingEnd) {
+            end = end.minusDays(1);
         }
-        Day day = new Day(date.getTime(), isHoliday);
-        days.put(date.getTimeInMillis(), day);
+        if (start.isAfter(end))
+            throw new IllegalArgumentException("end must not predate start");
+        initialize(start, end);
+    }
+
+    public static DefaultCalendar calendarYear(int year) {
+        return new DefaultCalendar(new LocalDate(year, JANUARY, 1), years(1));
+    }
+
+    private void initialize(LocalDate start, LocalDate end) {
+        days = new HashMap<>();
+        LocalDate day = start;
+        Day current = initializeDay(start, null);
+        firstDay = current;
+        for (day = day.plusDays(1); !day.isAfter(end); day = day.plusDays(1)) {
+            current = initializeDay(day, current);
+        }
+        lastDay = current;
+    }
+
+    private Day initializeDay(LocalDate date, Day last) {
+        boolean weekend = checkDateIsOnWeekend(date);
+        boolean holiday = false; // @todo checkHoliday(date); based on jollyday
+        DateTime dayStart = date.toDateTimeAtStartOfDay();
+        Day day = new Day(dayStart.toDate(), weekend || holiday);
+        if (last != null) {
+            last.setNextDay(day);
+        }
+        return recordDay(dayStart, day);
+    }
+
+    private boolean checkDateIsOnWeekend(LocalDate date) {
+        switch (date.getDayOfWeek()) {
+            case SATURDAY:
+            case SUNDAY:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    private Day recordDay(DateTime dayStart, Day day) {
+        days.put(dayStart.getMillis(), day);
+        if (day.isHoliday()) {
+            numberOfHolidays++;
+        } else {
+            numberOfWorkingDays++;
+        }
         return day;
-    }
-
-    private void clear(java.util.Calendar calendar) {
-        calendar.set(java.util.Calendar.HOUR_OF_DAY, 0);
-        calendar.set(java.util.Calendar.MINUTE, 0);
-        calendar.set(java.util.Calendar.SECOND, 0);
-        calendar.set(java.util.Calendar.MILLISECOND, 0);
-        calendar.get(java.util.Calendar.MILLISECOND);
-    }
-
-    @Override
-    public Day getFirstDay() {
-        return firstDay;
-    }
-
-    @Override
-    public Day getLastDay() {
-        return lastDay;
-    }
-
-    @Override
-    public int getNumberOfWorkingDays() {
-        return this.numberOfWorkingDays;
-    }
-
-    @Override
-    public int getNumberOfHolidays() {
-        return this.numberOfHolidays;
     }
 
     @Override
@@ -96,24 +105,22 @@ public class DefaultCalendar extends org.wickedsource.budgeteer.web.planning.Cal
 
     @Override
     public int getNumberOfWorkingDaysInPeriod(TimePeriod period) {
-        java.util.Calendar startCal = period.getStartCalendar();
-        clear(startCal);
-        java.util.Calendar endCal = period.getEndCalendar();
-        clear(endCal);
+
+        LocalDate start = new LocalDate(period.getStart());
+        LocalDate end = new LocalDate(period.getEnd());
 
         int numberOfWorkingDays = 0;
 
-        Day currentDay = days.get(startCal.getTimeInMillis());
-        if(currentDay == null){
-            throw new RuntimeException("Start of TimePeriod is not in the date range of this calendar!");
-        }
-        while(currentDay != null && currentDay.getDate().getTime() <= endCal.getTimeInMillis()){
-            if(!currentDay.isHoliday()){
+        LocalDate date = start;
+        for (; !date.isAfter(end); date = date.plusDays(1)) {
+            Day day = days.get(date.toDateTimeAtStartOfDay().getMillis());
+            if (day == null) {
+                break;
+            }
+            if (!day.isHoliday()) {
                 numberOfWorkingDays++;
             }
-            currentDay = currentDay.nextDay();
         }
-
         return numberOfWorkingDays;
     }
 
