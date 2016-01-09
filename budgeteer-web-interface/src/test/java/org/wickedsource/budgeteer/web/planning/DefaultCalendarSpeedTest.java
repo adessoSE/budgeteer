@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.joda.time.LocalDate;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,8 +14,13 @@ public class DefaultCalendarSpeedTest {
 
 	Logger logger = LoggerFactory.getLogger(DefaultCalendarSpeedTest.class);
 
-	public static final int TIMES = 10000;
+	public static final int TIMES = 50000;
 
+	/*
+	 * Do not run in regular regressions, as speed depends on platform and
+	 * parallel jobs
+	 */
+	@Ignore
 	@Test
 	public void findsHolidaysInFeasibleTime() {
 
@@ -43,10 +49,10 @@ public class DefaultCalendarSpeedTest {
 		long after = System.currentTimeMillis();
 
 		long millisWith = after - inBetween;
-		logger.info("to calculate working days with holidays " + TIMES + " times takes " + millisWith + "ms");
+		logger.warn("to calculate working days with holidays " + TIMES + " times takes " + millisWith + "ms");
 		long millisWithout = inBetween - beforeStart;
-		logger.info("to calculate working days without holidays " + TIMES + " times takes " + millisWithout + "ms");
+		logger.warn("to calculate working days without holidays " + TIMES + " times takes " + millisWithout + "ms");
 
-		Assert.assertTrue(Double.compare(millisWithout * 1.5, millisWith) > 0);
+		Assert.assertTrue(Double.compare(millisWithout * 1.2 + 5, millisWith) > 0);
 	}
 }
