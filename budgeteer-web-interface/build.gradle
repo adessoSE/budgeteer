@@ -67,6 +67,7 @@ dependencies {
     compile group: 'commons-codec', name: 'commons-codec', version: "${commons_codec_version}"
 
     compile group: 'joda-time', name: 'joda-time', version: "${joda_time_version}"
+    providedCompile group: 'org.joda', name: 'joda-convert', version: "${joda_convert_version}"
     compile group: 'org.joda', name: 'joda-money', version: "${joda_money_version}"
     compile group: 'de.jollyday', name: 'jollyday', version: "${jollyday_version}"
 

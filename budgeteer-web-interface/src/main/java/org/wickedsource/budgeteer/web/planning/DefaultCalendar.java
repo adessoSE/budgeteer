@@ -1,135 +1,154 @@
 package org.wickedsource.budgeteer.web.planning;
 
-import lombok.Getter;
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-import org.joda.time.ReadablePeriod;
+import static org.joda.time.DateTimeConstants.*;
+import static org.joda.time.Period.years;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.joda.time.DateTimeConstants.*;
-import static org.joda.time.Period.years;
+import lombok.Getter;
+
+import org.joda.time.LocalDate;
+import org.joda.time.ReadablePeriod;
 
 /**
- * Calendar in which weekends and local holidays are marked as holidays.
+ * Calendar in which weekends and optionally holidays are marked as non-working.
  */
 public class DefaultCalendar extends Calendar {
 
-    /**
-     * Mapping the first millisecond of each day to a Day object.
-     */
-    private Map<Long, Day> days;
+	public static DefaultCalendar calendarYear(int year) {
+		return new DefaultCalendar(new LocalDate(year, JANUARY, 1), years(1));
+	}
 
-    @Getter
-    private Day firstDay;
+	/**
+	 * Mapping every date to a Day object.
+	 */
+	private Map<LocalDate, Day> days;
 
-    @Getter
-    private Day lastDay;
+	@Getter
+	private LocalDate start;
 
-    @Getter
-    private int numberOfWorkingDays;
+	@Getter
+	private LocalDate end;
 
-    @Getter
-    private int numberOfHolidays;
+	@Getter
+	private HolidayConfiguration holidayManager;
 
-    public DefaultCalendar(Date start, Date end) {
-        this(new LocalDate(start), new LocalDate(end), true);
-    }
+	@Getter
+	private transient int numberOfWorkingDays;
 
-    public DefaultCalendar(LocalDate start, ReadablePeriod period) {
-        this(start, start.plus(period), false);
-    }
+	@Getter
+	private transient int numberOfHolidays;
 
-    public DefaultCalendar(LocalDate start, LocalDate end, boolean includingEnd) {
-        if (!includingEnd) {
-            end = end.minusDays(1);
-        }
-        if (start.isAfter(end))
-            throw new IllegalArgumentException("end must not predate start");
-        initialize(start, end);
-    }
+	private boolean initialized;
 
-    public static DefaultCalendar calendarYear(int year) {
-        return new DefaultCalendar(new LocalDate(year, JANUARY, 1), years(1));
-    }
+	public DefaultCalendar(LocalDate start, ReadablePeriod period) {
+		this(start, start.plus(period), false);
+	}
 
-    private void initialize(LocalDate start, LocalDate end) {
-        days = new HashMap<>();
-        LocalDate day = start;
-        Day current = initializeDay(start, null);
-        firstDay = current;
-        for (day = day.plusDays(1); !day.isAfter(end); day = day.plusDays(1)) {
-            current = initializeDay(day, current);
-        }
-        lastDay = current;
-    }
+	public DefaultCalendar(LocalDate start, LocalDate end, boolean includingEnd) {
+		if (!includingEnd) {
+			end = end.minusDays(1);
+		}
+		if (start.isAfter(end)) {
+			throw new IllegalArgumentException("end must not predate start");
+		}
+		this.start = start;
+		this.end = end;
+	}
 
-    private Day initializeDay(LocalDate date, Day last) {
-        boolean weekend = checkDateIsOnWeekend(date);
-        boolean holiday = false; // @todo checkHoliday(date); based on jollyday
-        DateTime dayStart = date.toDateTimeAtStartOfDay();
-        Day day = new Day(dayStart.toDate(), weekend || holiday);
-        if (last != null) {
-            last.setNextDay(day);
-        }
-        return recordDay(dayStart, day);
-    }
+	public void setHolidayManager(HolidayConfiguration holidayManager) {
+		if (initialized) {
+			throw new IllegalStateException("cannot set holidayManager after use");
+		}
+		this.holidayManager = holidayManager;
+	}
 
-    private boolean checkDateIsOnWeekend(LocalDate date) {
-        switch (date.getDayOfWeek()) {
-            case SATURDAY:
-            case SUNDAY:
-                return true;
-            default:
-                return false;
-        }
-    }
+	@Override
+	public int getNumberOfDays() {
+		initialize();
+		return this.numberOfWorkingDays + this.numberOfHolidays;
+	}
 
-    private Day recordDay(DateTime dayStart, Day day) {
-        days.put(dayStart.getMillis(), day);
-        if (day.isHoliday()) {
-            numberOfHolidays++;
-        } else {
-            numberOfWorkingDays++;
-        }
-        return day;
-    }
+	@Override
+	public int getNumberOfWorkingDays(List<TimePeriod> absences) {
+		initialize();
 
-    @Override
-    public int getNumberOfDays() {
-        return this.numberOfWorkingDays + this.numberOfHolidays;
-    }
+		int workingDays = this.numberOfWorkingDays;
+		for (TimePeriod absence : absences) {
+			workingDays -= getNumberOfWorkingDaysInPeriod(absence);
+		}
+		return workingDays;
+	}
 
-    @Override
-    public int getNumberOfWorkingDaysInPeriod(TimePeriod period) {
+	@Override
+	public int getNumberOfWorkingDaysInPeriod(TimePeriod period) {
+		initialize();
 
-        LocalDate start = new LocalDate(period.getStart());
-        LocalDate end = new LocalDate(period.getEnd());
+		LocalDate periodStart = period.getStart();
+		LocalDate periodEnd = period.getEnd();
 
-        int numberOfWorkingDays = 0;
+		if (period.isInfinite() || periodStart.isBefore(this.start) || periodEnd.isAfter(this.end)) {
+			throw new IllegalArgumentException("time period must be fully enclosed in calendar");
+		}
 
-        LocalDate date = start;
-        for (; !date.isAfter(end); date = date.plusDays(1)) {
-            Day day = days.get(date.toDateTimeAtStartOfDay().getMillis());
-            if (day == null) {
-                break;
-            }
-            if (!day.isHoliday()) {
-                numberOfWorkingDays++;
-            }
-        }
-        return numberOfWorkingDays;
-    }
+		int numberOfWorkingDays = 0;
+		for (Day day : days.get(periodStart)) {
 
-    @Override
-    public int getNumberOfWorkingDays(List<TimePeriod> absences) {
-        int workingDays = this.numberOfWorkingDays;
-        for(TimePeriod absence : absences){
-            workingDays -= getNumberOfWorkingDaysInPeriod(absence);
-        }
-        return workingDays;
-    }
+			if (day.getLocalDate().isAfter(periodEnd)) {
+				break;
+			}
+			if (!day.isNonWorking()) {
+				numberOfWorkingDays++;
+			}
+		}
+		return numberOfWorkingDays;
+	}
+
+	private void initialize() {
+		if (initialized) {
+			return;
+		}
+
+		days = new HashMap<>();
+		Day current = null;
+
+		for (LocalDate day = start; !day.isAfter(end); day = day.plusDays(1)) {
+			current = initializeDay(day, current);
+		}
+		initialized = true;
+	}
+
+	private Day initializeDay(LocalDate date, Day precedingDay) {
+
+		boolean weekend = checkDateIsOnWeekend(date);
+		boolean holiday = holidayManager != null && holidayManager.checkHoliday(date);
+
+		Day day = new Day(date, weekend || holiday);
+		if (precedingDay != null) {
+			precedingDay.setNextDay(day);
+		}
+		return recordDay(date, day);
+	}
+
+	private boolean checkDateIsOnWeekend(LocalDate date) {
+		switch (date.getDayOfWeek()) {
+		case SATURDAY:
+		case SUNDAY:
+			return true;
+		default:
+			return false;
+		}
+	}
+
+	private Day recordDay(LocalDate date, Day day) {
+		days.put(date, day);
+		if (day.isNonWorking()) {
+			numberOfHolidays++;
+		} else {
+			numberOfWorkingDays++;
+		}
+		return day;
+	}
 }
