@@ -78,6 +78,17 @@ public class BudgetService {
     }
 
     /**
+     * Loads the base data of a single budget from the database.
+     *
+     * @param personId ID of the person for which the budget should be loaded.
+     * @return base data of the specified budget.
+     */
+    public List<BudgetBaseData> loadBudgetBaseDataByPersonId(long personId) {
+        List<BudgetEntity> budget = budgetRepository.findByPersonId(personId);
+        return budgetBaseDataMapper.map(budget);
+    }
+
+    /**
      * Loads all tags assigned to any budget of the given user.
      *
      * @param projectId ID of the project
