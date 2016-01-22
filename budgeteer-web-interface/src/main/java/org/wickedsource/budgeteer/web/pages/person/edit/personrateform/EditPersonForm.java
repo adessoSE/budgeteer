@@ -1,5 +1,11 @@
 package org.wickedsource.budgeteer.web.pages.person.edit.personrateform;
 
+import static org.wicketstuff.lazymodel.LazyModel.from;
+import static org.wicketstuff.lazymodel.LazyModel.model;
+
+import java.util.LinkedList;
+import java.util.List;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.injection.Injector;
@@ -22,12 +28,6 @@ import org.wickedsource.budgeteer.service.person.PersonWithRates;
 import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
 import org.wickedsource.budgeteer.web.pages.person.edit.EditPersonPage;
 import org.wickedsource.budgeteer.web.pages.person.edit.IEditPersonPageStrategy;
-
-import java.util.LinkedList;
-import java.util.List;
-
-import static org.wicketstuff.lazymodel.LazyModel.from;
-import static org.wicketstuff.lazymodel.LazyModel.model;
 
 public class EditPersonForm extends Form<PersonWithRates> {
 
@@ -58,11 +58,10 @@ public class EditPersonForm extends Form<PersonWithRates> {
     private void addComponents() {
         setOutputMarkupId(true);
         add(new CustomFeedbackPanel("feedback"));
-        add(new RequiredTextField<String>("name", model(from(getModel()).getName())));
-        add(new RequiredTextField<String>("importKey", model(from(getModel()).getImportKey())));
+        add(new RequiredTextField<>("name", model(from(getModel()).getName())));
+        add(new RequiredTextField<>("importKey", model(from(getModel()).getImportKey())));
         add(createRatesList("ratesList"));
-
-        add(new PersonRateForm("addRateForm") {
+        add(new PersonRateForm("addRateForm", getModelObject().getPersonId()) {
             @Override
             protected void rateAdded(PersonRate rate) {
                 EditPersonForm.this.getModelObject().getRates().add(rate);
@@ -70,7 +69,7 @@ public class EditPersonForm extends Form<PersonWithRates> {
 
             @Override
             protected List<PersonRate> getOverlappingRates(DateRange dateRange, BudgetBaseData budget) {
-                List<PersonRate> result = new LinkedList<PersonRate>();
+                List<PersonRate> result = new LinkedList<>();
                 for(PersonRate p : EditPersonForm.this.getModelObject().getRates()){
                     if(p.getBudget().equals(budget) && DateUtil.isDateRangeOverlapping(p.getDateRange(), dateRange)){
                         result.add(p);
