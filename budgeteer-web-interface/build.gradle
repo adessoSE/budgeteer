@@ -52,6 +52,7 @@ processResources {
 
 dependencies {
     compile project(':budgeteer-aproda-importer')
+    compile project(':budgeteer-ubw-importer')
     compile project(':budgeteer-resourceplan-importer')
 
     compile(
