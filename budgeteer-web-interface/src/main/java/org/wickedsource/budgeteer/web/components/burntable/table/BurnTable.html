@@ -1,5 +1,6 @@
 <wicket:panel>
 
+    <div wicket:id="feedback"></div>
     <p class="pull-right">Total burned budget with current filter: <strong wicket:id="total">€120.000</strong></p><br/>
 
     <table class="table table-bordered table-hover" wicket:id="table">
@@ -17,7 +18,7 @@
         <tr wicket:id="recordList">
             <td wicket:id="budget">Project Management</td>
             <td wicket:id="person">Tom Hombergs</td>
-            <td wicket:id="dailyRate">€790</td>
+            <td><span wicket:id="dailyRate">790</span><span wicket:id="edited" class="fa fa-fw fa-edit"></span></td>
             <td wicket:id="date">25.09.2014</td>
             <td wicket:id="hours">8.00</td>
             <td wicket:id="burnedBudget">790</td>

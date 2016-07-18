@@ -10,7 +10,6 @@ buildscript {
 
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:1.1.5.RELEASE")
-        classpath 'org.springframework:springloaded:1.2.1.RELEASE'
     }
 }
 
@@ -53,6 +52,7 @@ processResources {
 
 dependencies {
     compile project(':budgeteer-aproda-importer')
+    compile project(':budgeteer-ubw-importer')
     compile project(':budgeteer-resourceplan-importer')
 
     compile(
@@ -84,6 +84,8 @@ dependencies {
             [group: 'com.mysema.querydsl', name: 'querydsl-apt', version: "${query_dsl_version}"],
             [group: 'com.mysema.querydsl', name: 'querydsl-jpa', version: "${query_dsl_version}"]
     )
+
+    compile group: 'org.liquibase',  name: 'liquibase-core', version: '3.3.2'
 
     runtime(
             [group: 'org.hsqldb', name: 'hsqldb', version: '2.3.2'],

@@ -1,0 +1,105 @@
+<wicket:extend xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+    <div class="form-box wide" id="login-box">
+        <div class="header"><span wicket:it="pageTitle"><wicket:message key="page.title">Edit Contract Details</wicket:message></span>
+            <div class="box-tools pull-right">
+                <button wicket:id="cancelButton1" class="btn bg-olive btn-sm"><i class="fa fa-times"></i></button>
+            </div>
+        </div>
+        <form wicket:id="form" method="post">
+            <div class="body bg-gray">
+                <div wicket:id="feedback"></div>
+                <div class="box box-primary">
+                    <div class="box-header" style="cursor: move;">
+                        <h3 class="box-title">Basic information of the invoice</h3>
+                        <div class="box-tools pull-right">
+                            <span class="btn btn-default btn-sm" data-widget="collapse">
+                                <i class="fa fa-minus"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label for="invoiceName"><wicket:message key="page.invoice.title">Invoice title</wicket:message></label>
+                            <input wicket:id="invoiceName"type="text" name="name" id="invoiceName" class="form-control"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="contractName"><wicket:message key="page.invoice.contract.title">Contract title</wicket:message></label>
+                            <input wicket:id="contractName"type="text" name="name" id="contractName" class="form-control"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="internalNumber"><wicket:message key="page.invoice.internalNumber">Internal-number</wicket:message></label>
+                            <input wicket:id="internalNumber"type="text" name="name" id="internalNumber" class="form-control"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="year"><wicket:message key="page.invoice.year">Year of the contract</wicket:message></label>
+                            <select wicket:id="year" style="width: 100%;" class="form-control" id="year"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="month"><wicket:message key="page.invoice.month">Month of the contract</wicket:message></label>
+                            <select wicket:id="month" style="width: 100%;"  class="form-control" id="month"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="sum"><wicket:message key="page.invoice.sum">Sum</wicket:message></label>
+                            <input wicket:id="sum" style="width: 100%;" type="number" step="0.01" class="form-control" id="sum"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="paid"><wicket:message key="page.invoice.paidDate">Paid</wicket:message></label>
+                            <input wicket:id="paidDate" style="width: 100%;" type="text" class="form-control" id="paidDate"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="dueDate"><wicket:message key="page.invoice.dueDate">Paid</wicket:message></label>
+                            <input wicket:id="dueDate" style="width: 100%;" type="text" class="form-control" id="dueDate"/>
+                        </div>
+                        <div wicket:id="fileUpload"></div>
+                    </div>
+                </div>
+                <div class="box box-primary">
+                    <div class="box-header" style="cursor: move;">
+                        <h3 class="box-title">Additional information</h3>
+                        <div class="box-tools pull-right">
+                            <span class="btn btn-default btn-sm" data-widget="collapse">
+                                <i class="fa fa-minus"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <div wicket:id="attributeTable" style="width: 100%;">
+                            <div class="form-group" wicket:id="invoiceAttributes">
+                                <label wicket:id="attributeTitle" />
+                                <input wicket:id="attributeValue" type="text" class="form-control"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box box-primary">
+                    <div class="box-header" style="cursor: move;">
+                        <h3 class="box-title"><wicket:message key="page.invoice.new.attribute">Edit Contract Details</wicket:message></h3>
+                        <div class="box-tools pull-right">
+                            <span class="btn btn-default btn-sm" data-widget="collapse">
+                                <i class="fa fa-minus"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <span for="attribute_name">
+                            <wicket:message key="page.invoice.new.attribute.name.of.attribute">Edit Contract Details</wicket:message>
+                        </span>
+                        <input  id="attribute_name" wicket:id="nameOfNewAttribute" type="text"/>
+                        <Button wicket:id="addAttribute"><i class="fa fa-fw fa-plus"></i></Button>
+                    </div>
+                </div>
+            </div>
+            <div class="footer">
+                <div class="row">
+                    <div class="col-lg-3">
+                        <button wicket:id="cancelButton2" type="button" class="btn bg-olive btn-block">Cancel</button>
+                    </div>
+                    <div class="col-lg-9">
+                        <button wicket:id="save" class="btn bg-olive btn-block">Create invoice / Save Changes</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</wicket:extend>

@@ -8,6 +8,8 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.budgeteer.IntegrationTestTemplate;
 import org.wickedsource.budgeteer.MoneyUtil;
+import org.wickedsource.budgeteer.persistence.budget.BudgetEntity;
+import org.wickedsource.budgeteer.persistence.person.PersonEntity;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -87,6 +89,17 @@ public class WorkRecordRepositoryTest extends IntegrationTestTemplate {
         Assert.assertEquals(MoneyUtil.createMoneyFromCents(50000l), record.getDailyRate());
         record = repository.findOne(3l);
         Assert.assertEquals(MoneyUtil.createMoneyFromCents(50000l), record.getDailyRate());
+    }
+
+    @Test
+    @DatabaseSetup("updateDailyRates.xml")
+    @DatabaseTearDown(value = "updateDailyRates.xml", type = DatabaseOperation.DELETE_ALL)
+    public void testUpdateWorkRecordDailyRatesWithEditedRecord() throws Exception {
+        repository.updateDailyRates(1l, 1l, format.parse("01.01.2015"), format.parse("15.08.2015"), MoneyUtil.createMoneyFromCents(50000l));
+        WorkRecordEntity record = repository.findOne(1l);
+        Assert.assertEquals(MoneyUtil.createMoneyFromCents(50000l), record.getDailyRate());
+        record = repository.findOne(6l);
+        Assert.assertEquals(MoneyUtil.createMoneyFromCents(10000l), record.getDailyRate());
     }
 
     @Test
@@ -521,5 +534,46 @@ public class WorkRecordRepositoryTest extends IntegrationTestTemplate {
         Assert.assertEquals(0, (long) repository.countByProjectId(2l));
     }
 
+    @Test
+    @DatabaseSetup("findManuallyEditedEntries.xml")
+    @DatabaseTearDown(value = "findManuallyEditedEntries.xml", type = DatabaseOperation.DELETE_ALL)
+    public void testFindManuallyEditedEntries() throws ParseException {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        List<WorkRecordEntity> records = repository.findManuallyEditedEntries(2l, formatter.parse("2014-01-01"), new Date() );
+        Assert.assertEquals(0, records.size());
 
+        records = repository.findManuallyEditedEntries(1l, formatter.parse("2014-01-01"), formatter.parse("2016-08-15") );
+        Assert.assertEquals(1, records.size());
+
+        records = repository.findManuallyEditedEntries(1l, formatter.parse("2014-01-01"), formatter.parse("2016-08-14") );
+        Assert.assertEquals(0, records.size());
+
+        records = repository.findManuallyEditedEntries(1l, formatter.parse("2012-01-01"), formatter.parse("2016-08-14") );
+        Assert.assertEquals(1, records.size());
+
+        records = repository.findManuallyEditedEntries(1l, formatter.parse("2012-01-01"), formatter.parse("2016-08-16") );
+        Assert.assertEquals(2, records.size());
+    }
+
+    @Test
+    @DatabaseSetup("findDuplicateEntries.xml")
+    @DatabaseTearDown(value = "findDuplicateEntries.xml", type = DatabaseOperation.DELETE_ALL)
+    public void testFindDuplicateEntries() throws ParseException {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        BudgetEntity budget = new BudgetEntity(); budget.setId(1l);
+        PersonEntity person = new PersonEntity(); person.setId(1l);
+
+
+        List<WorkRecordEntity> records = repository.findDuplicateEntries(budget, person, formatter.parse("2014-01-01"), 480);
+        Assert.assertEquals(1, records.size());
+
+        records = repository.findDuplicateEntries(budget, person, formatter.parse("2014-01-01"), 481);
+        Assert.assertEquals(0, records.size());
+
+        person.setId(3l);
+        budget.setId(4l);
+        records = repository.findDuplicateEntries(budget, person, formatter.parse("2016-08-15"), 960);
+        Assert.assertEquals(2, records.size());
+
+    }
 }

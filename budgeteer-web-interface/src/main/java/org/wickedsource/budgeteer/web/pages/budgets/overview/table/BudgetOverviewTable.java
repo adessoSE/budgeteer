@@ -16,10 +16,12 @@ import org.wickedsource.budgeteer.web.ClassAwareWrappingModel;
 import org.wickedsource.budgeteer.web.components.dataTable.DataTableBehavior;
 import org.wickedsource.budgeteer.web.components.money.BudgetUnitMoneyModel;
 import org.wickedsource.budgeteer.web.components.money.MoneyLabel;
+import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
 import org.wickedsource.budgeteer.web.pages.budgets.details.BudgetDetailsPage;
 import org.wickedsource.budgeteer.web.pages.budgets.edit.EditBudgetPage;
 import org.wickedsource.budgeteer.web.pages.budgets.overview.BudgetsOverviewPage;
 import org.wickedsource.budgeteer.web.pages.budgets.overview.table.progressbar.ProgressBar;
+import org.wickedsource.budgeteer.web.pages.contract.details.ContractDetailsPage;
 
 import java.util.List;
 
@@ -28,8 +30,11 @@ import static org.wicketstuff.lazymodel.LazyModel.model;
 
 public class BudgetOverviewTable extends Panel {
 
-    public BudgetOverviewTable(String id, FilteredBudgetModel model) {
+    private final BreadcrumbsModel breadcrumbsModel;
+
+    public BudgetOverviewTable(String id, IModel<List<BudgetDetailData>> model, BreadcrumbsModel breadcrumbsModel) {
         super(id, model);
+        this.breadcrumbsModel = breadcrumbsModel;
         WebMarkupContainer table = new WebMarkupContainer("table");
         table.add(new DataTableBehavior(DataTableBehavior.getRecommendedOptions()));
 
@@ -67,6 +72,23 @@ public class BudgetOverviewTable extends Panel {
                 link.add(linkTitle);
                 item.add(link);
                 item.add(new Label("lastUpdated", model(from(item.getModel()).getLastUpdated())));
+                Link clink =  new Link("contractLink") {
+                    @Override
+                    public void onClick() {
+                        WebPage page = new ContractDetailsPage(ContractDetailsPage.createParameters(item.getModelObject().getContractId())){
+                            @Override
+                            protected BreadcrumbsModel getBreadcrumbsModel() {
+                                BreadcrumbsModel m = breadcrumbsModel;
+                                m.addBreadcrumb(ContractDetailsPage.class, ContractDetailsPage.createParameters(item.getModelObject().getContractId()));
+                                return m;
+                            }
+                        };
+                        setResponsePage(page);
+                    }
+                };
+                Label clinkTitle = new Label("contractTitle",model(from(item.getModel()).getContractName()));
+                clink.add(clinkTitle);
+                item.add(clink);
                 item.add(new MoneyLabel("amount", new BudgetUnitMoneyModel(model(from(item.getModel()).getTotal()))));
                 item.add(new MoneyLabel("spent", new BudgetUnitMoneyModel(model(from(item.getModel()).getSpent()))));
                 item.add(new MoneyLabel("remaining", new BudgetUnitMoneyModel(model(from(item.getModel()).getRemaining()))));

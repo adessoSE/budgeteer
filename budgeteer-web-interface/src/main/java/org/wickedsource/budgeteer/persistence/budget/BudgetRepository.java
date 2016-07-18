@@ -1,11 +1,12 @@
 package org.wickedsource.budgeteer.persistence.budget;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
-
-import java.util.List;
+import org.wickedsource.budgeteer.service.notification.MissingContractForBudgetNotification;
 
 public interface BudgetRepository extends CrudRepository<BudgetEntity, Long> {
 
@@ -32,8 +33,21 @@ public interface BudgetRepository extends CrudRepository<BudgetEntity, Long> {
     @Query("select new org.wickedsource.budgeteer.persistence.budget.MissingBudgetTotalBean(b.id, b.name) from BudgetEntity b where b.total = 0 and b.id=:budgetId order by b.name")
     public MissingBudgetTotalBean getMissingBudgetTotalForBudget(@Param("budgetId") long budgetId);
 
+
+    @Query("select new org.wickedsource.budgeteer.service.notification.MissingContractForBudgetNotification(b.id) from BudgetEntity b where b.contract = null and b.id=:budgetId")
+    public MissingContractForBudgetNotification getMissingContractForBudget(@Param("budgetId") long budgetId);
+
+    @Query("select new org.wickedsource.budgeteer.service.notification.MissingContractForBudgetNotification(b.id) from BudgetEntity b where b.contract = null and b.project.id=:projectId")
+    public List<MissingContractForBudgetNotification> getMissingContractForProject(@Param("projectId")long projectId);
+
+
     @Modifying
     @Query("delete from BudgetEntity b where b.project.id = :projectId")
     public void deleteByProjectId(@Param("projectId") long projectId);
 
+    @Query("select b from BudgetEntity b where b.contract.id = :contractId")
+    List<BudgetEntity> findByContractId(@Param("contractId") long cId);
+
+    @Query("select distinct wr.budget from WorkRecordEntity wr where wr.person.id = :personId")
+    List<BudgetEntity> findByPersonId(@Param("personId") long personId);
 }

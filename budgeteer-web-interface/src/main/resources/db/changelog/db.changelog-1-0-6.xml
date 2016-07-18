@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+
+    <changeSet author="ehhc" id="issue#72-1">
+      <addColumn tableName="WORK_RECORD">
+           <column name="EDITED_MANUALLY" type="BOOLEAN"/>
+       </addColumn>
+       <addDefaultValue
+               tableName="WORK_RECORD"
+               columnDataType="boolean"
+               columnName="EDITED_MANUALLY"
+               defaultValueBoolean="false" />
+   </changeSet>
+
+    <changeSet id="issue#75" author="ehhc">
+        <createSequence sequenceName="SEQ_BUDGET_ID" startValue="1"/>
+    </changeSet>
+
+    <changeSet id="issue#73" author="ehhc">
+        <createSequence sequenceName="SEQ_CONTRACT_FIELD_ID" startValue="1"/>
+        <createSequence sequenceName="SEQ_INVOICE_FIELD_ID" startValue="1"/>
+        <createTable tableName="CONTRACT">
+            <column autoIncrement="true" name="ID" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="SYS_PK_10355"/>
+            </column>
+            <column name="BUDGET" type="BIGINT"/>
+            <column name="FILE" type="BLOB"/>
+            <column name="FILE_NAME" type="VARCHAR(255)"/>
+            <column name="INTERNAL_NUMBER" type="VARCHAR(255)"/>
+            <column name="LINK" type="VARCHAR(255)"/>
+            <column name="CONTRACT_NAME" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CONTRACT_TYPE" type="INT"/>
+            <column name="YEAR_OF_CONTRACT" type="INT"/>
+            <column name="PROJECT_ID" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <createTable tableName="CONTRACT_FIELD">
+            <column name="ID" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CONTRACT_FIELD_VALUE" type="VARCHAR(255)"/>
+            <column name="PROJECT_CONTRACT_FIELD" type="BIGINT"/>
+            <column name="CONTRACT_ID" type="BIGINT"/>
+        </createTable>
+        <createTable tableName="CONTRACT_INVOICE_FIELD">
+            <column autoIncrement="true" name="ID" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="SYS_PK_10365"/>
+            </column>
+            <column name="FIELD_NAME" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CONTRACT_ID" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <createTable tableName="INVOICE">
+            <column autoIncrement="true" name="ID" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="SYS_PK_10371"/>
+            </column>
+            <column name="DATE" type="date"/>
+            <column name="FILE" type="BLOB"/>
+            <column name="FILE_NAME" type="VARCHAR(255)"/>
+            <column name="INTERNAL_NUMBER" type="VARCHAR(255)"/>
+            <column name="INVOICE_SUM" type="BIGINT"/>
+            <column name="LINK" type="VARCHAR(255)"/>
+            <column name="MONTH" type="INT"/>
+            <column name="NAME" type="VARCHAR(255)"/>
+            <column name="PAID" type="BOOLEAN"/>
+            <column name="YEAR" type="INT"/>
+            <column name="CONTRACT_ID" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <createTable tableName="INVOICE_FIELD">
+            <column name="ID" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="INVOICE_FIELD_VALUE" type="VARCHAR(255)"/>
+            <column name="CONTRACT_INVOICE_FIELD_ID" type="BIGINT"/>
+            <column name="INVOICE_ID" type="BIGINT"/>
+        </createTable>
+        <createTable tableName="PROJECT_CONTRACT_FIELD">
+            <column autoIncrement="true" name="ID" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="SYS_PK_10381"/>
+            </column>
+            <column name="FIELD_NAME" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="PROJECT_ID" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addColumn tableName="BUDGET">
+            <column name="CONTRACT_ID" type="BIGINT(64)"/>
+        </addColumn>
+        <addColumn tableName="IMPORT">
+            <column name="NUMBER_OF_IMPORTED_FILES" type="INTEGER(32)"/>
+        </addColumn>
+        <addPrimaryKey columnNames="ID" constraintName="SYS_PK_10360" tableName="CONTRACT_FIELD"/>
+        <addPrimaryKey columnNames="ID" constraintName="SYS_PK_10376" tableName="INVOICE_FIELD"/>
+        <addUniqueConstraint columnNames="FIELD_NAME, PROJECT_ID" constraintName="UK_KJGHF0NRN8LXTUW5X1W52FDMO" tableName="PROJECT_CONTRACT_FIELD"/>
+        <addUniqueConstraint columnNames="FIELD_NAME, CONTRACT_ID" constraintName="UNIQUE_FIELD_NAME_PER_CONTRACT" tableName="CONTRACT_INVOICE_FIELD"/>
+        <createIndex indexName="SYS_IDX_10413" tableName="BUDGET">
+            <column name="CONTRACT_ID"/>
+        </createIndex>
+        <createIndex indexName="SYS_IDX_10419" tableName="CONTRACT">
+            <column name="PROJECT_ID"/>
+        </createIndex>
+        <createIndex indexName="SYS_IDX_10423" tableName="CONTRACT_FIELD">
+            <column name="PROJECT_CONTRACT_FIELD"/>
+        </createIndex>
+        <createIndex indexName="SYS_IDX_10426" tableName="CONTRACT_FIELD">
+            <column name="CONTRACT_ID"/>
+        </createIndex>
+        <createIndex indexName="SYS_IDX_10429" tableName="CONTRACT_INVOICE_FIELD">
+            <column name="CONTRACT_ID"/>
+        </createIndex>
+        <createIndex indexName="SYS_IDX_10433" tableName="INVOICE">
+            <column name="CONTRACT_ID"/>
+        </createIndex>
+        <createIndex indexName="SYS_IDX_10437" tableName="INVOICE_FIELD">
+            <column name="CONTRACT_INVOICE_FIELD_ID"/>
+        </createIndex>
+        <createIndex indexName="SYS_IDX_10440" tableName="INVOICE_FIELD">
+            <column name="INVOICE_ID"/>
+        </createIndex>
+        <createIndex indexName="SYS_IDX_10443" tableName="PROJECT_CONTRACT_FIELD">
+            <column name="PROJECT_ID"/>
+        </createIndex>
+        <addForeignKeyConstraint baseColumnNames="PROJECT_CONTRACT_FIELD" baseTableName="CONTRACT_FIELD" constraintName="FK_6HKD4IMJD9SXQV1WPBOL7JXRP" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="PROJECT_CONTRACT_FIELD"/>
+        <addForeignKeyConstraint baseColumnNames="INVOICE_ID" baseTableName="INVOICE_FIELD" constraintName="FK_D1BPENV74QA5C2W6YB8DTBTJ" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="INVOICE"/>
+        <addForeignKeyConstraint baseColumnNames="CONTRACT_ID" baseTableName="BUDGET" constraintName="FK_DK2E3WXKGBKE74HUBTBWVD2GW" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="CONTRACT"/>
+        <addForeignKeyConstraint baseColumnNames="CONTRACT_INVOICE_FIELD_ID" baseTableName="INVOICE_FIELD" constraintName="FK_G3ITQHKT42771T51CRYCK8LG6" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="CONTRACT_INVOICE_FIELD"/>
+        <addForeignKeyConstraint baseColumnNames="CONTRACT_ID" baseTableName="CONTRACT_FIELD" constraintName="FK_HGITV5X6TMVKN9SMWJM1X0ISU" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="CONTRACT"/>
+        <addForeignKeyConstraint baseColumnNames="CONTRACT_ID" baseTableName="INVOICE" constraintName="FK_P5IK43G72W210AY0RF9TU4UNW" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="CONTRACT"/>
+        <addForeignKeyConstraint baseColumnNames="PROJECT_ID" baseTableName="PROJECT_CONTRACT_FIELD" constraintName="FK_Q9AUA0B5L0S10Q0M2M3L7BJE7" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="PROJECT"/>
+        <addForeignKeyConstraint baseColumnNames="PROJECT_ID" baseTableName="CONTRACT" constraintName="FK_QSM8X6J63KANFJCBWH19PM9T9" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="PROJECT"/>
+        <addForeignKeyConstraint baseColumnNames="CONTRACT_ID" baseTableName="CONTRACT_INVOICE_FIELD" constraintName="FK_RERAXDSIXPNPMMJNG86O4XG3T" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="CONTRACT"/>
+    </changeSet>
+
+    <changeSet id="contract_and_invoice_id_should_not_start_with_0" author="ehhc">
+        <createSequence sequenceName="SEQ_CONTRACT_ID" startValue="1"/>
+        <createSequence sequenceName="SEQ_INVOICE_ID" startValue="1"/>
+    </changeSet>
+
+    <changeSet id="Issue #77" author="ehhc">
+        <createSequence sequenceName="SEQ_Contract_Invoice_field_ID" startValue="1"/>
+        <createSequence sequenceName="SEQ_Project_contract_field_ID" startValue="1"/>
+    </changeSet>
+
+    <changeSet author="ehhc" id="changed_columns_of_contract_and_invoices">
+        <addColumn tableName="INVOICE">
+            <column name="DUE_DATE" type="DATE(10)"/>
+        </addColumn>
+        <addColumn tableName="INVOICE">
+            <column name="PAID_DATE" type="DATE(10)"/>
+        </addColumn>
+        <addColumn tableName="CONTRACT">
+            <column name="START_DATE" type="DATE(10)"/>
+        </addColumn>
+        <dropColumn columnName="PAID" tableName="INVOICE"/>
+        <dropColumn columnName="YEAR_OF_CONTRACT" tableName="CONTRACT"/>
+    </changeSet>
+</databaseChangeLog>

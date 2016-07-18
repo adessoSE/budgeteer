@@ -1,10 +1,15 @@
 package org.wickedsource.budgeteer.web.pages.person.edit.personrateform;
 
+import static org.wicketstuff.lazymodel.LazyModel.from;
+import static org.wicketstuff.lazymodel.LazyModel.model;
+
+import java.util.HashMap;
+import java.util.List;
+
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
-import org.apache.wicket.markup.html.form.ListMultipleChoice;
 import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.service.DateRange;
@@ -14,18 +19,15 @@ import org.wickedsource.budgeteer.service.person.PersonRate;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.components.budget.BudgetBaseDataChoiceRenderer;
 import org.wickedsource.budgeteer.web.components.daterange.DateRangeInputField;
+import org.wickedsource.budgeteer.web.components.listMultipleChoiceWithGroups.ListMultipleChoiceWithGroups;
+import org.wickedsource.budgeteer.web.components.listMultipleChoiceWithGroups.OptionGroup;
 import org.wickedsource.budgeteer.web.components.money.MoneyTextField;
 import org.wickedsource.budgeteer.web.components.multiselect.MultiselectBehavior;
-
-import java.util.List;
-
-import static org.wicketstuff.lazymodel.LazyModel.from;
-import static org.wicketstuff.lazymodel.LazyModel.model;
 
 public abstract class PersonRateForm extends Form<PersonRateForm.PersonRateFormModel> {
 
     public static class PersonRateFormModel extends PersonRate{
-        private ListModel<BudgetBaseData> chosenBudgets = new ListModel<BudgetBaseData>();
+        private ListModel<BudgetBaseData> chosenBudgets = new ListModel<>();
 
         public ListModel<BudgetBaseData> getChosenBudgets() {
             return chosenBudgets;
@@ -36,7 +38,7 @@ public abstract class PersonRateForm extends Form<PersonRateForm.PersonRateFormM
     private BudgetService budgetService;
 
 
-    public PersonRateForm(String id) {
+    public PersonRateForm(String id, long personId) {
         super(id, model(from(new PersonRateFormModel())));
         Injector.get().inject(this);
 
@@ -44,13 +46,16 @@ public abstract class PersonRateForm extends Form<PersonRateForm.PersonRateFormM
         rateField.setRequired(true);
         add(rateField);
 
-        DateRangeInputField dateRangeField = new DateRangeInputField("dateRangeField", model(from(getModel()).getDateRange()));
+        DateRangeInputField dateRangeField = new DateRangeInputField("dateRangeField", model(from(getModel()).getDateRange()), DateRangeInputField.DROP_LOCATION.UP);
         dateRangeField.setRequired(true);
         add(dateRangeField);
 
-        List<BudgetBaseData> possibleBudgets = budgetService.loadBudgetBaseDataForProject(BudgeteerSession.get().getProjectId());
-        ListMultipleChoice<BudgetBaseData> budgetChoice =
-                new ListMultipleChoice<BudgetBaseData>("budgetField", getModelObject().getChosenBudgets(), possibleBudgets, new IChoiceRenderer<BudgetBaseData>() {
+
+
+        List<OptionGroup<BudgetBaseData>> possibleBudgets = budgetService.getPossibleBudgetDataForPersonAndProject(BudgeteerSession.get().getProjectId(), personId);
+
+        ListMultipleChoiceWithGroups<BudgetBaseData> budgetChoice =
+                new ListMultipleChoiceWithGroups<>("budgetField", getModelObject().getChosenBudgets(), possibleBudgets, new IChoiceRenderer<BudgetBaseData>() {
                     @Override
                     public Object getDisplayValue(BudgetBaseData object) {
                         return object.getName();
@@ -60,12 +65,15 @@ public abstract class PersonRateForm extends Form<PersonRateForm.PersonRateFormM
                     public String getIdValue(BudgetBaseData object, int index) {
                         return "" + object.getId();
                     }
+
                 });
 
         budgetChoice.setRequired(true);
         budgetChoice.setChoiceRenderer(new BudgetBaseDataChoiceRenderer());
 
-        budgetChoice.add(new MultiselectBehavior(MultiselectBehavior.getRecommendedOptions()));
+        HashMap<String, String> multiselectOptions = MultiselectBehavior.getRecommendedOptions();
+        multiselectOptions.put("includeSelectAllOption","false");
+        budgetChoice.add(new MultiselectBehavior(multiselectOptions));
 
         add(budgetChoice);
 
@@ -84,9 +92,12 @@ public abstract class PersonRateForm extends Form<PersonRateForm.PersonRateFormM
                 overlappingEntryNames.append(System.getProperty("line.separator"));
                 for(int i=0; i < overlappingRate.size(); i++){
                     PersonRate p = overlappingRate.get(i);
-                    overlappingEntryNames.append(p.getBudget().getName() + " " + p.getDateRange().toString());
+                    overlappingEntryNames.append(p.getBudget().getName());
+                    overlappingEntryNames.append(" ");
+                    overlappingEntryNames.append(p.getDateRange().toString());
                     if(i < overlappingRate.size() - 1){
-                        overlappingEntryNames.append(","+System.getProperty("line.separator"));
+                        overlappingEntryNames.append(",");
+                        overlappingEntryNames.append(System.getProperty("line.separator"));
                     }
                 }
                 error(String.format(getString("personRateForm.overlappingRates"), overlappingEntryNames.toString()));
