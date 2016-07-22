@@ -12,17 +12,17 @@ import org.wickedsource.budgeteer.imports.api.*;
 
 public class UBWWorkRecordsImporter implements WorkRecordsImporter {
 
-    private static final int SHEET_INDEX = 3;
+    private static final int SHEET_INDEX = 5;
 
-    private static final int COLUMN_INVOICABLE = 10;
+    private static final int COLUMN_INVOICABLE = 11;
 
     private static final int COLUMN_DATE = 3;
 
     private static final int COLUMN_PERSON = 2;
 
-    private static final int COLUMN_BUDGET = 7;
+    private static final int COLUMN_BUDGET = 8;
 
-    private static final int COLUMN_HOURS = 9;
+    private static final int COLUMN_HOURS = 10;
 
     private List<List<String>> skippedRecords = new LinkedList<List<String>>();
 
