@@ -5,21 +5,26 @@ import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.CheckBox;
+import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.NumberTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.wickedsource.budgeteer.service.DateUtil;
 import org.wickedsource.budgeteer.service.contract.DynamicAttributeField;
 import org.wickedsource.budgeteer.service.invoice.InvoiceBaseData;
 import org.wickedsource.budgeteer.service.invoice.InvoiceService;
 import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
+import org.wickedsource.budgeteer.web.components.daterange.DateInputField;
 import org.wickedsource.budgeteer.web.components.fileUpload.CustomFileUpload;
 import org.wickedsource.budgeteer.web.components.money.MoneyTextField;
+import org.wickedsource.budgeteer.web.components.monthRenderer.MonthRenderer;
+
+import java.util.Arrays;
+import java.util.List;
 
 import static org.wicketstuff.lazymodel.LazyModel.from;
 import static org.wicketstuff.lazymodel.LazyModel.model;
@@ -70,10 +75,12 @@ public class EditInvoiceForm  extends Form<InvoiceBaseData> {
         budgetTextfield.setRequired(true);
         add(budgetTextfield);
 
-        add(new NumberTextField<Integer>("year", model(from(getModelObject()).getYear())));
-        add(new NumberTextField<Integer>("month", model(from(getModelObject()).getMonth())));
+        add(new DropDownChoice<Integer>("year", model(from(getModelObject()).getYear()), DateUtil.getCurrentYears(5)));
+        List<Integer> monthList = Arrays.asList(0,1,2,3,4,5,6,7,8,9,10,11);
+        add(new DropDownChoice<Integer>("month", model(from(getModelObject()).getMonth()), monthList, new MonthRenderer()));
 
-        add(new CheckBox("paid", model(from(getModelObject()).isPaid())));
+        add(new DateInputField("paidDate", model(from(getModelObject()).getPaidDate())));
+        add(new DateInputField("dueDate", model(from(getModelObject()).getDueDate())));
 
         final CustomFileUpload fileUpload = new CustomFileUpload("fileUpload", model(from(getModelObject()).getFileUploadModel()));
         add(fileUpload);
@@ -117,7 +124,6 @@ public class EditInvoiceForm  extends Form<InvoiceBaseData> {
                     ((InvoiceBaseData) form.getModelObject()).getFileUploadModel().setFile(fileUpload.getFile());
                     ((InvoiceBaseData) form.getModelObject()).getFileUploadModel().setFileName(fileUpload.getFileName());
                     ((InvoiceBaseData) form.getModelObject()).setInvoiceId(service.save((InvoiceBaseData) form.getModelObject()));
-                    service.save((InvoiceBaseData) form.getModelObject());
                     this.success(getString("feedback.success"));
                 } catch(Exception e){
                     e.printStackTrace();

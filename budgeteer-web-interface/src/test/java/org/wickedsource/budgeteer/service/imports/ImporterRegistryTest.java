@@ -8,6 +8,6 @@ public class ImporterRegistryTest {
     @Test
     public void testRegistry() {
         ImporterRegistry registry = new ImporterRegistry();
-        Assert.assertEquals(1, registry.getWorkingRecordsImporters().size());
+        Assert.assertEquals(2, registry.getWorkingRecordsImporters().size());
     }
 }

@@ -12,11 +12,13 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.persistence.contract.ContractEntity;
+import org.wickedsource.budgeteer.service.DateUtil;
 import org.wickedsource.budgeteer.service.contract.ContractBaseData;
 import org.wickedsource.budgeteer.service.contract.ContractService;
 import org.wickedsource.budgeteer.service.contract.DynamicAttributeField;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
+import org.wickedsource.budgeteer.web.components.daterange.DateInputField;
 import org.wickedsource.budgeteer.web.components.fileUpload.CustomFileUpload;
 import org.wickedsource.budgeteer.web.components.money.MoneyTextField;
 
@@ -67,7 +69,13 @@ public class EditContractForm extends Form<ContractBaseData> {
         budgetTextfield.setRequired(true);
         add(budgetTextfield);
 
-        add(new NumberTextField<Integer>("year", model(from(getModelObject()).getYear())));
+        if(getModelObject().getStartDate() == null){
+            getModelObject().setStartDate(DateUtil.getBeginOfYear());
+        }
+        DateInputField startDateInputField = new DateInputField("startDate", model(from(getModelObject()).getStartDate()), DateInputField.DROP_LOCATION.UP);
+        startDateInputField.setRequired(true);
+        add(startDateInputField);
+
         add(new DropDownChoice<ContractEntity.ContractType>("type",
                 model(from(getModelObject()).getType()), Arrays.asList(ContractEntity.ContractType.values()),
                 new EnumChoiceRenderer<ContractEntity.ContractType>(this)));

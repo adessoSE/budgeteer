@@ -30,7 +30,8 @@ public class InvoiceDataMapper extends AbstractMapper<InvoiceEntity, InvoiceBase
         result.setInternalNumber(entity.getInternalNumber());
         result.setYear(entity.getYear());
         result.setMonth(entity.getMonth());
-        result.setPaid(entity.isPaid());
+        result.setPaidDate(entity.getPaidDate());
+        result.setDueDate(entity.getDueDate());
         result.setFileUploadModel(new FileUploadModel(entity.getFileName(), entity.getFile(), entity.getLink()));
 
         HashMap<String, DynamicAttributeField> dynamicAttributeFieldMap = new HashMap<String, DynamicAttributeField>();
@@ -39,6 +40,12 @@ public class InvoiceDataMapper extends AbstractMapper<InvoiceEntity, InvoiceBase
             while (it.hasNext()) {
                 Map.Entry pair = (Map.Entry)it.next();
                 dynamicAttributeFieldMap.put((String) pair.getKey(), new DynamicAttributeField((String) pair.getKey(), ""));
+            }
+        } else {
+            if(entity.getContract().getInvoiceFields() != null){
+               for (ContractInvoiceField contractInvoiceField : entity.getContract().getInvoiceFields()) {
+                    dynamicAttributeFieldMap.put(contractInvoiceField.getFieldName(), new DynamicAttributeField(contractInvoiceField.getFieldName(), ""));
+               }
             }
         }
         for(InvoiceFieldEntity fieldEntity : entity.getDynamicFields()){

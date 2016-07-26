@@ -32,7 +32,7 @@ public class ResourcePlanImporter implements PlanRecordsImporter {
     private SimpleDateFormat format = new SimpleDateFormat();
 
     @Override
-    public List<ImportedPlanRecord> importFile(ImportFile file, CurrencyUnit currencyUnit) throws ImportException {
+    public List<ImportedPlanRecord> importFile(ImportFile file, CurrencyUnit currencyUnit) throws ImportException, InvalidFileFormatException {
         skippedRecords.add(new LinkedList<String>());
         LinkedList<String> filenameList = new LinkedList<String>();
         filenameList.add(file.getFilename());
@@ -41,6 +41,9 @@ public class ResourcePlanImporter implements PlanRecordsImporter {
         try {
             List<ImportedPlanRecord> resultList = new ArrayList<ImportedPlanRecord>();
             Workbook workbook = new XSSFWorkbook(file.getInputStream());
+            if(!isValid(workbook)){
+                throw new InvalidFileFormatException("Invalid file", file.getFilename());
+            }
             Sheet sheet = workbook.getSheetAt(RESOURCE_PLAN_SHEET_INDEX);
             List<DateColumn> dateColumns = getDateColumns(sheet);
             int i = FIRST_ENTRY_ROW;
@@ -54,6 +57,25 @@ public class ResourcePlanImporter implements PlanRecordsImporter {
         } catch (IOException e) {
             throw new ImportException(e);
         }
+    }
+
+    private boolean isValid(Workbook workbook) {
+        boolean result = workbook.getNumberOfSheets() >= RESOURCE_PLAN_SHEET_INDEX;
+        if(result){
+            try {
+                Sheet s = workbook.getSheetAt(RESOURCE_PLAN_SHEET_INDEX);
+                Row r = s.getRow(FIRST_ENTRY_ROW - 1);
+                if (r == null) {
+                    result = false;
+                } else{
+                    result = r.getCell(COLUMN_PERSON).getStringCellValue().equals("Person") &&
+                            r.getCell(COLUMN_BUDGET).getStringCellValue().equals("Budget");
+                }
+            } catch (Exception e){
+                result = false;
+            }
+        }
+        return result;
     }
 
     private List<DateColumn> getDateColumns(Sheet sheet) {

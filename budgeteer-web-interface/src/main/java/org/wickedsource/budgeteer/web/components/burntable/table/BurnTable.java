@@ -87,7 +87,6 @@ public class BurnTable extends Panel {
                         @Override
                         protected void cancel(AjaxRequestTarget target, Form<Money> form) {
                             item.getModelObject().setEditedManually(item.getModelObject().isEditedManually());
-                            this.setModel(model(from(item.getModelObject()).getDailyRate()));
                             target.add(item);
                         }
 

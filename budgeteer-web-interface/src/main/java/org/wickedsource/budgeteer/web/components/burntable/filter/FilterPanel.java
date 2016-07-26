@@ -1,5 +1,11 @@
 package org.wickedsource.budgeteer.web.components.burntable.filter;
 
+import static org.wicketstuff.lazymodel.LazyModel.from;
+import static org.wicketstuff.lazymodel.LazyModel.model;
+
+import java.util.HashMap;
+import java.util.List;
+
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
@@ -18,12 +24,6 @@ import org.wickedsource.budgeteer.web.components.daterange.DateRangeInputField;
 import org.wickedsource.budgeteer.web.components.multiselect.MultiselectBehavior;
 import org.wickedsource.budgeteer.web.components.person.PersonBaseDataChoiceRenderer;
 import org.wicketstuff.lazymodel.LazyModel;
-
-import java.util.HashMap;
-import java.util.List;
-
-import static org.wicketstuff.lazymodel.LazyModel.from;
-import static org.wicketstuff.lazymodel.LazyModel.model;
 
 public class FilterPanel extends Panel {
 
@@ -64,7 +64,8 @@ public class FilterPanel extends Panel {
         };
         container.setVisible(isPersonFilterEnabled());
         LazyModel<List<PersonBaseData>> chosenPersons = model(from(form.getModelObject().getPersonList()));
-        List<PersonBaseData> possiblePersons = personService.loadPeopleBaseData(BudgeteerSession.get().getProjectId());
+        List<PersonBaseData> possiblePersonsFromFilter = form.getModelObject().getPossiblePersons();
+        List<PersonBaseData> possiblePersons = possiblePersonsFromFilter.isEmpty() ?  personService.loadPeopleBaseData(BudgeteerSession.get().getProjectId()) : possiblePersonsFromFilter;
         ListMultipleChoice<PersonBaseData> selectedPersons =
                 new ListMultipleChoice<PersonBaseData>("personSelect", chosenPersons,
                         possiblePersons, new PersonBaseDataChoiceRenderer());
@@ -87,10 +88,10 @@ public class FilterPanel extends Panel {
             }
         };
         container.setVisible(isBudgetFilterEnabled());
-
-        List<BudgetBaseData> possibleBudgets = budgetService.loadBudgetBaseDataForProject(BudgeteerSession.get().getProjectId());
+        List<BudgetBaseData> possibleBudgetsFromFilter = form.getModelObject().getPossibleBudgets();
+        List<BudgetBaseData> possibleBudgets = possibleBudgetsFromFilter.isEmpty() ? budgetService.loadBudgetBaseDataForProject(BudgeteerSession.get().getProjectId()) : possibleBudgetsFromFilter;
         LazyModel<List<BudgetBaseData>> chosenBudgets = model(from(form.getModelObject().getBudgetList()));
-        ListMultipleChoice<BudgetBaseData> selectedBudgets = new ListMultipleChoice<BudgetBaseData>("budgetSelect", chosenBudgets, possibleBudgets, new BudgetBaseDataChoiceRenderer());
+        ListMultipleChoice<BudgetBaseData> selectedBudgets = new ListMultipleChoice<>("budgetSelect", chosenBudgets, possibleBudgets, new BudgetBaseDataChoiceRenderer());
 
         HashMap<String, String> options = MultiselectBehavior.getRecommendedOptions();
         options.put("buttonWidth","'250px'");

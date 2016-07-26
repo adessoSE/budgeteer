@@ -1,7 +1,10 @@
 package org.wickedsource.budgeteer.web.pages.budgets.hours;
 
+import javax.inject.Inject;
+
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
+import org.wickedsource.budgeteer.service.person.PersonService;
 import org.wickedsource.budgeteer.service.record.WorkRecordFilter;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.Mount;
@@ -17,11 +20,15 @@ import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 @Mount("budgets/hours/${id}")
 public class BudgetHoursPage extends BasePage {
 
+    @Inject
+    private PersonService personService;
+
     public BudgetHoursPage(PageParameters parameters) {
         super(parameters);
 
         WorkRecordFilter filter = new WorkRecordFilter(BudgeteerSession.get().getProjectId());
         filter.getBudgetList().add(new BudgetBaseData(getParameterId(), ""));
+        filter.setPossiblePersons(personService.loadPeopleBaseDataByBudget(getParameterId()));
 
         BurnTableWithFilter table = new BurnTableWithFilter("burnTable", filter);
         table.setBudgetFilterEnabled(false);

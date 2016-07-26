@@ -6,14 +6,15 @@ import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.util.resource.AbstractResourceStreamWriter;
 import org.wickedsource.budgeteer.service.contract.DynamicAttributeField;
 import org.wickedsource.budgeteer.service.invoice.InvoiceBaseData;
-import org.wickedsource.budgeteer.web.components.money.MoneyLabel;
+import org.wickedsource.budgeteer.web.PropertyLoader;
+import org.wickedsource.budgeteer.web.pages.base.basepage.BasePage;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -21,35 +22,40 @@ import java.io.OutputStream;
 import static org.wicketstuff.lazymodel.LazyModel.from;
 import static org.wicketstuff.lazymodel.LazyModel.model;
 
-public class InvoiceHighlightsPanel extends Panel {
+public class InvoiceHighlightsPanel extends GenericPanel<InvoiceBaseData> {
 
     public InvoiceHighlightsPanel(String id, final IModel<InvoiceBaseData> model) {
         super(id, model);
-        add(new Label("name", model(from(model.getObject()).getInvoiceName())));
-        add(new Label("contractName", model(from(model.getObject()).getContractName())));
-        add(new Label("internalNumber", model(from(model.getObject()).getInternalNumber())));
-        add(new Label("year", model(from(model.getObject()).getYear())));
-        add(new Label("month", model(from(model.getObject()).getMonth())));
-        add(new MoneyLabel("sum", model(from(model.getObject()).getSum())));
-        add(new Label("paid", (model.getObject().isPaid() ? getString("invoice.paid.yes") : getString("invoice.paid.no"))));
+    }
+
+    @Override
+    protected void onInitialize() {
+        super.onInitialize();
+        add(new Label("name", model(from(getModelObject()).getInvoiceName())));
+        add(new Label("contractName", model(from(getModelObject()).getContractName())));
+        add(new Label("internalNumber", model(from(getModelObject()).getInternalNumber())));
+        add(new Label("year", model(from(getModelObject()).getYear())));
+        add(new Label("month", PropertyLoader.getProperty(BasePage.class, "monthRenderer.name." + getModelObject().getMonth())));
+        add(new Label("sum", model(from(getModelObject()).getSum())));
+        add(new Label("paid", (getModelObject().isPaid() ? getString("invoice.paid.yes") : getString("invoice.paid.no"))));
 
         WebMarkupContainer linkContainer = new WebMarkupContainer("linkContainer"){
             @Override
             public boolean isVisible() {
-                return model.getObject().getFileUploadModel().getLink() != null && !model.getObject().getFileUploadModel().getLink().isEmpty();
+                return getModelObject().getFileUploadModel().getLink() != null && !getModelObject().getFileUploadModel().getLink().isEmpty();
             }
         };
-        linkContainer.add(new ExternalLink("link", Model.of(model.getObject().getFileUploadModel().getLink()), Model.of(model.getObject().getFileUploadModel().getLink())));
+        linkContainer.add(new ExternalLink("link", Model.of(getModelObject().getFileUploadModel().getLink()), Model.of(getModelObject().getFileUploadModel().getLink())));
         add(linkContainer);
 
         WebMarkupContainer fileContainer = new WebMarkupContainer("fileContainer"){
             @Override
             public boolean isVisible() {
-                return model.getObject().getFileUploadModel().getFileName() != null && !model.getObject().getFileUploadModel().getFileName().isEmpty();
+                return getModelObject().getFileUploadModel().getFileName() != null && !getModelObject().getFileUploadModel().getFileName().isEmpty();
             }
         };
-        final byte[] file = model.getObject().getFileUploadModel().getFile();
-        final String fileName = model.getObject().getFileUploadModel().getFileName();
+        final byte[] file = getModelObject().getFileUploadModel().getFile();
+        final String fileName = getModelObject().getFileUploadModel().getFileName();
         Link<Void> fileDownloadLink = new Link<Void>("file") {
 
             @Override
@@ -68,7 +74,7 @@ public class InvoiceHighlightsPanel extends Panel {
         fileContainer.add(fileDownloadLink);
         add(fileContainer);
 
-        add(new ListView<DynamicAttributeField>("additionalInformation", model(from(model.getObject()).getDynamicInvoiceFields())) {
+        add(new ListView<DynamicAttributeField>("additionalInformation", model(from(getModelObject()).getDynamicInvoiceFields())) {
             @Override
             protected void populateItem(ListItem<DynamicAttributeField> item) {
                 item.add(new Label("value", model(from(item.getModelObject()).getValue())));
@@ -76,5 +82,4 @@ public class InvoiceHighlightsPanel extends Panel {
             }
         });
     }
-
 }

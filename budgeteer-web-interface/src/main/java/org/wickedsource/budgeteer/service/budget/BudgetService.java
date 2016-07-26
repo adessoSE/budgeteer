@@ -1,5 +1,12 @@
 package org.wickedsource.budgeteer.service.budget;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+
+import javax.transaction.Transactional;
+
 import org.joda.money.Money;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,11 +23,8 @@ import org.wickedsource.budgeteer.persistence.record.PlanRecordRepository;
 import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
 import org.wickedsource.budgeteer.service.UnknownEntityException;
 import org.wickedsource.budgeteer.service.contract.ContractDataMapper;
-
-import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import org.wickedsource.budgeteer.web.BudgeteerSession;
+import org.wickedsource.budgeteer.web.components.listMultipleChoiceWithGroups.OptionGroup;
 
 
 @Service
@@ -74,6 +78,17 @@ public class BudgetService {
     }
 
     /**
+     * Loads the base data of a single budget from the database.
+     *
+     * @param personId ID of the person for which the budget should be loaded.
+     * @return base data of the specified budget.
+     */
+    public List<BudgetBaseData> loadBudgetBaseDataByPersonId(long personId) {
+        List<BudgetEntity> budget = budgetRepository.findByPersonId(personId);
+        return budgetBaseDataMapper.map(budget);
+    }
+
+    /**
      * Loads all tags assigned to any budget of the given user.
      *
      * @param projectId ID of the project
@@ -110,6 +125,7 @@ public class BudgetService {
         data.setAvgDailyRate(toMoneyNullsafe(avgDailyRateInCents));
         data.setUnplanned(entity.getTotal().minus(toMoneyNullsafe(plannedBudgetInCents)));
         data.setContractName(entity.getContract() == null ? null : entity.getContract().getName() );
+        data.setContractId(entity.getContract() == null ? 0 : entity.getContract().getId() );
         return data;
     }
 
@@ -232,6 +248,40 @@ public class BudgetService {
 
     public void deleteBudget(long id) {
         budgetRepository.delete(id);
+    }
+
+    public List<BudgetDetailData> loadBudgetByContract(long cId){
+        List<BudgetDetailData> result = new LinkedList<BudgetDetailData>();
+        List<BudgetEntity> temp =budgetRepository.findByContractId(cId);
+        if(temp != null){
+            for(BudgetEntity b : temp){
+                result.add(enrichBudgetEntity(b));
+            }
+        }
+        return result;
+    }
+
+    public List<OptionGroup<BudgetBaseData>> getPossibleBudgetDataForPersonAndProject(long projectId, long personId){
+
+        List<BudgetBaseData> allBudgets = loadBudgetBaseDataForProject(BudgeteerSession.get().getProjectId());
+        List<BudgetBaseData> personalBudgets = loadBudgetBaseDataForPerson(personId);
+
+        allBudgets.removeAll(personalBudgets);
+
+        List<OptionGroup<BudgetBaseData>> result = new LinkedList();
+        if(!personalBudgets.isEmpty()) {
+            result.add(new OptionGroup<>("Used", personalBudgets));
+        }
+        if(! allBudgets.isEmpty()){
+            result.add(new OptionGroup<>("All", allBudgets));
+        }
+
+        return result;
+    }
+
+    private List<BudgetBaseData> loadBudgetBaseDataForPerson(long personId) {
+        List<BudgetEntity> budgets = budgetRepository.findByPersonId(personId);
+        return budgetBaseDataMapper.map(budgets);
     }
 
 }

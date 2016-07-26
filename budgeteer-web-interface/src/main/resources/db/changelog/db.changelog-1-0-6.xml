@@ -147,4 +147,27 @@
         <addForeignKeyConstraint baseColumnNames="CONTRACT_ID" baseTableName="CONTRACT_INVOICE_FIELD" constraintName="FK_RERAXDSIXPNPMMJNG86O4XG3T" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="CONTRACT"/>
     </changeSet>
 
+    <changeSet id="contract_and_invoice_id_should_not_start_with_0" author="ehhc">
+        <createSequence sequenceName="SEQ_CONTRACT_ID" startValue="1"/>
+        <createSequence sequenceName="SEQ_INVOICE_ID" startValue="1"/>
+    </changeSet>
+
+    <changeSet id="Issue #77" author="ehhc">
+        <createSequence sequenceName="SEQ_Contract_Invoice_field_ID" startValue="1"/>
+        <createSequence sequenceName="SEQ_Project_contract_field_ID" startValue="1"/>
+    </changeSet>
+
+    <changeSet author="ehhc" id="changed_columns_of_contract_and_invoices">
+        <addColumn tableName="INVOICE">
+            <column name="DUE_DATE" type="DATE(10)"/>
+        </addColumn>
+        <addColumn tableName="INVOICE">
+            <column name="PAID_DATE" type="DATE(10)"/>
+        </addColumn>
+        <addColumn tableName="CONTRACT">
+            <column name="START_DATE" type="DATE(10)"/>
+        </addColumn>
+        <dropColumn columnName="PAID" tableName="INVOICE"/>
+        <dropColumn columnName="YEAR_OF_CONTRACT" tableName="CONTRACT"/>
+    </changeSet>
 </databaseChangeLog>

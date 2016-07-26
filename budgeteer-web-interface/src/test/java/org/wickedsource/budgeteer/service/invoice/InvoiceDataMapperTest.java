@@ -9,6 +9,7 @@ import org.wickedsource.budgeteer.persistence.invoice.InvoiceEntity;
 import org.wickedsource.budgeteer.persistence.invoice.InvoiceFieldEntity;
 import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,7 +20,7 @@ import static org.junit.Assert.assertTrue;
 public class InvoiceDataMapperTest {
 
     /**
-     * Tests whether different invoiced belonging to different contracts will get the same dynamic attributes
+     * Tests whether different invoiced associated with different contracts will get the same dynamic attributes
      */
     @Test
     public void testMapWithDifferentProjectsButSameAttributes(){
@@ -114,7 +115,7 @@ public class InvoiceDataMapperTest {
         invoiceEntity.setInternalNumber("InvoiceEntity 1");
         invoiceEntity.setYear(2015);
         invoiceEntity.setMonth(3);
-        invoiceEntity.setPaid(true);
+        invoiceEntity.setPaidDate(new Date());
 
         invoiceEntity.setFileName("FileName1");
         invoiceEntity.setFile(null);
@@ -164,7 +165,7 @@ public class InvoiceDataMapperTest {
         invoiceEntity.setInternalNumber("InvoiceEntity 2");
         invoiceEntity.setYear(2015);
         invoiceEntity.setMonth(3);
-        invoiceEntity.setPaid(true);
+        invoiceEntity.setPaidDate(new Date());
         invoiceEntity.setContract(contract2);
         invoiceEntity.setDynamicFields(new LinkedList<InvoiceFieldEntity>());
 

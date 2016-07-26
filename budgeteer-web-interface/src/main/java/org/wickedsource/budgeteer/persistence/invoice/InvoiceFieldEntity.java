@@ -16,7 +16,7 @@ public class InvoiceFieldEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_INVOICE_FIELD_ID")
     private long id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade={CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "CONTRACT_INVOICE_FIELD_ID")
     private ContractInvoiceField field;
 

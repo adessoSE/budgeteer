@@ -113,7 +113,19 @@ public class ProjectService {
         invoiceRepository.deleteInvoiceFieldByProjectId(projectId);
         invoiceRepository.deleteContractInvoiceFieldByProject(projectId);
         invoiceRepository.deleteByProjectId(projectId);
+        contractRepository.deleteContractFieldByProjectId(projectId);
         contractRepository.deleteByProjectId(projectId);
+        if(projectRepository.findOne(projectId) != null) {
+            List<UserEntity> userList = projectRepository.findOne(projectId).getAuthorizedUsers();
+            if (userList != null) {
+                for (UserEntity u : userList) {
+                    if (u.getDefaultProject().getId() == projectId) {
+                        u.setDefaultProject(null);
+                        userRepository.save(u);
+                    }
+                }
+            }
+        }
         projectRepository.delete(projectId);
     }
 
@@ -131,8 +143,7 @@ public class ProjectService {
 
     public Project findProjectById(long projectId){
         ProjectEntity entity = projectRepository.findOne(projectId);
-        Project result = new Project(entity.getId(), entity.getProjectStart(), entity.getProjectEnd(), entity.getName());
-        return result;
+        return new Project(entity.getId(), entity.getProjectStart(), entity.getProjectEnd(), entity.getName());
     }
 
     public void save(Project project) {

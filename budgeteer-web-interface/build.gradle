@@ -1,6 +1,6 @@
 import org.apache.tools.ant.filters.ReplaceTokens
 
-version = '1.0.4.BETA'
+version = '1.0.6.BETA'
 
 buildscript {
     repositories {
@@ -10,7 +10,6 @@ buildscript {
 
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:1.1.5.RELEASE")
-        classpath 'org.springframework:springloaded:1.2.1.RELEASE'
     }
 }
 
@@ -53,6 +52,7 @@ processResources {
 
 dependencies {
     compile project(':budgeteer-aproda-importer')
+    compile project(':budgeteer-ubw-importer')
     compile project(':budgeteer-resourceplan-importer')
 
     compile(

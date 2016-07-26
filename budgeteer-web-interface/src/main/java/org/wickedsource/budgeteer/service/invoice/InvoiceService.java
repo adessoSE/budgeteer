@@ -77,7 +77,8 @@ public class InvoiceService {
         } catch (ParseException e) {
           e.printStackTrace();
         }
-        invoiceEntity.setPaid(invoiceBaseData.isPaid());
+        invoiceEntity.setPaidDate(invoiceBaseData.getPaidDate());
+        invoiceEntity.setDueDate(invoiceBaseData.getDueDate());
 
         invoiceEntity.setFileName(invoiceBaseData.getFileUploadModel().getFileName());
         invoiceEntity.setFile(invoiceBaseData.getFileUploadModel().getFile());

@@ -44,7 +44,6 @@ public class ContractService {
 
     public List<ContractBaseData> getContractsByProject(long projectId) {
         List<ContractEntity> contracts = new LinkedList<ContractEntity>();
-        contracts.add(null);
         contracts.addAll(contractRepository.findByProjectId(projectId));
         return mapper.map(contracts);
     }
@@ -72,7 +71,7 @@ public class ContractService {
         contractEntity.setName(contractBaseData.getContractName());
         contractEntity.setBudget(contractBaseData.getBudget());
         contractEntity.setInternalNumber(contractBaseData.getInternalNumber());
-        contractEntity.setYear(contractBaseData.getYear());
+        contractEntity.setStartDate(contractBaseData.getStartDate());
         contractEntity.setType(contractBaseData.getType());
         contractEntity.setLink(contractBaseData.getFileModel().getLink());
         contractEntity.setFileName(contractBaseData.getFileModel().getFileName());

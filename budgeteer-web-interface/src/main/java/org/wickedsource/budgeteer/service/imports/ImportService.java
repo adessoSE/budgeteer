@@ -90,7 +90,7 @@ public class ImportService implements ApplicationContextAware {
      * @param importFiles the files to be imported
      */
     @Transactional(rollbackOn = ImportException.class)
-    public void doImport(long projectId, Importer importer, List<ImportFile> importFiles) throws ImportException {
+    public void doImport(long projectId, Importer importer, List<ImportFile> importFiles) throws ImportException, InvalidFileFormatException {
         skippedRecords = new LinkedList<List<String>>();
         if (importer instanceof WorkRecordsImporter) {
             WorkRecordsImporter workRecordsImporter = (WorkRecordsImporter) importer;

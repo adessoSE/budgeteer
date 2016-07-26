@@ -43,6 +43,17 @@ public class ProjectEntity implements Serializable {
     /**
      * List of possible dynamic fields that can be used by contracts of this project
      */
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "project", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "project", fetch = FetchType.LAZY)
     private Set<ProjectContractField> contractFields;
+
+    @Override
+    public String toString() {
+        return "ProjectEntity{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", authorizedUsers=" + authorizedUsers +
+                ", projectStart=" + projectStart +
+                ", projectEnd=" + projectEnd +
+                '}';
+    }
 }

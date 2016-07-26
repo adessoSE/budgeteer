@@ -61,19 +61,21 @@ public class EditBudgetForm extends Form<EditBudgetData> {
         MoneyTextField totalField = new MoneyTextField("total", model(from(getModel()).getTotal()));
         totalField.setRequired(true);
         add(totalField);
-        add(new DropDownChoice<ContractBaseData>("contract", model(from(getModel()).getContract()),
+        DropDownChoice<ContractBaseData> contractDropDown = new DropDownChoice<ContractBaseData>("contract", model(from(getModel()).getContract()),
                 contractService.getContractsByProject(BudgeteerSession.get().getProjectId()),
                 new IChoiceRenderer<ContractBaseData>() {
-            @Override
-            public Object getDisplayValue(ContractBaseData object) {
-                return object == null ? getString("no.contract") : object.getContractName();
-            }
+                    @Override
+                    public Object getDisplayValue(ContractBaseData object) {
+                        return object == null ? getString("no.contract") : object.getContractName();
+                    }
 
-            @Override
-            public String getIdValue(ContractBaseData object, int index) {
-                return object != null ? "" + object.getContractId() : "";
-            }
-        }));
+                    @Override
+                    public String getIdValue(ContractBaseData object, int index) {
+                        return object != null ? "" + object.getContractId() : "";
+                    }
+                });
+        contractDropDown.setNullValid(true);
+        add(contractDropDown);
         add(createTagsList("tagsList", new BudgetTagsModel(BudgeteerSession.get().getProjectId()), tagsField));
         add(new NotificationListPanel("notificationList", new BudgetNotificationsModel(getModel().getObject().getId())));
     }

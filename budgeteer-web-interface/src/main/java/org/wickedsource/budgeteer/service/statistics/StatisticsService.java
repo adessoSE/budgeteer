@@ -445,21 +445,44 @@ public class StatisticsService {
         return targetAndActual;
     }
 
-    public ContractDetailBudgetChart getMonthlyBudgetBurnedForContract(long contractId, int numberOfMonths) {
+    public List<ContractStatisticBean> getMonthlyAggregatedStatisticsForContract(long contractId, int numberOfMonths){
+        List<ContractStatisticBean> result = new LinkedList<ContractStatisticBean>();
         Date startDate = dateUtil.monthsAgo(numberOfMonths);
-        ContractDetailBudgetChart result = new ContractDetailBudgetChart();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(startDate);
+        Calendar currentDate = Calendar.getInstance();
+        currentDate.setTime(new Date());
+        while(cal.before(currentDate)){
+            ContractStatisticBean bean = contractRepository.getContractStatisticAggregatedByMonthAndYear(contractId, cal.get(Calendar.MONTH), cal.get(Calendar.YEAR));
+            result.add(bean);
+            cal.add(Calendar.MONTH, 1);
+        }
+        return result;
+    }
+
+    public List<ContractStatisticBean> getMonthlyStatisticsForContract(long contractId, Date startDate){
+        List<ContractStatisticBean> result = new LinkedList<ContractStatisticBean>();
         Calendar cal = Calendar.getInstance();
         cal.setTime(startDate);
         Calendar currentDate = Calendar.getInstance();
         currentDate.setTime(new Date());
         while(cal.before(currentDate)){
             ContractStatisticBean bean = contractRepository.getContractStatisticByMonthAndYear(contractId, cal.get(Calendar.MONTH), cal.get(Calendar.YEAR));
-            result.getRemainingTotalBudget().add(MoneyUtil.createMoneyFromCents(bean.getRemainingContractBudget()));
-            result.getBurnedMoneyAllBudgets().add(MoneyUtil.createMoneyFromCents(bean.getSpendBudget()));
-            result.getBurnedMoneyInvoice().add(MoneyUtil.createMoneyFromCents(bean.getInvoicedBudget()));
+            result.add(bean);
             cal.add(Calendar.MONTH, 1);
         }
-      return result;
+        return result;
+    }
+
+    public ContractDetailBudgetChart getMonthlyBudgetBurnedForContract(long contractId, int numberOfMonths) {
+        ContractDetailBudgetChart result = new ContractDetailBudgetChart();
+        List<ContractStatisticBean> values = getMonthlyAggregatedStatisticsForContract(contractId, numberOfMonths);
+        for(ContractStatisticBean bean : values){
+            result.getRemainingTotalBudget().add(MoneyUtil.createMoneyFromCents(bean.getRemainingContractBudget()));
+            result.getBurnedMoneyAllBudgets().add(MoneyUtil.createMoneyFromCents(bean.getSpentBudget()));
+            result.getBurnedMoneyInvoice().add(MoneyUtil.createMoneyFromCents(bean.getInvoicedBudget()));
+        }
+        return result;
     }
 
     protected void fillMissingMonths(int numberOfMonths, List<MonthlyAggregatedRecordBean> bean, List<Money> resultList){

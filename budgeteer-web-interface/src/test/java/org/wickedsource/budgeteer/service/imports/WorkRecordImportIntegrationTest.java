@@ -14,6 +14,7 @@ import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.importer.aproda.AprodaWorkRecordsImporter;
 import org.wickedsource.budgeteer.imports.api.ImportException;
 import org.wickedsource.budgeteer.imports.api.ImportFile;
+import org.wickedsource.budgeteer.imports.api.InvalidFileFormatException;
 import org.wickedsource.budgeteer.persistence.budget.BudgetRepository;
 import org.wickedsource.budgeteer.persistence.imports.ImportEntity;
 import org.wickedsource.budgeteer.persistence.imports.ImportRepository;
@@ -81,7 +82,7 @@ public class WorkRecordImportIntegrationTest extends IntegrationTestTemplate {
         assertImportRecord();
     }
 
-    private void doImport() throws ImportException {
+    private void doImport() throws ImportException, InvalidFileFormatException {
         List<ImportFile> importFiles = new ArrayList<ImportFile>();
         importFiles.add(new ImportFile("file1", getClass().getResourceAsStream("testReport1.xlsx")));
         importFiles.add(new ImportFile("file2", getClass().getResourceAsStream("testReport2.xlsx")));

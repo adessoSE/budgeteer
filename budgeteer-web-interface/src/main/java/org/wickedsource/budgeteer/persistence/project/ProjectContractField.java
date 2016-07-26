@@ -15,11 +15,12 @@ import java.io.Serializable;
         @UniqueConstraint(columnNames = {"FIELD_NAME", "PROJECT_ID"})
 })
 /**
- * (dynamic) Fields that could be used by a contract belonging to a project
+ * (dynamic) Fields that could be used by a contract associated with a project
  */
 public class ProjectContractField implements Serializable{
     @Id
-    @GeneratedValue()
+    @SequenceGenerator(name="SEQ_Project_contract_field_ID", sequenceName="SEQ_Project_contract_field_ID")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_Project_contract_field_ID")
     private long id;
 
     @Column(name="FIELD_NAME", nullable = false)

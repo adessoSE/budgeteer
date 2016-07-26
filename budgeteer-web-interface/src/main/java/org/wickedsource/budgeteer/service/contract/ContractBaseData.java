@@ -10,6 +10,7 @@ import org.wickedsource.budgeteer.service.invoice.InvoiceBaseData;
 import org.wickedsource.budgeteer.web.components.fileUpload.FileUploadModel;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class ContractBaseData implements Serializable{
     private String contractName;
     private Money budget;
     private String internalNumber;
-    private int year;
+    private Date startDate;
     private ContractEntity.ContractType type;
     private List<DynamicAttributeField> contractAttributes;
     private FileUploadModel fileModel = new FileUploadModel();

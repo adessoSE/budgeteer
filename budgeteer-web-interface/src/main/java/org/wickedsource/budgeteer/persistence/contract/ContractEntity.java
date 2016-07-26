@@ -8,6 +8,7 @@ import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -23,7 +24,8 @@ public class ContractEntity implements Serializable {
     }
 
     @Id
-    @GeneratedValue
+    @SequenceGenerator(name="SEQ_CONTRACT_ID", sequenceName="SEQ_CONTRACT_ID")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_CONTRACT_ID")
     private long id;
 
     @Column(name="CONTRACT_NAME", nullable = false)
@@ -43,8 +45,9 @@ public class ContractEntity implements Serializable {
     @Column(name="INTERNAL_NUMBER")
     private String internalNumber;
 
-    @Column(name="YEAR_OF_CONTRACT")
-    private int year = 0;
+    @Column(name="START_DATE")
+    @Temporal(TemporalType.DATE)
+    private Date startDate;
 
     @Column(name = "CONTRACT_TYPE")
     @Enumerated(EnumType.ORDINAL)
@@ -69,8 +72,20 @@ public class ContractEntity implements Serializable {
     /**
      * A list of possible dynamic fields that a invoice that belongs to this contract can use
      */
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "contract", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "contract", fetch = FetchType.LAZY)
     private Set<ContractInvoiceField> invoiceFields;
 
-
+    @Override
+    public String toString() {
+        return "ContractEntity{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", projectId=" + project.getId() +
+                ", budget=" + budget +
+                ", internalNumber='" + internalNumber + '\'' +
+                ", type=" + type +
+                ", link='" + link + '\'' +
+                ", fileName='" + fileName + '\'' +
+                '}';
+    }
 }

@@ -7,13 +7,16 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.persistence.contract.ContractEntity;
 import org.wickedsource.budgeteer.service.contract.ContractBaseData;
 import org.wickedsource.budgeteer.service.contract.ContractService;
 import org.wickedsource.budgeteer.service.contract.DynamicAttributeField;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.components.dataTable.DataTableBehavior;
+import org.wickedsource.budgeteer.web.components.datelabel.DateLabel;
 import org.wickedsource.budgeteer.web.pages.contract.details.ContractDetailsPage;
 import org.wickedsource.budgeteer.web.pages.contract.edit.EditContractPage;
 
@@ -39,11 +42,12 @@ public class ContractOverviewTable extends Panel{
         table.add(new ListView<ContractBaseData>("contractRows", model(from(data).getContracts())) {
             @Override
             protected void populateItem(ListItem<ContractBaseData> item) {
-                BookmarkablePageLink<EditContractPage> link = new BookmarkablePageLink<EditContractPage>("editContract", ContractDetailsPage.class, EditContractPage.createParameters(item.getModelObject().getContractId()));
+                long contractId = item.getModelObject().getContractId();
+                BookmarkablePageLink<EditContractPage> link = new BookmarkablePageLink<EditContractPage>("editContract", ContractDetailsPage.class, EditContractPage.createParameters(contractId));
                 link.add(new Label("contractName", model(from(item.getModelObject()).getContractName())));
                 item.add(link);
                 item.add(new Label("internalNumber", model(from(item.getModelObject()).getInternalNumber())));
-                item.add(new Label("year", model(from(item.getModelObject()).getYear())));
+                item.add(new DateLabel("startDate", model(from(item.getModelObject()).getStartDate())));
                 item.add(new EnumLabel<ContractEntity.ContractType>("type", model(from(item.getModelObject()).getType())));
                 item.add(new ListView<DynamicAttributeField>("contractRow", model(from(item.getModelObject()).getContractAttributes())) {
                     @Override
@@ -51,7 +55,8 @@ public class ContractOverviewTable extends Panel{
                         item.add(new Label("contractRowText", item.getModelObject().getValue()));
                     }
                 });
-                item.add(new Label("budget", model(from(item.getModelObject()).getBudget())));
+                item.add(new Label("budget", Model.of(MoneyUtil.toDouble(item.getModelObject().getBudget(), BudgeteerSession.get().getSelectedBudgetUnit()))));
+                item.add(new BookmarkablePageLink("editLink", EditContractPage.class, EditContractPage.createParameters(contractId)));
             }
         });
         table.add(new ListView<String>("footerRow", model(from(data).getFooter()) ) {

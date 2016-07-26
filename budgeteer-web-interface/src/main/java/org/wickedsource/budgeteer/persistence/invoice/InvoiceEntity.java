@@ -23,7 +23,8 @@ import java.util.List;
 public class InvoiceEntity {
 
     @Id
-    @GeneratedValue
+    @SequenceGenerator(name="SEQ_INVOICE_ID", sequenceName="SEQ_INVOICE_ID")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_INVOICE_ID")
     private long id;
 
     @ManyToOne(optional = false)
@@ -51,8 +52,13 @@ public class InvoiceEntity {
     @Temporal(TemporalType.DATE)
     private Date date;
 
-    @Column(name = "PAID")
-    private boolean paid;
+    @Column(name = "DUE_DATE")
+    @Temporal(TemporalType.DATE)
+    private Date dueDate;
+
+    @Column(name = "PAID_DATE")
+    @Temporal(TemporalType.DATE)
+    private Date paidDate;
 
     @Column(name = "LINK")
     private String link;
@@ -73,5 +79,19 @@ public class InvoiceEntity {
     @JoinColumn(name="INVOICE_ID")
     private List<InvoiceFieldEntity> dynamicFields = new LinkedList<InvoiceFieldEntity>();
 
-
+    @Override
+    public String toString() {
+        return "InvoiceEntity{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", invoiceSum=" + invoiceSum +
+                ", internalNumber='" + internalNumber + '\'' +
+                ", year=" + year +
+                ", month=" + month +
+                ", date=" + date +
+                ", link='" + link + '\'' +
+                ", fileName='" + fileName + '\'' +
+                ", contractId=" + contract.getId() +
+                '}';
+    }
 }

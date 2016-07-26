@@ -8,6 +8,7 @@ import org.wickedsource.budgeteer.service.contract.DynamicAttributeField;
 import org.wickedsource.budgeteer.web.components.fileUpload.FileUploadModel;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -23,7 +24,8 @@ public class InvoiceBaseData implements Serializable {
     private String internalNumber;
     private int year;
     private int month;
-    private boolean paid;
+    private Date paidDate;
+    private Date dueDate;
 
     private FileUploadModel fileUploadModel = new FileUploadModel();
 
@@ -33,5 +35,9 @@ public class InvoiceBaseData implements Serializable {
         this.contractId = contractId;
         this.contractName = contractName;
         dynamicInvoiceFields = new LinkedList<DynamicAttributeField>();
+    }
+
+    public boolean isPaid(){
+        return paidDate != null && paidDate != new Date(0);
     }
 }

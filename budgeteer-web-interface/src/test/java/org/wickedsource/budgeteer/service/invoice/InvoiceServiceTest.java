@@ -49,7 +49,7 @@ public class InvoiceServiceTest{
 
 
     /**
-     * Save a new Invoice belonging to a Contract that does not have any ContractInvoiceFields
+     * Save a new Invoice associated with a Contract that does not have any ContractInvoiceFields
      */
     @Test
     @DatabaseSetup("invoiceTest.xml")
@@ -74,11 +74,11 @@ public class InvoiceServiceTest{
         assertEquals(MoneyUtil.createMoney(2000), savedInvoice.getSum());
         assertTrue(savedInvoice.getInvoiceId() > 0);
         assertEquals(5, savedInvoice.getDynamicInvoiceFields().size());
-        assertEquals(5, contractRepository.findOne(savedInvoice.getContractId()).getInvoiceFields().size());
+        assertEquals(5, contractRepository.findById(savedInvoice.getContractId()).getInvoiceFields().size());
     }
 
     /**
-     * Save a new Invoice belonging to a Contract that has two ContractInvoiceFields
+     * Save a new Invoice associated with a Contract that has two ContractInvoiceFields
      */
     @Test
     @DatabaseSetup("invoiceTest.xml")
@@ -102,9 +102,9 @@ public class InvoiceServiceTest{
         assertEquals(2015, savedInvoice.getYear());
         assertEquals(MoneyUtil.createMoney(2000), savedInvoice.getSum());
         assertTrue(savedInvoice.getInvoiceId() > 0);
-        assertEquals(5, savedInvoice.getDynamicInvoiceFields().size());
+        assertEquals(7, savedInvoice.getDynamicInvoiceFields().size());
 
-        ContractEntity contract = contractRepository.findOne(savedInvoice.getContractId());
+        ContractEntity contract = contractRepository.findById(savedInvoice.getContractId());
         Set<ContractInvoiceField> contractInvoiceFields = contract.getInvoiceFields();
         assertEquals(7, contractInvoiceFields.size());
         assertTrue(contractInvoiceFields.contains(new ContractInvoiceField(3, "Test Contract Field", contract)));
@@ -139,7 +139,7 @@ public class InvoiceServiceTest{
         assertTrue(savedInvoice.getInvoiceId() > 0);
         assertEquals(5, savedInvoice.getDynamicInvoiceFields().size());
 
-        ContractEntity contract = contractRepository.findOne(savedInvoice.getContractId());
+        ContractEntity contract = contractRepository.findById(savedInvoice.getContractId());
         Set<ContractInvoiceField> contractInvoiceFields = contract.getInvoiceFields();
         assertEquals(5, contractInvoiceFields.size());
     }
@@ -174,7 +174,7 @@ public class InvoiceServiceTest{
         assertTrue(savedInvoice.getDynamicInvoiceFields().contains(new DynamicAttributeField("Test Contract Field", "Test")));
         assertTrue(savedInvoice.getDynamicInvoiceFields().contains(new DynamicAttributeField("Test Contract Field 2", "Test 2")));
 
-        ContractEntity contract = contractRepository.findOne(savedInvoice.getContractId());
+        ContractEntity contract = contractRepository.findById(savedInvoice.getContractId());
         Set<ContractInvoiceField> contractInvoiceFields = contract.getInvoiceFields();
         assertEquals(7, contractInvoiceFields.size());
     }
@@ -208,9 +208,9 @@ public class InvoiceServiceTest{
         assertEquals(2015, savedInvoice.getYear());
         assertEquals(MoneyUtil.createMoney(2000), savedInvoice.getSum());
         assertTrue(savedInvoice.getInvoiceId() > 0);
-        assertEquals(0, savedInvoice.getDynamicInvoiceFields().size());
+        assertEquals(2, savedInvoice.getDynamicInvoiceFields().size());
 
-        ContractEntity contract = contractRepository.findOne(savedInvoice.getContractId());
+        ContractEntity contract = contractRepository.findById(savedInvoice.getContractId());
         Set<ContractInvoiceField> contractInvoiceFields = contract.getInvoiceFields();
         assertEquals(2, contractInvoiceFields.size());
     }
@@ -219,7 +219,7 @@ public class InvoiceServiceTest{
     private InvoiceBaseData getDummyInvoice(){
         InvoiceBaseData result = new InvoiceBaseData();
         result.setInvoiceId(0);
-        result.setPaid(false);
+        result.setPaidDate(null);
         result.setContractId(1);
         result.setContractName("Test");
         result.setInternalNumber("Internal Number");
@@ -244,13 +244,24 @@ public class InvoiceServiceTest{
     }
 
 
+    @Test
+    @DatabaseSetup("invoiceTest.xml")
+    @DatabaseTearDown(value = "invoiceTest.xml", type = DatabaseOperation.DELETE_ALL)
+    // Invoice with two InvoiceFields
+    public void testFindInvoiceFieldByName(){
+        assertNotNull(contractRepository.findInvoiceFieldByName(3, "Test Contract Field"));
+        assertNotNull(contractRepository.findInvoiceFieldByName(3, "Test Contract Field 2"));
+    }
 
     @Test
     @DatabaseSetup("invoiceTest.xml")
     @DatabaseTearDown(value = "invoiceTest.xml", type = DatabaseOperation.DELETE_ALL)
     // Invoice with two InvoiceFields
     public void testDeleteInvoice(){
-       service.deleteInvoice(3);
+        service.deleteInvoice(3);
+
+        assertNotNull(contractRepository.findById(3).getInvoiceFields());
+        assertEquals(2, contractRepository.findById(3).getInvoiceFields().size());
         assertNotNull(contractRepository.findInvoiceFieldByName(3, "Test Contract Field"));
         assertNotNull(contractRepository.findInvoiceFieldByName(3, "Test Contract Field 2"));
 
