@@ -14,6 +14,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.wickedsource.budgeteer.importer.resourceplan.ResourcePlanImporter;
 import org.wickedsource.budgeteer.imports.api.ImportException;
 import org.wickedsource.budgeteer.imports.api.ImportFile;
+import org.wickedsource.budgeteer.imports.api.InvalidFileFormatException;
 import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
 import org.wickedsource.budgeteer.persistence.project.ProjectRepository;
 
@@ -32,7 +33,7 @@ public class PlanRecordImporterTest {
     private ImportService importService;
 
 
-    private void doImport() throws ImportException {
+    private void doImport() throws ImportException, InvalidFileFormatException {
         List<ImportFile> importFiles = new ArrayList<ImportFile>();
         importFiles.add(new ImportFile("resource_plan2.xlsx", getClass().getResourceAsStream("resource_plan2.xlsx")));
         importService.doImport(1l, new ResourcePlanImporter(), importFiles);

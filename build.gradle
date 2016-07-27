@@ -56,6 +56,8 @@ subprojects {
         dbunit_version = '2.5.1'
 
         lombok_version = '1.16.6'
+
+        liquibase_core_version = '3.3.2'
     }
 
     dependencies {

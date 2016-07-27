@@ -7,15 +7,15 @@ import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.persistence.budget.BudgetEntity;
 import org.wickedsource.budgeteer.persistence.budget.BudgetRepository;
 import org.wickedsource.budgeteer.persistence.budget.BudgetTagEntity;
+import org.wickedsource.budgeteer.persistence.contract.ContractEntity;
+import org.wickedsource.budgeteer.persistence.contract.ContractRepository;
 import org.wickedsource.budgeteer.persistence.person.DailyRateRepository;
 import org.wickedsource.budgeteer.persistence.record.PlanRecordRepository;
 import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
 import org.wickedsource.budgeteer.service.ServiceTestTemplate;
+import org.wickedsource.budgeteer.service.contract.ContractBaseData;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import static org.mockito.Mockito.*;
 
@@ -35,6 +35,9 @@ public class BudgetServiceTest extends ServiceTestTemplate {
 
     @Autowired
     private DailyRateRepository rateRepository;
+
+    @Autowired
+    private ContractRepository contractRepository;
 
     @Test
     public void testLoadBudgetBaseDataForProject() throws Exception {
@@ -127,6 +130,35 @@ public class BudgetServiceTest extends ServiceTestTemplate {
         Assert.assertEquals(data.getTags(), mapEntitiesToTags(budget.getTags()));
         Assert.assertEquals(data.getTitle(), budget.getName());
         Assert.assertEquals(data.getTotal(), budget.getTotal());
+        Assert.assertEquals(data.getContract(), null);
+    }
+
+    @Test
+    public void testSaveBudgetWithContract() throws Exception {
+        BudgetEntity budget = createBudgetEntity();
+        when(budgetRepository.findOne(1l)).thenReturn(budget);
+
+        ContractEntity contractEntity = createContract();
+        when(contractRepository.findOne(1l)).thenReturn(contractEntity);
+
+        EditBudgetData data = new EditBudgetData();
+        data.setId(1l);
+        ContractBaseData contractBaseData = new ContractBaseData();
+        contractBaseData.setContractId(1l);
+        data.setContract(contractBaseData);
+
+        budgetService.saveBudget(data);
+
+        Assert.assertEquals(1l, budget.getId());
+        Assert.assertEquals(1l, budget.getContract().getId());
+    }
+
+    private ContractEntity createContract() {
+        ContractEntity entity = new ContractEntity();
+        entity.setId(1);
+        entity.setName("TestName");
+        entity.setBudgets(new LinkedList<BudgetEntity>());
+        return entity;
     }
 
     private List<String> mapEntitiesToTags(List<BudgetTagEntity> tagEntities) {

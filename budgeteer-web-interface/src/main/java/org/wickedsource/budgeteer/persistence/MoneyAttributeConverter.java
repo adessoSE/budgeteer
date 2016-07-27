@@ -11,11 +11,11 @@ public class MoneyAttributeConverter implements AttributeConverter<Money, Long> 
 
     @Override
     public Long convertToDatabaseColumn(Money money) {
-        return money.getAmountMinorLong();
+        return money == null ? null : money.getAmountMinorLong();
     }
 
     @Override
     public Money convertToEntityAttribute(Long cents) {
-        return MoneyUtil.createMoneyFromCents(cents);
+        return MoneyUtil.createMoneyFromCents(cents == null ? 0 : cents);
     }
 }

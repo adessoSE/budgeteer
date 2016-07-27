@@ -1,6 +1,7 @@
 package org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs;
 
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.wickedsource.budgeteer.web.PropertyLoader;
 import org.wickedsource.budgeteer.web.pages.base.basepage.BasePage;
 
@@ -57,6 +58,10 @@ public class BreadcrumbsModel implements IModel<List<Breadcrumb>> {
      */
     public void addBreadcrumb(Class<? extends BasePage> crumb) {
         crumbsList.add(new Breadcrumb(crumb, getBreadcrumbTitle(crumb)));
+    }
+
+    public void addBreadcrumb(Class<? extends BasePage> crumb, PageParameters pageParameters) {
+        crumbsList.add(new Breadcrumb(crumb, pageParameters, getBreadcrumbTitle(crumb)));
     }
 
     @Override

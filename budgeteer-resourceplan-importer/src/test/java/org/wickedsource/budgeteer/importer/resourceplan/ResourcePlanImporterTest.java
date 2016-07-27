@@ -3,9 +3,7 @@ package org.wickedsource.budgeteer.importer.resourceplan;
 import org.joda.money.CurrencyUnit;
 import org.junit.Assert;
 import org.junit.Test;
-import org.wickedsource.budgeteer.imports.api.ExampleFile;
-import org.wickedsource.budgeteer.imports.api.ImportFile;
-import org.wickedsource.budgeteer.imports.api.ImportedPlanRecord;
+import org.wickedsource.budgeteer.imports.api.*;
 
 import java.util.List;
 
@@ -42,5 +40,12 @@ public class ResourcePlanImporterTest {
         Assert.assertNotNull(file.getFileName());
         Assert.assertNotNull(file.getInputStream());
         Assert.assertNotNull(file.getContentType());
+    }
+
+    @Test(expected = InvalidFileFormatException.class)
+    public void testInvalidFile() throws ImportException, InvalidFileFormatException {
+        ResourcePlanImporter importer = new ResourcePlanImporter();
+        ImportFile file = new ImportFile("resource_plan_invalid.xlsx", getClass().getResourceAsStream("/resource_plan_invalid.xlsx"));
+        importer.importFile(file, CurrencyUnit.EUR);
     }
 }

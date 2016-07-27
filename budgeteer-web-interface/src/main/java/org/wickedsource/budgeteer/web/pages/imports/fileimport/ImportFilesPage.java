@@ -23,10 +23,7 @@ import org.apache.wicket.util.io.IOUtils;
 import org.apache.wicket.util.resource.AbstractResourceStreamWriter;
 import org.apache.wicket.util.time.Duration;
 import org.wickedsource.budgeteer.importer.aproda.AprodaWorkRecordsImporter;
-import org.wickedsource.budgeteer.imports.api.ExampleFile;
-import org.wickedsource.budgeteer.imports.api.ImportException;
-import org.wickedsource.budgeteer.imports.api.ImportFile;
-import org.wickedsource.budgeteer.imports.api.Importer;
+import org.wickedsource.budgeteer.imports.api.*;
 import org.wickedsource.budgeteer.service.imports.ImportService;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.ClassAwareWrappingModel;
@@ -82,6 +79,8 @@ public class ImportFilesPage extends DialogPageWithBacklink {
                     error(String.format(getString("message.importError"), e.getMessage()));
                 } catch (IllegalArgumentException e) {
                     error(String.format(getString("message.importError"), e.getMessage()));
+                } catch(InvalidFileFormatException e){
+                    error(String.format(getString("message.invalidFileException"), e.getFileName()));
                 }
             }
 

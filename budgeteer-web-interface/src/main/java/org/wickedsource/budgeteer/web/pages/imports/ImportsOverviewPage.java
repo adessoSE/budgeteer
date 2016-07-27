@@ -1,4 +1,5 @@
 package org.wickedsource.budgeteer.web.pages.imports;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -17,7 +18,9 @@ import org.wickedsource.budgeteer.web.pages.base.basepage.BasePage;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
 import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 import org.wickedsource.budgeteer.web.pages.imports.fileimport.ImportFilesPage;
+
 import java.util.List;
+
 import static org.wicketstuff.lazymodel.LazyModel.from;
 import static org.wicketstuff.lazymodel.LazyModel.model;
 @Mount("imports")
@@ -49,6 +52,7 @@ public class ImportsOverviewPage extends BasePage {
                 final Long impId = item.getModelObject().getId();
                 item.add(new Label("importDate", model(from(item.getModel()).getImportDate())));
                 item.add(new Label("importType", model(from(item.getModel()).getImportType())));
+                item.add(new Label("numberOfFiles", model(from(item.getModel()).getNumberOfImportedFiles())));
                 item.add(new Label("startDate", model(from(item.getModel()).getStartDate())));
                 item.add(new Label("endDate", model(from(item.getModel()).getEndDate())));
                 item.add(new AjaxLink("deleteButton") {

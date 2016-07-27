@@ -1,5 +1,10 @@
 package org.wickedsource.budgeteer.service.person;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.wickedsource.budgeteer.persistence.budget.BudgetRepository;
@@ -9,10 +14,6 @@ import org.wickedsource.budgeteer.persistence.person.PersonRepository;
 import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
 import org.wickedsource.budgeteer.service.DateRange;
 import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
-
-import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @Transactional
@@ -122,5 +123,9 @@ public class PersonService {
 
     public void deletePerson(long personId) {
         personRepository.delete(personId);
+    }
+
+    public List<PersonBaseData> loadPeopleBaseDataByBudget(long budgetId) {
+        return personBaseDataMapper.map(personRepository.findBaseDataByBudgetId(budgetId));
     }
 }

@@ -1,6 +1,7 @@
 package org.wickedsource.budgeteer.persistence.person;
 
 import org.joda.money.Money;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -28,4 +29,8 @@ public interface DailyRateRepository extends CrudRepository<DailyRateEntity, Lon
 
     @Query("select r from DailyRateEntity r where r.budget.id = :budgetId and r.person.id = :personId and r.dateEnd >= :rangeStart" )
     List<DailyRateEntity> findByBudgetAndPersonEndingInOrAfterDateRange(@Param("budgetId") long budgetId, @Param("personId") long personId, @Param("rangeStart") Date earliestDate);
+
+    @Modifying
+    @Query("delete from DailyRateEntity r where r.budget.id in ( select b.id from BudgetEntity b where b.project.id = :projectId)")
+    void deleteByProjectId(@Param("projectId") long projectId);
 }

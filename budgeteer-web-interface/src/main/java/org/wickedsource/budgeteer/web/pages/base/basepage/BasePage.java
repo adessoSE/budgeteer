@@ -7,6 +7,7 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.util.string.StringValue;
 import org.wickedsource.budgeteer.web.BudgeteerReferences;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.components.security.NeedsLogin;
@@ -70,4 +71,25 @@ public abstract class BasePage extends WebPage {
      */
     protected abstract BreadcrumbsModel getBreadcrumbsModel();
 
+
+    /**
+     * Creates a valid PageParameters object to pass into the constructor of this page class.
+     *
+     * @param objectId id of the budget whose details to display.
+     * @return a valid PageParameters object.
+     */
+    public static PageParameters createParameters(long objectId) {
+        PageParameters parameters = new PageParameters();
+        parameters.add("id", objectId);
+        return parameters;
+    }
+
+    public long getParameterId() {
+        StringValue value = getPageParameters().get("id");
+        if (value == null || value.isEmpty() || value.isNull()) {
+            return 0l;
+        } else {
+            return value.toLong();
+        }
+    }
 }

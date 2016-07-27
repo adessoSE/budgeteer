@@ -1,11 +1,11 @@
 package org.wickedsource.budgeteer.persistence.person;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
-
-import java.util.List;
 
 public interface PersonRepository extends CrudRepository<PersonEntity, Long> {
 
@@ -25,5 +25,8 @@ public interface PersonRepository extends CrudRepository<PersonEntity, Long> {
 
     @Modifying
     @Query("delete from PersonEntity p where p.project.id = :projectId")
-    public void deleteByProjectId(@Param("projectId") long projectId);
+    void deleteByProjectId(@Param("projectId") long projectId);
+
+    @Query("select new org.wickedsource.budgeteer.persistence.person.PersonBaseDataBean(p.id, p.name, sum(r.minutes * r.dailyRate) / sum(r.minutes), max(r.date)) from PersonEntity p left join p.workRecords r where r.budget.id = :budgetId group by p.id, p.name order by p.name")
+    List<PersonBaseDataBean> findBaseDataByBudgetId(@Param("budgetId") long budgetId);
 }
