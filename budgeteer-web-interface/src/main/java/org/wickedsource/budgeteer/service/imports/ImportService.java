@@ -52,6 +52,7 @@ public class ImportService implements ApplicationContextAware {
             i.setId(entity.getId());
             i.setImportType(entity.getImportType());
             i.setImportDate(entity.getImportDate());
+            i.setNumberOfImportedFiles(entity.getNumberOfImportedFiles() == null ? -1 : entity.getNumberOfImportedFiles());
             i.setEndDate(entity.getEndDate());
             i.setStartDate(entity.getStartDate());
             resultList.add(i);
@@ -89,7 +90,7 @@ public class ImportService implements ApplicationContextAware {
      * @param importFiles the files to be imported
      */
     @Transactional(rollbackOn = ImportException.class)
-    public void doImport(long projectId, Importer importer, List<ImportFile> importFiles) throws ImportException {
+    public void doImport(long projectId, Importer importer, List<ImportFile> importFiles) throws ImportException, InvalidFileFormatException {
         skippedRecords = new LinkedList<List<String>>();
         if (importer instanceof WorkRecordsImporter) {
             WorkRecordsImporter workRecordsImporter = (WorkRecordsImporter) importer;
@@ -100,12 +101,13 @@ public class ImportService implements ApplicationContextAware {
                 skippedRecords.addAll(workRecordsImporter.getSkippedRecords());
                 skippedRecords.addAll(dbImporter.getSkippedRecords());
             }
+            skippedRecords.addAll(dbImporter.findAndRemoveManuallyEditedEntries());
         } else if (importer instanceof PlanRecordsImporter) {
             PlanRecordsImporter planRecordsImporter = (PlanRecordsImporter) importer;
             PlanRecordDatabaseImporter dbImporter = applicationContext.getBean(PlanRecordDatabaseImporter.class, projectId, planRecordsImporter.getDisplayName());
             for (ImportFile file : importFiles) {
                 List<ImportedPlanRecord> records = planRecordsImporter.importFile(file, MoneyUtil.DEFAULT_CURRENCY);
-                dbImporter.importRecords(records);
+                dbImporter.importRecords(records, file.getFilename());
                 skippedRecords.addAll(planRecordsImporter.getSkippedRecords());
                 skippedRecords.addAll(dbImporter.getSkippedRecords());
             }

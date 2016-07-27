@@ -3,9 +3,7 @@ package org.wickedsource.budgeteer.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.util.*;
 
 @Component
 public class DateUtil {
@@ -77,4 +75,17 @@ public class DateUtil {
         return cal.getTime();
     }
 
+    /**
+     * Returns a list of the current year +- range
+     */
+    public static List<Integer> getCurrentYears(int range){
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.setTime(new Date());
+        int currentYear = cal.get(Calendar.YEAR);
+        List<Integer> result = new LinkedList<Integer>();
+        for(int i = 0; i < range * 2;  i++){
+            result.add(currentYear - range + i);
+        }
+        return result;
+    }
 }

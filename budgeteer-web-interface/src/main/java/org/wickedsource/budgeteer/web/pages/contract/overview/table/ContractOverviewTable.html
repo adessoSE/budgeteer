@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.6-strict.dtd">
+<wicket:panel>
+    <table class="table table-hover smallLastColumn" wicket:id="table">
+        <thead>
+            <tr>
+                <th><wicket:message key="overview.table.contract.name">Contract name</wicket:message></th>
+                <th><wicket:message key="overview.table.contract.internalNumber">Internal-number</wicket:message></th>
+                <th><wicket:message key="overview.table.contract.year">Year</wicket:message></th>
+                <th><wicket:message key="overview.table.contract.type">Type</wicket:message></th>
+                <th wicket:id="headerRow"><span wicket:id="headerItem">Contract Title</span></th>
+                <th><wicket:message key="overview.table.contract.budget">Budget</wicket:message></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr wicket:id="contractRows">
+                <td><a wicket:id="editContract"><span wicket:id="contractName"></span></a></td>
+                <td><span wicket:id="internalNumber"></span></td>
+                <td><span wicket:id="startDate"></span></td>
+                <td><span wicket:id="type"></span></td>
+                <td wicket:id="contractRow"><span wicket:id="contractRowText">Title</span></td>
+                <td><span wicket:id="budget"></span></td>
+                <td><span>
+                    <a wicket:id="editLink" class="btn btn-default btn-sm fa fa-edit"></a>
+                </span></td>
+            </tr>
+        <tfoot>
+            <tr>
+                <td wicket:id="footerRow">
+                    <strong>
+                        <span wicket:id="footerItem">Contract Title</span>
+                    </strong>
+                </td>
+            </tr>
+        </tfoot>
+        </tbody>
+    </table>
+</wicket:panel>
+</html>

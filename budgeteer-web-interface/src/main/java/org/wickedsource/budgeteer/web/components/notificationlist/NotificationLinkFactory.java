@@ -18,7 +18,9 @@ public class NotificationLinkFactory implements Serializable {
         } else if (notification instanceof MissingBudgetTotalNotification) {
             MissingBudgetTotalNotification missingBudgetTotalNotification = (MissingBudgetTotalNotification) notification;
             return new EditBudgetPage(EditBudgetPage.createParameters(missingBudgetTotalNotification.getBudgetId()), backlinkPage, backlinkParameters);
-        } else if (notification instanceof EmptyWorkRecordsNotification) {
+        }else if (notification instanceof MissingContractForBudgetNotification) {
+            return new EditBudgetPage(EditBudgetPage.createParameters(((MissingContractForBudgetNotification)notification).getBudgetId()), backlinkPage, backlinkParameters);
+        }  else if (notification instanceof EmptyWorkRecordsNotification) {
             return new ImportFilesPage(backlinkPage, backlinkParameters);
         } else if (notification instanceof EmptyPlanRecordsNotification) {
             return new ImportFilesPage(backlinkPage, backlinkParameters);

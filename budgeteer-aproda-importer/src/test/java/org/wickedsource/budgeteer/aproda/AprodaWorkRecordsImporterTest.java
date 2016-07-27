@@ -3,9 +3,7 @@ package org.wickedsource.budgeteer.aproda;
 import org.junit.Assert;
 import org.junit.Test;
 import org.wickedsource.budgeteer.importer.aproda.AprodaWorkRecordsImporter;
-import org.wickedsource.budgeteer.imports.api.ExampleFile;
-import org.wickedsource.budgeteer.imports.api.ImportFile;
-import org.wickedsource.budgeteer.imports.api.ImportedWorkRecord;
+import org.wickedsource.budgeteer.imports.api.*;
 
 import java.io.InputStream;
 import java.text.DateFormat;
@@ -64,5 +62,12 @@ public class AprodaWorkRecordsImporterTest {
         Assert.assertNotNull(file.getFileName());
         Assert.assertNotNull(file.getInputStream());
         Assert.assertNotNull(file.getContentType());
+    }
+
+    @Test(expected = InvalidFileFormatException.class)
+    public void testInvalidFile() throws InvalidFileFormatException, ImportException {
+        AprodaWorkRecordsImporter importer = new AprodaWorkRecordsImporter();
+        InputStream in = getClass().getResourceAsStream("/aproda-testreport_invalid.xlsx");
+        importer.importFile(new ImportFile("aproda-testreport_invalid.xslx", in));
     }
 }

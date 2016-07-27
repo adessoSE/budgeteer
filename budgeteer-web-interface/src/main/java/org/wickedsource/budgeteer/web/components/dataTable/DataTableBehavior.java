@@ -44,7 +44,25 @@ public class DataTableBehavior extends Behavior{
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("$.fn.dataTable.moment('D.MM.YY');");
         stringBuilder.append("$.fn.dataTable.moment('YYYY/MM');");
+        stringBuilder.append(getCustomSortin());
         return stringBuilder.toString();
+    }
+
+    private String getCustomSortin() {
+        return "$.fn.dataTable.ext.type.detect.unshift(\n" +
+                "    function ( d ) {\n" +
+                "        var t = $.parseHTML(d); return $(t).find('.wicketBehaviorclick').length > 0 ?\n" +
+                "            'custom-Money-Label' :\n" +
+                "            null;\n" +
+                "    }\n" +
+                ");\n" +
+                " \n" +
+                "$.fn.dataTable.ext.type.order['custom-Money-Label-pre'] = function ( d ) {\n" +
+                " var t = $.parseHTML(d); " +
+                " var text = $(t).find('.wicketBehaviorclick').text().replace(/\\D/g, ''); " +
+                " var postFix= $(t).nextAll().length > 0 ? '00000' :''; " +
+                " return parseInt(text+postFix);\n" +
+                "};";
     }
 
     public String getScript(Component component) {

@@ -1,0 +1,14 @@
+<html xmlns:wicket>
+    <wicket:panel>
+        <span wicket:id="container">
+            <span wicket:id="label">[[label]]</span>
+            <form wicket:id="editor" style="width: 100%;">
+                <input type="number" step="any" min="0" wicket:id="input" style="width: 60%;"/>
+                <span>
+                    <button type="submit" wicket:id="save" title="save"><i class="fa fa-fw fa-check-square-o"></i></button>
+                    <button type="submit" wicket:id="cancel"title="cancel"><i class="fa fa-fw fa-minus-square"></i></button>
+                </span>
+            </form>
+        </span>
+    </wicket:panel>
+</html>

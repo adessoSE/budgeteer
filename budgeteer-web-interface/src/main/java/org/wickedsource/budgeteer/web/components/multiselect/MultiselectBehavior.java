@@ -1,5 +1,8 @@
 package org.wickedsource.budgeteer.web.components.multiselect;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.head.CssHeaderItem;
@@ -7,9 +10,6 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.wickedsource.budgeteer.web.BudgeteerReferences;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class MultiselectBehavior extends Behavior{
     private HashMap<String, String> options;
@@ -67,6 +67,7 @@ public class MultiselectBehavior extends Behavior{
         options.put("buttonClass","'btn btn-default btn-sm'");
         options.put("enableFiltering","true");
         options.put("enableCaseInsensitiveFiltering", "true");
+        options.put("enableClickableOptGroups", "true");
         return options;
     }
 }

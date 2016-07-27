@@ -27,7 +27,7 @@ public class AprodaWorkRecordsImporter implements WorkRecordsImporter {
     private List<List<String>> skippedRecords = new LinkedList<List<String>>();
 
     @Override
-    public List<ImportedWorkRecord> importFile(ImportFile file) throws ImportException {
+    public List<ImportedWorkRecord> importFile(ImportFile file) throws ImportException, InvalidFileFormatException {
         return read(file);
     }
 
@@ -59,7 +59,7 @@ public class AprodaWorkRecordsImporter implements WorkRecordsImporter {
         return skippedRecords;
     }
 
-    public List<ImportedWorkRecord> read(ImportFile file) throws ImportException {
+    public List<ImportedWorkRecord> read(ImportFile file) throws ImportException, InvalidFileFormatException {
         try {
             skippedRecords.add(new LinkedList<String>());
             //Adds the name of the imported file at the beginning of the list of skipped data sets..
@@ -69,6 +69,9 @@ public class AprodaWorkRecordsImporter implements WorkRecordsImporter {
 
             List<ImportedWorkRecord> resultList = new ArrayList<ImportedWorkRecord>();
             Workbook workbook = new XSSFWorkbook(file.getInputStream());
+            if(!checkValidity(workbook)){
+                throw new InvalidFileFormatException("Invalid file", file.getFilename());
+            }
             Sheet sheet = workbook.getSheetAt(SHEET_INDEX);
             int i = 3;
             Row row = sheet.getRow(i);
@@ -86,6 +89,27 @@ public class AprodaWorkRecordsImporter implements WorkRecordsImporter {
         } catch (IOException e) {
             throw new ImportException(e);
         }
+    }
+
+    private boolean checkValidity(Workbook workbook) {
+        boolean isValid = workbook.getNumberOfSheets() >= SHEET_INDEX ;
+        if(isValid){
+            Sheet sheet = workbook.getSheetAt(SHEET_INDEX);
+            if(sheet.getRow(2) == null){
+                isValid = false ;
+            } else {
+                Row r = sheet.getRow(2);
+                try {
+                    isValid = r.getCell(COLUMN_PERSON).getStringCellValue().equals("Name") &&
+                            r.getCell(COLUMN_DATE).getStringCellValue().equals("Tag") &&
+                            r.getCell(COLUMN_BUDGET).getStringCellValue().equals("Subgruppe") &&
+                            r.getCell(COLUMN_HOURS).getStringCellValue().equals("Aufwand [h]");
+                }catch (Exception e){
+                    isValid = false;
+                }
+            }
+        }
+        return isValid;
     }
 
     private List<String> getRowAsStrings(Row row, int index) {
