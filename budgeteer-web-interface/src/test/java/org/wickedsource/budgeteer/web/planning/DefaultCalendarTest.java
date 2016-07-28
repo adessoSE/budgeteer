@@ -1,59 +1,63 @@
 package org.wickedsource.budgeteer.web.planning;
 
+import static org.joda.time.DateTimeConstants.*;
+
+import org.joda.time.LocalDate;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.Calendar;
-
 public class DefaultCalendarTest {
 
-    @Test
-    public void testGetDays() throws Exception {
-        DefaultCalendar cal = createDefaultCalendar();
+	@Test
+	public void testGetDays() throws Exception {
+		DefaultCalendar cal = createDefaultCalendar();
 
-        Assert.assertEquals(365, cal.getNumberOfDays());
-        Assert.assertEquals(261, cal.getNumberOfWorkingDays());
-        Assert.assertEquals(104, cal.getNumberOfHolidays());
+		Assert.assertEquals(365, cal.getNumberOfDays());
+		Assert.assertEquals(261, cal.getNumberOfWorkingDays());
+		Assert.assertEquals(104, cal.getNumberOfHolidays());
 
-        Day firstDay = cal.getFirstDay();
-        java.util.Calendar firstDayCalendar = java.util.Calendar.getInstance();
-        firstDayCalendar.setTime(firstDay.getDate());
-        Assert.assertEquals(2015, firstDayCalendar.get(Calendar.YEAR));
-        Assert.assertEquals(Calendar.JANUARY, firstDayCalendar.get(Calendar.MONTH));
-        Assert.assertEquals(1, firstDayCalendar.get(Calendar.DAY_OF_MONTH));
+		LocalDate firstDay = cal.getStart();
+		Assert.assertEquals(2015, firstDay.getYear());
+		Assert.assertEquals(JANUARY, firstDay.getMonthOfYear());
+		Assert.assertEquals(1, firstDay.getDayOfMonth());
 
-        Day lastDay = cal.getLastDay();
-        java.util.Calendar lastDayCalendar = java.util.Calendar.getInstance();
-        lastDayCalendar.setTime(lastDay.getDate());
-        Assert.assertEquals(2015, lastDayCalendar.get(Calendar.YEAR));
-        Assert.assertEquals(Calendar.DECEMBER, lastDayCalendar.get(Calendar.MONTH));
-        Assert.assertEquals(31, lastDayCalendar.get(Calendar.DAY_OF_MONTH));
-    }
+		LocalDate lastDay = cal.getEnd();
+		Assert.assertEquals(2015, lastDay.getYear());
+		Assert.assertEquals(DECEMBER, lastDay.getMonthOfYear());
+		Assert.assertEquals(31, lastDay.getDayOfMonth());
+	}
 
-    @Test
-    public void testGetNumberOfWorkingDaysInPeriod() {
-        DefaultCalendar cal = createDefaultCalendar();
-        Calendar startCal = Calendar.getInstance();
-        startCal.set(2015, Calendar.JULY, 9);
-        Calendar endCal = Calendar.getInstance();
-        endCal.set(2015, Calendar.JULY, 15);
-        TimePeriod period = new TimePeriod(startCal.getTime(), endCal.getTime());
+	@Test
+	public void testGetDaysWithDeNwHolidays() throws Exception {
+		DefaultCalendar cal = createDefaultCalendar();
+		cal.setHolidayManager(new HolidayConfiguration("de", "nw"));
 
-        Assert.assertEquals(5, cal.getNumberOfWorkingDaysInPeriod(period));
-    }
+		Assert.assertEquals(365, cal.getNumberOfDays());
+		Assert.assertEquals(251, cal.getNumberOfWorkingDays());
+		Assert.assertEquals(114, cal.getNumberOfHolidays());
 
-    private DefaultCalendar createDefaultCalendar() {
-        Calendar start = Calendar.getInstance();
-        start.set(Calendar.YEAR, 2015);
-        start.set(Calendar.MONTH, Calendar.JANUARY);
-        start.set(Calendar.DAY_OF_MONTH, 1);
+		LocalDate firstDay = cal.getStart();
+		Assert.assertEquals(2015, firstDay.getYear());
+		Assert.assertEquals(JANUARY, firstDay.getMonthOfYear());
+		Assert.assertEquals(1, firstDay.getDayOfMonth());
 
-        Calendar end = Calendar.getInstance();
-        end.set(Calendar.YEAR, 2015);
-        end.set(Calendar.MONTH, Calendar.DECEMBER);
-        end.set(Calendar.DAY_OF_MONTH, 31);
+		LocalDate lastDay = cal.getEnd();
+		Assert.assertEquals(2015, lastDay.getYear());
+		Assert.assertEquals(DECEMBER, lastDay.getMonthOfYear());
+		Assert.assertEquals(31, lastDay.getDayOfMonth());
+	}
 
-        return new DefaultCalendar(start.getTime(), end.getTime());
-    }
+	@Test
+	public void testGetNumberOfWorkingDaysInPeriod() {
+		DefaultCalendar cal = createDefaultCalendar();
+		LocalDate start = new LocalDate(2015, JULY, 9);
+		LocalDate end = new LocalDate(2015, JULY, 15);
+		TimePeriod period = new TimePeriod(start, end);
 
+		Assert.assertEquals(5, cal.getNumberOfWorkingDaysInPeriod(period));
+	}
+
+	private DefaultCalendar createDefaultCalendar() {
+		return DefaultCalendar.calendarYear(2015);
+	}
 }

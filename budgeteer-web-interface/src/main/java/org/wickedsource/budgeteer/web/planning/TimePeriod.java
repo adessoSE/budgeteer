@@ -1,36 +1,35 @@
 package org.wickedsource.budgeteer.web.planning;
 
-import java.util.*;
-import java.util.Calendar;
+import lombok.Getter;
+
+import org.joda.time.LocalDate;
 
 public class TimePeriod {
 
-    private final Date start;
+	@Getter
+	private final LocalDate start;
 
-    private final Date end;
+	@Getter
+	private final LocalDate end;
 
-    public TimePeriod(Date start, Date end) {
+	public TimePeriod(LocalDate start, LocalDate end) {
         this.start = start;
         this.end = end;
+		if (start != null && end != null && start.isAfter(end)) {
+			throw new IllegalArgumentException("end must not predate start");
+		}
     }
 
-    public Date getStart() {
-        return start;
+	public boolean isInfinite() {
+		return isOpenEnd() || isOpenStart();
     }
 
-    public java.util.Calendar getStartCalendar(){
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(start);
-        return cal;
-    }
+	public boolean isOpenEnd() {
+		return end == null;
+	}
 
-    public java.util.Calendar getEndCalendar(){
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(end);
-        return cal;
-    }
+	public boolean isOpenStart() {
+		return start == null;
+	}
 
-    public Date getEnd() {
-        return end;
-    }
 }

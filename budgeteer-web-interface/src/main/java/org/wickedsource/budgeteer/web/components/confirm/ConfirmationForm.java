@@ -21,7 +21,7 @@ public abstract class ConfirmationForm extends Form {
     }
 
     public void addConfirmation(String confirmationMessage) {
-        add(new AttributeModifier("onsubmit", String.format("return confirm('%s');", confirmationMessage)));
+        add(new AttributeModifier("submit", String.format("return confirm('%s');", confirmationMessage)));
     }
 
     public abstract void onSubmit();

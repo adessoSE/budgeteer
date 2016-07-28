@@ -28,13 +28,14 @@ public class PersonHoursPage extends BasePage {
 
         WorkRecordFilter filter = new WorkRecordFilter(BudgeteerSession.get().getProjectId());
         filter.getPersonList().add(new PersonBaseData(getParameterId()));
-        filter.setPossibleBudgets(budgetService.loadBudgetBaseDataByPersonId(getParameterId()));
+        filter.getPossibleBudgets().addAll(budgetService.loadBudgetBaseDataByPersonId(getParameterId()));
 
         BurnTableWithFilter table = new BurnTableWithFilter("burnTable", filter);
         table.setPersonFilterEnabled(false);
         add(table);
     }
 
+    @SuppressWarnings("unchecked")
     protected BreadcrumbsModel getBreadcrumbsModel() {
         BreadcrumbsModel model = new BreadcrumbsModel(DashboardPage.class, PeopleOverviewPage.class);
         model.addBreadcrumb(new Breadcrumb(PersonDetailsPage.class, PersonDetailsPage.createParameters(getParameterId()), new PersonNameModel(getParameterId())));

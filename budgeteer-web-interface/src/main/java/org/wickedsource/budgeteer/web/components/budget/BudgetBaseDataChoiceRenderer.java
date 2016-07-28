@@ -1,17 +1,12 @@
 package org.wickedsource.budgeteer.web.components.budget;
 
-import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
+import org.wickedsource.budgeteer.web.pages.base.AbstractChoiceRenderer;
 
-public class BudgetBaseDataChoiceRenderer implements IChoiceRenderer<BudgetBaseData> {
+public class BudgetBaseDataChoiceRenderer extends AbstractChoiceRenderer<BudgetBaseData> {
 
     @Override
     public Object getDisplayValue(BudgetBaseData object) {
         return object.getName();
-    }
-
-    @Override
-    public String getIdValue(BudgetBaseData object, int index) {
-        return String.valueOf(object.getId());
     }
 }
