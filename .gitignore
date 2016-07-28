@@ -14,3 +14,4 @@ target
 out
 budgeteer.ipr
 budgeteer.iws
+budgeteer-web-interface/src/main/resources/application.properties

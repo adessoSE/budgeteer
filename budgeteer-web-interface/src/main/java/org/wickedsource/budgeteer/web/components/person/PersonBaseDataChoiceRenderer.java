@@ -1,17 +1,12 @@
 package org.wickedsource.budgeteer.web.components.person;
 
-import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.wickedsource.budgeteer.service.person.PersonBaseData;
+import org.wickedsource.budgeteer.web.pages.base.AbstractChoiceRenderer;
 
-public class PersonBaseDataChoiceRenderer implements IChoiceRenderer<PersonBaseData> {
+public class PersonBaseDataChoiceRenderer extends AbstractChoiceRenderer<PersonBaseData> {
 
     @Override
     public Object getDisplayValue(PersonBaseData object) {
         return object.getName();
-    }
-
-    @Override
-    public String getIdValue(PersonBaseData object, int index) {
-        return String.valueOf(object.getId());
     }
 }

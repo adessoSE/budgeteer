@@ -53,8 +53,8 @@ public class DateRangeInputField extends TextField<DateRange> {
     }
 
     @Override
-    protected String getInputType() {
-        return "text";
+    protected String[] getInputTypes() {
+        return new String[]{"text"};
     }
 
 

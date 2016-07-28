@@ -16,7 +16,7 @@ public class BreadcrumbsModel implements IModel<List<Breadcrumb>> {
      */
     private static final String BREADCRUMB_TITLE_KEY = "breadcrumb.title";
 
-    private List<Breadcrumb> crumbsList = new ArrayList<Breadcrumb>();
+    private List<Breadcrumb> crumbsList = new ArrayList<>();
 
     /**
      * Convenience constructor. Creates breadcrumbs for all page classes passed into the constructor. Uses the property
@@ -25,6 +25,7 @@ public class BreadcrumbsModel implements IModel<List<Breadcrumb>> {
      *
      * @param crumbs the page classes to create breadcrumbs for.
      */
+    @SafeVarargs
     public BreadcrumbsModel(Class<? extends BasePage>... crumbs) {
         for (Class<? extends BasePage> crumb : crumbs) {
             crumbsList.add(new Breadcrumb(crumb, getBreadcrumbTitle(crumb)));

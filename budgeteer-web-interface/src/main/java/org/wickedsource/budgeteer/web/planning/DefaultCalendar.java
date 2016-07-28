@@ -1,124 +1,154 @@
 package org.wickedsource.budgeteer.web.planning;
 
-import java.util.*;
+import static org.joda.time.DateTimeConstants.*;
+import static org.joda.time.Period.years;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import lombok.Getter;
+
+import org.joda.time.LocalDate;
+import org.joda.time.ReadablePeriod;
 
 /**
- * Standard calendar in which only weekends are marked as holidays.
+ * Calendar in which weekends and optionally holidays are marked as non-working.
  */
-public class DefaultCalendar extends org.wickedsource.budgeteer.web.planning.Calendar {
+public class DefaultCalendar extends Calendar {
 
-    /**
-     * Mapping the first millisecond of each day to a Day object.
-     */
-    private Map<Long, Day> days = new HashMap<>();
+	public static DefaultCalendar calendarYear(int year) {
+		return new DefaultCalendar(new LocalDate(year, JANUARY, 1), years(1));
+	}
 
-    private Day firstDay;
+	/**
+	 * Mapping every date to a Day object.
+	 */
+	private Map<LocalDate, Day> days;
 
-    private Day lastDay;
+	@Getter
+	private LocalDate start;
 
-    private int numberOfWorkingDays;
+	@Getter
+	private LocalDate end;
 
-    private int numberOfHolidays;
+	@Getter
+	private HolidayConfiguration holidayManager;
 
-    public DefaultCalendar(Date start, Date end) {
+	@Getter
+	private transient int numberOfWorkingDays;
 
-        java.util.Calendar startCal = java.util.Calendar.getInstance();
-        startCal.setTime(start);
-        clear(startCal);
+	@Getter
+	private transient int numberOfHolidays;
 
-        java.util.Calendar endCal = java.util.Calendar.getInstance();
-        endCal.setTime(end);
-        clear(endCal);
+	private boolean initialized;
 
-        firstDay = addDay(startCal);
-        startCal.add(java.util.Calendar.DAY_OF_YEAR, 1);
+	public DefaultCalendar(LocalDate start, ReadablePeriod period) {
+		this(start, start.plus(period), false);
+	}
 
-        Day previousDay = firstDay;
-        while (startCal.before(endCal)) {
-            Day day = addDay(startCal);
-            startCal.add(java.util.Calendar.DAY_OF_YEAR, 1);
-            previousDay.setNextDay(day);
-            previousDay = day;
-        }
-        lastDay = addDay(endCal);
-    }
+	public DefaultCalendar(LocalDate start, LocalDate end, boolean includingEnd) {
+		if (!includingEnd) {
+			end = end.minusDays(1);
+		}
+		if (start.isAfter(end)) {
+			throw new IllegalArgumentException("end must not predate start");
+		}
+		this.start = start;
+		this.end = end;
+	}
 
-    private Day addDay(java.util.Calendar date) {
-        int dayOfWeek = date.get(java.util.Calendar.DAY_OF_WEEK);
-        boolean isHoliday = false;
-        if (dayOfWeek == java.util.Calendar.SATURDAY
-                || dayOfWeek == java.util.Calendar.SUNDAY) {
-            isHoliday = true;
-            this.numberOfHolidays++;
-        }else{
-            this.numberOfWorkingDays++;
-        }
-        Day day = new Day(date.getTime(), isHoliday);
-        days.put(date.getTimeInMillis(), day);
-        return day;
-    }
+	public void setHolidayManager(HolidayConfiguration holidayManager) {
+		if (initialized) {
+			throw new IllegalStateException("cannot set holidayManager after use");
+		}
+		this.holidayManager = holidayManager;
+	}
 
-    private void clear(java.util.Calendar calendar) {
-        calendar.clear(java.util.Calendar.HOUR_OF_DAY);
-        calendar.clear(java.util.Calendar.MINUTE);
-        calendar.clear(java.util.Calendar.SECOND);
-        calendar.clear(java.util.Calendar.MILLISECOND);
-    }
+	@Override
+	public int getNumberOfDays() {
+		initialize();
+		return this.numberOfWorkingDays + this.numberOfHolidays;
+	}
 
-    @Override
-    public Day getFirstDay() {
-        return firstDay;
-    }
+	@Override
+	public int getNumberOfWorkingDays(List<TimePeriod> absences) {
+		initialize();
 
-    @Override
-    public Day getLastDay() {
-        return lastDay;
-    }
+		int workingDays = this.numberOfWorkingDays;
+		for (TimePeriod absence : absences) {
+			workingDays -= getNumberOfWorkingDaysInPeriod(absence);
+		}
+		return workingDays;
+	}
 
-    @Override
-    public int getNumberOfWorkingDays() {
-        return this.numberOfWorkingDays;
-    }
+	@Override
+	public int getNumberOfWorkingDaysInPeriod(TimePeriod period) {
+		initialize();
 
-    @Override
-    public int getNumberOfHolidays() {
-        return this.numberOfHolidays;
-    }
+		LocalDate periodStart = period.getStart();
+		LocalDate periodEnd = period.getEnd();
 
-    @Override
-    public int getNumberOfDays() {
-        return this.numberOfWorkingDays + this.numberOfHolidays;
-    }
+		if (period.isInfinite() || periodStart.isBefore(this.start) || periodEnd.isAfter(this.end)) {
+			throw new IllegalArgumentException("time period must be fully enclosed in calendar");
+		}
 
-    @Override
-    public int getNumberOfWorkingDaysInPeriod(TimePeriod period) {
-        java.util.Calendar startCal = period.getStartCalendar();
-        clear(startCal);
-        java.util.Calendar endCal = period.getEndCalendar();
-        clear(endCal);
+		int numberOfWorkingDays = 0;
+		for (Day day : days.get(periodStart)) {
 
-        int numberOfWorkingDays = 0;
+			if (day.getLocalDate().isAfter(periodEnd)) {
+				break;
+			}
+			if (!day.isNonWorking()) {
+				numberOfWorkingDays++;
+			}
+		}
+		return numberOfWorkingDays;
+	}
 
-        Day currentDay = days.get(startCal.getTimeInMillis());
-        if(currentDay == null){
-            throw new RuntimeException("Start of TimePeriod is not in the date range of this calendar!");
-        }
-        while(currentDay != null && currentDay.getDate().getTime() <= endCal.getTimeInMillis()){
-            if(!currentDay.isHoliday()){
-                numberOfWorkingDays++;
-            }
-            currentDay = currentDay.nextDay();
-        }
+	private void initialize() {
+		if (initialized) {
+			return;
+		}
 
-        return numberOfWorkingDays;
-    }
+		days = new HashMap<>();
+		Day current = null;
 
-    @Override
-    public int getNumberOfWorkingDays(List<TimePeriod> absences) {
-        int workingDays = this.numberOfWorkingDays;
-        for(TimePeriod absence : absences){
-            workingDays -= getNumberOfWorkingDaysInPeriod(absence);
-        }
-        return workingDays;
-    }
+		for (LocalDate day = start; !day.isAfter(end); day = day.plusDays(1)) {
+			current = initializeDay(day, current);
+		}
+		initialized = true;
+	}
+
+	private Day initializeDay(LocalDate date, Day precedingDay) {
+
+		boolean weekend = checkDateIsOnWeekend(date);
+		boolean holiday = holidayManager != null && holidayManager.checkHoliday(date);
+
+		Day day = new Day(date, weekend || holiday);
+		if (precedingDay != null) {
+			precedingDay.setNextDay(day);
+		}
+		return recordDay(date, day);
+	}
+
+	private boolean checkDateIsOnWeekend(LocalDate date) {
+		switch (date.getDayOfWeek()) {
+		case SATURDAY:
+		case SUNDAY:
+			return true;
+		default:
+			return false;
+		}
+	}
+
+	private Day recordDay(LocalDate date, Day day) {
+		days.put(date, day);
+		if (day.isNonWorking()) {
+			numberOfHolidays++;
+		} else {
+			numberOfWorkingDays++;
+		}
+		return day;
+	}
 }

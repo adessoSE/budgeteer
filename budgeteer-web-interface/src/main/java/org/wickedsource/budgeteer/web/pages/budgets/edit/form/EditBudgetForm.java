@@ -23,6 +23,7 @@ import org.wickedsource.budgeteer.web.ClassAwareWrappingModel;
 import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
 import org.wickedsource.budgeteer.web.components.money.MoneyTextField;
 import org.wickedsource.budgeteer.web.components.notificationlist.NotificationListPanel;
+import org.wickedsource.budgeteer.web.pages.base.AbstractChoiceRenderer;
 import org.wickedsource.budgeteer.web.pages.budgets.BudgetTagsModel;
 import org.wickedsource.budgeteer.web.pages.budgets.edit.tagsfield.TagsTextField;
 
@@ -63,7 +64,7 @@ public class EditBudgetForm extends Form<EditBudgetData> {
         add(totalField);
         DropDownChoice<ContractBaseData> contractDropDown = new DropDownChoice<ContractBaseData>("contract", model(from(getModel()).getContract()),
                 contractService.getContractsByProject(BudgeteerSession.get().getProjectId()),
-                new IChoiceRenderer<ContractBaseData>() {
+                new AbstractChoiceRenderer<ContractBaseData>() {
                     @Override
                     public Object getDisplayValue(ContractBaseData object) {
                         return object == null ? getString("no.contract") : object.getContractName();
@@ -87,7 +88,7 @@ public class EditBudgetForm extends Form<EditBudgetData> {
                 Label label = new Label("tag", model(from(item.getModel())));
                 label.setRenderBodyOnly(true);
                 item.add(label);
-                item.add(new AjaxEventBehavior("onclick") {
+                item.add(new AjaxEventBehavior("click") {
                     @SuppressWarnings("unchecked")
                     @Override
                     protected void onEvent(AjaxRequestTarget target) {
