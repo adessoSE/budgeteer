@@ -15,7 +15,7 @@ import org.apache.wicket.util.string.AppendingStringBuffer;
 
 public class ListMultipleChoiceWithGroups<T> extends ListMultipleChoice<T> {
 
-    private final IModel<Collection<? extends OptionGroup<T>>> optionGroups;
+    private final IModel<Collection<OptionGroup<T>>> optionGroups;
 
 
     public ListMultipleChoiceWithGroups(String id, ListModel<T> chosenOptions, List<OptionGroup<T>> possibleOptions, IChoiceRenderer<? super T> choiceRenderer) {

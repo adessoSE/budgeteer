@@ -1,6 +1,6 @@
 package org.wickedsource.budgeteer.web;
 
-import com.googlecode.wickedcharts.wicket6.JavaScriptResourceRegistry;
+import com.googlecode.wickedcharts.wicket7.JavaScriptResourceRegistry;
 import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.Session;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -87,7 +87,7 @@ public class BudgeteerApplication extends WebApplication implements ApplicationC
                 new ConfigurationBuilder().setUrls(
                         ClasspathHelper.forPackage("org.wickedsource.budgeteer")).setScanners(
                         new TypeAnnotationsScanner()));
-        Set<Class<?>> pagesToMount = reflections.getTypesAnnotatedWith(Mount.class);
+        Set<Class<?>> pagesToMount = reflections.getTypesAnnotatedWith(Mount.class, true);
 
         for (Class<?> page : pagesToMount) {
             Class<? extends WebPage> pageClass = (Class<? extends WebPage>) page;

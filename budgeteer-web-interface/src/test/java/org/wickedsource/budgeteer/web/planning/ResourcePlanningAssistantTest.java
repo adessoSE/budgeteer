@@ -1,11 +1,11 @@
 package org.wickedsource.budgeteer.web.planning;
 
+import java.util.Calendar;
+
+import org.joda.time.LocalDate;
 import org.junit.Assert;
 import org.junit.Test;
 import org.wickedsource.budgeteer.MoneyUtil;
-
-import java.util.*;
-import java.util.Calendar;
 
 public class ResourcePlanningAssistantTest {
 
@@ -48,18 +48,16 @@ public class ResourcePlanningAssistantTest {
 
     private Configuration getConfiguration() {
         Configuration config = new Configuration();
-        Date start = getDate(2015, Calendar.JANUARY, 1);
-        Date end = getDate(2015, Calendar.DECEMBER, 31);
+		LocalDate start = getDate(2015, Calendar.JANUARY, 1);
+		LocalDate end = getDate(2015, Calendar.DECEMBER, 31);
 
-        config.setCalendar(new DefaultCalendar(start, end));
+		DefaultCalendar calendar = new DefaultCalendar(start, end, true);
+		config.setCalendar(calendar);
+
         return config;
     }
 
-    private Date getDate(int year, int month, int dayOfMonth){
-        java.util.Calendar cal = java.util.Calendar.getInstance();
-        cal.set(java.util.Calendar.YEAR, year);
-        cal.set(java.util.Calendar.MONTH, month);
-        cal.set(java.util.Calendar.DAY_OF_MONTH, dayOfMonth);
-        return cal.getTime();
+	private LocalDate getDate(int year, int oldJUDMonth, int dayOfMonth) {
+		return new LocalDate(year, oldJUDMonth + 1, dayOfMonth);
     }
 }
