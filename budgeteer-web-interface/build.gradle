@@ -85,7 +85,7 @@ dependencies {
             [group: 'com.mysema.querydsl', name: 'querydsl-jpa', version: "${query_dsl_version}"]
     )
 
-    compile group: 'org.liquibase',  name: 'liquibase-core', version: '3.3.2'
+//    compile group: 'org.liquibase',  name: 'liquibase-core', version: '3.3.2'
 
     runtime(
             [group: 'org.hsqldb', name: 'hsqldb', version: '2.3.2'],
@@ -151,7 +151,8 @@ bootRun {
             '-Dspring.datasource.url=jdbc:hsqldb:mem:budgeteer',
             '-Dspring.datasource.driverClassName=org.hsqldb.jdbcDriver',
             '-Dspring.datasource.username=sa',
-            '-Dspring.datasource.password='
+            '-Dspring.datasource.password=',
+            '-Dspring.jpa.hibernate.ddl-auto=update'
 }
 
 idea {

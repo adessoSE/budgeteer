@@ -15,7 +15,14 @@ import javax.persistence.Table;
 })
 public class WorkRecordEntity extends RecordEntity {
 
-    @Column(name="EDITED_MANUALLY") @Getter @Setter
-    private boolean editedManually;
+    @Column(name="EDITED_MANUALLY")
+    private Boolean editedManually;
 
+    public Boolean isEditedManually() {
+        return editedManually;
+    }
+
+    public void setEditedManually(Boolean editedManually) {
+        this.editedManually = editedManually;
+    }
 }
