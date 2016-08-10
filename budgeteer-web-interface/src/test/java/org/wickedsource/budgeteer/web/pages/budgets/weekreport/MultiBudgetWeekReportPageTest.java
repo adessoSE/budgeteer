@@ -7,14 +7,17 @@ import org.wickedsource.budgeteer.web.AbstractWebTestTemplate;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.pages.budgets.weekreport.multi.MultiBudgetWeekReportPage;
 
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MultiBudgetWeekReportPageTest extends AbstractWebTestTemplate {
+
+    private static final List<String> EMPTY_STRING_LIST = new ArrayList<>(0);
 
     @Test
     public void testSingleBudget() {
         WicketTester tester = getTester();
-        BudgetTagFilter filter = new BudgetTagFilter(Collections.EMPTY_LIST, 1l);
+        BudgetTagFilter filter = new BudgetTagFilter(EMPTY_STRING_LIST, 1L);
         BudgeteerSession.get().setBudgetFilter(filter);
         tester.startPage(MultiBudgetWeekReportPage.class);
         tester.assertRenderedPage(MultiBudgetWeekReportPage.class);

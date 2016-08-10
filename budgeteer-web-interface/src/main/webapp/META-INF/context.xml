@@ -1,0 +1,10 @@
+<Context path="">
+    <Resource name="jdbc/budgeteer-db-ora" auth="Container" type="javax.sql.DataSource" scope="Shareable"
+              singleton="true"
+              maxTotal="20" maxIdle="10" maxWaitMillis="-1" username="budgeteer" password="budgeteer"
+              driverClassName="oracle.jdbc.OracleDriver" url="jdbc:oracle:thin:@localhost:1521:XE"/>
+    <Resource name="jdbc/budgeteer-db-mys" auth="Container" type="javax.sql.DataSource" scope="Shareable"
+              singleton="true"
+              maxTotal="20" maxIdle="10" maxWaitMillis="-1" username="budgeteer" password="budgeteer"
+              driverClassName="com.mysql.jdbc.Driver" url="jdbc:mysql://localhost:3306/budgeteer?useSSL=false"/>
+</Context>

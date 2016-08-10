@@ -3,7 +3,6 @@ package org.wickedsource.budgeteer.service.record;
 import com.mysema.query.types.Predicate;
 import com.mysema.query.types.expr.BooleanExpression;
 import org.wickedsource.budgeteer.persistence.record.QWorkRecordEntity;
-import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
 
 public class WorkRecordQueries {
 

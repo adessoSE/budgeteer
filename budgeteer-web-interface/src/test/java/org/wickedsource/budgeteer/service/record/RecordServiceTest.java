@@ -19,7 +19,6 @@ import org.wickedsource.budgeteer.service.ServiceTestTemplate;
 import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -27,6 +26,8 @@ import static org.mockito.Mockito.*;
 
 @ContextConfiguration(loader = SpringockitoContextLoader.class, locations = {"classpath:spring-service.xml", "classpath:spring-repository-mock.xml"})
 public class RecordServiceTest extends ServiceTestTemplate {
+
+    private static final List<String> EMPTY_STRING_LIST = new ArrayList<>(0);
 
     @Autowired
     @ReplaceWithMock
@@ -43,7 +44,7 @@ public class RecordServiceTest extends ServiceTestTemplate {
     public void testGetWeeklyAggregationForPerson() throws Exception {
         List<AggregatedRecord> recordList = createAggregatedRecordList();
         when(recordJoiner.joinWeekly(anyListOf(WeeklyAggregatedRecordBean.class), anyListOf(WeeklyAggregatedRecordBean.class))).thenReturn(recordList);
-        List<AggregatedRecord> resultList = service.getWeeklyAggregationForPerson(1l);
+        List<AggregatedRecord> resultList = service.getWeeklyAggregationForPerson(1L);
         Assert.assertEquals(recordList, resultList);
     }
 
@@ -51,7 +52,7 @@ public class RecordServiceTest extends ServiceTestTemplate {
     public void testGetMonthlyAggregationForPerson() throws Exception {
         List<AggregatedRecord> recordList = createAggregatedRecordList();
         when(recordJoiner.joinMonthly(anyListOf(MonthlyAggregatedRecordBean.class), anyListOf(MonthlyAggregatedRecordBean.class))).thenReturn(recordList);
-        List<AggregatedRecord> resultList = service.getMonthlyAggregationForPerson(1l);
+        List<AggregatedRecord> resultList = service.getMonthlyAggregationForPerson(1L);
         Assert.assertEquals(recordList, resultList);
     }
 
@@ -59,7 +60,7 @@ public class RecordServiceTest extends ServiceTestTemplate {
     public void testGetWeeklyAggregationForBudget() throws Exception {
         List<AggregatedRecord> recordList = createAggregatedRecordList();
         when(recordJoiner.joinWeekly(anyListOf(WeeklyAggregatedRecordBean.class), anyListOf(WeeklyAggregatedRecordBean.class))).thenReturn(recordList);
-        List<AggregatedRecord> resultList = service.getWeeklyAggregationForBudget(1l);
+        List<AggregatedRecord> resultList = service.getWeeklyAggregationForBudget(1L);
         Assert.assertEquals(recordList, resultList);
     }
 
@@ -67,7 +68,7 @@ public class RecordServiceTest extends ServiceTestTemplate {
     public void testGetMonthlyAggregationForBudget() throws Exception {
         List<AggregatedRecord> recordList = createAggregatedRecordList();
         when(recordJoiner.joinWeekly(anyListOf(WeeklyAggregatedRecordBean.class), anyListOf(WeeklyAggregatedRecordBean.class))).thenReturn(recordList);
-        List<AggregatedRecord> resultList = service.getWeeklyAggregationForBudget(1l);
+        List<AggregatedRecord> resultList = service.getWeeklyAggregationForBudget(1L);
         Assert.assertEquals(recordList, resultList);
     }
 
@@ -75,7 +76,7 @@ public class RecordServiceTest extends ServiceTestTemplate {
     public void testGetWeeklyAggregationForBudgets() throws Exception {
         List<AggregatedRecord> recordList = createAggregatedRecordList();
         when(recordJoiner.joinWeekly(anyListOf(WeeklyAggregatedRecordBean.class), anyListOf(WeeklyAggregatedRecordBean.class))).thenReturn(recordList);
-        List<AggregatedRecord> resultList = service.getWeeklyAggregationForBudgets(new BudgetTagFilter(Collections.EMPTY_LIST, 1l));
+        List<AggregatedRecord> resultList = service.getWeeklyAggregationForBudgets(new BudgetTagFilter(EMPTY_STRING_LIST, 1L));
         Assert.assertEquals(recordList, resultList);
     }
 
@@ -83,7 +84,7 @@ public class RecordServiceTest extends ServiceTestTemplate {
     public void testGetMonthlyAggregationForBudgets() throws Exception {
         List<AggregatedRecord> recordList = createAggregatedRecordList();
         when(recordJoiner.joinMonthly(anyListOf(MonthlyAggregatedRecordBean.class), anyListOf(MonthlyAggregatedRecordBean.class))).thenReturn(recordList);
-        List<AggregatedRecord> resultList = service.getMonthlyAggregationForBudgets(new BudgetTagFilter(Collections.EMPTY_LIST, 1l));
+        List<AggregatedRecord> resultList = service.getMonthlyAggregationForBudgets(new BudgetTagFilter(EMPTY_STRING_LIST, 1L));
         Assert.assertEquals(recordList, resultList);
     }
 
@@ -91,17 +92,17 @@ public class RecordServiceTest extends ServiceTestTemplate {
     public void testGetFilteredRecords() throws Exception {
         List<WorkRecordEntity> recordList = createRecordList();
         when(workRecordRepository.findAll(any(Predicate.class))).thenReturn(recordList);
-        List<WorkRecord> filteredRecords = service.getFilteredRecords(new WorkRecordFilter(1l));
+        List<WorkRecord> filteredRecords = service.getFilteredRecords(new WorkRecordFilter(1L));
         Assert.assertEquals(recordList.size(), filteredRecords.size());
         Assert.assertEquals(WorkRecord.class, filteredRecords.get(0).getClass());
     }
 
     private List<WorkRecordEntity> createRecordList() {
-        List<WorkRecordEntity> list = new ArrayList<WorkRecordEntity>();
+        List<WorkRecordEntity> list = new ArrayList<>();
         WorkRecordEntity record = new WorkRecordEntity();
         record.setDailyRate(MoneyUtil.createMoney(100d));
         record.setDate(new Date());
-        record.setId(1l);
+        record.setId(1L);
         record.setBudget(new BudgetEntity());
         record.setImportRecord(new ImportEntity());
         record.setMinutes(480);
@@ -112,7 +113,7 @@ public class RecordServiceTest extends ServiceTestTemplate {
 
 
     private List<AggregatedRecord> createAggregatedRecordList() {
-        List<AggregatedRecord> list = new ArrayList<AggregatedRecord>();
+        List<AggregatedRecord> list = new ArrayList<>();
         list.add(new AggregatedRecord());
         list.add(new AggregatedRecord());
         list.add(new AggregatedRecord());
