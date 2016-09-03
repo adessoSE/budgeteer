@@ -21,7 +21,7 @@ public class MoneyTextField extends TextField<Money> {
     }
 
     @Override
-    protected String getInputType() {
-        return "number";
+    protected String[] getInputTypes() {
+        return new String[]{"number"};
     }
 }

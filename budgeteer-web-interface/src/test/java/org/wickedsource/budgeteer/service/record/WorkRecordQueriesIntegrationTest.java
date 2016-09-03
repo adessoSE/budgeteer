@@ -30,7 +30,7 @@ public class WorkRecordQueriesIntegrationTest extends IntegrationTestTemplate {
     @DatabaseSetup("findByFilter.xml")
     @DatabaseTearDown(value = "findByFilter.xml", type = DatabaseOperation.DELETE_ALL)
     public void testFindByEmptyFilter() throws Exception {
-        WorkRecordFilter filter = new WorkRecordFilter(1l);
+        WorkRecordFilter filter = new WorkRecordFilter(1L);
         Predicate query = WorkRecordQueries.findByFilter(filter);
         List<WorkRecordEntity> records = ListUtil.toArrayList(repository.findAll(query));
         Assert.assertEquals(4, records.size());
@@ -40,8 +40,8 @@ public class WorkRecordQueriesIntegrationTest extends IntegrationTestTemplate {
     @DatabaseSetup("findByFilter.xml")
     @DatabaseTearDown(value = "findByFilter.xml", type = DatabaseOperation.DELETE_ALL)
     public void testFindByPersonFilter() throws Exception {
-        WorkRecordFilter filter = new WorkRecordFilter(1l);
-        filter.getPersonList().add(new PersonBaseData(1l));
+        WorkRecordFilter filter = new WorkRecordFilter(1L);
+        filter.getPersonList().add(new PersonBaseData(1L));
         Predicate query = WorkRecordQueries.findByFilter(filter);
         List<WorkRecordEntity> records = ListUtil.toArrayList(repository.findAll(query));
         Assert.assertEquals(2, records.size());
@@ -51,8 +51,8 @@ public class WorkRecordQueriesIntegrationTest extends IntegrationTestTemplate {
     @DatabaseSetup("findByFilter.xml")
     @DatabaseTearDown(value = "findByFilter.xml", type = DatabaseOperation.DELETE_ALL)
     public void testFindByBudgetFilter() throws Exception {
-        WorkRecordFilter filter = new WorkRecordFilter(1l);
-        filter.getBudgetList().add(new BudgetBaseData(1l, "budget1"));
+        WorkRecordFilter filter = new WorkRecordFilter(1L);
+        filter.getBudgetList().add(new BudgetBaseData(1L, "budget1"));
         Predicate query = WorkRecordQueries.findByFilter(filter);
         List<WorkRecordEntity> records = ListUtil.toArrayList(repository.findAll(query));
         Assert.assertEquals(2, records.size());
@@ -62,7 +62,7 @@ public class WorkRecordQueriesIntegrationTest extends IntegrationTestTemplate {
     @DatabaseSetup("findByFilter.xml")
     @DatabaseTearDown(value = "findByFilter.xml", type = DatabaseOperation.DELETE_ALL)
     public void testFindByDateFilter() throws Exception {
-        WorkRecordFilter filter = new WorkRecordFilter(1l);
+        WorkRecordFilter filter = new WorkRecordFilter(1L);
         filter.setDateRange(new DateRange(format.parse("01.01.2015"), format.parse("15.08.2015")));
         Predicate query = WorkRecordQueries.findByFilter(filter);
         List<WorkRecordEntity> records = ListUtil.toArrayList(repository.findAll(query));
@@ -73,9 +73,9 @@ public class WorkRecordQueriesIntegrationTest extends IntegrationTestTemplate {
     @DatabaseSetup("findByFilter.xml")
     @DatabaseTearDown(value = "findByFilter.xml", type = DatabaseOperation.DELETE_ALL)
     public void testFindByMixedFilter() throws Exception {
-        WorkRecordFilter filter = new WorkRecordFilter(1l);
-        filter.getPersonList().add(new PersonBaseData(1l));
-        filter.getBudgetList().add(new BudgetBaseData(1l, "budget1"));
+        WorkRecordFilter filter = new WorkRecordFilter(1L);
+        filter.getPersonList().add(new PersonBaseData(1L));
+        filter.getBudgetList().add(new BudgetBaseData(1L, "budget1"));
         filter.setDateRange(new DateRange(format.parse("01.01.2015"), format.parse("02.01.2015")));
         Predicate query = WorkRecordQueries.findByFilter(filter);
         List<WorkRecordEntity> records = ListUtil.toArrayList(repository.findAll(query));

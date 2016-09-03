@@ -24,9 +24,9 @@
     <WORK_RECORD id="1" person_id="1" budget_id="1" record_date="2015-02-01" record_year="2015" record_month="2" record_week="1" record_day="1" minutes="480" daily_rate="200" import_id="1"/>
     <WORK_RECORD id="2" person_id="1" budget_id="3" record_date="2016-02-02" record_year="2016" record_month="2" record_week="1" record_day="2" minutes="480" daily_rate="200" import_id="1"/>
 
-    <INVOICE id="1" CONTRACT_ID="1" NAME="Test Invoice1"  INTERNAL_NUMBER="ABC" YEAR="2014" MONTH="2" INVOICE_SUM="200" DATE="2014-02-01"/>
-    <INVOICE id="2" CONTRACT_ID="1" NAME="Test Invoic2e"  INTERNAL_NUMBER="ABC" YEAR="2015" MONTH="2" INVOICE_SUM="200" DATE="2014-02-01"/>
-    <INVOICE id="3" CONTRACT_ID="1" NAME="Test Invoice3"  INTERNAL_NUMBER="ABC" YEAR="2016" MONTH="2" INVOICE_SUM="200" DATE="2014-02-01"/>
+    <INVOICE id="1" CONTRACT_ID="1" NAME="Test Invoice1"  INTERNAL_NUMBER="ABC" YEAR="2014" MONTH="2" INVOICE_SUM="200" SENT_DATE="2014-02-01"/>
+    <INVOICE id="2" CONTRACT_ID="1" NAME="Test Invoic2e"  INTERNAL_NUMBER="ABC" YEAR="2015" MONTH="2" INVOICE_SUM="200" SENT_DATE="2014-02-01"/>
+    <INVOICE id="3" CONTRACT_ID="1" NAME="Test Invoice3"  INTERNAL_NUMBER="ABC" YEAR="2016" MONTH="2" INVOICE_SUM="200" SENT_DATE="2014-02-01"/>
 
 
 </dataset>

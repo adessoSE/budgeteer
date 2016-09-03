@@ -11,7 +11,7 @@ public class MoneyAttributeConverter implements AttributeConverter<Money, Long> 
 
     @Override
     public Long convertToDatabaseColumn(Money money) {
-        return money.getAmountMinorLong();
+        return money == null ? null : money.getAmountMinorLong();
     }
 
     @Override

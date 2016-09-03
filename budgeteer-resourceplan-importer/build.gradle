@@ -1,4 +1,18 @@
 dependencies {
     compile project(':budgeteer-importer-api')
-    compile 'org.apache.poi:poi-ooxml:3.10.1'
+    compile group: 'org.apache.poi', name: 'poi-ooxml', version: "${poi_version}"
+    runtime group: 'commons-codec', name: 'commons-codec', version: "${commons_codec_version}"
+}
+
+idea {
+    // cf. https://discuss.gradle.org/t/the-idea-plugin-breaks-the-new-intellij-13-iml-configuration/2456/10
+    module.iml.withXml {
+        def sourceFolder = it.asNode().component.content.sourceFolder
+        def atts = sourceFolder.find { it.@url == 'file://$MODULE_DIR$/src/main/resources' }.attributes()
+        atts.remove('isTestSource')
+        atts.put('type', 'java-resource')
+        atts = sourceFolder.find { it.@url == 'file://$MODULE_DIR$/src/test/resources' }.attributes()
+        atts.remove('isTestSource')
+        atts.put('type', 'java-test-resource')
+    }
 }

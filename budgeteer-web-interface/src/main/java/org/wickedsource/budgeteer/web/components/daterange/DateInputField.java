@@ -38,8 +38,8 @@ public class DateInputField extends TextField<java.util.Date> {
     }
 
     @Override
-    protected String getInputType() {
-        return "text";
+    protected String[] getInputTypes() {
+        return new String[] { "text" };
     }
 
     @Override

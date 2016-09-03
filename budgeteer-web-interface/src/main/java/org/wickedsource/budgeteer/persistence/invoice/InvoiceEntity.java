@@ -48,7 +48,7 @@ public class InvoiceEntity {
     @Max(value = 11)
     private int month;
 
-    @Column(name="DATE")
+    @Column(name="SENT_DATE")
     @Temporal(TemporalType.DATE)
     private Date date;
 
@@ -60,11 +60,11 @@ public class InvoiceEntity {
     @Temporal(TemporalType.DATE)
     private Date paidDate;
 
-    @Column(name = "LINK")
+    @Column(name = "URL")
     private String link;
 
     @Lob @Basic(fetch=FetchType.LAZY)
-    @Column(name = "FILE", length = 5 * 1024 * 1024) // five megabytes
+    @Column(name = "INVOICE_FILE", length = 5 * 1024 * 1024) // five megabytes
     private byte[] file;
 
     @Column(name = "FILE_NAME")
