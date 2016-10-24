@@ -1,5 +1,7 @@
 package org.wickedsource.budgeteer.importer.ubw;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
 
@@ -12,17 +14,17 @@ import org.wickedsource.budgeteer.imports.api.*;
 
 public class UBWWorkRecordsImporter implements WorkRecordsImporter {
 
-    private static final int SHEET_INDEX = 3;
-
-    private static final int COLUMN_INVOICABLE = 10;
-
-    private static final int COLUMN_DATE = 3;
+    private static final int SHEET_INDEX = 2;
 
     private static final int COLUMN_PERSON = 2;
 
-    private static final int COLUMN_BUDGET = 7;
+    private static final int COLUMN_DATE = 3;
 
-    private static final int COLUMN_HOURS = 9;
+    private static final int COLUMN_BUDGET = 8;
+
+    private static final int COLUMN_HOURS = 10;
+
+    private static final int COLUMN_INVOICABLE = 11;
 
     private List<List<String>> skippedRecords = new LinkedList<List<String>>();
 
@@ -41,19 +43,19 @@ public class UBWWorkRecordsImporter implements WorkRecordsImporter {
                 throw new InvalidFileFormatException("Invalid file", file.getFilename());
             }
             Sheet sheet = workbook.getSheetAt(SHEET_INDEX);
-            int i = 3;
-            Row row = sheet.getRow(i);
-            while (row != null && row.getCell(0).getStringCellValue() != null) {
+            int rowIndex = 3; // First row with valid values
+            Row row = sheet.getRow(rowIndex);
+            while (row != null && row.getCell(0) != null && row.getCell(0).getStringCellValue() != null) {
                 if (isImportable(row)) {
                     ImportedWorkRecord record = parseRow(row, file);
                     resultList.add(record);
                 } else {
                     if(!isCompletelyEmpty(row)) {
-                        skippedRecords.add(getRowAsStrings(row, i));
+                        skippedRecords.add(getRowAsStrings(row, rowIndex));
                     }
                 }
-                i++;
-                row = sheet.getRow(i);
+                rowIndex++;
+                row = sheet.getRow(rowIndex);
             }
             return resultList;
         } catch (IOException e) {
