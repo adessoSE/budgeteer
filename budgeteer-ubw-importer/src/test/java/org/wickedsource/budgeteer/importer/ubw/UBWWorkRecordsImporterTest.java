@@ -34,7 +34,7 @@ public class UBWWorkRecordsImporterTest {
         UBWWorkRecordsImporter importer = new UBWWorkRecordsImporter();
         importer.importFile(new ImportFile("file.xslx", importer.getExampleFile().getInputStream()));
         List<List<String>> skippedRecords = importer.getSkippedRecords();
-        assertEquals(5, skippedRecords.size());
+        assertEquals(6, skippedRecords.size());
 
         assertEquals("file.xslx", skippedRecords.get(1).get(0));
     }
