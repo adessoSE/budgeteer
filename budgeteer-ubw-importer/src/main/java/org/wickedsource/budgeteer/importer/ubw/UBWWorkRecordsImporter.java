@@ -12,7 +12,7 @@ import org.wickedsource.budgeteer.imports.api.*;
 
 public class UBWWorkRecordsImporter implements WorkRecordsImporter {
 
-    private static final int SHEET_INDEX = 5;
+    private static final int SHEET_INDEX = 2;
 
     private static final int COLUMN_INVOICABLE = 11;
 
@@ -43,7 +43,7 @@ public class UBWWorkRecordsImporter implements WorkRecordsImporter {
             Sheet sheet = workbook.getSheetAt(SHEET_INDEX);
             int i = 3;
             Row row = sheet.getRow(i);
-            while (row != null && row.getCell(0).getStringCellValue() != null) {
+            while (row != null && row.getCell(0) != null && row.getCell(0).getStringCellValue() != null) {
                 if (isImportable(row)) {
                     ImportedWorkRecord record = parseRow(row, file);
                     resultList.add(record);
