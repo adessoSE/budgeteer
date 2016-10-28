@@ -1,12 +1,12 @@
 package org.wickedsource.budgeteer.persistence.contract;
 
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
-
-import java.util.List;
 
 public interface ContractRepository extends CrudRepository<ContractEntity, Long>{
 
@@ -65,4 +65,7 @@ public interface ContractRepository extends CrudRepository<ContractEntity, Long>
     @Modifying
     @Query("delete from ContractFieldEntity c where c.id in (select s.id from ContractFieldEntity s where  s.field.project.id = :projectId)")
     void deleteContractFieldByProjectId(@Param("projectId") long projectId);
+
+    @Query("Select e from ContractFieldEntity e where e.contract.id = :contractID")
+    List<ContractFieldEntity> findContractFieldsByContractId(@Param("contractID") Long contractID);
 }
