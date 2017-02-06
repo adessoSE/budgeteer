@@ -14,8 +14,9 @@ buildscript {
     }
 }
 
+
 apply plugin: 'war'
-apply plugin: 'spring-boot'
+apply plugin: 'org.springframework.boot'
 
 configurations {
     querydslapt
@@ -53,7 +54,7 @@ dependencies {
             [group: 'com.googlecode.wicked-charts', name: 'wicked-charts-wicket7', version: "${wicketcharts_version}"],
     )
 
-    compile group: 'org.springframework', name: 'spring-webmvc', version: "${spring_webmvc_version}"
+    compile group: 'org.springframework', name: 'spring-webmvc', version: "${spring_version}"
     compile(
             [group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: "${spring_boot_version}"],
             [group: 'org.springframework.boot', name: 'spring-boot-starter-logging', version: "${spring_boot_version}"],
@@ -75,8 +76,8 @@ dependencies {
     compile group: 'de.jollyday', name: 'jollyday', version: "${jollyday_version}"
 
     compile(
-            [group: 'com.mysema.querydsl', name: 'querydsl-apt', version: "${query_dsl_version}"],
-            [group: 'com.mysema.querydsl', name: 'querydsl-jpa', version: "${query_dsl_version}"]
+            [group: 'com.querydsl', name: 'querydsl-apt', version: "${query_dsl_version}"],
+            [group: 'com.querydsl', name: 'querydsl-jpa', version: "${query_dsl_version}"]
     )
 
 //    compile group: 'org.liquibase',  name: 'liquibase-core', version: '3.3.2'
@@ -113,7 +114,7 @@ task generateQueryDSL(type: JavaCompile, group: 'build', description: 'Generates
     classpath = configurations.compile + configurations.querydslapt
     options.compilerArgs = [
             "-proc:only",
-            "-processor", "com.mysema.query.apt.jpa.JPAAnnotationProcessor"
+            "-processor", "com.querydsl.apt.jpa.JPAAnnotationProcessor"
     ]
 
     destinationDir = sourceSets.generated.java.srcDirs.iterator().next()
