@@ -1,6 +1,8 @@
 package org.wickedsource.budgeteer.persistence.user;
 
 import lombok.Data;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
 
 import javax.persistence.*;
@@ -25,7 +27,8 @@ public class UserEntity {
     @Column(nullable = false, length = 512)
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "authorizedUsers")
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @ManyToMany(mappedBy = "authorizedUsers")
     private List<ProjectEntity> authorizedProjects = new ArrayList<ProjectEntity>();
 
     @ManyToOne(fetch = FetchType.LAZY)
