@@ -1,6 +1,6 @@
 import org.apache.tools.ant.filters.ReplaceTokens
 
-version = '1.0.7.BETA'
+version = '1.0.8.BETA'
 
 buildscript {
     repositories {
