@@ -1,9 +1,9 @@
 package org.wickedsource.budgeteer.service.contract;
 
-import com.github.springtestdbunit.DbUnitTestExecutionListener;
-import com.github.springtestdbunit.annotation.DatabaseOperation;
-import com.github.springtestdbunit.annotation.DatabaseSetup;
-import com.github.springtestdbunit.annotation.DatabaseTearDown;
+import static org.junit.Assert.*;
+
+import java.util.*;
+
 import org.apache.commons.lang3.time.DateUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,12 +17,13 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
 import org.wickedsource.budgeteer.IntegrationTestConfiguration;
 import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.persistence.contract.ContractEntity;
+import org.wickedsource.budgeteer.persistence.contract.ContractRepository;
 import org.wickedsource.budgeteer.persistence.project.ProjectRepository;
 
-import java.util.*;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import com.github.springtestdbunit.DbUnitTestExecutionListener;
+import com.github.springtestdbunit.annotation.DatabaseOperation;
+import com.github.springtestdbunit.annotation.DatabaseSetup;
+import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {IntegrationTestConfiguration.class})
@@ -41,6 +42,8 @@ public class ContractServiceTest{
     @Autowired
     private ProjectRepository projectRepository;
 
+    @Autowired
+    private ContractRepository contractRepository;
 
     /**
      * Save a new Contract associated with a Project that does not have any ProjectContractFields
@@ -241,6 +244,18 @@ public class ContractServiceTest{
         return result;
     }
 
+    @Test
+    @DatabaseSetup("contractDeletionTest.xml")
+    @DatabaseTearDown(value = "contractDeletionTest.xml", type = DatabaseOperation.DELETE_ALL)
+    public void testDeleteContract() {
+        assertNotNull(service.getContractById(3));
+        assertEquals(contractRepository.findContractFieldsByContractId(3L).size(), 2);
+        assertEquals(contractRepository.findContractFieldsByContractId(4L).size(), 1);
+        service.deleteContract(3);
+        assertEquals(contractRepository.findContractFieldsByContractId(3L).size(), 0);
+        assertEquals(contractRepository.findContractFieldsByContractId(4L).size(), 1);
+        assertNull(service.getContractById(3));
+    }
 
 
 
