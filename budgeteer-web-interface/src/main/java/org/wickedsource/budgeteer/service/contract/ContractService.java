@@ -1,20 +1,23 @@
 package org.wickedsource.budgeteer.service.contract;
 
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.wickedsource.budgeteer.persistence.budget.BudgetEntity;
 import org.wickedsource.budgeteer.persistence.budget.BudgetRepository;
 import org.wickedsource.budgeteer.persistence.contract.ContractEntity;
 import org.wickedsource.budgeteer.persistence.contract.ContractFieldEntity;
 import org.wickedsource.budgeteer.persistence.contract.ContractRepository;
+import org.wickedsource.budgeteer.persistence.invoice.InvoiceRepository;
 import org.wickedsource.budgeteer.persistence.project.ProjectContractField;
 import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
 import org.wickedsource.budgeteer.persistence.project.ProjectRepository;
 import org.wickedsource.budgeteer.web.pages.contract.overview.table.ContractOverviewTableModel;
-
-import javax.transaction.Transactional;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
 
 @Service
 @Transactional
@@ -28,6 +31,9 @@ public class ContractService {
 
     @Autowired
     private BudgetRepository budgetRepository;
+
+    @Autowired
+    private InvoiceRepository invoiceRepository;
 
     @Autowired
     private ContractDataMapper mapper;
@@ -110,6 +116,15 @@ public class ContractService {
     }
 
     public void deleteContract(long contractId) {
+        List<BudgetEntity> budgets = budgetRepository.findByContractId(contractId);
+        for (BudgetEntity budgetEntity : budgets) {
+            budgetEntity.setContract(null);
+        }
+        budgetRepository.save(budgets);
+
+        invoiceRepository.deleteInvoiceFieldsByContractId(contractId);
+        invoiceRepository.deleteInvoicesByContractId(contractId);
+
         contractRepository.delete(contractId);
     }
 }
