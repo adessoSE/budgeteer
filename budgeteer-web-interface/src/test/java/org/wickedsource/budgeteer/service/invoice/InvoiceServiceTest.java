@@ -1,15 +1,17 @@
 package org.wickedsource.budgeteer.service.invoice;
 
-import com.github.springtestdbunit.DbUnitTestExecutionListener;
-import com.github.springtestdbunit.annotation.DatabaseOperation;
-import com.github.springtestdbunit.annotation.DatabaseSetup;
-import com.github.springtestdbunit.annotation.DatabaseTearDown;
+import static org.junit.Assert.*;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
@@ -21,22 +23,16 @@ import org.wickedsource.budgeteer.persistence.contract.ContractRepository;
 import org.wickedsource.budgeteer.persistence.invoice.InvoiceRepository;
 import org.wickedsource.budgeteer.service.contract.DynamicAttributeField;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import com.github.springtestdbunit.DbUnitTestExecutionListener;
+import com.github.springtestdbunit.annotation.DatabaseOperation;
+import com.github.springtestdbunit.annotation.DatabaseSetup;
+import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
-import static org.junit.Assert.*;
-
-@RunWith(SpringJUnit4ClassRunner.class)
+@RunWith(SpringRunner.class)
 @ContextConfiguration(classes = {IntegrationTestConfiguration.class})
-@TestExecutionListeners({
-        DbUnitTestExecutionListener.class,
-        DirtiesContextTestExecutionListener.class,
-        DependencyInjectionTestExecutionListener.class,
-        TransactionalTestExecutionListener.class
-})
-public class InvoiceServiceTest{
-
+@TestExecutionListeners({DbUnitTestExecutionListener.class, DirtiesContextTestExecutionListener.class, DependencyInjectionTestExecutionListener.class,
+        TransactionalTestExecutionListener.class})
+public class InvoiceServiceTest {
 
     @Autowired
     private InvoiceService service;
@@ -47,14 +43,13 @@ public class InvoiceServiceTest{
     @Autowired
     private ContractRepository contractRepository;
 
-
     /**
      * Save a new Invoice associated with a Contract that does not have any ContractInvoiceFields
      */
     @Test
     @DatabaseSetup("invoiceTest.xml")
     @DatabaseTearDown(value = "invoiceTest.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testSaveNewInvoice(){
+    public void testSaveNewInvoice() {
         InvoiceBaseData testObject = getDummyInvoice();
         testObject.setContractId(1);
 
@@ -83,7 +78,7 @@ public class InvoiceServiceTest{
     @Test
     @DatabaseSetup("invoiceTest.xml")
     @DatabaseTearDown(value = "invoiceTest.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testSaveNewInvoice2(){
+    public void testSaveNewInvoice2() {
         InvoiceBaseData testObject = getDummyInvoice();
         testObject.setContractId(2);
 
@@ -117,7 +112,7 @@ public class InvoiceServiceTest{
     @Test
     @DatabaseSetup("invoiceTest.xml")
     @DatabaseTearDown(value = "invoiceTest.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testUpdateInvoice(){
+    public void testUpdateInvoice() {
         InvoiceBaseData testObject = getDummyInvoice();
         testObject.setContractId(4);
         testObject.setInvoiceId(4);
@@ -150,7 +145,7 @@ public class InvoiceServiceTest{
     @Test
     @DatabaseSetup("invoiceTest.xml")
     @DatabaseTearDown(value = "invoiceTest.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testUpdateInvoice2(){
+    public void testUpdateInvoice2() {
         InvoiceBaseData testObject = getDummyInvoice();
         testObject.setContractId(3);
         testObject.setInvoiceId(3);
@@ -185,11 +180,11 @@ public class InvoiceServiceTest{
     @Test
     @DatabaseSetup("invoiceTest.xml")
     @DatabaseTearDown(value = "invoiceTest.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testUpdateInvoice3(){
+    public void testUpdateInvoice3() {
         InvoiceBaseData testObject = getDummyInvoice();
         testObject.setContractId(5);
         testObject.setInvoiceId(5);
-        for(DynamicAttributeField field : testObject.getDynamicInvoiceFields()){
+        for (DynamicAttributeField field : testObject.getDynamicInvoiceFields()) {
             field.setValue("");
         }
 
@@ -215,8 +210,7 @@ public class InvoiceServiceTest{
         assertEquals(2, contractInvoiceFields.size());
     }
 
-
-    private InvoiceBaseData getDummyInvoice(){
+    private InvoiceBaseData getDummyInvoice() {
         InvoiceBaseData result = new InvoiceBaseData();
         result.setInvoiceId(0);
         result.setPaidDate(null);
@@ -234,7 +228,7 @@ public class InvoiceServiceTest{
     private List<DynamicAttributeField> getDummyDynamicInvoiceFields() {
         List<DynamicAttributeField> result = new LinkedList<DynamicAttributeField>();
         DynamicAttributeField data = new DynamicAttributeField();
-        for(int i = 0; i < 5; i++) {
+        for (int i = 0; i < 5; i++) {
             data = new DynamicAttributeField();
             data.setName("test" + i);
             data.setValue("test" + i);
@@ -243,12 +237,11 @@ public class InvoiceServiceTest{
         return result;
     }
 
-
     @Test
     @DatabaseSetup("invoiceTest.xml")
     @DatabaseTearDown(value = "invoiceTest.xml", type = DatabaseOperation.DELETE_ALL)
     // Invoice with two InvoiceFields
-    public void testFindInvoiceFieldByName(){
+    public void testFindInvoiceFieldByName() {
         assertNotNull(contractRepository.findInvoiceFieldByName(3, "Test Contract Field"));
         assertNotNull(contractRepository.findInvoiceFieldByName(3, "Test Contract Field 2"));
     }
@@ -257,7 +250,7 @@ public class InvoiceServiceTest{
     @DatabaseSetup("invoiceTest.xml")
     @DatabaseTearDown(value = "invoiceTest.xml", type = DatabaseOperation.DELETE_ALL)
     // Invoice with two InvoiceFields
-    public void testDeleteInvoice(){
+    public void testDeleteInvoice() {
         service.deleteInvoice(3);
 
         assertNotNull(contractRepository.findById(3).getInvoiceFields());
@@ -273,7 +266,7 @@ public class InvoiceServiceTest{
     @DatabaseSetup("invoiceTest.xml")
     @DatabaseTearDown(value = "invoiceTest.xml", type = DatabaseOperation.DELETE_ALL)
     // Invoice without any InvoiceFields
-    public void testDeleteInvoiceWithoutFields(){
+    public void testDeleteInvoiceWithoutFields() {
         service.deleteInvoice(4);
         assertNull(invoiceRepository.findOne(4l));
     }
@@ -282,12 +275,10 @@ public class InvoiceServiceTest{
     @DatabaseSetup("invoiceTest.xml")
     @DatabaseTearDown(value = "invoiceTest.xml", type = DatabaseOperation.DELETE_ALL)
     // Invoice without any InvoiceFields but with a contract containing ContractInvoiceFields
-    public void testDeleteInvoiceWithContractInvoiceFields(){
+    public void testDeleteInvoiceWithContractInvoiceFields() {
         service.deleteInvoice(5);
         assertNotNull(contractRepository.findInvoiceFieldByName(5, "Test Contract Field"));
         assertNotNull(contractRepository.findInvoiceFieldByName(5, "Test Contract Field 2"));
     }
-
-
 
 }

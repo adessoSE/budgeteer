@@ -8,15 +8,14 @@ import org.mockito.internal.util.MockUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@RunWith(SpringRunner.class)
 @ContextConfiguration(loader = SpringockitoContextLoader.class, locations = {"classpath:spring-service.xml", "classpath:spring-repository-mock.xml"})
 public abstract class ServiceTestTemplate {
 
     @Autowired
     private ApplicationContext context;
-
 
     @Before
     public void resetMocks() {
@@ -24,7 +23,7 @@ public abstract class ServiceTestTemplate {
             if (!"workRecordDatabaseImporter".equals(name) && !"planRecordDatabaseImporter".equals(name)) {
                 // excluding prototype beans with constructor arguments
                 Object bean = context.getBean(name);
-                if (new MockUtil().isMock(bean)) {
+                if (MockUtil.isMock(bean)) {
                     Mockito.reset(bean);
                 }
             }
