@@ -2,11 +2,6 @@ machine:
   java:
     version: oraclejdk8
 
-dependencies:
-
-  override:
-    - ./gradlew --stacktrace --console=plain resolveDependencies
-
 test:
   override:
    - ./gradlew --stacktrace --console=plain build
