@@ -1,6 +1,6 @@
 import org.apache.tools.ant.filters.ReplaceTokens
 
-version = '1.0.6.BETA'
+version = '1.0.8.BETA'
 
 buildscript {
     repositories {
@@ -14,8 +14,9 @@ buildscript {
     }
 }
 
+
 apply plugin: 'war'
-apply plugin: 'spring-boot'
+apply plugin: 'org.springframework.boot'
 
 configurations {
     querydslapt
@@ -53,7 +54,7 @@ dependencies {
             [group: 'com.googlecode.wicked-charts', name: 'wicked-charts-wicket7', version: "${wicketcharts_version}"],
     )
 
-    compile group: 'org.springframework', name: 'spring-webmvc', version: "${spring_webmvc_version}"
+    compile group: 'org.springframework', name: 'spring-webmvc', version: "${spring_version}"
     compile(
             [group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: "${spring_boot_version}"],
             [group: 'org.springframework.boot', name: 'spring-boot-starter-logging', version: "${spring_boot_version}"],
@@ -75,11 +76,11 @@ dependencies {
     compile group: 'de.jollyday', name: 'jollyday', version: "${jollyday_version}"
 
     compile(
-            [group: 'com.mysema.querydsl', name: 'querydsl-apt', version: "${query_dsl_version}"],
-            [group: 'com.mysema.querydsl', name: 'querydsl-jpa', version: "${query_dsl_version}"]
+            [group: 'com.querydsl', name: 'querydsl-apt', version: "${query_dsl_version}"],
+            [group: 'com.querydsl', name: 'querydsl-jpa', version: "${query_dsl_version}"]
     )
 
-    compile group: 'org.liquibase',  name: 'liquibase-core', version: "${liquibase_core_version}"
+//    compile group: 'org.liquibase',  name: 'liquibase-core', version: '3.3.2'
 
     runtime(
             [group: 'org.hsqldb', name: 'hsqldb', version: "${hsqldb_version}"],
@@ -113,7 +114,7 @@ task generateQueryDSL(type: JavaCompile, group: 'build', description: 'Generates
     classpath = configurations.compile + configurations.querydslapt
     options.compilerArgs = [
             "-proc:only",
-            "-processor", "com.mysema.query.apt.jpa.JPAAnnotationProcessor"
+            "-processor", "com.querydsl.apt.jpa.JPAAnnotationProcessor"
     ]
 
     destinationDir = sourceSets.generated.java.srcDirs.iterator().next()
@@ -145,7 +146,8 @@ bootRun {
             '-Dspring.datasource.url=jdbc:hsqldb:mem:budgeteer',
             '-Dspring.datasource.driverClassName=org.hsqldb.jdbcDriver',
             '-Dspring.datasource.username=sa',
-            '-Dspring.datasource.password='
+            '-Dspring.datasource.password=',
+            '-Dspring.jpa.hibernate.ddl-auto=update'
 }
 
 idea {
@@ -156,15 +158,22 @@ idea {
     }
     // cf. https://discuss.gradle.org/t/the-idea-plugin-breaks-the-new-intellij-13-iml-configuration/2456/10
     module.iml.withXml {
-        def sourceFolder = it.asNode().component.content.sourceFolder
-        def atts = sourceFolder.find { it.@url == 'file://$MODULE_DIR$/src/main/resources' }.attributes()
+        def xmlParser = new XmlParser()
+        def content = it.asNode().component.content[0]
+        def atts = content.find { it.@url == 'file://$MODULE_DIR$/src/main/resources' }.attributes()
         atts.remove('isTestSource')
         atts.put('type', 'java-resource')
-        atts = sourceFolder.find { it.@url == 'file://$MODULE_DIR$/src/test/resources' }.attributes()
+        atts = content.find { it.@url == 'file://$MODULE_DIR$/src/test/resources' }.attributes()
         atts.remove('isTestSource')
         atts.put('type', 'java-test-resource')
-        atts = sourceFolder.find { it.@url == 'file://$MODULE_DIR$/src/generated/java' }.attributes()
-        atts.put('generated', 'true')
+        atts = content.find { it.@url == 'file://$MODULE_DIR$/src/generated/java' }?.attributes()
+        if (atts)
+            atts.put('generated', 'true')
+        else {
+            def generatedNode = '''
+                <sourceFolder url="file://$MODULE_DIR$/src/generated/java" isTestSource="false" generated="true" />'''
+            content.append(xmlParser.parseText(generatedNode))
+        }
         def springFacet = '''
             <component name="FacetManager">
                 <facet type="Spring" name="Spring">
@@ -187,6 +196,6 @@ idea {
                   </configuration>
                 </facet>
             </component>'''
-        it.asNode().append((new XmlParser()).parseText(springFacet))
+        it.asNode().append(xmlParser.parseText(springFacet))
     }
 }

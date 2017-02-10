@@ -60,7 +60,7 @@ public class ContractEntity implements Serializable {
     private String link;
 
     @Lob @Basic(fetch=FetchType.LAZY)
-    @Column(name = "FILE", length = 5 * 1024 * 1024) // five megabytes
+    @Column(name = "CONTRACT_FILE", length = 5 * 1024 * 1024) // five megabytes
     private byte[] file;
 
     @Column(name = "FILE_NAME")

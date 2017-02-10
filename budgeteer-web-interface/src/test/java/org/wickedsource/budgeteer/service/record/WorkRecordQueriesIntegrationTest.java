@@ -3,7 +3,7 @@ package org.wickedsource.budgeteer.service.record;
 import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
-import com.mysema.query.types.Predicate;
+import com.querydsl.core.types.Predicate;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;

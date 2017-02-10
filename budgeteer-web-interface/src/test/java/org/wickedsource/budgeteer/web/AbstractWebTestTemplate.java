@@ -4,10 +4,10 @@ import org.apache.wicket.util.tester.WicketTester;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.wickedsource.budgeteer.service.user.User;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@RunWith(SpringRunner.class)
 @ContextConfiguration(locations = {"classpath:spring-web.xml", "classpath:spring-service-mock.xml"})
 public abstract class AbstractWebTestTemplate {
 

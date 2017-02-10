@@ -19,7 +19,7 @@ public class WorkRecordMapper extends AbstractMapper<WorkRecordEntity, WorkRecor
         record.setDate(entity.getDate());
         record.setBudgetName(entity.getBudget().getName());
         record.setDailyRate(entity.getDailyRate());
-        record.setEditedManually(entity.isEditedManually());
+        record.setEditedManually(entity.isEditedManually() != null ? entity.isEditedManually(): false);
         return record;
     }
 }

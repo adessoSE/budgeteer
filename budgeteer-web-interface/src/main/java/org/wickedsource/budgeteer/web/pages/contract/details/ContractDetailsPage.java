@@ -32,29 +32,15 @@ public class ContractDetailsPage extends BasePage {
 
     private static final int numberOfMonths = 6;
 
+    private ContractDetailModel contractModel;
+
     public ContractDetailsPage(PageParameters parameters) {
         super(parameters);
-        ContractDetailModel contractModel = new ContractDetailModel(getParameterId());
+        contractModel = new ContractDetailModel(getParameterId());
 
         add(new ContractHighlightsPanel("highlightsPanel", contractModel));
         add(new ContractDetailChart("comparisonChart", new ContractDetailChartModel(getParameterId(), numberOfMonths), new BudgeteerChartTheme()));
         add(new DifferenceTable("differenceTable", new DifferenceTableModel(getParameterId(), contractModel.getObject().getStartDate())));
- /**       add(new ListView<InvoiceBaseData>("invoices", contractModel.getObject().getBelongingInvoices()) {
-            @Override
-            protected void populateItem(final ListItem<InvoiceBaseData> item) {
-                BookmarkablePageLink<InvoiceDetailsPage> link = new BookmarkablePageLink<InvoiceDetailsPage>("link", InvoiceDetailsPage.class, InvoiceDetailsPage.createParameters(item.getModelObject().getInvoiceId()));
-                link.add(new Label("linkText", item.getModelObject().getInvoiceName()));
-                item.add(link);
-            }
-        });
-        add(new ListView<BudgetBaseData>("budgets", contractModel.getObject().getBelongingBudgets()) {
-            @Override
-            protected void populateItem(final ListItem<BudgetBaseData> item) {
-                BookmarkablePageLink<BudgetDetailsPage> link = new BookmarkablePageLink<BudgetDetailsPage>("link", BudgetDetailsPage.class, BudgetDetailsPage.createParameters(item.getModelObject().getId()));
-                link.add(new Label("linkText", item.getModelObject().getName()));
-                item.add(link);
-            }
-        }); **/
 
         add(new Link("editLink") {
             @Override
@@ -119,4 +105,9 @@ public class ContractDetailsPage extends BasePage {
         return model;
     }
 
+    @Override
+    protected void onDetach() {
+        contractModel.detach();
+        super.onDetach();
+    }
 }

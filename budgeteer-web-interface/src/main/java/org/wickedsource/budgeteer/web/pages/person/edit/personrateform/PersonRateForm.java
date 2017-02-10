@@ -10,7 +10,6 @@ import org.apache.wicket.injection.Injector;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.ListMultipleChoice;
-import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.service.DateRange;
@@ -20,11 +19,8 @@ import org.wickedsource.budgeteer.service.person.PersonRate;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.components.budget.BudgetBaseDataChoiceRenderer;
 import org.wickedsource.budgeteer.web.components.daterange.DateRangeInputField;
-import org.wickedsource.budgeteer.web.components.listMultipleChoiceWithGroups.ListMultipleChoiceWithGroups;
-import org.wickedsource.budgeteer.web.components.listMultipleChoiceWithGroups.OptionGroup;
 import org.wickedsource.budgeteer.web.components.money.MoneyTextField;
 import org.wickedsource.budgeteer.web.components.multiselect.MultiselectBehavior;
-import org.wickedsource.budgeteer.web.pages.base.AbstractChoiceRenderer;
 
 public abstract class PersonRateForm extends Form<PersonRateForm.PersonRateFormModel> {
 
@@ -54,17 +50,7 @@ public abstract class PersonRateForm extends Form<PersonRateForm.PersonRateFormM
 
         List<BudgetBaseData> possibleBudgets = budgetService.loadBudgetBaseDataForProject(BudgeteerSession.get().getProjectId());
         ListMultipleChoice<BudgetBaseData> budgetChoice =
-                new ListMultipleChoice<>("budgetField", getModelObject().getChosenBudgets(), possibleBudgets, new AbstractChoiceRenderer<BudgetBaseData>() {
-                    @Override
-                    public Object getDisplayValue(BudgetBaseData object) {
-                        return object.getName();
-                    }
-
-                    @Override
-                    public String getIdValue(BudgetBaseData object, int index) {
-                        return "" + object.getId();
-                    }
-                });
+                new ListMultipleChoice<>("budgetField", getModelObject().getChosenBudgets(), possibleBudgets, new BudgetBaseDataChoiceRenderer());
 
         budgetChoice.setRequired(true);
         budgetChoice.setChoiceRenderer(new BudgetBaseDataChoiceRenderer());

@@ -1,7 +1,7 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:mockito="http://www.mockito.org/spring/mockito"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
     http://www.mockito.org/spring/mockito http://www.mockito.org/spring/mockito.xsd">
 
     <mockito:mock id="userRepository" class="org.wickedsource.budgeteer.persistence.user.UserRepository"/>

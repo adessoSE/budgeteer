@@ -19,15 +19,6 @@ public class BudgetRepositoryTest extends IntegrationTestTemplate {
     @Autowired
     private BudgetRepository budgetRepository;
 
-    @Autowired
-    private ProjectRepository projectRepository;
-
-    @Autowired
-    private WorkRecordRepository workRecordRepository;
-
-    @Autowired
-    private PersonRepository personRepository;
-
     @Test
     @DatabaseSetup("getAllTagsInProject.xml")
     @DatabaseTearDown(value = "getAllTagsInProject.xml", type = DatabaseOperation.DELETE_ALL)

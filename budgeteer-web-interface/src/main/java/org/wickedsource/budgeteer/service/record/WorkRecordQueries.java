@@ -1,7 +1,7 @@
 package org.wickedsource.budgeteer.service.record;
 
-import com.mysema.query.types.Predicate;
-import com.mysema.query.types.expr.BooleanExpression;
+import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import org.wickedsource.budgeteer.persistence.record.QWorkRecordEntity;
 
 public class WorkRecordQueries {

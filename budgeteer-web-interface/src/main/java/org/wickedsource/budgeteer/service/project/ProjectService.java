@@ -1,5 +1,9 @@
 package org.wickedsource.budgeteer.service.project;
 
+import java.util.List;
+
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.wickedsource.budgeteer.persistence.budget.BudgetRepository;
@@ -16,9 +20,6 @@ import org.wickedsource.budgeteer.persistence.user.UserEntity;
 import org.wickedsource.budgeteer.persistence.user.UserRepository;
 import org.wickedsource.budgeteer.service.DateRange;
 import org.wickedsource.budgeteer.web.pages.administration.Project;
-
-import javax.transaction.Transactional;
-import java.util.List;
 
 @Service
 @Transactional
@@ -119,7 +120,7 @@ public class ProjectService {
             List<UserEntity> userList = projectRepository.findOne(projectId).getAuthorizedUsers();
             if (userList != null) {
                 for (UserEntity u : userList) {
-                    if (u.getDefaultProject().getId() == projectId) {
+                    if (u.getDefaultProject() != null && u.getDefaultProject().getId() == projectId) {
                         u.setDefaultProject(null);
                         userRepository.save(u);
                     }

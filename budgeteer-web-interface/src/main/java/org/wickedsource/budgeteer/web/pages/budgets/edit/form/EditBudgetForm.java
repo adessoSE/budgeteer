@@ -1,5 +1,10 @@
 package org.wickedsource.budgeteer.web.pages.budgets.edit.form;
 
+import static org.wicketstuff.lazymodel.LazyModel.from;
+import static org.wicketstuff.lazymodel.LazyModel.model;
+
+import java.util.List;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -7,7 +12,6 @@ import org.apache.wicket.injection.Injector;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -26,11 +30,6 @@ import org.wickedsource.budgeteer.web.components.notificationlist.NotificationLi
 import org.wickedsource.budgeteer.web.pages.base.AbstractChoiceRenderer;
 import org.wickedsource.budgeteer.web.pages.budgets.BudgetTagsModel;
 import org.wickedsource.budgeteer.web.pages.budgets.edit.tagsfield.TagsTextField;
-
-import java.util.List;
-
-import static org.wicketstuff.lazymodel.LazyModel.from;
-import static org.wicketstuff.lazymodel.LazyModel.model;
 
 public class EditBudgetForm extends Form<EditBudgetData> {
 
@@ -68,11 +67,6 @@ public class EditBudgetForm extends Form<EditBudgetData> {
                     @Override
                     public Object getDisplayValue(ContractBaseData object) {
                         return object == null ? getString("no.contract") : object.getContractName();
-                    }
-
-                    @Override
-                    public String getIdValue(ContractBaseData object, int index) {
-                        return object != null ? "" + object.getContractId() : "";
                     }
                 });
         contractDropDown.setNullValid(true);
