@@ -32,23 +32,17 @@ public class DashboardPage extends BasePage {
         AverageDailyRateChartModel avgDailyRateModel = new AverageDailyRateChartModel(BudgeteerSession.get().getProjectId(), 30);
         add(new AverageDailyRateChart("averageDailyRateChart", avgDailyRateModel, theme));
 
-        add(new BookmarkablePageLink<PeopleOverviewPage>("peopleLink1", PeopleOverviewPage.class));
-        add(new BookmarkablePageLink<PeopleOverviewPage>("peopleLink2", PeopleOverviewPage.class));
+        add(new BookmarkablePageLink<PeopleOverviewPage>("peopleLink", PeopleOverviewPage.class));
 
-        add(new BookmarkablePageLink<HoursPage>("hoursLink1", HoursPage.class));
-        add(new BookmarkablePageLink<HoursPage>("hoursLink2", HoursPage.class));
+        add(new BookmarkablePageLink<HoursPage>("hoursLink", HoursPage.class));
 
-        add(new BookmarkablePageLink<BudgetsOverviewPage>("budgetsLink1", BudgetsOverviewPage.class));
-        add(new BookmarkablePageLink<BudgetsOverviewPage>("budgetsLink2", BudgetsOverviewPage.class));
+        add(new BookmarkablePageLink<BudgetsOverviewPage>("budgetsLink", BudgetsOverviewPage.class));
 
-        add(new BookmarkablePageLink<BudgetsOverviewPage>("contractsLink1", ContractOverviewPage.class));
-        add(new BookmarkablePageLink<BudgetsOverviewPage>("contractsLink2", ContractOverviewPage.class));
+        add(new BookmarkablePageLink<BudgetsOverviewPage>("contractsLink", ContractOverviewPage.class));
 
-        add(new BookmarkablePageLink<InvoiceOverviewPage>("invoiceLink1", InvoiceOverviewPage.class));
-        add(new BookmarkablePageLink<InvoiceOverviewPage>("invoiceLink2", InvoiceOverviewPage.class));
+        add(new BookmarkablePageLink<InvoiceOverviewPage>("invoiceLink", InvoiceOverviewPage.class));
 
-        add(new BookmarkablePageLink<ImportsOverviewPage>("importsLink1", ImportsOverviewPage.class));
-        add(new BookmarkablePageLink<ImportsOverviewPage>("importsLink2", ImportsOverviewPage.class));
+        add(new BookmarkablePageLink<ImportsOverviewPage>("importsLink", ImportsOverviewPage.class));
     }
 
     @SuppressWarnings("unchecked")
