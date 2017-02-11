@@ -8,8 +8,6 @@ allprojects {
     version = '1.0.5.TESTING'
 }
 
-ext['hibernate.version'] = '5.0.2.Final'
-
 // alle Skripte aus ./gradle.d in sortierter Reihenfolge einbinden
 file('gradle.d').listFiles().sort().each {
     if (it =~ /.*\.gradle$/) {
