@@ -32,16 +32,20 @@
                 <div class="form-group">
                     <label for="contractSelect"><wicket:message key="page.tags.key.contract">Contract</wicket:message></label>
                     <select id="contractSelect" wicket:id="contract" class="form-control"/>
-                    <p class="help-block"><wicket:message key="page.budget.key.hint">The Contract connected with this budget.</wicket:message></p>
+                    <p class="help-block"><wicket:message key="page.tags.key.hint">The Contract connected with this budget.</wicket:message></p>
                 </div>
                 <div class="form-group">
                     <label for="tagsInput">Tags</label>
                     <input wicket:id="tagsInput" type="text" name="name" id="tagsInput" class="form-control" wicket:message="placeholder:page.tags.placeholder" />
-                    <p class="help-block"><span wicket:id="tagsList" class="badge bg-light-blue pointer"><span wicket:id="tag"></span></span></p>
                     <p class="help-block">
                         <wicket:message key="page.tags.hint">
                             Tags allow grouping of budgets so you can monitor groups of budgets instead of only single budgets.
                         </wicket:message>
+                    </p>
+                    <p class="help-block">
+                        <span wicket:id="tagsList" class="badge bg-light-blue pointer">
+                            <span wicket:id="tag"></span>
+                        </span>
                     </p>
                 </div>
             </div>
