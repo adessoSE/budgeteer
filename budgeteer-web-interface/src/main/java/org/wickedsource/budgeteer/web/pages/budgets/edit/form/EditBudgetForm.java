@@ -57,6 +57,7 @@ public class EditBudgetForm extends Form<EditBudgetData> {
         add(tagsField);
         add(new CustomFeedbackPanel("feedback"));
         add(new RequiredTextField<String>("name", model(from(getModel()).getTitle())));
+        add(new RequiredTextField<String>("description", model(from(getModel()).getDescription())));
         add(new RequiredTextField<String>("importKey", model(from(getModel()).getImportKey())));
         MoneyTextField totalField = new MoneyTextField("total", model(from(getModel()).getTotal()));
         totalField.setRequired(true);

@@ -119,6 +119,7 @@ public class BudgetService {
         data.setId(entity.getId());
         data.setLastUpdated(lastUpdated);
         data.setName(entity.getName());
+        data.setDescription(entity.getDescription());
         data.setSpent(toMoneyNullsafe(spentBudgetInCents));
         data.setTotal(entity.getTotal());
         data.setTags(mapEntitiesToTags(entity.getTags()));
@@ -193,6 +194,7 @@ public class BudgetService {
         }
         EditBudgetData data = new EditBudgetData();
         data.setId(budget.getId());
+        data.setDescription(budget.getDescription());
         data.setTotal(budget.getTotal());
         data.setTitle(budget.getName());
         data.setTags(mapEntitiesToTags(budget.getTags()));
@@ -216,6 +218,7 @@ public class BudgetService {
             budget.setProject(project);
         }
         budget.setImportKey(data.getImportKey());
+        budget.setDescription(data.getDescription());
         budget.setTotal(data.getTotal());
         budget.setName(data.getTitle());
         budget.getTags().clear();

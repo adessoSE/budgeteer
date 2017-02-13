@@ -36,14 +36,10 @@ public class PersonDetailsPage extends BasePage {
         super(parameters);
         add(new PersonHighlightsPanel("highlightsPanel", new PersonHighlightsModel(getParameterId())));
         add(new BudgetDistributionChart("distributionChart", new BudgetDistributionChartModel(getParameterId()), new BudgeteerChartTheme()));
-        add(createEditPersonLink("editPersonLink1"));
-        add(createEditPersonLink("editPersonLink2"));
-        add(new BookmarkablePageLink<PersonWeekReportPage>("weekReportLink1", PersonWeekReportPage.class, PersonWeekReportPage.createParameters(getParameterId())));
-        add(new BookmarkablePageLink<PersonWeekReportPage>("weekReportLink2", PersonWeekReportPage.class, PersonWeekReportPage.createParameters(getParameterId())));
-        add(new BookmarkablePageLink<PersonWeekReportPage>("monthReportLink1", PersonMonthReportPage.class, PersonMonthReportPage.createParameters(getParameterId())));
-        add(new BookmarkablePageLink<PersonWeekReportPage>("monthReportLink2", PersonMonthReportPage.class, PersonMonthReportPage.createParameters(getParameterId())));
-        add(new BookmarkablePageLink<PersonWeekReportPage>("hoursLink1", PersonHoursPage.class, PersonHoursPage.createParameters(getParameterId())));
-        add(new BookmarkablePageLink<PersonWeekReportPage>("hoursLink2", PersonHoursPage.class, PersonHoursPage.createParameters(getParameterId())));
+        add(createEditPersonLink("editPersonLink"));
+        add(new BookmarkablePageLink<PersonWeekReportPage>("weekReportLink", PersonWeekReportPage.class, PersonWeekReportPage.createParameters(getParameterId())));
+        add(new BookmarkablePageLink<PersonWeekReportPage>("monthReportLink", PersonMonthReportPage.class, PersonMonthReportPage.createParameters(getParameterId())));
+        add(new BookmarkablePageLink<PersonWeekReportPage>("hoursLink", PersonHoursPage.class, PersonHoursPage.createParameters(getParameterId())));
 
         Form deleteForm = new ConfirmationForm("deleteForm", this, "confirmation.delete") {
             @Override
@@ -52,8 +48,7 @@ public class PersonDetailsPage extends BasePage {
                 setResponsePage(PeopleOverviewPage.class);
             }
         };
-        deleteForm.add(new SubmitLink("deletePersonLink1"));
-        deleteForm.add(new SubmitLink("deletePersonLink2"));
+        deleteForm.add(new SubmitLink("deletePersonLink"));
         add(deleteForm);
     }
 

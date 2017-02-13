@@ -24,6 +24,7 @@ public class BudgetHighlightsPanel extends Panel {
                 return contract;
             }
         }));
+        add(new Label("description", model(from(model).getDescription())));
         add(new MoneyLabel("total", model(from(model).getTotal()), true));
         add(new MoneyLabel("remaining", model(from(model).getRemaining()), true));
         add(new PercentageLabel("progress", model(from(model).getProgress())));
