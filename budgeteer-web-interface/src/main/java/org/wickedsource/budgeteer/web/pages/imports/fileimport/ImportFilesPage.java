@@ -23,6 +23,7 @@ import org.apache.wicket.util.io.IOUtils;
 import org.apache.wicket.util.resource.AbstractResourceStreamWriter;
 import org.apache.wicket.util.time.Duration;
 import org.wickedsource.budgeteer.importer.aproda.AprodaWorkRecordsImporter;
+import org.wickedsource.budgeteer.importer.ubw.UBWWorkRecordsImporter;
 import org.wickedsource.budgeteer.imports.api.*;
 import org.wickedsource.budgeteer.service.imports.ImportService;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
@@ -108,7 +109,16 @@ public class ImportFilesPage extends DialogPageWithBacklink {
         feedback.setOutputMarkupId(true);
         form.add(feedback);
 
-        DropDownChoice<Importer> importerChoice = new DropDownChoice<Importer>("importerChoice", new PropertyModel<Importer>(this, "importer"), new ImportersListModel(), new ImporterChoiceRenderer());
+        ImportersListModel importersListModel = new ImportersListModel();
+        DropDownChoice<Importer> importerChoice = new DropDownChoice<Importer>("importerChoice", new PropertyModel<Importer>(this, "importer"), importersListModel, new ImporterChoiceRenderer());
+
+        // Set the UBWWorkRecordsImporter as Default if available
+        for (Importer importer : importersListModel.getObject()) {
+            if (importer.getClass() == UBWWorkRecordsImporter.class) {
+                importerChoice.setDefaultModelObject(importer);
+            }
+        }
+
         importerChoice.add(new AjaxFormComponentUpdatingBehavior("change") {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
