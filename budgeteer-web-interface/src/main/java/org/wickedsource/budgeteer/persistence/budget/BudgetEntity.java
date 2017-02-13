@@ -32,6 +32,8 @@ public class BudgetEntity {
     @Column(nullable = false)
     private String name;
 
+    private String description;
+
     private Money total;
 
     @ManyToOne(optional = false)
@@ -69,6 +71,7 @@ public class BudgetEntity {
         if (dailyRates != null ? !dailyRates.equals(that.dailyRates) : that.dailyRates != null) return false;
         if (importKey != null ? !importKey.equals(that.importKey) : that.importKey != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
+        if (description != null ? !description.equals(that.description) : that.description != null) return false;
         if (planRecords != null ? !planRecords.equals(that.planRecords) : that.planRecords != null) return false;
         if (project != null ? !project.equals(that.project) : that.project != null) return false;
         if (tags != null ? !tags.equals(that.tags) : that.tags != null) return false;
@@ -82,6 +85,7 @@ public class BudgetEntity {
     public int hashCode() {
         int result = (int) (id ^ (id >>> 32));
         result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + (total != null ? total.hashCode() : 0);
         result = 31 * result + (project != null ? project.hashCode() : 0);
         result = 31 * result + (tags != null ? tags.hashCode() : 0);
