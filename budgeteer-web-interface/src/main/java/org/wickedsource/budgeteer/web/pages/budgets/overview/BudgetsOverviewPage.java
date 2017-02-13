@@ -34,12 +34,9 @@ public class BudgetsOverviewPage extends BasePage {
         add(new BudgetTagFilterPanel("tagFilter", tagsModel));
         add(new BudgetOverviewTable("budgetTable", new FilteredBudgetModel(BudgeteerSession.get().getProjectId(), model(from(BudgeteerSession.get().getBudgetFilter()))), getBreadcrumbsModel()));
 
-        add(new BookmarkablePageLink<MultiBudgetWeekReportPage>("weekReportLink1", MultiBudgetWeekReportPage.class));
-        add(new BookmarkablePageLink<MultiBudgetWeekReportPage>("weekReportLink2", MultiBudgetWeekReportPage.class));
-        add(new BookmarkablePageLink<MultiBudgetMonthReportPage>("monthReportLink1", MultiBudgetMonthReportPage.class));
-        add(new BookmarkablePageLink<MultiBudgetMonthReportPage>("monthReportLink2", MultiBudgetMonthReportPage.class));
-        add(createNewBudgetLink("createBudgetLink1"));
-        add(createNewBudgetLink("createBudgetLink2"));
+        add(new BookmarkablePageLink<MultiBudgetWeekReportPage>("weekReportLink", MultiBudgetWeekReportPage.class));
+        add(new BookmarkablePageLink<MultiBudgetMonthReportPage>("monthReportLink", MultiBudgetMonthReportPage.class));
+        add(createNewBudgetLink("createBudgetLink"));
 
     }
 

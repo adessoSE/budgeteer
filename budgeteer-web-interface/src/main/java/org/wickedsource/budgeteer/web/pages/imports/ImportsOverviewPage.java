@@ -33,8 +33,7 @@ public class ImportsOverviewPage extends BasePage {
         importListContainer.setOutputMarkupId(true);
         importListContainer.add(createImportsList("importsList", new ImportsModel(BudgeteerSession.get().getProjectId())));
         add(importListContainer);
-        add(createImportLink("importLink1"));
-        add(createImportLink("importLink2"));
+        add(createImportLink("importLink"));
     }
     private Link createImportLink(String id) {
         final ImportFilesPage importPage = new ImportFilesPage(ImportsOverviewPage.class, getPageParameters());
