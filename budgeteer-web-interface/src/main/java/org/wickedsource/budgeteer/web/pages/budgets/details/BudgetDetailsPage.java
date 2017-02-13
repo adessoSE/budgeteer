@@ -52,15 +52,11 @@ public class BudgetDetailsPage extends BasePage {
         };
         add(new BudgetHighlightsPanel("highlightsPanel", new BudgetHighlightsModel(getParameterId())));
         add(new PeopleDistributionChart("distributionChart", new PeopleDistributionChartModel(getParameterId()), new BudgeteerChartTheme()));
-        add(new BookmarkablePageLink<SingleBudgetWeekReportPage>("weekReportLink1", SingleBudgetWeekReportPage.class, createParameters(getParameterId())));
-        add(new BookmarkablePageLink<SingleBudgetWeekReportPage>("weekReportLink2", SingleBudgetWeekReportPage.class, createParameters(getParameterId())));
-        add(new BookmarkablePageLink<SingleBudgetMonthReportPage>("monthReportLink1", SingleBudgetMonthReportPage.class, createParameters(getParameterId())));
-        add(new BookmarkablePageLink<SingleBudgetMonthReportPage>("monthReportLink2", SingleBudgetMonthReportPage.class, createParameters(getParameterId())));
+        add(new BookmarkablePageLink<SingleBudgetWeekReportPage>("weekReportLink", SingleBudgetWeekReportPage.class, createParameters(getParameterId())));
+        add(new BookmarkablePageLink<SingleBudgetMonthReportPage>("monthReportLink", SingleBudgetMonthReportPage.class, createParameters(getParameterId())));
         addContractLinks();
-        add(new BookmarkablePageLink<BudgetHoursPage>("hoursLink1", BudgetHoursPage.class, createParameters(getParameterId())));
-        add(new BookmarkablePageLink<BudgetHoursPage>("hoursLink2", BudgetHoursPage.class, createParameters(getParameterId())));
-        add(createEditLink("editLink1"));
-        add(createEditLink("editLink2"));
+        add(new BookmarkablePageLink<BudgetHoursPage>("hoursLink", BudgetHoursPage.class, createParameters(getParameterId())));
+        add(createEditLink("editLink"));
 
         Form deleteForm = new ConfirmationForm("deleteForm", this, "confirmation.delete") {
             @Override
@@ -69,8 +65,7 @@ public class BudgetDetailsPage extends BasePage {
                 setResponsePage(BudgetsOverviewPage.class);
             }
         };
-        deleteForm.add(new SubmitLink("deleteLink1"));
-        deleteForm.add(new SubmitLink("deleteLink2"));
+        deleteForm.add(new SubmitLink("deleteLink"));
         add(deleteForm);
     }
 

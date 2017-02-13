@@ -56,56 +56,62 @@
                     <div class="row">
                         <div class="col-lg-4 col-xs-6">
                             <!-- small box -->
-                            <div class="small-box bg-aqua">
-                                <div class="inner">
-                                    <h3><a wicket:id="weekReportLink1">Week Report</a></h3>
-                                    <br/>
-                                    <br/>
+                            <a wicket:id="weekReportLink">
+                                <div class="small-box bg-aqua">
+                                    <div class="inner">
+                                        <h3>Week Report</h3>
+                                        <br/>
+                                        <br/>
+                                    </div>
+                                    <div class="icon">
+                                        <i class="ion ion-stats-bars"></i>
+                                    </div>
+                                    <div class="small-box-footer">
+                                        Budget burned within this budget aggregated by week <i
+                                            class="fa fa-arrow-circle-right"></i>
+                                    </div>
                                 </div>
-                                <div class="icon">
-                                    <i class="ion ion-stats-bars"></i>
-                                </div>
-                                <a wicket:id="weekReportLink2" class="small-box-footer">
-                                    Budget burned within this budget aggregated by week <i
-                                        class="fa fa-arrow-circle-right"></i>
-                                </a>
-                            </div>
+                            </a>
                         </div>
                         <!-- ./col -->
                         <div class="col-lg-4 col-xs-6">
                             <!-- small box -->
-                            <div class="small-box bg-aqua">
-                                <div class="inner">
-                                    <h3><a wicket:id="monthReportLink1">Month Report</a></h3>
-                                    <br/>
-                                    <br/>
+                            <a wicket:id="monthReportLink">
+                                <div class="small-box bg-aqua">
+                                    <div class="inner">
+                                        <h3>Month Report</h3>
+                                        <br/>
+                                        <br/>
+                                    </div>
+                                    <div class="icon">
+                                        <i class="ion ion-stats-bars"></i>
+                                    </div>
+                                    <div class="small-box-footer">
+                                        Budget burned within this budget aggregated by month<i
+                                            class="fa fa-arrow-circle-right"></i>
+                                    </div>
                                 </div>
-                                <div class="icon">
-                                    <i class="ion ion-stats-bars"></i>
-                                </div>
-                                <a wicket:id="monthReportLink2" class="small-box-footer">
-                                    Budget burned within this budget aggregated by month<i
-                                        class="fa fa-arrow-circle-right"></i>
-                                </a>
-                            </div>
+                            </a>
                         </div>
                         <!-- ./col -->
                         <div class="col-lg-4 col-xs-6">
                             <!-- small box -->
-                            <div class="small-box bg-aqua">
-                                <div class="inner">
-                                    <h3><a wicket:id="hoursLink1">Hours</a></h3>
-                                    <br/>
-                                    <br/>
+                            <a wicket:id="hoursLink">
+                                <div class="small-box bg-aqua">
+                                    <div class="inner">
+                                        <h3>Hours</h3>
+                                        <br/>
+                                        <br/>
+                                    </div>
+                                    <div class="icon">
+                                        <i class="ion ion-clock"></i>
+                                    </div>
+                                    <div class="small-box-footer">
+                                        List all Hours booked on this budget <i
+                                            class="fa fa-arrow-circle-right"></i>
+                                    </div>
                                 </div>
-                                <div class="icon">
-                                    <i class="ion ion-clock"></i>
-                                </div>
-                                <a wicket:id="hoursLink2" class="small-box-footer">
-                                    List all Hours booked on this budget <i
-                                        class="fa fa-arrow-circle-right"></i>
-                                </a>
-                            </div>
+                            </a>
                         </div>
                     </div>
                     <div class="row">
@@ -130,36 +136,40 @@
 
                         <div class="col-lg-4 col-xs-6">
                             <!-- small box -->
-                            <div class="small-box bg-green">
-                                <div class="inner">
-                                    <h3><a wicket:id="editLink1">Edit Budget</a></h3>
-                                    <br/>
-                                    <br/>
-                                </div>
-                                <div class="icon">
-                                    <i class="ion ion-edit"></i>
-                                </div>
-                                <a wicket:id="editLink2" class="small-box-footer">
-                                    Edit the data of this budget <i class="fa fa-arrow-circle-right"></i>
-                                </a>
-                            </div>
-                        </div>
-                        <form wicket:id="deleteForm">
-                            <div class="col-lg-4 col-xs-6">
-                                <!-- small box -->
-                                <div class="small-box bg-red">
+                            <a wicket:id="editLink">
+                                <div class="small-box bg-green">
                                     <div class="inner">
-                                        <h3><a wicket:id="deleteLink1">Delete Budget</a></h3>
+                                        <h3>Edit Budget</h3>
                                         <br/>
                                         <br/>
                                     </div>
                                     <div class="icon">
-                                        <i class="ion ion-close"></i>
+                                        <i class="ion ion-edit"></i>
                                     </div>
-                                    <a wicket:id="deleteLink2" class="small-box-footer">
-                                        Delete this budget with all its records<i class="fa fa-arrow-circle-right"></i>
-                                    </a>
+                                    <div class="small-box-footer">
+                                        Edit the data of this budget <i class="fa fa-arrow-circle-right"></i>
+                                    </div>
                                 </div>
+                            </a>
+                        </div>
+                        <form wicket:id="deleteForm">
+                            <div class="col-lg-4 col-xs-6">
+                                <!-- small box -->
+                                <a wicket:id="deleteLink">
+                                    <div class="small-box bg-red">
+                                        <div class="inner">
+                                            <h3>Delete Budget</h3>
+                                            <br/>
+                                            <br/>
+                                        </div>
+                                        <div class="icon">
+                                            <i class="ion ion-close"></i>
+                                        </div>
+                                        <div class="small-box-footer">
+                                            Delete this budget with all its records<i class="fa fa-arrow-circle-right"></i>
+                                        </div>
+                                    </div>
+                                </a>
                             </div>
                         </form>
                     </div>
