@@ -123,7 +123,6 @@ public class ImportFilesPage extends DialogPageWithBacklink {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 skippedImports = null;
-                target.add(form);
             }
         });
         importerChoice.setRequired(true);
