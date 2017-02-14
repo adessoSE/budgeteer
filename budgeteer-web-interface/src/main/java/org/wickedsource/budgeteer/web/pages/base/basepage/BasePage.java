@@ -19,6 +19,7 @@ import org.wickedsource.budgeteer.web.pages.base.basepage.budgetunitchoice.Budge
 import org.wickedsource.budgeteer.web.pages.base.basepage.notifications.NotificationDropdown;
 import org.wickedsource.budgeteer.web.pages.base.basepage.notifications.NotificationModel;
 import org.wickedsource.budgeteer.web.pages.user.login.LoginPage;
+import org.wickedsource.budgeteer.web.pages.user.selectproject.SelectProjectPage;
 
 @NeedsLogin
 public abstract class BasePage extends WebPage {
@@ -44,6 +45,7 @@ public abstract class BasePage extends WebPage {
         add(notificationDropdown);
         add(new BudgetUnitChoice("budgetUnitDropdown", new BudgetUnitModel(projectId)));
         add(new BookmarkablePageLink<ProjectAdministrationPage>("administrationLink", ProjectAdministrationPage.class));
+        add(createProjectChangeLink("changeProjectLink"));
         add(createLogoutLink("logoutLink"));
         add(new HeaderResponseContainer("JavaScriptContainer", "JavaScriptContainer"));
     }
@@ -54,6 +56,16 @@ public abstract class BasePage extends WebPage {
         response.render(JavaScriptReferenceHeaderItem.forReference(BudgeteerReferences.getJQueryReference()));
         response.render(JavaScriptReferenceHeaderItem.forReference(BudgeteerReferences.getAdminLteAppReference()));
         response.render(JavaScriptReferenceHeaderItem.forUrl("//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"));
+    }
+
+    private Link createProjectChangeLink(String id) {
+        return new Link(id) {
+            @Override
+            public void onClick() {
+                SelectProjectPage page = new SelectProjectPage(LoginPage.class, new PageParameters());
+                setResponsePage(page);
+            }
+        };
     }
 
     private Link createLogoutLink(String id) {
