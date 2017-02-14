@@ -76,6 +76,6 @@ function change_layout() {
     fix_sidebar();
 }
 function change_skin(cls) {
-    $("body").removeClass("skin-blue skin-black");
+    $("body").removeClass("skin-green skin-black");
     $("body").addClass(cls);
 }
