@@ -29,6 +29,8 @@ public class DashboardPage extends BasePage {
 
         add(new Label("username", new UsernameModel()));
 
+        add(new Label("projectname", new ProjectnameModel()));
+
         AverageDailyRateChartModel avgDailyRateModel = new AverageDailyRateChartModel(BudgeteerSession.get().getProjectId(), 30);
         add(new AverageDailyRateChart("averageDailyRateChart", avgDailyRateModel, theme));
 

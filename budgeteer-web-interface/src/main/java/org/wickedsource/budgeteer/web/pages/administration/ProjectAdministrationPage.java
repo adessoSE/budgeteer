@@ -38,7 +38,6 @@ public class ProjectAdministrationPage extends BasePage {
     @SpringBean
     private UserService userService;
 
-
     @SpringBean
     private ProjectService projectService;
 
