@@ -31,6 +31,7 @@ public class BurnTable extends Panel {
 
     private CustomFeedbackPanel feedbackPanel;
     private boolean dailyRateIsEditable;
+    private ListView<WorkRecord> rows;
 
     @Inject
     private RecordService recordService;
@@ -49,7 +50,7 @@ public class BurnTable extends Panel {
 
         WebMarkupContainer table = new WebMarkupContainer("table");
         table.add(new DataTableBehavior(DataTableBehavior.getRecommendedOptions()));
-        ListView<WorkRecord> rows = createList("recordList", model, table);
+        rows = createList("recordList", model, table);
         table.add(rows);
 
         add(table);
@@ -118,4 +119,7 @@ public class BurnTable extends Panel {
         };
     }
 
+    public ListView<WorkRecord> getRows() {
+        return rows;
+    }
 }
