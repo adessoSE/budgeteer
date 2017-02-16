@@ -1,13 +1,5 @@
 package org.wickedsource.budgeteer.web.pages.budgets.overview.table;
 
-import static java.util.Collections.singletonList;
-import static org.mockito.Mockito.*;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
-
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.Test;
@@ -17,6 +9,14 @@ import org.wickedsource.budgeteer.service.budget.BudgetDetailData;
 import org.wickedsource.budgeteer.service.budget.BudgetService;
 import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
 import org.wickedsource.budgeteer.web.AbstractWebTestTemplate;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Random;
+
+import static java.util.Collections.singletonList;
+import static org.mockito.Mockito.*;
 
 public class BudgetOverviewTableTest extends AbstractWebTestTemplate {
 
