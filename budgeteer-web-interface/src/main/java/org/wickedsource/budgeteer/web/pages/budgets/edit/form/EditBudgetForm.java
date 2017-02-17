@@ -13,6 +13,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
@@ -57,7 +58,7 @@ public class EditBudgetForm extends Form<EditBudgetData> {
         add(tagsField);
         add(new CustomFeedbackPanel("feedback"));
         add(new RequiredTextField<String>("name", model(from(getModel()).getTitle())));
-        add(new RequiredTextField<String>("description", model(from(getModel()).getDescription())));
+        add(new TextField<String>("description", model(from(getModel()).getDescription())));
         add(new RequiredTextField<String>("importKey", model(from(getModel()).getImportKey())));
         MoneyTextField totalField = new MoneyTextField("total", model(from(getModel()).getTotal()));
         totalField.setRequired(true);
