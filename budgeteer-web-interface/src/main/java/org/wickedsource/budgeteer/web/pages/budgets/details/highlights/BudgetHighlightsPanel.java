@@ -24,12 +24,26 @@ public class BudgetHighlightsPanel extends Panel {
                 return contract;
             }
         }));
-        add(new Label("description", model(from(model).getDescription())));
+        add(new Label("description", new PropertyModel<String>(model, "description"){
+            @Override
+            public String getObject() {
+                String description = super.getObject();
+                description = description == null ? getString("no.description") : description;
+                return description;
+            }
+        }));
         add(new MoneyLabel("total", model(from(model).getTotal()), true));
         add(new MoneyLabel("remaining", model(from(model).getRemaining()), true));
         add(new PercentageLabel("progress", model(from(model).getProgress())));
         add(new MoneyLabel("avgDailyRate", model(from(model).getAvgDailyRate()), true));
-        add(new Label("lastUpdated", model(from(model).getLastUpdated())));
+        add(new Label("lastUpdated", new PropertyModel<String>(model, "lastUpdated"){
+            @Override
+            public String getObject() {
+                String lastUpdated = super.getObject();
+                lastUpdated = lastUpdated == null ? getString("no.lastUpdated") : lastUpdated;
+                return lastUpdated;
+            }
+        }));
     }
 
 }
