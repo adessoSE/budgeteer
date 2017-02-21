@@ -19,6 +19,8 @@ import org.wickedsource.budgeteer.service.person.PersonRate;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.components.budget.BudgetBaseDataChoiceRenderer;
 import org.wickedsource.budgeteer.web.components.daterange.DateRangeInputField;
+import org.wickedsource.budgeteer.web.components.listMultipleChoiceWithGroups.ListMultipleChoiceWithGroups;
+import org.wickedsource.budgeteer.web.components.listMultipleChoiceWithGroups.OptionGroup;
 import org.wickedsource.budgeteer.web.components.money.MoneyTextField;
 import org.wickedsource.budgeteer.web.components.multiselect.MultiselectBehavior;
 
@@ -48,9 +50,9 @@ public abstract class PersonRateForm extends Form<PersonRateForm.PersonRateFormM
         dateRangeField.setRequired(true);
         add(dateRangeField);
 
-        List<BudgetBaseData> possibleBudgets = budgetService.loadBudgetBaseDataForProject(BudgeteerSession.get().getProjectId());
+        List<OptionGroup<BudgetBaseData>> possibleBudgets = budgetService.getPossibleBudgetDataForPersonAndProject(BudgeteerSession.get().getProjectId(), personId);
         ListMultipleChoice<BudgetBaseData> budgetChoice =
-                new ListMultipleChoice<>("budgetField", getModelObject().getChosenBudgets(), possibleBudgets, new BudgetBaseDataChoiceRenderer());
+                new ListMultipleChoiceWithGroups<>("budgetField", getModelObject().getChosenBudgets(), possibleBudgets, new BudgetBaseDataChoiceRenderer());
 
         budgetChoice.setRequired(true);
         budgetChoice.setChoiceRenderer(new BudgetBaseDataChoiceRenderer());
