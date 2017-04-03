@@ -5,7 +5,7 @@ task wrapper(type: Wrapper) {
 }
 
 allprojects {
-    version = '1.0.5.TESTING'
+    version = '1.0.8.BETA'
 }
 
 // alle Skripte aus ./gradle.d in sortierter Reihenfolge einbinden
