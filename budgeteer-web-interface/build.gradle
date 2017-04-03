@@ -11,7 +11,6 @@ buildscript {
     }
 }
 
-
 apply plugin: 'war'
 apply plugin: 'org.springframework.boot'
 
@@ -151,24 +150,8 @@ idea {
         sourceDirs += sourceSets.generated.java.srcDirs
         downloadSources = true
     }
-    // cf. https://discuss.gradle.org/t/the-idea-plugin-breaks-the-new-intellij-13-iml-configuration/2456/10
+
     module.iml.withXml {
-        def xmlParser = new XmlParser()
-        def content = it.asNode().component.content[0]
-        def atts = content.find { it.@url == 'file://$MODULE_DIR$/src/main/resources' }.attributes()
-        atts.remove('isTestSource')
-        atts.put('type', 'java-resource')
-        atts = content.find { it.@url == 'file://$MODULE_DIR$/src/test/resources' }.attributes()
-        atts.remove('isTestSource')
-        atts.put('type', 'java-test-resource')
-        atts = content.find { it.@url == 'file://$MODULE_DIR$/src/generated/java' }?.attributes()
-        if (atts)
-            atts.put('generated', 'true')
-        else {
-            def generatedNode = '''
-                <sourceFolder url="file://$MODULE_DIR$/src/generated/java" isTestSource="false" generated="true" />'''
-            content.append(xmlParser.parseText(generatedNode))
-        }
         def springFacet = '''
             <component name="FacetManager">
                 <facet type="Spring" name="Spring">
