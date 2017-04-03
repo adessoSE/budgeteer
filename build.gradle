@@ -20,7 +20,7 @@ subprojects {
     apply plugin: 'jacoco'
 
     repositories {
-        mavenCentral()
+        jcenter()
         maven {
             name "Apache Snapshots"
             url "https://repository.apache.org/content/repositories/snapshots/"
