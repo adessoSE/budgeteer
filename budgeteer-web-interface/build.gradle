@@ -29,7 +29,7 @@ sourceSets {
         java {
             srcDir 'src/main/java'
         }
-        /* alle .java Dateien landen im war */
+        /* all .java files are added to war */
         resources.srcDirs = ['src/main/java', 'src/main/resources']
     }
 }
