@@ -1,9 +1,5 @@
 package org.wickedsource.budgeteer.web.components.listMultipleChoiceWithGroups;
 
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
@@ -12,6 +8,10 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.util.string.AppendingStringBuffer;
+
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 
 public class ListMultipleChoiceWithGroups<T> extends ListMultipleChoice<T> {
 

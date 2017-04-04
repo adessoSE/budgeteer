@@ -1,16 +1,15 @@
 package org.wickedsource.budgeteer.web.planning;
 
-import static org.joda.time.DateTimeConstants.*;
-import static org.joda.time.Period.years;
+import lombok.Getter;
+import org.joda.time.LocalDate;
+import org.joda.time.ReadablePeriod;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import lombok.Getter;
-
-import org.joda.time.LocalDate;
-import org.joda.time.ReadablePeriod;
+import static org.joda.time.DateTimeConstants.*;
+import static org.joda.time.Period.years;
 
 /**
  * Calendar in which weekends and optionally holidays are marked as non-working.

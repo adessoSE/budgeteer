@@ -1,7 +1,5 @@
 package org.wickedsource.budgeteer.web.pages.budgets.hours;
 
-import javax.inject.Inject;
-
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
 import org.wickedsource.budgeteer.service.person.PersonService;
@@ -16,6 +14,8 @@ import org.wickedsource.budgeteer.web.pages.budgets.BudgetNameModel;
 import org.wickedsource.budgeteer.web.pages.budgets.details.BudgetDetailsPage;
 import org.wickedsource.budgeteer.web.pages.budgets.overview.BudgetsOverviewPage;
 import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
+
+import javax.inject.Inject;
 
 @Mount("budgets/hours/${id}")
 public class BudgetHoursPage extends BasePage {
