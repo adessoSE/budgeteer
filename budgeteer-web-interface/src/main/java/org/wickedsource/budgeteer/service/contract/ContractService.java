@@ -1,11 +1,5 @@
 package org.wickedsource.budgeteer.service.contract;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
-import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.wickedsource.budgeteer.persistence.budget.BudgetEntity;
@@ -18,6 +12,11 @@ import org.wickedsource.budgeteer.persistence.project.ProjectContractField;
 import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
 import org.wickedsource.budgeteer.persistence.project.ProjectRepository;
 import org.wickedsource.budgeteer.web.pages.contract.overview.table.ContractOverviewTableModel;
+
+import javax.transaction.Transactional;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
 @Service
 @Transactional

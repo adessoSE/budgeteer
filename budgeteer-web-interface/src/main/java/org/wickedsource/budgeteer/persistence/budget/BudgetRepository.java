@@ -1,12 +1,12 @@
 package org.wickedsource.budgeteer.persistence.budget;
 
-import java.util.List;
-
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.wickedsource.budgeteer.service.notification.MissingContractForBudgetNotification;
+
+import java.util.List;
 
 public interface BudgetRepository extends CrudRepository<BudgetEntity, Long> {
 
