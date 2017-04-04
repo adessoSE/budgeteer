@@ -1,11 +1,11 @@
 package org.wickedsource.budgeteer.web.planning;
 
-import java.util.Calendar;
-
 import org.joda.time.LocalDate;
 import org.junit.Assert;
 import org.junit.Test;
 import org.wickedsource.budgeteer.MoneyUtil;
+
+import java.util.Calendar;
 
 public class ResourcePlanningAssistantTest {
 

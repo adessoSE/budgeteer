@@ -1,14 +1,14 @@
 package org.wickedsource.budgeteer.web.planning;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.joda.time.LocalDate;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class DefaultCalendarSpeedTest {
 

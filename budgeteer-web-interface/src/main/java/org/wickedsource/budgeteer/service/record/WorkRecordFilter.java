@@ -1,15 +1,14 @@
 package org.wickedsource.budgeteer.service.record;
 
-import java.io.Serializable;
-import java.util.LinkedList;
-import java.util.List;
-
+import lombok.Getter;
+import lombok.Setter;
 import org.wickedsource.budgeteer.service.DateRange;
 import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
 import org.wickedsource.budgeteer.service.person.PersonBaseData;
 
-import lombok.Getter;
-import lombok.Setter;
+import java.io.Serializable;
+import java.util.LinkedList;
+import java.util.List;
 
 public class WorkRecordFilter implements Serializable {
 

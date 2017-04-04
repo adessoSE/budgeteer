@@ -1,8 +1,8 @@
 package org.wickedsource.budgeteer.web.planning;
 
-import java.util.List;
-
 import org.joda.time.LocalDate;
+
+import java.util.List;
 
 public abstract class Calendar {
 

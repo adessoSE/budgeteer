@@ -1,8 +1,5 @@
 package org.wickedsource.budgeteer.persistence.record;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Index;

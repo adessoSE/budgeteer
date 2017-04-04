@@ -1,12 +1,10 @@
 package org.wickedsource.budgeteer.persistence.contract;
 
-import java.io.Serializable;
-
-import javax.persistence.*;
-
+import lombok.Data;
 import org.wickedsource.budgeteer.persistence.project.ProjectContractField;
 
-import lombok.Data;
+import javax.persistence.*;
+import java.io.Serializable;
 
 @Data
 @Entity

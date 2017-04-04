@@ -1,9 +1,5 @@
 package org.wickedsource.budgeteer.web.pages.budgets.monthreport.single;
 
-import java.util.List;
-
-import javax.inject.Inject;
-
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -21,6 +17,9 @@ import org.wickedsource.budgeteer.web.pages.budgets.components.targetactualchart
 import org.wickedsource.budgeteer.web.pages.budgets.components.weekreporttable.BudgetsMonthlyAggregatedRecordsModel;
 import org.wickedsource.budgeteer.web.pages.budgets.overview.BudgetsOverviewPage;
 import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
+
+import javax.inject.Inject;
+import java.util.List;
 
 @Mount("budgets/months/${id}")
 public class SingleBudgetMonthReportPage extends BasePage {
