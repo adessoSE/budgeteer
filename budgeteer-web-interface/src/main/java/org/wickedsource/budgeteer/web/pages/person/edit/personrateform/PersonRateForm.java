@@ -1,11 +1,5 @@
 package org.wickedsource.budgeteer.web.pages.person.edit.personrateform;
 
-import static org.wicketstuff.lazymodel.LazyModel.from;
-import static org.wicketstuff.lazymodel.LazyModel.model;
-
-import java.util.HashMap;
-import java.util.List;
-
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
@@ -21,6 +15,12 @@ import org.wickedsource.budgeteer.web.components.budget.BudgetBaseDataChoiceRend
 import org.wickedsource.budgeteer.web.components.daterange.DateRangeInputField;
 import org.wickedsource.budgeteer.web.components.money.MoneyTextField;
 import org.wickedsource.budgeteer.web.components.multiselect.MultiselectBehavior;
+
+import java.util.HashMap;
+import java.util.List;
+
+import static org.wicketstuff.lazymodel.LazyModel.from;
+import static org.wicketstuff.lazymodel.LazyModel.model;
 
 public abstract class PersonRateForm extends Form<PersonRateForm.PersonRateFormModel> {
 
