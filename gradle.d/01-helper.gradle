@@ -34,7 +34,8 @@ void resolveConfiguration(configuration) {
 boolean isResolveableConfiguration(configuration) {
     def nonResolveableConfigurations = ['apiElements', 'implementation',
                                         'runtimeElements', 'runtimeOnly',
-                                        'testImplementation', 'testRuntimeOnly']
+                                        'testImplementation', 'testRuntimeOnly',
+                                        'generatedImplementation', 'generatedRuntimeOnly']
 
     if (nonResolveableConfigurations.contains(configuration.getName())) {
         return false
