@@ -1,11 +1,7 @@
 import org.gradle.internal.jvm.Jvm
 
 task wrapper(type: Wrapper) {
-    gradleVersion '3.3'
-}
-
-allprojects {
-    version = '1.0.5.TESTING'
+    gradleVersion '3.4.1'
 }
 
 // alle Skripte aus ./gradle.d in sortierter Reihenfolge einbinden
@@ -15,12 +11,16 @@ file('gradle.d').listFiles().sort().each {
     }
 }
 
+allprojects {
+    version = getBuildVersion('1.0.8.BETA')
+}
+
 subprojects {
     apply plugin: 'java'
     apply plugin: 'jacoco'
 
     repositories {
-        mavenCentral()
+        jcenter()
         maven {
             name "Apache Snapshots"
             url "https://repository.apache.org/content/repositories/snapshots/"
