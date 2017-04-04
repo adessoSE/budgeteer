@@ -1,11 +1,5 @@
 package org.wickedsource.budgeteer.web.pages.person.edit.personrateform;
 
-import static org.wicketstuff.lazymodel.LazyModel.from;
-import static org.wicketstuff.lazymodel.LazyModel.model;
-
-import java.util.LinkedList;
-import java.util.List;
-
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.injection.Injector;
@@ -28,6 +22,12 @@ import org.wickedsource.budgeteer.service.person.PersonWithRates;
 import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
 import org.wickedsource.budgeteer.web.pages.person.edit.EditPersonPage;
 import org.wickedsource.budgeteer.web.pages.person.edit.IEditPersonPageStrategy;
+
+import java.util.LinkedList;
+import java.util.List;
+
+import static org.wicketstuff.lazymodel.LazyModel.from;
+import static org.wicketstuff.lazymodel.LazyModel.model;
 
 public class EditPersonForm extends Form<PersonWithRates> {
 

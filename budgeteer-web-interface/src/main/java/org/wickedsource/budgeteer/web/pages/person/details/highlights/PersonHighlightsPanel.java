@@ -1,8 +1,5 @@
 package org.wickedsource.budgeteer.web.pages.person.details.highlights;
 
-import static org.wicketstuff.lazymodel.LazyModel.from;
-import static org.wicketstuff.lazymodel.LazyModel.model;
-
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.IModel;
@@ -10,6 +7,9 @@ import org.wickedsource.budgeteer.service.person.PersonDetailData;
 import org.wickedsource.budgeteer.web.components.datelabel.DateLabel;
 import org.wickedsource.budgeteer.web.components.money.MoneyLabel;
 import org.wickedsource.budgeteer.web.components.nullmodel.NullsafeModel;
+
+import static org.wicketstuff.lazymodel.LazyModel.from;
+import static org.wicketstuff.lazymodel.LazyModel.model;
 
 public class PersonHighlightsPanel extends GenericPanel<PersonDetailData> {
 
