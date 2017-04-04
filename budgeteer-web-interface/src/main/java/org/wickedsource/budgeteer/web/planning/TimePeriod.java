@@ -1,7 +1,6 @@
 package org.wickedsource.budgeteer.web.planning;
 
 import lombok.Getter;
-
 import org.joda.time.LocalDate;
 
 public class TimePeriod {

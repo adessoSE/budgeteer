@@ -1,18 +1,18 @@
 package org.wickedsource.budgeteer.importer.ubw;
 
-import static org.junit.Assert.*;
-
-import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.List;
-
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.Test;
 import org.wickedsource.budgeteer.imports.api.ExampleFile;
 import org.wickedsource.budgeteer.imports.api.ImportFile;
 import org.wickedsource.budgeteer.imports.api.ImportedWorkRecord;
+
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.List;
+
+import static org.junit.Assert.*;
 
 public class UBWWorkRecordsImporterTest {
 

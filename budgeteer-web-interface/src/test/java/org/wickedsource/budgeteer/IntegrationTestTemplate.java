@@ -1,7 +1,6 @@
 package org.wickedsource.budgeteer;
 
-import javax.transaction.Transactional;
-
+import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
@@ -10,7 +9,7 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
-import com.github.springtestdbunit.DbUnitTestExecutionListener;
+import javax.transaction.Transactional;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = {IntegrationTestConfiguration.class})
