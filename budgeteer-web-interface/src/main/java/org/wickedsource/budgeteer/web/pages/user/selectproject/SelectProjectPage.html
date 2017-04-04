@@ -15,9 +15,9 @@
                 <div class="input-group margin">
                     <input wicket:id="projectName" type="text" name="name" id="projectName" placeholder="Project Name"
                            class="form-control"/>
-                <span class="input-group-btn">
-                  <button class="btn bg-olive btn-flat" type="submit">Go!</button>
-                 </span>
+                    <span class="input-group-btn">
+                        <button class="btn bg-olive glyphicon glyphicon-log-in" style="top: 0" type="submit"></button>
+                    </span>
                 </div>
             </form>
 
@@ -26,17 +26,16 @@
                 <div class="input-group margin">
                     <select wicket:id="projectChoice" placeholder="Project Name" class="form-control">
                     </select>
-                <span class="input-group-btn">
-                    <button wicket:id="markProject" class="btn bg-olive btn-flat glyphicon glyphicon-star"
-                            style="top: 0; border-right: 1px solid black;"></button>
-                    <button class="btn bg-olive btn-flat" wicket:id="goButton">Go!</button>
-                 </span>
+                    <div class="input-group-btn">
+                        <button wicket:id="markProject" class="btn bg-olive glyphicon glyphicon-star" style="top: 0"></button>
+                        <button  wicket:id="goButton" class="btn bg-olive glyphicon glyphicon-log-in" style="top: 0"></button>
+                    </div>
                 </div>
             </form>
         </div>
         <div class="footer">
             <div class="row">
-                <button wicket:id="backlink2" type="button" class="btn bg-olive btn-block">Cancel</button>
+                <button wicket:id="backlink2" type="button" class="btn bg-olive btn-block">Logout</button>
             </div>
         </div>
 
