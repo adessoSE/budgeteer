@@ -1,10 +1,5 @@
 package org.wickedsource.budgeteer.web.pages.person.edit;
 
-import static org.mockito.Matchers.anyLong;
-import static org.mockito.Mockito.when;
-
-import java.util.ArrayList;
-
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,6 +9,11 @@ import org.wickedsource.budgeteer.service.person.PersonService;
 import org.wickedsource.budgeteer.service.person.PersonWithRates;
 import org.wickedsource.budgeteer.web.AbstractWebTestTemplate;
 import org.wickedsource.budgeteer.web.pages.person.overview.PeopleOverviewPage;
+
+import java.util.ArrayList;
+
+import static org.mockito.Matchers.anyLong;
+import static org.mockito.Mockito.when;
 
 public class EditPersonPageTest extends AbstractWebTestTemplate {
 

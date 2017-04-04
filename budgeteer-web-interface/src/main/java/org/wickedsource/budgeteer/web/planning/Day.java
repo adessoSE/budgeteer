@@ -1,9 +1,9 @@
 package org.wickedsource.budgeteer.web.planning;
 
+import org.joda.time.LocalDate;
+
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-
-import org.joda.time.LocalDate;
 
 public class Day implements Iterable<Day> {
 
