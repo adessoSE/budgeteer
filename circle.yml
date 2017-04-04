@@ -2,6 +2,12 @@ machine:
   java:
     version: oraclejdk8
 
+dependencies:
+
+  override:
+    # download all dependencies for caching
+    - ./gradlew --stacktrace --console=plain resolveDependencies
+
 test:
   override:
    - ./gradlew --stacktrace --console=plain build
