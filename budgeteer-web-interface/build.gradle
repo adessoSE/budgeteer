@@ -89,7 +89,7 @@ dependencies {
             [group: 'org.dbunit', name: 'dbunit', version: "${dbunit_version}"],
     )
 
-    testCompile "org.springframework.boot:spring-boot-starter-test" // version?
+    testCompile "org.springframework.boot:spring-boot-starter-test"
 
     providedCompile group: 'org.projectlombok', name: 'lombok', version: "${lombok_version}"
 }
