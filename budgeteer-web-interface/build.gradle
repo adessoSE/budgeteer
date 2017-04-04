@@ -60,7 +60,7 @@ dependencies {
             [group: 'org.springframework.boot', name: 'spring-boot-starter-logging', version: "${spring_boot_version}"],
             [group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: "${spring_boot_version}"],
     )
-    providedCompile(group: 'org.springframework.boot', name: 'spring-boot-starter-jetty', version: "${spring_boot_version}")
+    providedCompile(group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat', version: "${spring_boot_version}")
 
     compile group: 'org.slf4j', name: 'slf4j-api', version: "${slf4j_version}"
     compile group: 'ch.qos.logback', name: 'logback-classic', version: "${logback_version}"
@@ -78,6 +78,11 @@ dependencies {
     compile(
             [group: 'com.querydsl', name: 'querydsl-apt', version: "${query_dsl_version}"],
             [group: 'com.querydsl', name: 'querydsl-jpa', version: "${query_dsl_version}"]
+    )
+
+    compile (
+            [group: 'org.keycloak', name: 'keycloak-spring-boot-adapter', version: "${keycloak_spring_boot_version}"],
+            [group: 'org.keycloak', name: 'keycloak-tomcat8-adapter', version: "${keycloak_tomcat8_adapter_version}"]
     )
 
     runtime(

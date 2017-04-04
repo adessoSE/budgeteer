@@ -7,9 +7,11 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.StringValue;
 import org.wickedsource.budgeteer.web.BudgeteerReferences;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
+import org.wickedsource.budgeteer.web.BudgeteerSettings;
 import org.wickedsource.budgeteer.web.components.security.NeedsLogin;
 import org.wickedsource.budgeteer.web.pages.administration.ProjectAdministrationPage;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
@@ -20,11 +22,17 @@ import org.wickedsource.budgeteer.web.pages.base.basepage.notifications.Notifica
 import org.wickedsource.budgeteer.web.pages.base.basepage.notifications.NotificationModel;
 import org.wickedsource.budgeteer.web.pages.user.login.LoginPage;
 import org.wickedsource.budgeteer.web.pages.user.selectproject.SelectProjectPage;
+import org.wickedsource.budgeteer.web.pages.user.selectproject.SelectProjectWithKeycloakPage;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 
 @NeedsLogin
 public abstract class BasePage extends WebPage {
     protected NotificationDropdown notificationDropdown;
 
+    @SpringBean
+    private BudgeteerSettings settings;
 
     public BasePage(PageParameters parameters) {
         super(parameters);
@@ -62,8 +70,11 @@ public abstract class BasePage extends WebPage {
         return new Link(id) {
             @Override
             public void onClick() {
-                SelectProjectPage page = new SelectProjectPage(LoginPage.class, new PageParameters());
-                setResponsePage(page);
+                if (settings.isKeycloakActivated()) {
+                    setResponsePage(new SelectProjectWithKeycloakPage());
+                } else {
+                    setResponsePage(new SelectProjectPage(LoginPage.class, new PageParameters()));
+                }
             }
         };
     }
@@ -72,8 +83,20 @@ public abstract class BasePage extends WebPage {
         return new Link(id) {
             @Override
             public void onClick() {
+                if (settings.isKeycloakActivated()) {
+                    logoutFromKeycloak();
+                }
                 BudgeteerSession.get().logout();
                 setResponsePage(LoginPage.class);
+            }
+
+            private void logoutFromKeycloak() {
+                HttpServletRequest request = (HttpServletRequest) getRequestCycle().getRequest().getContainerRequest();
+                try {
+                    request.logout();
+                } catch (ServletException e) {
+                    e.printStackTrace();
+                }
             }
         };
     }
