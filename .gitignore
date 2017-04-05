@@ -1,17 +1,31 @@
 # gradle specific
 .gradle
 
+# Ignore Gradle GUI config
+gradle-app.setting
+
 # binary build artefacts
 build
 bin
 target
+out
+*.class
+*.jar
+*.war
+
+# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
+!gradle-wrapper.jar
+
+# temp
+*.*~
+
+# Mac OS X
+.DS_Store
 
 # IntelliJ IDEA specific
+*.iml
+*.ipr
+*.iws
 .idea
-.idea/*
-**/*.iml
-**/build
-out
-budgeteer.ipr
-budgeteer.iws
+
 budgeteer-web-interface/src/main/resources/application.properties
