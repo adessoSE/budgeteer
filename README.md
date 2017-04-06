@@ -13,7 +13,7 @@ your budgets are heading.
 ![Start Page](https://raw.githubusercontent.com/thombergs/budgeteer/master/screenshots/start-page.png)
 
 ### Budget Overview
-![Start Page](https://raw.githubusercontent.com/thombergs/budgeteer/master/screenshots/budget-overview.png)
+![Budget Overview](https://raw.githubusercontent.com/thombergs/budgeteer/master/screenshots/budget-overview.png)
 
 ### Month Report
-![Start Page](https://raw.githubusercontent.com/thombergs/budgeteer/master/screenshots/month-report.png)
+![Month Report](https://raw.githubusercontent.com/thombergs/budgeteer/master/screenshots/month-report.png)
