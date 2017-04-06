@@ -1,21 +1,22 @@
 <wicket:panel>
 
     <div class="row">
-        <div class="col-xs-10">
+        <div class="col-xs-12">
             <div wicket:id="filter"></div>
-        </div>
-
-        <div class="col-xs-2">
-            <div class="form-group">
-                <label>Export</label><br />
-                <button class="btn btn-default btn-block" wicket:id="export" type="submit">Export to CSV</button>
-            </div>
         </div>
     </div>
 
     <div class="row">
         <div class="col-xs-12">
             <div wicket:id="table"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-2 pull-right">
+            <div class="form-group">
+                <button class="btn btn-default btn-block" wicket:id="export" type="submit">Export to CSV</button>
+            </div>
         </div>
     </div>
 
