@@ -134,7 +134,7 @@ public class UserService {
     /**
      * Register user without password if using Keycloak
      */
-    public void registerUser(String username) {
+    private void registerUser(String username) {
         UserEntity userEntity = new UserEntity();
         userEntity.setName(username);
         userEntity.setPassword("password"); // dummy password

@@ -78,7 +78,7 @@ dependencies {
 
     compile (
             [group: 'org.keycloak', name: 'keycloak-spring-boot-adapter', version: "${keycloak_spring_boot_version}"],
-            [group: 'org.keycloak', name: 'keycloak-tomcat8-adapter', version: "${keycloak_tomcat8_adapter_version}"]
+            [group: 'org.keycloak', name: 'keycloak-tomcat8-adapter', version: "${keycloak_spring_boot_version}"]
     )
 
     runtime(
