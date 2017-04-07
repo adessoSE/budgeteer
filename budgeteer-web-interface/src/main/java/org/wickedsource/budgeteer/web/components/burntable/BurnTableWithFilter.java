@@ -1,14 +1,26 @@
 package org.wickedsource.budgeteer.web.components.burntable;
 
+import org.apache.wicket.markup.html.link.DownloadLink;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.AbstractReadOnlyModel;
+import org.apache.wicket.model.IModel;
+import org.wickedsource.budgeteer.service.exports.ExportService;
 import org.wickedsource.budgeteer.service.record.WorkRecordFilter;
 import org.wickedsource.budgeteer.web.components.burntable.filter.FilterPanel;
 import org.wickedsource.budgeteer.web.components.burntable.filter.FilteredRecordsModel;
 import org.wickedsource.budgeteer.web.components.burntable.table.BurnTable;
 
+import javax.inject.Inject;
+import java.io.File;
+
 public class BurnTableWithFilter extends Panel {
 
+    @Inject
+    private ExportService exportService;
+
     private FilterPanel filterPanel;
+
+    private BurnTable burnTable;
 
     public BurnTableWithFilter(String id, WorkRecordFilter initialFilter) {
         this(id, initialFilter, false);
@@ -21,8 +33,19 @@ public class BurnTableWithFilter extends Panel {
         add(filterPanel);
 
         FilteredRecordsModel tableModel = new FilteredRecordsModel(initialFilter);
-        BurnTable table = new BurnTable("table", tableModel, dailyRateIsEditable);
-        add(table);
+        burnTable = new BurnTable("table", tableModel, dailyRateIsEditable);
+        add(burnTable);
+
+        IModel<File> fileModel = new AbstractReadOnlyModel<File>() {
+            @Override
+            public File getObject() {
+                return exportService.generateCSVFileFromRecords(burnTable.getRows());
+            }
+        };
+
+        DownloadLink downloadlink = new DownloadLink("export", fileModel);
+        downloadlink.setDeleteAfterDownload(true);
+        add(downloadlink);
     }
 
     public boolean isPersonFilterEnabled() {
