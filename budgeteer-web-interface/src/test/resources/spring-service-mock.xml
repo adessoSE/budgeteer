@@ -16,6 +16,8 @@
 
     <mockito:mock id="importsService" class="org.wickedsource.budgeteer.service.imports.ImportService"/>
 
+    <mockito:mock id="exportService" class="org.wickedsource.budgeteer.service.exports.ExportService"/>
+
     <mockito:mock id="userService" class="org.wickedsource.budgeteer.service.user.UserService"/>
 
     <mockito:mock id="projectService" class="org.wickedsource.budgeteer.service.project.ProjectService"/>
