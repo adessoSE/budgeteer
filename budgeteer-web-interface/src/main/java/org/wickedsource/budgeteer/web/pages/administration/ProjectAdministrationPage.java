@@ -17,6 +17,7 @@ import org.wickedsource.budgeteer.service.project.ProjectService;
 import org.wickedsource.budgeteer.service.user.User;
 import org.wickedsource.budgeteer.service.user.UserService;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
+import org.wickedsource.budgeteer.web.BudgeteerSettings;
 import org.wickedsource.budgeteer.web.ClassAwareWrappingModel;
 import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
@@ -26,6 +27,7 @@ import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.Breadcrumb
 import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 import org.wickedsource.budgeteer.web.pages.user.login.LoginPage;
 import org.wickedsource.budgeteer.web.pages.user.selectproject.SelectProjectPage;
+import org.wickedsource.budgeteer.web.pages.user.selectproject.SelectProjectWithKeycloakPage;
 
 import java.util.List;
 
@@ -40,6 +42,9 @@ public class ProjectAdministrationPage extends BasePage {
 
     @SpringBean
     private ProjectService projectService;
+
+    @SpringBean
+    private BudgeteerSettings settings;
 
     public ProjectAdministrationPage() {
         add(new CustomFeedbackPanel("feedback"));
@@ -104,8 +109,11 @@ public class ProjectAdministrationPage extends BasePage {
             @Override
             public void onClick() {
                 projectService.deleteProject(BudgeteerSession.get().getProjectId());
-                SelectProjectPage page = new SelectProjectPage(LoginPage.class, new PageParameters());
-                setResponsePage(page);
+                if (settings.isKeycloakActivated()) {
+                    setResponsePage(new SelectProjectWithKeycloakPage());
+                } else {
+                    setResponsePage(new SelectProjectPage(LoginPage.class, new PageParameters()));
+                }
             }
         };
     }

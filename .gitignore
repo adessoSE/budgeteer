@@ -27,5 +27,3 @@ out
 *.ipr
 *.iws
 .idea
-
-budgeteer-web-interface/src/main/resources/application.properties

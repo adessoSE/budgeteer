@@ -102,6 +102,18 @@ public class UserService {
     }
 
     /**
+     * Login without password if using Keycloak
+     */
+    public User login(String username) {
+        UserEntity userEntity = userRepository.findByName(username);
+        if (userEntity == null) {
+            registerUser(username);
+            userEntity = userRepository.findByName(username);
+        }
+        return mapper.map(userEntity);
+    }
+
+    /**
      * Registers a new user to the Budgeteer application.
      * If the chosen username is already in-use, an UsernameAlreadyInUseException is thrown.
      *
@@ -109,7 +121,7 @@ public class UserService {
      * @param password the users password
      */
     public void registerUser(String username, String password) throws UsernameAlreadyInUseException {
-        if(userRepository.findByName(username) == null) {
+        if (userRepository.findByName(username) == null) {
             UserEntity user = new UserEntity();
             user.setName(username);
             user.setPassword(passwordHasher.hash(password));
@@ -117,5 +129,15 @@ public class UserService {
         } else {
             throw new UsernameAlreadyInUseException();
         }
+    }
+
+    /**
+     * Register user without password if using Keycloak
+     */
+    private void registerUser(String username) {
+        UserEntity userEntity = new UserEntity();
+        userEntity.setName(username);
+        userEntity.setPassword("password"); // dummy password
+        userRepository.save(userEntity);
     }
 }
