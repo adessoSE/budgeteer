@@ -9,6 +9,8 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.StringValue;
+import org.keycloak.KeycloakPrincipal;
+import org.keycloak.representations.AccessToken;
 import org.wickedsource.budgeteer.web.BudgeteerReferences;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.BudgeteerSettings;
@@ -26,6 +28,7 @@ import org.wickedsource.budgeteer.web.pages.user.selectproject.SelectProjectWith
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashSet;
 
 @NeedsLogin
 public abstract class BasePage extends WebPage {
@@ -52,10 +55,35 @@ public abstract class BasePage extends WebPage {
         notificationDropdown.setOutputMarkupId(true);
         add(notificationDropdown);
         add(new BudgetUnitChoice("budgetUnitDropdown", new BudgetUnitModel(projectId)));
-        add(new BookmarkablePageLink<ProjectAdministrationPage>("administrationLink", ProjectAdministrationPage.class));
+
+        BookmarkablePageLink pageLink = new BookmarkablePageLink<ProjectAdministrationPage>("administrationLink", ProjectAdministrationPage.class);
+        add(pageLink);
+        if (!currentUserIsAdmin()) {
+            pageLink.setVisible(false);
+        }
         add(createProjectChangeLink("changeProjectLink"));
         add(createLogoutLink("logoutLink"));
         add(new HeaderResponseContainer("JavaScriptContainer", "JavaScriptContainer"));
+    }
+
+    private boolean currentUserIsAdmin() {
+        HashSet<String> roles = loadRolesFromCurrentUser();
+        if (roles != null && roles.contains("admin")) {
+            return true;
+        } else if (roles == null) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private HashSet<String> loadRolesFromCurrentUser() {
+        if (settings.isKeycloakActivated()) {
+            HttpServletRequest request = (HttpServletRequest) getRequestCycle().getRequest().getContainerRequest();
+            AccessToken accessToken = ((KeycloakPrincipal) request.getUserPrincipal()).getKeycloakSecurityContext().getToken();
+            return (HashSet<String>) accessToken.getRealmAccess().getRoles();
+        }
+        return null;
     }
 
     @Override
