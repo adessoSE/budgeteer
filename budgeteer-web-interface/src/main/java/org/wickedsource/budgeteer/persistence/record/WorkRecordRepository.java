@@ -1,5 +1,8 @@
 package org.wickedsource.budgeteer.persistence.record;
 
+import java.util.Date;
+import java.util.List;
+
 import org.joda.money.Money;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
@@ -10,9 +13,6 @@ import org.springframework.data.repository.query.Param;
 import org.wickedsource.budgeteer.persistence.budget.BudgetEntity;
 import org.wickedsource.budgeteer.persistence.person.PersonEntity;
 import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
-
-import java.util.Date;
-import java.util.List;
 
 public interface WorkRecordRepository extends CrudRepository<WorkRecordEntity, Long>, QueryDslPredicateExecutor<WorkRecordEntity>,  RecordRepository , JpaSpecificationExecutor {
 
@@ -31,7 +31,7 @@ public interface WorkRecordRepository extends CrudRepository<WorkRecordEntity, L
      * @param budgetId ID of the budget whose average daily rate to calculate
      * @return monetary value of the average daily rate in cents.
      */
-    @Query("select sum(record.dailyRate * record.minutes) / sum(record.minutes) from WorkRecordEntity record where record.budget.id=:budgetId")
+    @Query("select case when (sum(record.minutes) = 0) then 0 else (sum(record.dailyRate * record.minutes) / sum(record.minutes)) end from WorkRecordEntity record where record.budget.id=:budgetId")
     Double getAverageDailyRate(@Param("budgetId") long budgetId);
 
     @Query("select max(record.date) from WorkRecordEntity record where record.budget.id=:budgetId")
