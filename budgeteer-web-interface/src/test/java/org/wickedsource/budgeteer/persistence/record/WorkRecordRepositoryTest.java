@@ -1,8 +1,12 @@
 package org.wickedsource.budgeteer.persistence.record;
 
-import com.github.springtestdbunit.annotation.DatabaseOperation;
-import com.github.springtestdbunit.annotation.DatabaseSetup;
-import com.github.springtestdbunit.annotation.DatabaseTearDown;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,12 +15,9 @@ import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.persistence.budget.BudgetEntity;
 import org.wickedsource.budgeteer.persistence.person.PersonEntity;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import com.github.springtestdbunit.annotation.DatabaseOperation;
+import com.github.springtestdbunit.annotation.DatabaseSetup;
+import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
 public class WorkRecordRepositoryTest extends IntegrationTestTemplate {
 
@@ -39,6 +40,14 @@ public class WorkRecordRepositoryTest extends IntegrationTestTemplate {
     public void testGetAverageDailyRate() throws Exception {
         double value = repository.getAverageDailyRate(1l);
         Assert.assertEquals(56666d, value, 1d);
+    }
+
+    @Test
+    @DatabaseSetup("getAverageDailyRateZeroMinutes.xml")
+    @DatabaseTearDown(value = "getAverageDailyRate.xml", type = DatabaseOperation.DELETE_ALL)
+    public void testGetAverageDailyRateZeroMinutes() throws Exception {
+        double value = repository.getAverageDailyRate(1l);
+        Assert.assertEquals(0, value, 0);
     }
 
     @Test
