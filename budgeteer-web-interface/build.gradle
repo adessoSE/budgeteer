@@ -48,6 +48,7 @@ dependencies {
             [group: 'org.apache.wicket', name: 'wicket-spring', version: "${wicket_spring_version}"],
             [group: 'org.wicketstuff', name: 'wicketstuff-lazymodel', version: "${wicketstuff_lazymodel_version}"],
             [group: 'com.googlecode.wicked-charts', name: 'wicked-charts-wicket7', version: "${wicketcharts_version}"],
+            files("lib/wicked-charts-wicket7-3.0.0.jar")
     )
 
     compile group: 'org.springframework', name: 'spring-webmvc', version: "${spring_version}"
