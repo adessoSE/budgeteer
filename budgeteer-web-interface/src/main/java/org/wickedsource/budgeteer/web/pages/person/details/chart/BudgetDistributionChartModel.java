@@ -10,7 +10,12 @@ import java.util.List;
 
 public class BudgetDistributionChartModel extends LoadableDetachableModel<List<Share>> {
 
-    @SpringBean
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@SpringBean
     private StatisticsService service;
 
     private long personId;

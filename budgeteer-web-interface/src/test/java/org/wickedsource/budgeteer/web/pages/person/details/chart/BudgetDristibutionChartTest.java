@@ -3,7 +3,6 @@ package org.wickedsource.budgeteer.web.pages.person.details.chart;
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.Test;
 import org.wickedsource.budgeteer.web.AbstractWebTestTemplate;
-import org.wickedsource.budgeteer.web.charts.BudgeteerChartTheme;
 
 public class BudgetDristibutionChartTest extends AbstractWebTestTemplate{
 
@@ -11,6 +10,6 @@ public class BudgetDristibutionChartTest extends AbstractWebTestTemplate{
     public void testRender() {
         WicketTester tester = getTester();
         BudgetDistributionChartModel model = new BudgetDistributionChartModel(1l);
-        tester.startComponentInPage(new BudgetDistributionChart("chart", model, new BudgeteerChartTheme()));
+        tester.startComponentInPage(new BudgetDistributionChart("chart", model));
     }
 }

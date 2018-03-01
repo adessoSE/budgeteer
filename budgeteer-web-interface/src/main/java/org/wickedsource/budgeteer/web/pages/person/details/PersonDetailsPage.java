@@ -9,15 +9,14 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.service.person.PersonService;
 import org.wickedsource.budgeteer.web.Mount;
-import org.wickedsource.budgeteer.web.charts.BudgeteerChartTheme;
 import org.wickedsource.budgeteer.web.components.confirm.ConfirmationForm;
 import org.wickedsource.budgeteer.web.pages.base.basepage.BasePage;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.Breadcrumb;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
 import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 import org.wickedsource.budgeteer.web.pages.person.PersonNameModel;
-import org.wickedsource.budgeteer.web.pages.person.details.chart.BudgetDistributionChart;
 import org.wickedsource.budgeteer.web.pages.person.details.chart.BudgetDistributionChartModel;
+import org.wickedsource.budgeteer.web.pages.person.details.chart.BudgetDistributionChart;
 import org.wickedsource.budgeteer.web.pages.person.details.highlights.PersonHighlightsModel;
 import org.wickedsource.budgeteer.web.pages.person.details.highlights.PersonHighlightsPanel;
 import org.wickedsource.budgeteer.web.pages.person.edit.EditPersonPage;
@@ -35,7 +34,7 @@ public class PersonDetailsPage extends BasePage {
     public PersonDetailsPage(PageParameters parameters) {
         super(parameters);
         add(new PersonHighlightsPanel("highlightsPanel", new PersonHighlightsModel(getParameterId())));
-        add(new BudgetDistributionChart("distributionChart", new BudgetDistributionChartModel(getParameterId()), new BudgeteerChartTheme()));
+        add(new BudgetDistributionChart("distributionChart", new BudgetDistributionChartModel(getParameterId())));
         add(createEditPersonLink("editPersonLink"));
         add(new BookmarkablePageLink<PersonWeekReportPage>("weekReportLink", PersonWeekReportPage.class, PersonWeekReportPage.createParameters(getParameterId())));
         add(new BookmarkablePageLink<PersonWeekReportPage>("monthReportLink", PersonMonthReportPage.class, PersonMonthReportPage.createParameters(getParameterId())));
