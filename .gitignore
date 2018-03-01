@@ -27,3 +27,8 @@ out
 *.ipr
 *.iws
 .idea
+
+# Eclipse specific
+.classpath
+.project
+.settings/
