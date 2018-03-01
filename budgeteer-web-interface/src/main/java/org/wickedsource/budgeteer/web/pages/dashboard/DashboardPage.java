@@ -5,7 +5,6 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.Mount;
-import org.wickedsource.budgeteer.web.charts.BudgeteerChartTheme;
 import org.wickedsource.budgeteer.web.pages.base.basepage.BasePage;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
 import org.wickedsource.budgeteer.web.pages.budgets.overview.BudgetsOverviewPage;
@@ -22,18 +21,21 @@ import org.wickedsource.budgeteer.web.pages.person.overview.PeopleOverviewPage;
 @Mount("dashboard")
 public class DashboardPage extends BasePage {
 
-    public DashboardPage() {
-        BudgeteerChartTheme theme = new BudgeteerChartTheme();
-        BurnedBudgetChartModel burnedBudgetModel = new BurnedBudgetChartModel(BudgeteerSession.get().getProjectId(), 8);
-        add(new BurnedBudgetChart("burnedBudgetChart", burnedBudgetModel, theme));
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
+	public DashboardPage() {
+        BurnedBudgetChartModel burnedBudgetModel = new BurnedBudgetChartModel(BudgeteerSession.get().getProjectId(), 8);
+        add(new BurnedBudgetChart("burnedBudgetChart", burnedBudgetModel));
+        
         add(new Label("username", new UsernameModel()));
 
         add(new Label("projectname", new ProjectnameModel()));
 
         AverageDailyRateChartModel avgDailyRateModel = new AverageDailyRateChartModel(BudgeteerSession.get().getProjectId(), 30);
-        add(new AverageDailyRateChart("averageDailyRateChart", avgDailyRateModel, theme));
-
+        add(new AverageDailyRateChart("averageDailyRateChart", avgDailyRateModel));
         add(new BookmarkablePageLink<PeopleOverviewPage>("peopleLink", PeopleOverviewPage.class));
 
         add(new BookmarkablePageLink<HoursPage>("hoursLink", HoursPage.class));
@@ -47,7 +49,6 @@ public class DashboardPage extends BasePage {
         add(new BookmarkablePageLink<ImportsOverviewPage>("importsLink", ImportsOverviewPage.class));
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     protected BreadcrumbsModel getBreadcrumbsModel() {
         return new BreadcrumbsModel(DashboardPage.class);
