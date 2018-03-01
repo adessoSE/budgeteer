@@ -2,7 +2,7 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:mockito="http://www.mockito.org/spring/mockito"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-    http://www.mockito.org/spring/mockito http://www.mockito.org/spring/mockito.xsd">
+    http://www.mockito.org/spring/mockito mockito.xsd">
 
     <mockito:mock id="notificationService" class="org.wickedsource.budgeteer.service.notification.NotificationService"/>
 

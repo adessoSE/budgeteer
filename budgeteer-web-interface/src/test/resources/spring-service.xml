@@ -8,7 +8,7 @@
 	   					   http://www.springframework.org/schema/context
                            http://www.springframework.org/schema/context/spring-context.xsd
                            http://www.mockito.org/spring/mockito
-                           http://www.mockito.org/spring/mockito.xsd">
+                           mockito.xsd">
 
     <context:component-scan base-package="org.wickedsource.budgeteer.service"/>
 
