@@ -1,6 +1,5 @@
 package org.wickedsource.budgeteer.web;
 
-import com.googlecode.wickedcharts.wicket7.JavaScriptResourceRegistry;
 import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.Session;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -22,6 +21,8 @@ import org.springframework.stereotype.Component;
 import org.wickedsource.budgeteer.web.components.security.BudgeteerAuthorizationStrategy;
 import org.wickedsource.budgeteer.web.components.security.BudgeteerUnauthorizedComponentInstantiationListener;
 import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
+
+import de.adesso.wickedcharts.wicket7.JavaScriptResourceRegistry;
 
 import java.util.Set;
 
