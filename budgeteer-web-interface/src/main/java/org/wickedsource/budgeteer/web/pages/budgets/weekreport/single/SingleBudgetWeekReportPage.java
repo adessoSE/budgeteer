@@ -7,10 +7,9 @@ import org.wickedsource.budgeteer.service.budget.BudgetService;
 import org.wickedsource.budgeteer.service.record.AggregatedRecord;
 import org.wickedsource.budgeteer.service.statistics.TargetAndActual;
 import org.wickedsource.budgeteer.web.Mount;
-import org.wickedsource.budgeteer.web.charts.BudgeteerChartTheme;
 import org.wickedsource.budgeteer.web.components.aggregatedrecordtable.AggregatedRecordTable;
 import org.wickedsource.budgeteer.web.components.targetactualchart.TargetAndActualChart;
-import org.wickedsource.budgeteer.web.components.targetactualchart.TargetAndActualChartOptions;
+import org.wickedsource.budgeteer.web.components.targetactualchart.TargetAndActualChartConfiguration;
 import org.wickedsource.budgeteer.web.pages.base.basepage.BasePage;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
 import org.wickedsource.budgeteer.web.pages.budgets.components.targetactualchart.BudgetsWeeklyAggregationModel;
@@ -33,7 +32,7 @@ public class SingleBudgetWeekReportPage extends BasePage {
         add(new Label("budgetName2", budgetService.loadBudgetBaseData(getParameterId()).getName()));
 
         IModel<TargetAndActual> model = new BudgetsWeeklyAggregationModel(getParameterId());
-        add(new TargetAndActualChart("targetAndActualChart", model, new BudgeteerChartTheme(), TargetAndActualChartOptions.Mode.WEEKLY));
+        add(new TargetAndActualChart("targetAndActualChart", model, TargetAndActualChartConfiguration.Mode.WEEKLY));
 
         IModel<List<AggregatedRecord>> tableModel = new BudgetsWeeklyAggregatedRecordsModel(getParameterId());
         add(new AggregatedRecordTable("table", tableModel));

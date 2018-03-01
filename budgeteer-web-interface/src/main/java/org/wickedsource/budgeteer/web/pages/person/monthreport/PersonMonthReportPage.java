@@ -6,10 +6,9 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.wickedsource.budgeteer.service.record.AggregatedRecord;
 import org.wickedsource.budgeteer.service.statistics.TargetAndActual;
 import org.wickedsource.budgeteer.web.Mount;
-import org.wickedsource.budgeteer.web.charts.BudgeteerChartTheme;
 import org.wickedsource.budgeteer.web.components.aggregatedrecordtable.AggregatedRecordTable;
 import org.wickedsource.budgeteer.web.components.targetactualchart.TargetAndActualChart;
-import org.wickedsource.budgeteer.web.components.targetactualchart.TargetAndActualChartOptions;
+import org.wickedsource.budgeteer.web.components.targetactualchart.TargetAndActualChartConfiguration;
 import org.wickedsource.budgeteer.web.pages.base.basepage.BasePage;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.Breadcrumb;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
@@ -32,7 +31,7 @@ public class PersonMonthReportPage extends BasePage {
         add(new Label("personName2", personNameModel));
 
         IModel<TargetAndActual> model = new PersonMonthlyAggregationModel(getParameterId());
-        add(new TargetAndActualChart("targetAndActualChart", model, new BudgeteerChartTheme(), TargetAndActualChartOptions.Mode.MONTHLY));
+        add(new TargetAndActualChart("targetAndActualChart", model, TargetAndActualChartConfiguration.Mode.MONTHLY));
 
         IModel<List<AggregatedRecord>> tableModel = new PersonMonthlyAggregatedRecordsModel(getParameterId());
         add(new AggregatedRecordTable("table", tableModel));
