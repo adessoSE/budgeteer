@@ -8,13 +8,12 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.service.contract.ContractService;
 import org.wickedsource.budgeteer.web.Mount;
-import org.wickedsource.budgeteer.web.charts.BudgeteerChartTheme;
 import org.wickedsource.budgeteer.web.components.confirm.ConfirmationForm;
 import org.wickedsource.budgeteer.web.pages.base.basepage.BasePage;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
 import org.wickedsource.budgeteer.web.pages.contract.budgetOverview.BudgetForContractOverviewPage;
-import org.wickedsource.budgeteer.web.pages.contract.details.contractDetailChart.ContractDetailChart;
 import org.wickedsource.budgeteer.web.pages.contract.details.contractDetailChart.ContractDetailChartModel;
+import org.wickedsource.budgeteer.web.pages.contract.details.contractDetailChart.ContractDetailChart;
 import org.wickedsource.budgeteer.web.pages.contract.details.differenceTable.DifferenceTable;
 import org.wickedsource.budgeteer.web.pages.contract.details.differenceTable.DifferenceTableModel;
 import org.wickedsource.budgeteer.web.pages.contract.details.highlights.ContractHighlightsPanel;
@@ -39,7 +38,7 @@ public class ContractDetailsPage extends BasePage {
         contractModel = new ContractDetailModel(getParameterId());
 
         add(new ContractHighlightsPanel("highlightsPanel", contractModel));
-        add(new ContractDetailChart("comparisonChart", new ContractDetailChartModel(getParameterId(), numberOfMonths), new BudgeteerChartTheme()));
+        add(new ContractDetailChart("comparisonChart", new ContractDetailChartModel(getParameterId(), numberOfMonths)));
         add(new DifferenceTable("differenceTable", new DifferenceTableModel(getParameterId(), contractModel.getObject().getStartDate())));
 
         add(new Link("editLink") {
