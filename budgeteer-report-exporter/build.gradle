@@ -1,0 +1,21 @@
+dependencies {
+    compile group: 'org.apache.poi', name: 'poi', version: "${poi_version}"
+	compile group: 'org.apache.poi', name: 'poi-ooxml', version: "${poi_version}"
+	compile group: 'com.google.guava', name: 'guava', version: '23.0'
+    
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
