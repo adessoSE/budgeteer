@@ -6,10 +6,8 @@ import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.service.statistics.MoneySeries;
 import org.wickedsource.budgeteer.service.statistics.TargetAndActual;
 import org.wickedsource.budgeteer.web.AbstractWebTestTemplate;
-import org.wickedsource.budgeteer.web.charts.BudgeteerChartTheme;
 import org.wickedsource.budgeteer.web.components.targetactualchart.TargetAndActualChart;
-import org.wickedsource.budgeteer.web.components.targetactualchart.TargetAndActualChartOptions;
-
+import org.wickedsource.budgeteer.web.components.targetactualchart.TargetAndActualChartConfiguration;
 import java.util.Random;
 
 public class TargetAndActualChartTest extends AbstractWebTestTemplate {
@@ -20,7 +18,7 @@ public class TargetAndActualChartTest extends AbstractWebTestTemplate {
     public void testRender() {
         WicketTester tester = getTester();
         PersonWeeklyAggregationModel model = new PersonWeeklyAggregationModel(1l);
-        tester.startComponentInPage(new TargetAndActualChart("chart", model, new BudgeteerChartTheme(), TargetAndActualChartOptions.Mode.WEEKLY));
+        tester.startComponentInPage(new TargetAndActualChart("chart", model, TargetAndActualChartConfiguration.Mode.WEEKLY));
     }
 
     public TargetAndActual createTargetAndActual(long personId, int numberOfWeeks) {

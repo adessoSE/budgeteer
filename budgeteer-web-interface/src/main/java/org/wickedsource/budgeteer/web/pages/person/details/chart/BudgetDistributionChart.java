@@ -1,13 +1,16 @@
 package org.wickedsource.budgeteer.web.pages.person.details.chart;
 
-import com.googlecode.wickedcharts.highcharts.theme.Theme;
-import com.googlecode.wickedcharts.wicket7.highcharts.Chart;
+import de.adesso.wickedcharts.wicket7.chartjs.Chart;
 
 public class BudgetDistributionChart extends Chart {
-    private BudgetDistributionChartModel model;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private BudgetDistributionChartModel model;
 
-    public BudgetDistributionChart(String id, BudgetDistributionChartModel model, Theme theme) {
-        super(id, new BudgetDistributionChartOptions(model), theme);
+    public BudgetDistributionChart(String id, BudgetDistributionChartModel model) {
+        super(id, new BudgetDistributionChartConfiguration(model));
         this.model = model;
     }
 
@@ -15,7 +18,7 @@ public class BudgetDistributionChart extends Chart {
     protected void onBeforeRender() {
         super.onBeforeRender();
         // resetting options to force re-rendering with new parameters
-        setOptions(new BudgetDistributionChartOptions(model));
+        setChartConfiguration(new BudgetDistributionChartConfiguration(model));
     }
 
 }

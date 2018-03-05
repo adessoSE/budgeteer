@@ -1,15 +1,13 @@
 package org.wickedsource.budgeteer.web.pages.contract.details.contractDetailChart;
 
-
-import com.googlecode.wickedcharts.highcharts.theme.Theme;
-import com.googlecode.wickedcharts.wicket7.highcharts.Chart;
+import de.adesso.wickedcharts.wicket7.chartjs.Chart;
 
 public class ContractDetailChart extends Chart{
 
     private ContractDetailChartModel model;
 
-    public ContractDetailChart(String id, ContractDetailChartModel model, Theme theme) {
-        super(id, new ContractDetailChartOptions(model), theme);
+    public ContractDetailChart(String id, ContractDetailChartModel model) {
+        super(id, new ContractDetailChartConfiguration(model));
         this.model = model;
     }
 
@@ -17,6 +15,6 @@ public class ContractDetailChart extends Chart{
     protected void onBeforeRender() {
         super.onBeforeRender();
         // resetting options to force re-rendering with new parameters
-        setOptions(new ContractDetailChartOptions(model));
+        setChartConfiguration(new ContractDetailChartConfiguration(model));
     }
 }

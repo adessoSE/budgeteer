@@ -1,22 +1,27 @@
 package org.wickedsource.budgeteer.web.pages.dashboard.burnedbudgetchart;
 
-import com.googlecode.wickedcharts.highcharts.theme.Theme;
-import com.googlecode.wickedcharts.wicket7.highcharts.Chart;
+import java.io.Serializable;
 
-public class BurnedBudgetChart extends Chart {
+import de.adesso.wickedcharts.wicket7.chartjs.Chart;
 
-    private BurnedBudgetChartModel model;
+public class BurnedBudgetChart extends Chart implements Serializable {
 
-    public BurnedBudgetChart(String id, BurnedBudgetChartModel model, Theme theme) {
-        super(id, new BurnedBudgetChartOptions(model), theme);
-        this.model = model;
-    }
-
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private BurnedBudgetChartModel model;
+    
+	public BurnedBudgetChart(String id, BurnedBudgetChartModel model) {
+		super(id, new BurnedBudgetChartConfiguration(model));
+		this.model = model;
+	}
+	
     @Override
     protected void onBeforeRender() {
         super.onBeforeRender();
         // resetting options to force re-rendering with new parameters
-        setOptions(new BurnedBudgetChartOptions(model));
+        setChartConfiguration(new BurnedBudgetChartConfiguration(model));
     }
 
 }

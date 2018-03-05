@@ -1,5 +1,6 @@
 package org.wickedsource.budgeteer.web.pages.base.basepage;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
 import org.apache.wicket.markup.head.filter.HeaderResponseContainer;
@@ -22,6 +23,7 @@ import org.wickedsource.budgeteer.web.pages.base.basepage.budgetunitchoice.Budge
 import org.wickedsource.budgeteer.web.pages.base.basepage.budgetunitchoice.BudgetUnitModel;
 import org.wickedsource.budgeteer.web.pages.base.basepage.notifications.NotificationDropdown;
 import org.wickedsource.budgeteer.web.pages.base.basepage.notifications.NotificationModel;
+import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 import org.wickedsource.budgeteer.web.pages.user.login.LoginPage;
 import org.wickedsource.budgeteer.web.pages.user.selectproject.SelectProjectPage;
 import org.wickedsource.budgeteer.web.pages.user.selectproject.SelectProjectWithKeycloakPage;
@@ -63,10 +65,11 @@ public abstract class BasePage extends WebPage {
         }
         add(createProjectChangeLink("changeProjectLink"));
         add(createLogoutLink("logoutLink"));
+        add(createDashboardLink("dashboardLink"));
         add(new HeaderResponseContainer("JavaScriptContainer", "JavaScriptContainer"));
     }
 
-    private boolean currentUserIsAdmin() {
+	private boolean currentUserIsAdmin() {
         HashSet<String> roles = loadRolesFromCurrentUser();
         if (roles != null && roles.contains("admin")) {
             return true;
@@ -93,6 +96,10 @@ public abstract class BasePage extends WebPage {
         response.render(JavaScriptReferenceHeaderItem.forReference(BudgeteerReferences.getAdminLteAppReference()));
         response.render(JavaScriptReferenceHeaderItem.forUrl("//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"));
     }
+
+    private Component createDashboardLink(String id) {
+		return new BookmarkablePageLink<>(id, DashboardPage.class);
+	}
 
     private Link createProjectChangeLink(String id) {
         return new Link(id) {

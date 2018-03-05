@@ -1,18 +1,19 @@
 package org.wickedsource.budgeteer.web.components.targetactualchart;
 
-import com.googlecode.wickedcharts.highcharts.theme.Theme;
-import com.googlecode.wickedcharts.wicket7.highcharts.Chart;
+
 import org.apache.wicket.model.IModel;
 import org.wickedsource.budgeteer.service.statistics.TargetAndActual;
+
+import de.adesso.wickedcharts.wicket7.chartjs.Chart;
 
 public class TargetAndActualChart extends Chart {
 
     private IModel<TargetAndActual> model;
 
-    private TargetAndActualChartOptions.Mode mode;
+    private TargetAndActualChartConfiguration.Mode mode;
 
-    public TargetAndActualChart(String id, IModel<TargetAndActual> model, Theme theme, TargetAndActualChartOptions.Mode mode) {
-        super(id, new TargetAndActualChartOptions(model, mode), theme);
+    public TargetAndActualChart(String id, IModel<TargetAndActual> model, TargetAndActualChartConfiguration.Mode mode) {
+        super(id, new TargetAndActualChartConfiguration(model, mode));
         this.model = model;
         this.mode = mode;
     }
@@ -21,6 +22,6 @@ public class TargetAndActualChart extends Chart {
     protected void onConfigure() {
         super.onConfigure();
         // resetting options to force re-rendering with new parameters
-        setOptions(new TargetAndActualChartOptions(model, mode));
+        setChartConfiguration(new TargetAndActualChartConfiguration(model, mode));
     }
 }

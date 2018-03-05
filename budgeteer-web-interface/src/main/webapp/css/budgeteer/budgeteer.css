@@ -97,3 +97,12 @@ table.smallLastColumn tr td:last-child {
 .table-bordered > tfoot > tr > td {
     border-top-width: 2px;
 }
+
+.chartCanvas {
+	height: 450px;
+}
+	
+	
+	
+	
+	
