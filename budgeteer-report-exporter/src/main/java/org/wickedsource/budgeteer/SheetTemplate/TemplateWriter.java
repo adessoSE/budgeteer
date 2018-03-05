@@ -9,13 +9,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
 
-import org.apache.commons.collections4.map.MultiKeyMap;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.RichTextString;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 
+import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 
 public class TemplateWriter<T> {
@@ -25,7 +25,7 @@ public class TemplateWriter<T> {
 	private SheetTemplate template;
 	private Sheet sheet;
 	private List<T> entries;
-	private MultiKeyMap<Object,String> flagMapping;
+	private Multimap<T,FieldFlag> flagMapping;
 	
 	
 	private int currentRowIndex;
@@ -34,14 +34,14 @@ public class TemplateWriter<T> {
 	public TemplateWriter(SheetTemplate sheetTemplate) {
 		this.template = sheetTemplate;
 		this.sheet = sheetTemplate.getSheet();
-		flagMapping = new MultiKeyMap<Object,String>();
+		flagMapping = ArrayListMultimap.create();
 	}
 	
 	public TemplateWriter(SheetTemplate sheetTemplate, List<T> entries) {
 		this.template = sheetTemplate;
 		this.sheet = sheetTemplate.getSheet();
 		this.entries = entries;
-		flagMapping = new MultiKeyMap<Object,String>();
+		flagMapping = ArrayListMultimap.create();
 	}
 	
 	public void setEntries(List<T> entries) {
@@ -59,10 +59,11 @@ public class TemplateWriter<T> {
 	void insert(T dto) {
 		currentRow = sheet.getRow(currentRowIndex);
 		replaceTemplateTags(dto);
-		setFlags(dto);
+		setCellStyle(dto);
 		currentRowIndex++;
 	}
 
+	@SuppressWarnings("unchecked")
 	private void replaceTemplateTags(T dto) {
 		Multimap<String, Integer> fieldMapping = template.getFieldMapping();
 
@@ -83,7 +84,7 @@ public class TemplateWriter<T> {
 						fieldValue = map.get(subkeyOf(tagname));
 					}
 					else if(fieldObject instanceof Map) {
-						Map<String,Object> mapObject = (Map) fieldObject;
+						Map<String,Object> mapObject = (Map<String, Object>) fieldObject;
 						fieldValue = mapObject.get(subkeyOf(tagname));
 					} else {
 						// TODO: exception or null?
@@ -146,7 +147,7 @@ public class TemplateWriter<T> {
 			}
 		}
 
-	private boolean containsOnlyOneTemplateTag(Cell currentCell) {
+	boolean containsOnlyOneTemplateTag(Cell currentCell) {
 		try {
 			Matcher matcher = SheetTemplate.TEMPLATE_TAG_PATTERN.matcher(currentCell.getStringCellValue());
 			return matcher.matches();
@@ -227,26 +228,23 @@ public class TemplateWriter<T> {
 		}
 	}
 
-	private void addFlagStyle(T dto, Cell currentCell) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	private void setFlags(T dto) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	private void setFlag(T dto, Field field, Cell cell) {
-		if(flagMapping.containsKey(dto,field.getName())) {
-			cell.setCellStyle(sheet.getWorkbook().createCellStyle());
-			cell.getCellStyle().cloneStyleFrom(template.getFlagTemplate().getCellStyleFor(flagMapping.get(dto, field.getName())));
+	void setCellStyle(T dto) {
+		if(flagMapping.containsKey(dto)) {
+			for(FieldFlag flag : flagMapping.get(dto)) {
+				String fieldname = flag.getField();
+				String flagname = flag.getFlag();
+				for(Integer columnIndex : template.getFieldMapping().get(fieldname)) {
+					Cell cell = currentRow.getCell(columnIndex);
+					cell.setCellStyle(sheet.getWorkbook().createCellStyle());
+					cell.getCellStyle().cloneStyleFrom(template.getFlagTemplate().getCellStyleFor(flagname));
+				}
+			}
 		}
 	}
 	
 	public void addFlag(T dto, String fieldname, String flag) {
-		if(template.getFieldList().contains(fieldname) && null != template.getFlagTemplate() && template.getFlagTemplate().contains(flag)) {
-			flagMapping.put(dto, fieldname, flag);
+		if(template.getFieldMapping().containsKey(fieldname) && null != template.getFlagTemplate() && template.getFlagTemplate().contains(flag)) {
+			flagMapping.put(dto, new FieldFlag(fieldname,flag));
 		} else {
 			// TODO: Exception
 		}

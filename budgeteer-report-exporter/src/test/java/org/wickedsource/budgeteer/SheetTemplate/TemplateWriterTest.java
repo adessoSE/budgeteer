@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
@@ -129,12 +130,26 @@ public class TemplateWriterTest {
 	
 	@Test
 	public void testSetFlag() {
-		fail("Not yet implemented");
+		tw.setEntries(Arrays.asList(dto1,dto2));
+		tw.addFlag(dto1, "dynamic.vorname" , "warning1");
+		tw.write();
+		
+		Row row = sheet.getRow(4);
+		Cell cell = row.getCell(6);
+		CellStyle style = template.getFlagTemplate().getCellStyleFor("warning1");
+		assertEquals(style,cell.getCellStyle());
+		
+		cell = row.getCell(8);;
+		style = template.getFlagTemplate().getCellStyleFor("warning1");
+		assertEquals(style,cell.getCellStyle());
+		
 	}
 
 	@Test
 	public void testRemoveFlagSheet() {
-		fail("Not yet implemented");
+		tw.removeFlagSheet();
+		Sheet removedSheet = wb.getSheet("Flags");
+		assertNull(removedSheet);
 	}
 	
 	@Test

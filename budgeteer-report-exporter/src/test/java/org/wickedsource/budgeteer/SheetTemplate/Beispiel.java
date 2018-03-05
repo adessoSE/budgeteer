@@ -41,6 +41,7 @@ public class Beispiel {
 		dto2.setDynamic(Arrays.asList(new Attribute("vorname", "Marina"), new Attribute("nachname","Musterfrau")));
 		
 		tw.setEntries(Arrays.asList(dto1,dto2));
+		tw.addFlag(dto1, "dynamic.vorname" , "warning1");
 		tw.write();
 		
 		XSSFFormulaEvaluator.evaluateAllFormulaCells(wb);
