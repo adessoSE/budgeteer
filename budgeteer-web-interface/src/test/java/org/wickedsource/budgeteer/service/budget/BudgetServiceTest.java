@@ -72,7 +72,7 @@ public class BudgetServiceTest extends ServiceTestTemplate {
     public void testLoadBudgetDetailData() throws Exception {
         Date date = new Date();
         when(budgetRepository.findOne(1l)).thenReturn(createBudgetEntity());
-        when(workRecordRepository.getLatestWordRecordDate(1l)).thenReturn(date);
+        when(workRecordRepository.getLatestWorkRecordDate(1l)).thenReturn(date);
         when(workRecordRepository.getSpentBudget(1l)).thenReturn(100000.0);
         when(planRecordRepository.getPlannedBudget(1l)).thenReturn(200000.0);
         when(workRecordRepository.getAverageDailyRate(1l)).thenReturn(50000.0);
@@ -86,7 +86,7 @@ public class BudgetServiceTest extends ServiceTestTemplate {
     public void testLoadBudgetsDetailData() throws Exception {
         Date date = new Date();
         when(budgetRepository.findByAtLeastOneTag(1l, Arrays.asList("1", "2", "3"))).thenReturn(Arrays.asList(createBudgetEntity()));
-        when(workRecordRepository.getLatestWordRecordDate(1l)).thenReturn(date);
+        when(workRecordRepository.getLatestWorkRecordDate(1l)).thenReturn(date);
         when(workRecordRepository.getSpentBudget(1l)).thenReturn(100000.0);
         when(planRecordRepository.getPlannedBudget(1l)).thenReturn(200000.0);
         when(workRecordRepository.getAverageDailyRate(1l)).thenReturn(50000.0);

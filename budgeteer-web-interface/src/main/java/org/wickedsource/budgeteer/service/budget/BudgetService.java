@@ -75,6 +75,17 @@ public class BudgetService {
         BudgetEntity budget = budgetRepository.findOne(budgetId);
         return budgetBaseDataMapper.map(budget);
     }
+    
+    
+	private List<BudgetEntity> loadBudgetEntitys(long projectId, BudgetTagFilter filter) {
+		List<BudgetEntity> budgets;
+        if (filter.getSelectedTags().isEmpty()) {
+            budgets = budgetRepository.findByProjectIdOrderByNameAsc(projectId);
+        } else {
+            budgets = budgetRepository.findByAtLeastOneTag(projectId, filter.getSelectedTags());
+        }
+		return budgets;
+	}
 
     /**
      * Loads the base data of a single budget from the database.
@@ -109,7 +120,7 @@ public class BudgetService {
     }
 
     private BudgetDetailData enrichBudgetEntity(BudgetEntity entity) {
-        Date lastUpdated = workRecordRepository.getLatestWordRecordDate(entity.getId());
+        Date lastUpdated = workRecordRepository.getLatestWorkRecordDate(entity.getId());
         Double spentBudgetInCents = workRecordRepository.getSpentBudget(entity.getId());
         Double plannedBudgetInCents = planRecordRepository.getPlannedBudget(entity.getId());
         Double avgDailyRateInCents = workRecordRepository.getAverageDailyRate(entity.getId());
@@ -166,12 +177,7 @@ public class BudgetService {
      * @return list of budgets that match the filter.
      */
     public List<BudgetDetailData> loadBudgetsDetailData(long projectId, BudgetTagFilter filter) {
-        List<BudgetEntity> budgets;
-        if (filter.getSelectedTags().isEmpty()) {
-            budgets = budgetRepository.findByProjectIdOrderByNameAsc(projectId);
-        } else {
-            budgets = budgetRepository.findByAtLeastOneTag(projectId, filter.getSelectedTags());
-        }
+        List<BudgetEntity> budgets = loadBudgetEntitys(projectId, filter);
         List<BudgetDetailData> dataList = new ArrayList<BudgetDetailData>();
         for (BudgetEntity entity : budgets) {
             // TODO: 4 additional database queries per loop! These can yet be optimized to 4 queries total!

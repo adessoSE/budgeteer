@@ -1,8 +1,10 @@
 package org.wickedsource.budgeteer.web.pages.budgets.overview;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.Mount;
@@ -12,6 +14,7 @@ import org.wickedsource.budgeteer.web.pages.budgets.BudgetTagsModel;
 import org.wickedsource.budgeteer.web.pages.budgets.edit.EditBudgetPage;
 import org.wickedsource.budgeteer.web.pages.budgets.monthreport.multi.MultiBudgetMonthReportPage;
 import org.wickedsource.budgeteer.web.pages.budgets.overview.filter.BudgetTagFilterPanel;
+import org.wickedsource.budgeteer.web.pages.budgets.overview.report.BudgetReportPage;
 import org.wickedsource.budgeteer.web.pages.budgets.overview.table.BudgetOverviewTable;
 import org.wickedsource.budgeteer.web.pages.budgets.overview.table.FilteredBudgetModel;
 import org.wickedsource.budgeteer.web.pages.budgets.weekreport.multi.MultiBudgetWeekReportPage;
@@ -37,8 +40,19 @@ public class BudgetsOverviewPage extends BasePage {
         add(new BookmarkablePageLink<MultiBudgetWeekReportPage>("weekReportLink", MultiBudgetWeekReportPage.class));
         add(new BookmarkablePageLink<MultiBudgetMonthReportPage>("monthReportLink", MultiBudgetMonthReportPage.class));
         add(createNewBudgetLink("createBudgetLink"));
-
+        add(createReportLink("createReportLink"));
     }
+    
+    
+	private Component createReportLink(String string) {
+		return new Link(string) {
+			@Override
+			public void onClick() {
+				setResponsePage(new BudgetReportPage(BudgetsOverviewPage.class, new PageParameters()));
+			}
+		};
+	}
+
 
     private Link createNewBudgetLink(String id) {
         return new Link(id) {
