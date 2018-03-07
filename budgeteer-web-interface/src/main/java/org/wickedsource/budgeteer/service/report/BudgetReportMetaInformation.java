@@ -8,5 +8,6 @@ import lombok.Data;
 
 @Data
 public class BudgetReportMetaInformation implements Serializable {
-	private DateRange dateRange;
+	private DateRange overallTimeRange;
+	private DateRange monthlyTimeRange;
 }

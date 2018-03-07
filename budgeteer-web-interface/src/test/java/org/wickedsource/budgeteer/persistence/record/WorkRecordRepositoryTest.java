@@ -46,10 +46,34 @@ public class WorkRecordRepositoryTest extends IntegrationTestTemplate {
     @DatabaseSetup("getSpentBudgetUntilDate.xml")
     @DatabaseTearDown(value = "getSpentBudgetUntilDate.xml", type = DatabaseOperation.DELETE_ALL)
     public void testGetSpentBudgetUntilDate() throws Exception {
-        double value = repository.getSpentBudgetUntilDate(1L, format.parse("16.08.2015"));
+        double value = repository.getSpentBudgetUntilDate(1L, format.parse("15.08.2015"));
         Assert.assertEquals(170000d, value, 1d);
     }
 
+    @Test
+    @DatabaseSetup("getSpentBudgetInTimeRange.xml")
+    @DatabaseTearDown(value = "getSpentBudgetInTimeRange.xml", type = DatabaseOperation.DELETE_ALL)
+    public void testGetSpentBudgetInTimeRange() throws Exception {
+        double value = repository.getSpentBudgetInTimeRange(1L, format.parse("15.08.2015"), format.parse("16.08.2015"));
+        Assert.assertEquals(37500d, value, 1d);
+    }
+
+    @Test
+    @DatabaseSetup("getTotalHoursInTimeRange.xml")
+    @DatabaseTearDown(value = "getTotalHoursInTimeRange.xml", type = DatabaseOperation.DELETE_ALL)
+    public void testGetTotalHoursInTimeRange() throws Exception {
+        double value = repository.getTotalHoursInTimeRange(1L, format.parse("15.08.2015"), format.parse("16.08.2015"));
+        Assert.assertEquals(5.5d, value, 10e-8);
+    }
+
+    @Test
+    @DatabaseSetup("getTotalHoursInTimeRange.xml")
+    @DatabaseTearDown(value = "getTotalHoursInTimeRange.xml", type = DatabaseOperation.DELETE_ALL)
+    public void testGetTotalHoursInTimeRangeAndNoRecordsAreInTimeRange() throws Exception {
+        double value = repository.getTotalHoursInTimeRange(1L, format.parse("15.08.2010"), format.parse("16.08.2011"));
+        Assert.assertEquals(0d, value, 10e-8);
+    }
+    
     @Test
     @DatabaseSetup("getAverageDailyRateZeroMinutes.xml")
     @DatabaseTearDown(value = "getAverageDailyRateZeroMinutes.xml", type = DatabaseOperation.DELETE_ALL)

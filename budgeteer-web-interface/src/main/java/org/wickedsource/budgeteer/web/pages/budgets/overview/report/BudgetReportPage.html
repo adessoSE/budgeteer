@@ -10,9 +10,14 @@
                 <div wicket:id="notificationList"></div>
                 <div wicket:id="feedback"></div>
                 <div class="form-group">
-                    <label for="titleInput"><wicket:message key="page.report.datepicker">Date range</wicket:message></label>
-                    <input wicket:id="dateRange" type="text" name="name" class="form-control"/>
-                    <p class="help-block"><wicket:message key="page.report.datepicker.hint">The full title of the budget to be displayed where enough space is available.</wicket:message></p>
+                    <label for="titleInput"><wicket:message key="page.report.overallDatepicker">Date range</wicket:message></label>
+                    <input wicket:id="overallRange" type="text" name="name" class="form-control"/>
+                    <p class="help-block"><wicket:message key="page.report.overallDatepicker.hint">The full title of the budget to be displayed where enough space is available.</wicket:message></p>
+                </div>
+                <div class="form-group">
+                    <label for="titleInput"><wicket:message key="page.report.monthlyDatepicker">Date range</wicket:message></label>
+                    <input wicket:id="monthlyRange" type="text" name="name" class="form-control"/>
+                    <p class="help-block"><wicket:message key="page.report.monthlyDatepicker.hint">The full title of the budget to be displayed where enough space is available.</wicket:message></p>
                 </div>
             </div>
             <div class="footer">

@@ -32,13 +32,15 @@ public class BudgetReportForm extends Form<BudgetReportMetaInformation> {
 	public BudgetReportForm(String id) {
 		super(id, model(from(new BudgetReportMetaInformation())));
 		Date startDate = service.getStartDateOfBudgets();
-		Date endDate = service.getFirstOfTheMonth();
-		getModel().getObject().setDateRange(new DateRange(startDate, endDate));
-
+		Date endDate = service.getLastDayOfLastMonth();
+		Date monthlyStartDate = service.getFirstDayOfLastMonth();
+		getModel().getObject().setOverallTimeRange(new DateRange(startDate, endDate));
+		getModel().getObject().setMonthlyTimeRange(new DateRange(monthlyStartDate,endDate));
 		
         add(new NotificationListPanel("notificationList", new BudgetReportNotificationModel()));
         add(new CustomFeedbackPanel("feedback"));
-        add(new DateRangeInputField("dateRange", model(from(getModel()).getDateRange()), DateRangeInputField.DROP_LOCATION.DOWN));
+        add(new DateRangeInputField("monthlyRange", model(from(getModel()).getMonthlyTimeRange()), DateRangeInputField.DROP_LOCATION.DOWN));
+        add(new DateRangeInputField("overallRange", model(from(getModel()).getOverallTimeRange()), DateRangeInputField.DROP_LOCATION.DOWN));
 	}
 	
     protected void onSubmit() {

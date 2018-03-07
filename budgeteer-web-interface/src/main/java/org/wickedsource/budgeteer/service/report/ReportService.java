@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -19,16 +20,12 @@ import org.wickedsource.budgeteer.SheetTemplate.SheetTemplate;
 import org.wickedsource.budgeteer.SheetTemplate.SheetTemplateSerializable;
 import org.wickedsource.budgeteer.SheetTemplate.TemplateWriter;
 import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
-import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
+import org.wickedsource.budgeteer.service.DateRange;
 import org.wickedsource.budgeteer.service.budget.BudgetDetailData;
 import org.wickedsource.budgeteer.service.budget.BudgetService;
 import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
 import org.wickedsource.budgeteer.service.contract.ContractBaseData;
 import org.wickedsource.budgeteer.service.contract.ContractService;
-import org.wickedsource.budgeteer.service.person.PersonService;
-import org.wickedsource.budgeteer.service.record.RecordService;
-import org.wickedsource.budgeteer.service.record.WorkRecord;
-import org.wickedsource.budgeteer.service.record.WorkRecordFilter;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -42,44 +39,42 @@ import org.joda.money.Money;
 public class ReportService {
 
 	@Autowired
-	private PersonService personService;
-    
-    @Autowired
-    private BudgetService budgetService;
-    
-    @Autowired
-    private ContractService contractService;
+	private BudgetService budgetService;
 
-    @Autowired
-	private RecordService recordService;
+	@Autowired
+	private ContractService contractService;
 
-    @Autowired
+	@Autowired
 	private WorkRecordRepository workRecordRepository;
 
+	/**
+	 * Creates an excel report file
+	 * 
+	 * @param budgetList
+	 *            the list of budgets, which are presented in the report
+	 * @param reportModel
+	 * @return Excel file
+	 */
+	public File createReportFile(long projectId, BudgetTagFilter filter,
+			BudgetReportMetaInformation metaInformationen) {
+		List<BudgetReportData> overallBudgetReportList = loadOverallBudgetReportData(projectId, filter,
+				metaInformationen);
+		List<BudgetReportData> monthlyBudgetReportList = loadMonthlyBudgetReportData(projectId, filter,
+				metaInformationen);
 
-    /**
-     * Creates an excel report file
-     * @param budgetList the list of budgets, which are presented in the report
-     * @param reportModel 
-     * @return Excel file
-     */
-	public File createReportFile(long projectId, BudgetTagFilter filter, BudgetReportMetaInformation metaInformationen) {
-		List<BudgetReportData> budgetList = loadBudgetReportData(projectId, filter,metaInformationen);
-		
 		XSSFWorkbook wb = getSheetWorkbook();
-		
-		writeBudgetData(wb.getSheetAt(0),budgetList);
-		
-		List<BudgetSummary> overallSummary = createBudgetSummary(budgetList);
-		writeSummary(wb.getSheetAt(0),overallSummary);
-		
-//		List<BudgetSummary> monthlySummary = createMonthlyBudgetSummary(budgetList);
+
+		writeBudgetData(wb.getSheetAt(0), overallBudgetReportList);
+		writeBudgetData(wb.getSheetAt(1), monthlyBudgetReportList);
+
+		List<BudgetSummary> overallSummary = createBudgetSummary(overallBudgetReportList);
+		List<BudgetSummary> monthlySummary = createBudgetSummary(monthlyBudgetReportList);
+
+		writeSummary(wb.getSheetAt(0), overallSummary);
+		writeSummary(wb.getSheetAt(1), monthlySummary);
+
 		XSSFFormulaEvaluator.evaluateAllFormulaCells(wb);
 		return createOutputFile(wb);
-	}
-
-	private List<BudgetSummary> createMonthlyBudgetSummary(List<BudgetReportData> budgetList) {
-		return null;
 	}
 
 	private void writeSummary(XSSFSheet sheet, List<BudgetSummary> summary) {
@@ -100,11 +95,11 @@ public class ReportService {
 
 	private void setWarnings(List<BudgetReportData> budgetList, TemplateWriter<BudgetReportData> tw) {
 		budgetList.stream().forEach(budgetData -> {
-			if(budgetData.getProgress() >= 0.6 && budgetData.getProgress() < 0.8) {
+			if (budgetData.getProgress() >= 0.6 && budgetData.getProgress() < 0.8) {
 				tw.addFlag(budgetData, "progress", "warning1");
-			} else if(budgetData.getProgress() >= 0.8 && budgetData.getProgress() < 1 ) {
+			} else if (budgetData.getProgress() >= 0.8 && budgetData.getProgress() < 1) {
 				tw.addFlag(budgetData, "progress", "warning2");
-			} else if(budgetData.getProgress() >= 1 ) {
+			} else if (budgetData.getProgress() >= 1) {
 				tw.addFlag(budgetData, "progress", "warning3");
 			}
 		});
@@ -112,8 +107,9 @@ public class ReportService {
 
 	private List<BudgetSummary> createBudgetSummary(List<BudgetReportData> budgetList) {
 		Set<String> recipients = new HashSet<String>();
-		budgetList.stream().forEach(budget -> recipients.add((String) getAttribute("rechnungsempfaenger",budget.getAttributes())));
-		
+		budgetList.stream().forEach(
+				budget -> recipients.add((String) getAttribute("rechnungsempfaenger", budget.getAttributes())));
+
 		List<BudgetSummary> summary = recipients.stream().map(description -> new BudgetSummary(description))
 				.collect(Collectors.toList());
 		return summary;
@@ -130,13 +126,13 @@ public class ReportService {
 		}
 		return wb;
 	}
-	
+
 	private Object getAttribute(String string, List<? extends SheetTemplateSerializable> list) {
-		if(null == list) {
+		if (null == list) {
 			return null;
 		}
-		for(SheetTemplateSerializable listEntry : list) {
-			if(listEntry.getName().equals(string)) {
+		for (SheetTemplateSerializable listEntry : list) {
+			if (listEntry.getName().equals(string)) {
 				return listEntry.getValue();
 			}
 		}
@@ -156,59 +152,62 @@ public class ReportService {
 		}
 		return outputFile;
 	}
-	
-	public List<BudgetReportData> loadBudgetReportData(long projectId, BudgetTagFilter filter, BudgetReportMetaInformation metaInformation) {
+
+	public List<BudgetReportData> loadOverallBudgetReportData(long projectId, BudgetTagFilter filter,
+			BudgetReportMetaInformation metaInformation) {
 		List<BudgetDetailData> budgets = budgetService.loadBudgetsDetailData(projectId, filter);
-		List<BudgetReportData> data = budgets.stream().map(budget -> enrichReportData(budget,metaInformation))
+		List<BudgetReportData> data = budgets.stream()
+				.map(budget -> enrichReportData(budget, metaInformation.getOverallTimeRange()))
 				.collect(Collectors.toList());
 		return data;
 	}
-	
-	BudgetReportData enrichReportData(BudgetDetailData budget, BudgetReportMetaInformation metaInformation) {
-        ContractBaseData contract = null; 
-        List<? extends SheetTemplateSerializable> attributes = null;
-        if(budget.getContractId() != 0L) {
-        	contract = contractService.getContractById(budget.getContractId());
-        	attributes = contract.getContractAttributes();
-        } 
-        
-        Double spentMoneyInCents = (workRecordRepository.getSpentBudgetUntilDate(budget.getId(), metaInformation.getDateRange().getEndDate()));
-        double spentMoney = toMoneyNullsafe(spentMoneyInCents).getAmount().doubleValue();
-        double taxRate = 19;
-        double taxCoefficient = 1.0+taxRate/100;
-        double totalMoney = budget.getTotal().getAmount().doubleValue();
-        double progress = spentMoney / totalMoney;
-        double totalHours = workRecordRepository.getTotalHoursByBudgetIdAndUntilDate(budget.getId(), metaInformation.getDateRange().getEndDate());
-        
-        
+
+	public List<BudgetReportData> loadMonthlyBudgetReportData(long projectId, BudgetTagFilter filter,
+			BudgetReportMetaInformation metaInformation) {
+		List<BudgetDetailData> budgets = budgetService.loadBudgetsDetailData(projectId, filter);
+		List<BudgetReportData> data = budgets.stream()
+				.map(budget -> enrichReportData(budget, metaInformation.getMonthlyTimeRange()))
+				.collect(Collectors.toList());
+		return data;
+	}
+
+	BudgetReportData enrichReportData(BudgetDetailData budget, DateRange dateRange) {
+		ContractBaseData contract = null;
+		List<? extends SheetTemplateSerializable> attributes = null;
+		if (budget.getContractId() != 0L) {
+			contract = contractService.getContractById(budget.getContractId());
+			attributes = contract.getContractAttributes();
+		}
+
+		Double spentMoneyInPeriodInCents = workRecordRepository.getSpentBudgetInTimeRange(budget.getId(),
+				dateRange.getStartDate(), dateRange.getEndDate());
+		double spentMoneyInPeriod = toMoneyNullsafe(spentMoneyInPeriodInCents).getAmount().doubleValue();
+		Double spentMoneyInCents = workRecordRepository.getSpentBudgetUntilDate(budget.getId(), dateRange.getEndDate());
+		double spentMoney = toMoneyNullsafe(spentMoneyInCents).getAmount().doubleValue();
+		double taxRate = 19;
+		double taxCoefficient = 1.0 + taxRate / 100;
+		double totalMoney = budget.getTotal().getAmount().doubleValue();
+		double progress = spentMoney / totalMoney;
+		double totalHours = workRecordRepository.getTotalHoursInTimeRange(budget.getId(), dateRange.getStartDate(),
+				dateRange.getEndDate());
+
 		BudgetReportData data = new BudgetReportData();
 		data.setName(budget.getName());
-		data.setFrom(metaInformation.getDateRange().getStartDate());
-		data.setUntil(metaInformation.getDateRange().getEndDate());
+		data.setFrom(dateRange.getStartDate());
+		data.setUntil(dateRange.getEndDate());
 		data.setAttributes(attributes);
-		data.setSpent_net(spentMoney);
-		data.setSpent_gross(spentMoney*taxCoefficient);
-		data.setBudgetRemaining_net(totalMoney-data.getSpent_net());
-		data.setBudgetRemaining_gross((totalMoney-data.getSpent_net())*taxCoefficient); 
+		data.setSpent_net(spentMoneyInPeriod);
+		data.setSpent_gross(spentMoneyInPeriod * taxCoefficient);
+		data.setBudgetRemaining_net(totalMoney - spentMoney);
+		data.setBudgetRemaining_gross((totalMoney - spentMoney) * taxCoefficient);
 		data.setHoursAggregated(totalHours);
 		data.setProgress(progress);
 		return data;
 	}
 
-	private double getTotalHours(BudgetDetailData budget, BudgetReportMetaInformation metaInformation) {
-		WorkRecordFilter filter = new WorkRecordFilter(BudgeteerSession.get().getProjectId());
-        filter.getBudgetList().add(new BudgetBaseData(budget.getId(), ""));
-        filter.getPossiblePersons().addAll(personService.loadPeopleBaseDataByBudget(budget.getId()));
-        filter.setDateRange(metaInformation.getDateRange());
-        List<WorkRecord> records = recordService.getFilteredRecords(filter);
-		
-        double hours = records.stream().mapToDouble(record -> record.getHours()).sum();
-		return hours;
-	}
-
-	public Date getFirstOfTheMonth() {
+	public Date getLastDayOfLastMonth() {
 		LocalDate firstOfMonth = LocalDate.now().withDayOfMonth(1);
-		return Date.from(firstOfMonth.atStartOfDay(ZoneId.systemDefault()).toInstant());
+		return Date.from(firstOfMonth.minus(1, ChronoUnit.DAYS).atStartOfDay(ZoneId.systemDefault()).toInstant());
 	}
 
 	public Date getStartDateOfBudget(long budgetId) {
@@ -221,13 +220,18 @@ public class ReportService {
 		List<Long> budgetIds = budgets.stream().map(budget -> budget.getId()).collect(Collectors.toList());
 		return workRecordRepository.getFirstWorkRecordDateByBudgetIds(budgetIds);
 	}
-	
-    private Money toMoneyNullsafe(Double cents) {
-        if (cents == null) {
-            return MoneyUtil.createMoneyFromCents(0l);
-        } else {
-            return MoneyUtil.createMoneyFromCents(Math.round(cents));
-        }
-    }
-	
+
+	public Date getFirstDayOfLastMonth() {
+		LocalDate firstOfMonth = LocalDate.now().withDayOfMonth(1);
+		return Date.from(firstOfMonth.minus(1, ChronoUnit.MONTHS).atStartOfDay(ZoneId.systemDefault()).toInstant());
+	}
+
+	private Money toMoneyNullsafe(Double cents) {
+		if (cents == null) {
+			return MoneyUtil.createMoneyFromCents(0l);
+		} else {
+			return MoneyUtil.createMoneyFromCents(Math.round(cents));
+		}
+	}
+
 }

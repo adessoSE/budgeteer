@@ -34,8 +34,11 @@ public interface WorkRecordRepository extends CrudRepository<WorkRecordEntity, L
     @Query("select case when (sum(record.minutes) = 0) then 0 else (sum(record.dailyRate * record.minutes) / sum(record.minutes)) end from WorkRecordEntity record where record.budget.id=:budgetId")
     Double getAverageDailyRate(@Param("budgetId") long budgetId);
 
-    @Query("select sum(record.minutes * record.dailyRate) / 60 / 8 from WorkRecordEntity record where record.budget.id = :budgetId AND record.date < :untilDate")
+    @Query("select sum(record.minutes * record.dailyRate) / 60 / 8 from WorkRecordEntity record where record.budget.id = :budgetId and record.date <= :untilDate")
     Double getSpentBudgetUntilDate(@Param("budgetId") long budgetId, @Param("untilDate") Date untilDate);
+    
+    @Query("select sum(record.minutes * record.dailyRate) / 60 / 8 from WorkRecordEntity record where record.budget.id = :budgetId and :fromDate <= record.date and record.date <= :untilDate")
+    Double getSpentBudgetInTimeRange(@Param("budgetId") long budgetId, @Param("fromDate") Date fromDate, @Param("untilDate") Date untilDate);
     
     @Query("select max(record.date) from WorkRecordEntity record where record.budget.id=:budgetId")
     Date getLatestWorkRecordDate(@Param("budgetId") long budgetId);
@@ -46,12 +49,14 @@ public interface WorkRecordRepository extends CrudRepository<WorkRecordEntity, L
     @Query("select min(record.date) from WorkRecordEntity record where record.budget.id in (:budgetIds)")
     Date getFirstWorkRecordDateByBudgetIds(@Param("budgetIds") List<Long> budgetIds);
     
-    
     @Query("select cast(sum(record.minutes) AS double) / 60.0 from WorkRecordEntity record where record.budget.id=:budgetId")
     Double getTotalHoursByBudgetId(@Param("budgetId") long budgetId);
     
     @Query("select cast(sum(record.minutes) AS double) / 60.0 from WorkRecordEntity record where record.budget.id=:budgetId and record.date <= :untilDate")
     Double getTotalHoursByBudgetIdAndUntilDate(@Param("budgetId") long budgetId, @Param("untilDate") Date until);
+    
+    @Query("select case when (count(*) = 0) then 0.0 else (cast(sum(record.minutes) AS double) / 60.0) end from WorkRecordEntity record where record.budget.id=:budgetId and :fromDate <= record.date and record.date <= :untilDate")
+	Double getTotalHoursInTimeRange(@Param("budgetId") long budgetId, @Param("fromDate") Date fromDate, @Param("untilDate") Date untilDate);
     
     @Override
     @Modifying
@@ -206,6 +211,8 @@ public interface WorkRecordRepository extends CrudRepository<WorkRecordEntity, L
     @Override
     @Query("select wr from WorkRecordEntity wr where wr.budget.project.id = :projectId")
     List<WorkRecordEntity> findByProjectId(@Param("projectId") long projectId);
+
+    
     
     
 }
