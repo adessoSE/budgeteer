@@ -46,6 +46,13 @@ public interface WorkRecordRepository extends CrudRepository<WorkRecordEntity, L
     @Query("select min(record.date) from WorkRecordEntity record where record.budget.id in (:budgetIds)")
     Date getFirstWorkRecordDateByBudgetIds(@Param("budgetIds") List<Long> budgetIds);
     
+    
+    @Query("select cast(sum(record.minutes) AS double) / 60.0 from WorkRecordEntity record where record.budget.id=:budgetId")
+    Double getTotalHoursByBudgetId(@Param("budgetId") long budgetId);
+    
+    @Query("select cast(sum(record.minutes) AS double) / 60.0 from WorkRecordEntity record where record.budget.id=:budgetId and record.date <= :untilDate")
+    Double getTotalHoursByBudgetIdAndUntilDate(@Param("budgetId") long budgetId, @Param("untilDate") Date until);
+    
     @Override
     @Modifying
     @Query("delete from WorkRecordEntity r where r.importRecord.id = :importId")

@@ -36,6 +36,7 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFFormulaEvaluator;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.joda.money.Money;
 
 @Service
 public class ReportService {
@@ -171,14 +172,13 @@ public class ReportService {
         	attributes = contract.getContractAttributes();
         } 
         
-        Double spentMoneyRecord = (workRecordRepository.getSpentBudgetUntilDate(budget.getId(), metaInformation.getDateRange().getEndDate()));
-        long spentMoneyInCents = (spentMoneyRecord != null) ? spentMoneyRecord.longValue() : 0L; 
-        Double spentMoney =MoneyUtil.createMoneyFromCents(spentMoneyInCents).getAmount().doubleValue();
+        Double spentMoneyInCents = (workRecordRepository.getSpentBudgetUntilDate(budget.getId(), metaInformation.getDateRange().getEndDate()));
+        double spentMoney = toMoneyNullsafe(spentMoneyInCents).getAmount().doubleValue();
         double taxRate = 19;
         double taxCoefficient = 1.0+taxRate/100;
-        Double totalMoney = budget.getTotal().getAmount().doubleValue();
-        Double progress = spentMoney / totalMoney;
-        
+        double totalMoney = budget.getTotal().getAmount().doubleValue();
+        double progress = spentMoney / totalMoney;
+        double totalHours = workRecordRepository.getTotalHoursByBudgetIdAndUntilDate(budget.getId(), metaInformation.getDateRange().getEndDate());
         
         
 		BudgetReportData data = new BudgetReportData();
@@ -190,7 +190,7 @@ public class ReportService {
 		data.setSpent_gross(spentMoney*taxCoefficient);
 		data.setBudgetRemaining_net(totalMoney-data.getSpent_net());
 		data.setBudgetRemaining_gross((totalMoney-data.getSpent_net())*taxCoefficient); 
-		data.setHoursAggregated(getTotalHours(budget,metaInformation));
+		data.setHoursAggregated(totalHours);
 		data.setProgress(progress);
 		return data;
 	}
@@ -221,4 +221,13 @@ public class ReportService {
 		List<Long> budgetIds = budgets.stream().map(budget -> budget.getId()).collect(Collectors.toList());
 		return workRecordRepository.getFirstWorkRecordDateByBudgetIds(budgetIds);
 	}
+	
+    private Money toMoneyNullsafe(Double cents) {
+        if (cents == null) {
+            return MoneyUtil.createMoneyFromCents(0l);
+        } else {
+            return MoneyUtil.createMoneyFromCents(Math.round(cents));
+        }
+    }
+	
 }
