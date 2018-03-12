@@ -16,7 +16,9 @@ import org.apache.poi.ss.usermodel.Sheet;
 
 import com.google.common.collect.Multimap;
 
+import javax.xml.bind.annotation.XmlElementDecl;
 
+@Deprecated
 public class SheetTemplateWriter<T>  {
 	
 	private static final String FORMAT = "\\{%s\\}";
