@@ -10,6 +10,11 @@ buildscript {
         classpath group: 'org.springframework', name: 'springloaded', version: "${springloaded_version}"
     }
 }
+idea {
+      module {
+            sourceDirs += file('generated/')
+          }
+}
 
 apply plugin: 'war'
 apply plugin: 'org.springframework.boot'
@@ -43,6 +48,7 @@ dependencies {
     compile project(':budgeteer-aproda-importer')
     compile project(':budgeteer-ubw-importer')
     compile project(':budgeteer-resourceplan-importer')
+    compile project(':budgeteer-report-exporter')
 
     compile(
             [group: 'org.apache.wicket', name: 'wicket-spring', version: "${wicket_spring_version}"],
@@ -144,7 +150,7 @@ bootRun {
             '-Dwicket.configurationType=DEVELOPMENT',
             //'-Dspring.datasource.url=jdbc:hsqldb:file:../../database/budgeteer;shutdown=true;hsqldb.write_delay=false;',
             '-Dspring.datasource.url=jdbc:hsqldb:mem:budgeteer',
-            //'-Dspring.datasource.url=jdbc:hsqldb:hsql://localhost/',
+            //'-Dspring.datasource.url=jdbc:hsqldb:hsql://localhost/budgeteer',
             '-Dspring.datasource.driverClassName=org.hsqldb.jdbcDriver',
             '-Dspring.datasource.username=sa',
             '-Dspring.datasource.password=',
