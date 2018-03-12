@@ -11,7 +11,7 @@ import java.util.Date;
 import java.util.HashMap;
 
 public class DateInputField extends TextField<java.util.Date> {
-    protected static DateFormat format = new SimpleDateFormat("MM/dd/yyyy");
+    protected static DateFormat format = new SimpleDateFormat("dd.MM.yyyy");
 
     public static enum DROP_LOCATION {UP, DOWN}
 
@@ -25,7 +25,7 @@ public class DateInputField extends TextField<java.util.Date> {
     public DateInputField(String id, IModel<Date> model,  DROP_LOCATION drop_location) {
         super(id, model);
         HashMap<String, String> options = new HashMap<String, String>();
-        options.put("format","'MM/DD/YYYY'");
+        options.put("format","'DD.MM.YYYY'");
         if(model.getObject() != null){
             options.put("startDate", "'"+format.format(model.getObject())+"'");
             options.put("endDate", "'"+format.format(model.getObject())+"'");

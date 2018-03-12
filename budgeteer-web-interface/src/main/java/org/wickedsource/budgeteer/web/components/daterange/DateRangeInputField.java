@@ -30,8 +30,8 @@ public class DateRangeInputField extends TextField<DateRange> {
         super(id, model);
         HashMap<String, String> options = new HashMap<String, String>();
         if(defaultRange != null && (defaultRange.getStartDate() != null || defaultRange.getEndDate() != null)){
-            DateFormat format = new SimpleDateFormat("MM/dd/yyyy");
-            options.put("format","'MM/DD/YYYY'");
+            DateFormat format = new SimpleDateFormat("dd.MM.yyyy");
+            options.put("format","'dd.MM.YYYY'");
             DateRange modelObject = model.getObject();
             if(defaultRange.getStartDate() != null){
                 options.put("startDate", "'"+format.format(modelObject.getStartDate() == null ? defaultRange.getStartDate() : modelObject.getStartDate())+"'");
