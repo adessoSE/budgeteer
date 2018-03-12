@@ -10,11 +10,6 @@ buildscript {
         classpath group: 'org.springframework', name: 'springloaded', version: "${springloaded_version}"
     }
 }
-idea {
-      module {
-            sourceDirs += file('generated/')
-          }
-}
 
 apply plugin: 'war'
 apply plugin: 'org.springframework.boot'
@@ -39,9 +34,12 @@ sourceSets {
 }
 
 processResources {
-    filter ReplaceTokens, tokens: [
-            "application.version": project.property("version")
-    ]
+    from('src/main/java') {
+    	exclude '**/*.xlsx'
+	    filter ReplaceTokens, tokens: [
+	            "application.version": project.property("version")
+	    ]
+    }
 }
 
 dependencies {

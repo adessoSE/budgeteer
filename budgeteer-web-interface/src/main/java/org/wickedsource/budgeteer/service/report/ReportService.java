@@ -48,12 +48,11 @@ public class ReportService {
 	private WorkRecordRepository workRecordRepository;
 
 	/**
-	 * Creates an excel report file
-	 * 
-	 * @param budgetList
-	 *            the list of budgets, which are presented in the report
-	 * @param reportModel
-	 * @return Excel file
+	 * Creates an excel spreadsheet containing the budgets informations
+	 * @param projectId
+	 * @param filter TagFilter of the selected Budgets
+	 * @param metaInformationen Necessary informations about the report
+	 * @return Excel spreadsheet file
 	 */
 	public File createReportFile(long projectId, BudgetTagFilter filter,
 			BudgetReportMetaInformation metaInformationen) {
