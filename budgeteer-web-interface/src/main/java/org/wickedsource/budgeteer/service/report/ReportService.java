@@ -173,8 +173,10 @@ public class ReportService {
 	BudgetReportData enrichReportData(BudgetDetailData budget, DateRange dateRange) {
 		ContractBaseData contract = null;
 		List<? extends SheetTemplateSerializable> attributes = null;
+		double taxRate = 19.0;
 		if (budget.getContractId() != 0L) {
 			contract = contractService.getContractById(budget.getContractId());
+			taxRate = contract.getTaxRate();
 			attributes = contract.getContractAttributes();
 		}
 
@@ -183,7 +185,6 @@ public class ReportService {
 		double spentMoneyInPeriod = toMoneyNullsafe(spentMoneyInPeriodInCents).getAmount().doubleValue();
 		Double spentMoneyInCents = workRecordRepository.getSpentBudgetUntilDate(budget.getId(), dateRange.getEndDate());
 		double spentMoney = toMoneyNullsafe(spentMoneyInCents).getAmount().doubleValue();
-		double taxRate = 19;
 		double taxCoefficient = 1.0 + taxRate / 100;
 		double totalMoney = budget.getTotal().getAmount().doubleValue();
 		double progress = spentMoney / totalMoney;

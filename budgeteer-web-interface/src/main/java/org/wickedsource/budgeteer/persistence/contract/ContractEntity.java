@@ -7,6 +7,8 @@ import org.wickedsource.budgeteer.persistence.invoice.InvoiceEntity;
 import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.LinkedList;
@@ -41,6 +43,9 @@ public class ContractEntity implements Serializable {
 
     @Column(name="BUDGET")
     private Money budget;
+    
+    @Column(name="TAXRATE")
+    private Double taxRate;
 
     @Column(name="INTERNAL_NUMBER")
     private String internalNumber;

@@ -81,6 +81,11 @@ public class ContractService {
         contractEntity.setLink(contractBaseData.getFileModel().getLink());
         contractEntity.setFileName(contractBaseData.getFileModel().getFileName());
         contractEntity.setFile(contractBaseData.getFileModel().getFile());
+        if(contractBaseData.getTaxRate() < 0) {
+        	throw new IllegalArgumentException("Taxrate must be positive.");
+        } else {
+        	contractEntity.setTaxRate(contractBaseData.getTaxRate());
+        }
 
         //update additional information of the current contract
         for(DynamicAttributeField fields : contractBaseData.getContractAttributes()){

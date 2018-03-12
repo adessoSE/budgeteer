@@ -35,6 +35,7 @@ public class ContractDataMapper extends AbstractMapper<ContractEntity, ContractB
         result.setType(entity.getType());
         result.setStartDate(entity.getStartDate());
         result.setFileModel(new FileUploadModel(entity.getFileName(), entity.getFile(), entity.getLink()));
+        result.setTaxRate(entity.getTaxRate() == null ? 0.0 : entity.getTaxRate().doubleValue());
 
         Map<String, DynamicAttributeField> contractAttributes = new HashMap<String, DynamicAttributeField>();
         for(ProjectContractField projectContractField:  entity.getProject().getContractFields()){

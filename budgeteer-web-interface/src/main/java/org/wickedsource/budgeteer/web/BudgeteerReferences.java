@@ -37,7 +37,6 @@ public class BudgeteerReferences {
         return new UrlResourceReference(Url.parse("css/bootstrap-multiselect/bootstrap.multiselect.css")).setContextRelative(true);
     }
 
-
     public static ResourceReference getJQueryDataTableJSReference() {
         return new UrlResourceReference(Url.parse("js/plugins/datatables/jquery.dataTables.js")).setContextRelative(true);
     }
@@ -55,6 +54,10 @@ public class BudgeteerReferences {
 
     public static ResourceReference getMomentJsReference() {
         return new UrlResourceReference(Url.parse("js/moment.js/moment.2.8.4.min.js")).setContextRelative(true);
+    }
+
+    public static ResourceReference getChartjsReference() {
+        return new UrlResourceReference(Url.parse("js/chart.js/chartjs.2.7.2.min.js")).setContextRelative(true);
     }
 
 }
