@@ -11,7 +11,7 @@ import org.apache.wicket.util.resource.FileResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.wickedsource.budgeteer.service.DateRange;
 import org.wickedsource.budgeteer.service.report.BudgetReportMetaInformation;
-import org.wickedsource.budgeteer.service.report.ReportService;
+import org.wickedsource.budgeteer.service.report.BudgetReportService;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
 import org.wickedsource.budgeteer.web.components.daterange.DateRangeInputField;
@@ -27,7 +27,7 @@ import java.util.Date;
 public class BudgetReportForm extends Form<BudgetReportMetaInformation> {
 
 	@SpringBean
-	private ReportService service;
+	private BudgetReportService service;
 	
 	public BudgetReportForm(String id) {
 		super(id, model(from(new BudgetReportMetaInformation())));

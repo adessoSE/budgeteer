@@ -36,7 +36,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.joda.money.Money;
 
 @Service
-public class ReportService {
+public class BudgetReportService {
 
 	@Autowired
 	private BudgetService budgetService;
