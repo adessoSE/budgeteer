@@ -10,8 +10,8 @@ import org.apache.wicket.util.file.Files;
 import org.apache.wicket.util.resource.FileResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.wickedsource.budgeteer.service.DateRange;
-import org.wickedsource.budgeteer.service.report.BudgetReportMetaInformation;
-import org.wickedsource.budgeteer.service.report.BudgetReportService;
+import org.wickedsource.budgeteer.service.budget.report.BudgetReportService;
+import org.wickedsource.budgeteer.service.budget.report.ReportMetaInformation;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
 import org.wickedsource.budgeteer.web.components.daterange.DateRangeInputField;
@@ -24,13 +24,13 @@ import static org.wicketstuff.lazymodel.LazyModel.model;
 import java.io.File;
 import java.util.Date;
 
-public class BudgetReportForm extends Form<BudgetReportMetaInformation> {
+public class BudgetReportForm extends Form<ReportMetaInformation> {
 
 	@SpringBean
 	private BudgetReportService service;
 	
 	public BudgetReportForm(String id) {
-		super(id, model(from(new BudgetReportMetaInformation())));
+		super(id, model(from(new ReportMetaInformation())));
 		Date startDate = service.getStartDateOfBudgets();
 		Date endDate = service.getLastDayOfLastMonth();
 		Date monthlyStartDate = service.getFirstDayOfLastMonth();

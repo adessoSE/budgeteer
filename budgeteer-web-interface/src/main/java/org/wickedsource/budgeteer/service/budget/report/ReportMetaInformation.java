@@ -1,4 +1,4 @@
-package org.wickedsource.budgeteer.service.report;
+package org.wickedsource.budgeteer.service.budget.report;
 
 import java.io.Serializable;
 
@@ -7,7 +7,7 @@ import org.wickedsource.budgeteer.service.DateRange;
 import lombok.Data;
 
 @Data
-public class BudgetReportMetaInformation implements Serializable {
+public class ReportMetaInformation implements Serializable {
 	/**
 	 * 
 	 */

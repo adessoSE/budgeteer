@@ -1,4 +1,4 @@
-package org.wickedsource.budgeteer.service.report;
+package org.wickedsource.budgeteer.service.budget.report;
 
 import java.util.Date;
 import java.util.List;

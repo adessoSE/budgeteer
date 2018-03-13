@@ -5,8 +5,8 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.wickedsource.budgeteer.service.report.BudgetReportMetaInformation;
-import org.wickedsource.budgeteer.service.report.BudgetReportService;
+import org.wickedsource.budgeteer.service.budget.report.BudgetReportService;
+import org.wickedsource.budgeteer.service.budget.report.ReportMetaInformation;
 import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.pages.base.dialogpage.DialogPageWithBacklink;
 import org.wickedsource.budgeteer.web.pages.budgets.overview.report.form.BudgetReportForm;
@@ -22,11 +22,11 @@ public class BudgetReportPage extends DialogPageWithBacklink {
      */
     public BudgetReportPage(Class<? extends WebPage> backlinkPage, PageParameters backlinkParameters) {
         super(backlinkPage, backlinkParameters);
-        Form<BudgetReportMetaInformation> form = new BudgetReportForm("form");
+        Form<ReportMetaInformation> form = new BudgetReportForm("form");
         addComponents(form);
     }
 
-    private void addComponents(Form<BudgetReportMetaInformation> form) {
+    private void addComponents(Form<ReportMetaInformation> form) {
         add(createBacklink("cancelButton1"));
         form.add(createBacklink("cancelButton2"));
         add(form);

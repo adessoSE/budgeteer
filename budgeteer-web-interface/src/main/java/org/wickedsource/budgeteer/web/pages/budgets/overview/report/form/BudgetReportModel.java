@@ -3,17 +3,17 @@ package org.wickedsource.budgeteer.web.pages.budgets.overview.report.form;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.IObjectClassAwareModel;
 import org.apache.wicket.model.Model;
-import org.wickedsource.budgeteer.service.report.BudgetReportMetaInformation;
+import org.wickedsource.budgeteer.service.budget.report.ReportMetaInformation;
 
-public class BudgetReportModel implements IModel<BudgetReportMetaInformation>, IObjectClassAwareModel<BudgetReportMetaInformation> {
+public class BudgetReportModel implements IModel<ReportMetaInformation>, IObjectClassAwareModel<ReportMetaInformation> {
 
-	private IModel<BudgetReportMetaInformation> wrappedModel;
+	private IModel<ReportMetaInformation> wrappedModel;
 
-	public BudgetReportModel(BudgetReportMetaInformation metaInfo) {
+	public BudgetReportModel(ReportMetaInformation metaInfo) {
 		this.wrappedModel = Model.of(metaInfo);
 	}
 	
-	public BudgetReportModel(IModel<BudgetReportMetaInformation> wrappedModel) {
+	public BudgetReportModel(IModel<ReportMetaInformation> wrappedModel) {
 		this.wrappedModel = wrappedModel;
 	}
 	
@@ -23,17 +23,17 @@ public class BudgetReportModel implements IModel<BudgetReportMetaInformation>, I
 	}
 
 	@Override
-	public Class<BudgetReportMetaInformation> getObjectClass() {
-		return BudgetReportMetaInformation.class;
+	public Class<ReportMetaInformation> getObjectClass() {
+		return ReportMetaInformation.class;
 	}
 
 	@Override
-	public BudgetReportMetaInformation getObject() {
+	public ReportMetaInformation getObject() {
 		return wrappedModel.getObject();
 	}
 
 	@Override
-	public void setObject(BudgetReportMetaInformation object) {
+	public void setObject(ReportMetaInformation object) {
 		wrappedModel.setObject(object);
 	}
 

@@ -1,4 +1,4 @@
-package org.wickedsource.budgeteer.service.report;
+package org.wickedsource.budgeteer.service.budget.report;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -55,7 +55,7 @@ public class BudgetReportService {
 	 * @return Excel spreadsheet file
 	 */
 	public File createReportFile(long projectId, BudgetTagFilter filter,
-			BudgetReportMetaInformation metaInformationen) {
+			ReportMetaInformation metaInformationen) {
 		List<BudgetReportData> overallBudgetReportList = loadOverallBudgetReportData(projectId, filter,
 				metaInformationen);
 		List<BudgetReportData> monthlyBudgetReportList = loadMonthlyBudgetReportData(projectId, filter,
@@ -153,7 +153,7 @@ public class BudgetReportService {
 	}
 
 	public List<BudgetReportData> loadOverallBudgetReportData(long projectId, BudgetTagFilter filter,
-			BudgetReportMetaInformation metaInformation) {
+			ReportMetaInformation metaInformation) {
 		List<BudgetDetailData> budgets = budgetService.loadBudgetsDetailData(projectId, filter);
 		List<BudgetReportData> data = budgets.stream()
 				.map(budget -> enrichReportData(budget, metaInformation.getOverallTimeRange()))
@@ -162,7 +162,7 @@ public class BudgetReportService {
 	}
 
 	public List<BudgetReportData> loadMonthlyBudgetReportData(long projectId, BudgetTagFilter filter,
-			BudgetReportMetaInformation metaInformation) {
+			ReportMetaInformation metaInformation) {
 		List<BudgetDetailData> budgets = budgetService.loadBudgetsDetailData(projectId, filter);
 		List<BudgetReportData> data = budgets.stream()
 				.map(budget -> enrichReportData(budget, metaInformation.getMonthlyTimeRange()))
@@ -173,7 +173,7 @@ public class BudgetReportService {
 	BudgetReportData enrichReportData(BudgetDetailData budget, DateRange dateRange) {
 		ContractBaseData contract = null;
 		List<? extends SheetTemplateSerializable> attributes = null;
-		double taxRate = 19.0;
+		double taxRate = 0.0;
 		if (budget.getContractId() != 0L) {
 			contract = contractService.getContractById(budget.getContractId());
 			taxRate = contract.getTaxRate();

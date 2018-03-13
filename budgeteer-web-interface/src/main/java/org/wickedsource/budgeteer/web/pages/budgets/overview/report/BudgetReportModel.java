@@ -8,9 +8,9 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
-import org.wickedsource.budgeteer.service.report.BudgetReportData;
-import org.wickedsource.budgeteer.service.report.BudgetReportMetaInformation;
-import org.wickedsource.budgeteer.service.report.BudgetReportService;
+import org.wickedsource.budgeteer.service.budget.report.BudgetReportData;
+import org.wickedsource.budgeteer.service.budget.report.BudgetReportService;
+import org.wickedsource.budgeteer.service.budget.report.ReportMetaInformation;
 
 public class BudgetReportModel extends LoadableDetachableModel<File> {
 
@@ -26,9 +26,9 @@ public class BudgetReportModel extends LoadableDetachableModel<File> {
 
     private IModel<BudgetTagFilter> filterModel;
     
-    private IModel<BudgetReportMetaInformation> reportModel;
+    private IModel<ReportMetaInformation> reportModel;
 
-    public BudgetReportModel(long projectId, IModel<BudgetTagFilter> filterModel, IModel<BudgetReportMetaInformation> reportModel) {
+    public BudgetReportModel(long projectId, IModel<BudgetTagFilter> filterModel, IModel<ReportMetaInformation> reportModel) {
         Injector.get().inject(this);
         this.filterModel = filterModel;
         this.projectId = projectId;
