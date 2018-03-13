@@ -54,7 +54,12 @@ public interface ContractRepository extends CrudRepository<ContractEntity, Long>
             ") from ContractEntity c where c.id = :contractId")
     public ContractStatisticBean getContractStatisticByMonthAndYear(@Param("contractId") Long contractId, @Param("month") Integer month, @Param("year") Integer year);
 
+    @Query("select coalesce(sum(wr.minutes * wr.dailyRate/ 60 / 8),0) from WorkRecordEntity wr where wr.budget.contract.id = :contractId")
+    public Double getSpentBudgetByContractId(@Param("contractId") long contractId);
 
+    @Query("select (c.budget - coalesce((select sum(wr.minutes * wr.dailyRate)/ 60 / 8 from WorkRecordEntity wr where wr.budget.contract.id = :contractId) ,0)) from ContractEntity c where c.id = :contractId")
+    public Double getBudgetLeftByContractId(@Param("contractId") long contractId);
+    
     @Modifying
     @Query("delete from ContractEntity c where c.project.id = :projectId")
     void deleteByProjectId(@Param(value = "projectId") long projectId);

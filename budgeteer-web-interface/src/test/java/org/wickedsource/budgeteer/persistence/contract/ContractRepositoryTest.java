@@ -58,4 +58,27 @@ public class ContractRepositoryTest extends IntegrationTestTemplate {
         Assert.assertEquals(0, records.getSpentBudget());
         Assert.assertEquals(0, records.getInvoicedBudget());
     }
+
+    @Test
+    @DatabaseSetup("contract.xml")
+    @DatabaseTearDown(value = "contract.xml", type = DatabaseOperation.DELETE_ALL)
+    public void testGetBudgetLeftByContractId() {
+        Double BudgetLeft1 = repository.getBudgetLeftByContractId(1L);
+        Double BudgetLeft2 = repository.getBudgetLeftByContractId(2L);
+        Assert.assertEquals(9400, BudgetLeft1.doubleValue(),10e-8);
+        Assert.assertEquals(10000, BudgetLeft2.doubleValue(),10e-8);
+    }
+
+    @Test
+    @DatabaseSetup("contract.xml")
+    @DatabaseTearDown(value = "contract.xml", type = DatabaseOperation.DELETE_ALL)
+    public void testGetBudgetSpentByContractId() {
+        Double BudgetSpent1 = repository.getSpentBudgetByContractId(1L);
+        Double BudgetSpent2 = repository.getSpentBudgetByContractId(2L);
+        Assert.assertEquals(600, BudgetSpent1.doubleValue(),10e-8);
+        Assert.assertEquals(0, BudgetSpent2.doubleValue(),10e-8);
+    }
+    
+    
+    
 }

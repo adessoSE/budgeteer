@@ -55,7 +55,9 @@ public class ContractOverviewTable extends Panel{
                         item.add(new Label("contractRowText", item.getModelObject().getValue()));
                     }
                 });
-                item.add(new Label("budget", Model.of(MoneyUtil.toDouble(item.getModelObject().getBudget(), BudgeteerSession.get().getSelectedBudgetUnit()))));
+                item.add(new Label("budgetTotal", Model.of(MoneyUtil.toDouble(item.getModelObject().getBudget(), BudgeteerSession.get().getSelectedBudgetUnit()))));
+                item.add(new Label("budgetSpent", Model.of(MoneyUtil.toDouble(item.getModelObject().getBudgetSpent(), BudgeteerSession.get().getSelectedBudgetUnit()))));
+                item.add(new Label("budgetLeft", Model.of(MoneyUtil.toDouble(item.getModelObject().getBudgetLeft(), BudgeteerSession.get().getSelectedBudgetUnit()))));
                 item.add(new BookmarkablePageLink("editLink", EditContractPage.class, EditContractPage.createParameters(contractId)));
             }
         });
