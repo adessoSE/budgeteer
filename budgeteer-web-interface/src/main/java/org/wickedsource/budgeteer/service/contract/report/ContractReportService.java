@@ -25,7 +25,6 @@ import org.wickedsource.budgeteer.SheetTemplate.SheetTemplateSerializable;
 import org.wickedsource.budgeteer.SheetTemplate.TemplateWriter;
 import org.wickedsource.budgeteer.persistence.contract.ContractEntity;
 import org.wickedsource.budgeteer.persistence.contract.ContractRepository;
-import org.wickedsource.budgeteer.service.budget.report.BudgetSummary;
 
 @Transactional
 @Service
@@ -43,7 +42,7 @@ public class ContractReportService {
 		List<ContractReportData> contractReportList = loadContractReportData(projectId);
 		writeContractData(wb.getSheetAt(0),contractReportList);
 
-		List<ContractReportSummary> summary = createBudgetSummary(contractReportList);
+		List<ContractReportSummary> summary = createSummary(contractReportList);
 		writeSummary(wb.getSheetAt(0), summary);
 
 		XSSFFormulaEvaluator.evaluateAllFormulaCells(wb);
@@ -51,14 +50,14 @@ public class ContractReportService {
 	}
 	
 	private void writeSummary(XSSFSheet sheet, List<ContractReportSummary> summary) {
-		SheetTemplate template = new SheetTemplate(BudgetSummary.class, sheet);
+		SheetTemplate template = new SheetTemplate(ContractReportData.class, sheet);
 		TemplateWriter<ContractReportSummary> tw = new TemplateWriter<ContractReportSummary>(template);
 		tw.setEntries(summary);
 		tw.write();
 		tw.removeFlagSheet();
 	}
 
-	private List<ContractReportSummary> createBudgetSummary(List<ContractReportData> contractReportList) {
+	private List<ContractReportSummary> createSummary(List<ContractReportData> contractReportList) {
 		Set<String> recipients = new HashSet<String>();
 		contractReportList.stream().forEach(
 				contract -> recipients.add((String) getAttribute("rechnungsempfaenger", contract.getAttributes())));
@@ -94,23 +93,23 @@ public class ContractReportService {
 		return outputFile;
 	}
 
-	private void writeContractData(XSSFSheet sheet, List<ContractReportData> monthlyBudgetReportList) {
+	private void writeContractData(XSSFSheet sheet, List<ContractReportData> reportList) {
 		SheetTemplate template = new SheetTemplate(ContractReportData.class, sheet);
 		TemplateWriter<ContractReportData> tw = new TemplateWriter<ContractReportData>(template);
-		tw.setEntries(monthlyBudgetReportList);
-		setWarnings(monthlyBudgetReportList, tw);
+		tw.setEntries(reportList);
+		setWarnings(reportList, tw);
 		tw.write();
 		
 	}
 
-	private void setWarnings(List<ContractReportData> budgetList, TemplateWriter<ContractReportData> tw) {
-		budgetList.stream().forEach(budgetData -> {
-			if (budgetData.getProgress() >= 0.6 && budgetData.getProgress() < 0.8) {
-				tw.addFlag(budgetData, "progress", "warning1");
-			} else if (budgetData.getProgress() >= 0.8 && budgetData.getProgress() < 1) {
-				tw.addFlag(budgetData, "progress", "warning2");
-			} else if (budgetData.getProgress() >= 1) {
-				tw.addFlag(budgetData, "progress", "warning3");
+	private void setWarnings(List<ContractReportData> list, TemplateWriter<ContractReportData> tw) {
+		list.stream().forEach(contractData -> {
+			if (contractData.getProgress() >= 0.6 && contractData.getProgress() < 0.8) {
+				tw.addFlag(contractData, "progress", "warning1");
+			} else if (contractData.getProgress() >= 0.8 && contractData.getProgress() < 1) {
+				tw.addFlag(contractData, "progress", "warning2");
+			} else if (contractData.getProgress() >= 1) {
+				tw.addFlag(contractData, "progress", "warning3");
 			}
 		});
 	}
