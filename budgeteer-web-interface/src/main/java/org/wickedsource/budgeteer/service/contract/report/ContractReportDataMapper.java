@@ -16,21 +16,19 @@ import org.wickedsource.budgeteer.persistence.contract.ContractEntity;
 import org.wickedsource.budgeteer.persistence.contract.ContractFieldEntity;
 import org.wickedsource.budgeteer.persistence.contract.ContractRepository;
 import org.wickedsource.budgeteer.persistence.contract.ContractStatisticBean;
-import org.wickedsource.budgeteer.service.AbstractMapper;
 import org.wickedsource.budgeteer.service.DateRange;
 import org.wickedsource.budgeteer.service.contract.DynamicAttributeField;
 
 @Component
-public class ContractReportDataMapper extends AbstractMapper<ContractEntity,ContractReportData>{
+public class ContractReportDataMapper {
 
 	@Autowired
 	private ContractRepository contractRepository;
 	
-	@Override
-	public ContractReportData map(ContractEntity contract) {
-		LocalDate now = LocalDate.now();
-		ContractStatisticBean statistics = contractRepository.getContractStatisticByMonthAndYear(contract.getId(), now.getMonthValue(), now.getYear());
-		DateRange dateRange = new DateRange(contract.getStartDate(), Date.from(now.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+	public ContractReportData map(ContractEntity contract, Date endDate) {
+		LocalDate end = endDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+		ContractStatisticBean statistics = contractRepository.getContractStatisticByMonthAndYear(contract.getId(), end.getMonthValue(), end.getYear());
+		DateRange dateRange = new DateRange(contract.getStartDate(), endDate);
 		
 		ContractReportData report = new ContractReportData();
 		report.setContract(contract.getName());
@@ -45,7 +43,7 @@ public class ContractReportDataMapper extends AbstractMapper<ContractEntity,Cont
 		report.setTaxRate(contract.getTaxRate()/100);
 		report.setFrom(dateRange.getStartDate());
 		report.setUntil(dateRange.getEndDate());
-		report.setBudgetSpent_net(MoneyUtil.createMoneyFromCents(contractRepository.getSpentBudgetByContractId(contract.getId()).longValue()).getAmount().doubleValue());
+		report.setBudgetSpent_net(MoneyUtil.createMoneyFromCents(contractRepository.getSpentBudgetByContractIdUntilDate(contract.getId(),end.getMonthValue(),end.getYear()).longValue()).getAmount().doubleValue());
 		report.setBudgetLeft_net(contract.getBudget().getAmount().doubleValue() - report.getBudgetSpent_net());
 		report.setBudgetTotal_net(contract.getBudget().getAmount().doubleValue());
 
@@ -58,10 +56,10 @@ public class ContractReportDataMapper extends AbstractMapper<ContractEntity,Cont
 		return report;
 	}
 
-    public List<ContractReportData> map(List<ContractEntity> entityList){
+    public List<ContractReportData> map(List<ContractEntity> entityList, Date endDate){
         List<ContractReportData> result = new LinkedList<ContractReportData>();
         for(ContractEntity entity : entityList){
-            result.add(map(entity));
+            result.add(map(entity,endDate));
         }
         return result;
     }

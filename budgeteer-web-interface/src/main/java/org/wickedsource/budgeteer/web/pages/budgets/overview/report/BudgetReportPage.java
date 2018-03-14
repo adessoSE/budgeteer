@@ -1,11 +1,8 @@
 package org.wickedsource.budgeteer.web.pages.budgets.overview.report;
 
-
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.wickedsource.budgeteer.service.budget.report.BudgetReportService;
 import org.wickedsource.budgeteer.service.budget.report.ReportMetaInformation;
 import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.pages.base.dialogpage.DialogPageWithBacklink;
@@ -14,12 +11,11 @@ import org.wickedsource.budgeteer.web.pages.budgets.overview.report.form.BudgetR
 @Mount({"budgets/report"})
 public class BudgetReportPage extends DialogPageWithBacklink {
 
-    @SpringBean
-    private BudgetReportService service;
-
     /**
-     * Use this constructor to create a page with a form to create a new budget.
-     */
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
     public BudgetReportPage(Class<? extends WebPage> backlinkPage, PageParameters backlinkParameters) {
         super(backlinkPage, backlinkParameters);
         Form<ReportMetaInformation> form = new BudgetReportForm("form");

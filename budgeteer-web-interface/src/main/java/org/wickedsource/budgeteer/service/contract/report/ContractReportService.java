@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -36,10 +37,10 @@ public class ContractReportService {
 	@Autowired
 	private ContractReportDataMapper mapper;
 	
-	public File createReportFile(long projectId) {
+	public File createReportFile(long projectId,Date endDate) {
 		XSSFWorkbook wb = getSheetWorkbook();
 
-		List<ContractReportData> contractReportList = loadContractReportData(projectId);
+		List<ContractReportData> contractReportList = loadContractReportData(projectId, endDate);
 		writeContractData(wb.getSheetAt(0),contractReportList);
 
 		List<ContractReportSummary> summary = createSummary(contractReportList);
@@ -50,7 +51,7 @@ public class ContractReportService {
 	}
 	
 	private void writeSummary(XSSFSheet sheet, List<ContractReportSummary> summary) {
-		SheetTemplate template = new SheetTemplate(ContractReportData.class, sheet);
+		SheetTemplate template = new SheetTemplate(ContractReportSummary.class, sheet);
 		TemplateWriter<ContractReportSummary> tw = new TemplateWriter<ContractReportSummary>(template);
 		tw.setEntries(summary);
 		tw.write();
@@ -114,10 +115,10 @@ public class ContractReportService {
 		});
 	}
 
-	private List<ContractReportData> loadContractReportData(long projectId) {
+	private List<ContractReportData> loadContractReportData(long projectId, Date endDate) {
 		List<ContractEntity> contracts = new LinkedList<ContractEntity>();
 		contracts.addAll(contractRepository.findByProjectId(projectId));
-		return mapper.map(contracts);
+		return mapper.map(contracts,endDate);
 	}
 
 	private XSSFWorkbook getSheetWorkbook() {

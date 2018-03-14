@@ -77,4 +77,8 @@ public interface ContractRepository extends CrudRepository<ContractEntity, Long>
 
     @Query("Select e from ContractFieldEntity e where e.contract.id = :contractID")
     List<ContractFieldEntity> findContractFieldsByContractId(@Param("contractID") Long contractID);
+
+    // TODO: test
+    @Query("select coalesce(sum(wr.minutes * wr.dailyRate/ 60 / 8),0) from WorkRecordEntity wr where wr.budget.contract.id = :contractId AND (wr.year < :year OR (wr.year = :year AND wr.month <= :month))")
+	Double getSpentBudgetByContractIdUntilDate(@Param("contractId") Long contractId, @Param("month") Integer month, @Param("year") Integer year);
 }

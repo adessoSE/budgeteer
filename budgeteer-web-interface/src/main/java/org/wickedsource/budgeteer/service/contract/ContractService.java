@@ -14,6 +14,10 @@ import org.wickedsource.budgeteer.persistence.project.ProjectRepository;
 import org.wickedsource.budgeteer.web.pages.contract.overview.table.ContractOverviewTableModel;
 
 import javax.transaction.Transactional;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -130,5 +134,40 @@ public class ContractService {
         invoiceRepository.deleteInvoicesByContractId(contractId);
 
         contractRepository.delete(contractId);
+    }
+    
+    public List<Date> getMonthList(long contractId) {
+    	List<Date> months = new ArrayList<Date>();
+    	ContractEntity contract = contractRepository.findById(contractId);
+    	Calendar cal = Calendar.getInstance();
+    	cal.setTime(contract.getStartDate());
+    	Calendar currentDate = Calendar.getInstance();
+    	currentDate.setTime(new Date());
+    	while(cal.before(currentDate)) {
+    		months.add(cal.getTime());
+    		cal.add(Calendar.MONTH, 1);
+    	}
+    	return months;
+    }
+    
+    public List<Date> getMonthListForProjectId(long projectId) {
+    	List<ContractEntity> contracts = contractRepository.findByProjectId(projectId);
+    	Date startDate = new Date();
+    	for(ContractEntity contract : contracts) {
+    		if(contract.getStartDate().before(startDate)) {
+    			startDate = contract.getStartDate();
+    		}
+    	}
+    	
+    	List<Date> months = new ArrayList<Date>();
+    	Calendar cal = Calendar.getInstance();
+    	cal.setTime(startDate);
+    	Calendar currentDate = Calendar.getInstance();
+    	currentDate.setTime(new Date());
+    	while(cal.before(currentDate)) {
+    		months.add(cal.getTime());
+    		cal.add(Calendar.MONTH, 1);
+    	}
+    	return months;
     }
 }
