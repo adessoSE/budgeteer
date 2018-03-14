@@ -1,25 +1,9 @@
 package org.wickedsource.budgeteer.web.pages.contract.overview.report.form;
 
-import static org.wicketstuff.lazymodel.LazyModel.from;
-import static org.wicketstuff.lazymodel.LazyModel.model;
-
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.apache.wicket.core.request.handler.BookmarkablePageRequestHandler;
-import org.apache.wicket.core.request.handler.PageProvider;
-import org.apache.wicket.core.request.handler.RenderPageRequestHandler;
-import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.LoadableDetachableModel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.IRequestCycle;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.request.resource.ContentDisposition;
@@ -32,8 +16,16 @@ import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
 import org.wickedsource.budgeteer.web.components.notificationlist.NotificationListPanel;
 import org.wickedsource.budgeteer.web.pages.budgets.overview.report.form.BudgetReportNotificationModel;
-import org.wickedsource.budgeteer.web.pages.contract.overview.ContractOverviewPage;
 import org.wickedsource.budgeteer.web.pages.contract.overview.report.ContractReportMetaInformation;
+
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static org.wicketstuff.lazymodel.LazyModel.from;
+import static org.wicketstuff.lazymodel.LazyModel.model;
 
 public class ContractReportForm extends Form<ContractReportMetaInformation> {
 
@@ -51,7 +43,7 @@ public class ContractReportForm extends Form<ContractReportMetaInformation> {
 		super(id, model(from(new ContractReportMetaInformation())));
 		List<Date> months = contractService.getMonthListForProjectId(BudgeteerSession.get().getProjectId());
 
-		SimpleDateFormat formatter = new SimpleDateFormat("MMM yyy");
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy, MMMM");
 		formattedMonths = getFormatedMonths(months, formatter);
 
 		getModelObject().setSelectedMonth(formattedMonths.get(formattedMonths.size()-1));

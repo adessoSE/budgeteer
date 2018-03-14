@@ -14,13 +14,7 @@ import org.wickedsource.budgeteer.persistence.project.ProjectRepository;
 import org.wickedsource.budgeteer.web.pages.contract.overview.table.ContractOverviewTableModel;
 
 import javax.transaction.Transactional;
-
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @Transactional
@@ -169,5 +163,10 @@ public class ContractService {
     		cal.add(Calendar.MONTH, 1);
     	}
     	return months;
+    }
+
+    public boolean projectHasContracts(long projectId) {
+        List<ContractEntity> contracts = contractRepository.findByProjectId(projectId);
+        return (null != contracts && !contracts.isEmpty());
     }
 }
