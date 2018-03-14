@@ -33,29 +33,41 @@ public class ContractReportService {
 
 	@Autowired
 	private ContractRepository contractRepository;
-	
+
 	@Autowired
 	private ContractReportDataMapper mapper;
+	@Autowired
+	private ContractReportMonthlyDataMapper monthlyMapper;
 	
 	public File createReportFile(long projectId,Date endDate) {
 		XSSFWorkbook wb = getSheetWorkbook();
 
+		// Overal summary
 		List<ContractReportData> contractReportList = loadContractReportData(projectId, endDate);
 		writeContractData(wb.getSheetAt(0),contractReportList);
 
 		List<ContractReportSummary> summary = createSummary(contractReportList);
-		writeSummary(wb.getSheetAt(0), summary);
+		writeSummary(wb.getSheetAt(0), summary,false);
+
+		 // Monthly summary
+		List<ContractReportData> monthlyContractReportList = loadMonthlyContractReportData(projectId, endDate);
+		writeContractData(wb.getSheetAt(1),monthlyContractReportList);
+
+		List<ContractReportSummary> monthlySummary = createSummary(monthlyContractReportList);
+		writeSummary(wb.getSheetAt(1), monthlySummary,true);
 
 		XSSFFormulaEvaluator.evaluateAllFormulaCells(wb);
 		return outputfile(wb);
 	}
-	
-	private void writeSummary(XSSFSheet sheet, List<ContractReportSummary> summary) {
+
+	private void writeSummary(XSSFSheet sheet, List<ContractReportSummary> summary, boolean removeFlagSheet) {
 		SheetTemplate template = new SheetTemplate(ContractReportSummary.class, sheet);
 		TemplateWriter<ContractReportSummary> tw = new TemplateWriter<ContractReportSummary>(template);
 		tw.setEntries(summary);
 		tw.write();
-		tw.removeFlagSheet();
+		if(removeFlagSheet) {
+            tw.removeFlagSheet();
+        }
 	}
 
 	private List<ContractReportSummary> createSummary(List<ContractReportData> contractReportList) {
@@ -119,6 +131,12 @@ public class ContractReportService {
 		List<ContractEntity> contracts = new LinkedList<ContractEntity>();
 		contracts.addAll(contractRepository.findByProjectId(projectId));
 		return mapper.map(contracts,endDate);
+	}
+
+	private List<ContractReportData> loadMonthlyContractReportData(long projectId, Date endDate) {
+		List<ContractEntity> contracts = new LinkedList<>();
+		contracts.addAll(contractRepository.findByProjectId(projectId));
+		return monthlyMapper.map(contracts,endDate);
 	}
 
 	private XSSFWorkbook getSheetWorkbook() {

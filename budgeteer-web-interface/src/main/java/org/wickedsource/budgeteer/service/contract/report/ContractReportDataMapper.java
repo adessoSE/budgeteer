@@ -27,7 +27,7 @@ public class ContractReportDataMapper {
 	
 	public ContractReportData map(ContractEntity contract, Date endDate) {
 		LocalDate end = endDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-		ContractStatisticBean statistics = contractRepository.getContractStatisticByMonthAndYear(contract.getId(), end.getMonthValue()-1, end.getYear());
+		ContractStatisticBean statistics = contractRepository.getContractStatisticAggregatedByMonthAndYear(contract.getId(), end.getMonthValue()-1, end.getYear());
 		DateRange dateRange = new DateRange(contract.getStartDate(), endDate);
 		
 		ContractReportData report = new ContractReportData();
@@ -43,7 +43,7 @@ public class ContractReportDataMapper {
 		report.setTaxRate(contract.getTaxRate()/100);
 		report.setFrom(dateRange.getStartDate());
 		report.setUntil(dateRange.getEndDate());
-		report.setBudgetSpent_net(MoneyUtil.createMoneyFromCents(contractRepository.getSpentBudgetByContractIdUntilDate(contract.getId(),end.getMonthValue()-1,end.getYear()).longValue()).getAmount().doubleValue());
+		report.setBudgetSpent_net(MoneyUtil.createMoneyFromCents(statistics.getSpentBudget()).getAmount().doubleValue());
 		report.setBudgetLeft_net(contract.getBudget().getAmount().doubleValue() - report.getBudgetSpent_net());
 		report.setBudgetTotal_net(contract.getBudget().getAmount().doubleValue());
 
