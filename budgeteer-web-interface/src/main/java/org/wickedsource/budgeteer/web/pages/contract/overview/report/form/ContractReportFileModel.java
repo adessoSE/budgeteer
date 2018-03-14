@@ -1,6 +1,10 @@
 package org.wickedsource.budgeteer.web.pages.contract.overview.report.form;
 
 import java.io.File;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
 
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.model.IModel;
@@ -31,7 +35,17 @@ public class ContractReportFileModel extends LoadableDetachableModel<File> {
 
     @Override
     protected File load() {
-    	return reportService.createReportFile(projectId,reportModel.getObject().getSelectedMonth().getDate());
+    	LocalDate now = LocalDate.now();
+    	LocalDate adjustedDate = reportModel.getObject().getSelectedMonth().getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+    			.plus(1,ChronoUnit.MONTHS).minus(1,ChronoUnit.DAYS);
+    	Date endDate = null;
+    	if(now.isBefore(adjustedDate)) {
+    		endDate = Date.from(now.atStartOfDay(ZoneId.systemDefault()).toInstant());
+    	} else {
+    		endDate = Date.from(adjustedDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+    	}
+    	
+    	return reportService.createReportFile(projectId,endDate);
     }
 
 }
