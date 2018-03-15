@@ -36,6 +36,7 @@ public class ContractReportService {
 
 	@Autowired
 	private ContractReportDataMapper mapper;
+	
 	@Autowired
 	private ContractReportMonthlyDataMapper monthlyMapper;
 	

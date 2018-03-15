@@ -10,8 +10,14 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.wickedsource.budgeteer.persistence.contract.ContractEntity;
+import org.wickedsource.budgeteer.persistence.contract.ContractRepository;
 import org.wickedsource.budgeteer.service.budget.BudgetDetailData;
 import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
+import org.wickedsource.budgeteer.service.contract.ContractBaseData;
+import org.wickedsource.budgeteer.service.contract.ContractService;
+import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.ClassAwareWrappingModel;
 import org.wickedsource.budgeteer.web.components.dataTable.DataTableBehavior;
 import org.wickedsource.budgeteer.web.components.money.BudgetUnitMoneyModel;
@@ -30,6 +36,10 @@ import static org.wicketstuff.lazymodel.LazyModel.model;
 
 public class BudgetOverviewTable extends Panel {
 
+    @SpringBean
+    private ContractService contractService;
+
+
     private final BreadcrumbsModel breadcrumbsModel;
 
     public BudgetOverviewTable(String id, IModel<List<BudgetDetailData>> model, BreadcrumbsModel breadcrumbsModel) {
@@ -44,10 +54,10 @@ public class BudgetOverviewTable extends Panel {
 
         IModel<BudgetDetailData> totalModel = new TotalBudgetDetailsModel(model);
         table.add(new Label("totalLastUpdated", model(from(totalModel).getLastUpdated())));
-        table.add(new MoneyLabel("totalAmount", new BudgetUnitMoneyModel(model(from(totalModel).getTotal()))));
-        table.add(new MoneyLabel("totalSpent", new BudgetUnitMoneyModel(model(from(totalModel).getSpent()))));
-        table.add(new MoneyLabel("totalRemaining", new BudgetUnitMoneyModel(model(from(totalModel).getRemaining()))));
-        table.add(new MoneyLabel("totalUnplanned", new BudgetUnitMoneyModel(model(from(totalModel).getUnplanned()))));
+        table.add(new MoneyLabel("totalAmount", new BudgetUnitMoneyModel(model(from(totalModel).getTotal()),1.0)));
+        table.add(new MoneyLabel("totalSpent", new BudgetUnitMoneyModel(model(from(totalModel).getSpent()),1.0)));
+        table.add(new MoneyLabel("totalRemaining", new BudgetUnitMoneyModel(model(from(totalModel).getRemaining()),1.0)));
+        table.add(new MoneyLabel("totalUnplanned", new BudgetUnitMoneyModel(model(from(totalModel).getUnplanned()),1.0)));
         table.add(new ProgressBar("totalProgressBar", model(from(totalModel).getProgressInPercent())));
 
         add(table);
@@ -67,6 +77,11 @@ public class BudgetOverviewTable extends Panel {
         return new ListView<BudgetDetailData>(id, model) {
             @Override
             protected void populateItem(final ListItem<BudgetDetailData> item) {
+                double taxCoefficient = 1.0;
+                ContractBaseData contractEntity = contractService.getContractById(item.getModelObject().getContractId());
+                if(contractEntity != null && BudgeteerSession.get().isTaxEnabled()) {
+                    taxCoefficient = 1.0+contractEntity.getTaxRate()/100;
+                }
                 BookmarkablePageLink link = new BookmarkablePageLink("detailLink", BudgetDetailsPage.class, BudgetDetailsPage.createParameters(item.getModelObject().getId()));
                 Label linkTitle = new Label("detailLinkTitle", model(from(item.getModel()).getName()));
                 link.add(linkTitle);
@@ -89,10 +104,10 @@ public class BudgetOverviewTable extends Panel {
                 Label clinkTitle = new Label("contractTitle",model(from(item.getModel()).getContractName()));
                 clink.add(clinkTitle);
                 item.add(clink);
-                item.add(new MoneyLabel("amount", new BudgetUnitMoneyModel(model(from(item.getModel()).getTotal()))));
-                item.add(new MoneyLabel("spent", new BudgetUnitMoneyModel(model(from(item.getModel()).getSpent()))));
-                item.add(new MoneyLabel("remaining", new BudgetUnitMoneyModel(model(from(item.getModel()).getRemaining()))));
-                item.add(new MoneyLabel("unplanned", new BudgetUnitMoneyModel(model(from(item.getModel()).getUnplanned()))));
+                item.add(new MoneyLabel("amount", new BudgetUnitMoneyModel(model(from(item.getModel()).getTotal()),taxCoefficient)));
+                item.add(new MoneyLabel("spent", new BudgetUnitMoneyModel(model(from(item.getModel()).getSpent()),taxCoefficient)));
+                item.add(new MoneyLabel("remaining", new BudgetUnitMoneyModel(model(from(item.getModel()).getRemaining()),taxCoefficient)));
+                item.add(new MoneyLabel("unplanned", new BudgetUnitMoneyModel(model(from(item.getModel()).getUnplanned()),taxCoefficient)));
                 item.add(new ProgressBar("progressBar", model(from(item.getModel()).getProgressInPercent())));
                 Link editPersonLink = new Link("editPage") {
                     @Override

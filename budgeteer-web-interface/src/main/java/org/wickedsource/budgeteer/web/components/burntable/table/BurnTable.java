@@ -54,7 +54,7 @@ public class BurnTable extends Panel {
         table.add(rows);
 
         add(table);
-        add(new MoneyLabel("total", new BudgetUnitMoneyModel(new TotalBudgetModel(model))));
+        add(new MoneyLabel("total", new BudgetUnitMoneyModel(new TotalBudgetModel(model),1.0)));
     }
 
     @Override
@@ -108,7 +108,7 @@ public class BurnTable extends Panel {
                 });
                 item.add(new Label("date", model(from(item.getModel()).getDate())));
                 item.add(new Label("hours", model(from(item.getModel()).getHours())));
-                item.add(new MoneyLabel("burnedBudget", new BudgetUnitMoneyModel(model(from(item.getModel()).getBudgetBurned()))));
+                item.add(new MoneyLabel("burnedBudget", new BudgetUnitMoneyModel(model(from(item.getModel()).getBudgetBurned()),1.0)));
             }
 
             @Override
