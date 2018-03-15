@@ -39,9 +39,9 @@ public class AggregatedRecordTable extends Panel {
                 item.add(new Label("startDate", model(from(item.getModel()).getAggregationPeriodStart())));
                 item.add(new Label("endDate", model(from(item.getModel()).getAggregationPeriodEnd())));
                 item.add(new Label("hours", model(from(item.getModel()).getHours())));
-                item.add(new MoneyLabel("budgetBurned", new BudgetUnitMoneyModel(model(from(item.getModel()).getBudgetBurned()),1.0)));
-                item.add(new MoneyLabel("budgetPlanned", new BudgetUnitMoneyModel(model(from(item.getModel()).getBudgetPlanned()),1.0)));
-                Label differenceLabel = new MoneyLabel("difference", new BudgetUnitMoneyModel(model(from(item.getModel()).getDifference()),1.0)) {
+                item.add(new MoneyLabel("budgetBurned", new BudgetUnitMoneyModel(model(from(item.getModel()).getBudgetBurned()))));
+                item.add(new MoneyLabel("budgetPlanned", new BudgetUnitMoneyModel(model(from(item.getModel()).getBudgetPlanned()))));
+                Label differenceLabel = new MoneyLabel("difference", new BudgetUnitMoneyModel(model(from(item.getModel()).getDifference()))) {
                     @Override
                     protected void onConfigure() {
                         IModel<Money> model = (IModel<Money>) getDefaultModel();

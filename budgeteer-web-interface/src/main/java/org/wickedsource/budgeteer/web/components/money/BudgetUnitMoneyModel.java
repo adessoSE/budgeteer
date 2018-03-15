@@ -10,11 +10,9 @@ import java.math.RoundingMode;
 public class BudgetUnitMoneyModel implements IModel<Money> {
 
     private IModel<Money> sourceModel;
-    private double taxRate;
 
-    public BudgetUnitMoneyModel(IModel<Money> sourceModel, double taxRate) {
+    public BudgetUnitMoneyModel(IModel<Money> sourceModel) {
         this.sourceModel = sourceModel;
-        this.taxRate = taxRate;
     }
 
 
@@ -23,7 +21,7 @@ public class BudgetUnitMoneyModel implements IModel<Money> {
         if (sourceModel.getObject() == null) {
             return MoneyUtil.createMoney(0d);
         } else {
-            return sourceModel.getObject().dividedBy(BudgeteerSession.get().getSelectedBudgetUnit(), RoundingMode.FLOOR).multipliedBy(taxRate, RoundingMode.FLOOR);
+            return sourceModel.getObject().dividedBy(BudgeteerSession.get().getSelectedBudgetUnit(), RoundingMode.FLOOR);
         }
     }
 

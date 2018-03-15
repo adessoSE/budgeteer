@@ -29,8 +29,6 @@ import static org.wicketstuff.lazymodel.LazyModel.model;
 @Mount("budgets")
 public class BudgetsOverviewPage extends BasePage {
 
-    private Fragment frag;
-
     public BudgetsOverviewPage() {
         BudgetTagsModel tagsModel = new BudgetTagsModel(BudgeteerSession.get().getProjectId());
         if (BudgeteerSession.get().getBudgetFilter() == null) {
@@ -76,6 +74,7 @@ public class BudgetsOverviewPage extends BasePage {
     }
 
     private void createNetGrossSwitchLink(String netGrossLink) {
+        Fragment frag;
         if (BudgeteerSession.get().isTaxEnabled()) {
             frag = new Fragment("netGrossLinkContainer", "netLinkFragment", this);
             frag.add(getSwitchLink(netGrossLink));

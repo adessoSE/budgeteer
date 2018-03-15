@@ -11,6 +11,8 @@ import org.wickedsource.budgeteer.IntegrationTestTemplate;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
+
 public class BudgetRepositoryTest extends IntegrationTestTemplate {
 
     @Autowired
@@ -65,6 +67,20 @@ public class BudgetRepositoryTest extends IntegrationTestTemplate {
         Assert.assertEquals(1l, missingTotal.getBudgetId());
         Assert.assertEquals("Budget 1", missingTotal.getBudgetName());
         Assert.assertNull(budgetRepository.getMissingBudgetTotalForBudget(2l));
+    }
+
+    @Test
+    @DatabaseSetup("getTaxCoefficient.xml")
+    @DatabaseTearDown(value = "getTaxCoefficient.xml", type = DatabaseOperation.DELETE_ALL)
+    public void testGetTaxCoefficientForBudget() {
+        Double taxCoefficient1 = budgetRepository.getTaxCoefficientByBudget(1L);
+        Double taxCoefficient2 = budgetRepository.getTaxCoefficientByBudget(2L);
+        Double taxCoefficient3 = budgetRepository.getTaxCoefficientByBudget(3L);
+        Double taxCoefficient4 = budgetRepository.getTaxCoefficientByBudget(4L);
+        assertEquals(2.0, taxCoefficient1, 10e-8);
+        assertEquals(1.0, taxCoefficient2, 10e-8);
+        assertEquals(1.19, taxCoefficient3, 10e-8);
+        assertEquals(1.0, taxCoefficient4, 10e-8);
     }
 
 }
