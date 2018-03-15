@@ -11,8 +11,6 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.wickedsource.budgeteer.persistence.contract.ContractEntity;
-import org.wickedsource.budgeteer.persistence.contract.ContractRepository;
 import org.wickedsource.budgeteer.service.budget.BudgetDetailData;
 import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
 import org.wickedsource.budgeteer.service.contract.ContractBaseData;

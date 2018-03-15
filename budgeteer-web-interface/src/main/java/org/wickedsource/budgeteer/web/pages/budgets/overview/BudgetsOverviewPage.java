@@ -19,7 +19,6 @@ import org.wickedsource.budgeteer.web.pages.budgets.overview.report.BudgetReport
 import org.wickedsource.budgeteer.web.pages.budgets.overview.table.BudgetOverviewTable;
 import org.wickedsource.budgeteer.web.pages.budgets.overview.table.FilteredBudgetModel;
 import org.wickedsource.budgeteer.web.pages.budgets.weekreport.multi.MultiBudgetWeekReportPage;
-import org.wickedsource.budgeteer.web.pages.contract.overview.ContractOverviewPage;
 import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 
 import java.util.ArrayList;
