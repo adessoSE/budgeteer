@@ -81,4 +81,9 @@ public interface ContractRepository extends CrudRepository<ContractEntity, Long>
     // TODO: test
     @Query("select coalesce(sum(wr.minutes * wr.dailyRate/ 60 / 8),0) from WorkRecordEntity wr where wr.budget.contract.id = :contractId AND (wr.year < :year OR (wr.year = :year AND wr.month <= :month))")
 	Double getSpentBudgetByContractIdUntilDate(@Param("contractId") Long contractId, @Param("month") Integer month, @Param("year") Integer year);
+
+    @Query("select ( coalesce(sum(wr.minutes * wr.dailyRate/ 60 / 8),0)*"
+    		+ "coalesce((select 1.0+c.taxRate/100.0 from ContractEntity c where c.id = :contractId),1.0)) "
+    		+ "from WorkRecordEntity wr where wr.budget.contract.id = :contractId")
+	Double getSpentBudgetGrossByContractId(@Param("contractId") Long contractId);
 }
