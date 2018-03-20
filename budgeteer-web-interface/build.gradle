@@ -34,20 +34,24 @@ sourceSets {
 }
 
 processResources {
-    filter ReplaceTokens, tokens: [
-            "application.version": project.property("version")
-    ]
+    from('src/main/java') {
+    	exclude '**/*.xlsx'
+	    filter ReplaceTokens, tokens: [
+	            "application.version": project.property("version")
+	    ]
+    }
 }
 
 dependencies {
     compile project(':budgeteer-aproda-importer')
     compile project(':budgeteer-ubw-importer')
     compile project(':budgeteer-resourceplan-importer')
+    compile project(':budgeteer-report-exporter')
 
     compile(
             [group: 'org.apache.wicket', name: 'wicket-spring', version: "${wicket_spring_version}"],
             [group: 'org.wicketstuff', name: 'wicketstuff-lazymodel', version: "${wicketstuff_lazymodel_version}"],
-            //[group: 'com.googlecode.wicked-charts', name: 'wicked-charts-wicket7', version: "${wicketcharts_version}"],
+            //[group: 'de.adesso.wicked-charts', name: 'wicked-charts-wicket7', version: "${wicketcharts_version}"],
             files("lib/wicked-charts-wicket7-3.0.0.jar","lib/chartjs-wrapper-3.0.0.jar")
     )
 

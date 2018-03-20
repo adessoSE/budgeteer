@@ -37,6 +37,14 @@ public class MoneyUtil {
         return doubleValues;
     }
 
+    public static List<Double> toDouble(List<Money> moneyList, Double unit, Double taxrate) {
+        List<Double> doubleValues = new ArrayList<Double>();
+        for (Money moneyValue : moneyList) {
+            doubleValues.add(toDouble(moneyValue, unit, taxrate));
+        }
+        return doubleValues;
+    }
+
     public static Double toDouble(Money money) {
         return money.getAmount().doubleValue();
     }
@@ -47,5 +55,9 @@ public class MoneyUtil {
 
     public static Double toDouble(Money money, Double unit) {
         return money.dividedBy(unit, RoundingMode.FLOOR).getAmount().doubleValue();
+    }
+
+    public static Double toDouble(Money money, Double unit, Double taxRate) {
+        return money.dividedBy(unit, RoundingMode.FLOOR).multipliedBy(taxRate, RoundingMode.FLOOR).getAmount().doubleValue();
     }
 }

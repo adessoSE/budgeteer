@@ -20,6 +20,7 @@ import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.components.listMultipleChoiceWithGroups.OptionGroup;
 
 import javax.transaction.Transactional;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
@@ -75,6 +76,17 @@ public class BudgetService {
         BudgetEntity budget = budgetRepository.findOne(budgetId);
         return budgetBaseDataMapper.map(budget);
     }
+    
+    
+	private List<BudgetEntity> loadBudgetEntitys(long projectId, BudgetTagFilter filter) {
+		List<BudgetEntity> budgets;
+        if (filter.getSelectedTags().isEmpty()) {
+            budgets = budgetRepository.findByProjectIdOrderByNameAsc(projectId);
+        } else {
+            budgets = budgetRepository.findByAtLeastOneTag(projectId, filter.getSelectedTags());
+        }
+		return budgets;
+	}
 
     /**
      * Loads the base data of a single budget from the database.
@@ -109,21 +121,28 @@ public class BudgetService {
     }
 
     private BudgetDetailData enrichBudgetEntity(BudgetEntity entity) {
-        Date lastUpdated = workRecordRepository.getLatestWordRecordDate(entity.getId());
+        Date lastUpdated = workRecordRepository.getLatestWorkRecordDate(entity.getId());
         Double spentBudgetInCents = workRecordRepository.getSpentBudget(entity.getId());
         Double plannedBudgetInCents = planRecordRepository.getPlannedBudget(entity.getId());
         Double avgDailyRateInCents = workRecordRepository.getAverageDailyRate(entity.getId());
+        Double taxCoefficient = budgetRepository.getTaxCoefficientByBudget(entity.getId());
 
         BudgetDetailData data = new BudgetDetailData();
         data.setId(entity.getId());
         data.setLastUpdated(lastUpdated);
         data.setName(entity.getName());
         data.setDescription(entity.getDescription());
-        data.setSpent(toMoneyNullsafe(spentBudgetInCents));
-        data.setTotal(entity.getTotal());
         data.setTags(mapEntitiesToTags(entity.getTags()));
+        // Money
+        data.setSpent(toMoneyNullsafe(spentBudgetInCents));
+        data.setSpent_gross(data.getSpent().multipliedBy(taxCoefficient, RoundingMode.FLOOR));
+        data.setTotal(entity.getTotal());
+        data.setTotal_gross(data.getTotal().multipliedBy(taxCoefficient, RoundingMode.FLOOR));
         data.setAvgDailyRate(toMoneyNullsafe(avgDailyRateInCents));
+        data.setAvgDailyRate_gross(data.getAvgDailyRate().multipliedBy(taxCoefficient, RoundingMode.FLOOR));
         data.setUnplanned(entity.getTotal().minus(toMoneyNullsafe(plannedBudgetInCents)));
+        data.setUnplanned_gross(data.getUnplanned().multipliedBy(taxCoefficient, RoundingMode.FLOOR));
+        // Money end
         data.setContractName(entity.getContract() == null ? null : entity.getContract().getName() );
         data.setContractId(entity.getContract() == null ? 0 : entity.getContract().getId() );
         return data;
@@ -166,12 +185,7 @@ public class BudgetService {
      * @return list of budgets that match the filter.
      */
     public List<BudgetDetailData> loadBudgetsDetailData(long projectId, BudgetTagFilter filter) {
-        List<BudgetEntity> budgets;
-        if (filter.getSelectedTags().isEmpty()) {
-            budgets = budgetRepository.findByProjectIdOrderByNameAsc(projectId);
-        } else {
-            budgets = budgetRepository.findByAtLeastOneTag(projectId, filter.getSelectedTags());
-        }
+        List<BudgetEntity> budgets = loadBudgetEntitys(projectId, filter);
         List<BudgetDetailData> dataList = new ArrayList<BudgetDetailData>();
         for (BudgetEntity entity : budgets) {
             // TODO: 4 additional database queries per loop! These can yet be optimized to 4 queries total!

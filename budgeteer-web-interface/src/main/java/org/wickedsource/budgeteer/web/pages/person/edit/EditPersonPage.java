@@ -61,5 +61,4 @@ public class EditPersonPage extends DialogPageWithBacklink {
             return value.toLong();
         }
     }
-
 }

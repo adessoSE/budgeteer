@@ -12,6 +12,7 @@ import java.util.List;
 public class ContractOverviewTableModel implements Serializable{
     private List<ContractBaseData> contracts = new LinkedList<ContractBaseData>();
     private List<String> footer = new LinkedList<String>();
+    private boolean taxRateEnabled;
 
     public List<String> getHeadline() {
         List<String> result = new LinkedList<String>();
@@ -22,4 +23,5 @@ public class ContractOverviewTableModel implements Serializable{
         }
         return result;
     }
+
 }

@@ -15,6 +15,7 @@ public class ContractStatisticBean implements Serializable {
     /**
      * budgets are in cents
      */
+    private Double progress;
     private long remainingContractBudget;
     private long spentBudget;
     private long invoicedBudget;
@@ -28,4 +29,7 @@ public class ContractStatisticBean implements Serializable {
         return spentBudget - invoicedBudget;
     }
 
+    public double getProgressInPercent() {
+    	return progress*100;
+    }
 }

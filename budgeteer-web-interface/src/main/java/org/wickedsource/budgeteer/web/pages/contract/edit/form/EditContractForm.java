@@ -68,6 +68,9 @@ public class EditContractForm extends Form<ContractBaseData> {
         MoneyTextField budgetTextfield = new MoneyTextField("budget", model(from(getModelObject()).getBudget()));
         budgetTextfield.setRequired(true);
         add(budgetTextfield);
+        
+        NumberTextField<Double> taxrateTextfield = new NumberTextField<>("taxrate", model(from(getModelObject()).getTaxRate()));
+        add(taxrateTextfield);
 
         if(getModelObject().getStartDate() == null){
             getModelObject().setStartDate(DateUtil.getBeginOfYear());

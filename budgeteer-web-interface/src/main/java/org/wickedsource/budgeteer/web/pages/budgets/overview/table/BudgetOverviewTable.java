@@ -10,8 +10,11 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.service.budget.BudgetDetailData;
 import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
+import org.wickedsource.budgeteer.service.contract.ContractService;
+import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.ClassAwareWrappingModel;
 import org.wickedsource.budgeteer.web.components.dataTable.DataTableBehavior;
 import org.wickedsource.budgeteer.web.components.money.BudgetUnitMoneyModel;
@@ -30,6 +33,10 @@ import static org.wicketstuff.lazymodel.LazyModel.model;
 
 public class BudgetOverviewTable extends Panel {
 
+    @SpringBean
+    private ContractService contractService;
+
+
     private final BreadcrumbsModel breadcrumbsModel;
 
     public BudgetOverviewTable(String id, IModel<List<BudgetDetailData>> model, BreadcrumbsModel breadcrumbsModel) {
@@ -38,16 +45,25 @@ public class BudgetOverviewTable extends Panel {
         WebMarkupContainer table = new WebMarkupContainer("table");
         table.add(new DataTableBehavior(DataTableBehavior.getRecommendedOptions()));
 
+        createNetGrossLabels(table);
+        setVisibilityOfNetGrossLabels(table);
 
         table.add(createBudgetList("budgetList", model));
 
 
         IModel<BudgetDetailData> totalModel = new TotalBudgetDetailsModel(model);
         table.add(new Label("totalLastUpdated", model(from(totalModel).getLastUpdated())));
-        table.add(new MoneyLabel("totalAmount", new BudgetUnitMoneyModel(model(from(totalModel).getTotal()))));
-        table.add(new MoneyLabel("totalSpent", new BudgetUnitMoneyModel(model(from(totalModel).getSpent()))));
-        table.add(new MoneyLabel("totalRemaining", new BudgetUnitMoneyModel(model(from(totalModel).getRemaining()))));
-        table.add(new MoneyLabel("totalUnplanned", new BudgetUnitMoneyModel(model(from(totalModel).getUnplanned()))));
+        if (BudgeteerSession.get().isTaxEnabled()) {
+            table.add(new MoneyLabel("totalAmount", new BudgetUnitMoneyModel(model(from(totalModel).getTotal_gross()))));
+            table.add(new MoneyLabel("totalSpent", new BudgetUnitMoneyModel(model(from(totalModel).getSpent_gross()))));
+            table.add(new MoneyLabel("totalRemaining", new BudgetUnitMoneyModel(model(from(totalModel).getRemaining_gross()))));
+            table.add(new MoneyLabel("totalUnplanned", new BudgetUnitMoneyModel(model(from(totalModel).getUnplanned_gross()))));
+        } else {
+            table.add(new MoneyLabel("totalAmount", new BudgetUnitMoneyModel(model(from(totalModel).getTotal()))));
+            table.add(new MoneyLabel("totalSpent", new BudgetUnitMoneyModel(model(from(totalModel).getSpent()))));
+            table.add(new MoneyLabel("totalRemaining", new BudgetUnitMoneyModel(model(from(totalModel).getRemaining()))));
+            table.add(new MoneyLabel("totalUnplanned", new BudgetUnitMoneyModel(model(from(totalModel).getUnplanned()))));
+        }
         table.add(new ProgressBar("totalProgressBar", model(from(totalModel).getProgressInPercent())));
 
         add(table);
@@ -89,10 +105,17 @@ public class BudgetOverviewTable extends Panel {
                 Label clinkTitle = new Label("contractTitle",model(from(item.getModel()).getContractName()));
                 clink.add(clinkTitle);
                 item.add(clink);
-                item.add(new MoneyLabel("amount", new BudgetUnitMoneyModel(model(from(item.getModel()).getTotal()))));
-                item.add(new MoneyLabel("spent", new BudgetUnitMoneyModel(model(from(item.getModel()).getSpent()))));
-                item.add(new MoneyLabel("remaining", new BudgetUnitMoneyModel(model(from(item.getModel()).getRemaining()))));
-                item.add(new MoneyLabel("unplanned", new BudgetUnitMoneyModel(model(from(item.getModel()).getUnplanned()))));
+                if (BudgeteerSession.get().isTaxEnabled()) {
+                    item.add(new MoneyLabel("amount", new BudgetUnitMoneyModel(model(from(item.getModel()).getTotal_gross()))));
+                    item.add(new MoneyLabel("spent", new BudgetUnitMoneyModel(model(from(item.getModel()).getSpent_gross()))));
+                    item.add(new MoneyLabel("remaining", new BudgetUnitMoneyModel(model(from(item.getModel()).getRemaining_gross()))));
+                    item.add(new MoneyLabel("unplanned", new BudgetUnitMoneyModel(model(from(item.getModel()).getUnplanned_gross()))));
+                } else {
+                    item.add(new MoneyLabel("amount", new BudgetUnitMoneyModel(model(from(item.getModel()).getTotal()))));
+                    item.add(new MoneyLabel("spent", new BudgetUnitMoneyModel(model(from(item.getModel()).getSpent()))));
+                    item.add(new MoneyLabel("remaining", new BudgetUnitMoneyModel(model(from(item.getModel()).getRemaining()))));
+                    item.add(new MoneyLabel("unplanned", new BudgetUnitMoneyModel(model(from(item.getModel()).getUnplanned()))));
+                }
                 item.add(new ProgressBar("progressBar", model(from(item.getModel()).getProgressInPercent())));
                 Link editPersonLink = new Link("editPage") {
                     @Override
@@ -109,5 +132,30 @@ public class BudgetOverviewTable extends Panel {
                 return super.newItem(index, new ClassAwareWrappingModel<BudgetDetailData>(itemModel, BudgetDetailData.class));
             }
         };
+    }
+
+    private void setVisibilityOfNetGrossLabels(WebMarkupContainer table) {
+        if (BudgeteerSession.get().isTaxEnabled()) {
+            table.get("netLabelTotal").setVisible(false);
+            table.get("netLabelSpent").setVisible(false);
+            table.get("netLabelLeft").setVisible(false);
+            table.get("netLabelUnplanned").setVisible(false);
+        } else {
+            table.get("grossLabelTotal").setVisible(false);
+            table.get("grossLabelSpent").setVisible(false);
+            table.get("grossLabelLeft").setVisible(false);
+            table.get("grossLabelUnplanned").setVisible(false);
+        }
+    }
+
+    private void createNetGrossLabels(WebMarkupContainer table) {
+        table.add(new WebMarkupContainer("netLabelTotal"));
+        table.add(new WebMarkupContainer("grossLabelTotal"));
+        table.add(new WebMarkupContainer("netLabelSpent"));
+        table.add(new WebMarkupContainer("grossLabelSpent"));
+        table.add(new WebMarkupContainer("netLabelLeft"));
+        table.add(new WebMarkupContainer("grossLabelLeft"));
+        table.add(new WebMarkupContainer("netLabelUnplanned"));
+        table.add(new WebMarkupContainer("grossLabelUnplanned"));
     }
 }

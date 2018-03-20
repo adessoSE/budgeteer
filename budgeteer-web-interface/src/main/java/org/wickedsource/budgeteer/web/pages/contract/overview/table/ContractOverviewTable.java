@@ -28,10 +28,15 @@ public class ContractOverviewTable extends Panel{
     @SpringBean
     private ContractService contractService;
 
+
     public ContractOverviewTable(String id) {
         super(id);
         ContractOverviewTableModel data = contractService.getContractOverviewByProject(BudgeteerSession.get().getProjectId());
         WebMarkupContainer table = new WebMarkupContainer("table");
+
+        createNetGrossLabels(table);
+        setVisibilityOfNetGrossLabels(table);
+
         table.add(new DataTableBehavior(DataTableBehavior.getRecommendedOptions()));
         table.add(new ListView<String>("headerRow",  model(from(data).getHeadline()) ) {
             @Override
@@ -43,6 +48,11 @@ public class ContractOverviewTable extends Panel{
             @Override
             protected void populateItem(ListItem<ContractBaseData> item) {
                 long contractId = item.getModelObject().getContractId();
+                double taxCoefficient = 1.0;
+
+                if (BudgeteerSession.get().isTaxEnabled()) {
+                    taxCoefficient = 1.0 + item.getModelObject().getTaxRate() / 100.0;
+                }
                 BookmarkablePageLink<EditContractPage> link = new BookmarkablePageLink<EditContractPage>("editContract", ContractDetailsPage.class, EditContractPage.createParameters(contractId));
                 link.add(new Label("contractName", model(from(item.getModelObject()).getContractName())));
                 item.add(link);
@@ -55,7 +65,9 @@ public class ContractOverviewTable extends Panel{
                         item.add(new Label("contractRowText", item.getModelObject().getValue()));
                     }
                 });
-                item.add(new Label("budget", Model.of(MoneyUtil.toDouble(item.getModelObject().getBudget(), BudgeteerSession.get().getSelectedBudgetUnit()))));
+                item.add(new Label("budgetTotal", Model.of(MoneyUtil.toDouble(item.getModelObject().getBudget(), BudgeteerSession.get().getSelectedBudgetUnit(), taxCoefficient))));
+                item.add(new Label("budgetSpent", Model.of(MoneyUtil.toDouble(item.getModelObject().getBudgetSpent(), BudgeteerSession.get().getSelectedBudgetUnit(), taxCoefficient))));
+                item.add(new Label("budgetLeft", Model.of(MoneyUtil.toDouble(item.getModelObject().getBudgetLeft(), BudgeteerSession.get().getSelectedBudgetUnit(), taxCoefficient))));
                 item.add(new BookmarkablePageLink("editLink", EditContractPage.class, EditContractPage.createParameters(contractId)));
             }
         });
@@ -66,5 +78,26 @@ public class ContractOverviewTable extends Panel{
             }
         });
         add(table);
+    }
+
+    private void setVisibilityOfNetGrossLabels(WebMarkupContainer table) {
+        if (BudgeteerSession.get().isTaxEnabled()) {
+            table.get("netLabelTotal").setVisible(false);
+            table.get("netLabelSpent").setVisible(false);
+            table.get("netLabelLeft").setVisible(false);
+        } else {
+            table.get("grossLabelTotal").setVisible(false);
+            table.get("grossLabelSpent").setVisible(false);
+            table.get("grossLabelLeft").setVisible(false);
+        }
+    }
+
+    private void createNetGrossLabels(WebMarkupContainer table) {
+        table.add(new WebMarkupContainer("netLabelTotal"));
+        table.add(new WebMarkupContainer("grossLabelTotal"));
+        table.add(new WebMarkupContainer("netLabelSpent"));
+        table.add(new WebMarkupContainer("grossLabelSpent"));
+        table.add(new WebMarkupContainer("netLabelLeft"));
+        table.add(new WebMarkupContainer("grossLabelLeft"));
     }
 }

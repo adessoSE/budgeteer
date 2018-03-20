@@ -43,8 +43,40 @@ public class WorkRecordRepositoryTest extends IntegrationTestTemplate {
     }
 
     @Test
+    @DatabaseSetup("getSpentBudgetUntilDate.xml")
+    @DatabaseTearDown(value = "getSpentBudgetUntilDate.xml", type = DatabaseOperation.DELETE_ALL)
+    public void testGetSpentBudgetUntilDate() throws Exception {
+        double value = repository.getSpentBudgetUntilDate(1L, format.parse("15.08.2015"));
+        Assert.assertEquals(170000d, value, 1d);
+    }
+
+    @Test
+    @DatabaseSetup("getSpentBudgetInTimeRange.xml")
+    @DatabaseTearDown(value = "getSpentBudgetInTimeRange.xml", type = DatabaseOperation.DELETE_ALL)
+    public void testGetSpentBudgetInTimeRange() throws Exception {
+        double value = repository.getSpentBudgetInTimeRange(1L, format.parse("15.08.2015"), format.parse("16.08.2015"));
+        Assert.assertEquals(37500d, value, 1d);
+    }
+
+    @Test
+    @DatabaseSetup("getTotalHoursInTimeRange.xml")
+    @DatabaseTearDown(value = "getTotalHoursInTimeRange.xml", type = DatabaseOperation.DELETE_ALL)
+    public void testGetTotalHoursInTimeRange() throws Exception {
+        double value = repository.getTotalHoursInTimeRange(1L, format.parse("15.08.2015"), format.parse("16.08.2015"));
+        Assert.assertEquals(5.5d, value, 10e-8);
+    }
+
+    @Test
+    @DatabaseSetup("getTotalHoursInTimeRange.xml")
+    @DatabaseTearDown(value = "getTotalHoursInTimeRange.xml", type = DatabaseOperation.DELETE_ALL)
+    public void testGetTotalHoursInTimeRangeAndNoRecordsAreInTimeRange() throws Exception {
+        double value = repository.getTotalHoursInTimeRange(1L, format.parse("15.08.2010"), format.parse("16.08.2011"));
+        Assert.assertEquals(0d, value, 10e-8);
+    }
+    
+    @Test
     @DatabaseSetup("getAverageDailyRateZeroMinutes.xml")
-    @DatabaseTearDown(value = "getAverageDailyRate.xml", type = DatabaseOperation.DELETE_ALL)
+    @DatabaseTearDown(value = "getAverageDailyRateZeroMinutes.xml", type = DatabaseOperation.DELETE_ALL)
     public void testGetAverageDailyRateZeroMinutes() throws Exception {
         double value = repository.getAverageDailyRate(1l);
         Assert.assertEquals(0, value, 0);
@@ -55,7 +87,42 @@ public class WorkRecordRepositoryTest extends IntegrationTestTemplate {
     @DatabaseTearDown(value = "getLastWorkRecordDate.xml", type = DatabaseOperation.DELETE_ALL)
     public void testGetLatestWorkRecordDate() throws Exception {
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = repository.getLatestWordRecordDate(1l);
+        Date date = repository.getLatestWorkRecordDate(1l);
+        Assert.assertEquals(format.parse("2015-08-15"), date);
+    }
+
+    @Test
+    @DatabaseSetup("getFirstWorkRecordDate.xml")
+    @DatabaseTearDown(value = "getFirstWorkRecordDate.xml", type = DatabaseOperation.DELETE_ALL)
+    public void testGetFirstWorkRecordDate() throws Exception {
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = repository.getFirstWorkRecordDate(1l);
+        Assert.assertEquals(format.parse("2015-01-01"), date);
+    }
+
+    @Test
+    @DatabaseSetup("getTotalHoursByBudgetId.xml")
+    @DatabaseTearDown(value = "getTotalHoursByBudgetId.xml", type = DatabaseOperation.DELETE_ALL)
+    public void testGetTotalHoursByBudgetId() throws Exception {
+        double hours = repository.getTotalHoursByBudgetId(1l);
+        Assert.assertEquals(23.5, hours,10e-6);
+    }
+
+    @Test
+    @DatabaseSetup("getTotalHoursByBudgetIdAndUntilDate.xml")
+    @DatabaseTearDown(value = "getTotalHoursByBudgetIdAndUntilDate.xml", type = DatabaseOperation.DELETE_ALL)
+    public void testGetTotalHoursByBudgetIdAndUntilDate() throws Exception {
+        Date date = format.parse("01.01.2015");
+        double hours = repository.getTotalHoursByBudgetIdAndUntilDate(1L,date);
+        Assert.assertEquals(15.5, hours,10e-6);
+    }
+
+    @Test
+    @DatabaseSetup("getFirstWorkRecordDateByBudgetIds.xml")
+    @DatabaseTearDown(value = "getFirstWorkRecordDateByBudgetIds.xml", type = DatabaseOperation.DELETE_ALL)
+    public void testGetFirstWorkRecordDateByBudgetIds() throws Exception {
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = repository.getFirstWorkRecordDateByBudgetIds(Arrays.asList(2L,3L));
         Assert.assertEquals(format.parse("2015-08-15"), date);
     }
 

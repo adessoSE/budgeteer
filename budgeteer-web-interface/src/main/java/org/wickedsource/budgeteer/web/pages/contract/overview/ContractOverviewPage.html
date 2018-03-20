@@ -40,6 +40,52 @@
                                 </a>
                             </div>
                         </div>
+                        <div class="col-lg-4 col-xs-6">
+                            <div class="small-box bg-yellow" wicket:id="createReportLink" style="cursor: pointer;">
+                                <div class="inner" >
+                                    <h3><a >Export Contract report</a></h3>
+                                    <br/>
+                                    <br/>
+                                </div>
+                                <div class="icon"><i class="ion ion-stats-bars"></i></div>
+                                <a class="small-box-footer">
+                                    Export this overview into an excel spreadsheet.
+                                    <i  class="fa fa-arrow-circle-right" />
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-xs-6">
+                            <div wicket:id="netGrossLinkContainer">
+                            </div>
+                            <wicket:fragment wicket:id="netLinkFragment">
+                                <div class="small-box bg-aqua" wicket:id="netGrossLink" style="cursor: pointer;">
+                                    <div class="inner">
+                                        <h3><a>Show net values</a></h3>
+                                        <br/>
+                                        <br/>
+                                    </div>
+                                    <div class="icon"><i class="fa fa-book"></i></div>
+                                    <a class="small-box-footer">
+                                        Shows the values of this table as net values.
+                                        <i class="fa fa-arrow-circle-right"/>
+                                    </a>
+                                </div>
+                            </wicket:fragment>
+                            <wicket:fragment wicket:id="grossLinkFragment">
+                                <div class="small-box bg-aqua" wicket:id="netGrossLink" style="cursor: pointer;">
+                                    <div class="inner">
+                                        <h3><a>Show gross values</a></h3>
+                                        <br/>
+                                        <br/>
+                                    </div>
+                                    <div class="icon"><i class="fa fa-book"></i></div>
+                                    <a class="small-box-footer">
+                                        Shows the values of this table as gross values.
+                                        <i class="fa fa-arrow-circle-right"/>
+                                    </a>
+                                </div>
+                            </wicket:fragment>
+                        </div>
                     </div>
 
                 </div>
