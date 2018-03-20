@@ -300,4 +300,8 @@ public class BudgetService {
         return budgetBaseDataMapper.map(budgets);
     }
 
+    public boolean projectHasBudgets(long projectId) {
+        List<BudgetEntity> budgets = budgetRepository.findByProjectIdOrderByNameAsc(projectId);
+        return (budgets != null && !budgets.isEmpty());
+    }
 }

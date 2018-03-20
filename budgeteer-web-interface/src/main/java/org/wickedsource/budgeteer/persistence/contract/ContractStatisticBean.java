@@ -29,7 +29,11 @@ public class ContractStatisticBean implements Serializable {
         return spentBudget - invoicedBudget;
     }
 
-    public double getProgressInPercent() {
-    	return progress*100;
+    public Double getProgressInPercent() {
+        if (progress != null) {
+            return progress * 100;
+        } else {
+            return null;
+        }
     }
 }

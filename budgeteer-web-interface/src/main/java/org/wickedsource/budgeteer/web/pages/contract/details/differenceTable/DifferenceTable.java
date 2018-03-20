@@ -54,7 +54,7 @@ public class DifferenceTable extends GenericPanel<List<ContractStatisticBean>> {
             sumInvoiced += b.getInvoicedBudget();
             sumSpend += b.getSpentBudget();
             sumDifference += b.getDifference();
-            progressInPercent = Math.max(progressInPercent, b.getProgressInPercent());
+            progressInPercent = Math.max(progressInPercent, b.getProgressInPercent() == null ? 0 : b.getProgressInPercent());
         }
         table.add(new Label("sumInvoiced", Model.of(MoneyUtil.toDouble(MoneyUtil.createMoneyFromCents(sumInvoiced), BudgeteerSession.get().getSelectedBudgetUnit()))));
         table.add(new Label("sumSpend", Model.of(MoneyUtil.toDouble(MoneyUtil.createMoneyFromCents(sumSpend), BudgeteerSession.get().getSelectedBudgetUnit()))));

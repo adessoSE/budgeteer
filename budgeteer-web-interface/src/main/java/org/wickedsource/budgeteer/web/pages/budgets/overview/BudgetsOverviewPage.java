@@ -1,11 +1,15 @@
 package org.wickedsource.budgeteer.web.pages.budgets.overview;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.wickedsource.budgeteer.service.budget.BudgetService;
 import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.Mount;
@@ -29,6 +33,9 @@ import static org.wicketstuff.lazymodel.LazyModel.model;
 @Mount("budgets")
 public class BudgetsOverviewPage extends BasePage {
 
+    @SpringBean
+    private BudgetService budgetService;
+
     public BudgetsOverviewPage() {
         BudgetTagsModel tagsModel = new BudgetTagsModel(BudgeteerSession.get().getProjectId());
         if (BudgeteerSession.get().getBudgetFilter() == null) {
@@ -45,15 +52,23 @@ public class BudgetsOverviewPage extends BasePage {
 
         createNetGrossSwitchLink("netGrossLink");
     }
-    
-    
-	private Component createReportLink(String string) {
-		return new Link(string) {
+
+
+    private Component createReportLink(String string) {
+        Link link = new Link(string) {
 			@Override
 			public void onClick() {
 				setResponsePage(new BudgetReportPage(BudgetsOverviewPage.class, new PageParameters()));
 			}
 		};
+
+
+        if (!budgetService.projectHasBudgets(BudgeteerSession.get().getProjectId())) {
+            link.setEnabled(false);
+            link.add(new AttributeAppender("style", "cursor: not-allowed;", " "));
+            link.add(new AttributeModifier("title", BudgetsOverviewPage.this.getString("links.budget.label.no.budget")));
+        }
+        return link;
 	}
 
 
