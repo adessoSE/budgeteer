@@ -95,11 +95,11 @@ public class BudgetReportService {
 
 	private void setWarnings(List<BudgetReportData> budgetList, TemplateWriter<BudgetReportData> tw) {
         budgetList.forEach(budgetData -> {
-			if (budgetData.getProgress() >= 0.6 && budgetData.getProgress() < 0.8) {
+            if (budgetData.getProgress() != null && budgetData.getProgress() >= 0.6 && budgetData.getProgress() < 0.8) {
 				tw.addFlag(budgetData, "progress", "warning1");
-			} else if (budgetData.getProgress() >= 0.8 && budgetData.getProgress() < 1) {
+            } else if (budgetData.getProgress() != null && budgetData.getProgress() >= 0.8 && budgetData.getProgress() < 1) {
 				tw.addFlag(budgetData, "progress", "warning2");
-			} else if (budgetData.getProgress() >= 1) {
+            } else if (budgetData.getProgress() != null && budgetData.getProgress() >= 1) {
 				tw.addFlag(budgetData, "progress", "warning3");
 			}
 		});
@@ -171,8 +171,8 @@ public class BudgetReportService {
 		return data;
 	}
 
-	BudgetReportData enrichReportData(BudgetDetailData budget, DateRange dateRange) {
-		ContractBaseData contract = null;
+    private BudgetReportData enrichReportData(BudgetDetailData budget, DateRange dateRange) {
+        ContractBaseData contract;
 		List<? extends SheetTemplateSerializable> attributes = null;
 		double taxRate = 0.0;
 		if (budget.getContractId() != 0L) {
@@ -188,7 +188,7 @@ public class BudgetReportService {
 		double spentMoney = toMoneyNullsafe(spentMoneyInCents).getAmount().doubleValue();
 		double taxCoefficient = 1.0 + taxRate / 100;
 		double totalMoney = budget.getTotal().getAmount().doubleValue();
-		double progress = spentMoney / totalMoney;
+        Double progress = (Math.abs(totalMoney) < Math.ulp(1.0) && Math.abs(spentMoney) < Math.ulp(1.0)) ? null : spentMoney / totalMoney;
 		double totalHours = workRecordRepository.getTotalHoursInTimeRange(budget.getId(), dateRange.getStartDate(),
 				dateRange.getEndDate());
 
@@ -229,7 +229,7 @@ public class BudgetReportService {
 
 	private Money toMoneyNullsafe(Double cents) {
 		if (cents == null) {
-			return MoneyUtil.createMoneyFromCents(0l);
+            return MoneyUtil.createMoneyFromCents(0L);
 		} else {
 			return MoneyUtil.createMoneyFromCents(Math.round(cents));
 		}

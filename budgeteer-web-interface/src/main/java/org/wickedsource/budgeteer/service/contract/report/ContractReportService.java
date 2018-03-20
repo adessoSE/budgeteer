@@ -1,18 +1,5 @@
 package org.wickedsource.budgeteer.service.contract.report;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import javax.transaction.Transactional;
-
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
@@ -26,6 +13,14 @@ import org.wickedsource.budgeteer.SheetTemplate.SheetTemplateSerializable;
 import org.wickedsource.budgeteer.SheetTemplate.TemplateWriter;
 import org.wickedsource.budgeteer.persistence.contract.ContractEntity;
 import org.wickedsource.budgeteer.persistence.contract.ContractRepository;
+
+import javax.transaction.Transactional;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Transactional
 @Service
@@ -63,7 +58,7 @@ public class ContractReportService {
 
 	private void writeSummary(XSSFSheet sheet, List<ContractReportSummary> summary, boolean removeFlagSheet) {
 		SheetTemplate template = new SheetTemplate(ContractReportSummary.class, sheet);
-		TemplateWriter<ContractReportSummary> tw = new TemplateWriter<ContractReportSummary>(template);
+		TemplateWriter<ContractReportSummary> tw = new TemplateWriter<>(template);
 		tw.setEntries(summary);
 		tw.write();
 		if(removeFlagSheet) {
@@ -72,8 +67,8 @@ public class ContractReportService {
 	}
 
 	private List<ContractReportSummary> createSummary(List<ContractReportData> contractReportList) {
-		Set<String> recipients = new HashSet<String>();
-		contractReportList.stream().forEach(
+		Set<String> recipients = new HashSet<>();
+		contractReportList.forEach(
 				contract -> recipients.add((String) getAttribute("rechnungsempfaenger", contract.getAttributes())));
 
 		List<ContractReportSummary> summary = recipients.stream().map(description -> new ContractReportSummary(description))
@@ -95,7 +90,7 @@ public class ContractReportService {
 
 	private File outputfile(XSSFWorkbook wb) {
 		File outputFile = null;
-		FileOutputStream out = null;
+		FileOutputStream out;
 		try {
 			outputFile = File.createTempFile("contract-report-", ".xlsx");
 			outputFile.deleteOnExit();
@@ -109,7 +104,7 @@ public class ContractReportService {
 
 	private void writeContractData(XSSFSheet sheet, List<ContractReportData> reportList) {
 		SheetTemplate template = new SheetTemplate(ContractReportData.class, sheet);
-		TemplateWriter<ContractReportData> tw = new TemplateWriter<ContractReportData>(template);
+		TemplateWriter<ContractReportData> tw = new TemplateWriter<>(template);
 		tw.setEntries(reportList);
 		setWarnings(reportList, tw);
 		tw.write();
@@ -117,19 +112,22 @@ public class ContractReportService {
 	}
 
 	private void setWarnings(List<ContractReportData> list, TemplateWriter<ContractReportData> tw) {
-		list.stream().forEach(contractData -> {
-			if (contractData.getProgress() >= 0.6 && contractData.getProgress() < 0.8) {
+		list.forEach(contractData -> {
+			if (contractData.getProgress() != null &&
+					contractData.getProgress() >= 0.6 && contractData.getProgress() < 0.8) {
 				tw.addFlag(contractData, "progress", "warning1");
-			} else if (contractData.getProgress() >= 0.8 && contractData.getProgress() < 1) {
+			} else if (contractData.getProgress() != null &&
+					contractData.getProgress() >= 0.8 && contractData.getProgress() < 1) {
 				tw.addFlag(contractData, "progress", "warning2");
-			} else if (contractData.getProgress() >= 1) {
+			} else if ((contractData.getProgress() == null && contractData.getBudgetSpent_net() > 0) ||
+					(contractData.getProgress() != null && contractData.getProgress() >= 1)) {
 				tw.addFlag(contractData, "progress", "warning3");
 			}
 		});
 	}
 
 	private List<ContractReportData> loadContractReportData(long projectId, Date endDate) {
-		List<ContractEntity> contracts = new LinkedList<ContractEntity>();
+		List<ContractEntity> contracts = new LinkedList<>();
 		contracts.addAll(contractRepository.findByProjectId(projectId));
 		return mapper.map(contracts,endDate);
 	}

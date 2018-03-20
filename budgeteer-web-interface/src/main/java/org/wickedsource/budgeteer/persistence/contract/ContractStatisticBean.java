@@ -15,7 +15,7 @@ public class ContractStatisticBean implements Serializable {
     /**
      * budgets are in cents
      */
-    private double progress;
+    private Double progress;
     private long remainingContractBudget;
     private long spentBudget;
     private long invoicedBudget;

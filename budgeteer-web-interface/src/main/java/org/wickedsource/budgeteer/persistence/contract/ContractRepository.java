@@ -21,8 +21,12 @@ public interface ContractRepository extends CrudRepository<ContractEntity, Long>
      * returns the remaining budget of the contract, the spend budget in budgeteer and the invoiced budget until the given date
      */
     @Query("select new org.wickedsource.budgeteer.persistence.contract.ContractStatisticBean(:year+0," +
-    		"(select coalesce(sum(wr.minutes * wr.dailyRate/ 60 / 8),0)" +
-    		" from WorkRecordEntity wr where wr.budget.contract.id = :contractId AND(wr.year < :year OR (wr.year = :year AND wr.month <= :month))) / cast(c.budget AS double), " +
+            "case when (abs(cast(c.budget AS double)) < 10e-16) then null else (" +
+            "(SELECT coalesce(sum(wr.minutes * wr.dailyRate/ 60 / 8),0)" +
+            " FROM WorkRecordEntity wr" +
+            " WHERE wr.budget.contract.id = :contractId AND(wr.year < :year OR (wr.year = :year AND wr.month <= :month)))" +
+            " / cast(c.budget AS double)" +
+            ") end, " +
             "(c.budget - coalesce((select sum(wr.minutes * wr.dailyRate/ 60 / 8) " +
             "from WorkRecordEntity wr where wr.budget.contract.id = :contractId " +
             "AND (wr.year < :year OR (wr.year = :year AND wr.month <= :month))" +
@@ -42,8 +46,12 @@ public interface ContractRepository extends CrudRepository<ContractEntity, Long>
      * returns the remaining budget of the contract, the spend budget in budgeteer and the invoiced budget for the given month
      */
     @Query("select new org.wickedsource.budgeteer.persistence.contract.ContractStatisticBean(:year+0," +
-    		"(select coalesce(sum(wr.minutes * wr.dailyRate/ 60 / 8),0)" +
-    		" from WorkRecordEntity wr where wr.budget.contract.id = :contractId AND (wr.year < :year OR (wr.year = :year AND wr.month <= :month))) / cast(c.budget AS double), " +
+            "case when (abs(cast(c.budget AS double)) < 10e-16) then null else (" +
+            "(SELECT coalesce(sum(wr.minutes * wr.dailyRate/ 60 / 8),0)" +
+            " FROM WorkRecordEntity wr" +
+            " WHERE wr.budget.contract.id = :contractId AND (wr.year < :year OR (wr.year = :year AND wr.month <= :month)))" +
+            " / cast(c.budget AS double)" +
+            ") end, " +
             "(c.budget - coalesce((select sum(wr.minutes * wr.dailyRate/ 60 / 8) " +
             "from WorkRecordEntity wr where wr.budget.contract.id = :contractId " +
             "AND (wr.year = :year AND wr.month = :month)" +

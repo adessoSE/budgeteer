@@ -1,14 +1,13 @@
 package org.wickedsource.budgeteer.service.contract.report;
 
+import lombok.Data;
+import org.wickedsource.budgeteer.SheetTemplate.SheetTemplateSerializable;
+
 import java.util.Date;
 import java.util.List;
 
-import org.wickedsource.budgeteer.SheetTemplate.SheetTemplateSerializable;
-
-import lombok.Data;
-
 @Data
-public class ContractReportData {
+class ContractReportData {
 	private long id;
 	private String contract;
 	private String contractId;
@@ -21,6 +20,6 @@ public class ContractReportData {
 	private double budgetLeft_gross;
 	private double budgetTotal_gross;
 	private double taxRate;
-	private double progress;
+	private Double progress;
 	private List<? extends SheetTemplateSerializable> attributes;
 }
