@@ -33,6 +33,10 @@ public class ContractOverviewTable extends Panel{
         super(id);
         ContractOverviewTableModel data = contractService.getContractOverviewByProject(BudgeteerSession.get().getProjectId());
         WebMarkupContainer table = new WebMarkupContainer("table");
+
+        createNetGrossLabels(table);
+        setVisibilityOfNetGrossLabels(table);
+
         table.add(new DataTableBehavior(DataTableBehavior.getRecommendedOptions()));
         table.add(new ListView<String>("headerRow",  model(from(data).getHeadline()) ) {
             @Override
@@ -76,6 +80,24 @@ public class ContractOverviewTable extends Panel{
         add(table);
     }
 
-    public void setTaxEnabled(boolean enabled) {
+    private void setVisibilityOfNetGrossLabels(WebMarkupContainer table) {
+        if (BudgeteerSession.get().isTaxEnabled()) {
+            table.get("netLabelTotal").setVisible(false);
+            table.get("netLabelSpent").setVisible(false);
+            table.get("netLabelLeft").setVisible(false);
+        } else {
+            table.get("grossLabelTotal").setVisible(false);
+            table.get("grossLabelSpent").setVisible(false);
+            table.get("grossLabelLeft").setVisible(false);
+        }
+    }
+
+    private void createNetGrossLabels(WebMarkupContainer table) {
+        table.add(new WebMarkupContainer("netLabelTotal"));
+        table.add(new WebMarkupContainer("grossLabelTotal"));
+        table.add(new WebMarkupContainer("netLabelSpent"));
+        table.add(new WebMarkupContainer("grossLabelSpent"));
+        table.add(new WebMarkupContainer("netLabelLeft"));
+        table.add(new WebMarkupContainer("grossLabelLeft"));
     }
 }

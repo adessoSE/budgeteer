@@ -45,6 +45,8 @@ public class BudgetOverviewTable extends Panel {
         WebMarkupContainer table = new WebMarkupContainer("table");
         table.add(new DataTableBehavior(DataTableBehavior.getRecommendedOptions()));
 
+        createNetGrossLabels(table);
+        setVisibilityOfNetGrossLabels(table);
 
         table.add(createBudgetList("budgetList", model));
 
@@ -130,5 +132,30 @@ public class BudgetOverviewTable extends Panel {
                 return super.newItem(index, new ClassAwareWrappingModel<BudgetDetailData>(itemModel, BudgetDetailData.class));
             }
         };
+    }
+
+    private void setVisibilityOfNetGrossLabels(WebMarkupContainer table) {
+        if (BudgeteerSession.get().isTaxEnabled()) {
+            table.get("netLabelTotal").setVisible(false);
+            table.get("netLabelSpent").setVisible(false);
+            table.get("netLabelLeft").setVisible(false);
+            table.get("netLabelUnplanned").setVisible(false);
+        } else {
+            table.get("grossLabelTotal").setVisible(false);
+            table.get("grossLabelSpent").setVisible(false);
+            table.get("grossLabelLeft").setVisible(false);
+            table.get("grossLabelUnplanned").setVisible(false);
+        }
+    }
+
+    private void createNetGrossLabels(WebMarkupContainer table) {
+        table.add(new WebMarkupContainer("netLabelTotal"));
+        table.add(new WebMarkupContainer("grossLabelTotal"));
+        table.add(new WebMarkupContainer("netLabelSpent"));
+        table.add(new WebMarkupContainer("grossLabelSpent"));
+        table.add(new WebMarkupContainer("netLabelLeft"));
+        table.add(new WebMarkupContainer("grossLabelLeft"));
+        table.add(new WebMarkupContainer("netLabelUnplanned"));
+        table.add(new WebMarkupContainer("grossLabelUnplanned"));
     }
 }

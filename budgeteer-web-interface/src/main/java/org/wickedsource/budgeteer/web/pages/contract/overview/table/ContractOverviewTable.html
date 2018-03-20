@@ -9,9 +9,30 @@
                 <th><wicket:message key="overview.table.contract.year">Year</wicket:message></th>
                 <th><wicket:message key="overview.table.contract.type">Type</wicket:message></th>
                 <th wicket:id="headerRow"><span wicket:id="headerItem">Contract Title</span></th>
-                <th><wicket:message key="overview.table.contract.budgetTotal">Budget Total</wicket:message></th>
-                <th><wicket:message key="overview.table.contract.budgetSpent">Budget Spent</wicket:message></th>
-                <th><wicket:message key="overview.table.contract.budgetLeft">Budget Left</wicket:message></th>
+                <th>
+                    <div wicket:id="netLabelTotal">
+                        <wicket:message key="overview.table.contract.netLabelTotal"></wicket:message>
+                    </div>
+                    <div wicket:id="grossLabelTotal">
+                        <wicket:message key="overview.table.contract.grossLabelTotal"></wicket:message>
+                    </div>
+                </th>
+                <th>
+                    <div wicket:id="netLabelSpent">
+                        <wicket:message key="overview.table.contract.netLabelSpent"></wicket:message>
+                    </div>
+                    <div wicket:id="grossLabelSpent">
+                        <wicket:message key="overview.table.contract.grossLabelSpent"></wicket:message>
+                    </div>
+                </th>
+                <th>
+                    <div wicket:id="netLabelLeft">
+                        <wicket:message key="overview.table.contract.netLabelLeft"></wicket:message>
+                    </div>
+                    <div wicket:id="grossLabelLeft">
+                        <wicket:message key="overview.table.contract.grossLabelLeft"></wicket:message>
+                    </div>
+                </th>
                 <th></th>
             </tr>
         </thead>
