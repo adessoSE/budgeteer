@@ -1,18 +1,13 @@
 package org.wickedsource.budgeteer.service.budget.report;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.temporal.ChronoUnit;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
+import org.apache.poi.EncryptedDocumentException;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.xssf.usermodel.XSSFFormulaEvaluator;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.joda.money.Money;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.wickedsource.budgeteer.MoneyUtil;
@@ -27,13 +22,19 @@ import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
 import org.wickedsource.budgeteer.service.contract.ContractBaseData;
 import org.wickedsource.budgeteer.service.contract.ContractService;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
-import org.apache.poi.EncryptedDocumentException;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFFormulaEvaluator;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.joda.money.Money;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class BudgetReportService {
@@ -49,7 +50,7 @@ public class BudgetReportService {
 
 	/**
 	 * Creates an excel spreadsheet containing the budgets informations
-	 * @param projectId
+     * @param projectId ProjectId
 	 * @param filter TagFilter of the selected Budgets
 	 * @param metaInformationen Necessary informations about the report
 	 * @return Excel spreadsheet file
@@ -78,7 +79,7 @@ public class BudgetReportService {
 
 	private void writeSummary(XSSFSheet sheet, List<BudgetSummary> summary) {
 		SheetTemplate template = new SheetTemplate(BudgetSummary.class, sheet);
-		TemplateWriter<BudgetSummary> tw = new TemplateWriter<BudgetSummary>(template);
+        TemplateWriter<BudgetSummary> tw = new TemplateWriter<>(template);
 		tw.setEntries(summary);
 		tw.write();
 		tw.removeFlagSheet();
@@ -86,14 +87,14 @@ public class BudgetReportService {
 
 	private void writeBudgetData(Sheet sheet, List<BudgetReportData> budgetList) {
 		SheetTemplate template = new SheetTemplate(BudgetReportData.class, sheet);
-		TemplateWriter<BudgetReportData> tw = new TemplateWriter<BudgetReportData>(template);
+        TemplateWriter<BudgetReportData> tw = new TemplateWriter<>(template);
 		tw.setEntries(budgetList);
 		setWarnings(budgetList, tw);
 		tw.write();
 	}
 
 	private void setWarnings(List<BudgetReportData> budgetList, TemplateWriter<BudgetReportData> tw) {
-		budgetList.stream().forEach(budgetData -> {
+        budgetList.forEach(budgetData -> {
 			if (budgetData.getProgress() >= 0.6 && budgetData.getProgress() < 0.8) {
 				tw.addFlag(budgetData, "progress", "warning1");
 			} else if (budgetData.getProgress() >= 0.8 && budgetData.getProgress() < 1) {
@@ -105,8 +106,8 @@ public class BudgetReportService {
 	}
 
 	private List<BudgetSummary> createBudgetSummary(List<BudgetReportData> budgetList) {
-		Set<String> recipients = new HashSet<String>();
-		budgetList.stream().forEach(
+        Set<String> recipients = new HashSet<>();
+        budgetList.forEach(
 				budget -> recipients.add((String) getAttribute("rechnungsempfaenger", budget.getAttributes())));
 
 		List<BudgetSummary> summary = recipients.stream().map(description -> new BudgetSummary(description))
@@ -140,7 +141,7 @@ public class BudgetReportService {
 
 	private File createOutputFile(XSSFWorkbook wb) {
 		File outputFile = null;
-		FileOutputStream out = null;
+        FileOutputStream out;
 		try {
 			outputFile = File.createTempFile("report-", ".xlsx");
 			outputFile.deleteOnExit();
@@ -216,7 +217,7 @@ public class BudgetReportService {
 
 	public Date getStartDateOfBudgets() {
 		BudgetTagFilter filter = BudgeteerSession.get().getBudgetFilter();
-		List<BudgetDetailData> budgets = budgetService.loadBudgetsDetailData(filter.getProjectId(), filter);
+        List<BudgetDetailData> budgets = budgetService.loadBudgetsDetailData(BudgeteerSession.get().getProjectId(), filter);
 		List<Long> budgetIds = budgets.stream().map(budget -> budget.getId()).collect(Collectors.toList());
 		return workRecordRepository.getFirstWorkRecordDateByBudgetIds(budgetIds);
 	}
