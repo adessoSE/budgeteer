@@ -7,7 +7,6 @@ import org.wickedsource.budgeteer.persistence.contract.ContractEntity;
 import org.wickedsource.budgeteer.persistence.contract.ContractFieldEntity;
 import org.wickedsource.budgeteer.persistence.contract.ContractRepository;
 import org.wickedsource.budgeteer.persistence.contract.ContractStatisticBean;
-import org.wickedsource.budgeteer.service.DateRange;
 import org.wickedsource.budgeteer.service.contract.DynamicAttributeField;
 
 import java.time.LocalDate;
@@ -36,14 +35,14 @@ public class ContractReportMonthlyDataMapper {
         }
         report.setAttributes(new ArrayList<DynamicAttributeField>(contractAttributes.values()));
         report.setId(contract.getId());
-        report.setTaxRate(contract.getTaxRate()/100);
+        report.setTaxRate(contract.getTaxRate().doubleValue() / 100);
         report.setFrom(Date.from(firstOfMonth.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
         report.setUntil(endDate);
         report.setBudgetSpent_net(MoneyUtil.createMoneyFromCents(statistics.getSpentBudget()).getAmount().doubleValue());
         report.setBudgetLeft_net(contract.getBudget().getAmount().doubleValue() - MoneyUtil.createMoneyFromCents(contractRepository.getSpentBudgetByContractIdUntilDate(contract.getId(),end.getMonthValue()-1,end.getYear()).longValue()).getAmount().doubleValue());
         report.setBudgetTotal_net(contract.getBudget().getAmount().doubleValue());
 
-        double taxCoefficient = 1.0 + contract.getTaxRate()/100;
+        double taxCoefficient = 1.0 + contract.getTaxRate().doubleValue() / 100;
         report.setBudgetSpent_gross(report.getBudgetSpent_net() * taxCoefficient);
         report.setBudgetLeft_gross(report.getBudgetLeft_net() * taxCoefficient);
         report.setBudgetTotal_gross(report.getBudgetTotal_net() * taxCoefficient);
