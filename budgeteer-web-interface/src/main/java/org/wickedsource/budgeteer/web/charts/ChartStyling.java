@@ -68,7 +68,7 @@ public class ChartStyling {
 	public static Options getOptions() {
 		return new Options()
 				.setLayout(ChartStyling.getLayout())
-				.setMaintainAspectRatio(false)
+				.setMaintainAspectRatio(true)
 				.setResponsive(true)
 				.setLegend(new Legend()
 						.setDisplay(false))

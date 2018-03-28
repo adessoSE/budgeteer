@@ -56,7 +56,7 @@ public class PeopleDistributionChartConfiguration extends ChartConfiguration {
     	
     	setOptions(new Options()
     			.setResponsive(true)
-    			.setMaintainAspectRatio(false)
+    			.setMaintainAspectRatio(true)
     			.setLegend(new Legend()
     					.setDisplay(true)
     					.setPosition(Position.RIGHT)));

@@ -76,7 +76,7 @@ public class TargetAndActualChartConfiguration extends ChartConfiguration {
 		setData(new Data().setDatasets(datasets).setLabels(TextLabel.of(labels)));
 
 		setOptions(new Options()
-				.setMaintainAspectRatio(false)
+				.setMaintainAspectRatio(true)
 				.setResponsive(true)
 				.setTooltips(new Tooltips()
 						.setIntersect(true)
