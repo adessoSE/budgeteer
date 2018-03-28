@@ -5,6 +5,9 @@ import org.apache.wicket.request.Request;
 import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
 import org.wickedsource.budgeteer.service.user.User;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class BudgeteerSession extends WebSession {
 
     private BudgetTagFilter budgetFilter;
@@ -47,6 +50,7 @@ public class BudgeteerSession extends WebSession {
 
     public void setProjectId(long projectId) {
         this.projectId = projectId;
+        setBudgetFilter(new BudgetTagFilter(new ArrayList<>(), projectId));
     }
 
     public static BudgeteerSession get() {
