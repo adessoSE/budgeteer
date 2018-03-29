@@ -43,7 +43,7 @@ public class ContractEntity implements Serializable {
     @Column(name="BUDGET")
     private Money budget;
 
-    @Column(name = "TAXRATE", precision = 10, scale = 2)
+    @Column(name = "TAXRATE", precision = 10, scale = 4)
     private BigDecimal taxRate;
 
     @Column(name="INTERNAL_NUMBER")
