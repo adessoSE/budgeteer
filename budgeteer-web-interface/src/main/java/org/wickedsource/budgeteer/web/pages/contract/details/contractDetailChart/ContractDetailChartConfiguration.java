@@ -1,24 +1,20 @@
 package org.wickedsource.budgeteer.web.pages.contract.details.contractDetailChart;
 
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
+import de.adesso.wickedcharts.chartjs.ChartConfiguration;
+import de.adesso.wickedcharts.chartjs.chartoptions.*;
+import de.adesso.wickedcharts.chartjs.chartoptions.label.TextLabel;
+import de.adesso.wickedcharts.chartjs.chartoptions.valueType.DoubleValue;
 import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.web.PropertyLoader;
 import org.wickedsource.budgeteer.web.charts.ChartStyling;
 import org.wickedsource.budgeteer.web.charts.ChartUtils;
 
-import de.adesso.wickedcharts.chartjs.ChartConfiguration;
-import de.adesso.wickedcharts.chartjs.chartoptions.ChartType;
-import de.adesso.wickedcharts.chartjs.chartoptions.Data;
-import de.adesso.wickedcharts.chartjs.chartoptions.Dataset;
-import de.adesso.wickedcharts.chartjs.chartoptions.TooltipMode;
-import de.adesso.wickedcharts.chartjs.chartoptions.Tooltips;
-import de.adesso.wickedcharts.chartjs.chartoptions.label.TextLabel;
-import de.adesso.wickedcharts.chartjs.chartoptions.valueType.DoubleValue;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
 
-public class ContractDetailChartConfiguration extends ChartConfiguration {
+public class ContractDetailChartConfiguration extends ChartConfiguration implements Serializable {
 
 	// TODO: Data Labels
 	
