@@ -99,10 +99,16 @@ table.smallLastColumn tr td:last-child {
 }
 
 .chartCanvas {
-	height: 450px;
+    height: 450px;
 }
 	
-	
-	
+.personDetails {
+    height: 210px;
+}
+
+.budgetDetails {
+	height: 270px;
+}
+
 	
 	
