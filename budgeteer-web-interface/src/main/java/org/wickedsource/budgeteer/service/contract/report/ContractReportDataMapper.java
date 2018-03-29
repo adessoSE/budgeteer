@@ -35,14 +35,14 @@ public class ContractReportDataMapper {
         }
 		report.setAttributes(new ArrayList<DynamicAttributeField>(contractAttributes.values()));
 		report.setId(contract.getId());
-		report.setTaxRate(contract.getTaxRate().doubleValue() / 100);
+		report.setTaxRate(contract.getTaxRate() != null ? contract.getTaxRate().doubleValue() / 100 : 0);
 		report.setFrom(dateRange.getStartDate());
 		report.setUntil(dateRange.getEndDate());
 		report.setBudgetSpent_net(MoneyUtil.createMoneyFromCents(statistics.getSpentBudget()).getAmount().doubleValue());
 		report.setBudgetLeft_net(contract.getBudget().getAmount().doubleValue() - report.getBudgetSpent_net());
 		report.setBudgetTotal_net(contract.getBudget().getAmount().doubleValue());
 
-		double taxCoefficient = 1.0 + contract.getTaxRate().doubleValue() / 100;
+		double taxCoefficient = 1.0 + report.getTaxRate();
 		report.setBudgetSpent_gross(report.getBudgetSpent_net() * taxCoefficient);
 		report.setBudgetLeft_gross(report.getBudgetLeft_net() * taxCoefficient);
 		report.setBudgetTotal_gross(report.getBudgetTotal_net() * taxCoefficient);
