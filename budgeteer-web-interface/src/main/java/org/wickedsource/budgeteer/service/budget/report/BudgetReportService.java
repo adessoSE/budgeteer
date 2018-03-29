@@ -108,7 +108,7 @@ public class BudgetReportService {
 	private List<BudgetSummary> createBudgetSummary(List<BudgetReportData> budgetList) {
         Set<String> recipients = new HashSet<>();
         budgetList.forEach(
-				budget -> recipients.add((String) getAttribute("rechnungsempfaenger", budget.getAttributes())));
+				budget -> recipients.add(getAttribute("rechnungsempfaenger", budget.getAttributes())));
 
 		List<BudgetSummary> summary = recipients.stream().map(description -> new BudgetSummary(description))
 				.collect(Collectors.toList());
@@ -127,16 +127,16 @@ public class BudgetReportService {
 		return wb;
 	}
 
-	private Object getAttribute(String string, List<? extends SheetTemplateSerializable> list) {
+	private String getAttribute(String string, List<? extends SheetTemplateSerializable> list) {
 		if (null == list) {
-			return null;
+			return "";
 		}
 		for (SheetTemplateSerializable listEntry : list) {
 			if (listEntry.getName().equals(string)) {
-				return listEntry.getValue();
+				return listEntry.getValue().toString();
 			}
 		}
-		return null;
+		return "";
 	}
 
 	private File createOutputFile(XSSFWorkbook wb) {
