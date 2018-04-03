@@ -38,7 +38,7 @@
             <div class="footer">
                 <div class="row">
                     <div class="col-lg-3">
-                        <button wicket:id="backlink2" type="button" class="btn bg-olive btn-block">Cancel</button>
+                        <button wicket:id="backlink2" type="button" id="cancel" class="btn bg-olive btn-block">Cancel</button>
                     </div>
                     <div class="col-lg-3">
                         <button wicket:id="exampleFileButton" class="btn bg-olive btn-block" data-toggle="tooltip" title
@@ -47,11 +47,12 @@
                         </button>
                     </div>
                     <div class="col-lg-6">
-                        <button type="submit" class="btn bg-olive btn-block"><wicket:message key="page.button.start">Start import</wicket:message></button>
+                        <button type="submit" id="submitButton" class="btn bg-olive btn-block"><wicket:message key="page.button.start">Start import</wicket:message></button>
                     </div>
                 </div>
             </div>
         </form>
     </div>
+    <script src="js/enterAndEscape.js"></script>
 
 </wicket:extend>
