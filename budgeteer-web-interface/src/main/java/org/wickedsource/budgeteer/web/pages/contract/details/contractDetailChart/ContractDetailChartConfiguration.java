@@ -15,8 +15,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class ContractDetailChartConfiguration extends ChartConfiguration implements Serializable {
-
-	// TODO: Data Labels
 	
     public ContractDetailChartConfiguration(ContractDetailChartModel model) {
     	setType(ChartType.BAR);
