@@ -1,5 +1,5 @@
 <wicket:extend>
-
+    <script src="/budgeteer/"></script>
     <div class="form-box" id="login-box">
         <div class="header">Choose Project
             <div class="box-tools pull-right">
@@ -24,11 +24,11 @@
             <form wicket:id="chooseProjectForm">
                 <h4>Or select an existing one</h4>
                 <div class="input-group margin">
-                    <select wicket:id="projectChoice" placeholder="Project Name" class="form-control">
+                    <select wicket:id="projectChoice" id="proCh" placeholder="Project Name" class="form-control" autofocus>
                     </select>
                     <div class="input-group-btn">
                         <button wicket:id="markProject" class="btn bg-olive glyphicon glyphicon-star" style="top: 0"></button>
-                        <button  wicket:id="goButton" class="btn bg-olive glyphicon glyphicon-log-in" style="top: 0"></button>
+                        <button  wicket:id="goButton" id="goBtn" class="btn bg-olive glyphicon glyphicon-log-in" style="top: 0"></button>
                     </div>
                 </div>
             </form>
