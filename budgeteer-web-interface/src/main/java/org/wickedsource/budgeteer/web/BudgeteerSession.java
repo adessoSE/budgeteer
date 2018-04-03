@@ -50,7 +50,7 @@ public class BudgeteerSession extends WebSession {
 
     public void setProjectId(long projectId) {
         this.projectId = projectId;
-        setBudgetFilter(new BudgetTagFilter(new ArrayList<>(), projectId));
+        setBudgetFilter(null);
     }
 
     public static BudgeteerSession get() {
