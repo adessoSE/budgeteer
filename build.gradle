@@ -41,7 +41,6 @@ subprojects {
     compileJava {
         sourceCompatibility = '1.8'
         targetCompatibility = '1.8'
-        compileJava.options.bootClasspath = "${Jvm.current().javaHome}/jre/lib/rt.jar"
     }
 
     jacocoTestReport {
