@@ -47,7 +47,7 @@ public class MoneyConverter implements IConverter<Money> {
      *                          123.456,78  = 123456,78 EUR
      *                          12.34.56    = 123456 EUR
      *                          123456,78   = 123456,78 EUR
-     *                          123         = 123 EUR           and so on...
+     *                          123         = 123 EUR           and so on..
      *
      * The pattern does not allow;
      *                          abc = no alphabetic characters
