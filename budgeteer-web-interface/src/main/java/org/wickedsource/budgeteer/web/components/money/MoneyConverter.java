@@ -38,6 +38,21 @@ public class MoneyConverter implements IConverter<Money> {
         this.prependCurrencySymbol = prependCurrencySymbol;
     }
 
+    /**
+     * @param value     The given value, to be converted.
+     * @param locale    Local of a certain country. Depending on the country the currency is chosen.
+     * If format is set to false, the converter tries to parse the given value to a double.
+     * If format is true, the method convertToObject converts Strings of certain patterns.
+     * The pattern has to be;
+     *                          123.456,78  = 123456,78 EUR
+     *                          12.34.56    = 123456 EUR
+     *                          123456,78   = 123456,78 EUR
+     *                          123         = 123 EUR           and so on..
+     *
+     * The pattern does not allow;
+     *                          abc = no alphabetic characters
+     *                          123456,789  = 123456,78 EUR     only two digits behind the comma are allowed.
+     * */
     @Override
     public Money convertToObject(String value, Locale locale) throws ConversionException {
         try {
