@@ -13,4 +13,8 @@ public class PeopleDistributionChartTest extends AbstractWebTestTemplate {
         tester.startComponentInPage(new PeopleDistributionChart("chart", model));
 	}
 
+    @Override
+    protected void setupTest() {
+
+    }
 }

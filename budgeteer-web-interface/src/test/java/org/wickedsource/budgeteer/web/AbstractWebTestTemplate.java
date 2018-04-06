@@ -1,6 +1,7 @@
 package org.wickedsource.budgeteer.web;
 
 import org.apache.wicket.util.tester.WicketTester;
+import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -16,6 +17,21 @@ public abstract class AbstractWebTestTemplate {
 
     private static WicketTester tester;
 
+    @Before
+    public void setUp() {
+        if (tester == null) {
+            tester = new WicketTester(application);
+            login();
+        }
+        setupTest();
+    }
+
+    /**
+     * Subclasses can use this method to provide the configuration needed by
+     * each test.
+     */
+    protected abstract void setupTest();
+
     public void login() {
         User user = new User();
         user.setId(1l);
@@ -24,11 +40,6 @@ public abstract class AbstractWebTestTemplate {
     }
 
     protected WicketTester getTester() {
-        if (tester == null) {
-            tester = new WicketTester(application);
-            login();
-        }
         return tester;
     }
-
 }

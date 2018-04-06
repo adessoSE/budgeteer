@@ -14,4 +14,8 @@ public class BudgetTagFilterPanelTest extends AbstractWebTestTemplate {
         tester.startComponentInPage(panel);
     }
 
+    @Override
+    protected void setupTest() {
+
+    }
 }

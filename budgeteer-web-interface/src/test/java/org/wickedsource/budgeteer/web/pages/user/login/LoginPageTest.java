@@ -12,4 +12,9 @@ public class LoginPageTest extends AbstractWebTestTemplate {
         tester.startPage(LoginPage.class);
         tester.assertRenderedPage(LoginPage.class);
     }
+
+    @Override
+    protected void setupTest() {
+
+    }
 }

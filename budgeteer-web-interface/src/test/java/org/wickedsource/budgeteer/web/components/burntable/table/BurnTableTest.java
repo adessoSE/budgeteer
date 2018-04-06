@@ -15,4 +15,8 @@ public class BurnTableTest extends AbstractWebTestTemplate {
         tester.startComponentInPage(table);
     }
 
+    @Override
+    protected void setupTest() {
+
+    }
 }

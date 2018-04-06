@@ -12,4 +12,9 @@ public class BudgetsOverviewPageTest extends AbstractWebTestTemplate {
         tester.startPage(BudgetsOverviewPage.class);
         tester.assertRenderedPage(BudgetsOverviewPage.class);
     }
+
+    @Override
+    protected void setupTest() {
+
+    }
 }

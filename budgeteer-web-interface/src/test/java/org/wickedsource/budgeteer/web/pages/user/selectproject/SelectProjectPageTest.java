@@ -15,4 +15,9 @@ public class SelectProjectPageTest extends AbstractWebTestTemplate {
         tester.startPage(page);
         tester.assertRenderedPage(SelectProjectPage.class);
     }
+
+    @Override
+    protected void setupTest() {
+
+    }
 }
