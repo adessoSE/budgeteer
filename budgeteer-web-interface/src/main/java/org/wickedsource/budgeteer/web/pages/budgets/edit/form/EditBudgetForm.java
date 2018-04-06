@@ -14,6 +14,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.wickedsource.budgeteer.service.budget.BudgetService;
 import org.wickedsource.budgeteer.service.budget.EditBudgetData;
 import org.wickedsource.budgeteer.service.contract.ContractBaseData;
@@ -103,7 +104,11 @@ public class EditBudgetForm extends Form<EditBudgetData> {
 
     @Override
     protected void onSubmit() {
+        try {
             service.saveBudget(getModelObject());
             this.success(getString("feedback.success"));
+        } catch (DataIntegrityViolationException e) {
+            this.error(getString("feedback.error.constraint"));
+        }
     }
 }
