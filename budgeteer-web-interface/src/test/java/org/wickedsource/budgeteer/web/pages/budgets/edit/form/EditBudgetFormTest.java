@@ -33,6 +33,7 @@ public class EditBudgetFormTest extends AbstractWebTestTemplate {
         fillName(formTester);
         fillImportKey(formTester);
         formTester.submit();
+        tester.assertErrorMessages("The budget total may not be empty!");
         assertThat(tester.getFeedbackMessages(null)).hasSize(1);
     }
 
@@ -42,6 +43,7 @@ public class EditBudgetFormTest extends AbstractWebTestTemplate {
         fillImportKey(formTester);
         fillBudget(formTester);
         formTester.submit();
+        tester.assertErrorMessages("The title of the budget may not be empty!");
         assertThat(tester.getFeedbackMessages(null)).hasSize(1);
     }
 
@@ -51,6 +53,7 @@ public class EditBudgetFormTest extends AbstractWebTestTemplate {
         fillName(formTester);
         fillBudget(formTester);
         formTester.submit();
+        tester.assertErrorMessages("The import key may not be empty!");
         assertThat(tester.getFeedbackMessages(null)).hasSize(1);
     }
 
@@ -61,7 +64,7 @@ public class EditBudgetFormTest extends AbstractWebTestTemplate {
         fillImportKey(formTester);
         fillBudget(formTester);
         formTester.submit();
-        assertThat(tester.getFeedbackMessages(null)).hasSize(1);
+        assertThat(tester.getFeedbackMessages(IFeedbackMessageFilter.ALL)).hasSize(1);
         verify(budgetServiceMock, times(1)).saveBudget(any());
     }
 
@@ -75,7 +78,7 @@ public class EditBudgetFormTest extends AbstractWebTestTemplate {
         fillBudget(formTester);
         formTester.submit();
 
-        assertThat(tester.getFeedbackMessages(IFeedbackMessageFilter.ALL)).hasSize(1);
+        tester.assertErrorMessages("The import key is already used in another budget.");
         verify(budgetServiceMock, times(1)).saveBudget(any());
     }
 
@@ -91,7 +94,6 @@ public class EditBudgetFormTest extends AbstractWebTestTemplate {
     private void fillName(FormTester formTester) {
         formTester.setValue("name", "budgetname");
     }
-
 
     @Override
     protected void setupTest() {
