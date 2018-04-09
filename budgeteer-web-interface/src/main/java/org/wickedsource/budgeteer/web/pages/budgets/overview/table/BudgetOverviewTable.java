@@ -10,6 +10,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.service.budget.BudgetDetailData;
 import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
@@ -19,6 +20,7 @@ import org.wickedsource.budgeteer.web.ClassAwareWrappingModel;
 import org.wickedsource.budgeteer.web.components.dataTable.DataTableBehavior;
 import org.wickedsource.budgeteer.web.components.money.BudgetUnitMoneyModel;
 import org.wickedsource.budgeteer.web.components.money.MoneyLabel;
+import org.wickedsource.budgeteer.web.components.taxLabel.TaxLabelModel;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
 import org.wickedsource.budgeteer.web.pages.budgets.details.BudgetDetailsPage;
 import org.wickedsource.budgeteer.web.pages.budgets.edit.EditBudgetPage;
@@ -46,7 +48,6 @@ public class BudgetOverviewTable extends Panel {
         table.add(new DataTableBehavior(DataTableBehavior.getRecommendedOptions()));
 
         createNetGrossLabels(table);
-        setVisibilityOfNetGrossLabels(table);
 
         table.add(createBudgetList("budgetList", model));
 
@@ -134,28 +135,10 @@ public class BudgetOverviewTable extends Panel {
         };
     }
 
-    private void setVisibilityOfNetGrossLabels(WebMarkupContainer table) {
-        if (BudgeteerSession.get().isTaxEnabled()) {
-            table.get("netLabelTotal").setVisible(false);
-            table.get("netLabelSpent").setVisible(false);
-            table.get("netLabelLeft").setVisible(false);
-            table.get("netLabelUnplanned").setVisible(false);
-        } else {
-            table.get("grossLabelTotal").setVisible(false);
-            table.get("grossLabelSpent").setVisible(false);
-            table.get("grossLabelLeft").setVisible(false);
-            table.get("grossLabelUnplanned").setVisible(false);
-        }
-    }
-
     private void createNetGrossLabels(WebMarkupContainer table) {
-        table.add(new WebMarkupContainer("netLabelTotal"));
-        table.add(new WebMarkupContainer("grossLabelTotal"));
-        table.add(new WebMarkupContainer("netLabelSpent"));
-        table.add(new WebMarkupContainer("grossLabelSpent"));
-        table.add(new WebMarkupContainer("netLabelLeft"));
-        table.add(new WebMarkupContainer("grossLabelLeft"));
-        table.add(new WebMarkupContainer("netLabelUnplanned"));
-        table.add(new WebMarkupContainer("grossLabelUnplanned"));
+        table.add(new Label("totalLabel", new TaxLabelModel(new StringResourceModel("overview.table.budget.totalLabel", this))));
+        table.add(new Label("leftLabel", new TaxLabelModel(new StringResourceModel("overview.table.budget.leftLabel", this))));
+        table.add(new Label("spentLabel", new TaxLabelModel(new StringResourceModel("overview.table.budget.spentLabel", this))));
+        table.add(new Label("unplannedLabel", new TaxLabelModel(new StringResourceModel("overview.table.budget.unplannedLabel", this))));
     }
 }

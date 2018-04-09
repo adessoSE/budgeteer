@@ -110,7 +110,7 @@ public class BudgetsOverviewPage extends BasePage {
                 } else {
                     BudgeteerSession.get().setTaxEnabled(true);
                 }
-                setResponsePage(BudgetsOverviewPage.class);
+//                setResponsePage(BudgetsOverviewPage.class);
             }
         };
     }
