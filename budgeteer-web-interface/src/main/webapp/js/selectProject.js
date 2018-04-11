@@ -1,45 +1,56 @@
-window.onload = (function (){
+// wait until the DOM is ready
+window.onload = (function () {
+
     // Get the input field
     var input = document.getElementById("proCh");
-
     var count = 0;
-    if(input.options[input.selectedIndex].value != ""){
+
+    // get the selected item from the dropdown list
+    if(input.options[input.selectedIndex].value != "") {
         count = 1;
     }
 
-    document.addEventListener('keydown',
-    function(evt) {
-        evt = evt || window.event;
-         var isEscape = false;
-         if ("key" in evt) {
-             isEscape = (evt.key == "Escape" || evt.key == "Esc");
-         } else {
-             isEscape = (evt.keyCode == 27);
-         }
-         if (isEscape) {
-             evt.preventDefault();
-             document.getElementById("logout").click();
-         }
-     });
+    // add listener for keydown-event
+    document.addEventListener("keydown", function(evt) {
+        // get the event
+        evt = evt || window.event;
+        var isEscape = false;
+        // get the key
+        if ("key" in evt) {
+            isEscape = (evt.key == "Escape" || evt.key == "Esc");
+        } else {
+            isEscape = (evt.keyCode == 27);
+        }
+        // if esc is pressed, click logout
+        if (isEscape) {
+            evt.preventDefault();
+            document.getElementById("logout").click();
+        }
+    });
 
-    // Execute a function when the user releases a key on the keyboard
+    // add listener for keypress-event
     input.addEventListener("keypress", function(event) {
       // Number 13 is the "Enter" key on the keyboard
-      if (event.keyCode === 13 && count == 0) {
+      if (event.keyCode === 13 && count != 1) {
         count = 1;
-        // Trigger the button element with a click
-        input.click();
+        console.log("count is" + count);
+        // click the dropdown list item
+        document.getElementById("proCh").click();
       }
       else if(event.keyCode === 13 && count == 1) {
-          event.preventDefault();
-          count = 0;
-          document.getElementById("goBtn").click();
+        event.preventDefault();
+        count = 0;
+        // click the submit-button
+        document.getElementById("goBtn").click();
+      }
+
+    });
+
+    // add listener for the click-event
+    input.addEventListener("click", function(event) {
+      if (count == 0) {
+        count += 1;
       }
     });
-    input.addEventListener("click", function(event) {
-      // Cancel the default action, if needed
-       if(count == 0){
-            count = 1;
-       }
-    });
+
 });
