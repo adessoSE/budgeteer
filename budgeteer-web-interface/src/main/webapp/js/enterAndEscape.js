@@ -1,4 +1,3 @@
-window.onload = (function () {
 
     document.addEventListener("keydown", function(evt) {
         evt = evt || window.event;
@@ -21,6 +20,3 @@ window.onload = (function () {
         }
     });
 
-
-
-});
