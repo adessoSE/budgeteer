@@ -74,6 +74,7 @@ public class ChartStyling {
 		StringBuilder result = new StringBuilder("");
 
 		// Get file from resources folder
+		// do not use files, this will not work in production!
         InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(fileName);
         InputStreamReader streamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
         BufferedReader reader = new BufferedReader(streamReader);
