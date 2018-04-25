@@ -17,8 +17,7 @@ public class TemplateWriter<T> {
 	private Sheet sheet;
 	private List<T> entries;
 	private Multimap<T,FieldFlag> flagMapping;
-	
-	
+
 	private int currentRowIndex;
 	private Row currentRow;
 
@@ -158,9 +157,12 @@ public class TemplateWriter<T> {
 		return tokens[0];
 	}
 
-	private Object subkeyOf(String tagname) {
-		String[] tokens = tagname.split("\\.");
-		return tokens[1];
+    String subkeyOf(String tagname) {
+        int dotIndex = tagname.indexOf(".");
+        if (dotIndex == -1) {
+            return null;
+        }
+        return tagname.substring(dotIndex + 1, tagname.length());
 	}
 
 	void insertRows() {

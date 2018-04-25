@@ -55,8 +55,7 @@ public class BudgetReportService {
 	 * @param metaInformationen Necessary informations about the report
 	 * @return Excel spreadsheet file
 	 */
-	public File createReportFile(long projectId, BudgetTagFilter filter,
-			ReportMetaInformation metaInformationen) {
+    public File createReportFile(long projectId, BudgetTagFilter filter, ReportMetaInformation metaInformationen) {
 		List<BudgetReportData> overallBudgetReportList = loadOverallBudgetReportData(projectId, filter,
 				metaInformationen);
 		List<BudgetReportData> monthlyBudgetReportList = loadMonthlyBudgetReportData(projectId, filter,
