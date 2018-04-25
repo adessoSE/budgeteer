@@ -94,7 +94,7 @@ public class BudgetsOverviewPage extends BasePage {
         Link link = new Link(string) {
             @Override
             public void onClick() {
-                if (BudgeteerSession.get().isTaxEnabled()) {
+                if (BudgeteerSession.get().isTaxEnabled() && Math.abs(BudgeteerSession.get().getSelectedBudgetUnit() - 1.0) < Math.ulp(1)) {
                     BudgeteerSession.get().setTaxEnabled(false);
                 } else {
                     BudgeteerSession.get().setTaxEnabled(true);
@@ -105,6 +105,12 @@ public class BudgetsOverviewPage extends BasePage {
                 new StringResourceModel("links.tax.label.net", this),
                 new StringResourceModel("links.tax.label.gross", this)
         )));
+        if(Math.abs(BudgeteerSession.get().getSelectedBudgetUnit() - 1.0) > Math.ulp(1)){
+            link.add(new AttributeAppender("style", "cursor: not-allowed;", " "));
+            link.add(new AttributeModifier("title", BudgetsOverviewPage.this.getString("links.budge.label.gross.value")));
+            link.setEnabled(false);
+            BudgeteerSession.get().setTaxEnabled(false);
+        }
         return link;
     }
 
