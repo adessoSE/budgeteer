@@ -69,23 +69,23 @@ public class ContractReportService {
 	private List<ContractReportSummary> createSummary(List<ContractReportData> contractReportList) {
 		Set<String> recipients = new HashSet<>();
 		contractReportList.forEach(
-				contract -> recipients.add((String) getAttribute("rechnungsempfaenger", contract.getAttributes())));
+				contract -> recipients.add(getAttribute("rechnungsempfaenger", contract.getAttributes())));
 
 		List<ContractReportSummary> summary = recipients.stream().map(description -> new ContractReportSummary(description))
 				.collect(Collectors.toList());
 		return summary;
 	}
 
-	private Object getAttribute(String string, List<? extends SheetTemplateSerializable> list) {
+	private String getAttribute(String string, List<? extends SheetTemplateSerializable> list) {
 		if (null == list) {
-			return null;
+			return "";
 		}
 		for (SheetTemplateSerializable listEntry : list) {
 			if (listEntry.getName().equals(string)) {
-				return listEntry.getValue();
+				return listEntry.getValue().toString();
 			}
 		}
-		return null;
+		return "";
 	}
 
 	private File outputfile(XSSFWorkbook wb) {

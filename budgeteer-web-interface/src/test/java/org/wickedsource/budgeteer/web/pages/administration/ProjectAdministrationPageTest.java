@@ -46,4 +46,8 @@ public class ProjectAdministrationPageTest extends AbstractWebTestTemplate {
         return users;
     }
 
+    @Override
+    protected void setupTest() {
+
+    }
 }

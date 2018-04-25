@@ -49,4 +49,8 @@ public class BudgetOverviewTableTest extends AbstractWebTestTemplate {
         return list;
     }
 
+    @Override
+    protected void setupTest() {
+
+    }
 }

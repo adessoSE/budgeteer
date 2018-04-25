@@ -1,20 +1,17 @@
 package org.wickedsource.budgeteer.SheetTemplate;
 
-import static org.junit.Assert.*;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.junit.Before;
-import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 public class TemplateWriterTest {
 
@@ -138,8 +135,8 @@ public class TemplateWriterTest {
 		Cell cell = row.getCell(6);
 		CellStyle style = template.getFlagTemplate().getCellStyleFor("warning1");
 		assertEquals(style,cell.getCellStyle());
-		
-		cell = row.getCell(8);;
+
+		cell = row.getCell(8);
 		style = template.getFlagTemplate().getCellStyleFor("warning1");
 		assertEquals(style,cell.getCellStyle());
 		
@@ -156,5 +153,23 @@ public class TemplateWriterTest {
 	public void testIsDynamicField() {
 		assertTrue(tw.isDynamicField("foo.bar"));
 		assertFalse(tw.isDynamicField("foo"));
+	}
+
+	@Test
+	public void testSubkeyOfWithDotAtTheEnd() {
+		String result = tw.subkeyOf("test.name.");
+		assertEquals("name.", result);
+	}
+
+	@Test
+	public void testSubkeyOfWithMultipleDots() {
+		String result = tw.subkeyOf("test.name.multiple.test");
+		assertEquals("name.multiple.test", result);
+	}
+
+	@Test
+	public void testSubkeyOfWithNoDots() {
+		String result = tw.subkeyOf("test");
+		assertNull(result);
 	}
 }

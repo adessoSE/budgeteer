@@ -12,4 +12,9 @@ public class SingleBudgetWeekReportPageTest extends AbstractWebTestTemplate{
         tester.startPage(SingleBudgetWeekReportPage.class, SingleBudgetWeekReportPage.createParameters(1l));
         tester.assertRenderedPage(SingleBudgetWeekReportPage.class);
     }
+
+    @Override
+    protected void setupTest() {
+
+    }
 }

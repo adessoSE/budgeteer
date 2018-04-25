@@ -34,4 +34,8 @@ public class EditPersonPageTest extends AbstractWebTestTemplate {
         tester.assertRenderedPage(EditPersonPage.class);
     }
 
+    @Override
+    protected void setupTest() {
+
+    }
 }

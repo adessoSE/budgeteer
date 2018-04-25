@@ -19,7 +19,7 @@ class ContractReportData {
 	private double budgetSpent_gross;
 	private double budgetLeft_gross;
 	private double budgetTotal_gross;
-	private double taxRate;
+	private Double taxRate;
 	private Double progress;
 	private List<? extends SheetTemplateSerializable> attributes;
 }

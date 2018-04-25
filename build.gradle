@@ -1,7 +1,7 @@
 import org.gradle.internal.jvm.Jvm
 
 task wrapper(type: Wrapper) {
-    gradleVersion '3.4.1'
+    gradleVersion '4.6'
 }
 
 // alle Skripte aus ./gradle.d in sortierter Reihenfolge einbinden
@@ -41,7 +41,6 @@ subprojects {
     compileJava {
         sourceCompatibility = '1.8'
         targetCompatibility = '1.8'
-        compileJava.options.bootClasspath = "${Jvm.current().javaHome}/jre/lib/rt.jar"
     }
 
     jacocoTestReport {

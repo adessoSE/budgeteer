@@ -20,6 +20,7 @@ public class EditBudgetPage extends DialogPageWithBacklink {
     @SpringBean
     private BudgetService service;
 
+
     /**
      * Use this constructor to create a page with a form to create a new budget.
      */

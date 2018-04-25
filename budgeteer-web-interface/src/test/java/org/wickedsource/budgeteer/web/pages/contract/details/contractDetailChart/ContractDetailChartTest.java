@@ -16,4 +16,8 @@ public class ContractDetailChartTest extends AbstractWebTestTemplate {
         tester.startComponentInPage(new PeopleDistributionChart("chart", model));
 	}
 
+    @Override
+    protected void setupTest() {
+
+    }
 }

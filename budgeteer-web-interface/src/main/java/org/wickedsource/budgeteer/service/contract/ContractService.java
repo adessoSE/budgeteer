@@ -14,6 +14,7 @@ import org.wickedsource.budgeteer.persistence.project.ProjectRepository;
 import org.wickedsource.budgeteer.web.pages.contract.overview.table.ContractOverviewTableModel;
 
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.util.*;
 
 @Service
@@ -82,7 +83,7 @@ public class ContractService {
         if(contractBaseData.getTaxRate() < 0) {
         	throw new IllegalArgumentException("Taxrate must be positive.");
         } else {
-        	contractEntity.setTaxRate(contractBaseData.getTaxRate());
+            contractEntity.setTaxRate(new BigDecimal(contractBaseData.getTaxRate()));
         }
 
         //update additional information of the current contract

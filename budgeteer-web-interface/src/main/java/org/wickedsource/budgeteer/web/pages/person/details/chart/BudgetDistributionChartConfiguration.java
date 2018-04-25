@@ -1,26 +1,21 @@
 package org.wickedsource.budgeteer.web.pages.person.details.chart;
 
 import de.adesso.wickedcharts.chartjs.ChartConfiguration;
-import de.adesso.wickedcharts.chartjs.chartoptions.ChartType;
-import de.adesso.wickedcharts.chartjs.chartoptions.Data;
-import de.adesso.wickedcharts.chartjs.chartoptions.Dataset;
-import de.adesso.wickedcharts.chartjs.chartoptions.Legend;
-import de.adesso.wickedcharts.chartjs.chartoptions.Options;
-import de.adesso.wickedcharts.chartjs.chartoptions.Position;
+import de.adesso.wickedcharts.chartjs.chartoptions.*;
 import de.adesso.wickedcharts.chartjs.chartoptions.colors.RgbColor;
 import de.adesso.wickedcharts.chartjs.chartoptions.label.TextLabel;
 import de.adesso.wickedcharts.chartjs.chartoptions.valueType.DoubleValue;
-
 import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.charts.ChartStyling;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class BudgetDistributionChartConfiguration extends ChartConfiguration {
+public class BudgetDistributionChartConfiguration extends ChartConfiguration implements Serializable {
 
 	public BudgetDistributionChartConfiguration(BudgetDistributionChartModel model) {
     	// Get ModelData

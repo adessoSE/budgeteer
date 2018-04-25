@@ -38,4 +38,9 @@ public class ImportsOverviewPageTest extends AbstractWebTestTemplate {
         }
         return list;
     }
+
+    @Override
+    protected void setupTest() {
+
+    }
 }

@@ -1,18 +1,18 @@
 package org.wickedsource.budgeteer.SheetTemplate;
-import static org.junit.Assert.*;
+
+import com.google.common.collect.Multimap;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.assertj.core.api.Assertions;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mockito;
 
 import java.util.List;
 
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.IndexedColors;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.junit.Before;
-import org.junit.Test;
-
-import com.google.common.collect.Multimap;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
 
 
 public class SheetTemplateTest {
@@ -20,6 +20,7 @@ public class SheetTemplateTest {
 	private Workbook wb;
 	private Sheet sheet;
 	private CellStyle testStyle;
+	private SheetTemplate st;
 	
 	public class TestDTO {
 		private String test;
@@ -68,20 +69,21 @@ public class SheetTemplateTest {
 		templateRow.createCell(15).setCellValue("{dynamic.name}");
 		templateRow.createCell(16).setCellValue("{.name}");
 		templateRow.createCell(17).setCellValue("{notexisting.name}");
+		templateRow.createCell(18).setCellValue("{dynamic.Bescha-Nr.}");
 		templateRow.createCell(4).setCellValue(1235.123456);
 		
 		
 		templateRow.createCell(100).setCellValue("hallo: {foo}");
+
+		st = new SheetTemplate(TestDTO.class, sheet);
 	}
 	
 	@Test
 	public void init() {
-		new SheetTemplate(TestDTO.class, sheet);
 	}
 	
 	@Test
 	public void testGetCellMapping() {
-		SheetTemplate st = new SheetTemplate(TestDTO.class, sheet);
 		Multimap<String,Integer> mapping = st.getFieldMapping();
 		assertNotNull(mapping);
 		
@@ -92,18 +94,17 @@ public class SheetTemplateTest {
 		assertTrue(mapping.containsKey("foo"));
 		assertTrue(mapping.get("foo").contains(100));
 		assertTrue(mapping.get("foo").contains(3));
+		assertTrue(mapping.get("dynamic.Bescha-Nr.").contains(18));
 		assertTrue(mapping.get("dynamic.name").contains(15));
 	}
 	
 	@Test
 	public void testCellContainsTemplateTagAndNotContainsTag() {
-		SheetTemplate st = new SheetTemplate(TestDTO.class, sheet);
 		assertFalse(st.cellContainsTemplateTag(sheet.getRow(4).getCell(2)));
 	}
 	
 	@Test
 	public void testDotInField() {
-		SheetTemplate st = new SheetTemplate(TestDTO.class, sheet);
 		assertTrue(st.cellContainsTemplateTag(sheet.getRow(4).getCell(15)));
 		assertFalse(st.cellContainsTemplateTag(sheet.getRow(4).getCell(16)));
 		assertFalse(st.cellContainsTemplateTag(sheet.getRow(4).getCell(17)));
@@ -111,28 +112,112 @@ public class SheetTemplateTest {
 	
 	@Test
 	public void testCellContainsTemplateTagAndContainsSimpleTag() {
-		SheetTemplate st = new SheetTemplate(TestDTO.class, sheet);
 		assertTrue(st.cellContainsTemplateTag(sheet.getRow(4).getCell(5)));
 	}
 	
 	@Test
 	public void testCellContainsTemplateTagAndContainsComplexTag() {
-		SheetTemplate st = new SheetTemplate(TestDTO.class, sheet);
 		assertTrue(st.cellContainsTemplateTag(sheet.getRow(4).getCell(100)));
 	}
 	
 	@Test
 	public void testCellContainsTemplateTagAndContainsMultipleTags() {
-		SheetTemplate st = new SheetTemplate(TestDTO.class, sheet);
 		assertTrue(st.cellContainsTemplateTag(sheet.getRow(4).getCell(100)));
 		assertTrue(st.cellContainsTemplateTag(sheet.getRow(4).getCell(3)));
 	}
 	
 	@Test
 	public void testFindTemplateRow() {
-		SheetTemplate st = new SheetTemplate(TestDTO.class, sheet);
 		assertEquals(4,st.getTemplateRowIndex());
 	}
 
-	// TODO: Add Test for Formula
+	@Test
+	public void testmapCellValueToFieldNamesWithDynamicAttribute() {
+		Cell cellMock = Mockito.mock(Cell.class);
+		when(cellMock.getCellTypeEnum()).thenReturn(CellType.STRING);
+		when(cellMock.getStringCellValue()).thenReturn("{dynamic.Bescha-Nr.}"); // valid
+
+		List<String> fields = st.mapCellValueToFieldNames(cellMock);
+
+		Assertions.assertThat(fields).contains("dynamic.Bescha-Nr.");
+	}
+
+	@Test
+	public void testmapCellValueToFieldNamesWithDynamicAttributeAndNoSpecials() {
+		Cell cellMock = Mockito.mock(Cell.class);
+		when(cellMock.getCellTypeEnum()).thenReturn(CellType.STRING);
+		when(cellMock.getStringCellValue()).thenReturn("{dynamic.Bescha-Nr}"); //  valid
+
+		List<String> fields = st.mapCellValueToFieldNames(cellMock);
+
+		Assertions.assertThat(fields).contains("dynamic.Bescha-Nr");
+	}
+
+
+	@Test
+	public void testmapCellValueToFieldNamesWithRawValue() {
+		Cell cellMock = Mockito.mock(Cell.class);
+		when(cellMock.getCellTypeEnum()).thenReturn(CellType.STRING);
+		when(cellMock.getStringCellValue()).thenReturn("{dynamic}"); // valid
+		List<String> fields = st.mapCellValueToFieldNames(cellMock);
+		Assertions.assertThat(fields).contains("dynamic");
+	}
+
+
+	@Test
+	public void testmapCellValueToFieldNamesWithStartingDot() {
+		Cell cellMock = Mockito.mock(Cell.class);
+		when(cellMock.getCellTypeEnum()).thenReturn(CellType.STRING);
+		when(cellMock.getStringCellValue()).thenReturn("{.test}"); // not valid
+
+		List<String> fields = st.mapCellValueToFieldNames(cellMock);
+
+		Assertions.assertThat(fields).isEmpty();
+	}
+
+
+	@Test
+	public void testmapCellValueToFieldNamesWithMultipleFields() {
+		Cell cellMock = Mockito.mock(Cell.class);
+		when(cellMock.getCellTypeEnum()).thenReturn(CellType.STRING);
+		when(cellMock.getStringCellValue()).thenReturn("{test} - {dynamic.name}"); // not valid
+
+		List<String> fields = st.mapCellValueToFieldNames(cellMock);
+
+		Assertions.assertThat(fields).hasSize(2)
+				.contains("test")
+				.contains("dynamic.name");
+	}
+
+
+	@Test
+	public void testmapCellValueToFieldNamesWithMultipleDynamicFields() {
+		st = spy(st);
+		when(st.dtoHasField("dynamic")).thenReturn(true);
+		when(st.dtoHasField("veryDynamic")).thenReturn(true);
+
+		Cell cellMock = Mockito.mock(Cell.class);
+		when(cellMock.getCellTypeEnum()).thenReturn(CellType.STRING);
+		when(cellMock.getStringCellValue()).thenReturn("{dynamic.test} - {veryDynamic.attribute}"); // not valid
+
+		List<String> fields = st.mapCellValueToFieldNames(cellMock);
+
+		Assertions.assertThat(fields).hasSize(2)
+				.contains("dynamic.test")
+				.contains("veryDynamic.attribute");
+	}
+
+	@Test
+	public void testmapCellValueToFieldNamesWithUnderscore() {
+		st = spy(st);
+		when(st.dtoHasField("test_name")).thenReturn(true);
+		Cell cellMock = Mockito.mock(Cell.class);
+		when(cellMock.getCellTypeEnum()).thenReturn(CellType.STRING);
+		when(cellMock.getStringCellValue()).thenReturn("{test_name}"); // not valid
+
+		List<String> fields = st.mapCellValueToFieldNames(cellMock);
+
+		Assertions.assertThat(fields).hasSize(1)
+				.contains("test_name");
+	}
 }

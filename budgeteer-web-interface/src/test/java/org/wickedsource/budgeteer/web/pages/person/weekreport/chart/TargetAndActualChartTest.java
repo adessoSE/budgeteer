@@ -8,6 +8,7 @@ import org.wickedsource.budgeteer.service.statistics.TargetAndActual;
 import org.wickedsource.budgeteer.web.AbstractWebTestTemplate;
 import org.wickedsource.budgeteer.web.components.targetactualchart.TargetAndActualChart;
 import org.wickedsource.budgeteer.web.components.targetactualchart.TargetAndActualChartConfiguration;
+
 import java.util.Random;
 
 public class TargetAndActualChartTest extends AbstractWebTestTemplate {
@@ -41,6 +42,11 @@ public class TargetAndActualChartTest extends AbstractWebTestTemplate {
         targetAndActual.setTargetSeries(series);
 
         return targetAndActual;
+
+    }
+
+    @Override
+    protected void setupTest() {
 
     }
 }
