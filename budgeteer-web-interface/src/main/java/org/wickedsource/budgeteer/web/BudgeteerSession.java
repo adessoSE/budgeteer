@@ -8,6 +8,8 @@ import java.util.HashMap;
 
 public class BudgeteerSession extends WebSession {
 
+    //Tags are saved in a Map and correspond to a projectID
+    //This makes them persistent when switching projects
     private HashMap<Long, BudgetTagFilter> budgetFilter = new HashMap<>();
 
     private Double selectedBudgetUnit = 1d;
