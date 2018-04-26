@@ -177,5 +177,4 @@ public class BudgetOverviewTable extends Panel {
         table.add(new Label("unplannedLabel", new TaxLabelModel(
                 new StringResourceModel("overview.table.budget.unplannedLabel", this))));
     }
-
 }
