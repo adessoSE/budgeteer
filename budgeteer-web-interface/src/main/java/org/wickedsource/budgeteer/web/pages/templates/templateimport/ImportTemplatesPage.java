@@ -1,0 +1,139 @@
+package org.wickedsource.budgeteer.web.pages.templates.templateimport;
+
+import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.ajax.AjaxEventBehavior;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.form.upload.FileUpload;
+import org.apache.wicket.markup.html.form.upload.FileUploadField;
+import org.apache.wicket.markup.html.link.DownloadLink;
+import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.io.IOUtils;
+import org.apache.wicket.util.resource.AbstractResourceStreamWriter;
+import org.apache.wicket.util.time.Duration;
+import org.wickedsource.budgeteer.importer.ubw.UBWWorkRecordsImporter;
+import org.wickedsource.budgeteer.imports.api.*;
+import org.wickedsource.budgeteer.service.imports.ImportService;
+import org.wickedsource.budgeteer.service.template.TemplateService;
+import org.wickedsource.budgeteer.web.BudgeteerSession;
+import org.wickedsource.budgeteer.web.ClassAwareWrappingModel;
+import org.wickedsource.budgeteer.web.Mount;
+import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
+import org.wickedsource.budgeteer.web.pages.base.dialogpage.DialogPageWithBacklink;
+import org.wickedsource.budgeteer.web.pages.imports.ImportsModel;
+import org.wickedsource.budgeteer.web.pages.imports.fileimport.*;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.wicketstuff.lazymodel.LazyModel.from;
+import static org.wicketstuff.lazymodel.LazyModel.model;
+
+@Mount("templates/importTemplates")
+public class ImportTemplatesPage extends DialogPageWithBacklink {
+
+    @SpringBean
+    private TemplateService service;
+
+    private TemplateImporter importer = new TemplateImporter();
+
+    private List<FileUpload> fileUploads = new ArrayList<FileUpload>();
+
+
+
+    private List<List<String>> skippedImports;
+
+    private TemplateFormInputDto templateFormInputDto = new TemplateFormInputDto(BudgeteerSession.get().getProjectId());
+
+
+
+    public ImportTemplatesPage(Class<? extends WebPage> backlinkPage, PageParameters backlinkParameters) {
+        super(backlinkPage, backlinkParameters);
+        add(createBacklink("backlink1"));
+        IModel formModel = model(from(templateFormInputDto));
+
+        this.setDefaultModel(formModel);
+        final Form<TemplateFormInputDto> form = new Form<TemplateFormInputDto>("importForm", new ClassAwareWrappingModel<TemplateFormInputDto>(new Model<TemplateFormInputDto>(new TemplateFormInputDto(BudgeteerSession.get().getProjectId())), TemplateFormInputDto.class)) {
+
+            @Override
+            protected void onSubmit() {
+                try {
+                    if(model(from(templateFormInputDto)).getObject().getName() == null){
+                        error(getString("message.error.no.name"));
+                    }
+                    if(model(from(templateFormInputDto)).getObject().getDescription() == null){
+                        error(getString("message.error.no.description"));
+                    }
+                    ImportFile file = new ImportFile(fileUploads.get(0).getClientFileName(), fileUploads.get(0).getInputStream());
+                    if(model(from(templateFormInputDto)).getObject().getName() != null && model(from(templateFormInputDto)).getObject().getDescription() != null){
+                        service.doImport(BudgeteerSession.get().getProjectId(), importer, file, model(from(templateFormInputDto)));
+                        success(getString("message.success"));
+                    }
+                } catch (IOException e) {
+                    error(String.format(getString("message.ioError"), e.getMessage()));
+                }  catch (IllegalArgumentException e) {
+                    error(String.format(getString("message.importError"), e.getMessage()));
+                } catch(InvalidFileFormatException e){
+                    error(String.format(getString("message.invalidFileException"), e.getFileName()));
+                }
+            }
+        };
+
+        add(form);
+
+        CustomFeedbackPanel feedback = new CustomFeedbackPanel("feedback");
+        feedback.setOutputMarkupId(true);
+        form.add(feedback);
+
+        FileUploadField fileUpload = new FileUploadField("fileUpload", new PropertyModel<List<FileUpload>>(this, "fileUploads"));
+        fileUpload.setRequired(true);
+
+        form.add(fileUpload);
+        form.add(createBacklink("backlink2"));
+
+        form.add(createExampleFileButton("exampleFileButton"));
+        form.add(new TextField<String>("name", model(from(templateFormInputDto).getName())));
+        form.add(new TextField<String>("description", model(from(templateFormInputDto).getDescription())));
+
+    }
+
+    /**
+     * Creates a button to download an example template.
+     */
+    private Link createExampleFileButton(String wicketId) {
+        return new Link<Void>(wicketId) {
+            @Override
+            public void onClick() {
+                final ExampleFile downloadFile = importer.getExampleFile();
+                AbstractResourceStreamWriter streamWriter = new AbstractResourceStreamWriter() {
+                    @Override
+                    public void write(OutputStream output) throws IOException {
+                        ByteArrayOutputStream out = new ByteArrayOutputStream();
+                        IOUtils.copy(downloadFile.getInputStream(), out);
+                        output.write(out.toByteArray());
+                    }
+                };
+                ResourceStreamRequestHandler handler = new ResourceStreamRequestHandler(streamWriter, downloadFile.getFileName());
+                getRequestCycle().scheduleRequestHandlerAfterCurrent(handler);
+                HttpServletResponse response = (HttpServletResponse) getRequestCycle().getResponse().getContainerResponse();
+                response.setContentType(downloadFile.getContentType());
+            }
+        };
+    }
+}

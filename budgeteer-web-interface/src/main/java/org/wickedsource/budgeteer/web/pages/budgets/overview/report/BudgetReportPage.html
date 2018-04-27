@@ -19,6 +19,11 @@
                     <input wicket:id="monthlyRange" type="text" name="name" class="form-control"/>
                     <p class="help-block"><wicket:message key="page.report.monthlyDatepicker.hint">The full title of the budget to be displayed where enough space is available.</wicket:message></p>
                 </div>
+                <div class="form-group">
+                    <label for="templateSelect"><wicket:message key="page.tags.template">Template</wicket:message></label>
+                    <select id="templateSelect" wicket:id="template" name="name" class="form-control"/>
+                    <p class="help-block"><wicket:message key="page.tags.template.hint">The Template to use for exporting this budget.</wicket:message></p>
+                </div>
             </div>
             <div class="footer">
                 <div class="row">

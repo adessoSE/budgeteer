@@ -3,6 +3,8 @@ package org.wickedsource.budgeteer.persistence.template;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.joda.money.Money;
 import org.wickedsource.budgeteer.persistence.budget.BudgetEntity;
 import org.wickedsource.budgeteer.persistence.person.PersonEntity;
@@ -23,8 +25,15 @@ public class TemplateEntity {
 
     private String name;
     private String description;
+    private XSSFWorkbook wb;
+
+    TemplateEntity(String name, String description, XSSFWorkbook workbook){
+        this.name = name;
+        this.description = description;
+        this.wb = workbook;
+    }
 
     public Template getTemplate(){
-        return new Template().setName(name).setDescription(description);
+        return new Template().setName(name).setDescription(description).setWb(wb);
     }
 }

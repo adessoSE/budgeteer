@@ -21,6 +21,7 @@ import org.wickedsource.budgeteer.service.budget.BudgetService;
 import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
 import org.wickedsource.budgeteer.service.contract.ContractBaseData;
 import org.wickedsource.budgeteer.service.contract.ContractService;
+import org.wickedsource.budgeteer.service.template.TemplateService;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 
 import java.io.File;
@@ -48,6 +49,9 @@ public class BudgetReportService {
 	@Autowired
 	private WorkRecordRepository workRecordRepository;
 
+	@Autowired
+	private TemplateService templateService;
+
 	/**
 	 * Creates an excel spreadsheet containing the budgets informations
      * @param projectId ProjectId
@@ -55,13 +59,13 @@ public class BudgetReportService {
 	 * @param metaInformationen Necessary informations about the report
 	 * @return Excel spreadsheet file
 	 */
-    public File createReportFile(long projectId, BudgetTagFilter filter, ReportMetaInformation metaInformationen) {
+    public File createReportFile(String templateName, long projectId, BudgetTagFilter filter, ReportMetaInformation metaInformationen) {
 		List<BudgetReportData> overallBudgetReportList = loadOverallBudgetReportData(projectId, filter,
 				metaInformationen);
 		List<BudgetReportData> monthlyBudgetReportList = loadMonthlyBudgetReportData(projectId, filter,
 				metaInformationen);
 
-		XSSFWorkbook wb = getSheetWorkbook();
+		XSSFWorkbook wb = getSheetWorkbook(templateName);
 
 		writeBudgetData(wb.getSheetAt(0), overallBudgetReportList);
 		writeBudgetData(wb.getSheetAt(1), monthlyBudgetReportList);
@@ -114,16 +118,20 @@ public class BudgetReportService {
 		return summary;
 	}
 
-	private XSSFWorkbook getSheetWorkbook() {
-		ClassLoader classLoader = getClass().getClassLoader();
-		InputStream in = classLoader.getResourceAsStream("report-template.xlsx");
-		XSSFWorkbook wb = null;
-		try {
-			wb = (XSSFWorkbook) WorkbookFactory.create(in);
-		} catch (EncryptedDocumentException | IOException | InvalidFormatException e) {
-			e.printStackTrace();
-		}
-		return wb;
+	private XSSFWorkbook getSheetWorkbook(String name) {
+		if(templateService.getByName(name) != null) {
+            return templateService.getByName(name).getWb();
+        }else{
+            ClassLoader classLoader = getClass().getClassLoader();
+            InputStream in = classLoader.getResourceAsStream("report-template.xlsx");
+            XSSFWorkbook wb = null;
+            try {
+                wb = (XSSFWorkbook) WorkbookFactory.create(in);
+            } catch (EncryptedDocumentException | IOException | InvalidFormatException e) {
+                e.printStackTrace();
+            }
+            return wb;
+        }
 	}
 
 	private String getAttribute(String string, List<? extends SheetTemplateSerializable> list) {
