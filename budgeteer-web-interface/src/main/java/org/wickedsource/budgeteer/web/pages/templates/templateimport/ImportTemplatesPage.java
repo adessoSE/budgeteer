@@ -1,20 +1,12 @@
 package org.wickedsource.budgeteer.web.pages.templates.templateimport;
 
-import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.ajax.AjaxEventBehavior;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
-import org.apache.wicket.markup.html.link.DownloadLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
@@ -22,19 +14,13 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.io.IOUtils;
 import org.apache.wicket.util.resource.AbstractResourceStreamWriter;
-import org.apache.wicket.util.time.Duration;
-import org.wickedsource.budgeteer.importer.ubw.UBWWorkRecordsImporter;
 import org.wickedsource.budgeteer.imports.api.*;
-import org.wickedsource.budgeteer.service.imports.ImportService;
 import org.wickedsource.budgeteer.service.template.TemplateService;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.ClassAwareWrappingModel;
 import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
 import org.wickedsource.budgeteer.web.pages.base.dialogpage.DialogPageWithBacklink;
-import org.wickedsource.budgeteer.web.pages.imports.ImportsModel;
-import org.wickedsource.budgeteer.web.pages.imports.fileimport.*;
-
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -69,7 +55,7 @@ public class ImportTemplatesPage extends DialogPageWithBacklink {
         IModel formModel = model(from(templateFormInputDto));
 
         this.setDefaultModel(formModel);
-        final Form<TemplateFormInputDto> form = new Form<TemplateFormInputDto>("importForm", new ClassAwareWrappingModel<TemplateFormInputDto>(new Model<TemplateFormInputDto>(new TemplateFormInputDto(BudgeteerSession.get().getProjectId())), TemplateFormInputDto.class)) {
+        final Form<TemplateFormInputDto> form = new Form<TemplateFormInputDto>("importForm", new ClassAwareWrappingModel<>(new Model<>(new TemplateFormInputDto(BudgeteerSession.get().getProjectId())), TemplateFormInputDto.class)) {
 
             @Override
             protected void onSubmit() {

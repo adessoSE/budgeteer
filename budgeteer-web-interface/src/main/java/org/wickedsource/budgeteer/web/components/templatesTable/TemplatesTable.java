@@ -3,8 +3,10 @@ package org.wickedsource.budgeteer.web.components.templatesTable;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.event.IEvent;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -17,6 +19,8 @@ import org.wickedsource.budgeteer.web.ClassAwareWrappingModel;
 import org.wickedsource.budgeteer.web.components.dataTable.DataTableBehavior;
 import org.wickedsource.budgeteer.web.components.dataTable.editableMoneyField.EditableMoneyField;
 import org.wickedsource.budgeteer.web.components.money.MoneyLabel;
+import org.wickedsource.budgeteer.web.pages.person.edit.EditPersonPage;
+import org.wickedsource.budgeteer.web.pages.person.overview.PeopleOverviewPage;
 
 import javax.inject.Inject;
 
@@ -40,10 +44,9 @@ public class TemplatesTable extends Panel {
         WebMarkupContainer table = new WebMarkupContainer("table");
         table.add(new DataTableBehavior(DataTableBehavior.getRecommendedOptions()));
         rows = createList("templateList", model, table);
-        table.add(rows);
 
+        table.add(rows);
         add(table);
-        //add(new MoneyLabel("total", new BudgetUnitMoneyModel(new TotalBudgetModel(model))));
     }
 
     private ListView<Template> createList(String id, final IModel<List<Template>> model, final WebMarkupContainer table) {
@@ -52,7 +55,14 @@ public class TemplatesTable extends Panel {
             protected void populateItem(final ListItem<Template> item) {
                 item.setOutputMarkupId(true);
                 item.add(new Label("name", model(from(item.getModel()).getName())));
-                item.add(new Label("description", model(from(item.getModel()).getDescription()))); }
+                item.add(new Label("description", model(from(item.getModel()).getDescription())));
+                item.add(new Link("editPage") {
+                    @Override
+                    public void onClick() {
+                        //WebPage page = new EditPersonPage(EditPersonPage.createParameters(getId()), PeopleOverviewPage.class, null);
+                        setResponsePage(this.getPage());
+                    }
+                });}
 
             @Override
             protected ListItem<Template> newItem(int index, IModel<Template> itemModel) {
