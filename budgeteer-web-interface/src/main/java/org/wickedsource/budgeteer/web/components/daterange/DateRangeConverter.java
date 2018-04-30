@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 
 public class DateRangeConverter implements IConverter<DateRange> {
 
-    private static DateFormat format = new SimpleDateFormat("MM/dd/yyyy");
+    private static DateFormat format = new SimpleDateFormat("dd.MM.yyyy");
 
     @Override
     public DateRange convertToObject(String value, Locale locale){
@@ -22,7 +22,7 @@ public class DateRangeConverter implements IConverter<DateRange> {
             return new DateRange(null, null);
         }
         try {
-            Pattern pattern = Pattern.compile("^([0-9]{2}/[0-9]{2}/[0-9]{4}) - ([0-9]{2}/[0-9]{2}/[0-9]{4})$");
+            Pattern pattern = Pattern.compile("^([0-9]{2}.[0-9]{2}.[0-9]{4}) - ([0-9]{2}.[0-9]{2}.[0-9]{4})$");
             Matcher matcher = pattern.matcher(value);
             if (matcher.matches()) {
                 String startString = matcher.group(1);

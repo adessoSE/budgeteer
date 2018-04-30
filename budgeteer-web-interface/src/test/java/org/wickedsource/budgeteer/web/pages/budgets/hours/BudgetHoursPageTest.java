@@ -25,4 +25,9 @@ public class BudgetHoursPageTest extends AbstractWebTestTemplate {
     private BudgetBaseData createBudget() {
         return new BudgetBaseData(1l, "Budget 1");
     }
+
+    @Override
+    protected void setupTest() {
+
+    }
 }

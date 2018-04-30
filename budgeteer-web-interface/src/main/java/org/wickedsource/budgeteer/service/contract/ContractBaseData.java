@@ -22,6 +22,9 @@ public class ContractBaseData implements Serializable{
     private long projectId;
     private String contractName;
     private Money budget;
+    private Money budgetSpent;
+    private Money budgetLeft;
+    private double taxRate; 
     private String internalNumber;
     private Date startDate;
     private ContractEntity.ContractType type;

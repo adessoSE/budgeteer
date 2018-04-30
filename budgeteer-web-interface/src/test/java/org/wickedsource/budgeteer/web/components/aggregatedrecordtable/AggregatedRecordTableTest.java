@@ -46,4 +46,9 @@ public class AggregatedRecordTableTest extends AbstractWebTestTemplate {
         }
         return list;
     }
+
+    @Override
+    protected void setupTest() {
+
+    }
 }

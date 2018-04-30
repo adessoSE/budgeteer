@@ -12,4 +12,9 @@ public class PeopleOverviewPageTest extends AbstractWebTestTemplate {
         tester.startPage(PeopleOverviewPage.class);
         tester.assertRenderedPage(PeopleOverviewPage.class);
     }
+
+    @Override
+    protected void setupTest() {
+
+    }
 }

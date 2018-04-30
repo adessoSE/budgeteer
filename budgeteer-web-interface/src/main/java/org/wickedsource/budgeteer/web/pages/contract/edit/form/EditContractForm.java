@@ -11,6 +11,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.wickedsource.budgeteer.persistence.contract.ContractEntity;
 import org.wickedsource.budgeteer.service.DateUtil;
 import org.wickedsource.budgeteer.service.contract.ContractBaseData;
@@ -68,6 +69,9 @@ public class EditContractForm extends Form<ContractBaseData> {
         MoneyTextField budgetTextfield = new MoneyTextField("budget", model(from(getModelObject()).getBudget()));
         budgetTextfield.setRequired(true);
         add(budgetTextfield);
+        
+        NumberTextField<Double> taxrateTextfield = new NumberTextField<>("taxrate", model(from(getModelObject()).getTaxRate()));
+        add(taxrateTextfield);
 
         if(getModelObject().getStartDate() == null){
             getModelObject().setStartDate(DateUtil.getBeginOfYear());
@@ -118,7 +122,9 @@ public class EditContractForm extends Form<ContractBaseData> {
                     ((ContractBaseData) form.getModelObject()).getFileModel().setFileName(fileUpload.getFileName());
                     ((ContractBaseData) form.getModelObject()).setContractId(service.save((ContractBaseData) form.getModelObject()));
                     this.success(getString("feedback.success"));
-                } catch(Exception e){
+                } catch (DataIntegrityViolationException e) {
+                    this.error(getString("feedback.error.dataformat.taxrate"));
+                } catch (Exception e) {
                     e.printStackTrace();
                     this.error(getString("feedback.error"));
                 }

@@ -13,4 +13,8 @@ public class BurnedBudgetChartTest extends AbstractWebTestTemplate  {
         tester.startComponentInPage(new BurnedBudgetChart("chart", model));
     }
 
+    @Override
+    protected void setupTest() {
+
+    }
 }

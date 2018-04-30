@@ -2,7 +2,9 @@ package org.wickedsource.budgeteer.service.budget;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.persistence.budget.BudgetEntity;
 import org.wickedsource.budgeteer.persistence.budget.BudgetRepository;
@@ -17,6 +19,7 @@ import org.wickedsource.budgeteer.service.contract.ContractBaseData;
 
 import java.util.*;
 
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
 public class BudgetServiceTest extends ServiceTestTemplate {
@@ -40,7 +43,7 @@ public class BudgetServiceTest extends ServiceTestTemplate {
     private ContractRepository contractRepository;
 
     @Test
-    public void testLoadBudgetBaseDataForProject() throws Exception {
+    public void testLoadBudgetBaseDataForProject() {
         when(budgetRepository.findByProjectIdOrderByNameAsc(1l)).thenReturn(Arrays.asList(createBudgetEntity()));
         List<BudgetBaseData> budgets = budgetService.loadBudgetBaseDataForProject(1l);
         Assert.assertEquals(1, budgets.size());
@@ -49,7 +52,7 @@ public class BudgetServiceTest extends ServiceTestTemplate {
     }
 
     @Test
-    public void testLoadBudgetBaseData() throws Exception {
+    public void testLoadBudgetBaseData() {
         when(budgetRepository.findOne(1l)).thenReturn(createBudgetEntity());
         BudgetBaseData data = budgetService.loadBudgetBaseData(1l);
         Assert.assertEquals(1l, data.getId());
@@ -57,7 +60,7 @@ public class BudgetServiceTest extends ServiceTestTemplate {
     }
 
     @Test
-    public void testLoadBudgetTags() throws Exception {
+    public void testLoadBudgetTags() {
         List<String> tags = new ArrayList<String>();
         tags.add("1");
         tags.add("2");
@@ -69,10 +72,10 @@ public class BudgetServiceTest extends ServiceTestTemplate {
     }
 
     @Test
-    public void testLoadBudgetDetailData() throws Exception {
+    public void testLoadBudgetDetailData() {
         Date date = new Date();
         when(budgetRepository.findOne(1l)).thenReturn(createBudgetEntity());
-        when(workRecordRepository.getLatestWordRecordDate(1l)).thenReturn(date);
+        when(workRecordRepository.getLatestWorkRecordDate(1l)).thenReturn(date);
         when(workRecordRepository.getSpentBudget(1l)).thenReturn(100000.0);
         when(planRecordRepository.getPlannedBudget(1l)).thenReturn(200000.0);
         when(workRecordRepository.getAverageDailyRate(1l)).thenReturn(50000.0);
@@ -83,10 +86,10 @@ public class BudgetServiceTest extends ServiceTestTemplate {
     }
 
     @Test
-    public void testLoadBudgetsDetailData() throws Exception {
+    public void testLoadBudgetsDetailData() {
         Date date = new Date();
         when(budgetRepository.findByAtLeastOneTag(1l, Arrays.asList("1", "2", "3"))).thenReturn(Arrays.asList(createBudgetEntity()));
-        when(workRecordRepository.getLatestWordRecordDate(1l)).thenReturn(date);
+        when(workRecordRepository.getLatestWorkRecordDate(1l)).thenReturn(date);
         when(workRecordRepository.getSpentBudget(1l)).thenReturn(100000.0);
         when(planRecordRepository.getPlannedBudget(1l)).thenReturn(200000.0);
         when(workRecordRepository.getAverageDailyRate(1l)).thenReturn(50000.0);
@@ -98,7 +101,7 @@ public class BudgetServiceTest extends ServiceTestTemplate {
     }
 
     @Test
-    public void testLoadBudgetToEdit() throws Exception {
+    public void testLoadBudgetToEdit() {
         BudgetEntity budget = createBudgetEntity();
         when(budgetRepository.findOne(1l)).thenReturn(budget);
         EditBudgetData data = budgetService.loadBudgetToEdit(1l);
@@ -112,16 +115,11 @@ public class BudgetServiceTest extends ServiceTestTemplate {
     }
 
     @Test
-    public void testSaveBudget() throws Exception {
+    public void testSaveBudget() {
         BudgetEntity budget = createBudgetEntity();
         when(budgetRepository.findOne(1l)).thenReturn(budget);
 
-        EditBudgetData data = new EditBudgetData();
-        data.setId(1l);
-        data.setImportKey("import");
-        data.setTags(Arrays.asList("1", "2"));
-        data.setTitle("title");
-        data.setTotal(MoneyUtil.createMoneyFromCents(123));
+        EditBudgetData data = getEditBudgetEntity();
 
         budgetService.saveBudget(data);
 
@@ -134,7 +132,7 @@ public class BudgetServiceTest extends ServiceTestTemplate {
     }
 
     @Test
-    public void testSaveBudgetWithContract() throws Exception {
+    public void testSaveBudgetWithContract() {
         BudgetEntity budget = createBudgetEntity();
         when(budgetRepository.findOne(1l)).thenReturn(budget);
 
@@ -170,13 +168,26 @@ public class BudgetServiceTest extends ServiceTestTemplate {
     }
 
     @Test
-    public void testLoadBudgetUnits() throws Exception {
+    public void testLoadBudgetUnits() {
         when(rateRepository.getDistinctRatesInCents(1l)).thenReturn(Arrays.asList(MoneyUtil.createMoney(100d), MoneyUtil.createMoney(200d)));
         List<Double> units = budgetService.loadBudgetUnits(1l);
         Assert.assertEquals(3, units.size());
         Assert.assertTrue(units.contains(1d));
         Assert.assertTrue(units.contains(100d));
         Assert.assertTrue(units.contains(200d));
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenConstraintIsViolated() {
+        given(budgetRepository.save(Mockito.any(BudgetEntity.class)))
+                .willThrow(new DataIntegrityViolationException("constraint violation"));
+        when(budgetRepository.findOne(1L)).thenReturn(createBudgetEntity());
+        try {
+            budgetService.saveBudget(createBudgetEditEntity());
+            Assert.fail("No Exception!");
+        } catch (DataIntegrityViolationException e) {
+            // yay
+        }
     }
 
     private BudgetEntity createBudgetEntity() {
@@ -189,5 +200,25 @@ public class BudgetServiceTest extends ServiceTestTemplate {
         budget.getTags().add(new BudgetTagEntity("Tag3"));
         budget.setImportKey("budget123");
         return budget;
+    }
+
+    private EditBudgetData createBudgetEditEntity() {
+        EditBudgetData data = new EditBudgetData();
+        data.setId(1l);
+        data.setImportKey("budget123");
+        data.setTags(Arrays.asList("1", "2"));
+        data.setTitle("title");
+        data.setTotal(MoneyUtil.createMoneyFromCents(123));
+        return data;
+    }
+
+    private EditBudgetData getEditBudgetEntity() {
+        EditBudgetData data = new EditBudgetData();
+        data.setId(1l);
+        data.setImportKey("import");
+        data.setTags(Arrays.asList("1", "2"));
+        data.setTitle("title");
+        data.setTotal(MoneyUtil.createMoneyFromCents(123));
+        return data;
     }
 }

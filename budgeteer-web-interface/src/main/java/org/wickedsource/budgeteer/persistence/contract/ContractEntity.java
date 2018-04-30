@@ -8,6 +8,7 @@ import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -41,6 +42,9 @@ public class ContractEntity implements Serializable {
 
     @Column(name="BUDGET")
     private Money budget;
+
+    @Column(name = "TAXRATE", precision = 10, scale = 4)
+    private BigDecimal taxRate;
 
     @Column(name="INTERNAL_NUMBER")
     private String internalNumber;

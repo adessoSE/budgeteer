@@ -19,4 +19,9 @@ public class MultiBudgetMonthReportPageTest extends AbstractWebTestTemplate {
         tester.startPage(MultiBudgetMonthReportPage.class);
         tester.assertRenderedPage(MultiBudgetMonthReportPage.class);
     }
+
+    @Override
+    protected void setupTest() {
+
+    }
 }

@@ -12,4 +12,9 @@ public class DashboardPageTest extends AbstractWebTestTemplate {
         tester.startPage(DashboardPage.class);
         tester.assertRenderedPage(DashboardPage.class);
     }
+
+    @Override
+    protected void setupTest() {
+
+    }
 }

@@ -12,8 +12,12 @@ import org.wickedsource.budgeteer.persistence.contract.ContractStatisticBean;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.PropertyLoader;
 import org.wickedsource.budgeteer.web.pages.base.basepage.BasePage;
+import org.wickedsource.budgeteer.web.pages.budgets.overview.table.progressbar.ProgressBar;
 
 import java.util.List;
+
+import static org.wicketstuff.lazymodel.LazyModel.from;
+import static org.wicketstuff.lazymodel.LazyModel.model;
 
 public class DifferenceTable extends GenericPanel<List<ContractStatisticBean>> {
 
@@ -36,6 +40,7 @@ public class DifferenceTable extends GenericPanel<List<ContractStatisticBean>> {
                 item.add(new Label("invoiced", Model.of(MoneyUtil.toDouble(MoneyUtil.createMoneyFromCents(item.getModelObject().getInvoicedBudget()), BudgeteerSession.get().getSelectedBudgetUnit()))));
                 item.add(new Label("spend", Model.of(MoneyUtil.toDouble(MoneyUtil.createMoneyFromCents(item.getModelObject().getSpentBudget()), BudgeteerSession.get().getSelectedBudgetUnit()))));
                 item.add(new Label("difference", Model.of(MoneyUtil.toDouble(MoneyUtil.createMoneyFromCents(item.getModelObject().getDifference()), BudgeteerSession.get().getSelectedBudgetUnit()))));
+                item.add(new ProgressBar("progress", model(from(item.getModelObject()).getProgressInPercent())));
             }
         });
 
@@ -44,15 +49,17 @@ public class DifferenceTable extends GenericPanel<List<ContractStatisticBean>> {
         long sumInvoiced = 0;
         long sumSpend = 0;
         long sumDifference = 0;
+        double progressInPercent = 0.0;
         for(ContractStatisticBean b : getModelObject()){
             sumInvoiced += b.getInvoicedBudget();
             sumSpend += b.getSpentBudget();
             sumDifference += b.getDifference();
+            progressInPercent = Math.max(progressInPercent, b.getProgressInPercent() == null ? 0 : b.getProgressInPercent());
         }
         table.add(new Label("sumInvoiced", Model.of(MoneyUtil.toDouble(MoneyUtil.createMoneyFromCents(sumInvoiced), BudgeteerSession.get().getSelectedBudgetUnit()))));
         table.add(new Label("sumSpend", Model.of(MoneyUtil.toDouble(MoneyUtil.createMoneyFromCents(sumSpend), BudgeteerSession.get().getSelectedBudgetUnit()))));
         table.add(new Label("sumDifference", Model.of(MoneyUtil.toDouble(MoneyUtil.createMoneyFromCents(sumDifference), BudgeteerSession.get().getSelectedBudgetUnit()))));
-
+        table.add(new ProgressBar("progressTotal", Model.of(progressInPercent)));
         add(table);
     }
 }

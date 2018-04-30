@@ -36,4 +36,9 @@ public class BudgetDetailsPageTest extends AbstractWebTestTemplate {
         budgetDetailData.setSpent(Money.of(CurrencyUnit.EUR, 43));
         return budgetDetailData;
     }
+
+    @Override
+    protected void setupTest() {
+
+    }
 }

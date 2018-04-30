@@ -25,7 +25,9 @@ public class ProgressBar extends Panel {
             @Override
             public String getObject() {
                 Double progress = getModel().getObject();
-                if (progress > 90d) {
+                if (progress == null) {
+                    return " progress-bar-success";
+                } else if (progress > 90d) {
                     return " progress-bar-danger";
                 } else if (progress > 75d) {
                     return " progress-bar-warning";
@@ -37,7 +39,7 @@ public class ProgressBar extends Panel {
         bar.add(new AttributeAppender("style", new AbstractReadOnlyModel<String>() {
             @Override
             public String getObject() {
-                int value = getModel().getObject().intValue();
+                int value = (getModel().getObject() == null) ? 0 : getModel().getObject().intValue();
                 if(value < 0 ){
                     value = 0;
                 }

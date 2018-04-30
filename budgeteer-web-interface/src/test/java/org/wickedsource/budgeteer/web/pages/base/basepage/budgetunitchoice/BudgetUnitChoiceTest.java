@@ -31,4 +31,9 @@ public class BudgetUnitChoiceTest extends AbstractWebTestTemplate {
         units.add(500d);
         return units;
     }
+
+    @Override
+    protected void setupTest() {
+
+    }
 }

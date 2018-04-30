@@ -1,20 +1,15 @@
 package org.wickedsource.budgeteer.web.charts;
 
-import java.io.File;
+import de.adesso.wickedcharts.chartjs.chartoptions.*;
+import de.adesso.wickedcharts.chartjs.chartoptions.colors.RgbColor;
+
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
-
-import de.adesso.wickedcharts.chartjs.chartoptions.AxesScale;
-import de.adesso.wickedcharts.chartjs.chartoptions.GridLines;
-import de.adesso.wickedcharts.chartjs.chartoptions.Layout;
-import de.adesso.wickedcharts.chartjs.chartoptions.Legend;
-import de.adesso.wickedcharts.chartjs.chartoptions.Options;
-import de.adesso.wickedcharts.chartjs.chartoptions.Padding;
-import de.adesso.wickedcharts.chartjs.chartoptions.Scales;
-import de.adesso.wickedcharts.chartjs.chartoptions.Ticks;
-import de.adesso.wickedcharts.chartjs.chartoptions.colors.RgbColor;
 
 public class ChartStyling {
 	public static List<RgbColor> getColors() {
@@ -76,27 +71,20 @@ public class ChartStyling {
 	}
 
 	public static String readFile(String fileName) {
-
 		StringBuilder result = new StringBuilder("");
 
 		// Get file from resources folder
-		ClassLoader classLoader = ChartStyling.class.getClassLoader();
-		File file = new File(classLoader.getResource(fileName).getFile());
-
-		try (Scanner scanner = new Scanner(file)) {
-
-			while (scanner.hasNextLine()) {
-				String line = scanner.nextLine();
+		// do not use files, this will not work in production!
+        InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(fileName);
+        InputStreamReader streamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
+        BufferedReader reader = new BufferedReader(streamReader);
+        try {
+            for (String line; (line = reader.readLine()) != null; ) {
 				result.append(line).append("\n");
 			}
-
-			scanner.close();
-
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 		return result.toString();
-
 	}
 }

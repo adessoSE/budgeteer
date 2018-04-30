@@ -18,6 +18,10 @@ public class BreadcrumbsPanelTest extends AbstractWebTestTemplate {
         tester.startComponentInPage(panel);
     }
 
+    @Override
+    protected void setupTest() {
+
+    }
 }
 
 class DummyBreadcrumbsModel implements IModel<List<Breadcrumb>> {

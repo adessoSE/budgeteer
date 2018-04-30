@@ -11,6 +11,8 @@ public class BudgeteerSession extends WebSession {
 
     private Double selectedBudgetUnit = 1d;
 
+    private boolean taxEnabled;
+
     private User loggedInUser;
 
     private long projectId;
@@ -73,5 +75,13 @@ public class BudgeteerSession extends WebSession {
         this.selectedBudgetUnit = selectedBudgetUnit;
     }
 
+
+    public void setTaxEnabled(boolean enabled) {
+        this.taxEnabled = enabled;
+    }
+
+    public boolean isTaxEnabled() {
+        return taxEnabled;
+    }
 
 }

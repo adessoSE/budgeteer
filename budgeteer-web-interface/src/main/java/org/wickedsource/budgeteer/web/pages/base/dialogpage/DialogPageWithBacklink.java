@@ -31,9 +31,7 @@ public abstract class DialogPageWithBacklink extends DialogPage {
         };
     }
 
-
-    public void goBack(){
-       setResponsePage(backlinkPage, backlinkParameters);
+    public void goBack() {
+        setResponsePage(backlinkPage, backlinkParameters);
     }
-
 }
