@@ -59,13 +59,13 @@ public class BudgetReportService {
 	 * @param metaInformationen Necessary informations about the report
 	 * @return Excel spreadsheet file
 	 */
-    public File createReportFile(String templateName, long projectId, BudgetTagFilter filter, ReportMetaInformation metaInformationen) {
+    public File createReportFile(long templateId, long projectId, BudgetTagFilter filter, ReportMetaInformation metaInformationen) {
 		List<BudgetReportData> overallBudgetReportList = loadOverallBudgetReportData(projectId, filter,
 				metaInformationen);
 		List<BudgetReportData> monthlyBudgetReportList = loadMonthlyBudgetReportData(projectId, filter,
 				metaInformationen);
 
-		XSSFWorkbook wb = getSheetWorkbook(templateName);
+		XSSFWorkbook wb = getSheetWorkbook(templateId);
 
 		writeBudgetData(wb.getSheetAt(0), overallBudgetReportList);
 		writeBudgetData(wb.getSheetAt(1), monthlyBudgetReportList);
@@ -118,9 +118,9 @@ public class BudgetReportService {
 		return summary;
 	}
 
-	private XSSFWorkbook getSheetWorkbook(String name) {
-		if(templateService.getByName(name) != null) {
-            return templateService.getByName(name).getWb();
+	private XSSFWorkbook getSheetWorkbook(long id) {
+		if(templateService.getById(id) != null) {
+            return templateService.getById(id).getWb();
         }else{
             ClassLoader classLoader = getClass().getClassLoader();
             InputStream in = classLoader.getResourceAsStream("report-template.xlsx");

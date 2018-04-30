@@ -6,11 +6,8 @@ document.addEventListener("keydown", function(evt) {
     var isEscape = false;
     // check the key
     if ("key" in evt) {
-        isEnter = (evt.key == "Enter");
-        isEscape = (evt.key == "Escape" || evt.key == "Esc");
-    } else {
-        isEnter = (evt.keyCode == 13);
-        isEscape = (evt.keyCode == 27);
+        isEnter = (evt.key === "Enter");
+        isEscape = (evt.key === "Escape" || evt.key === "Esc");
     }
     // if enter is pressed, click submit
     if (isEnter) {

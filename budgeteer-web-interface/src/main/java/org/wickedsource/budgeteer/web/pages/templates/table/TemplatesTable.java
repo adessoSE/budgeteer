@@ -1,26 +1,19 @@
-package org.wickedsource.budgeteer.web.components.templatesTable;
+package org.wickedsource.budgeteer.web.pages.templates.table;
 
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.event.IEvent;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.joda.money.Money;
-import org.wickedsource.budgeteer.service.record.WorkRecord;
 import org.wickedsource.budgeteer.service.template.Template;
 import org.wickedsource.budgeteer.service.template.TemplateService;
 import org.wickedsource.budgeteer.web.ClassAwareWrappingModel;
 import org.wickedsource.budgeteer.web.components.dataTable.DataTableBehavior;
-import org.wickedsource.budgeteer.web.components.dataTable.editableMoneyField.EditableMoneyField;
-import org.wickedsource.budgeteer.web.components.money.MoneyLabel;
-import org.wickedsource.budgeteer.web.pages.person.edit.EditPersonPage;
-import org.wickedsource.budgeteer.web.pages.person.overview.PeopleOverviewPage;
+import org.wickedsource.budgeteer.web.pages.templates.TemplatesPage;
+import org.wickedsource.budgeteer.web.pages.templates.edit.EditTemplatePage;
 
 import javax.inject.Inject;
 
@@ -59,8 +52,8 @@ public class TemplatesTable extends Panel {
                 item.add(new Link("editPage") {
                     @Override
                     public void onClick() {
-                        //WebPage page = new EditPersonPage(EditPersonPage.createParameters(getId()), PeopleOverviewPage.class, null);
-                        setResponsePage(this.getPage());
+                        WebPage page = new EditTemplatePage(TemplatesPage.class, getPage().getPageParameters(), item.getModelObject().getId());
+                        setResponsePage(page);
                     }
                 });}
 

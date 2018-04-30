@@ -2,24 +2,26 @@
 
     <p class="pull-right"></p><br/>
 
-    <table class="table table-bordered table-hover" wicket:id="table">
+    <table class="table table-hover smallLastColumn" wicket:id="table">
         <thead>
         <tr>
             <th>Name</th>
             <th>Desription</th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
         <tr wicket:id="templateList">
             <td wicket:id="name">Template</td>
-            <td><label style="width:95%; font-weight: normal !important" wicket:id="description">Some description.</label>
-             <button class="btn btn-default btn-sm fa fa-edit" wicket:id="editPage"> </button></td>
+            <td wicket:id="description">Some description.</td>
+            <td><button class="btn btn-default btn-sm fa fa-edit" wicket:id="editPage"> </button></td>
         </tr>
         </tbody>
         <tfoot>
         <tr>
             <th>Name</th>
             <th>Desription</th>
+            <th></th>
         </tr>
         </tfoot>
     </table>

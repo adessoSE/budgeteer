@@ -38,10 +38,10 @@ public class BudgetReportFileModel extends LoadableDetachableModel<File> {
 
     @Override
     protected File load() {
-        if(templateIModel.getObject() != null && templateIModel.getObject().getName() != null){
-            return reportService.createReportFile(templateIModel.getObject().getName(), projectId,filterModel.getObject(),reportModel.getObject());
+        if(templateIModel.getObject() != null){
+            return reportService.createReportFile(templateIModel.getObject().getId(), projectId,filterModel.getObject(),reportModel.getObject());
         }else{
-            return reportService.createReportFile("", projectId,filterModel.getObject(),reportModel.getObject());
+            return reportService.createReportFile(-1, projectId,filterModel.getObject(),reportModel.getObject());
         }
     }
 

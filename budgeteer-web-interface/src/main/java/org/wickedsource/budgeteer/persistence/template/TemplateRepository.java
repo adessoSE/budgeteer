@@ -27,7 +27,26 @@ public class TemplateRepository {
 
     public void add(List<Template> templates){
         for(Template E : templates){
-            this.templates.add(new TemplateEntity(E.getName(), E.getDescription(), E.getWb()));
+            this.templates.add(new TemplateEntity(E.getId(), E.getName(), E.getDescription(), E.getWb()));
+        }
+    }
+
+    public void replace(Template template){
+        for(TemplateEntity E : templates){
+            if(E.getId() == template.getId()){
+                templates.remove(E);
+                break;
+            }
+        }
+        templates.add(new TemplateEntity(template.getId(), template.getName(), template.getDescription(), template.getWb()));
+    }
+
+    public void delete(long id){
+        for(TemplateEntity E : templates){
+            if(E.getId() == id){
+                templates.remove(E);
+                break;
+            }
         }
     }
 }

@@ -13,7 +13,7 @@ public class TemplateFormInputDto implements Serializable {
     private String description;
     private List<Template> files;
 
-    TemplateFormInputDto(long projectId) {
+    public TemplateFormInputDto(long projectId) {
         this.projectId = projectId;
     }
 }

@@ -35,30 +35,30 @@ import java.util.Date;
 
 public class BudgetReportForm extends Form<ReportMetaInformation> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	@SpringBean
-	private BudgetReportService service;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
+    @SpringBean
+    private BudgetReportService service;
 
     @Inject
     private TemplateService templateService;
 
-	public BudgetReportForm(String id) {
-		super(id, model(from(new ReportMetaInformation())));
-		Date startDate = service.getStartDateOfBudgets();
-		Date endDate = service.getLastDayOfLastMonth();
-		Date monthlyStartDate = service.getFirstDayOfLastMonth();
-		getModel().getObject().setOverallTimeRange(new DateRange(startDate, endDate));
-		getModel().getObject().setMonthlyTimeRange(new DateRange(monthlyStartDate, endDate));
+    public BudgetReportForm(String id) {
+        super(id, model(from(new ReportMetaInformation())));
+        Date startDate = service.getStartDateOfBudgets();
+        Date endDate = service.getLastDayOfLastMonth();
+        Date monthlyStartDate = service.getFirstDayOfLastMonth();
+        getModel().getObject().setOverallTimeRange(new DateRange(startDate, endDate));
+        getModel().getObject().setMonthlyTimeRange(new DateRange(monthlyStartDate, endDate));
 
-		add(new NotificationListPanel("notificationList", new BudgetReportNotificationModel()));
-		add(new CustomFeedbackPanel("feedback"));
-		add(new DateRangeInputField("monthlyRange", model(from(getModel()).getMonthlyTimeRange()),
-				DateRangeInputField.DROP_LOCATION.DOWN));
-		add(new DateRangeInputField("overallRange", model(from(getModel()).getOverallTimeRange()),
-				DateRangeInputField.DROP_LOCATION.DOWN));
+        add(new NotificationListPanel("notificationList", new BudgetReportNotificationModel()));
+        add(new CustomFeedbackPanel("feedback"));
+        add(new DateRangeInputField("monthlyRange", model(from(getModel()).getMonthlyTimeRange()),
+                DateRangeInputField.DROP_LOCATION.DOWN));
+        add(new DateRangeInputField("overallRange", model(from(getModel()).getOverallTimeRange()),
+                DateRangeInputField.DROP_LOCATION.DOWN));
         DropDownChoice<Template> templateDropDown = new DropDownChoice<Template>("template", model(from(getModel()).getTemplate()),
                 templateService.getTemplates(),
                 new AbstractChoiceRenderer<Template>() {
@@ -69,10 +69,10 @@ public class BudgetReportForm extends Form<ReportMetaInformation> {
                 });
         templateDropDown.setNullValid(false);
         add(templateDropDown);
-	}
+    }
 
-	protected void onSubmit() {
-		String filename = "report.xlsx";
+    protected void onSubmit() {
+        String filename = "report.xlsx";
         if(((ReportMetaInformation) getModelObject()).getTemplate() == null){
             this.error(getString("feedback.error.no.template"));
         }else {
@@ -86,13 +86,10 @@ public class BudgetReportForm extends Form<ReportMetaInformation> {
                 @Override
                 public void respond(IRequestCycle requestCycle) {
                     super.respond(requestCycle);
-                    Files.remove(file);
+                    //Files.remove(file);
                 }
             }.setFileName(filename).setContentDisposition(ContentDisposition.ATTACHMENT));
         }
-
-
-
-	}
+    }
 
 }

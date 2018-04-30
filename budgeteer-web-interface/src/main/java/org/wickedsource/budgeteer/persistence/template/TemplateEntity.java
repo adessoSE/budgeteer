@@ -19,21 +19,22 @@ import java.util.Date;
 @Accessors(chain = true)
 public class TemplateEntity {
 
-    @Id
-    @GeneratedValue
+/*    @Id
+    @GeneratedValue*/
     private long id;
 
     private String name;
     private String description;
     private XSSFWorkbook wb;
 
-    TemplateEntity(String name, String description, XSSFWorkbook workbook){
+    TemplateEntity(long id, String name, String description, XSSFWorkbook workbook){
+        this.id = id;
         this.name = name;
         this.description = description;
         this.wb = workbook;
     }
 
     public Template getTemplate(){
-        return new Template().setName(name).setDescription(description).setWb(wb);
+        return new Template(id, name, description, wb);
     }
 }

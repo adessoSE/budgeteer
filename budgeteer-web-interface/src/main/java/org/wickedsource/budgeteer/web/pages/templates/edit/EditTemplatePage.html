@@ -1,7 +1,7 @@
 <wicket:extend xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
 
     <div class="form-box wide" id="login-box">
-        <div class="header">Import Templates
+        <div class="header">Edit Template
             <div class="box-tools pull-right">
                 <button wicket:id="backlink1" class="btn bg-olive btn-sm"><i class="fa fa-times"></i></button>
             </div>
@@ -37,13 +37,22 @@
                         <button wicket:id="backlink2" id="cancel" type="button" class="btn bg-olive btn-block">Cancel</button>
                     </div>
                     <div class="col-lg-3">
-                        <button wicket:id="exampleFileButton" class="btn bg-olive btn-block" data-toggle="tooltip" title
-                                data-original-title="Download an example file to see the format for templates.">
-                            <i class="fa fa-download"></i>&nbsp;&nbsp;&nbsp;Example Template
+                        <button wicket:id="downloadFileButton" class="btn bg-olive btn-block" data-toggle="tooltip" title
+                                data-original-title="Download the template.">
+                            <i class="fa fa-download"></i>&nbsp;&nbsp;&nbsp;Download Template
                         </button>
                     </div>
-                    <div class="col-lg-6">
-                        <button type="submit" id="submitButton" class="btn bg-olive btn-block"><wicket:message key="page.button.start">Start import</wicket:message></button>
+                    <div class="col-lg-3">
+                        <button wicket:id="deleteButton" class="btn bg-olive btn-block" data-toggle="tooltip" title
+                                data-original-title="Delete the template.">
+                            <i class="fa fa-trash-o"></i>&nbsp;&nbsp;&nbsp;Delete Template
+                        </button>
+                    </div>
+                    <div class="col-lg-3">
+                        <button type="submit" id="submitButton" class="btn bg-olive btn-block">
+                            <i class="fa fa-check"></i>
+                            <wicket:message key="page.button.start">Start import</wicket:message>
+                        </button>
                     </div>
                 </div>
             </div>
