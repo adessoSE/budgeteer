@@ -16,16 +16,15 @@ import java.util.Date;
 /*@Entity
 @Table(name="TEMPLATE")*/
 @Data
-@Accessors(chain = true)
 public class TemplateEntity {
 
 /*    @Id
     @GeneratedValue*/
     private long id;
 
-    private String name;
-    private String description;
-    private XSSFWorkbook wb;
+    private final String name;
+    private final String description;
+    private final XSSFWorkbook wb;
 
     TemplateEntity(long id, String name, String description, XSSFWorkbook workbook){
         this.id = id;

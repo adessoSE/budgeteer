@@ -24,10 +24,7 @@ import org.wickedsource.budgeteer.service.contract.ContractService;
 import org.wickedsource.budgeteer.service.template.TemplateService;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
@@ -119,19 +116,15 @@ public class BudgetReportService {
 	}
 
 	private XSSFWorkbook getSheetWorkbook(long id) {
-		if(templateService.getById(id) != null) {
-            return templateService.getById(id).getWb();
-        }else{
-            ClassLoader classLoader = getClass().getClassLoader();
-            InputStream in = classLoader.getResourceAsStream("report-template.xlsx");
-            XSSFWorkbook wb = null;
-            try {
-                wb = (XSSFWorkbook) WorkbookFactory.create(in);
-            } catch (EncryptedDocumentException | IOException | InvalidFormatException e) {
-                e.printStackTrace();
-            }
-            return wb;
+        try { //Yeah. This fixes a bug where exporting twice with the same template causes a crash.
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            templateService.getById(id).getWb().write(out);
+            ByteArrayInputStream in = new ByteArrayInputStream(out.toByteArray());
+            return (XSSFWorkbook) WorkbookFactory.create(in);
+        }catch (InvalidFormatException | IOException e){
+            e.printStackTrace();
         }
+        return null;
 	}
 
 	private String getAttribute(String string, List<? extends SheetTemplateSerializable> list) {

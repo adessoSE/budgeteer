@@ -7,12 +7,11 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 @Data
-@Accessors(chain = true)
 public class Template {
-    private long id;
-    private String name;
-    private String description;
-    private XSSFWorkbook wb;
+    private final long id;
+    private final String name;
+    private final String description;
+    private final XSSFWorkbook wb;
 
     public Template(long id, String name, String description, XSSFWorkbook wb){
         this.id = id;

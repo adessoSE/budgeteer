@@ -23,6 +23,7 @@ import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPa
 import org.wickedsource.budgeteer.web.components.daterange.DateRangeInputField;
 import org.wickedsource.budgeteer.web.components.notificationlist.NotificationListPanel;
 import org.wickedsource.budgeteer.web.pages.base.AbstractChoiceRenderer;
+import org.wickedsource.budgeteer.web.pages.base.dialogpage.DialogPageWithBacklink;
 import org.wickedsource.budgeteer.web.pages.budgets.overview.report.BudgetReportFileModel;
 
 import javax.inject.Inject;
@@ -73,7 +74,7 @@ public class BudgetReportForm extends Form<ReportMetaInformation> {
 
     protected void onSubmit() {
         String filename = "report.xlsx";
-        if(((ReportMetaInformation) getModelObject()).getTemplate() == null){
+        if((getModelObject()).getTemplate() == null){
             this.error(getString("feedback.error.no.template"));
         }else {
             this.success(getString("feedback.success"));
@@ -86,10 +87,9 @@ public class BudgetReportForm extends Form<ReportMetaInformation> {
                 @Override
                 public void respond(IRequestCycle requestCycle) {
                     super.respond(requestCycle);
-                    //Files.remove(file);
+                    Files.remove(file);
                 }
             }.setFileName(filename).setContentDisposition(ContentDisposition.ATTACHMENT));
         }
     }
-
 }

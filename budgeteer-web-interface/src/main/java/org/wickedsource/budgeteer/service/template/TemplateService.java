@@ -1,5 +1,7 @@
 package org.wickedsource.budgeteer.service.template;
 
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.wicket.model.IModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,10 +70,12 @@ public class TemplateService {
     public void doImport(long projectId, ImportFile importFile, IModel<TemplateFormInputDto> temModel) {
         List<Template> imports = new ArrayList<>();
         try {
-            imports.add(new Template(id, temModel.getObject().getName(), temModel.getObject().getDescription(), new XSSFWorkbook(importFile.getInputStream())));
+            imports.add(new Template(id, temModel.getObject().getName(), temModel.getObject().getDescription(), (XSSFWorkbook)WorkbookFactory.create(importFile.getInputStream())));
             templateRepository.add(imports);
             id += 1;
         } catch (IOException e){
+            e.printStackTrace();
+        } catch (InvalidFormatException e){
             e.printStackTrace();
         }
     }
