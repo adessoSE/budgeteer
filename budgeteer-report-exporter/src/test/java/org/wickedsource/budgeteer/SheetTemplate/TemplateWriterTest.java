@@ -13,7 +13,7 @@ import java.util.Date;
 
 import static org.junit.Assert.*;
 
-public class TemplateWriterTest {
+class TemplateWriterTest {
 
 	private XSSFWorkbook wb;
 	private TemplateWriter<TestDTO> tw;
@@ -22,7 +22,7 @@ public class TemplateWriterTest {
 	private TestDTO dto1,dto2;
 	
 	@BeforeEach
-	public void setUp() throws Exception {
+	void setUp() throws Exception {
 		InputStream in = new FileInputStream("test-mapping.xlsx");
 		wb = (XSSFWorkbook) WorkbookFactory.create(in);
 		sheet = wb.getSheetAt(0);
@@ -44,14 +44,14 @@ public class TemplateWriterTest {
 	}
 
 	@Test
-	public void testWrite() {
+	void testWrite() {
 		tw.setEntries(Arrays.asList(dto1,dto2));
 		tw.write();
 		
 		Row row = sheet.getRow(4);
 		assertEquals("Foo",row.getCell(0).getStringCellValue());
 		assertEquals("Foo - 123.4567899",row.getCell(1).getStringCellValue());
-		assertEquals(true,row.getCell(2).getBooleanCellValue());
+		assertTrue(row.getCell(2).getBooleanCellValue());
 		assertEquals("",row.getCell(3).getStringCellValue());
 		// date
 		// calendar
@@ -62,7 +62,7 @@ public class TemplateWriterTest {
 		row = sheet.getRow(5);
 		assertEquals("Bar",row.getCell(0).getStringCellValue());
 		assertEquals("Bar - 987.654321",row.getCell(1).getStringCellValue());
-		assertEquals(false,row.getCell(2).getBooleanCellValue());
+		assertFalse(row.getCell(2).getBooleanCellValue());
 		assertEquals("",row.getCell(3).getStringCellValue());
 		// date
 		// calendar
@@ -72,7 +72,7 @@ public class TemplateWriterTest {
 	}
 
 	@Test
-	public void testInsertZeroRows() {
+	void testInsertZeroRows() {
 		int lastRowNumber = sheet.getLastRowNum();
 		tw.setEntries(Collections.nCopies(0, new TestDTO()));
 		tw.insertRows();
@@ -80,7 +80,7 @@ public class TemplateWriterTest {
 	}
 
 	@Test
-	public void testInsertOneRow() {
+	void testInsertOneRow() {
 		int lastRowNumber = sheet.getLastRowNum();
 		tw.setEntries(Collections.nCopies(1, new TestDTO()));
 		tw.insertRows();
@@ -88,7 +88,7 @@ public class TemplateWriterTest {
 	}
 
 	@Test
-	public void testInsertMultipleRows() {
+	void testInsertMultipleRows() {
 		int lastRowNumber = sheet.getLastRowNum();
 		tw.setEntries(Collections.nCopies(5, new TestDTO()));
 		tw.insertRows();
@@ -96,7 +96,7 @@ public class TemplateWriterTest {
 	}
 
 	@Test
-	public void testCopyRow() {
+	void testCopyRow() {
 		tw.copyRow(sheet, 4);
 
 		Row copiedRow = sheet.getRow(5);
@@ -126,7 +126,7 @@ public class TemplateWriterTest {
 	}
 	
 	@Test
-	public void testSetFlag() {
+	void testSetFlag() {
 		tw.setEntries(Arrays.asList(dto1,dto2));
 		tw.addFlag(dto1, "dynamic.vorname" , "warning1");
 		tw.write();
@@ -143,32 +143,32 @@ public class TemplateWriterTest {
 	}
 
 	@Test
-	public void testRemoveFlagSheet() {
+	void testRemoveFlagSheet() {
 		tw.removeFlagSheet();
 		Sheet removedSheet = wb.getSheet("Flags");
 		assertNull(removedSheet);
 	}
 	
 	@Test
-	public void testIsDynamicField() {
+	void testIsDynamicField() {
 		assertTrue(tw.isDynamicField("foo.bar"));
 		assertFalse(tw.isDynamicField("foo"));
 	}
 
 	@Test
-	public void testSubkeyOfWithDotAtTheEnd() {
+	void testSubkeyOfWithDotAtTheEnd() {
 		String result = tw.subkeyOf("test.name.");
 		assertEquals("name.", result);
 	}
 
 	@Test
-	public void testSubkeyOfWithMultipleDots() {
+	void testSubkeyOfWithMultipleDots() {
 		String result = tw.subkeyOf("test.name.multiple.test");
 		assertEquals("name.multiple.test", result);
 	}
 
 	@Test
-	public void testSubkeyOfWithNoDots() {
+	void testSubkeyOfWithNoDots() {
 		String result = tw.subkeyOf("test");
 		assertNull(result);
 	}
