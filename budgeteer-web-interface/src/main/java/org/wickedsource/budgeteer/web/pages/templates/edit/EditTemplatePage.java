@@ -37,6 +37,11 @@ import java.util.List;
 import static org.wicketstuff.lazymodel.LazyModel.from;
 import static org.wicketstuff.lazymodel.LazyModel.model;
 
+/**
+ * Creates the form to edit a template. (Reupload, Download, Delete, Edit name/description)
+ *
+ * @author maximAtanasov
+ */
 @Mount("templates/editTemplates")
 public class EditTemplatePage extends DialogPageWithBacklink {
 
@@ -45,16 +50,19 @@ public class EditTemplatePage extends DialogPageWithBacklink {
 
     private long templateID;
 
-
     private List<FileUpload> fileUploads = new ArrayList<>();
 
     private TemplateFormInputDto templateFormInputDto = new TemplateFormInputDto(BudgeteerSession.get().getProjectId());
 
-
-
-    public EditTemplatePage(Class<? extends WebPage> backlinkPage, PageParameters backlinkParameters, long id) {
+    /**
+     *
+     * @param backlinkPage The page to go back to (Here, always the Template Overview page)
+     * @param backlinkParameters The parameters to pass to that page.
+     * @param templateID the ID of the template we want to edit.
+     */
+    public EditTemplatePage(Class<? extends WebPage> backlinkPage, PageParameters backlinkParameters, long templateID) {
         super(backlinkPage, backlinkParameters);
-        templateID = id;
+        this.templateID = templateID;
         add(createBacklink("backlink1"));
         IModel formModel = model(from(templateFormInputDto));
 
@@ -73,11 +81,11 @@ public class EditTemplatePage extends DialogPageWithBacklink {
                     if(fileUploads != null && fileUploads.size() > 0){
                         ImportFile file = new ImportFile(fileUploads.get(0).getClientFileName(), fileUploads.get(0).getInputStream());
                         if(model(from(templateFormInputDto)).getObject().getName() != null && model(from(templateFormInputDto)).getObject().getDescription() != null){
-                            service.editTemplate(BudgeteerSession.get().getProjectId(), id, file, model(from(templateFormInputDto)));
+                            service.editTemplate(BudgeteerSession.get().getProjectId(), templateID, file, model(from(templateFormInputDto)));
                             success(getString("message.success"));
                         }
                     }else if(model(from(templateFormInputDto)).getObject().getName() != null && model(from(templateFormInputDto)).getObject().getDescription() != null){
-                        service.editTemplate(BudgeteerSession.get().getProjectId(), id, null, model(from(templateFormInputDto)));
+                        service.editTemplate(BudgeteerSession.get().getProjectId(), templateID, null, model(from(templateFormInputDto)));
                         success(getString("message.success"));
                     }
                 } catch (IOException e) {
@@ -100,8 +108,8 @@ public class EditTemplatePage extends DialogPageWithBacklink {
         form.add(fileUpload);
         form.add(createBacklink("backlink2"));
 
-        templateFormInputDto.setName(service.getById(id).getName());
-        templateFormInputDto.setDescription(service.getById(id).getDescription());
+        templateFormInputDto.setName(service.getById(templateID).getName());
+        templateFormInputDto.setDescription(service.getById(templateID).getDescription());
         form.add(DownloadFileButton("downloadFileButton"));
         form.add(DeleteTemplateButton("deleteButton"));
         form.add(new TextField<String>("name", model(from(templateFormInputDto).getName())));

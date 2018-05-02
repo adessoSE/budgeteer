@@ -9,14 +9,16 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 @Data
 public class Template {
     private final long id;
+    private final long projectID;
     private final String name;
     private final String description;
     private final XSSFWorkbook wb;
 
-    public Template(long id, String name, String description, XSSFWorkbook wb){
+    public Template(long id, String name, String description, XSSFWorkbook wb, long projectID){
         this.id = id;
         this.name = name;
         this.description = description;
         this.wb = wb;
+        this.projectID = projectID;
     }
 }

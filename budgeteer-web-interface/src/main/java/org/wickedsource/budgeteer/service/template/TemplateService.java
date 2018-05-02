@@ -32,7 +32,17 @@ public class TemplateService {
     public List<Template> getTemplates(){
         List<Template> result = new ArrayList<>();
         for(TemplateEntity E : templateRepository.findAll()){
-            result.add(new Template(E.getId(), E.getName(), E.getDescription(), E.getWb()));
+            result.add(new Template(E.getId(), E.getName(), E.getDescription(), E.getWb(), E.getProjectId()));
+        }
+        return result;
+    }
+
+    public List<Template> getTemplatesInProject(long projectID){
+        List<Template> result = new ArrayList<>();
+        for(TemplateEntity E : templateRepository.findAll()){
+            if(E.getProjectId() == projectID) {
+                result.add(new Template(E.getId(), E.getName(), E.getDescription(), E.getWb(), E.getProjectId()));
+            }
         }
         return result;
     }
@@ -40,7 +50,7 @@ public class TemplateService {
     public Template getById(long templateID){
         for(TemplateEntity E : templateRepository.findAll()){
             if(E.getId() == templateID){
-                return new Template(E.getId(), E.getName(), E.getDescription(), E.getWb());
+                return new Template(E.getId(), E.getName(), E.getDescription(), E.getWb(), E.getProjectId());
             }
         }
         return null;
@@ -54,14 +64,16 @@ public class TemplateService {
         Template temp;
         if(importFile != null) {
             try {
-                temp = new Template(templateId, temModel.getObject().getName(), temModel.getObject().getDescription(), new XSSFWorkbook(importFile.getInputStream()));
+                temp = new Template(templateId, temModel.getObject().getName(), temModel.getObject().getDescription(),
+                        new XSSFWorkbook(importFile.getInputStream()), projectId);
                 templateRepository.replace(temp);
 
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }else{
-            temp = new Template(templateId, temModel.getObject().getName(), temModel.getObject().getDescription(), getById(templateId).getWb());
+            temp = new Template(templateId, temModel.getObject().getName(),
+                    temModel.getObject().getDescription(), getById(templateId).getWb(), projectId);
             templateRepository.replace(temp);
 
         }
@@ -70,12 +82,11 @@ public class TemplateService {
     public void doImport(long projectId, ImportFile importFile, IModel<TemplateFormInputDto> temModel) {
         List<Template> imports = new ArrayList<>();
         try {
-            imports.add(new Template(id, temModel.getObject().getName(), temModel.getObject().getDescription(), (XSSFWorkbook)WorkbookFactory.create(importFile.getInputStream())));
+            imports.add(new Template(id, temModel.getObject().getName(), temModel.getObject().getDescription(),
+                    (XSSFWorkbook)WorkbookFactory.create(importFile.getInputStream()), projectId));
             templateRepository.add(imports);
             id += 1;
-        } catch (IOException e){
-            e.printStackTrace();
-        } catch (InvalidFormatException e){
+        } catch (IOException | InvalidFormatException e){
             e.printStackTrace();
         }
     }

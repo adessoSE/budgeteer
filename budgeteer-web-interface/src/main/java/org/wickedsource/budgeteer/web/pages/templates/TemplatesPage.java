@@ -23,8 +23,6 @@ import static org.wicketstuff.lazymodel.LazyModel.from;
 @Mount("templates")
 public class TemplatesPage extends BasePage {
 
-    private WebMarkupContainer importListContainer;
-
     public TemplatesPage() {
         long projectId = BudgeteerSession.get().getProjectId();
         TemplatesTable table = new TemplatesTable("templateTable", new TemplateListModel(BudgeteerSession.get().getProjectId()));
@@ -66,7 +64,7 @@ public class TemplatesPage extends BasePage {
             }
             @Override
             protected ListItem<Template> newItem(int index, IModel<Template> itemModel) {
-                return super.newItem(index, new ClassAwareWrappingModel<Template>(itemModel, Template.class));
+                return super.newItem(index, new ClassAwareWrappingModel<>(itemModel, Template.class));
             }
         };
     }

@@ -22,6 +22,6 @@ public class TemplateListModel extends LoadableDetachableModel<List<Template>> {
 
     @Override
     protected List<Template> load() {
-        return service.getTemplates();
+        return service.getTemplatesInProject(projectId);
     }
 }
