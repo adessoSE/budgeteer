@@ -2,4 +2,5 @@ dependencies {
     compile project(':budgeteer-importer-api')
     compile group: 'org.apache.poi', name: 'poi-ooxml', version: "${poi_version}"
     runtime group: 'commons-codec', name: 'commons-codec', version: "${commons_codec_version}"
+    testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.2.0'
 }
