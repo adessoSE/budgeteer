@@ -10,12 +10,12 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-public class AprodaWorkRecordsImporterTest {
+class AprodaWorkRecordsImporterTest {
 
     private DateFormat format = new SimpleDateFormat("dd.MM.yyyy");
 
     @Test
-    public void testRead() throws Exception {
+    void testRead() throws Exception {
         AprodaWorkRecordsImporter importer = new AprodaWorkRecordsImporter();
         InputStream in = getClass().getResourceAsStream("/aproda-testreport.xlsx");
         List<ImportedWorkRecord> records = importer.importFile(new ImportFile("file.xslx", in));
@@ -27,7 +27,7 @@ public class AprodaWorkRecordsImporterTest {
     }
 
     @Test
-    public void testGetSkippedDataSets() throws Exception {
+    void testGetSkippedDataSets() throws Exception {
         AprodaWorkRecordsImporter importer = new AprodaWorkRecordsImporter();
         InputStream in = getClass().getResourceAsStream("/aproda-testreport.xlsx");
         List<ImportedWorkRecord> records = importer.importFile(new ImportFile("file.xslx", in));
@@ -56,7 +56,7 @@ public class AprodaWorkRecordsImporterTest {
     }
 
     @Test
-    public void testGetExampleFile(){
+    void testGetExampleFile(){
         AprodaWorkRecordsImporter importer = new AprodaWorkRecordsImporter();
         ExampleFile file = importer.getExampleFile();
         Assertions.assertNotNull(file.getFileName());
@@ -65,7 +65,7 @@ public class AprodaWorkRecordsImporterTest {
     }
 
     @Test
-    public void testInvalidFile() throws InvalidFileFormatException, ImportException {
+    void testInvalidFile() {
         Assertions.assertThrows(InvalidFileFormatException.class, () -> {
             AprodaWorkRecordsImporter importer = new AprodaWorkRecordsImporter();
             InputStream in = getClass().getResourceAsStream("/aproda-testreport_invalid.xlsx");
