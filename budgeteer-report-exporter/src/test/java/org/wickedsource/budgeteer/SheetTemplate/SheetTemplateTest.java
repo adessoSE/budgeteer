@@ -4,8 +4,8 @@ import com.google.common.collect.Multimap;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.assertj.core.api.Assertions;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.util.List;
@@ -54,7 +54,7 @@ public class SheetTemplateTest {
 		
 	}
 	
-	@Before
+	@BeforeEach
 	public void setUp() {
 		wb = new XSSFWorkbook();
 		sheet = wb.createSheet();

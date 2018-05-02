@@ -2,8 +2,8 @@ package org.wickedsource.budgeteer.SheetTemplate;
 
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -21,7 +21,7 @@ public class TemplateWriterTest {
 	private SheetTemplate template;
 	private TestDTO dto1,dto2;
 	
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		InputStream in = new FileInputStream("test-mapping.xlsx");
 		wb = (XSSFWorkbook) WorkbookFactory.create(in);

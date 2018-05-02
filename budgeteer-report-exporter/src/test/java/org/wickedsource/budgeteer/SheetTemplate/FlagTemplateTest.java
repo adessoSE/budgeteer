@@ -9,15 +9,15 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class FlagTemplateTest {
 
 	private FlagTemplate flagTemplate;
 	private Sheet sheet;
 	
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		InputStream in = new FileInputStream("test-mapping.xlsx");
 		Workbook wb = (XSSFWorkbook) WorkbookFactory.create(in);
