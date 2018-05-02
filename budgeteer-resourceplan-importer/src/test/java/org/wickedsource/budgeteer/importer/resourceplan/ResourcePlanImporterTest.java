@@ -7,10 +7,10 @@ import org.wickedsource.budgeteer.imports.api.*;
 
 import java.util.List;
 
-public class ResourcePlanImporterTest {
+class ResourcePlanImporterTest {
 
     @Test
-    public void testImportFile() throws Exception {
+    void testImportFile() throws Exception {
         ResourcePlanImporter importer = new ResourcePlanImporter();
         ImportFile file = new ImportFile("resource_plan.xlsx", getClass().getResourceAsStream("/resource_plan.xlsx"));
         List<ImportedPlanRecord> records = importer.importFile(file, CurrencyUnit.EUR);
@@ -34,7 +34,7 @@ public class ResourcePlanImporterTest {
     }
 
     @Test
-    public void testGetExampleFile(){
+    void testGetExampleFile(){
         ResourcePlanImporter importer = new ResourcePlanImporter();
         ExampleFile file = importer.getExampleFile();
         Assertions.assertNotNull(file.getFileName());
@@ -43,7 +43,7 @@ public class ResourcePlanImporterTest {
     }
 
     @Test
-    public void testInvalidFile() throws ImportException, InvalidFileFormatException {
+    void testInvalidFile() {
         Assertions.assertThrows(InvalidFileFormatException.class, () -> {
             ResourcePlanImporter importer = new ResourcePlanImporter();
             ImportFile file = new ImportFile("resource_plan_invalid.xlsx", getClass().getResourceAsStream("/resource_plan_invalid.xlsx"));
