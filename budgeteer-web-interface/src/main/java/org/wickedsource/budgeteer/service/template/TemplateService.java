@@ -20,8 +20,6 @@ import java.util.List;
 @Transactional
 public class TemplateService {
 
-    private long id = 0;
-
     @Autowired
     TemplateRepository templateRepository;
 
@@ -61,31 +59,31 @@ public class TemplateService {
     }
 
     public void editTemplate(long projectId, long templateId, ImportFile importFile, IModel<TemplateFormInputDto> temModel) {
-        Template temp;
+        TemplateEntity temp;
         if(importFile != null) {
             try {
-                temp = new Template(templateId, temModel.getObject().getName(), temModel.getObject().getDescription(),
+                temp = new TemplateEntity(temModel.getObject().getName(), temModel.getObject().getDescription(),
                         new XSSFWorkbook(importFile.getInputStream()), projectId);
-                templateRepository.replace(temp);
-
+                templateRepository.delete(templateId);
+                templateRepository.save(temp);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }else{
-            temp = new Template(templateId, temModel.getObject().getName(),
+            temp = new TemplateEntity(temModel.getObject().getName(),
                     temModel.getObject().getDescription(), getById(templateId).getWb(), projectId);
-            templateRepository.replace(temp);
+            templateRepository.delete(templateId);
+            templateRepository.save(temp);
 
         }
     }
 
     public void doImport(long projectId, ImportFile importFile, IModel<TemplateFormInputDto> temModel) {
-        List<Template> imports = new ArrayList<>();
+        List<TemplateEntity> imports = new ArrayList<>();
         try {
-            imports.add(new Template(id, temModel.getObject().getName(), temModel.getObject().getDescription(),
+            imports.add(new TemplateEntity(temModel.getObject().getName(), temModel.getObject().getDescription(),
                     (XSSFWorkbook)WorkbookFactory.create(importFile.getInputStream()), projectId));
-            templateRepository.add(imports);
-            id += 1;
+            templateRepository.save(imports);
         } catch (IOException | InvalidFormatException e){
             e.printStackTrace();
         }

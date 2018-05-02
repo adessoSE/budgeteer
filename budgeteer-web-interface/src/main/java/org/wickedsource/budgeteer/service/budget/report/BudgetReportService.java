@@ -116,15 +116,7 @@ public class BudgetReportService {
 	}
 
 	private XSSFWorkbook getSheetWorkbook(long id) {
-        try { //Yeah. This fixes a bug where exporting twice with the same template causes a crash.
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            templateService.getById(id).getWb().write(out);
-            ByteArrayInputStream in = new ByteArrayInputStream(out.toByteArray());
-            return (XSSFWorkbook) WorkbookFactory.create(in);
-        }catch (InvalidFormatException | IOException e){
-            e.printStackTrace();
-        }
-        return null;
+    	return templateService.getById(id).getWb();
 	}
 
 	private String getAttribute(String string, List<? extends SheetTemplateSerializable> list) {
