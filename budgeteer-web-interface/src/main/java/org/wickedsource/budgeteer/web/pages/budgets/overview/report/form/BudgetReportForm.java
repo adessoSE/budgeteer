@@ -3,6 +3,7 @@ package org.wickedsource.budgeteer.web.pages.budgets.overview.report.form;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.IRequestCycle;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
@@ -33,6 +34,7 @@ import static org.wicketstuff.lazymodel.LazyModel.model;
 
 import java.io.File;
 import java.util.Date;
+import java.util.List;
 
 public class BudgetReportForm extends Form<ReportMetaInformation> {
 
@@ -61,7 +63,12 @@ public class BudgetReportForm extends Form<ReportMetaInformation> {
         add(new DateRangeInputField("overallRange", model(from(getModel()).getOverallTimeRange()),
                 DateRangeInputField.DROP_LOCATION.DOWN));
         DropDownChoice<Template> templateDropDown = new DropDownChoice<Template>("template", model(from(getModel()).getTemplate()),
-                templateService.getTemplates(),
+                new LoadableDetachableModel<List<? extends Template>>() {
+                    @Override
+                    protected List<? extends Template> load() {
+                        return templateService.getTemplatesInProject(BudgeteerSession.get().getProjectId());
+                    }
+                },
                 new AbstractChoiceRenderer<Template>() {
                     @Override
                     public Object getDisplayValue(Template object) {
