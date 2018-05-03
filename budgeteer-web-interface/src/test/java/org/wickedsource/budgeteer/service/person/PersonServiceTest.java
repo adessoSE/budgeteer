@@ -1,7 +1,7 @@
 package org.wickedsource.budgeteer.service.person;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.persistence.person.PersonBaseDataBean;
@@ -29,11 +29,11 @@ public class PersonServiceTest extends ServiceTestTemplate {
     public void testLoadPeopleBaseData() throws Exception {
         when(personRepository.findBaseDataByProjectId(1l)).thenReturn(Arrays.asList(createPersonBaseDataBean()));
         List<PersonBaseData> data = personService.loadPeopleBaseData(1l);
-        Assert.assertEquals(1, data.size());
-        Assert.assertEquals(Long.valueOf(1), data.get(0).getId());
-        Assert.assertEquals("person1", data.get(0).getName());
-        Assert.assertEquals(MoneyUtil.createMoneyFromCents(10000l), data.get(0).getAverageDailyRate());
-        Assert.assertEquals(fixedDate, data.get(0).getLastBooked());
+        Assertions.assertEquals(1, data.size());
+        Assertions.assertEquals(Long.valueOf(1), data.get(0).getId());
+        Assertions.assertEquals("person1", data.get(0).getName());
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(10000l), data.get(0).getAverageDailyRate());
+        Assertions.assertEquals(fixedDate, data.get(0).getLastBooked());
     }
 
 
@@ -41,12 +41,12 @@ public class PersonServiceTest extends ServiceTestTemplate {
     public void testLoadPersonDetailData() throws Exception {
         when(personRepository.findDetailDataByPersonId(1l)).thenReturn(createPersonDetailDataBean());
         PersonDetailData data = personService.loadPersonDetailData(1l);
-        Assert.assertEquals("person1", data.getName());
-        Assert.assertEquals(MoneyUtil.createMoneyFromCents(123456l), data.getAverageDailyRate());
-        Assert.assertEquals(fixedDate, data.getLastBookedDate());
-        Assert.assertEquals(fixedDate, data.getFirstBookedDate());
-        Assert.assertEquals(MoneyUtil.createMoneyFromCents(654321l), data.getBudgetBurned());
-        Assert.assertEquals(5.0d, data.getHoursBooked(), 0.1d);
+        Assertions.assertEquals("person1", data.getName());
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(123456l), data.getAverageDailyRate());
+        Assertions.assertEquals(fixedDate, data.getLastBookedDate());
+        Assertions.assertEquals(fixedDate, data.getFirstBookedDate());
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(654321l), data.getBudgetBurned());
+        Assertions.assertEquals(5.0d, data.getHoursBooked(), 0.1d);
     }
 
 
@@ -54,10 +54,10 @@ public class PersonServiceTest extends ServiceTestTemplate {
     public void testLoadPersonBaseData() throws Exception {
         when(personRepository.findBaseDataByPersonId(1l)).thenReturn(createPersonBaseDataBean());
         PersonBaseData bean = personService.loadPersonBaseData(1l);
-        Assert.assertEquals(Long.valueOf(1), bean.getId());
-        Assert.assertEquals("person1", bean.getName());
-        Assert.assertEquals(MoneyUtil.createMoneyFromCents(10000l), bean.getAverageDailyRate());
-        Assert.assertEquals(fixedDate, bean.getLastBooked());
+        Assertions.assertEquals(Long.valueOf(1), bean.getId());
+        Assertions.assertEquals("person1", bean.getName());
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(10000l), bean.getAverageDailyRate());
+        Assertions.assertEquals(fixedDate, bean.getLastBooked());
     }
 
     private PersonBaseDataBean createPersonBaseDataBean() {

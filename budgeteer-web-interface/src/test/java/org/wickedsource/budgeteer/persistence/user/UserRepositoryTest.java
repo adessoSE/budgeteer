@@ -1,7 +1,7 @@
 package org.wickedsource.budgeteer.persistence.user;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.budgeteer.IntegrationTestTemplate;
 import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
@@ -25,7 +25,7 @@ public class UserRepositoryTest extends IntegrationTestTemplate {
         this.userRepository.save(user);
 
         UserEntity result = this.userRepository.findByNameAndPassword("name", "password");
-        Assert.assertNotNull(result);
+        Assertions.assertNotNull(result);
     }
 
     @Test
@@ -33,8 +33,8 @@ public class UserRepositoryTest extends IntegrationTestTemplate {
         ProjectEntity savedProject = createProjectAndUsers();
 
         List<UserEntity> usersNotInProject = userRepository.findNotInProject(savedProject.getId());
-        Assert.assertEquals(1, usersNotInProject.size());
-        Assert.assertEquals("user2", usersNotInProject.get(0).getName());
+        Assertions.assertEquals(1, usersNotInProject.size());
+        Assertions.assertEquals("user2", usersNotInProject.get(0).getName());
     }
 
     @Test
@@ -42,8 +42,8 @@ public class UserRepositoryTest extends IntegrationTestTemplate {
         ProjectEntity savedProject = createProjectAndUsers();
 
         List<UserEntity> usersInProject = userRepository.findInProject(savedProject.getId());
-        Assert.assertEquals(1, usersInProject.size());
-        Assert.assertEquals("user1", usersInProject.get(0).getName());
+        Assertions.assertEquals(1, usersInProject.size());
+        Assertions.assertEquals("user1", usersInProject.get(0).getName());
     }
 
     private ProjectEntity createProjectAndUsers() {

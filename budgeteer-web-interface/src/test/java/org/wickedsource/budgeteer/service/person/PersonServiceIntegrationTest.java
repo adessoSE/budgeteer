@@ -3,8 +3,8 @@ package org.wickedsource.budgeteer.service.person;
 import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.budgeteer.IntegrationTestTemplate;
 import org.wickedsource.budgeteer.MoneyUtil;
@@ -36,11 +36,11 @@ public class PersonServiceIntegrationTest extends IntegrationTestTemplate {
     @DatabaseTearDown(value = "personWithRates.xml", type = DatabaseOperation.DELETE_ALL)
     public void testLoadPersonWithRates() throws Exception {
         PersonWithRates person = service.loadPersonWithRates(2l);
-        Assert.assertEquals("person2", person.getName());
-        Assert.assertEquals(2l, person.getPersonId());
-        Assert.assertEquals("person2", person.getImportKey());
-        Assert.assertEquals(2, person.getRates().size());
-        Assert.assertNotNull(person.getRates().get(0).getBudget());
+        Assertions.assertEquals("person2", person.getName());
+        Assertions.assertEquals(2l, person.getPersonId());
+        Assertions.assertEquals("person2", person.getImportKey());
+        Assertions.assertEquals(2, person.getRates().size());
+        Assertions.assertNotNull(person.getRates().get(0).getBudget());
     }
 
     @Test
@@ -64,14 +64,14 @@ public class PersonServiceIntegrationTest extends IntegrationTestTemplate {
         service.savePersonWithRates(person);
 
         PersonEntity personEntity = personRepository.findOne(1l);
-        Assert.assertEquals(2, personEntity.getDailyRates().size());
+        Assertions.assertEquals(2, personEntity.getDailyRates().size());
 
         WorkRecordEntity record = workRecordRepository.findOne(1l);
-        Assert.assertEquals(MoneyUtil.createMoneyFromCents(32100l), record.getDailyRate());
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(32100l), record.getDailyRate());
         record = workRecordRepository.findOne(2l);
-        Assert.assertEquals(MoneyUtil.createMoneyFromCents(12300l), record.getDailyRate());
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(12300l), record.getDailyRate());
         record = workRecordRepository.findOne(3l);
-        Assert.assertEquals(MoneyUtil.createMoneyFromCents(32100l), record.getDailyRate());
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(32100l), record.getDailyRate());
     }
 
 }

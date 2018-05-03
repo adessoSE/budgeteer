@@ -1,7 +1,7 @@
 package org.wickedsource.budgeteer.service.invoice;
 
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.persistence.contract.ContractEntity;
 import org.wickedsource.budgeteer.persistence.contract.ContractInvoiceField;

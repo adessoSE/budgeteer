@@ -1,8 +1,8 @@
 package org.wickedsource.budgeteer.service.record;
 
 import com.querydsl.core.types.Predicate;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.kubek2k.springockito.annotations.ReplaceWithMock;
 import org.kubek2k.springockito.annotations.SpringockitoContextLoader;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +45,7 @@ public class RecordServiceTest extends ServiceTestTemplate {
         List<AggregatedRecord> recordList = createAggregatedRecordList();
         when(recordJoiner.joinWeekly(anyListOf(WeeklyAggregatedRecordBean.class), anyListOf(WeeklyAggregatedRecordBean.class))).thenReturn(recordList);
         List<AggregatedRecord> resultList = service.getWeeklyAggregationForPerson(1L);
-        Assert.assertEquals(recordList, resultList);
+        Assertions.assertEquals(recordList, resultList);
     }
 
     @Test
@@ -53,7 +53,7 @@ public class RecordServiceTest extends ServiceTestTemplate {
         List<AggregatedRecord> recordList = createAggregatedRecordList();
         when(recordJoiner.joinMonthly(anyListOf(MonthlyAggregatedRecordBean.class), anyListOf(MonthlyAggregatedRecordBean.class))).thenReturn(recordList);
         List<AggregatedRecord> resultList = service.getMonthlyAggregationForPerson(1L);
-        Assert.assertEquals(recordList, resultList);
+        Assertions.assertEquals(recordList, resultList);
     }
 
     @Test
@@ -61,7 +61,7 @@ public class RecordServiceTest extends ServiceTestTemplate {
         List<AggregatedRecord> recordList = createAggregatedRecordList();
         when(recordJoiner.joinWeekly(anyListOf(WeeklyAggregatedRecordBean.class), anyListOf(WeeklyAggregatedRecordBean.class))).thenReturn(recordList);
         List<AggregatedRecord> resultList = service.getWeeklyAggregationForBudget(1L);
-        Assert.assertEquals(recordList, resultList);
+        Assertions.assertEquals(recordList, resultList);
     }
 
     @Test
@@ -69,7 +69,7 @@ public class RecordServiceTest extends ServiceTestTemplate {
         List<AggregatedRecord> recordList = createAggregatedRecordList();
         when(recordJoiner.joinWeekly(anyListOf(WeeklyAggregatedRecordBean.class), anyListOf(WeeklyAggregatedRecordBean.class))).thenReturn(recordList);
         List<AggregatedRecord> resultList = service.getWeeklyAggregationForBudget(1L);
-        Assert.assertEquals(recordList, resultList);
+        Assertions.assertEquals(recordList, resultList);
     }
 
     @Test
@@ -77,7 +77,7 @@ public class RecordServiceTest extends ServiceTestTemplate {
         List<AggregatedRecord> recordList = createAggregatedRecordList();
         when(recordJoiner.joinWeekly(anyListOf(WeeklyAggregatedRecordBean.class), anyListOf(WeeklyAggregatedRecordBean.class))).thenReturn(recordList);
         List<AggregatedRecord> resultList = service.getWeeklyAggregationForBudgets(new BudgetTagFilter(EMPTY_STRING_LIST, 1L));
-        Assert.assertEquals(recordList, resultList);
+        Assertions.assertEquals(recordList, resultList);
     }
 
     @Test
@@ -85,7 +85,7 @@ public class RecordServiceTest extends ServiceTestTemplate {
         List<AggregatedRecord> recordList = createAggregatedRecordList();
         when(recordJoiner.joinMonthly(anyListOf(MonthlyAggregatedRecordBean.class), anyListOf(MonthlyAggregatedRecordBean.class))).thenReturn(recordList);
         List<AggregatedRecord> resultList = service.getMonthlyAggregationForBudgets(new BudgetTagFilter(EMPTY_STRING_LIST, 1L));
-        Assert.assertEquals(recordList, resultList);
+        Assertions.assertEquals(recordList, resultList);
     }
 
     @Test
@@ -93,8 +93,8 @@ public class RecordServiceTest extends ServiceTestTemplate {
         List<WorkRecordEntity> recordList = createRecordList();
         when(workRecordRepository.findAll(any(Predicate.class))).thenReturn(recordList);
         List<WorkRecord> filteredRecords = service.getFilteredRecords(new WorkRecordFilter(1L));
-        Assert.assertEquals(recordList.size(), filteredRecords.size());
-        Assert.assertEquals(WorkRecord.class, filteredRecords.get(0).getClass());
+        Assertions.assertEquals(recordList.size(), filteredRecords.size());
+        Assertions.assertEquals(WorkRecord.class, filteredRecords.get(0).getClass());
     }
 
     private List<WorkRecordEntity> createRecordList() {

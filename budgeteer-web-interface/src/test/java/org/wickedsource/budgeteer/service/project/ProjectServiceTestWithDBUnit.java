@@ -4,13 +4,13 @@ import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
@@ -21,7 +21,7 @@ import org.wickedsource.budgeteer.persistence.project.ProjectRepository;
 import org.wickedsource.budgeteer.persistence.record.PlanRecordRepository;
 import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {IntegrationTestConfiguration.class})
 @TestExecutionListeners({DbUnitTestExecutionListener.class, DirtiesContextTestExecutionListener.class, DependencyInjectionTestExecutionListener.class,
         TransactionalTestExecutionListener.class})
@@ -50,7 +50,7 @@ public class ProjectServiceTestWithDBUnit {
     @DatabaseTearDown(value = "deleteProject.xml", type = DatabaseOperation.DELETE_ALL)
     public void deleteEmptyProject() {
         projectService.deleteProject(1);
-        Assert.assertEquals(null, projectRepository.findOne(1l));
+        Assertions.assertEquals(null, projectRepository.findOne(1l));
     }
 
     @Test
@@ -58,10 +58,10 @@ public class ProjectServiceTestWithDBUnit {
     @DatabaseTearDown(value = "deleteProject.xml", type = DatabaseOperation.DELETE_ALL)
     public void deleteProject() {
         projectService.deleteProject(6);
-        Assert.assertEquals(null, projectRepository.findOne(6l));
-        Assert.assertEquals(0, planRecordRepository.findByProjectId(6l).size());
-        Assert.assertEquals(0, workRecordRepository.findByProjectId(6l).size());
-        Assert.assertEquals(0, invoiceRepository.findByProjectId(6l).size());
-        Assert.assertEquals(0, contractRepository.findByProjectId(6l).size());
+        Assertions.assertEquals(null, projectRepository.findOne(6l));
+        Assertions.assertEquals(0, planRecordRepository.findByProjectId(6l).size());
+        Assertions.assertEquals(0, workRecordRepository.findByProjectId(6l).size());
+        Assertions.assertEquals(0, invoiceRepository.findByProjectId(6l).size());
+        Assertions.assertEquals(0, contractRepository.findByProjectId(6l).size());
     }
 }

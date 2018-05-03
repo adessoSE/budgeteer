@@ -1,7 +1,7 @@
 package org.wickedsource.budgeteer.service.notification;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.budgeteer.persistence.budget.BudgetRepository;
 import org.wickedsource.budgeteer.persistence.budget.MissingBudgetTotalBean;
@@ -37,30 +37,30 @@ public class NotificationServiceTest extends ServiceTestTemplate {
         when(budgetRepository.getMissingBudgetTotalsForProject(1l)).thenReturn(Arrays.asList(createMissingBudgetTotal()));
 
         List<Notification> notifications = service.getNotifications(1l);
-        Assert.assertEquals(4, notifications.size());
+        Assertions.assertEquals(4, notifications.size());
     }
 
     @Test
     public void testGetNotificationsForPerson() throws Exception {
         when(workRecordRepository.getMissingDailyRatesForPerson(1l)).thenReturn(Arrays.asList(createMissingDailyRateForBudget()));
         List<Notification> notifications = service.getNotificationsForPerson(1l);
-        Assert.assertEquals(1, notifications.size());
+        Assertions.assertEquals(1, notifications.size());
         MissingDailyRateForBudgetNotification notification = (MissingDailyRateForBudgetNotification) notifications.get(0);
-        Assert.assertEquals(1l, notification.getPersonId());
-        Assert.assertEquals("person1", notification.getPersonName());
-        Assert.assertEquals(fixedDate, notification.getStartDate());
-        Assert.assertEquals(fixedDate, notification.getEndDate());
-        Assert.assertEquals("Budget1", notification.getBudgetName());
+        Assertions.assertEquals(1l, notification.getPersonId());
+        Assertions.assertEquals("person1", notification.getPersonName());
+        Assertions.assertEquals(fixedDate, notification.getStartDate());
+        Assertions.assertEquals(fixedDate, notification.getEndDate());
+        Assertions.assertEquals("Budget1", notification.getBudgetName());
     }
 
     @Test
     public void testGetNotificationsForBudget() throws Exception {
         when(budgetRepository.getMissingBudgetTotalForBudget(1l)).thenReturn(createMissingBudgetTotal());
         List<Notification> notifications = service.getNotificationsForBudget(1l);
-        Assert.assertEquals(1, notifications.size());
+        Assertions.assertEquals(1, notifications.size());
         MissingBudgetTotalNotification notification = (MissingBudgetTotalNotification) notifications.get(0);
-        Assert.assertEquals(1l, notification.getBudgetId());
-        Assert.assertEquals("budget1", notification.getBudgetName());
+        Assertions.assertEquals(1l, notification.getBudgetId());
+        Assertions.assertEquals("budget1", notification.getBudgetName());
     }
 
     private MissingDailyRateBean createMissingDailyRate() {

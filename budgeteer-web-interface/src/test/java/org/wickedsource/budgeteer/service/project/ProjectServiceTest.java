@@ -1,7 +1,7 @@
 package org.wickedsource.budgeteer.service.project;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
 import org.wickedsource.budgeteer.persistence.project.ProjectRepository;
@@ -30,14 +30,14 @@ public class ProjectServiceTest extends ServiceTestTemplate {
         when(userRepository.findOne(anyLong())).thenReturn(createUserWithProjects());
         ProjectBaseData project = projectService.createProject("MyProject", 1l);
         verify(projectRepository, times(1)).save(any(ProjectEntity.class));
-        Assert.assertEquals("name", project.getName());
+        Assertions.assertEquals("name", project.getName());
     }
 
     @Test
     public void testGetProjectsForUser() throws Exception {
         when(userRepository.findOne(1l)).thenReturn(createUserWithProjects());
         List<ProjectBaseData> projects = projectService.getProjectsForUser(1l);
-        Assert.assertEquals(2, projects.size());
+        Assertions.assertEquals(2, projects.size());
     }
 
     private UserEntity createUserWithProjects() {

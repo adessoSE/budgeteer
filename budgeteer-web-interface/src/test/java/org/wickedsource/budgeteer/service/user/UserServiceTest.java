@@ -1,7 +1,7 @@
 package org.wickedsource.budgeteer.service.user;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
 import org.wickedsource.budgeteer.persistence.project.ProjectRepository;
@@ -36,24 +36,28 @@ public class UserServiceTest extends ServiceTestTemplate{
         verify(userRepository, times(1)).save(any(UserEntity.class));
     }
 
-    @Test(expected = UsernameAlreadyInUseException.class)
-    public void testDuplicateUsernameDuringRegistration() throws Exception{
-        when(userRepository.findByName("User")).thenReturn(null, new UserEntity());
-        service.registerUser("User", "Password");
-        service.registerUser("User", "Password");
+    @Test
+    public void testDuplicateUsernameDuringRegistration() {
+        Assertions.assertThrows(UsernameAlreadyInUseException.class, () -> {
+            when(userRepository.findByName("User")).thenReturn(null, new UserEntity());
+            service.registerUser("User", "Password");
+            service.registerUser("User", "Password");
+        });
     }
 
     @Test
     public void testLoginSuccess() throws Exception {
         when(userRepository.findByNameAndPassword("user", passwordHasher.hash("password"))).thenReturn(createUserEntity());
         User user = service.login("user", "password");
-        Assert.assertNotNull(user);
+        Assertions.assertNotNull(user);
     }
 
-    @Test(expected = InvalidLoginCredentialsException.class)
-    public void testLoginFail() throws Exception {
-        when(userRepository.findByNameAndPassword("user", passwordHasher.hash("password"))).thenReturn(null);
-        service.login("user", "password");
+    @Test
+    public void testLoginFail() {
+        Assertions.assertThrows(InvalidLoginCredentialsException.class, () -> {
+            when(userRepository.findByNameAndPassword("user", passwordHasher.hash("password"))).thenReturn(null);
+            service.login("user", "password");
+        });
     }
 
     @Test
@@ -64,16 +68,20 @@ public class UserServiceTest extends ServiceTestTemplate{
         // assertion not possible when mocking repository
     }
 
-    @Test(expected = UnknownEntityException.class)
+    @Test
     public void testAddUserToProjectFailProjectNotFound() {
-        when(userRepository.findOne(1l)).thenReturn(createUserEntity());
-        service.addUserToProject(1l, 1l);
+        Assertions.assertThrows(UnknownEntityException.class, () -> {
+            when(userRepository.findOne(1l)).thenReturn(createUserEntity());
+            service.addUserToProject(1l, 1l);
+        });
     }
 
-    @Test(expected = UnknownEntityException.class)
+    @Test
     public void testAddUserToProjectFailUserNotFound() {
-        when(projectRepository.findOne(1l)).thenReturn(createProjectEntity());
-        service.addUserToProject(1l, 1l);
+        Assertions.assertThrows(UnknownEntityException.class, () -> {
+            when(projectRepository.findOne(1l)).thenReturn(createProjectEntity());
+            service.addUserToProject(1l, 1l);
+        });
     }
 
     @Test
@@ -84,32 +92,36 @@ public class UserServiceTest extends ServiceTestTemplate{
         // assertion not possible when mocking repository
     }
 
-    @Test(expected = UnknownEntityException.class)
+    @Test
     public void testRemoveUserFromProjectFailProjectNotFound() {
-        when(userRepository.findOne(1l)).thenReturn(createUserEntity());
-        service.removeUserFromProject(1l, 1l);
+        Assertions.assertThrows(UnknownEntityException.class, () -> {
+            when(userRepository.findOne(1l)).thenReturn(createUserEntity());
+            service.removeUserFromProject(1l, 1l);
+        });
     }
 
-    @Test(expected = UnknownEntityException.class)
+    @Test
     public void testRemoveUserFromProjectFailUserNotFound() {
-        when(projectRepository.findOne(1l)).thenReturn(createProjectEntity());
-        service.removeUserFromProject(1l, 1l);
+        Assertions.assertThrows(UnknownEntityException.class, () -> {
+            when(projectRepository.findOne(1l)).thenReturn(createProjectEntity());
+            service.removeUserFromProject(1l, 1l);
+        });
     }
 
     @Test
       public void testGetUsersNotInProject() {
         when(userRepository.findNotInProject(1l)).thenReturn(Arrays.asList(createUserEntity()));
         List<User> users = service.getUsersNotInProject(1l);
-        Assert.assertEquals(1, users.size());
-        Assert.assertEquals("user", users.get(0).getName());
+        Assertions.assertEquals(1, users.size());
+        Assertions.assertEquals("user", users.get(0).getName());
     }
 
     @Test
     public void testGetUsersInProject() {
         when(userRepository.findInProject(1l)).thenReturn(Arrays.asList(createUserEntity()));
         List<User> users = service.getUsersInProject(1l);
-        Assert.assertEquals(1, users.size());
-        Assert.assertEquals("user", users.get(0).getName());
+        Assertions.assertEquals(1, users.size());
+        Assertions.assertEquals("user", users.get(0).getName());
     }
 
     private UserEntity createUserEntity() {

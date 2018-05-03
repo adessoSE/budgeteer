@@ -4,8 +4,8 @@ package org.wickedsource.budgeteer.service.imports;
 import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.budgeteer.IntegrationTestTemplate;
 import org.wickedsource.budgeteer.importer.resourceplan.ResourcePlanImporter;
@@ -87,30 +87,30 @@ public class PlanRecordImportIntegrationTest extends IntegrationTestTemplate {
 
     private void assertImportRecord() throws ParseException {
         ImportEntity importRecord = importRepository.findAll().iterator().next();
-        Assert.assertNotNull(importRecord.getProject());
-        Assert.assertNotNull(importRecord.getImportDate());
-        Assert.assertNotNull(importRecord.getImportType());
-        Assert.assertEquals(format.parse("01.01.2014"), importRecord.getStartDate());
-        Assert.assertEquals(format.parse("01.02.2014"), importRecord.getEndDate());
+        Assertions.assertNotNull(importRecord.getProject());
+        Assertions.assertNotNull(importRecord.getImportDate());
+        Assertions.assertNotNull(importRecord.getImportType());
+        Assertions.assertEquals(format.parse("01.01.2014"), importRecord.getStartDate());
+        Assertions.assertEquals(format.parse("01.02.2014"), importRecord.getEndDate());
     }
 
     private void assertImportedRecords() {
         Iterator<PlanRecordEntity> iterator = planRecordRepository.findAll().iterator();
         while (iterator.hasNext()) {
             PlanRecordEntity record = iterator.next();
-            Assert.assertNotNull(record.getBudget());
-            Assert.assertNotNull(record.getPerson());
-            Assert.assertNotNull(record.getDate());
-            Assert.assertNotNull(record.getMinutes());
+            Assertions.assertNotNull(record.getBudget());
+            Assertions.assertNotNull(record.getPerson());
+            Assertions.assertNotNull(record.getDate());
+            Assertions.assertNotNull(record.getMinutes());
         }
     }
 
     private void assertCounts(int personCount) {
-        Assert.assertEquals(26, planRecordRepository.count());
-        Assert.assertEquals(2, budgetRepository.count());
-        Assert.assertEquals(personCount, personRepository.count());
-        Assert.assertEquals(1, importRepository.count());
-        //Assert.assertEquals(2, dailyRateRepository.count());
+        Assertions.assertEquals(26, planRecordRepository.count());
+        Assertions.assertEquals(2, budgetRepository.count());
+        Assertions.assertEquals(personCount, personRepository.count());
+        Assertions.assertEquals(1, importRepository.count());
+        //Assertions.assertEquals(2, dailyRateRepository.count());
     }
 
 }

@@ -1,7 +1,7 @@
 package org.wickedsource.budgeteer.service.imports;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.budgeteer.persistence.imports.ImportEntity;
 import org.wickedsource.budgeteer.persistence.imports.ImportRepository;
@@ -29,8 +29,8 @@ public class ImportServiceTest extends ServiceTestTemplate {
     public void testLoadImports() throws Exception {
         when(importRepository.findByProjectId(1l)).thenReturn(Arrays.asList(createImportEntity()));
         List<Import> imports = importService.loadImports(1l);
-        Assert.assertEquals(1, imports.size());
-        Assert.assertEquals("TestImport", imports.get(0).getImportType());
+        Assertions.assertEquals(1, imports.size());
+        Assertions.assertEquals("TestImport", imports.get(0).getImportType());
     }
 
     @Test

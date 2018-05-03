@@ -5,8 +5,8 @@ import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 import com.google.common.collect.Lists;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.wickedsource.budgeteer.IntegrationTestTemplate;
@@ -91,34 +91,34 @@ public class WorkRecordImportIntegrationTest extends IntegrationTestTemplate {
 
     private void assertImportRecord() throws ParseException {
         ImportEntity importRecord = importRepository.findAll().iterator().next();
-        Assert.assertNotNull(importRecord.getProject());
-        Assert.assertNotNull(importRecord.getImportDate());
-        Assert.assertNotNull(importRecord.getImportType());
-        Assert.assertEquals(format.parse("06.10.2014"), importRecord.getStartDate());
-        Assert.assertEquals(format.parse("31.10.2014"), importRecord.getEndDate());
+        Assertions.assertNotNull(importRecord.getProject());
+        Assertions.assertNotNull(importRecord.getImportDate());
+        Assertions.assertNotNull(importRecord.getImportType());
+        Assertions.assertEquals(format.parse("06.10.2014"), importRecord.getStartDate());
+        Assertions.assertEquals(format.parse("31.10.2014"), importRecord.getEndDate());
     }
 
     private void assertImportedRecords(boolean hasDailyRate) {
         Iterator<WorkRecordEntity> iterator = workRecordRepository.findAll().iterator();
         while (iterator.hasNext()) {
             WorkRecordEntity record = iterator.next();
-            Assert.assertNotNull(record.getBudget());
-            Assert.assertNotNull(record.getPerson());
-            Assert.assertNotNull(record.getDate());
-            Assert.assertNotNull(record.getMinutes());
+            Assertions.assertNotNull(record.getBudget());
+            Assertions.assertNotNull(record.getPerson());
+            Assertions.assertNotNull(record.getDate());
+            Assertions.assertNotNull(record.getMinutes());
             if (hasDailyRate) {
-                Assert.assertNotEquals(MoneyUtil.createMoneyFromCents(0), workRecordRepository.findAll().iterator().next().getDailyRate());
+                Assertions.assertNotEquals(MoneyUtil.createMoneyFromCents(0), workRecordRepository.findAll().iterator().next().getDailyRate());
             } else {
-                Assert.assertEquals(MoneyUtil.createMoneyFromCents(0), workRecordRepository.findAll().iterator().next().getDailyRate());
+                Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0), workRecordRepository.findAll().iterator().next().getDailyRate());
             }
         }
     }
 
     private void assertCounts() {
-        Assert.assertEquals(16, workRecordRepository.count());
-        Assert.assertEquals(2, budgetRepository.count());
-        Assert.assertEquals(2, personRepository.count());
-        Assert.assertEquals(1, importRepository.count());
+        Assertions.assertEquals(16, workRecordRepository.count());
+        Assertions.assertEquals(2, budgetRepository.count());
+        Assertions.assertEquals(2, personRepository.count());
+        Assertions.assertEquals(1, importRepository.count());
     }
 
     @Test
@@ -133,9 +133,9 @@ public class WorkRecordImportIntegrationTest extends IntegrationTestTemplate {
         List<List<String>> feedback = importer.findAndRemoveManuallyEditedEntries();
         ProjectEntity projectEntity = new ProjectEntity(); projectEntity.setId(1l);
         List<WorkRecordEntity> workRecordsInImportDateRange = workRecordRepository.findByProjectAndDateRange(projectEntity, formatter.parse("2012-01-01"), formatter.parse("2016-08-15"));
-        Assert.assertEquals(7, workRecordsInImportDateRange.size());
-        Assert.assertEquals(10, Lists.newArrayList(workRecordRepository.findAll()).size());
-        Assert.assertEquals(5, feedback.size());
+        Assertions.assertEquals(7, workRecordsInImportDateRange.size());
+        Assertions.assertEquals(10, Lists.newArrayList(workRecordRepository.findAll()).size());
+        Assertions.assertEquals(5, feedback.size());
     }
 
 }
