@@ -9,7 +9,7 @@ import org.wickedsource.budgeteer.persistence.project.ProjectRepository;
 
 import java.util.List;
 
-public class UserRepositoryTest extends IntegrationTestTemplate {
+class UserRepositoryTest extends IntegrationTestTemplate {
 
     @Autowired
     private UserRepository userRepository;
@@ -18,7 +18,7 @@ public class UserRepositoryTest extends IntegrationTestTemplate {
     private ProjectRepository projectRepository;
 
     @Test
-    public void testFindByNameAndPassword() {
+    void testFindByNameAndPassword() {
         UserEntity user = new UserEntity();
         user.setName("name");
         user.setPassword("password");
@@ -29,7 +29,7 @@ public class UserRepositoryTest extends IntegrationTestTemplate {
     }
 
     @Test
-    public void testFindNotInProject() {
+    void testFindNotInProject() {
         ProjectEntity savedProject = createProjectAndUsers();
 
         List<UserEntity> usersNotInProject = userRepository.findNotInProject(savedProject.getId());
@@ -38,7 +38,7 @@ public class UserRepositoryTest extends IntegrationTestTemplate {
     }
 
     @Test
-    public void testFindInProject() {
+    void testFindInProject() {
         ProjectEntity savedProject = createProjectAndUsers();
 
         List<UserEntity> usersInProject = userRepository.findInProject(savedProject.getId());

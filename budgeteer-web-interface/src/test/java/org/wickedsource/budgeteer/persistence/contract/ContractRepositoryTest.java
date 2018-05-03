@@ -10,7 +10,7 @@ import org.wickedsource.budgeteer.IntegrationTestTemplate;
 
 import java.text.ParseException;
 
-public class ContractRepositoryTest extends IntegrationTestTemplate {
+class ContractRepositoryTest extends IntegrationTestTemplate {
 
     @Autowired
     private ContractRepository repository;
@@ -18,8 +18,8 @@ public class ContractRepositoryTest extends IntegrationTestTemplate {
     @Test
     @DatabaseSetup("contract.xml")
     @DatabaseTearDown(value = "contract.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testGetRemainingBudgetForContract() throws ParseException {
-        ContractStatisticBean records = repository.getContractStatisticAggregatedByMonthAndYear(1l, 2, 2014);
+    void testGetRemainingBudgetForContract() throws ParseException {
+        ContractStatisticBean records = repository.getContractStatisticAggregatedByMonthAndYear(1L, 2, 2014);
         Assertions.assertEquals(2, records.getMonth());
         Assertions.assertEquals(200.0/10000.0,records.getProgress(),10e-8);
         Assertions.assertEquals(2014, records.getYear());
@@ -27,7 +27,7 @@ public class ContractRepositoryTest extends IntegrationTestTemplate {
         Assertions.assertEquals(200, records.getSpentBudget());
         Assertions.assertEquals(200, records.getInvoicedBudget());
 
-        records = repository.getContractStatisticAggregatedByMonthAndYear(1l, 6, 2015);
+        records = repository.getContractStatisticAggregatedByMonthAndYear(1L, 6, 2015);
         Assertions.assertEquals(6, records.getMonth());
         Assertions.assertEquals(400.0/10000.0,records.getProgress(),10e-8);
         Assertions.assertEquals(2015, records.getYear());
@@ -36,7 +36,7 @@ public class ContractRepositoryTest extends IntegrationTestTemplate {
         Assertions.assertEquals(400, records.getInvoicedBudget());
 
 
-        records = repository.getContractStatisticAggregatedByMonthAndYear(1l, 1, 2016);
+        records = repository.getContractStatisticAggregatedByMonthAndYear(1L, 1, 2016);
         Assertions.assertEquals(1, records.getMonth());
         Assertions.assertEquals(400.0/10000.0,records.getProgress(),10e-8);
         Assertions.assertEquals(2016, records.getYear());
@@ -48,9 +48,9 @@ public class ContractRepositoryTest extends IntegrationTestTemplate {
     @Test
     @DatabaseSetup("contract.xml")
     @DatabaseTearDown(value = "contract.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testGetRemainingBudgetForContractWithoutWorkRecordsOrInvoices() {
+    void testGetRemainingBudgetForContractWithoutWorkRecordsOrInvoices() {
         ContractStatisticBean records;
-        records = repository.getContractStatisticAggregatedByMonthAndYear(2l, 1, 2016);
+        records = repository.getContractStatisticAggregatedByMonthAndYear(2L, 1, 2016);
         Assertions.assertEquals(1, records.getMonth());
         Assertions.assertEquals(0.0,records.getProgress(),10e-8);
         Assertions.assertEquals(2016, records.getYear());
@@ -62,27 +62,27 @@ public class ContractRepositoryTest extends IntegrationTestTemplate {
     @Test
     @DatabaseSetup("contract.xml")
     @DatabaseTearDown(value = "contract.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testGetBudgetLeftByContractId() {
+    void testGetBudgetLeftByContractId() {
         Double BudgetLeft1 = repository.getBudgetLeftByContractId(1L);
         Double BudgetLeft2 = repository.getBudgetLeftByContractId(2L);
-        Assertions.assertEquals(9400, BudgetLeft1.doubleValue(),10e-8);
-        Assertions.assertEquals(10000, BudgetLeft2.doubleValue(),10e-8);
+        Assertions.assertEquals(9400, BudgetLeft1,10e-8);
+        Assertions.assertEquals(10000, BudgetLeft2,10e-8);
     }
 
     @Test
     @DatabaseSetup("contract.xml")
     @DatabaseTearDown(value = "contract.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testGetBudgetSpentByContractId() {
+    void testGetBudgetSpentByContractId() {
         Double BudgetSpent1 = repository.getSpentBudgetByContractId(1L);
         Double BudgetSpent2 = repository.getSpentBudgetByContractId(2L);
-        Assertions.assertEquals(600, BudgetSpent1.doubleValue(),10e-8);
-        Assertions.assertEquals(0, BudgetSpent2.doubleValue(),10e-8);
+        Assertions.assertEquals(600, BudgetSpent1,10e-8);
+        Assertions.assertEquals(0, BudgetSpent2,10e-8);
     }
     
     @Test
     @DatabaseSetup("contract.xml")
     @DatabaseTearDown(value = "contract.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testGetBudgetSpentGrossByContractId() {
+    void testGetBudgetSpentGrossByContractId() {
     	Double budgetSpentGross1 = repository.getSpentBudgetGrossByContractId(1L);
     	Double budgetSpentGross2 = repository.getSpentBudgetGrossByContractId(2L);
     	Assertions.assertEquals(1200, budgetSpentGross1,10e-8);

@@ -25,7 +25,7 @@ import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
 @ContextConfiguration(classes = {IntegrationTestConfiguration.class})
 @TestExecutionListeners({DbUnitTestExecutionListener.class, DirtiesContextTestExecutionListener.class, DependencyInjectionTestExecutionListener.class,
         TransactionalTestExecutionListener.class})
-public class ProjectServiceTestWithDBUnit {
+class ProjectServiceTestWithDBUnit {
 
     @Autowired
     private ProjectService projectService;
@@ -48,20 +48,20 @@ public class ProjectServiceTestWithDBUnit {
     @Test
     @DatabaseSetup("deleteProject.xml")
     @DatabaseTearDown(value = "deleteProject.xml", type = DatabaseOperation.DELETE_ALL)
-    public void deleteEmptyProject() {
+    void deleteEmptyProject() {
         projectService.deleteProject(1);
-        Assertions.assertEquals(null, projectRepository.findOne(1l));
+        Assertions.assertNull(projectRepository.findOne(1L));
     }
 
     @Test
     @DatabaseSetup("deleteProject.xml")
     @DatabaseTearDown(value = "deleteProject.xml", type = DatabaseOperation.DELETE_ALL)
-    public void deleteProject() {
+    void deleteProject() {
         projectService.deleteProject(6);
-        Assertions.assertEquals(null, projectRepository.findOne(6l));
-        Assertions.assertEquals(0, planRecordRepository.findByProjectId(6l).size());
-        Assertions.assertEquals(0, workRecordRepository.findByProjectId(6l).size());
-        Assertions.assertEquals(0, invoiceRepository.findByProjectId(6l).size());
-        Assertions.assertEquals(0, contractRepository.findByProjectId(6l).size());
+        Assertions.assertNull(projectRepository.findOne(6L));
+        Assertions.assertEquals(0, planRecordRepository.findByProjectId(6L).size());
+        Assertions.assertEquals(0, workRecordRepository.findByProjectId(6L).size());
+        Assertions.assertEquals(0, invoiceRepository.findByProjectId(6L).size());
+        Assertions.assertEquals(0, contractRepository.findByProjectId(6L).size());
     }
 }

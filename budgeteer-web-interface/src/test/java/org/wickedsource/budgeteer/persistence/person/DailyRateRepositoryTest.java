@@ -16,7 +16,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-public class DailyRateRepositoryTest extends IntegrationTestTemplate {
+class DailyRateRepositoryTest extends IntegrationTestTemplate {
 
     @Autowired
     private DailyRateRepository rateRepository;
@@ -24,24 +24,24 @@ public class DailyRateRepositoryTest extends IntegrationTestTemplate {
     @Test
     @DatabaseSetup("personWithRates.xml")
     @DatabaseTearDown(value = "personWithRates.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testGetDistinctRates() {
-        List<Money> rates = rateRepository.getDistinctRatesInCents(1l);
+    void testGetDistinctRates() {
+        List<Money> rates = rateRepository.getDistinctRatesInCents(1L);
         Assertions.assertEquals(2, rates.size());
-        Assertions.assertTrue(rates.contains(MoneyUtil.createMoneyFromCents(50000l)));
-        Assertions.assertTrue(rates.contains(MoneyUtil.createMoneyFromCents(60000l)));
+        Assertions.assertTrue(rates.contains(MoneyUtil.createMoneyFromCents(50000L)));
+        Assertions.assertTrue(rates.contains(MoneyUtil.createMoneyFromCents(60000L)));
     }
 
 
     @Test
     @DatabaseSetup("personWithRates.xml")
     @DatabaseTearDown(value = "personWithRates.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testFindByBudgetAndPersonWithOverlappingDateRange() throws ParseException {
+    void testFindByBudgetAndPersonWithOverlappingDateRange() throws ParseException {
         SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
-        List<DailyRateEntity> rates = rateRepository.findByBudgetAndPersonWithOverlappingDateRange(2l, 1l, formatter.parse("20.02.2015"), formatter.parse("25.02.2015"));
+        List<DailyRateEntity> rates = rateRepository.findByBudgetAndPersonWithOverlappingDateRange(2L, 1L, formatter.parse("20.02.2015"), formatter.parse("25.02.2015"));
 
         Assertions.assertEquals(4, rates.size());
         List<Long> idsThatShouldBePresent = new LinkedList<Long>();
-        idsThatShouldBePresent.addAll(Arrays.asList(new Long[]{4l,5l,6l,7l}));
+        idsThatShouldBePresent.addAll(Arrays.asList(4L, 5L, 6L, 7L));
         for(int i=idsThatShouldBePresent.size()-1; i >= 0; i--){
             DailyRateEntity r = rates.get(i);
             idsThatShouldBePresent.remove(r.getId());
@@ -52,13 +52,13 @@ public class DailyRateRepositoryTest extends IntegrationTestTemplate {
     @Test
     @DatabaseSetup("personWithRates.xml")
     @DatabaseTearDown(value = "personWithRates.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testFindByBudgetAndPersonEndingInOrAfterDateRange() throws ParseException {
+    void testFindByBudgetAndPersonEndingInOrAfterDateRange() throws ParseException {
         SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
-        List<DailyRateEntity> rates = rateRepository.findByBudgetAndPersonEndingInOrAfterDateRange(2l, 1l, formatter.parse("21.02.2015"));
+        List<DailyRateEntity> rates = rateRepository.findByBudgetAndPersonEndingInOrAfterDateRange(2L, 1L, formatter.parse("21.02.2015"));
 
         Assertions.assertEquals(4, rates.size());
         List<Long> idsThatShouldBePresent = new LinkedList<Long>();
-        idsThatShouldBePresent.addAll(Arrays.asList(new Long[]{5l,6l,7l, 8l}));
+        idsThatShouldBePresent.addAll(Arrays.asList(5L, 6L, 7L, 8L));
         for(int i=idsThatShouldBePresent.size()-1; i >= 0; i--){
             DailyRateEntity r = rates.get(i);
             idsThatShouldBePresent.remove(r.getId());

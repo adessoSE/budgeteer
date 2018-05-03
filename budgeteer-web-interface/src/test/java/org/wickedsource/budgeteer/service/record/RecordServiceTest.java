@@ -25,7 +25,7 @@ import java.util.List;
 import static org.mockito.Mockito.*;
 
 @ContextConfiguration(loader = SpringockitoContextLoader.class, locations = {"classpath:spring-service.xml", "classpath:spring-repository-mock.xml"})
-public class RecordServiceTest extends ServiceTestTemplate {
+class RecordServiceTest extends ServiceTestTemplate {
 
     private static final List<String> EMPTY_STRING_LIST = new ArrayList<>(0);
 
@@ -41,7 +41,7 @@ public class RecordServiceTest extends ServiceTestTemplate {
     private RecordService service;
 
     @Test
-    public void testGetWeeklyAggregationForPerson() throws Exception {
+    void testGetWeeklyAggregationForPerson() throws Exception {
         List<AggregatedRecord> recordList = createAggregatedRecordList();
         when(recordJoiner.joinWeekly(anyListOf(WeeklyAggregatedRecordBean.class), anyListOf(WeeklyAggregatedRecordBean.class))).thenReturn(recordList);
         List<AggregatedRecord> resultList = service.getWeeklyAggregationForPerson(1L);
@@ -49,7 +49,7 @@ public class RecordServiceTest extends ServiceTestTemplate {
     }
 
     @Test
-    public void testGetMonthlyAggregationForPerson() throws Exception {
+    void testGetMonthlyAggregationForPerson() throws Exception {
         List<AggregatedRecord> recordList = createAggregatedRecordList();
         when(recordJoiner.joinMonthly(anyListOf(MonthlyAggregatedRecordBean.class), anyListOf(MonthlyAggregatedRecordBean.class))).thenReturn(recordList);
         List<AggregatedRecord> resultList = service.getMonthlyAggregationForPerson(1L);
@@ -57,7 +57,7 @@ public class RecordServiceTest extends ServiceTestTemplate {
     }
 
     @Test
-    public void testGetWeeklyAggregationForBudget() throws Exception {
+    void testGetWeeklyAggregationForBudget() throws Exception {
         List<AggregatedRecord> recordList = createAggregatedRecordList();
         when(recordJoiner.joinWeekly(anyListOf(WeeklyAggregatedRecordBean.class), anyListOf(WeeklyAggregatedRecordBean.class))).thenReturn(recordList);
         List<AggregatedRecord> resultList = service.getWeeklyAggregationForBudget(1L);
@@ -65,7 +65,7 @@ public class RecordServiceTest extends ServiceTestTemplate {
     }
 
     @Test
-    public void testGetMonthlyAggregationForBudget() throws Exception {
+    void testGetMonthlyAggregationForBudget() throws Exception {
         List<AggregatedRecord> recordList = createAggregatedRecordList();
         when(recordJoiner.joinWeekly(anyListOf(WeeklyAggregatedRecordBean.class), anyListOf(WeeklyAggregatedRecordBean.class))).thenReturn(recordList);
         List<AggregatedRecord> resultList = service.getWeeklyAggregationForBudget(1L);
@@ -73,7 +73,7 @@ public class RecordServiceTest extends ServiceTestTemplate {
     }
 
     @Test
-    public void testGetWeeklyAggregationForBudgets() throws Exception {
+    void testGetWeeklyAggregationForBudgets() throws Exception {
         List<AggregatedRecord> recordList = createAggregatedRecordList();
         when(recordJoiner.joinWeekly(anyListOf(WeeklyAggregatedRecordBean.class), anyListOf(WeeklyAggregatedRecordBean.class))).thenReturn(recordList);
         List<AggregatedRecord> resultList = service.getWeeklyAggregationForBudgets(new BudgetTagFilter(EMPTY_STRING_LIST, 1L));
@@ -81,7 +81,7 @@ public class RecordServiceTest extends ServiceTestTemplate {
     }
 
     @Test
-    public void testGetMonthlyAggregationForBudgets() throws Exception {
+    void testGetMonthlyAggregationForBudgets() throws Exception {
         List<AggregatedRecord> recordList = createAggregatedRecordList();
         when(recordJoiner.joinMonthly(anyListOf(MonthlyAggregatedRecordBean.class), anyListOf(MonthlyAggregatedRecordBean.class))).thenReturn(recordList);
         List<AggregatedRecord> resultList = service.getMonthlyAggregationForBudgets(new BudgetTagFilter(EMPTY_STRING_LIST, 1L));
@@ -89,7 +89,7 @@ public class RecordServiceTest extends ServiceTestTemplate {
     }
 
     @Test
-    public void testGetFilteredRecords() throws Exception {
+    void testGetFilteredRecords() throws Exception {
         List<WorkRecordEntity> recordList = createRecordList();
         when(workRecordRepository.findAll(any(Predicate.class))).thenReturn(recordList);
         List<WorkRecord> filteredRecords = service.getFilteredRecords(new WorkRecordFilter(1L));

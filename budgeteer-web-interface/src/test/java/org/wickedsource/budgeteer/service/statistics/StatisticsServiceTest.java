@@ -19,7 +19,7 @@ import java.util.*;
 
 import static org.mockito.Mockito.*;
 
-public class StatisticsServiceTest extends ServiceTestTemplate {
+class StatisticsServiceTest extends ServiceTestTemplate {
 
     private DateFormat format = new SimpleDateFormat("dd.MM.yyyy");
 
@@ -43,7 +43,7 @@ public class StatisticsServiceTest extends ServiceTestTemplate {
     };
 
     @Test
-    public void testGetWeeklyBudgetBurnedForProject() throws Exception {
+    void testGetWeeklyBudgetBurnedForProject() throws Exception {
         when(dateProvider.currentDate()).thenReturn(format.parse("29.01.2015"));
         when(workRecordRepository.aggregateByWeekForProject(anyLong(), any(Date.class))).thenReturn(createLast5Weeks());
         List<Money> resultList = service.getWeeklyBudgetBurnedForProject(1L, 5);
@@ -56,7 +56,7 @@ public class StatisticsServiceTest extends ServiceTestTemplate {
     }
 
     @Test
-    public void testGetWeeklyBudgetPlannedForProject() throws Exception {
+    void testGetWeeklyBudgetPlannedForProject() throws Exception {
         when(dateProvider.currentDate()).thenReturn(format.parse("29.01.2015"));
         when(planRecordRepository.aggregateByWeekForProject(anyLong(), any(Date.class))).thenReturn(createLast5Weeks());
         List<Money> resultList = service.getWeeklyBudgetPlannedForProject(1L, 5);
@@ -69,7 +69,7 @@ public class StatisticsServiceTest extends ServiceTestTemplate {
     }
 
     @Test
-    public void testGetWeeklyBudgetBurnedForPerson() throws Exception {
+    void testGetWeeklyBudgetBurnedForPerson() throws Exception {
         when(dateProvider.currentDate()).thenReturn(format.parse("29.01.2015"));
         when(workRecordRepository.aggregateByWeekForPerson(anyLong(), any(Date.class))).thenReturn(createLast5Weeks());
         List<Money> resultList = service.getWeeklyBudgetBurnedForPerson(1L, 5);
@@ -82,7 +82,7 @@ public class StatisticsServiceTest extends ServiceTestTemplate {
     }
 
     @Test
-    public void testGetWeeklyBudgetPlannedForPerson() throws Exception {
+    void testGetWeeklyBudgetPlannedForPerson() throws Exception {
         when(dateProvider.currentDate()).thenReturn(format.parse("29.01.2015"));
         when(planRecordRepository.aggregateByWeekForPerson(anyLong(), any(Date.class))).thenReturn(createLast5Weeks());
         List<Money> resultList = service.getWeeklyBudgetPlannedForPerson(1L, 5);
@@ -114,7 +114,7 @@ public class StatisticsServiceTest extends ServiceTestTemplate {
 
 
     @Test
-    public void testGetAvgDailyRateForPreviousDays() throws Exception {
+    void testGetAvgDailyRateForPreviousDays() throws Exception {
         when(dateProvider.currentDate()).thenReturn(format.parse("05.01.2015"));
         when(workRecordRepository.getAverageDailyRatesPerDay(anyLong(), any(Date.class))).thenReturn(createLast5Days());
         List<Money> resultList = service.getAvgDailyRateForPreviousDays(1L, 5);
@@ -136,7 +136,7 @@ public class StatisticsServiceTest extends ServiceTestTemplate {
     }
 
     @Test
-    public void testGetBudgetDistribution() throws Exception {
+    void testGetBudgetDistribution() throws Exception {
         when(workRecordRepository.getBudgetShareForPerson(1L)).thenReturn(createShares());
         List<Share> shares = service.getBudgetDistribution(1L);
         Assertions.assertEquals(4, shares.size());
@@ -160,7 +160,7 @@ public class StatisticsServiceTest extends ServiceTestTemplate {
     }
 
     @Test
-    public void testGetPeopleDistribution() throws Exception {
+    void testGetPeopleDistribution() throws Exception {
         when(workRecordRepository.getPersonShareForBudget(1L)).thenReturn(createShares());
         List<Share> shares = service.getPeopleDistribution(1L);
         Assertions.assertEquals(4, shares.size());
@@ -175,7 +175,7 @@ public class StatisticsServiceTest extends ServiceTestTemplate {
     }
 
     @Test
-    public void testGetWeekStatsForPerson() throws Exception {
+    void testGetWeekStatsForPerson() throws Exception {
         when(dateProvider.currentDate()).thenReturn(format.parse("29.01.2015"));
         when(workRecordRepository.aggregateByWeekAndBudgetForPerson(anyLong(), any(Date.class))).thenReturn(createLast5WeeksForBudget());
         when(planRecordRepository.aggregateByWeekForPerson(anyLong(), any(Date.class))).thenReturn(createLast5Weeks());
@@ -190,7 +190,7 @@ public class StatisticsServiceTest extends ServiceTestTemplate {
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(500000L), targetSeries.get(4));
 
         Assertions.assertEquals(2, targetAndActual.getActualSeries().size());
-        Collections.sort(targetAndActual.getActualSeries(), moneySeriesComparator);
+        targetAndActual.getActualSeries().sort(moneySeriesComparator);
 
         MoneySeries actualSeries1 = targetAndActual.getActualSeries().get(1);
         Assertions.assertEquals("Budget 2", actualSeries1.getName());
@@ -212,7 +212,7 @@ public class StatisticsServiceTest extends ServiceTestTemplate {
     }
 
     @Test
-    public void testGetWeekStatsForBudget() throws Exception {
+    void testGetWeekStatsForBudget() throws Exception {
         when(dateProvider.currentDate()).thenReturn(format.parse("29.01.2015"));
         when(workRecordRepository.aggregateByWeekAndPersonForBudget(anyLong(), any(Date.class))).thenReturn(createLast5WeeksForPerson());
         when(planRecordRepository.aggregateByWeekForBudget(anyLong(), any(Date.class))).thenReturn(createLast5Weeks());
@@ -227,7 +227,7 @@ public class StatisticsServiceTest extends ServiceTestTemplate {
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(500000L), targetSeries.get(4));
 
         Assertions.assertEquals(2, targetAndActual.getActualSeries().size());
-        Collections.sort(targetAndActual.getActualSeries(), moneySeriesComparator);
+        targetAndActual.getActualSeries().sort(moneySeriesComparator);
 
         MoneySeries actualSeries1 = targetAndActual.getActualSeries().get(1);
         Assertions.assertEquals("Person 2", actualSeries1.getName());
@@ -249,7 +249,7 @@ public class StatisticsServiceTest extends ServiceTestTemplate {
     }
 
     @Test
-    public void testGetWeekStatsForBudgets() throws Exception {
+    void testGetWeekStatsForBudgets() throws Exception {
         when(dateProvider.currentDate()).thenReturn(format.parse("29.01.2015"));
         when(workRecordRepository.aggregateByWeekAndPersonForBudgets(anyLong(), anyList(), any(Date.class))).thenReturn(createLast5WeeksForBudget());
         when(planRecordRepository.aggregateByWeekForBudgets(anyLong(), anyList(), any(Date.class))).thenReturn(createLast5Weeks());
@@ -264,7 +264,7 @@ public class StatisticsServiceTest extends ServiceTestTemplate {
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(500000L), targetSeries.get(4));
 
         Assertions.assertEquals(2, targetAndActual.getActualSeries().size());
-        Collections.sort(targetAndActual.getActualSeries(), moneySeriesComparator);
+        targetAndActual.getActualSeries().sort(moneySeriesComparator);
 
         MoneySeries actualSeries1 = targetAndActual.getActualSeries().get(1);
         Assertions.assertEquals("Budget 2", actualSeries1.getName());
@@ -325,7 +325,7 @@ public class StatisticsServiceTest extends ServiceTestTemplate {
     }
 
     @Test
-    public void testGetMonthStatsForPerson() throws Exception {
+    void testGetMonthStatsForPerson() throws Exception {
         when(dateProvider.currentDate()).thenReturn(format.parse("29.01.2015"));
         when(workRecordRepository.aggregateByMonthAndBudgetForPerson(anyLong(), any(Date.class))).thenReturn(createLast5MonthsForBudget());
         when(planRecordRepository.aggregateByMonthForPerson(anyLong(), any(Date.class))).thenReturn(createLast5Months());
@@ -340,7 +340,7 @@ public class StatisticsServiceTest extends ServiceTestTemplate {
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(500000L), targetSeries.get(4));
 
         Assertions.assertEquals(2, targetAndActual.getActualSeries().size());
-        Collections.sort(targetAndActual.getActualSeries(), moneySeriesComparator);
+        targetAndActual.getActualSeries().sort(moneySeriesComparator);
 
         MoneySeries actualSeries1 = targetAndActual.getActualSeries().get(1);
         Assertions.assertEquals("Budget 2", actualSeries1.getName());
@@ -362,7 +362,7 @@ public class StatisticsServiceTest extends ServiceTestTemplate {
     }
 
     @Test
-    public void testGetMonthStatsForBudgets() throws Exception {
+    void testGetMonthStatsForBudgets() throws Exception {
         when(dateProvider.currentDate()).thenReturn(format.parse("29.01.2015"));
         when(workRecordRepository.aggregateByMonthAndPersonForBudgets(anyLong(), anyList(), any(Date.class))).thenReturn(createLast5MonthsForBudget());
         when(planRecordRepository.aggregateByMonthForBudgets(anyLong(), anyList(), any(Date.class))).thenReturn(createLast5Months());
@@ -377,7 +377,7 @@ public class StatisticsServiceTest extends ServiceTestTemplate {
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(500000L), targetSeries.get(4));
 
         Assertions.assertEquals(2, targetAndActual.getActualSeries().size());
-        Collections.sort(targetAndActual.getActualSeries(), moneySeriesComparator);
+        targetAndActual.getActualSeries().sort(moneySeriesComparator);
 
         MoneySeries actualSeries1 = targetAndActual.getActualSeries().get(1);
         Assertions.assertEquals("Budget 2", actualSeries1.getName());
@@ -399,7 +399,7 @@ public class StatisticsServiceTest extends ServiceTestTemplate {
     }
 
     @Test
-    public void testGetMonthStatsForBudget() throws Exception {
+    void testGetMonthStatsForBudget() throws Exception {
         when(dateProvider.currentDate()).thenReturn(format.parse("29.01.2015"));
         when(workRecordRepository.aggregateByMonthAndPersonForBudget(anyLong(), any(Date.class))).thenReturn(createLast5MonthsForBudget());
         when(planRecordRepository.aggregateByMonthForBudget(anyLong(), any(Date.class))).thenReturn(createLast5Months());
@@ -414,7 +414,7 @@ public class StatisticsServiceTest extends ServiceTestTemplate {
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(500000L), targetSeries.get(4));
 
         Assertions.assertEquals(2, targetAndActual.getActualSeries().size());
-        Collections.sort(targetAndActual.getActualSeries(), moneySeriesComparator);
+        targetAndActual.getActualSeries().sort(moneySeriesComparator);
 
         MoneySeries actualSeries1 = targetAndActual.getActualSeries().get(1);
         Assertions.assertEquals("Budget 2", actualSeries1.getName());
@@ -437,7 +437,7 @@ public class StatisticsServiceTest extends ServiceTestTemplate {
 
 
     @Test
-    public void testFillMissingMonths() throws ParseException {
+    void testFillMissingMonths() throws ParseException {
         SimpleDateFormat format1 = new SimpleDateFormat("dd.MM.yyyy");
         List<MonthlyAggregatedRecordBean> beans = new LinkedList<MonthlyAggregatedRecordBean>();
         beans.add(new MonthlyAggregatedRecordBean(2015, 1, 15d, 100000));

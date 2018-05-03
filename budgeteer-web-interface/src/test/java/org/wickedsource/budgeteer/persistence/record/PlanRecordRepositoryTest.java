@@ -15,7 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
 
-public class PlanRecordRepositoryTest extends IntegrationTestTemplate {
+class PlanRecordRepositoryTest extends IntegrationTestTemplate {
 
     private DateFormat format = new SimpleDateFormat("dd.MM.yyyy");
 
@@ -25,251 +25,251 @@ public class PlanRecordRepositoryTest extends IntegrationTestTemplate {
     @Test
     @DatabaseSetup("getPlannedBudget.xml")
     @DatabaseTearDown(value = "getPlannedBudget.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testGetPlannedBudget() throws Exception {
-        double value = repository.getPlannedBudget(1l);
+    void testGetPlannedBudget() throws Exception {
+        double value = repository.getPlannedBudget(1L);
         Assertions.assertEquals(170000d, value, 1d);
     }
 
     @Test
     @DatabaseSetup("updateDailyRates.xml")
     @DatabaseTearDown(value = "updateDailyRates.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testUpdatePlanRecordDailyRates() throws Exception {
-        repository.updateDailyRates(1l, 1l, format.parse("01.01.2015"), format.parse("15.08.2015"), MoneyUtil.createMoneyFromCents(50000l));
-        PlanRecordEntity record = repository.findOne(1l);
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(50000l), record.getDailyRate());
-        record = repository.findOne(3l);
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(50000l), record.getDailyRate());
+    void testUpdatePlanRecordDailyRates() throws Exception {
+        repository.updateDailyRates(1L, 1L, format.parse("01.01.2015"), format.parse("15.08.2015"), MoneyUtil.createMoneyFromCents(50000L));
+        PlanRecordEntity record = repository.findOne(1L);
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(50000L), record.getDailyRate());
+        record = repository.findOne(3L);
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(50000L), record.getDailyRate());
     }
 
     @Test
     @DatabaseSetup("aggregateByWeekAndPerson.xml")
     @DatabaseTearDown(value = "aggregateByWeekAndPerson.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testAggregateByWeekAndPerson() {
-        List<WeeklyAggregatedRecordBean> records = repository.aggregateByWeekAndPerson(1l);
+    void testAggregateByWeekAndPerson() {
+        List<WeeklyAggregatedRecordBean> records = repository.aggregateByWeekAndPerson(1L);
         Assertions.assertEquals(3, records.size());
 
         Assertions.assertEquals(2014, records.get(0).getYear());
         Assertions.assertEquals(1, records.get(0).getWeek());
         Assertions.assertEquals(8d, records.get(0).getHours(), 0.1d);
-        Assertions.assertEquals(10000l, records.get(0).getValueInCents());
+        Assertions.assertEquals(10000L, records.get(0).getValueInCents());
 
         Assertions.assertEquals(2015, records.get(1).getYear());
         Assertions.assertEquals(1, records.get(1).getWeek());
         Assertions.assertEquals(16d, records.get(1).getHours(), 0.1d);
-        Assertions.assertEquals(30000l, records.get(1).getValueInCents());
+        Assertions.assertEquals(30000L, records.get(1).getValueInCents());
 
         Assertions.assertEquals(2015, records.get(2).getYear());
         Assertions.assertEquals(33, records.get(2).getWeek());
         Assertions.assertEquals(16d, records.get(2).getHours(), 0.1d);
-        Assertions.assertEquals(0l, records.get(2).getValueInCents());
+        Assertions.assertEquals(0L, records.get(2).getValueInCents());
     }
 
     @Test
     @DatabaseSetup("aggregateByMonthAndPerson.xml")
     @DatabaseTearDown(value = "aggregateByMonthAndPerson.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testAggregateByMonthAndPerson() {
-        List<MonthlyAggregatedRecordBean> records = repository.aggregateByMonthAndPerson(1l);
+    void testAggregateByMonthAndPerson() {
+        List<MonthlyAggregatedRecordBean> records = repository.aggregateByMonthAndPerson(1L);
         Assertions.assertEquals(3, records.size());
 
         Assertions.assertEquals(2014, records.get(0).getYear());
         Assertions.assertEquals(0, records.get(0).getMonth());
         Assertions.assertEquals(8d, records.get(0).getHours(), 0.1d);
-        Assertions.assertEquals(10000l, records.get(0).getValueInCents());
+        Assertions.assertEquals(10000L, records.get(0).getValueInCents());
 
         Assertions.assertEquals(2015, records.get(1).getYear());
         Assertions.assertEquals(0, records.get(1).getMonth());
         Assertions.assertEquals(16d, records.get(1).getHours(), 0.1d);
-        Assertions.assertEquals(30000l, records.get(1).getValueInCents());
+        Assertions.assertEquals(30000L, records.get(1).getValueInCents());
 
         Assertions.assertEquals(2015, records.get(2).getYear());
         Assertions.assertEquals(7, records.get(2).getMonth());
         Assertions.assertEquals(16d, records.get(2).getHours(), 0.1d);
-        Assertions.assertEquals(0l, records.get(2).getValueInCents());
+        Assertions.assertEquals(0L, records.get(2).getValueInCents());
     }
 
     @Test
     @DatabaseSetup("aggregateByWeekAndBudget.xml")
     @DatabaseTearDown(value = "aggregateByWeekAndBudget.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testAggregateByWeekAndBudget() {
-        List<WeeklyAggregatedRecordBean> records = repository.aggregateByWeekAndBudget(1l);
+    void testAggregateByWeekAndBudget() {
+        List<WeeklyAggregatedRecordBean> records = repository.aggregateByWeekAndBudget(1L);
         Assertions.assertEquals(3, records.size());
 
         Assertions.assertEquals(2014, records.get(0).getYear());
         Assertions.assertEquals(1, records.get(0).getWeek());
         Assertions.assertEquals(8d, records.get(0).getHours(), 0.1d);
-        Assertions.assertEquals(10000l, records.get(0).getValueInCents());
+        Assertions.assertEquals(10000L, records.get(0).getValueInCents());
 
         Assertions.assertEquals(2015, records.get(1).getYear());
         Assertions.assertEquals(1, records.get(1).getWeek());
         Assertions.assertEquals(16d, records.get(1).getHours(), 0.1d);
-        Assertions.assertEquals(30000l, records.get(1).getValueInCents());
+        Assertions.assertEquals(30000L, records.get(1).getValueInCents());
 
         Assertions.assertEquals(2015, records.get(2).getYear());
         Assertions.assertEquals(33, records.get(2).getWeek());
         Assertions.assertEquals(16d, records.get(2).getHours(), 0.1d);
-        Assertions.assertEquals(0l, records.get(2).getValueInCents());
+        Assertions.assertEquals(0L, records.get(2).getValueInCents());
     }
 
     @Test
     @DatabaseSetup("aggregateByMonthAndBudget.xml")
     @DatabaseTearDown(value = "aggregateByMonthAndBudget.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testAggregateByMonthAndBudget() {
-        List<MonthlyAggregatedRecordBean> records = repository.aggregateByMonthAndBudget(1l);
+    void testAggregateByMonthAndBudget() {
+        List<MonthlyAggregatedRecordBean> records = repository.aggregateByMonthAndBudget(1L);
         Assertions.assertEquals(3, records.size());
 
         Assertions.assertEquals(2014, records.get(0).getYear());
         Assertions.assertEquals(0, records.get(0).getMonth());
         Assertions.assertEquals(8d, records.get(0).getHours(), 0.1d);
-        Assertions.assertEquals(10000l, records.get(0).getValueInCents());
+        Assertions.assertEquals(10000L, records.get(0).getValueInCents());
 
         Assertions.assertEquals(2015, records.get(1).getYear());
         Assertions.assertEquals(0, records.get(1).getMonth());
         Assertions.assertEquals(16d, records.get(1).getHours(), 0.1d);
-        Assertions.assertEquals(30000l, records.get(1).getValueInCents());
+        Assertions.assertEquals(30000L, records.get(1).getValueInCents());
 
         Assertions.assertEquals(2015, records.get(2).getYear());
         Assertions.assertEquals(7, records.get(2).getMonth());
         Assertions.assertEquals(16d, records.get(2).getHours(), 0.1d);
-        Assertions.assertEquals(0l, records.get(2).getValueInCents());
+        Assertions.assertEquals(0L, records.get(2).getValueInCents());
     }
 
     @Test
     @DatabaseSetup("aggregateByBudgetTags.xml")
     @DatabaseTearDown(value = "aggregateByBudgetTags.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testAggregatedByWeekAndBudgetTags() {
-        List<WeeklyAggregatedRecordBean> records = repository.aggregateByWeekAndBudgetTags(1l, Arrays.asList("tag1"));
+    void testAggregatedByWeekAndBudgetTags() {
+        List<WeeklyAggregatedRecordBean> records = repository.aggregateByWeekAndBudgetTags(1L, Arrays.asList("tag1"));
         Assertions.assertEquals(2, records.size());
 
         Assertions.assertEquals(2014, records.get(0).getYear());
         Assertions.assertEquals(1, records.get(0).getWeek());
         Assertions.assertEquals(8d, records.get(0).getHours(), 0.1d);
-        Assertions.assertEquals(10000l, records.get(0).getValueInCents());
+        Assertions.assertEquals(10000L, records.get(0).getValueInCents());
 
         Assertions.assertEquals(2015, records.get(1).getYear());
         Assertions.assertEquals(1, records.get(1).getWeek());
         Assertions.assertEquals(16d, records.get(1).getHours(), 0.1d);
-        Assertions.assertEquals(30000l, records.get(1).getValueInCents());
+        Assertions.assertEquals(30000L, records.get(1).getValueInCents());
 
-        records = repository.aggregateByWeekAndBudgetTags(1l, Arrays.asList("tag2"));
+        records = repository.aggregateByWeekAndBudgetTags(1L, Arrays.asList("tag2"));
         Assertions.assertEquals(2, records.size());
 
         Assertions.assertEquals(2015, records.get(0).getYear());
         Assertions.assertEquals(1, records.get(0).getWeek());
         Assertions.assertEquals(16d, records.get(0).getHours(), 0.1d);
-        Assertions.assertEquals(30000l, records.get(0).getValueInCents());
+        Assertions.assertEquals(30000L, records.get(0).getValueInCents());
 
         Assertions.assertEquals(2015, records.get(1).getYear());
         Assertions.assertEquals(33, records.get(1).getWeek());
         Assertions.assertEquals(16d, records.get(1).getHours(), 0.1d);
-        Assertions.assertEquals(0l, records.get(1).getValueInCents());
+        Assertions.assertEquals(0L, records.get(1).getValueInCents());
     }
 
     @Test
     @DatabaseSetup("aggregateByBudgetTags.xml")
     @DatabaseTearDown(value = "aggregateByBudgetTags.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testAggregatedByMonthAndBudgetTags() {
-        List<MonthlyAggregatedRecordBean> records = repository.aggregateByMonthAndBudgetTags(1l, Arrays.asList("tag1"));
+    void testAggregatedByMonthAndBudgetTags() {
+        List<MonthlyAggregatedRecordBean> records = repository.aggregateByMonthAndBudgetTags(1L, Arrays.asList("tag1"));
         Assertions.assertEquals(2, records.size());
 
         Assertions.assertEquals(2014, records.get(0).getYear());
         Assertions.assertEquals(0, records.get(0).getMonth());
         Assertions.assertEquals(8d, records.get(0).getHours(), 0.1d);
-        Assertions.assertEquals(10000l, records.get(0).getValueInCents());
+        Assertions.assertEquals(10000L, records.get(0).getValueInCents());
 
         Assertions.assertEquals(2015, records.get(1).getYear());
         Assertions.assertEquals(0, records.get(1).getMonth());
         Assertions.assertEquals(16d, records.get(1).getHours(), 0.1d);
-        Assertions.assertEquals(30000l, records.get(1).getValueInCents());
+        Assertions.assertEquals(30000L, records.get(1).getValueInCents());
 
-        records = repository.aggregateByMonthAndBudgetTags(1l, Arrays.asList("tag2"));
+        records = repository.aggregateByMonthAndBudgetTags(1L, Arrays.asList("tag2"));
         Assertions.assertEquals(2, records.size());
 
         Assertions.assertEquals(2015, records.get(0).getYear());
         Assertions.assertEquals(0, records.get(0).getMonth());
         Assertions.assertEquals(16d, records.get(0).getHours(), 0.1d);
-        Assertions.assertEquals(30000l, records.get(0).getValueInCents());
+        Assertions.assertEquals(30000L, records.get(0).getValueInCents());
 
         Assertions.assertEquals(2015, records.get(1).getYear());
         Assertions.assertEquals(7, records.get(1).getMonth());
         Assertions.assertEquals(16d, records.get(1).getHours(), 0.1d);
-        Assertions.assertEquals(0l, records.get(1).getValueInCents());
+        Assertions.assertEquals(0L, records.get(1).getValueInCents());
     }
 
     @Test
     @DatabaseSetup("aggregate.xml")
     @DatabaseTearDown(value = "aggregate.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testAggregateByWeekForProject() throws ParseException {
-        List<WeeklyAggregatedRecordBean> records = repository.aggregateByWeekForProject(1l, format.parse("02.01.2015"));
+    void testAggregateByWeekForProject() throws ParseException {
+        List<WeeklyAggregatedRecordBean> records = repository.aggregateByWeekForProject(1L, format.parse("02.01.2015"));
         Assertions.assertEquals(2, records.size());
 
         Assertions.assertEquals(2015, records.get(0).getYear());
         Assertions.assertEquals(1, records.get(0).getWeek());
         Assertions.assertEquals(8d, records.get(0).getHours(), 0.1d);
-        Assertions.assertEquals(20000l, records.get(0).getValueInCents());
+        Assertions.assertEquals(20000L, records.get(0).getValueInCents());
 
         Assertions.assertEquals(2015, records.get(1).getYear());
         Assertions.assertEquals(33, records.get(1).getWeek());
         Assertions.assertEquals(16d, records.get(1).getHours(), 0.1d);
-        Assertions.assertEquals(0l, records.get(1).getValueInCents());
+        Assertions.assertEquals(0L, records.get(1).getValueInCents());
     }
 
     @Test
     @DatabaseSetup("aggregate.xml")
     @DatabaseTearDown(value = "aggregate.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testAggregateByWeekForPerson() throws ParseException {
-        List<WeeklyAggregatedRecordBean> records = repository.aggregateByWeekForPerson(1l, format.parse("02.01.2015"));
+    void testAggregateByWeekForPerson() throws ParseException {
+        List<WeeklyAggregatedRecordBean> records = repository.aggregateByWeekForPerson(1L, format.parse("02.01.2015"));
         Assertions.assertEquals(1, records.size());
 
         Assertions.assertEquals(2015, records.get(0).getYear());
         Assertions.assertEquals(1, records.get(0).getWeek());
         Assertions.assertEquals(8d, records.get(0).getHours(), 0.1d);
-        Assertions.assertEquals(20000l, records.get(0).getValueInCents());
+        Assertions.assertEquals(20000L, records.get(0).getValueInCents());
     }
 
     @Test
     @DatabaseSetup("aggregate.xml")
     @DatabaseTearDown(value = "aggregate.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testAggregateByWeekForBudget() throws ParseException {
-        List<WeeklyAggregatedRecordBean> records = repository.aggregateByWeekForBudget(1l, format.parse("01.01.2015"));
+    void testAggregateByWeekForBudget() throws ParseException {
+        List<WeeklyAggregatedRecordBean> records = repository.aggregateByWeekForBudget(1L, format.parse("01.01.2015"));
         Assertions.assertEquals(1, records.size());
 
         Assertions.assertEquals(2015, records.get(0).getYear());
         Assertions.assertEquals(1, records.get(0).getWeek());
         Assertions.assertEquals(8d, records.get(0).getHours(), 0.1d);
-        Assertions.assertEquals(10000l, records.get(0).getValueInCents());
+        Assertions.assertEquals(10000L, records.get(0).getValueInCents());
     }
 
     @Test
     @DatabaseSetup("aggregate.xml")
     @DatabaseTearDown(value = "aggregate.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testAggregateByWeekAndBudgetForPerson() throws ParseException {
-        List<WeeklyAggregatedRecordWithTitleBean> records = repository.aggregateByWeekAndBudgetForPerson(1l, format.parse("01.01.2015"));
+    void testAggregateByWeekAndBudgetForPerson() throws ParseException {
+        List<WeeklyAggregatedRecordWithTitleBean> records = repository.aggregateByWeekAndBudgetForPerson(1L, format.parse("01.01.2015"));
         Assertions.assertEquals(2, records.size());
 
         Assertions.assertEquals(2015, records.get(0).getYear());
         Assertions.assertEquals(1, records.get(0).getWeek());
         Assertions.assertEquals(8d, records.get(0).getHours(), 0.1d);
-        Assertions.assertEquals(10000l, records.get(0).getValueInCents());
+        Assertions.assertEquals(10000L, records.get(0).getValueInCents());
         Assertions.assertEquals("Budget 1", records.get(0).getTitle());
 
         Assertions.assertEquals(2015, records.get(1).getYear());
         Assertions.assertEquals(1, records.get(1).getWeek());
         Assertions.assertEquals(8d, records.get(1).getHours(), 0.1d);
-        Assertions.assertEquals(20000l, records.get(1).getValueInCents());
+        Assertions.assertEquals(20000L, records.get(1).getValueInCents());
         Assertions.assertEquals("Budget 2", records.get(1).getTitle());
     }
 
     @Test
     @DatabaseSetup("aggregate.xml")
     @DatabaseTearDown(value = "aggregate.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testAggregateByWeekAndPersonForBudget() throws ParseException {
-        List<WeeklyAggregatedRecordWithTitleBean> records = repository.aggregateByWeekAndPersonForBudget(1l, format.parse("01.01.2015"));
+    void testAggregateByWeekAndPersonForBudget() throws ParseException {
+        List<WeeklyAggregatedRecordWithTitleBean> records = repository.aggregateByWeekAndPersonForBudget(1L, format.parse("01.01.2015"));
         Assertions.assertEquals(1, records.size());
 
         Assertions.assertEquals(2015, records.get(0).getYear());
         Assertions.assertEquals(1, records.get(0).getWeek());
         Assertions.assertEquals(8d, records.get(0).getHours(), 0.1d);
-        Assertions.assertEquals(10000l, records.get(0).getValueInCents());
+        Assertions.assertEquals(10000L, records.get(0).getValueInCents());
         Assertions.assertEquals("person1", records.get(0).getTitle());
 
     }
@@ -277,20 +277,20 @@ public class PlanRecordRepositoryTest extends IntegrationTestTemplate {
     @Test
     @DatabaseSetup("aggregate.xml")
     @DatabaseTearDown(value = "aggregate.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testAggregateByWeekAndPersonForBudgets() throws ParseException {
-        List<WeeklyAggregatedRecordWithTitleBean> records = repository.aggregateByWeekAndPersonForBudgets(1l, Arrays.asList("tag1"), format.parse("01.01.2015"));
+    void testAggregateByWeekAndPersonForBudgets() throws ParseException {
+        List<WeeklyAggregatedRecordWithTitleBean> records = repository.aggregateByWeekAndPersonForBudgets(1L, Arrays.asList("tag1"), format.parse("01.01.2015"));
         Assertions.assertEquals(2, records.size());
 
         Assertions.assertEquals(2015, records.get(0).getYear());
         Assertions.assertEquals(1, records.get(0).getWeek());
         Assertions.assertEquals(16d, records.get(0).getHours(), 0.1d);
-        Assertions.assertEquals(30000l, records.get(0).getValueInCents());
+        Assertions.assertEquals(30000L, records.get(0).getValueInCents());
         Assertions.assertEquals("person1", records.get(0).getTitle());
 
         Assertions.assertEquals(2015, records.get(1).getYear());
         Assertions.assertEquals(33, records.get(1).getWeek());
         Assertions.assertEquals(16d, records.get(1).getHours(), 0.1d);
-        Assertions.assertEquals(0l, records.get(1).getValueInCents());
+        Assertions.assertEquals(0L, records.get(1).getValueInCents());
         Assertions.assertEquals("person2", records.get(1).getTitle());
 
     }
@@ -298,47 +298,47 @@ public class PlanRecordRepositoryTest extends IntegrationTestTemplate {
     @Test
     @DatabaseSetup("aggregateByMonthAndBudgetForPerson.xml")
     @DatabaseTearDown(value = "aggregateByMonthAndBudgetForPerson.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testAggregateByMonthAndBudgetForPerson() throws ParseException {
-        List<MonthlyAggregatedRecordWithTitleBean> records = repository.aggregateByMonthAndBudgetForPerson(1l, format.parse("01.01.2015"));
+    void testAggregateByMonthAndBudgetForPerson() throws ParseException {
+        List<MonthlyAggregatedRecordWithTitleBean> records = repository.aggregateByMonthAndBudgetForPerson(1L, format.parse("01.01.2015"));
         Assertions.assertEquals(2, records.size());
 
         Assertions.assertEquals(2015, records.get(0).getYear());
         Assertions.assertEquals(0, records.get(0).getMonth());
         Assertions.assertEquals(8d, records.get(0).getHours(), 0.1d);
-        Assertions.assertEquals(10000l, records.get(0).getValueInCents());
+        Assertions.assertEquals(10000L, records.get(0).getValueInCents());
         Assertions.assertEquals("Budget 1", records.get(0).getTitle());
 
         Assertions.assertEquals(2015, records.get(1).getYear());
         Assertions.assertEquals(0, records.get(1).getMonth());
         Assertions.assertEquals(8d, records.get(1).getHours(), 0.1d);
-        Assertions.assertEquals(20000l, records.get(1).getValueInCents());
+        Assertions.assertEquals(20000L, records.get(1).getValueInCents());
         Assertions.assertEquals("Budget 2", records.get(1).getTitle());
     }
 
     @Test
     @DatabaseSetup("aggregateByMonthForPerson.xml")
     @DatabaseTearDown(value = "aggregateByMonthForPerson.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testAggregateByMonthForPerson() throws ParseException {
-        List<MonthlyAggregatedRecordBean> records = repository.aggregateByMonthForPerson(1l, format.parse("01.01.2015"));
+    void testAggregateByMonthForPerson() throws ParseException {
+        List<MonthlyAggregatedRecordBean> records = repository.aggregateByMonthForPerson(1L, format.parse("01.01.2015"));
         Assertions.assertEquals(1, records.size());
 
         Assertions.assertEquals(2015, records.get(0).getYear());
         Assertions.assertEquals(0, records.get(0).getMonth());
         Assertions.assertEquals(16d, records.get(0).getHours(), 0.1d);
-        Assertions.assertEquals(30000l, records.get(0).getValueInCents());
+        Assertions.assertEquals(30000L, records.get(0).getValueInCents());
     }
 
     @Test
     @DatabaseSetup("aggregateByMonthAndPersonForBudget.xml")
     @DatabaseTearDown(value = "aggregateByMonthAndPersonForBudget.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testAggregateByMonthAndPersonForBudget() throws ParseException {
-        List<MonthlyAggregatedRecordWithTitleBean> records = repository.aggregateByMonthAndPersonForBudget(1l, format.parse("01.01.2015"));
+    void testAggregateByMonthAndPersonForBudget() throws ParseException {
+        List<MonthlyAggregatedRecordWithTitleBean> records = repository.aggregateByMonthAndPersonForBudget(1L, format.parse("01.01.2015"));
         Assertions.assertEquals(1, records.size());
 
         Assertions.assertEquals(2015, records.get(0).getYear());
         Assertions.assertEquals(0, records.get(0).getMonth());
         Assertions.assertEquals(8d, records.get(0).getHours(), 0.1d);
-        Assertions.assertEquals(10000l, records.get(0).getValueInCents());
+        Assertions.assertEquals(10000L, records.get(0).getValueInCents());
         Assertions.assertEquals("person1", records.get(0).getTitle());
 
     }
@@ -346,29 +346,29 @@ public class PlanRecordRepositoryTest extends IntegrationTestTemplate {
     @Test
     @DatabaseSetup("aggregateByMonthForBudget.xml")
     @DatabaseTearDown(value = "aggregateByMonthForBudget.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testAggregateByMonthForBudget() throws ParseException {
-        List<MonthlyAggregatedRecordBean> records = repository.aggregateByMonthForBudget(1l, format.parse("01.01.2015"));
+    void testAggregateByMonthForBudget() throws ParseException {
+        List<MonthlyAggregatedRecordBean> records = repository.aggregateByMonthForBudget(1L, format.parse("01.01.2015"));
         Assertions.assertEquals(1, records.size());
 
         Assertions.assertEquals(2015, records.get(0).getYear());
         Assertions.assertEquals(0, records.get(0).getMonth());
         Assertions.assertEquals(8d, records.get(0).getHours(), 0.1d);
-        Assertions.assertEquals(10000l, records.get(0).getValueInCents());
+        Assertions.assertEquals(10000L, records.get(0).getValueInCents());
     }
 
     @Test
     @DatabaseSetup("aggregateByMonthAndPersonForBudgets.xml")
     @DatabaseTearDown(value = "aggregateByMonthAndPersonForBudgets.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testDeleteByProjectId(){
-        repository.deleteByProjectId(1l);
+    void testDeleteByProjectId(){
+        repository.deleteByProjectId(1L);
     }
 
     @Test
     @DatabaseSetup("countByProjectId.xml")
     @DatabaseTearDown(value = "countByProjectId.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testCountByProjectId(){
-        Assertions.assertEquals(2, (long) repository.countByProjectId(1l));
-        Assertions.assertEquals(0, (long) repository.countByProjectId(2l));
+    void testCountByProjectId(){
+        Assertions.assertEquals(2, (long) repository.countByProjectId(1L));
+        Assertions.assertEquals(0, (long) repository.countByProjectId(2L));
     }
 
 }

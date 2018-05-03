@@ -17,7 +17,7 @@ import java.util.List;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Mockito.when;
 
-public class NotificationServiceTest extends ServiceTestTemplate {
+class NotificationServiceTest extends ServiceTestTemplate {
 
     private Date fixedDate = new Date();
 
@@ -31,22 +31,22 @@ public class NotificationServiceTest extends ServiceTestTemplate {
     private NotificationService service;
 
     @Test
-    public void testGetNotifications() throws Exception {
-        when(workRecordRepository.getMissingDailyRatesForProject(1l)).thenReturn(Arrays.asList(createMissingDailyRate()));
-        when(workRecordRepository.countByProjectId(anyLong())).thenReturn(0l, 0l);
-        when(budgetRepository.getMissingBudgetTotalsForProject(1l)).thenReturn(Arrays.asList(createMissingBudgetTotal()));
+    void testGetNotifications() throws Exception {
+        when(workRecordRepository.getMissingDailyRatesForProject(1L)).thenReturn(Arrays.asList(createMissingDailyRate()));
+        when(workRecordRepository.countByProjectId(anyLong())).thenReturn(0L, 0L);
+        when(budgetRepository.getMissingBudgetTotalsForProject(1L)).thenReturn(Arrays.asList(createMissingBudgetTotal()));
 
-        List<Notification> notifications = service.getNotifications(1l);
+        List<Notification> notifications = service.getNotifications(1L);
         Assertions.assertEquals(4, notifications.size());
     }
 
     @Test
-    public void testGetNotificationsForPerson() throws Exception {
-        when(workRecordRepository.getMissingDailyRatesForPerson(1l)).thenReturn(Arrays.asList(createMissingDailyRateForBudget()));
-        List<Notification> notifications = service.getNotificationsForPerson(1l);
+    void testGetNotificationsForPerson() throws Exception {
+        when(workRecordRepository.getMissingDailyRatesForPerson(1L)).thenReturn(Arrays.asList(createMissingDailyRateForBudget()));
+        List<Notification> notifications = service.getNotificationsForPerson(1L);
         Assertions.assertEquals(1, notifications.size());
         MissingDailyRateForBudgetNotification notification = (MissingDailyRateForBudgetNotification) notifications.get(0);
-        Assertions.assertEquals(1l, notification.getPersonId());
+        Assertions.assertEquals(1L, notification.getPersonId());
         Assertions.assertEquals("person1", notification.getPersonName());
         Assertions.assertEquals(fixedDate, notification.getStartDate());
         Assertions.assertEquals(fixedDate, notification.getEndDate());
@@ -54,24 +54,24 @@ public class NotificationServiceTest extends ServiceTestTemplate {
     }
 
     @Test
-    public void testGetNotificationsForBudget() throws Exception {
-        when(budgetRepository.getMissingBudgetTotalForBudget(1l)).thenReturn(createMissingBudgetTotal());
-        List<Notification> notifications = service.getNotificationsForBudget(1l);
+    void testGetNotificationsForBudget() throws Exception {
+        when(budgetRepository.getMissingBudgetTotalForBudget(1L)).thenReturn(createMissingBudgetTotal());
+        List<Notification> notifications = service.getNotificationsForBudget(1L);
         Assertions.assertEquals(1, notifications.size());
         MissingBudgetTotalNotification notification = (MissingBudgetTotalNotification) notifications.get(0);
-        Assertions.assertEquals(1l, notification.getBudgetId());
+        Assertions.assertEquals(1L, notification.getBudgetId());
         Assertions.assertEquals("budget1", notification.getBudgetName());
     }
 
     private MissingDailyRateBean createMissingDailyRate() {
-        return new MissingDailyRateBean(1l, "person1", fixedDate, fixedDate);
+        return new MissingDailyRateBean(1L, "person1", fixedDate, fixedDate);
     }
 
     private MissingDailyRateForBudgetBean createMissingDailyRateForBudget() {
-        return new MissingDailyRateForBudgetBean(1l, "person1", fixedDate, fixedDate, "Budget1");
+        return new MissingDailyRateForBudgetBean(1L, "person1", fixedDate, fixedDate, "Budget1");
     }
 
     private MissingBudgetTotalBean createMissingBudgetTotal() {
-        return new MissingBudgetTotalBean(1l, "budget1");
+        return new MissingBudgetTotalBean(1L, "budget1");
     }
 }

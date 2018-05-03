@@ -31,7 +31,7 @@ import java.util.Set;
 @ContextConfiguration(classes = {IntegrationTestConfiguration.class})
 @TestExecutionListeners({DbUnitTestExecutionListener.class, DirtiesContextTestExecutionListener.class, DependencyInjectionTestExecutionListener.class,
         TransactionalTestExecutionListener.class})
-public class InvoiceServiceTest {
+class InvoiceServiceTest {
 
     @Autowired
     private InvoiceService service;
@@ -48,13 +48,13 @@ public class InvoiceServiceTest {
     @Test
     @DatabaseSetup("invoiceTest.xml")
     @DatabaseTearDown(value = "invoiceTest.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testSaveNewInvoice() {
+    void testSaveNewInvoice() {
         InvoiceBaseData testObject = getDummyInvoice();
         testObject.setContractId(1);
 
         long newContractId = service.save(testObject);
 
-        Assertions.assertTrue(newContractId != 0l);
+        Assertions.assertTrue(newContractId != 0L);
 
         InvoiceBaseData savedInvoice = service.getInvoiceById(newContractId);
 
@@ -77,13 +77,13 @@ public class InvoiceServiceTest {
     @Test
     @DatabaseSetup("invoiceTest.xml")
     @DatabaseTearDown(value = "invoiceTest.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testSaveNewInvoice2() {
+    void testSaveNewInvoice2() {
         InvoiceBaseData testObject = getDummyInvoice();
         testObject.setContractId(2);
 
         long newContractId = service.save(testObject);
 
-        Assertions.assertTrue(newContractId != 0l);
+        Assertions.assertTrue(newContractId != 0L);
 
         InvoiceBaseData savedInvoice = service.getInvoiceById(newContractId);
 
@@ -111,14 +111,14 @@ public class InvoiceServiceTest {
     @Test
     @DatabaseSetup("invoiceTest.xml")
     @DatabaseTearDown(value = "invoiceTest.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testUpdateInvoice() {
+    void testUpdateInvoice() {
         InvoiceBaseData testObject = getDummyInvoice();
         testObject.setContractId(4);
         testObject.setInvoiceId(4);
 
         long newContractId = service.save(testObject);
 
-        Assertions.assertTrue(newContractId != 0l);
+        Assertions.assertTrue(newContractId != 0L);
 
         InvoiceBaseData savedInvoice = service.getInvoiceById(newContractId);
 
@@ -144,14 +144,14 @@ public class InvoiceServiceTest {
     @Test
     @DatabaseSetup("invoiceTest.xml")
     @DatabaseTearDown(value = "invoiceTest.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testUpdateInvoice2() {
+    void testUpdateInvoice2() {
         InvoiceBaseData testObject = getDummyInvoice();
         testObject.setContractId(3);
         testObject.setInvoiceId(3);
 
         long newContractId = service.save(testObject);
 
-        Assertions.assertTrue(newContractId != 0l);
+        Assertions.assertTrue(newContractId != 0L);
 
         InvoiceBaseData savedInvoice = service.getInvoiceById(newContractId);
 
@@ -179,7 +179,7 @@ public class InvoiceServiceTest {
     @Test
     @DatabaseSetup("invoiceTest.xml")
     @DatabaseTearDown(value = "invoiceTest.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testUpdateInvoice3() {
+    void testUpdateInvoice3() {
         InvoiceBaseData testObject = getDummyInvoice();
         testObject.setContractId(5);
         testObject.setInvoiceId(5);
@@ -189,7 +189,7 @@ public class InvoiceServiceTest {
 
         long newContractId = service.save(testObject);
 
-        Assertions.assertTrue(newContractId != 0l);
+        Assertions.assertTrue(newContractId != 0L);
 
         InvoiceBaseData savedInvoice = service.getInvoiceById(newContractId);
 
@@ -240,7 +240,7 @@ public class InvoiceServiceTest {
     @DatabaseSetup("invoiceTest.xml")
     @DatabaseTearDown(value = "invoiceTest.xml", type = DatabaseOperation.DELETE_ALL)
     // Invoice with two InvoiceFields
-    public void testFindInvoiceFieldByName() {
+    void testFindInvoiceFieldByName() {
         Assertions.assertNotNull(contractRepository.findInvoiceFieldByName(3, "Test Contract Field"));
         Assertions.assertNotNull(contractRepository.findInvoiceFieldByName(3, "Test Contract Field 2"));
     }
@@ -249,7 +249,7 @@ public class InvoiceServiceTest {
     @DatabaseSetup("invoiceTest.xml")
     @DatabaseTearDown(value = "invoiceTest.xml", type = DatabaseOperation.DELETE_ALL)
     // Invoice with two InvoiceFields
-    public void testDeleteInvoice() {
+    void testDeleteInvoice() {
         service.deleteInvoice(3);
 
         Assertions.assertNotNull(contractRepository.findById(3).getInvoiceFields());
@@ -265,16 +265,16 @@ public class InvoiceServiceTest {
     @DatabaseSetup("invoiceTest.xml")
     @DatabaseTearDown(value = "invoiceTest.xml", type = DatabaseOperation.DELETE_ALL)
     // Invoice without any InvoiceFields
-    public void testDeleteInvoiceWithoutFields() {
+    void testDeleteInvoiceWithoutFields() {
         service.deleteInvoice(4);
-        Assertions.assertNull(invoiceRepository.findOne(4l));
+        Assertions.assertNull(invoiceRepository.findOne(4L));
     }
 
     @Test
     @DatabaseSetup("invoiceTest.xml")
     @DatabaseTearDown(value = "invoiceTest.xml", type = DatabaseOperation.DELETE_ALL)
     // Invoice without any InvoiceFields but with a contract containing ContractInvoiceFields
-    public void testDeleteInvoiceWithContractInvoiceFields() {
+    void testDeleteInvoiceWithContractInvoiceFields() {
         service.deleteInvoice(5);
         Assertions.assertNotNull(contractRepository.findInvoiceFieldByName(5, "Test Contract Field"));
         Assertions.assertNotNull(contractRepository.findInvoiceFieldByName(5, "Test Contract Field 2"));

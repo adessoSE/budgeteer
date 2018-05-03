@@ -11,7 +11,6 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.wickedsource.budgeteer.importer.aproda.AprodaWorkRecordsImporter;
 import org.wickedsource.budgeteer.imports.api.ImportException;
 import org.wickedsource.budgeteer.imports.api.ImportFile;
@@ -25,7 +24,7 @@ import java.util.List;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(loader = SpringockitoContextLoader.class, locations = {"classpath:spring-service.xml", "classpath:spring-repository-mock.xml"})
-public class WorkRecordImporterTest {
+class WorkRecordImporterTest {
 
     @Autowired
     private ProjectRepository projectRepository;
@@ -36,13 +35,13 @@ public class WorkRecordImporterTest {
     private void doImport() throws ImportException, InvalidFileFormatException {
         List<ImportFile> importFiles = new ArrayList<ImportFile>();
         importFiles.add(new ImportFile("file1", getClass().getResourceAsStream("testReport3.xlsx")));
-        importService.doImport(1l, new AprodaWorkRecordsImporter(), importFiles);
+        importService.doImport(1L, new AprodaWorkRecordsImporter(), importFiles);
     }
 
     @Test
     @DatabaseSetup("doImportWithEmptyDatabase.xml")
     @DatabaseTearDown(value = "doImportWithEmptyDatabase.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testGetSkippedRecordsNoSkippedRecords() throws Exception {
+    void testGetSkippedRecordsNoSkippedRecords() throws Exception {
         Mockito.when(projectRepository.findOne(Mockito.anyLong())).thenReturn(new ProjectEntity());
         doImport();
         List<List<String>> skippedRecords = importService.getSkippedRecords();
@@ -52,7 +51,7 @@ public class WorkRecordImporterTest {
     @Test
     @DatabaseSetup("doImportWithEmptyDatabase.xml")
     @DatabaseTearDown(value = "doImportWithEmptyDatabase.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testGetSkippedRecordsSomeSkippedRecords() throws Exception {
+    void testGetSkippedRecordsSomeSkippedRecords() throws Exception {
         SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yy");
         ProjectEntity project = new ProjectEntity();
         project.setProjectStart(formatter.parse("02.01.2014"));

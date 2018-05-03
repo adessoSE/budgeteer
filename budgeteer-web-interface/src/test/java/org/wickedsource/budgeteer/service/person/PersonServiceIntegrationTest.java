@@ -18,7 +18,7 @@ import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
-public class PersonServiceIntegrationTest extends IntegrationTestTemplate {
+class PersonServiceIntegrationTest extends IntegrationTestTemplate {
 
     private DateFormat format = new SimpleDateFormat("dd.MM.yyyy");
 
@@ -34,10 +34,10 @@ public class PersonServiceIntegrationTest extends IntegrationTestTemplate {
     @Test
     @DatabaseSetup("personWithRates.xml")
     @DatabaseTearDown(value = "personWithRates.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testLoadPersonWithRates() throws Exception {
-        PersonWithRates person = service.loadPersonWithRates(2l);
+    void testLoadPersonWithRates() throws Exception {
+        PersonWithRates person = service.loadPersonWithRates(2L);
         Assertions.assertEquals("person2", person.getName());
-        Assertions.assertEquals(2l, person.getPersonId());
+        Assertions.assertEquals(2L, person.getPersonId());
         Assertions.assertEquals("person2", person.getImportKey());
         Assertions.assertEquals(2, person.getRates().size());
         Assertions.assertNotNull(person.getRates().get(0).getBudget());
@@ -46,32 +46,32 @@ public class PersonServiceIntegrationTest extends IntegrationTestTemplate {
     @Test
     @DatabaseSetup("personWithRates.xml")
     @DatabaseTearDown(value = "personWithRates.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testSavePersonWithRates() throws Exception {
+    void testSavePersonWithRates() throws Exception {
         PersonWithRates person = new PersonWithRates();
-        person.setPersonId(1l);
+        person.setPersonId(1L);
         person.setName("name");
         person.setImportKey("name");
         PersonRate rate1 = new PersonRate();
-        rate1.setRate(MoneyUtil.createMoneyFromCents(12300l));
+        rate1.setRate(MoneyUtil.createMoneyFromCents(12300L));
         rate1.setDateRange(new DateRange(format.parse("01.01.2014"), format.parse("15.08.2014")));
-        rate1.setBudget(new BudgetBaseData(1l, "budget1"));
+        rate1.setBudget(new BudgetBaseData(1L, "budget1"));
         person.getRates().add(rate1);
         PersonRate rate2 = new PersonRate();
-        rate2.setRate(MoneyUtil.createMoneyFromCents(32100l));
+        rate2.setRate(MoneyUtil.createMoneyFromCents(32100L));
         rate2.setDateRange(new DateRange(format.parse("01.01.2015"), format.parse("15.08.2015")));
-        rate2.setBudget(new BudgetBaseData(1l, "budget1"));
+        rate2.setBudget(new BudgetBaseData(1L, "budget1"));
         person.getRates().add(rate2);
         service.savePersonWithRates(person);
 
-        PersonEntity personEntity = personRepository.findOne(1l);
+        PersonEntity personEntity = personRepository.findOne(1L);
         Assertions.assertEquals(2, personEntity.getDailyRates().size());
 
-        WorkRecordEntity record = workRecordRepository.findOne(1l);
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(32100l), record.getDailyRate());
-        record = workRecordRepository.findOne(2l);
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(12300l), record.getDailyRate());
-        record = workRecordRepository.findOne(3l);
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(32100l), record.getDailyRate());
+        WorkRecordEntity record = workRecordRepository.findOne(1L);
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(32100L), record.getDailyRate());
+        record = workRecordRepository.findOne(2L);
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(12300L), record.getDailyRate());
+        record = workRecordRepository.findOne(3L);
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(32100L), record.getDailyRate());
     }
 
 }

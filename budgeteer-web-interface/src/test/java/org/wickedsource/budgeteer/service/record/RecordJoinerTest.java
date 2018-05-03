@@ -13,7 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RecordJoinerTest extends ServiceTestTemplate{
+class RecordJoinerTest extends ServiceTestTemplate{
 
     private DateFormat format = new SimpleDateFormat("dd.MM.yyyy");
 
@@ -21,7 +21,7 @@ public class RecordJoinerTest extends ServiceTestTemplate{
     private RecordJoiner joiner;
 
     @Test
-    public void testJoinWeekly() throws Exception {
+    void testJoinWeekly() throws Exception {
         List<AggregatedRecord> records = joiner.joinWeekly(createWeeklyWorkRecords(), createWeeklyPlanRecords());
         Assertions.assertEquals(3, records.size());
 
@@ -49,7 +49,7 @@ public class RecordJoinerTest extends ServiceTestTemplate{
     }
 
     @Test
-    public void testJoinMonthly() throws Exception {
+    void testJoinMonthly() throws Exception {
         List<AggregatedRecord> records = joiner.joinMonthly(createMonthlyWorkRecords(), createMonthlyPlanRecords());
         Assertions.assertEquals(3, records.size());
 

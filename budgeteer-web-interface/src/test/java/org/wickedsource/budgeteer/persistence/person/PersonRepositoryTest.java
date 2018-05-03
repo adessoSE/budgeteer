@@ -12,7 +12,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-public class PersonRepositoryTest extends IntegrationTestTemplate {
+class PersonRepositoryTest extends IntegrationTestTemplate {
 
     private DateFormat format = new SimpleDateFormat("dd.MM.yyyy");
 
@@ -22,8 +22,8 @@ public class PersonRepositoryTest extends IntegrationTestTemplate {
     @Test
     @DatabaseSetup("findBaseData.xml")
     @DatabaseTearDown(value = "findBaseData.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testFindBaseDataByProjectId() throws Exception {
-        List<PersonBaseDataBean> data = personRepository.findBaseDataByProjectId(1l);
+    void testFindBaseDataByProjectId() throws Exception {
+        List<PersonBaseDataBean> data = personRepository.findBaseDataByProjectId(1L);
         Assertions.assertEquals(2, data.size());
 
         PersonBaseDataBean bean1 = data.get(0);
@@ -42,8 +42,8 @@ public class PersonRepositoryTest extends IntegrationTestTemplate {
     @Test
     @DatabaseSetup("findBaseData.xml")
     @DatabaseTearDown(value = "findBaseData.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testFindBaseDataByPersonId() throws Exception {
-        PersonBaseDataBean bean = personRepository.findBaseDataByPersonId(1l);
+    void testFindBaseDataByPersonId() throws Exception {
+        PersonBaseDataBean bean = personRepository.findBaseDataByPersonId(1L);
 
         Assertions.assertEquals(Long.valueOf(1), bean.getId());
         Assertions.assertEquals(Long.valueOf(20000), bean.getAverageDailyRateInCents());
@@ -54,8 +54,8 @@ public class PersonRepositoryTest extends IntegrationTestTemplate {
     @Test
     @DatabaseSetup("findBaseData.xml")
     @DatabaseTearDown(value = "findBaseData.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testFindDetailDataByPersonId() throws Exception {
-        PersonDetailDataBean bean = personRepository.findDetailDataByPersonId(1l);
+    void testFindDetailDataByPersonId() throws Exception {
+        PersonDetailDataBean bean = personRepository.findDetailDataByPersonId(1L);
 
         Assertions.assertEquals(Long.valueOf(1), bean.getId());
         Assertions.assertEquals("person1", bean.getName());
@@ -70,8 +70,8 @@ public class PersonRepositoryTest extends IntegrationTestTemplate {
     @Test
     @DatabaseSetup("personWithRates.xml")
     @DatabaseTearDown(value = "personWithRates.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testFindOneFetchDailyRates() {
-        PersonEntity person = personRepository.findOneFetchDailyRates(2l);
+    void testFindOneFetchDailyRates() {
+        PersonEntity person = personRepository.findOneFetchDailyRates(2L);
         Assertions.assertEquals(2, person.getDailyRates().size());
         Assertions.assertNotNull(person.getDailyRates().get(0).getBudget());
     }

@@ -25,7 +25,7 @@ import java.util.List;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(loader = SpringockitoContextLoader.class, locations = {"classpath:spring-service.xml", "classpath:spring-repository-mock.xml"})
-public class PlanRecordImporterTest {
+class PlanRecordImporterTest {
 
     @Autowired
     private ProjectRepository projectRepository;
@@ -43,7 +43,7 @@ public class PlanRecordImporterTest {
     @Test
     @DatabaseSetup("doImportWithEmptyDatabase.xml")
     @DatabaseTearDown(value = "doImportWithEmptyDatabase.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testGetSkippedRecordsNoSkippedRecords() throws Exception {
+    void testGetSkippedRecordsNoSkippedRecords() throws Exception {
         Mockito.when(projectRepository.findOne(Mockito.anyLong())).thenReturn(new ProjectEntity());
         doImport();
         List<List<String>> skippedRecords = importService.getSkippedRecords();
@@ -53,7 +53,7 @@ public class PlanRecordImporterTest {
     @Test
     @DatabaseSetup("doImportWithEmptyDatabase.xml")
     @DatabaseTearDown(value = "doImportWithEmptyDatabase.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testGetSkippedRecordsSomeSkippedRecords() throws Exception {
+    void testGetSkippedRecordsSomeSkippedRecords() throws Exception {
         SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yy");
         ProjectEntity project = new ProjectEntity();
         project.setProjectStart(formatter.parse("02.01.2014"));

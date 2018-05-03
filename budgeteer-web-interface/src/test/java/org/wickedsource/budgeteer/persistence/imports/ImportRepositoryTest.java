@@ -10,7 +10,7 @@ import org.wickedsource.budgeteer.IntegrationTestTemplate;
 
 import java.util.List;
 
-public class ImportRepositoryTest extends IntegrationTestTemplate {
+class ImportRepositoryTest extends IntegrationTestTemplate {
 
     @Autowired
     private ImportRepository repository;
@@ -18,8 +18,8 @@ public class ImportRepositoryTest extends IntegrationTestTemplate {
     @Test
     @DatabaseSetup("findByProjectId.xml")
     @DatabaseTearDown(value = "findByProjectId.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testFindByProjectId() {
-        List<ImportEntity> imports = repository.findByProjectId(1l);
+    void testFindByProjectId() {
+        List<ImportEntity> imports = repository.findByProjectId(1L);
         Assertions.assertEquals(2, imports.size());
     }
 }
