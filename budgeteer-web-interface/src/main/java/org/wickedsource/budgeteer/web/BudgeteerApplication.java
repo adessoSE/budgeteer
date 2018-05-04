@@ -1,5 +1,6 @@
 package org.wickedsource.budgeteer.web;
 
+import de.adesso.wickedcharts.wicket7.JavaScriptResourceRegistry;
 import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.Session;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -21,8 +22,6 @@ import org.springframework.stereotype.Component;
 import org.wickedsource.budgeteer.web.components.security.BudgeteerAuthorizationStrategy;
 import org.wickedsource.budgeteer.web.components.security.BudgeteerUnauthorizedComponentInstantiationListener;
 import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
-
-import de.adesso.wickedcharts.wicket7.JavaScriptResourceRegistry;
 
 import java.util.Set;
 
@@ -101,7 +100,6 @@ public class BudgeteerApplication extends WebApplication implements ApplicationC
 
     private void initWickedCharts() {
         //JavaScriptResourceRegistry.getInstance().setHighchartsReference(BudgeteerReferences.getHighchartsReference());
-//        JavaScriptResourceRegistry.getInstance().getHighchartsEntry().setEnabled(false);
         JavaScriptResourceRegistry.getInstance().setChartJsReference(BudgeteerReferences.getChartjsReference());
         JavaScriptResourceRegistry.getInstance().setJQueryReference(BudgeteerReferences.getJQueryReference());
     }
