@@ -14,4 +14,9 @@ public class FilterPanelTest extends AbstractWebTestTemplate {
         FilterPanel panel = new FilterPanel("panel", new WorkRecordFilter(1l));
         tester.startComponentInPage(panel);
     }
+
+    @Override
+    protected void setupTest() {
+
+    }
 }

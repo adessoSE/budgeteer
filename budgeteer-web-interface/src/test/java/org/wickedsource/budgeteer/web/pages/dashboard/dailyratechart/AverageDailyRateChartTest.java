@@ -12,4 +12,9 @@ public class AverageDailyRateChartTest extends AbstractWebTestTemplate {
         AverageDailyRateChartModel model = new AverageDailyRateChartModel(1l, 5);
         tester.startComponentInPage(new AverageDailyRateChart("chart", model));
     }
+
+    @Override
+    protected void setupTest() {
+
+    }
 }

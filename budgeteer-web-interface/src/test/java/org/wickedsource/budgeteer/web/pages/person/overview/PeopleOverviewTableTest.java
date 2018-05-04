@@ -42,4 +42,9 @@ public class PeopleOverviewTableTest extends AbstractWebTestTemplate {
         }
         return list;
     }
+
+    @Override
+    protected void setupTest() {
+
+    }
 }

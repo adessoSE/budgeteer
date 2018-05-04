@@ -15,7 +15,7 @@ public class DateRangeInputField extends TextField<DateRange> {
 
     public static enum DROP_LOCATION {UP, DOWN}
 
-    public DateRangeInputField(String id, LazyModel<DateRange> model, DROP_LOCATION drop_location) {
+    public DateRangeInputField(String id, IModel<DateRange> model, DROP_LOCATION drop_location) {
         this(id, model, null, drop_location);
     }
 

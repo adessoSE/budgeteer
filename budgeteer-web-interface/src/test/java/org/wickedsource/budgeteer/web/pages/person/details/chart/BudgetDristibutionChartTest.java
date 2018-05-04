@@ -12,4 +12,9 @@ public class BudgetDristibutionChartTest extends AbstractWebTestTemplate{
         BudgetDistributionChartModel model = new BudgetDistributionChartModel(1l);
         tester.startComponentInPage(new BudgetDistributionChart("chart", model));
     }
+
+    @Override
+    protected void setupTest() {
+
+    }
 }

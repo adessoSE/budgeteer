@@ -15,4 +15,9 @@ public class ImportFilesPageTest extends AbstractWebTestTemplate {
         tester.startPage(page);
         tester.assertRenderedPage(ImportFilesPage.class);
     }
+
+    @Override
+    protected void setupTest() {
+
+    }
 }

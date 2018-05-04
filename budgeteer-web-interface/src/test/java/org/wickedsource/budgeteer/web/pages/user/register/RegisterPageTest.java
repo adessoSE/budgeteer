@@ -12,4 +12,9 @@ public class RegisterPageTest extends AbstractWebTestTemplate {
         tester.startPage(RegisterPage.class);
         tester.assertRenderedPage(RegisterPage.class);
     }
+
+    @Override
+    protected void setupTest() {
+
+    }
 }

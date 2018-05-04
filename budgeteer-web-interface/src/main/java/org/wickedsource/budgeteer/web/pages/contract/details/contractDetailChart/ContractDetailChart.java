@@ -2,7 +2,9 @@ package org.wickedsource.budgeteer.web.pages.contract.details.contractDetailChar
 
 import de.adesso.wickedcharts.wicket7.chartjs.Chart;
 
-public class ContractDetailChart extends Chart{
+import java.io.Serializable;
+
+public class ContractDetailChart extends Chart implements Serializable {
 
     private ContractDetailChartModel model;
 

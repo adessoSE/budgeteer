@@ -1,24 +1,11 @@
 package org.wickedsource.budgeteer.web.components.targetactualchart;
 
 import de.adesso.wickedcharts.chartjs.ChartConfiguration;
-import de.adesso.wickedcharts.chartjs.chartoptions.AxesScale;
-import de.adesso.wickedcharts.chartjs.chartoptions.ChartType;
-import de.adesso.wickedcharts.chartjs.chartoptions.Data;
-import de.adesso.wickedcharts.chartjs.chartoptions.Dataset;
-import de.adesso.wickedcharts.chartjs.chartoptions.GridLines;
-import de.adesso.wickedcharts.chartjs.chartoptions.Legend;
-import de.adesso.wickedcharts.chartjs.chartoptions.Options;
-import de.adesso.wickedcharts.chartjs.chartoptions.Scales;
-import de.adesso.wickedcharts.chartjs.chartoptions.TooltipMode;
-import de.adesso.wickedcharts.chartjs.chartoptions.Tooltips;
+import de.adesso.wickedcharts.chartjs.chartoptions.*;
 import de.adesso.wickedcharts.chartjs.chartoptions.colors.RgbColor;
 import de.adesso.wickedcharts.chartjs.chartoptions.colors.SimpleColor;
 import de.adesso.wickedcharts.chartjs.chartoptions.label.TextLabel;
 import de.adesso.wickedcharts.chartjs.chartoptions.valueType.DoubleValue;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.wicket.model.IModel;
 import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.service.statistics.MoneySeries;
@@ -28,12 +15,16 @@ import org.wickedsource.budgeteer.web.PropertyLoader;
 import org.wickedsource.budgeteer.web.charts.ChartStyling;
 import org.wickedsource.budgeteer.web.charts.ChartUtils;
 
-public class TargetAndActualChartConfiguration extends ChartConfiguration {
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+public class TargetAndActualChartConfiguration extends ChartConfiguration implements Serializable {
 
 	public enum Mode {
 		MONTHLY,
 
-		WEEKLY;
+		WEEKLY
 	}
 
 	public TargetAndActualChartConfiguration(IModel<TargetAndActual> model, Mode mode) {

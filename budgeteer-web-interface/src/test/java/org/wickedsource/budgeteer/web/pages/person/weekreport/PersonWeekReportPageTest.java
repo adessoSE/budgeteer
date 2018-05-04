@@ -35,4 +35,9 @@ public class PersonWeekReportPageTest extends AbstractWebTestTemplate {
         data.setLastBookedDate(new Date());
         return data;
     }
+
+    @Override
+    protected void setupTest() {
+
+    }
 }

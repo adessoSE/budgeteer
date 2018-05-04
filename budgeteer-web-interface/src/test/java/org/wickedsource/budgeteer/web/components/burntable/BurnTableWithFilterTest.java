@@ -13,4 +13,9 @@ public class BurnTableWithFilterTest extends AbstractWebTestTemplate {
         BurnTableWithFilter table = new BurnTableWithFilter("panel", new WorkRecordFilter(1l));
         tester.startComponentInPage(table);
     }
+
+    @Override
+    protected void setupTest() {
+
+    }
 }

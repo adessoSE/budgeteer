@@ -51,8 +51,7 @@ dependencies {
     compile(
             [group: 'org.apache.wicket', name: 'wicket-spring', version: "${wicket_spring_version}"],
             [group: 'org.wicketstuff', name: 'wicketstuff-lazymodel', version: "${wicketstuff_lazymodel_version}"],
-            //[group: 'de.adesso.wicked-charts', name: 'wicked-charts-wicket7', version: "${wicketcharts_version}"],
-            files("lib/wicked-charts-wicket7-3.0.0.jar","lib/chartjs-wrapper-3.0.0.jar")
+            [group: 'de.adesso.wicked-charts', name: 'wicked-charts-wicket7', version: "${wicketcharts_version}"]
     )
 
     compile group: 'org.springframework', name: 'spring-webmvc', version: "${spring_version}"
@@ -147,8 +146,8 @@ bootRun {
             '-Dserver.port=8080',
             '-Dwicket.configurationType=DEVELOPMENT',
             //'-Dspring.datasource.url=jdbc:hsqldb:file:../../database/budgeteer;shutdown=true;hsqldb.write_delay=false;',
-            //'-Dspring.datasource.url=jdbc:hsqldb:mem:budgeteer',
-            '-Dspring.datasource.url=jdbc:hsqldb:hsql://localhost/budgeteer',
+            '-Dspring.datasource.url=jdbc:hsqldb:mem:budgeteer',
+            //'-Dspring.datasource.url=jdbc:hsqldb:hsql://localhost/budgeteer',
             '-Dspring.datasource.driverClassName=org.hsqldb.jdbcDriver',
             '-Dspring.datasource.username=sa',
             '-Dspring.datasource.password=',

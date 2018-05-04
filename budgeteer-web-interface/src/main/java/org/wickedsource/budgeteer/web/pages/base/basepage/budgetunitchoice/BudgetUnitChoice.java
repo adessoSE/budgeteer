@@ -31,6 +31,7 @@ public class BudgetUnitChoice extends Panel {
                     @Override
                     public void onClick() {
                         session.setSelectedBudgetUnit(item.getModelObject());
+                        setResponsePage(this.getPage().getPageClass());
                     }
                 };
                 item.add(link);

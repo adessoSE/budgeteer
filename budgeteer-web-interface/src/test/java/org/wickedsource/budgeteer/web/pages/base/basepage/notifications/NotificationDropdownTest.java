@@ -53,4 +53,8 @@ public class NotificationDropdownTest extends AbstractWebTestTemplate {
         return notifications;
     }
 
+    @Override
+    protected void setupTest() {
+
+    }
 }

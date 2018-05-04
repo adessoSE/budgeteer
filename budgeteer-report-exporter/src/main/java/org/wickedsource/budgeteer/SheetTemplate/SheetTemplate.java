@@ -1,4 +1,12 @@
 package org.wickedsource.budgeteer.SheetTemplate;
+
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -6,17 +14,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellType;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Multimap;
-
 public class SheetTemplate {
 
-	public static final Pattern TEMPLATE_TAG_PATTERN = Pattern.compile("\\{([a-zA-Z0-9\\._]+)\\}");
+    public static final Pattern TEMPLATE_TAG_PATTERN = Pattern.compile("\\{([a-zA-Z0-9\\_\\-]+)(?:\\.(?<attribute>[a-zA-Z0-9\\-\\_\\.]+))?\\}");
 	
 	private Multimap<String,Integer> fieldMapping;
 
@@ -41,9 +41,11 @@ public class SheetTemplate {
 	}
 	
 	private void processSheet() {
-		findTemplateRow();
-		createFieldMapping();
-		checkForFlagTemplate();
+        if (sheet != null) {
+            findTemplateRow();
+            createFieldMapping();
+            checkForFlagTemplate();
+        }
 	}
 
 	private void checkForFlagTemplate() {
@@ -56,7 +58,7 @@ public class SheetTemplate {
 	}
 
 	private void createFieldMapping() {
-		for(Cell cell : sheet.getRow(templateRowIndex)) { 
+		for(Cell cell : sheet.getRow(templateRowIndex)) {
 			List<String> fields = mapCellValueToFieldNames(cell);
 			if(null != fields) {
 				fields.stream().forEach(name -> fieldMapping.put(name, cell.getColumnIndex()));
@@ -81,39 +83,56 @@ public class SheetTemplate {
 		}
 		return false;
 	}
-	
-	/**
-	 * 
-	 * @param cell
-	 * @return
-	 * @throws IllegalArgumentException
-	 */
-	List<String> mapCellValueToFieldNames(Cell cell) {
-	String cellValue;
-	if(cell.getCellTypeEnum().equals(CellType.FORMULA)) {
-		cellValue = cell.getCellFormula();
-	} else if(cell.getCellTypeEnum().equals(CellType.STRING)){
-		cellValue = cell.getStringCellValue();
-	} else {
-		return null;
-	}
-	Matcher matcher = TEMPLATE_TAG_PATTERN.matcher(cellValue);
-	List<String> fields = new ArrayList<String>(matcher.groupCount());
-	while(matcher.find()) {
-		if(dtoHasField(matcher.group(1))) {
-			fields.add(matcher.group(1));
-		}
-	}
-	return fields;
-	}
 
-	boolean dtoHasField(String group) {
-		if(group.charAt(0) == '.') {
-			return false;
-		}
-		String[] tokens = group.split("\\.");
-		return fieldList.contains(tokens[0]);
-	}
+    String getCellValue(Cell cell) {
+        String cellValue = null;
+        if (cell.getCellTypeEnum().equals(CellType.FORMULA)) {
+            cellValue = cell.getCellFormula();
+        } else if (cell.getCellTypeEnum().equals(CellType.STRING)) {
+            cellValue = cell.getStringCellValue();
+        }
+        return cellValue;
+    }
+
+
+    /**
+     * @param cell
+     * @return
+     * @throws IllegalArgumentException
+     */
+    List<String> mapCellValueToFieldNames(Cell cell) {
+        String cellValue = getCellValue(cell);
+        if (cellValue == null) {
+            return null;
+        }
+
+        List<String> fields = getFieldFromCellValue(cellValue);
+        return fields;
+    }
+
+    private List<String> getFieldFromCellValue(String cellValue) {
+        Matcher matcher = TEMPLATE_TAG_PATTERN.matcher(cellValue);
+        List<String> fields = new ArrayList<String>(matcher.groupCount());
+        while (matcher.find()) {
+            String field = matcher.group(1);
+            if (dtoHasField(field)) {
+                if (matcher.group("attribute") == null) {
+                    fields.add(field);
+                } else {
+                    fields.add(field + "." + matcher.group("attribute"));
+                }
+            }
+        }
+        return fields;
+    }
+
+    boolean dtoHasField(String group) {
+        if (group.charAt(0) == '.') {
+            return false;
+        }
+        String[] tokens = group.split("\\.");
+        return fieldList.contains(tokens[0]);
+    }
 
 	/**
 	 * 

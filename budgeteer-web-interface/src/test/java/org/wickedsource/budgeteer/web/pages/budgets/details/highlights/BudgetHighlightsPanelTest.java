@@ -41,4 +41,9 @@ public class BudgetHighlightsPanelTest extends AbstractWebTestTemplate {
         data.setTags(Arrays.asList("Active"));
         return data;
     }
+
+    @Override
+    protected void setupTest() {
+
+    }
 }

@@ -21,12 +21,10 @@ import org.wickedsource.budgeteer.service.budget.BudgetService;
 import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
 import org.wickedsource.budgeteer.service.contract.ContractBaseData;
 import org.wickedsource.budgeteer.service.contract.ContractService;
+import org.wickedsource.budgeteer.service.template.TemplateService;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
@@ -48,6 +46,9 @@ public class BudgetReportService {
 	@Autowired
 	private WorkRecordRepository workRecordRepository;
 
+	@Autowired
+	private TemplateService templateService;
+
 	/**
 	 * Creates an excel spreadsheet containing the budgets informations
      * @param projectId ProjectId
@@ -55,14 +56,13 @@ public class BudgetReportService {
 	 * @param metaInformationen Necessary informations about the report
 	 * @return Excel spreadsheet file
 	 */
-	public File createReportFile(long projectId, BudgetTagFilter filter,
-			ReportMetaInformation metaInformationen) {
+    public File createReportFile(long templateId, long projectId, BudgetTagFilter filter, ReportMetaInformation metaInformationen) {
 		List<BudgetReportData> overallBudgetReportList = loadOverallBudgetReportData(projectId, filter,
 				metaInformationen);
 		List<BudgetReportData> monthlyBudgetReportList = loadMonthlyBudgetReportData(projectId, filter,
 				metaInformationen);
 
-		XSSFWorkbook wb = getSheetWorkbook();
+		XSSFWorkbook wb = getSheetWorkbook(templateId);
 
 		writeBudgetData(wb.getSheetAt(0), overallBudgetReportList);
 		writeBudgetData(wb.getSheetAt(1), monthlyBudgetReportList);
@@ -108,35 +108,27 @@ public class BudgetReportService {
 	private List<BudgetSummary> createBudgetSummary(List<BudgetReportData> budgetList) {
         Set<String> recipients = new HashSet<>();
         budgetList.forEach(
-				budget -> recipients.add((String) getAttribute("rechnungsempfaenger", budget.getAttributes())));
+				budget -> recipients.add(getAttribute("rechnungsempfaenger", budget.getAttributes())));
 
 		List<BudgetSummary> summary = recipients.stream().map(description -> new BudgetSummary(description))
 				.collect(Collectors.toList());
 		return summary;
 	}
 
-	private XSSFWorkbook getSheetWorkbook() {
-		ClassLoader classLoader = getClass().getClassLoader();
-		InputStream in = classLoader.getResourceAsStream("report-template.xlsx");
-		XSSFWorkbook wb = null;
-		try {
-			wb = (XSSFWorkbook) WorkbookFactory.create(in);
-		} catch (EncryptedDocumentException | IOException | InvalidFormatException e) {
-			e.printStackTrace();
-		}
-		return wb;
+	private XSSFWorkbook getSheetWorkbook(long id) {
+    	return templateService.getById(id).getWb();
 	}
 
-	private Object getAttribute(String string, List<? extends SheetTemplateSerializable> list) {
+	private String getAttribute(String string, List<? extends SheetTemplateSerializable> list) {
 		if (null == list) {
-			return null;
+			return "";
 		}
 		for (SheetTemplateSerializable listEntry : list) {
 			if (listEntry.getName().equals(string)) {
-				return listEntry.getValue();
+				return listEntry.getValue().toString();
 			}
 		}
-		return null;
+		return "";
 	}
 
 	private File createOutputFile(XSSFWorkbook wb) {

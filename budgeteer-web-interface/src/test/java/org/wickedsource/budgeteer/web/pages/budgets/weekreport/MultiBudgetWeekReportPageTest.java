@@ -23,4 +23,8 @@ public class MultiBudgetWeekReportPageTest extends AbstractWebTestTemplate {
         tester.assertRenderedPage(MultiBudgetWeekReportPage.class);
     }
 
+    @Override
+    protected void setupTest() {
+
+    }
 }

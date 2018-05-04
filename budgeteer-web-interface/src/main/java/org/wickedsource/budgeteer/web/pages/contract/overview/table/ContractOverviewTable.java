@@ -8,6 +8,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.persistence.contract.ContractEntity;
@@ -17,6 +18,7 @@ import org.wickedsource.budgeteer.service.contract.DynamicAttributeField;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.components.dataTable.DataTableBehavior;
 import org.wickedsource.budgeteer.web.components.datelabel.DateLabel;
+import org.wickedsource.budgeteer.web.components.tax.TaxLabelModel;
 import org.wickedsource.budgeteer.web.pages.contract.details.ContractDetailsPage;
 import org.wickedsource.budgeteer.web.pages.contract.edit.EditContractPage;
 
@@ -35,7 +37,6 @@ public class ContractOverviewTable extends Panel{
         WebMarkupContainer table = new WebMarkupContainer("table");
 
         createNetGrossLabels(table);
-        setVisibilityOfNetGrossLabels(table);
 
         table.add(new DataTableBehavior(DataTableBehavior.getRecommendedOptions()));
         table.add(new ListView<String>("headerRow",  model(from(data).getHeadline()) ) {
@@ -53,7 +54,8 @@ public class ContractOverviewTable extends Panel{
                 if (BudgeteerSession.get().isTaxEnabled()) {
                     taxCoefficient = 1.0 + item.getModelObject().getTaxRate() / 100.0;
                 }
-                BookmarkablePageLink<EditContractPage> link = new BookmarkablePageLink<EditContractPage>("editContract", ContractDetailsPage.class, EditContractPage.createParameters(contractId));
+                BookmarkablePageLink<EditContractPage> link = new BookmarkablePageLink<EditContractPage>("editContract",
+                        ContractDetailsPage.class, EditContractPage.createParameters(contractId));
                 link.add(new Label("contractName", model(from(item.getModelObject()).getContractName())));
                 item.add(link);
                 item.add(new Label("internalNumber", model(from(item.getModelObject()).getInternalNumber())));
@@ -65,10 +67,14 @@ public class ContractOverviewTable extends Panel{
                         item.add(new Label("contractRowText", item.getModelObject().getValue()));
                     }
                 });
-                item.add(new Label("budgetTotal", Model.of(MoneyUtil.toDouble(item.getModelObject().getBudget(), BudgeteerSession.get().getSelectedBudgetUnit(), taxCoefficient))));
-                item.add(new Label("budgetSpent", Model.of(MoneyUtil.toDouble(item.getModelObject().getBudgetSpent(), BudgeteerSession.get().getSelectedBudgetUnit(), taxCoefficient))));
-                item.add(new Label("budgetLeft", Model.of(MoneyUtil.toDouble(item.getModelObject().getBudgetLeft(), BudgeteerSession.get().getSelectedBudgetUnit(), taxCoefficient))));
-                item.add(new BookmarkablePageLink("editLink", EditContractPage.class, EditContractPage.createParameters(contractId)));
+                item.add(new Label("budgetTotal", Model.of(MoneyUtil.toDouble(item.getModelObject().getBudget(),
+                        BudgeteerSession.get().getSelectedBudgetUnit(), taxCoefficient))));
+                item.add(new Label("budgetSpent", Model.of(MoneyUtil.toDouble(item.getModelObject().getBudgetSpent(),
+                        BudgeteerSession.get().getSelectedBudgetUnit(), taxCoefficient))));
+                item.add(new Label("budgetLeft", Model.of(MoneyUtil.toDouble(item.getModelObject().getBudgetLeft(),
+                        BudgeteerSession.get().getSelectedBudgetUnit(), taxCoefficient))));
+                item.add(new BookmarkablePageLink("editLink", EditContractPage.class,
+                        EditContractPage.createParameters(contractId)));
             }
         });
         table.add(new ListView<String>("footerRow", model(from(data).getFooter()) ) {
@@ -80,24 +86,12 @@ public class ContractOverviewTable extends Panel{
         add(table);
     }
 
-    private void setVisibilityOfNetGrossLabels(WebMarkupContainer table) {
-        if (BudgeteerSession.get().isTaxEnabled()) {
-            table.get("netLabelTotal").setVisible(false);
-            table.get("netLabelSpent").setVisible(false);
-            table.get("netLabelLeft").setVisible(false);
-        } else {
-            table.get("grossLabelTotal").setVisible(false);
-            table.get("grossLabelSpent").setVisible(false);
-            table.get("grossLabelLeft").setVisible(false);
-        }
-    }
-
     private void createNetGrossLabels(WebMarkupContainer table) {
-        table.add(new WebMarkupContainer("netLabelTotal"));
-        table.add(new WebMarkupContainer("grossLabelTotal"));
-        table.add(new WebMarkupContainer("netLabelSpent"));
-        table.add(new WebMarkupContainer("grossLabelSpent"));
-        table.add(new WebMarkupContainer("netLabelLeft"));
-        table.add(new WebMarkupContainer("grossLabelLeft"));
+        table.add(new Label("totalLabel", new TaxLabelModel(
+                new StringResourceModel("overview.table.contract.label.total", this))));
+        table.add(new Label("leftLabel", new TaxLabelModel(
+                new StringResourceModel("overview.table.contract.label.left", this))));
+        table.add(new Label("spentLabel", new TaxLabelModel(
+                new StringResourceModel("overview.table.contract.label.spent", this))));
     }
 }

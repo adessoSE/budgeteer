@@ -1,22 +1,13 @@
 package org.wickedsource.budgeteer.SheetTemplate;
 
-import java.lang.reflect.Field;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.regex.Matcher;
-
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellType;
-import org.apache.poi.ss.usermodel.RichTextString;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
+import org.apache.poi.ss.usermodel.*;
+
+import java.lang.reflect.Field;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.regex.Matcher;
 
 public class TemplateWriter<T> {
 	
@@ -26,8 +17,7 @@ public class TemplateWriter<T> {
 	private Sheet sheet;
 	private List<T> entries;
 	private Multimap<T,FieldFlag> flagMapping;
-	
-	
+
 	private int currentRowIndex;
 	private Row currentRow;
 
@@ -82,12 +72,13 @@ public class TemplateWriter<T> {
 						HashMap<String,Object> map = new HashMap<String,Object>();
 						listObject.stream().forEach(listEntry -> map.put(listEntry.getName(), listEntry.getValue()));
 						fieldValue = map.get(subkeyOf(tagname));
-					}
-					else if(fieldObject instanceof Map) {
+					} else if(fieldObject instanceof Map) {
 						Map<String,Object> mapObject = (Map<String, Object>) fieldObject;
 						fieldValue = mapObject.get(subkeyOf(tagname));
+					} else if (fieldObject == null) {
+						// do nothing
 					} else {
-						// TODO: exception or null?
+						throw new IllegalArgumentException("The field " + field.getName() + " uses an unsupported type.");
 					}
 				} else {
 					Field field = dto.getClass().getDeclaredField(tagname);
@@ -166,9 +157,12 @@ public class TemplateWriter<T> {
 		return tokens[0];
 	}
 
-	private Object subkeyOf(String tagname) {
-		String[] tokens = tagname.split("\\.");
-		return tokens[1];
+    String subkeyOf(String tagname) {
+        int dotIndex = tagname.indexOf(".");
+        if (dotIndex == -1) {
+            return null;
+        }
+        return tagname.substring(dotIndex + 1, tagname.length());
 	}
 
 	void insertRows() {
@@ -245,8 +239,6 @@ public class TemplateWriter<T> {
 	public void addFlag(T dto, String fieldname, String flag) {
 		if(template.getFieldMapping().containsKey(fieldname) && null != template.getFlagTemplate() && template.getFlagTemplate().contains(flag)) {
 			flagMapping.put(dto, new FieldFlag(fieldname,flag));
-		} else {
-			// TODO: Exception
 		}
 	}
 	

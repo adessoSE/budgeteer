@@ -13,4 +13,8 @@ public class HoursPageTest extends AbstractWebTestTemplate {
         tester.assertRenderedPage(HoursPage.class);
     }
 
+    @Override
+    protected void setupTest() {
+
+    }
 }
