@@ -35,16 +35,23 @@ public class TemplateService {
         return result;
     }
 
+    /**
+     * @param projectID The ID of the current project.
+     * @return All the templates in the current project.
+     */
     public List<Template> getTemplatesInProject(long projectID){
         List<Template> result = new ArrayList<>();
-        for(TemplateEntity E : templateRepository.findAll()){
-            if(E.getProjectId() == projectID) {
-                result.add(new Template(E.getId(), E.getName(), E.getDescription(), E.getWb(), E.getProjectId()));
-            }
+        for(TemplateEntity E : templateRepository.findByProjectId(projectID)){
+            result.add(new Template(E.getId(), E.getName(), E.getDescription(), E.getWb(), E.getProjectId()));
         }
         return result;
     }
 
+    /**
+     * Returns a template from the database given it's ID.
+     * @param templateID The ID of the template.
+     * @return A new Template object.
+     */
     public Template getById(long templateID){
         for(TemplateEntity E : templateRepository.findAll()){
             if(E.getId() == templateID){
@@ -54,30 +61,51 @@ public class TemplateService {
         return null;
     }
 
+    /**
+     * Delete a template given it's id.
+     * @param templateID The ID of the template.
+     */
     public void deleteTemplate(long templateID){
         templateRepository.delete(templateID);
     }
 
-    public void editTemplate(long projectId, long templateId, ImportFile importFile, IModel<TemplateFormInputDto> temModel) {
+    /**
+     *
+     * @param projectId The id of the current project
+     * @param templateId The id of the template to edit
+     * @param importFile The file if containing the Workbook (can be null if we do not want to reupload)
+     * @param temModel The model for the template that is being edited
+     * @return Returns the id of the new template, as it will be different (we create a new one with the edited data
+     * and destroy the old one.
+     */
+    public long editTemplate(long projectId, long templateId, ImportFile importFile, IModel<TemplateFormInputDto> temModel) {
         TemplateEntity temp;
         if(importFile != null) {
             try {
                 temp = new TemplateEntity(temModel.getObject().getName(), temModel.getObject().getDescription(),
-                        new XSSFWorkbook(importFile.getInputStream()), projectId);
+                        (XSSFWorkbook)WorkbookFactory.create(importFile.getInputStream()), projectId);
                 templateRepository.delete(templateId);
                 templateRepository.save(temp);
-            } catch (IOException e) {
+                return temp.getId();
+            } catch (IOException | InvalidFormatException e) {
                 e.printStackTrace();
+                return 0;
             }
         }else{
             temp = new TemplateEntity(temModel.getObject().getName(),
                     temModel.getObject().getDescription(), getById(templateId).getWb(), projectId);
             templateRepository.delete(templateId);
             templateRepository.save(temp);
-
+            return temp.getId();
         }
     }
 
+    /**
+     * Imports a template into the repository
+     * @param projectId The id of the current project
+     * @param importFile The file to import
+     * @param temModel The data model (name, description, id).
+     */
     public void doImport(long projectId, ImportFile importFile, IModel<TemplateFormInputDto> temModel) {
         List<TemplateEntity> imports = new ArrayList<>();
         try {
@@ -89,6 +117,10 @@ public class TemplateService {
         }
     }
 
+    /**
+     *
+     * @return An example file that shows how a template could look
+     */
     public ExampleFile getExampleFile() {
         ExampleFile file = new ExampleFile();
         file.setFileName("example_template.xlsx");

@@ -16,7 +16,6 @@ import org.wickedsource.budgeteer.web.pages.templates.TemplatesPage;
 import org.wickedsource.budgeteer.web.pages.templates.edit.EditTemplatePage;
 
 import javax.inject.Inject;
-
 import java.util.List;
 
 import static org.wicketstuff.lazymodel.LazyModel.from;
@@ -25,11 +24,6 @@ import static org.wicketstuff.lazymodel.LazyModel.model;
 public class TemplatesTable extends Panel {
 
     private ListView<Template> rows;
-
-    @Inject
-    private TemplateService templateService;
-
-
 
     public TemplatesTable(String id, TemplateListModel model) {
         super(id, model);
@@ -60,7 +54,7 @@ public class TemplatesTable extends Panel {
             @Override
             protected ListItem<Template> newItem(int index, IModel<Template> itemModel) {
                 // wrap model to work with LazyModel
-                return super.newItem(index, new ClassAwareWrappingModel<Template>(itemModel, Template.class));
+                return super.newItem(index, new ClassAwareWrappingModel<>(itemModel, Template.class));
             }
         };
     }

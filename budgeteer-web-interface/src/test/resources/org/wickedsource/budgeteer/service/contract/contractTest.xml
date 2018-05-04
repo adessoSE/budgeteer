@@ -3,7 +3,7 @@
     <!-- Project without ProjectContractFields -->
     <PROJECT id="1" name="project1"/>
 
-    <!-- Project without two ProjectContractFields -->
+    <!-- Project with two ProjectContractFields -->
     <PROJECT id="2" name="project2"/>
 
     <PROJECT_CONTRACT_FIELD id="1" FIELD_NAME="test0" PROJECT_ID="2" />

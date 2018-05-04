@@ -2,32 +2,23 @@ package org.wickedsource.budgeteer.persistence.template;
 
 
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.experimental.Accessors;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.openxml4j.opc.OPCPackage;
-import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.hibernate.type.StandardBasicTypes;
-import org.joda.money.Money;
-import org.wickedsource.budgeteer.persistence.budget.BudgetEntity;
-import org.wickedsource.budgeteer.persistence.person.PersonEntity;
-import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
 import org.wickedsource.budgeteer.service.template.Template;
 
 import javax.persistence.*;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.util.Date;
 
 
 @Entity
 @Table(name="TEMPLATE")
-@Data
 @NoArgsConstructor
+@Getter
 public class TemplateEntity {
 
     @Id
@@ -43,9 +34,11 @@ public class TemplateEntity {
     @Column(name="DESCRIPTION", length = 64)
     private String description = "";
 
+    //Transient because Hibernate cannot save the Workbook directly in the db
     @Transient
     private XSSFWorkbook wbXSSF = new XSSFWorkbook();
 
+    //So we get the internal data and store it in a byte array.
     @Column(name="TEMPLATE")
     @Lob
     private byte[] wbArr;
@@ -56,6 +49,7 @@ public class TemplateEntity {
         this.wbXSSF = workbook;
         this.projectId = projectID;
         try{
+            //Write the workbook to an OutputStream and then get the byteArray of it.
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             wbXSSF.write(out);
             wbArr = out.toByteArray();
@@ -64,10 +58,18 @@ public class TemplateEntity {
         }
     }
 
+    /**
+     * Create a new Template object from our data.
+     * @return A new Template from this TemplateEntity
+     */
     public Template getTemplate(){
         return new Template(id, name, description, wbXSSF, projectId);
     }
 
+    /**
+     * We must create a new XSSFWorkbook each time we want one.
+     * @return A new XSSFWorkbook
+     */
     public XSSFWorkbook getWb(){
         if(wbArr != null) {
             try {

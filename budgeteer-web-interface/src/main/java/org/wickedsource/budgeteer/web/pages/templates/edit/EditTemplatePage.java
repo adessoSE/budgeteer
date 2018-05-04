@@ -13,12 +13,8 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.apache.wicket.util.io.IOUtils;
 import org.apache.wicket.util.resource.AbstractResourceStreamWriter;
-import org.wickedsource.budgeteer.imports.api.ExampleFile;
 import org.wickedsource.budgeteer.imports.api.ImportFile;
-import org.wickedsource.budgeteer.imports.api.InvalidFileFormatException;
-import org.wickedsource.budgeteer.service.template.Template;
 import org.wickedsource.budgeteer.service.template.TemplateService;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.ClassAwareWrappingModel;
@@ -28,7 +24,6 @@ import org.wickedsource.budgeteer.web.pages.base.dialogpage.DialogPageWithBackli
 import org.wickedsource.budgeteer.web.pages.templates.templateimport.TemplateFormInputDto;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -67,7 +62,9 @@ public class EditTemplatePage extends DialogPageWithBacklink {
         IModel formModel = model(from(templateFormInputDto));
 
         this.setDefaultModel(formModel);
-        final Form<TemplateFormInputDto> form = new Form<TemplateFormInputDto>("importForm", new ClassAwareWrappingModel<>(new Model<>(new TemplateFormInputDto(BudgeteerSession.get().getProjectId())), TemplateFormInputDto.class)) {
+        final Form<TemplateFormInputDto> form = new Form<TemplateFormInputDto>("editForm", new ClassAwareWrappingModel<>(new Model<>(new TemplateFormInputDto(BudgeteerSession.get().getProjectId())), TemplateFormInputDto.class)) {
+
+            private long templateId = templateID;
 
             @Override
             protected void onSubmit() {
@@ -81,12 +78,14 @@ public class EditTemplatePage extends DialogPageWithBacklink {
                     if(fileUploads != null && fileUploads.size() > 0){
                         ImportFile file = new ImportFile(fileUploads.get(0).getClientFileName(), fileUploads.get(0).getInputStream());
                         if(model(from(templateFormInputDto)).getObject().getName() != null && model(from(templateFormInputDto)).getObject().getDescription() != null){
-                            service.editTemplate(BudgeteerSession.get().getProjectId(), templateID, file, model(from(templateFormInputDto)));
+                            templateId = service.editTemplate(BudgeteerSession.get().getProjectId(), templateId, file, model(from(templateFormInputDto)));
                             success(getString("message.success"));
+                            updateTemplateID(templateId);
                         }
                     }else if(model(from(templateFormInputDto)).getObject().getName() != null && model(from(templateFormInputDto)).getObject().getDescription() != null){
-                        service.editTemplate(BudgeteerSession.get().getProjectId(), templateID, null, model(from(templateFormInputDto)));
+                        templateId = service.editTemplate(BudgeteerSession.get().getProjectId(), templateId, null, model(from(templateFormInputDto)));
                         success(getString("message.success"));
+                        updateTemplateID(templateId);
                     }
                 } catch (IOException e) {
                     error(String.format(getString("message.ioError"), e.getMessage()));
@@ -110,10 +109,14 @@ public class EditTemplatePage extends DialogPageWithBacklink {
 
         templateFormInputDto.setName(service.getById(templateID).getName());
         templateFormInputDto.setDescription(service.getById(templateID).getDescription());
-        form.add(DownloadFileButton("downloadFileButton"));
         form.add(DeleteTemplateButton("deleteButton"));
-        form.add(new TextField<String>("name", model(from(templateFormInputDto).getName())));
-        form.add(new TextField<String>("description", model(from(templateFormInputDto).getDescription())));
+        form.add(DownloadFileButton("downloadFileButton"));
+        form.add(new TextField<>("name", model(from(templateFormInputDto).getName())));
+        form.add(new TextField<>("description", model(from(templateFormInputDto).getDescription())));
+    }
+
+    private void updateTemplateID(long newID){
+        templateID = newID;
     }
 
     /**
