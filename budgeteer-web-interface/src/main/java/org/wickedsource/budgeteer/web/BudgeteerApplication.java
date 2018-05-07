@@ -23,6 +23,7 @@ import org.wickedsource.budgeteer.web.components.security.BudgeteerAuthorization
 import org.wickedsource.budgeteer.web.components.security.BudgeteerUnauthorizedComponentInstantiationListener;
 import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 
+import java.util.List;
 import java.util.Set;
 
 @Component
