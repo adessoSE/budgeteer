@@ -1,6 +1,6 @@
 package org.wickedsource.budgeteer.service;
 
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.kubek2k.springockito.annotations.SpringockitoContextLoader;
 import org.mockito.Mockito;
@@ -17,7 +17,7 @@ public abstract class ServiceTestTemplate {
     @Autowired
     private ApplicationContext context;
 
-    @Before
+    @BeforeEach
     public void resetMocks() {
         for (String name : context.getBeanDefinitionNames()) {
             if (!"workRecordDatabaseImporter".equals(name) && !"planRecordDatabaseImporter".equals(name)) {
