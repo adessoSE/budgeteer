@@ -8,9 +8,9 @@ import org.wickedsource.budgeteer.web.pages.budgets.BudgetTagsModel;
 public class BudgetTagFilterPanelTest extends AbstractWebTestTemplate {
 
     @Test
-    public void render() {
+    void render() {
         WicketTester tester = getTester();
-        BudgetTagFilterPanel panel = new BudgetTagFilterPanel("panel", new BudgetTagsModel(1l));
+        BudgetTagFilterPanel panel = new BudgetTagFilterPanel("panel", new BudgetTagsModel(1L));
         tester.startComponentInPage(panel);
     }
 

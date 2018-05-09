@@ -18,11 +18,11 @@ public class BudgetDetailsPageTest extends AbstractWebTestTemplate {
     private BudgetService service;
 
     @Test
-    public void render() {
+    void render() {
         WicketTester tester = getTester();
-        when(service.loadBudgetDetailData(1l)).thenReturn(createBudget());
-        when(service.loadBudgetBaseData(1l)).thenReturn(new BudgetBaseData(1L, "Budget 1"));
-        tester.startPage(BudgetDetailsPage.class, BudgetDetailsPage.createParameters(1l));
+        when(service.loadBudgetDetailData(1L)).thenReturn(createBudget());
+        when(service.loadBudgetBaseData(1L)).thenReturn(new BudgetBaseData(1L, "Budget 1"));
+        tester.startPage(BudgetDetailsPage.class, BudgetDetailsPage.createParameters(1L));
         tester.assertRenderedPage(BudgetDetailsPage.class);
     }
 

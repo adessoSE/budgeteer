@@ -7,7 +7,7 @@ import org.wickedsource.budgeteer.web.AbstractWebTestTemplate;
 public class LoginPageTest extends AbstractWebTestTemplate {
 
     @Test
-    public void test() {
+    void test() {
         WicketTester tester = getTester();
         tester.startPage(LoginPage.class);
         tester.assertRenderedPage(LoginPage.class);

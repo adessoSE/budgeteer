@@ -22,7 +22,7 @@ public class NotificationDropdownTest extends AbstractWebTestTemplate {
     private NotificationService service;
 
     @Test
-    public void testRenderFull() {
+    void testRenderFull() {
         WicketTester tester = getTester();
         when(service.getNotifications(1L)).thenReturn(createNotifications());
         NotificationModel model = new NotificationModel(1L);
@@ -34,7 +34,7 @@ public class NotificationDropdownTest extends AbstractWebTestTemplate {
     }
 
     @Test
-    public void testRenderEmpty() {
+    void testRenderEmpty() {
         WicketTester tester = getTester();
         when(service.getNotifications(1L)).thenReturn(EMPTY_NOTIFICATION_LIST);
         NotificationModel model = new NotificationModel(1L);

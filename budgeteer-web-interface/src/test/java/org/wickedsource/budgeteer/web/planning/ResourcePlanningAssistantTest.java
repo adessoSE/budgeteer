@@ -7,10 +7,10 @@ import org.wickedsource.budgeteer.MoneyUtil;
 
 import java.util.Calendar;
 
-public class ResourcePlanningAssistantTest {
+class ResourcePlanningAssistantTest {
 
     @Test
-    public void testAllocate() throws Exception {
+    void testAllocate() throws Exception {
 
         Task task1 = new Task("Task 1", MoneyUtil.createMoneyFromCents(10000000));
         Task task2 = new Task("Task 2", MoneyUtil.createMoneyFromCents(5000000));

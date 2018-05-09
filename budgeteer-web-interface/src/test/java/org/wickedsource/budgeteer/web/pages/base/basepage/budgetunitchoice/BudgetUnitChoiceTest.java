@@ -17,10 +17,10 @@ public class BudgetUnitChoiceTest extends AbstractWebTestTemplate {
     BudgetService service;
 
     @Test
-    public void testRender() {
+    void testRender() {
         WicketTester tester = getTester();
-        when(service.loadBudgetUnits(1l)).thenReturn(createBudgetUnits());
-        BudgetUnitModel model = new BudgetUnitModel(1l);
+        when(service.loadBudgetUnits(1L)).thenReturn(createBudgetUnits());
+        BudgetUnitModel model = new BudgetUnitModel(1L);
         BudgetUnitChoice dropdown = new BudgetUnitChoice("budgetUnit", model);
         tester.startComponentInPage(dropdown);
     }

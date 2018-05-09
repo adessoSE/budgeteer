@@ -12,7 +12,7 @@ import org.wickedsource.budgeteer.web.pages.person.overview.PeopleOverviewPage;
 
 import java.util.ArrayList;
 
-import static org.mockito.Matchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 public class EditPersonPageTest extends AbstractWebTestTemplate {
@@ -21,13 +21,13 @@ public class EditPersonPageTest extends AbstractWebTestTemplate {
     private PersonService personService;
 
     @BeforeEach
-    public void setUpMocks(){
+    void setUpMocks(){
         when(personService.loadPersonWithRates(anyLong())).thenReturn(new PersonWithRates(123L, "name", "key", new ArrayList<PersonRate>()));
 
     }
 
     @Test
-    public void testRender() {
+    void testRender() {
         WicketTester tester = getTester();
         EditPersonPage page = new EditPersonPage(null, PeopleOverviewPage.class, null);
         tester.startPage(page);

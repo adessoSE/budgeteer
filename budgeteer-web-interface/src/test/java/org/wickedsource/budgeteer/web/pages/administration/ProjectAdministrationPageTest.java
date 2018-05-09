@@ -11,7 +11,7 @@ import org.wickedsource.budgeteer.web.AbstractWebTestTemplate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.mockito.Matchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 public class ProjectAdministrationPageTest extends AbstractWebTestTemplate {
@@ -23,19 +23,19 @@ public class ProjectAdministrationPageTest extends AbstractWebTestTemplate {
     private ProjectService projectService;
 
     @Test
-    public void test() {
+    void test() {
         WicketTester tester = getTester();
-        when(userService.getUsersInProject(1l)).thenReturn(getUsersInProject());
+        when(userService.getUsersInProject(1L)).thenReturn(getUsersInProject());
         when(projectService.findProjectById(anyLong())).thenReturn(getNewProject());
         tester.startPage(ProjectAdministrationPage.class);
         tester.assertRenderedPage(ProjectAdministrationPage.class);
     }
 
     private Project getNewProject() {
-        return new Project(1l, null, null, "TestProject");
+        return new Project(1L, null, null, "TestProject");
     }
 
-    public List<User> getUsersInProject() {
+    private List<User> getUsersInProject() {
         List<User> users = new ArrayList<User>();
         for (int i = 1; i <= 5; i++) {
             User user = new User();

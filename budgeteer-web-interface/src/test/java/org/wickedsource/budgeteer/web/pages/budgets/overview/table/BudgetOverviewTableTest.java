@@ -28,7 +28,7 @@ public class BudgetOverviewTableTest extends AbstractWebTestTemplate {
     private Random random = new Random();
 
     @Test
-    public void render() {
+    void render() {
         WicketTester tester = getTester();
         when(service.loadBudgetsDetailData(anyLong(), any(BudgetTagFilter.class))).thenReturn(createTestData());
         FilteredBudgetModel model = new FilteredBudgetModel(1, Model.of(new BudgetTagFilter(EMPTY_STRING_LIST, 1L)));
@@ -36,7 +36,7 @@ public class BudgetOverviewTableTest extends AbstractWebTestTemplate {
         tester.startComponentInPage(table);
     }
 
-    public List<BudgetDetailData> createTestData() {
+    private List<BudgetDetailData> createTestData() {
         List<BudgetDetailData> list = new ArrayList<>();
         for (int i = 0; i < 20; i++) {
             BudgetDetailData data = new BudgetDetailData();

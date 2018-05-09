@@ -6,10 +6,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.joda.time.DateTimeConstants.*;
 
-public class DefaultCalendarTest {
+class DefaultCalendarTest {
 
 	@Test
-	public void testGetDays() throws Exception {
+	void testGetDays() throws Exception {
 		DefaultCalendar cal = createDefaultCalendar();
 
 		Assertions.assertEquals(365, cal.getNumberOfDays());
@@ -28,7 +28,7 @@ public class DefaultCalendarTest {
 	}
 
 	@Test
-	public void testGetDaysWithDeNwHolidays() throws Exception {
+	void testGetDaysWithDeNwHolidays() throws Exception {
 		DefaultCalendar cal = createDefaultCalendar();
 		cal.setHolidayManager(new HolidayConfiguration("de", "nw"));
 
@@ -48,7 +48,7 @@ public class DefaultCalendarTest {
 	}
 
 	@Test
-	public void testGetNumberOfWorkingDaysInPeriod() {
+	void testGetNumberOfWorkingDaysInPeriod() {
 		DefaultCalendar cal = createDefaultCalendar();
 		LocalDate start = new LocalDate(2015, JULY, 9);
 		LocalDate end = new LocalDate(2015, JULY, 15);

@@ -12,9 +12,9 @@ import java.util.Collections;
 public class MultiBudgetMonthReportPageTest extends AbstractWebTestTemplate {
 
     @Test
-    public void testSingleBudget() {
+    void testSingleBudget() {
         WicketTester tester = getTester();
-        BudgetTagFilter filter = new BudgetTagFilter(Collections.EMPTY_LIST, 1l);
+        BudgetTagFilter filter = new BudgetTagFilter(Collections.EMPTY_LIST, 1L);
         BudgeteerSession.get().setBudgetFilter(filter);
         tester.startPage(MultiBudgetMonthReportPage.class);
         tester.assertRenderedPage(MultiBudgetMonthReportPage.class);

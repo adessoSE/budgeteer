@@ -19,14 +19,14 @@ public class ImportsOverviewPageTest extends AbstractWebTestTemplate {
     private ImportService service;
 
     @Test
-    public void render() {
+    void render() {
         WicketTester tester = getTester();
-        when(service.loadImports(1l)).thenReturn(createImports());
+        when(service.loadImports(1L)).thenReturn(createImports());
         tester.startPage(ImportsOverviewPage.class);
         tester.assertRenderedPage(ImportsOverviewPage.class);
     }
 
-    public List<Import> createImports() {
+    private List<Import> createImports() {
         List<Import> list = new ArrayList<Import>();
         for (int i = 0; i < 20; i++) {
             Import importRecord = new Import();

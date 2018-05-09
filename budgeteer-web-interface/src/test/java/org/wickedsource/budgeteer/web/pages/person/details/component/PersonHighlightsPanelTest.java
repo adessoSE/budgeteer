@@ -20,10 +20,10 @@ public class PersonHighlightsPanelTest extends AbstractWebTestTemplate {
     private PersonService service;
 
     @Test
-    public void render() {
-        when(service.loadPersonDetailData(1l)).thenReturn(createDetailData());
+    void render() {
+        when(service.loadPersonDetailData(1L)).thenReturn(createDetailData());
         WicketTester tester = getTester();
-        PersonHighlightsModel model = new PersonHighlightsModel(1l);
+        PersonHighlightsModel model = new PersonHighlightsModel(1L);
         PersonHighlightsPanel panel = new PersonHighlightsPanel("panel", model);
         tester.startComponentInPage(panel);
 

@@ -9,7 +9,7 @@ import org.wickedsource.budgeteer.web.pages.user.login.LoginPage;
 public class SelectProjectPageTest extends AbstractWebTestTemplate {
 
     @Test
-    public void test() {
+    void test() {
         WicketTester tester = getTester();
         SelectProjectPage page = new SelectProjectPage(LoginPage.class, new PageParameters());
         tester.startPage(page);

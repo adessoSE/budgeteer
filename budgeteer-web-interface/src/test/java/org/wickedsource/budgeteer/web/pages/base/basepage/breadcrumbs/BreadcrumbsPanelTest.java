@@ -12,7 +12,7 @@ import java.util.List;
 public class BreadcrumbsPanelTest extends AbstractWebTestTemplate {
 
     @Test
-    public void testRender() {
+    void testRender() {
         WicketTester tester = getTester();
         BreadcrumbsPanel panel = new BreadcrumbsPanel("breadcrumbs", new DummyBreadcrumbsModel());
         tester.startComponentInPage(panel);

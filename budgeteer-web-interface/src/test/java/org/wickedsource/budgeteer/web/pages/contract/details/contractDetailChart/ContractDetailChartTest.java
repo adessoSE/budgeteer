@@ -10,9 +10,9 @@ public class ContractDetailChartTest extends AbstractWebTestTemplate {
 
 
 	@Test
-	public void testRender() {
+    void testRender() {
         WicketTester tester = getTester();
-        PeopleDistributionChartModel model = new PeopleDistributionChartModel(1l);
+        PeopleDistributionChartModel model = new PeopleDistributionChartModel(1L);
         tester.startComponentInPage(new PeopleDistributionChart("chart", model));
 	}
 

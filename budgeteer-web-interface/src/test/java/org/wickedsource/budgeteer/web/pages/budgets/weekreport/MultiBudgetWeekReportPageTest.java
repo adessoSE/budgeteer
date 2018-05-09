@@ -15,7 +15,7 @@ public class MultiBudgetWeekReportPageTest extends AbstractWebTestTemplate {
     private static final List<String> EMPTY_STRING_LIST = new ArrayList<>(0);
 
     @Test
-    public void testSingleBudget() {
+    void testSingleBudget() {
         WicketTester tester = getTester();
         BudgetTagFilter filter = new BudgetTagFilter(EMPTY_STRING_LIST, 1L);
         BudgeteerSession.get().setBudgetFilter(filter);

@@ -32,9 +32,9 @@ public abstract class AbstractWebTestTemplate {
      */
     protected abstract void setupTest();
 
-    public void login() {
+    private void login() {
         User user = new User();
-        user.setId(1l);
+        user.setId(1L);
         user.setName("username");
         BudgeteerSession.get().login(user);
     }

@@ -18,10 +18,10 @@ public class PersonMonthReportPageTest extends AbstractWebTestTemplate{
     private PersonService service;
 
     @Test
-    public void test() {
+    void test() {
         WicketTester tester = getTester();
-        when(service.loadPersonDetailData(1l)).thenReturn(createPerson());
-        tester.startPage(PersonMonthReportPage.class, PersonMonthReportPage.createParameters(1l));
+        when(service.loadPersonDetailData(1L)).thenReturn(createPerson());
+        tester.startPage(PersonMonthReportPage.class, PersonMonthReportPage.createParameters(1L));
         tester.assertRenderedPage(PersonMonthReportPage.class);
     }
 

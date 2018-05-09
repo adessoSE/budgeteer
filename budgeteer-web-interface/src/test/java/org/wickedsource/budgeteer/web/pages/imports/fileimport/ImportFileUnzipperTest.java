@@ -10,10 +10,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
 
-public class ImportFileUnzipperTest {
+class ImportFileUnzipperTest {
 
     @Test
-    public void testReadImportFiles() throws Exception {
+    void testReadImportFiles() throws Exception {
         ImportFileUnzipper unzipper = new ImportFileUnzipper(getClass().getResourceAsStream("testfiles.zip"));
         List<ImportFile> files = unzipper.readImportFiles();
         Assert.assertEquals(2, files.size());

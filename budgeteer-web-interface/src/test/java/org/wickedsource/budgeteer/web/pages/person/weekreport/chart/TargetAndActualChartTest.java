@@ -16,9 +16,9 @@ public class TargetAndActualChartTest extends AbstractWebTestTemplate {
     private Random random = new Random();
 
     @Test
-    public void testRender() {
+    void testRender() {
         WicketTester tester = getTester();
-        PersonWeeklyAggregationModel model = new PersonWeeklyAggregationModel(1l);
+        PersonWeeklyAggregationModel model = new PersonWeeklyAggregationModel(1L);
         tester.startComponentInPage(new TargetAndActualChart("chart", model, TargetAndActualChartConfiguration.Mode.WEEKLY));
     }
 

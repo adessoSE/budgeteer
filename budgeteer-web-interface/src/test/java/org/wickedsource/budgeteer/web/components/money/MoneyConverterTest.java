@@ -6,10 +6,10 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Locale;
 
-public class MoneyConverterTest {
+class MoneyConverterTest {
 
     @Test
-    public void testGermanLocale() {
+    void testGermanLocale() {
         MoneyConverter converter = new MoneyConverter();
 
         Money money = converter.convertToObject("123.456,78", Locale.GERMAN);
@@ -20,7 +20,7 @@ public class MoneyConverterTest {
     }
 
     @Test
-    public void testUSLocale() {
+    void testUSLocale() {
         MoneyConverter converter = new MoneyConverter();
 
         Money money = converter.convertToObject("123,456.78", Locale.US);

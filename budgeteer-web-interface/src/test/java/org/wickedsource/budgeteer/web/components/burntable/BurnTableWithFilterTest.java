@@ -8,9 +8,9 @@ import org.wickedsource.budgeteer.web.AbstractWebTestTemplate;
 public class BurnTableWithFilterTest extends AbstractWebTestTemplate {
 
     @Test
-    public void render() {
+    void render() {
         WicketTester tester = getTester();
-        BurnTableWithFilter table = new BurnTableWithFilter("panel", new WorkRecordFilter(1l));
+        BurnTableWithFilter table = new BurnTableWithFilter("panel", new WorkRecordFilter(1L));
         tester.startComponentInPage(table);
     }
 

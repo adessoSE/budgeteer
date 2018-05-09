@@ -18,10 +18,10 @@ public class PersonHoursPageTest extends AbstractWebTestTemplate {
     private PersonService service;
 
     @Test
-    public void render() {
+    void render() {
         WicketTester tester = getTester();
-        when(service.loadPersonDetailData(1l)).thenReturn(createPerson());
-        tester.startPage(PersonHoursPage.class, PersonHoursPage.createParameters(1l));
+        when(service.loadPersonDetailData(1L)).thenReturn(createPerson());
+        tester.startPage(PersonHoursPage.class, PersonHoursPage.createParameters(1L));
         tester.assertRenderedPage(PersonHoursPage.class);
     }
 

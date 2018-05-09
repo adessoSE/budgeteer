@@ -15,15 +15,15 @@ public class BudgetHoursPageTest extends AbstractWebTestTemplate {
     private BudgetService service;
 
     @Test
-    public void render() {
+    void render() {
         WicketTester tester = getTester();
-        when(service.loadBudgetBaseData(1l)).thenReturn(createBudget());
-        tester.startPage(BudgetHoursPage.class, BudgetHoursPage.createParameters(1l));
+        when(service.loadBudgetBaseData(1L)).thenReturn(createBudget());
+        tester.startPage(BudgetHoursPage.class, BudgetHoursPage.createParameters(1L));
         tester.assertRenderedPage(BudgetHoursPage.class);
     }
 
     private BudgetBaseData createBudget() {
-        return new BudgetBaseData(1l, "Budget 1");
+        return new BudgetBaseData(1L, "Budget 1");
     }
 
     @Override

@@ -9,7 +9,7 @@ import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 public class ImportFilesPageTest extends AbstractWebTestTemplate {
 
     @Test
-    public void test() {
+    void test() {
         WicketTester tester = getTester();
         ImportFilesPage page = new ImportFilesPage(DashboardPage.class, new PageParameters());
         tester.startPage(page);
