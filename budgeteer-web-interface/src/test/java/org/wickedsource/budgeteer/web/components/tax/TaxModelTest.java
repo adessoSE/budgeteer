@@ -1,7 +1,7 @@
 package org.wickedsource.budgeteer.web.components.tax;
 
 import org.apache.wicket.markup.html.basic.Label;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.wickedsource.budgeteer.web.AbstractWebTestTemplate;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 

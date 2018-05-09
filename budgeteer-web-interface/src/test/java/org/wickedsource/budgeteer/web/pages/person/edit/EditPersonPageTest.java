@@ -1,8 +1,8 @@
 package org.wickedsource.budgeteer.web.pages.person.edit;
 
 import org.apache.wicket.util.tester.WicketTester;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.budgeteer.service.person.PersonRate;
 import org.wickedsource.budgeteer.service.person.PersonService;
@@ -20,7 +20,7 @@ public class EditPersonPageTest extends AbstractWebTestTemplate {
     @Autowired
     private PersonService personService;
 
-    @Before
+    @BeforeEach
     public void setUpMocks(){
         when(personService.loadPersonWithRates(anyLong())).thenReturn(new PersonWithRates(123L, "name", "key", new ArrayList<PersonRate>()));
 

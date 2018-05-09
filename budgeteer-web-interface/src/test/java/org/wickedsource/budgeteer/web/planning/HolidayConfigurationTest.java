@@ -1,8 +1,8 @@
 package org.wickedsource.budgeteer.web.planning;
 
 import org.joda.time.LocalDate;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -13,7 +13,7 @@ public class HolidayConfigurationTest {
 	private static final String NORTHRHINE_WESTFALIA = "nw";
 	private HolidayConfiguration holidayManager;
 
-	@Before
+	@BeforeEach
 	public void init() {
 		holidayManager = new HolidayConfiguration(GERMANY, NORTHRHINE_WESTFALIA);
 	}

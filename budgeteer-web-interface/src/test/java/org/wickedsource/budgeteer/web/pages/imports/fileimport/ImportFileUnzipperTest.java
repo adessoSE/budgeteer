@@ -1,7 +1,7 @@
 package org.wickedsource.budgeteer.web.pages.imports.fileimport;
 
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.wickedsource.budgeteer.imports.api.ImportFile;
 
 import java.io.BufferedReader;

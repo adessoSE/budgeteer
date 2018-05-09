@@ -3,7 +3,7 @@ package org.wickedsource.budgeteer.web.pages.budgets.edit.form;
 import org.apache.wicket.feedback.IFeedbackMessageFilter;
 import org.apache.wicket.util.tester.FormTester;
 import org.apache.wicket.util.tester.WicketTester;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;

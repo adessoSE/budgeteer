@@ -1,7 +1,7 @@
 package org.wickedsource.budgeteer.web.pages.base.basepage.notifications;
 
 import org.apache.wicket.util.tester.WicketTester;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.budgeteer.service.notification.MissingDailyRateNotification;
 import org.wickedsource.budgeteer.service.notification.Notification;

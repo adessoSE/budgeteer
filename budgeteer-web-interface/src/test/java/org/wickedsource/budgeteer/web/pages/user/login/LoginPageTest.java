@@ -1,7 +1,7 @@
 package org.wickedsource.budgeteer.web.pages.user.login;
 
 import org.apache.wicket.util.tester.WicketTester;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.wickedsource.budgeteer.web.AbstractWebTestTemplate;
 
 public class LoginPageTest extends AbstractWebTestTemplate {

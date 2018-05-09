@@ -1,9 +1,9 @@
 package org.wickedsource.budgeteer.web.planning;
 
 import org.joda.time.LocalDate;
-import org.junit.Assert;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +20,7 @@ public class DefaultCalendarSpeedTest {
 	 * Do not run in regular regressions, as speed depends on platform and
 	 * parallel jobs
 	 */
-	@Ignore
+	@Disabled
 	@Test
 	public void findsHolidaysInFeasibleTime() {
 
@@ -53,6 +53,6 @@ public class DefaultCalendarSpeedTest {
 		long millisWithout = inBetween - beforeStart;
 		logger.warn("to calculate working days without holidays " + TIMES + " times takes " + millisWithout + "ms");
 
-		Assert.assertTrue(Double.compare(millisWithout * 1.2 + 5, millisWith) > 0);
+		Assertions.assertTrue(Double.compare(millisWithout * 1.2 + 5, millisWith) > 0);
 	}
 }
