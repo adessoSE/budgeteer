@@ -1,0 +1,53 @@
+<wicket:extend xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+
+    <div class="form-box wide" id="login-box">
+        <div class="header">Import Templates
+            <div class="box-tools pull-right">
+                <button wicket:id="backlink1" class="btn bg-olive btn-sm"><i class="fa fa-times"></i></button>
+            </div>
+        </div>
+        <form wicket:id="importForm" method="post">
+            <div class="body bg-gray">
+                <div wicket:id="feedback"></div>
+                <div class="box box-primary">
+                    <div class="box-header">
+                        <h3 class="box-title"><wicket:message key="page.file.title">Select Files to Upload</wicket:message></h3>
+                    </div>
+                    <div class="box-body">
+                        <input wicket:id="fileUpload" type="file" multiple>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="titleInput"><wicket:message key="page.template.name">Template Name</wicket:message></label>
+                    <input wicket:id="name"type="text" name="name" id="nameInput" class="form-control"/>
+                    <p class="help-block"><wicket:message key="page.template.name.hint">The name of the template.</wicket:message></p>
+                </div>
+
+                <div class="form-group">
+                    <label for="titleInput"><wicket:message key="page.template.description">Template Descripion</wicket:message></label>
+                    <input wicket:id="description"type="text" name="name" id="descriptionInput" class="form-control"/>
+                    <p class="help-block"><wicket:message key="page.template.description.hint">A description of the purpose of the template.</wicket:message></p>
+                </div>
+
+            </div>
+            <div class="footer">
+                <div class="row">
+                    <div class="col-lg-3">
+                        <button wicket:id="backlink2" id="cancel" type="button" class="btn bg-olive btn-block">Cancel</button>
+                    </div>
+                    <div class="col-lg-3">
+                        <button wicket:id="exampleFileButton" class="btn bg-olive btn-block" data-toggle="tooltip" title
+                                data-original-title="Download an example file to see the format for templates.">
+                            <i class="fa fa-download"></i>&nbsp;&nbsp;&nbsp;Example Template
+                        </button>
+                    </div>
+                    <div class="col-lg-6">
+                        <button type="submit" id="submitButton" class="btn bg-olive btn-block"><wicket:message key="page.button.start">Start import</wicket:message></button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script src="js/enterAndEscape.js"></script>
+</wicket:extend>

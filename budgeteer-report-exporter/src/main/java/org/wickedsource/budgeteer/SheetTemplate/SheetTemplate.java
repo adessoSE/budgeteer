@@ -58,7 +58,7 @@ public class SheetTemplate {
 	}
 
 	private void createFieldMapping() {
-		for(Cell cell : sheet.getRow(templateRowIndex)) { 
+		for(Cell cell : sheet.getRow(templateRowIndex)) {
 			List<String> fields = mapCellValueToFieldNames(cell);
 			if(null != fields) {
 				fields.stream().forEach(name -> fieldMapping.put(name, cell.getColumnIndex()));

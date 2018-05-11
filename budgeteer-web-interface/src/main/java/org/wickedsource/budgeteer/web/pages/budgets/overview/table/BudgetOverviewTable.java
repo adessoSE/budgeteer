@@ -38,7 +38,6 @@ public class BudgetOverviewTable extends Panel {
     @SpringBean
     private ContractService contractService;
 
-
     private final BreadcrumbsModel breadcrumbsModel;
 
     public BudgetOverviewTable(String id, IModel<List<BudgetDetailData>> model, BreadcrumbsModel breadcrumbsModel) {
@@ -56,6 +55,7 @@ public class BudgetOverviewTable extends Panel {
     }
 
     private void addTableSummaryLabels(WebMarkupContainer table, IModel<List<BudgetDetailData>> model) {
+
         IModel<BudgetDetailData> totalModel = new TotalBudgetDetailsModel(model);
         table.add(new Label("totalLastUpdated", model(from(totalModel).getLastUpdated())));
 
@@ -177,5 +177,4 @@ public class BudgetOverviewTable extends Panel {
         table.add(new Label("unplannedLabel", new TaxLabelModel(
                 new StringResourceModel("overview.table.budget.unplannedLabel", this))));
     }
-
 }
