@@ -2,6 +2,7 @@ package org.wickedsource.budgeteer.service.template;
 
 import lombok.Getter;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.wickedsource.budgeteer.service.ReportType;
 
 import java.io.Serializable;
 
@@ -17,6 +18,7 @@ public class Template implements Serializable {
     private final long projectID;
     private final String name;
     private final String description;
+    private final ReportType type;
     transient private final XSSFWorkbook wb;
 
     /**
@@ -27,10 +29,11 @@ public class Template implements Serializable {
      * @param wb The XSSFWorkbook (Excel template itself).
      * @param projectID The ID of the current project (Templates are specific to a project).
      */
-    public Template(long id, String name, String description, XSSFWorkbook wb, long projectID){
+    public Template(long id, String name, String description, ReportType type, XSSFWorkbook wb, long projectID){
         this.id = id;
         this.name = name;
         this.description = description;
+        this.type = type;
         this.wb = wb;
         this.projectID = projectID;
     }

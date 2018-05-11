@@ -41,6 +41,7 @@ public class TemplatesTable extends Panel {
                 item.setOutputMarkupId(true);
                 item.add(new Label("name", model(from(item.getModel()).getName())));
                 item.add(new Label("description", model(from(item.getModel()).getDescription())));
+                item.add(new Label("type", model(from(item.getModel()).getType()).getObject().toString()));
                 item.add(new Link("editPage") {
                     @Override
                     public void onClick() {

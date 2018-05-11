@@ -1,8 +1,5 @@
 package org.wickedsource.budgeteer.service.contract.report;
 
-import org.apache.poi.EncryptedDocumentException;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.usermodel.XSSFFormulaEvaluator;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -13,12 +10,12 @@ import org.wickedsource.budgeteer.SheetTemplate.SheetTemplateSerializable;
 import org.wickedsource.budgeteer.SheetTemplate.TemplateWriter;
 import org.wickedsource.budgeteer.persistence.contract.ContractEntity;
 import org.wickedsource.budgeteer.persistence.contract.ContractRepository;
+import org.wickedsource.budgeteer.service.template.TemplateService;
 
 import javax.transaction.Transactional;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -34,9 +31,12 @@ public class ContractReportService {
 	
 	@Autowired
 	private ContractReportMonthlyDataMapper monthlyMapper;
+
+	@Autowired
+	private TemplateService templateService;
 	
-	public File createReportFile(long projectId,Date endDate) {
-		XSSFWorkbook wb = getSheetWorkbook();
+	public File createReportFile(long templateId, long projectId,Date endDate) {
+		XSSFWorkbook wb = getSheetWorkbook(templateId);
 
 		// Overal summary
 		List<ContractReportData> contractReportList = loadContractReportData(projectId, endDate);
@@ -138,15 +138,7 @@ public class ContractReportService {
 		return monthlyMapper.map(contracts,endDate);
 	}
 
-	private XSSFWorkbook getSheetWorkbook() {
-		ClassLoader classLoader = getClass().getClassLoader();
-		InputStream in = classLoader.getResourceAsStream("contract-report-template.xlsx");
-		XSSFWorkbook wb = null;
-		try {
-			wb = (XSSFWorkbook) WorkbookFactory.create(in);
-		} catch (EncryptedDocumentException | IOException | InvalidFormatException e) {
-			e.printStackTrace();
-		}
-		return wb;
+	private XSSFWorkbook getSheetWorkbook(long id) {
+		return templateService.getById(id).getWb();
 	}
 }

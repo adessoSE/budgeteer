@@ -1,12 +1,14 @@
 package org.wickedsource.budgeteer.web.pages.templates.templateimport;
 
 import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
@@ -16,11 +18,13 @@ import org.apache.wicket.util.io.IOUtils;
 import org.apache.wicket.util.resource.AbstractResourceStreamWriter;
 import org.wickedsource.budgeteer.imports.api.ExampleFile;
 import org.wickedsource.budgeteer.imports.api.ImportFile;
+import org.wickedsource.budgeteer.service.ReportType;
 import org.wickedsource.budgeteer.service.template.TemplateService;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.ClassAwareWrappingModel;
 import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
+import org.wickedsource.budgeteer.web.pages.base.AbstractChoiceRenderer;
 import org.wickedsource.budgeteer.web.pages.base.dialogpage.DialogPageWithBacklink;
 
 import javax.servlet.http.HttpServletResponse;
@@ -28,6 +32,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.wicketstuff.lazymodel.LazyModel.from;
@@ -61,8 +66,12 @@ public class ImportTemplatesPage extends DialogPageWithBacklink {
                     if(model(from(templateFormInputDto)).getObject().getDescription() == null){
                         error(getString("message.error.no.description"));
                     }
+                    if(model(from(templateFormInputDto)).getObject().getType() == null){
+                        error(getString("message.error.no.type"));
+                    }
                     ImportFile file = new ImportFile(fileUploads.get(0).getClientFileName(), fileUploads.get(0).getInputStream());
-                    if(model(from(templateFormInputDto)).getObject().getName() != null && model(from(templateFormInputDto)).getObject().getDescription() != null){
+                    if(model(from(templateFormInputDto)).getObject().getName() != null && model(from(templateFormInputDto)).getObject().getDescription() != null
+                            && model(from(templateFormInputDto)).getObject().getType() != null){
                         service.doImport(BudgeteerSession.get().getProjectId(), file, model(from(templateFormInputDto)));
                         success(getString("message.success"));
                     }
@@ -80,15 +89,30 @@ public class ImportTemplatesPage extends DialogPageWithBacklink {
         feedback.setOutputMarkupId(true);
         form.add(feedback);
 
-        FileUploadField fileUpload = new FileUploadField("fileUpload", new PropertyModel<List<FileUpload>>(this, "fileUploads"));
+        FileUploadField fileUpload = new FileUploadField("fileUpload", new PropertyModel<>(this, "fileUploads"));
         fileUpload.setRequired(true);
 
         form.add(fileUpload);
         form.add(createBacklink("backlink2"));
 
         form.add(createExampleFileButton("exampleFileButton"));
-        form.add(new TextField<String>("name", model(from(templateFormInputDto).getName())));
-        form.add(new TextField<String>("description", model(from(templateFormInputDto).getDescription())));
+        form.add(new TextField<>("name", model(from(templateFormInputDto).getName())));
+        form.add(new TextField<>("description", model(from(templateFormInputDto).getDescription())));
+        DropDownChoice<ReportType> typeDropDown = new DropDownChoice<>("type", model(from(templateFormInputDto).getType()),
+                new LoadableDetachableModel<List<ReportType>>() {
+                    @Override
+                    protected List<ReportType> load() {
+                        return Arrays.asList(ReportType.values());
+                    }
+                },
+                new AbstractChoiceRenderer<ReportType>() {
+                    @Override
+                    public Object getDisplayValue(ReportType object) {
+                        return object == null ? "Unnamed" : object.toString();
+                    }
+                });
+        typeDropDown.setNullValid(false);
+        form.add(typeDropDown);
     }
 
     /**

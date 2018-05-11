@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.wickedsource.budgeteer.service.ReportType;
 import org.wickedsource.budgeteer.service.template.Template;
 
 import javax.persistence.*;
@@ -34,6 +35,9 @@ public class TemplateEntity implements Serializable {
     @Column(name="DESCRIPTION", length = 512)
     private String description;
 
+    @Column(name="TYPE", length = 64)
+    private ReportType type;
+
     //Transient because Hibernate cannot save the Workbook directly in the db
     @Transient
     private XSSFWorkbook wbXSSF;
@@ -43,9 +47,10 @@ public class TemplateEntity implements Serializable {
     @Lob
     private byte[] wbArr;
 
-    public TemplateEntity( String name, String description, XSSFWorkbook workbook, long projectID){
+    public TemplateEntity( String name, String description, ReportType type, XSSFWorkbook workbook, long projectID){
         this.name = name;
         this.description = description;
+        this.type = type;
         this.wbXSSF = workbook;
         this.projectId = projectID;
         try{
@@ -63,7 +68,7 @@ public class TemplateEntity implements Serializable {
      * @return A new Template from this TemplateEntity
      */
     public Template getTemplate(){
-        return new Template(id, name, description, wbXSSF, projectId);
+        return new Template(id, name, description, type ,wbXSSF, projectId);
     }
 
     /**
