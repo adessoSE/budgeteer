@@ -3,8 +3,8 @@ package org.wickedsource.budgeteer.web.pages.template.edit;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.tester.FormTester;
 import org.apache.wicket.util.tester.WicketTester;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.kubek2k.springockito.annotations.ReplaceWithMock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.budgeteer.service.template.Template;
@@ -52,7 +52,7 @@ public class EditTemplatePageTest extends AbstractWebTestTemplate {
         WicketTester tester = getTester();
         EditTemplatePage testPage = new EditTemplatePage(TemplatesPage.class, new PageParameters(), 1L);
         tester.startPage(testPage);
-        Assert.assertNotNull(testPage.get("editForm"));
+        Assertions.assertNotNull(testPage.get("editForm"));
         FormTester formTester = tester.newFormTester("editForm", true);
         formTester.setClearFeedbackMessagesBeforeSubmit(true);
         formTester.setFile("fileUpload", null, "");
@@ -68,7 +68,7 @@ public class EditTemplatePageTest extends AbstractWebTestTemplate {
         WicketTester tester = getTester();
         EditTemplatePage testPage = new EditTemplatePage(TemplatesPage.class, new PageParameters(), 1L);
         tester.startPage(testPage);
-        Assert.assertNotNull(testPage.get("editForm"));
+        Assertions.assertNotNull(testPage.get("editForm"));
         FormTester formTester = tester.newFormTester("editForm", true);
         formTester.setValue("name", "TEST_N");
         formTester.setValue("description", "TEST_D");
@@ -85,7 +85,7 @@ public class EditTemplatePageTest extends AbstractWebTestTemplate {
         WicketTester tester = getTester();
         EditTemplatePage testPage = new EditTemplatePage(TemplatesPage.class, new PageParameters(), 1L);
         tester.startPage(testPage);
-        Assert.assertNotNull(testPage.get("editForm:deleteButton"));
+        Assertions.assertNotNull(testPage.get("editForm:deleteButton"));
         tester.clickLink("editForm:deleteButton");
         verify(templateService, times(1)).deleteTemplate(anyLong());
         tester.assertRenderedPage(TemplatesPage.class);
