@@ -36,7 +36,7 @@ import static org.wicketstuff.lazymodel.LazyModel.model;
         TransactionalTestExecutionListener.class
 })
 @ContextConfiguration(classes = {IntegrationTestConfiguration.class})
-public class TemplateServiceTest {
+class TemplateServiceTest {
 
     @Autowired
     TemplateService templateService;
@@ -47,7 +47,7 @@ public class TemplateServiceTest {
     @Test
     @DatabaseSetup("templateTest.xml")
     @DatabaseTearDown(value = "templateTest.xml", type = DatabaseOperation.DELETE_ALL)
-    public void doImportTest() {
+    void doImportTest() {
         TemplateFormInputDto testDto = new TemplateFormInputDto(1);
         testDto.setName("TEST");
         testDto.setDescription("TEST_D");
@@ -63,7 +63,7 @@ public class TemplateServiceTest {
     @Test
     @DatabaseSetup("templateTest.xml")
     @DatabaseTearDown(value = "templateTest.xml", type = DatabaseOperation.DELETE_ALL)
-    public void editTemplateTest() {
+    void editTemplateTest() {
         populateDatabase(2);
         TemplateFormInputDto testDto = new TemplateFormInputDto(1);
         testDto.setName("TEST");
@@ -82,7 +82,7 @@ public class TemplateServiceTest {
     @Test
     @DatabaseSetup("templateTest.xml")
     @DatabaseTearDown(value = "templateTest.xml", type = DatabaseOperation.DELETE_ALL)
-    public void deleteTemplateTest() {
+    void deleteTemplateTest() {
         populateDatabase(1);
         Assertions.assertEquals(1, templateService.getTemplatesInProject(1).size());
         Template testTempl = templateService.getTemplates().get(0);
@@ -104,7 +104,7 @@ public class TemplateServiceTest {
     }
 
     @Test
-    public void getExampleFileTest(){
+    void getExampleFileTest(){
         try {
             XSSFWorkbook testWorkbok = (XSSFWorkbook)WorkbookFactory.create(templateService.getExampleFile().getInputStream());
             Assertions.assertNotNull(testWorkbok);
@@ -115,7 +115,7 @@ public class TemplateServiceTest {
     }
 
     @BeforeEach
-    public void emptyDatabase(){
+    void emptyDatabase(){
         templateRepository.deleteAll();
     }
 }

@@ -25,14 +25,14 @@ public class EditTemplatePageTest extends AbstractWebTestTemplate {
     private TemplateService templateService;
 
     @Test
-    public void testRender() {
+    void testRender() {
         WicketTester tester = getTester();
         tester.startPage(new EditTemplatePage(TemplatesPage.class, new PageParameters(), 1L));
         tester.assertRenderedPage(EditTemplatePage.class);
     }
 
     @Test
-    public void testBacklink1Click() {
+    void testBacklink1Click() {
         WicketTester tester = getTester();
         tester.startPage(new EditTemplatePage(TemplatesPage.class, new PageParameters(), 1L));
         tester.clickLink("backlink1");
@@ -40,7 +40,7 @@ public class EditTemplatePageTest extends AbstractWebTestTemplate {
     }
 
     @Test
-    public void testBacklink2Click() {
+    void testBacklink2Click() {
         WicketTester tester = getTester();
         tester.startPage(new EditTemplatePage(TemplatesPage.class, new PageParameters(), 1L));
         tester.clickLink("editForm:backlink2");
@@ -48,7 +48,7 @@ public class EditTemplatePageTest extends AbstractWebTestTemplate {
     }
 
     @Test
-    public void NoDataFormSubmitTest(){
+    void NoDataFormSubmitTest(){
         WicketTester tester = getTester();
         EditTemplatePage testPage = new EditTemplatePage(TemplatesPage.class, new PageParameters(), 1L);
         tester.startPage(testPage);
@@ -64,7 +64,7 @@ public class EditTemplatePageTest extends AbstractWebTestTemplate {
     }
 
     @Test
-    public void AllCorrectInputForm(){
+    void AllCorrectInputForm(){
         WicketTester tester = getTester();
         EditTemplatePage testPage = new EditTemplatePage(TemplatesPage.class, new PageParameters(), 1L);
         tester.startPage(testPage);
@@ -81,7 +81,7 @@ public class EditTemplatePageTest extends AbstractWebTestTemplate {
     }
 
     @Test
-    public void DeleteButtonTest(){
+    void DeleteButtonTest(){
         WicketTester tester = getTester();
         EditTemplatePage testPage = new EditTemplatePage(TemplatesPage.class, new PageParameters(), 1L);
         tester.startPage(testPage);

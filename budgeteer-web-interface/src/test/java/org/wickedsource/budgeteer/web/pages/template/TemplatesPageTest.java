@@ -11,14 +11,14 @@ public class TemplatesPageTest extends AbstractWebTestTemplate {
 
 
     @Test
-    public void testRender() {
+    void testRender() {
         WicketTester tester = getTester();
         tester.startPage(TemplatesPage.class);
         tester.assertRenderedPage(TemplatesPage.class);
     }
 
     @Test
-    public void testImportClick() {
+    void testImportClick() {
         WicketTester tester = getTester();
         tester.startPage(TemplatesPage.class);
         tester.clickLink("importLink");

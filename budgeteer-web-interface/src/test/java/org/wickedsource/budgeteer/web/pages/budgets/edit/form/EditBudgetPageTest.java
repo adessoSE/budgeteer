@@ -29,24 +29,24 @@ public class EditBudgetPageTest extends AbstractWebTestTemplate {
     }
 
     @Test
-    public void renders() {
+    void renders() {
         getTester().assertRenderedPage(EditBudgetPage.class);
     }
 
     @Test
-    public void backlinkWorks() {
+    void backlinkWorks() {
         getTester().clickLink("cancelButton1");
         getTester().assertRenderedPage(BudgetsOverviewPage.class);
     }
 
     @Test
-    public void secondBacklinkWorks() {
+    void secondBacklinkWorks() {
         getTester().clickLink("form:cancelButton2");
         getTester().assertRenderedPage(BudgetsOverviewPage.class);
     }
 
     @Test
-    public void onSubmitCallsBudgetService() {
+    void onSubmitCallsBudgetService() {
         FormTester formTester = getTester().newFormTester("form");
         formTester.setValue("name","TestBudget");
         formTester.setValue("importKey","einImportKey"); // import key
@@ -58,7 +58,7 @@ public class EditBudgetPageTest extends AbstractWebTestTemplate {
     }
 
     @Test
-    public void onInvalidInputErrorMessagesAreShown() {
+    void onInvalidInputErrorMessagesAreShown() {
         FormTester formTester = getTester().newFormTester("form");
         formTester.setValue("name","TestBudget");
         formTester.setValue("importKey","einImportKey"); // import key

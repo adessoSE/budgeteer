@@ -9,13 +9,13 @@ import org.wickedsource.budgeteer.IntegrationTestTemplate;
 
 import java.util.List;
 
-public class TemplateRepositoryTest extends IntegrationTestTemplate {
+class TemplateRepositoryTest extends IntegrationTestTemplate {
 
     @Autowired
     TemplateRepository templateRepository;
 
     @Test
-    public void testFindInProject() {
+    void testFindInProject() {
         addTemplateToProject(1L);
 
         List<TemplateEntity> templatesInProject = templateRepository.findByProjectId(1L);
@@ -24,7 +24,7 @@ public class TemplateRepositoryTest extends IntegrationTestTemplate {
     }
 
     @Test
-    public void deleteTemplateTest() {
+    void deleteTemplateTest() {
         TemplateEntity templateEntity = new TemplateEntity("template1", "desc1", new XSSFWorkbook(), 1L);
         templateRepository.save(templateEntity);
         templateRepository.delete(templateEntity.getId());
@@ -32,7 +32,7 @@ public class TemplateRepositoryTest extends IntegrationTestTemplate {
     }
 
     @Test
-    public void deleteAllTest() {
+    void deleteAllTest() {
         addTemplateToProject(1L);
         templateRepository.deleteAll();
         Assertions.assertEquals(0, templateRepository.findByProjectId(1L).size());

@@ -21,7 +21,7 @@ public class TemplatesTableTest extends AbstractWebTestTemplate {
     private TemplateService templateService;
 
     @Test
-    public void testRender() {
+    void testRender() {
         WicketTester tester = getTester();
         TemplateListModel model = new TemplateListModel(1L);
         TemplatesTable table = new TemplatesTable("table", model);

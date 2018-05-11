@@ -17,14 +17,14 @@ import static org.assertj.core.api.Java6Assertions.assertThat;
 public class ImportTemplatesPageTest extends AbstractWebTestTemplate {
 
     @Test
-    public void testRender() {
+    void testRender() {
         WicketTester tester = getTester();
         tester.startPage(new ImportTemplatesPage(TemplatesPage.class, new PageParameters()));
         tester.assertRenderedPage(ImportTemplatesPage.class);
     }
 
     @Test
-    public void testBacklink1Click() {
+    void testBacklink1Click() {
         WicketTester tester = getTester();
         tester.startPage(new ImportTemplatesPage(TemplatesPage.class, new PageParameters()));
         tester.clickLink("backlink1");
@@ -32,7 +32,7 @@ public class ImportTemplatesPageTest extends AbstractWebTestTemplate {
     }
 
     @Test
-    public void testBacklink2Click() {
+    void testBacklink2Click() {
         WicketTester tester = getTester();
         tester.startPage(new ImportTemplatesPage(TemplatesPage.class, new PageParameters()));
         tester.clickLink("importForm:backlink2");
@@ -40,7 +40,7 @@ public class ImportTemplatesPageTest extends AbstractWebTestTemplate {
     }
 
     @Test
-    public void NoDataFormSubmitTest(){
+    void NoDataFormSubmitTest(){
         WicketTester tester = getTester();
         ImportTemplatesPage testPage = new ImportTemplatesPage(TemplatesPage.class, new PageParameters());
         tester.startPage(testPage);
@@ -54,7 +54,7 @@ public class ImportTemplatesPageTest extends AbstractWebTestTemplate {
     }
 
     @Test
-    public void NameAndDescriptionFormSubmitTest(){
+    void NameAndDescriptionFormSubmitTest(){
         WicketTester tester = getTester();
         ImportTemplatesPage testPage = new ImportTemplatesPage(TemplatesPage.class, new PageParameters());
         tester.startPage(testPage);
@@ -70,7 +70,7 @@ public class ImportTemplatesPageTest extends AbstractWebTestTemplate {
     }
 
     @Test
-    public void NoNameNoDescriptionWithFileTest(){ //yes I know this is a horrible name
+    void NoNameNoDescriptionWithFileTest(){ //yes I know this is a horrible name
         WicketTester tester = getTester();
         ImportTemplatesPage testPage = new ImportTemplatesPage(TemplatesPage.class, new PageParameters());
         tester.startPage(testPage);
@@ -87,7 +87,7 @@ public class ImportTemplatesPageTest extends AbstractWebTestTemplate {
 
 
     @Test
-    public void AllCorrectInputForm(){
+    void AllCorrectInputForm(){
         WicketTester tester = getTester();
         ImportTemplatesPage testPage = new ImportTemplatesPage(TemplatesPage.class, new PageParameters());
         tester.startPage(testPage);
