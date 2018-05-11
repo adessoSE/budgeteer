@@ -1,21 +1,20 @@
 package org.wickedsource.budgeteer.web.pages.dashboard.burnedbudgetchart;
 
-import java.io.Serializable;
-import java.util.Arrays;
-import java.util.List;
-
-import org.wickedsource.budgeteer.MoneyUtil;
-import org.wickedsource.budgeteer.web.BudgeteerSession;
-import org.wickedsource.budgeteer.web.PropertyLoader;
-import org.wickedsource.budgeteer.web.charts.ChartStyling;
-import org.wickedsource.budgeteer.web.charts.ChartUtils;
-
 import de.adesso.wickedcharts.chartjs.ChartConfiguration;
 import de.adesso.wickedcharts.chartjs.chartoptions.ChartType;
 import de.adesso.wickedcharts.chartjs.chartoptions.Data;
 import de.adesso.wickedcharts.chartjs.chartoptions.Dataset;
 import de.adesso.wickedcharts.chartjs.chartoptions.label.TextLabel;
 import de.adesso.wickedcharts.chartjs.chartoptions.valueType.DoubleValue;
+import org.wickedsource.budgeteer.MoneyUtil;
+import org.wickedsource.budgeteer.web.BudgeteerSession;
+import org.wickedsource.budgeteer.web.PropertyLoader;
+import org.wickedsource.budgeteer.web.charts.ChartStyling;
+import org.wickedsource.budgeteer.web.charts.ChartUtils;
+
+import java.io.Serializable;
+import java.util.Arrays;
+import java.util.List;
 
 public class BurnedBudgetChartConfiguration extends ChartConfiguration implements Serializable {
 	

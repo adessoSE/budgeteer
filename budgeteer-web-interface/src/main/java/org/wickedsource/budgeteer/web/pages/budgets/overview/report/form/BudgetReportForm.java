@@ -4,7 +4,6 @@ import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
-import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.IRequestCycle;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.request.resource.ContentDisposition;
@@ -12,11 +11,9 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.file.Files;
 import org.apache.wicket.util.resource.FileResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.wickedsource.budgeteer.service.DateRange;
 import org.wickedsource.budgeteer.service.budget.report.BudgetReportService;
 import org.wickedsource.budgeteer.service.budget.report.ReportMetaInformation;
-import org.wickedsource.budgeteer.service.contract.ContractBaseData;
 import org.wickedsource.budgeteer.service.template.Template;
 import org.wickedsource.budgeteer.service.template.TemplateService;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
@@ -24,17 +21,15 @@ import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPa
 import org.wickedsource.budgeteer.web.components.daterange.DateRangeInputField;
 import org.wickedsource.budgeteer.web.components.notificationlist.NotificationListPanel;
 import org.wickedsource.budgeteer.web.pages.base.AbstractChoiceRenderer;
-import org.wickedsource.budgeteer.web.pages.base.dialogpage.DialogPageWithBacklink;
 import org.wickedsource.budgeteer.web.pages.budgets.overview.report.BudgetReportFileModel;
 
 import javax.inject.Inject;
-
-import static org.wicketstuff.lazymodel.LazyModel.from;
-import static org.wicketstuff.lazymodel.LazyModel.model;
-
 import java.io.File;
 import java.util.Date;
 import java.util.List;
+
+import static org.wicketstuff.lazymodel.LazyModel.from;
+import static org.wicketstuff.lazymodel.LazyModel.model;
 
 public class BudgetReportForm extends Form<ReportMetaInformation> {
 

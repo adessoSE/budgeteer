@@ -6,7 +6,8 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.wicket.model.IModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.wickedsource.budgeteer.imports.api.*;
+import org.wickedsource.budgeteer.imports.api.ExampleFile;
+import org.wickedsource.budgeteer.imports.api.ImportFile;
 import org.wickedsource.budgeteer.persistence.template.TemplateEntity;
 import org.wickedsource.budgeteer.persistence.template.TemplateRepository;
 import org.wickedsource.budgeteer.web.pages.templates.templateimport.TemplateFormInputDto;
@@ -21,7 +22,7 @@ import java.util.List;
 public class TemplateService {
 
     @Autowired
-    TemplateRepository templateRepository;
+    private TemplateRepository templateRepository;
 
     /**
      *

@@ -3,19 +3,21 @@ package org.wickedsource.budgeteer.service.template;
 import lombok.Getter;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import java.io.Serializable;
+
 /**
  * This class contains all the data for a Template.
  * The id attribute is not auto-generated like with TemplateEntity, it is instead passed
  * into the constructor.
  */
 @Getter
-public class Template {
+public class Template implements Serializable {
 
     private final long id;
     private final long projectID;
     private final String name;
     private final String description;
-    private final XSSFWorkbook wb;
+    transient private final XSSFWorkbook wb;
 
     /**
      * @param id the ID for the template - this must be the same as the auto-generated id

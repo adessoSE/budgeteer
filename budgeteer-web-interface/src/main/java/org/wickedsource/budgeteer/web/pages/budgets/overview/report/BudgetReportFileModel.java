@@ -1,6 +1,5 @@
 package org.wickedsource.budgeteer.web.pages.budgets.overview.report;
 
-import java.io.File;
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
@@ -9,6 +8,8 @@ import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
 import org.wickedsource.budgeteer.service.budget.report.BudgetReportService;
 import org.wickedsource.budgeteer.service.budget.report.ReportMetaInformation;
 import org.wickedsource.budgeteer.service.template.Template;
+
+import java.io.File;
 
 public class BudgetReportFileModel extends LoadableDetachableModel<File> {
 

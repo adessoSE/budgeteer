@@ -4,6 +4,7 @@ import org.apache.wicket.protocol.http.WebSession;
 import org.apache.wicket.request.Request;
 import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
 import org.wickedsource.budgeteer.service.user.User;
+
 import java.util.HashMap;
 
 public class BudgeteerSession extends WebSession {

@@ -1,7 +1,6 @@
 package org.wickedsource.budgeteer.persistence.template;
 
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -13,13 +12,14 @@ import javax.persistence.*;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.Serializable;
 
 
 @Entity
 @Table(name="TEMPLATE")
 @NoArgsConstructor
 @Getter
-public class TemplateEntity {
+public class TemplateEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -29,14 +29,14 @@ public class TemplateEntity {
     private long projectId;
 
     @Column(name="NAME", length = 64)
-    private String name = "";
+    private String name;
 
-    @Column(name="DESCRIPTION", length = 64)
-    private String description = "";
+    @Column(name="DESCRIPTION", length = 512)
+    private String description;
 
     //Transient because Hibernate cannot save the Workbook directly in the db
     @Transient
-    private XSSFWorkbook wbXSSF = new XSSFWorkbook();
+    private XSSFWorkbook wbXSSF;
 
     //So we get the internal data and store it in a byte array.
     @Column(name="TEMPLATE")

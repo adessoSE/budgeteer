@@ -9,13 +9,11 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.wickedsource.budgeteer.service.template.Template;
-import org.wickedsource.budgeteer.service.template.TemplateService;
 import org.wickedsource.budgeteer.web.ClassAwareWrappingModel;
 import org.wickedsource.budgeteer.web.components.dataTable.DataTableBehavior;
 import org.wickedsource.budgeteer.web.pages.templates.TemplatesPage;
 import org.wickedsource.budgeteer.web.pages.templates.edit.EditTemplatePage;
 
-import javax.inject.Inject;
 import java.util.List;
 
 import static org.wicketstuff.lazymodel.LazyModel.from;

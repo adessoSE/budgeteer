@@ -1,12 +1,10 @@
 package org.wickedsource.budgeteer.service.budget.report;
 
-import java.io.Serializable;
-import java.util.List;
-
-import org.wickedsource.budgeteer.service.DateRange;
-
 import lombok.Data;
+import org.wickedsource.budgeteer.service.DateRange;
 import org.wickedsource.budgeteer.service.template.Template;
+
+import java.io.Serializable;
 
 @Data
 public class ReportMetaInformation implements Serializable {

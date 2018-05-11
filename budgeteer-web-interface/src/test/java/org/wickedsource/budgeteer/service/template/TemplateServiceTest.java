@@ -1,6 +1,5 @@
 package org.wickedsource.budgeteer.service.template;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;

@@ -1,5 +1,6 @@
 package org.wickedsource.budgeteer.web.pages.dashboard.dailyratechart;
 
+import com.google.common.collect.Lists;
 import de.adesso.wickedcharts.chartjs.ChartConfiguration;
 import de.adesso.wickedcharts.chartjs.chartoptions.CallbackFunction;
 import de.adesso.wickedcharts.chartjs.chartoptions.ChartType;
@@ -8,14 +9,11 @@ import de.adesso.wickedcharts.chartjs.chartoptions.Dataset;
 import de.adesso.wickedcharts.chartjs.chartoptions.label.Label;
 import de.adesso.wickedcharts.chartjs.chartoptions.label.TextLabel;
 import de.adesso.wickedcharts.chartjs.chartoptions.valueType.DoubleValue;
-
 import org.apache.wicket.injection.Injector;
 import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.PropertyLoader;
 import org.wickedsource.budgeteer.web.charts.ChartStyling;
-
-import com.google.common.collect.Lists;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;

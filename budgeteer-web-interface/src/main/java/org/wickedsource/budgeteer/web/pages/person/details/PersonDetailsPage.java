@@ -15,8 +15,8 @@ import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.Breadcrumb
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
 import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 import org.wickedsource.budgeteer.web.pages.person.PersonNameModel;
-import org.wickedsource.budgeteer.web.pages.person.details.chart.BudgetDistributionChartModel;
 import org.wickedsource.budgeteer.web.pages.person.details.chart.BudgetDistributionChart;
+import org.wickedsource.budgeteer.web.pages.person.details.chart.BudgetDistributionChartModel;
 import org.wickedsource.budgeteer.web.pages.person.details.highlights.PersonHighlightsModel;
 import org.wickedsource.budgeteer.web.pages.person.details.highlights.PersonHighlightsPanel;
 import org.wickedsource.budgeteer.web.pages.person.edit.EditPersonPage;

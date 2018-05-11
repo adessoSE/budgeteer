@@ -5,7 +5,6 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.convert.IConverter;
 import org.wickedsource.budgeteer.service.DateRange;
-import org.wicketstuff.lazymodel.LazyModel;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
