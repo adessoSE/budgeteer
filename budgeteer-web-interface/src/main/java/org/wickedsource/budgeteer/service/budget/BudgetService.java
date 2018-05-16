@@ -78,7 +78,7 @@ public class BudgetService {
     }
     
     
-	private List<BudgetEntity> loadBudgetEntitys(long projectId, BudgetTagFilter filter) {
+	private List<BudgetEntity> loadBudgetEntities(long projectId, BudgetTagFilter filter) {
 		List<BudgetEntity> budgets;
         if (filter.getSelectedTags().isEmpty()) {
             budgets = budgetRepository.findByProjectIdOrderByNameAsc(projectId);
@@ -185,7 +185,7 @@ public class BudgetService {
      * @return list of budgets that match the filter.
      */
     public List<BudgetDetailData> loadBudgetsDetailData(long projectId, BudgetTagFilter filter) {
-        List<BudgetEntity> budgets = loadBudgetEntitys(projectId, filter);
+        List<BudgetEntity> budgets = loadBudgetEntities(projectId, filter);
         List<BudgetDetailData> dataList = new ArrayList<BudgetDetailData>();
         for (BudgetEntity entity : budgets) {
             // TODO: 4 additional database queries per loop! These can yet be optimized to 4 queries total!

@@ -10,6 +10,8 @@ import org.wickedsource.budgeteer.imports.api.ExampleFile;
 import org.wickedsource.budgeteer.imports.api.ImportFile;
 import org.wickedsource.budgeteer.persistence.template.TemplateEntity;
 import org.wickedsource.budgeteer.persistence.template.TemplateRepository;
+import org.wickedsource.budgeteer.service.ReportType;
+import org.wickedsource.budgeteer.web.pages.templates.TemplateFilter;
 import org.wickedsource.budgeteer.web.pages.templates.templateimport.TemplateFormInputDto;
 
 import javax.transaction.Transactional;
@@ -44,6 +46,26 @@ public class TemplateService {
         List<Template> result = new ArrayList<>();
         for(TemplateEntity E : templateRepository.findByProjectId(projectID)){
             result.add(new Template(E.getId(), E.getName(), E.getDescription(), E.getType(), E.getWb(), E.getProjectId()));
+        }
+        return result;
+    }
+
+
+    /**
+     * @param filter The Filter to use.
+     * @return All the templates in the current project.
+     */
+    public List<Template> getFillteredTemplatesInProject(TemplateFilter filter){
+        if(!filter.isActive()){
+            return getTemplatesInProject(filter.getProjectId());
+        }
+        List<Template> result = new ArrayList<>();
+        for(TemplateEntity E : templateRepository.findByProjectId(filter.getProjectId())){
+            for(ReportType type : filter.getTypesList()){
+                if(type == E.getType()){
+                    result.add(new Template(E.getId(), E.getName(), E.getDescription(), E.getType(), E.getWb(), E.getProjectId()));
+                }
+            }
         }
         return result;
     }

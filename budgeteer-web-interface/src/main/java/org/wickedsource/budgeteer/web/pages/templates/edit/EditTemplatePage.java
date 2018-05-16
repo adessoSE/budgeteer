@@ -2,12 +2,14 @@ package org.wickedsource.budgeteer.web.pages.templates.edit;
 
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
@@ -15,11 +17,13 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.resource.AbstractResourceStreamWriter;
 import org.wickedsource.budgeteer.imports.api.ImportFile;
+import org.wickedsource.budgeteer.service.ReportType;
 import org.wickedsource.budgeteer.service.template.TemplateService;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.ClassAwareWrappingModel;
 import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
+import org.wickedsource.budgeteer.web.pages.base.AbstractChoiceRenderer;
 import org.wickedsource.budgeteer.web.pages.base.dialogpage.DialogPageWithBacklink;
 import org.wickedsource.budgeteer.web.pages.templates.templateimport.TemplateFormInputDto;
 
@@ -27,6 +31,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.wicketstuff.lazymodel.LazyModel.from;
@@ -72,17 +77,17 @@ public class EditTemplatePage extends DialogPageWithBacklink {
                     if(model(from(templateFormInputDto)).getObject().getName() == null){
                         error(getString("message.error.no.name"));
                     }
-                    if(model(from(templateFormInputDto)).getObject().getDescription() == null){
-                        error(getString("message.error.no.description"));
+                    if(model(from(templateFormInputDto)).getObject().getType() == null){
+                        error(getString("message.error.no.type"));
                     }
                     if(fileUploads != null && fileUploads.size() > 0){
                         ImportFile file = new ImportFile(fileUploads.get(0).getClientFileName(), fileUploads.get(0).getInputStream());
-                        if(model(from(templateFormInputDto)).getObject().getName() != null && model(from(templateFormInputDto)).getObject().getDescription() != null){
+                        if(model(from(templateFormInputDto)).getObject().getName() != null && model(from(templateFormInputDto)).getObject().getType() != null){
                             templateId = service.editTemplate(BudgeteerSession.get().getProjectId(), templateId, file, model(from(templateFormInputDto)));
                             success(getString("message.success"));
                             updateTemplateID(templateId);
                         }
-                    }else if(model(from(templateFormInputDto)).getObject().getName() != null && model(from(templateFormInputDto)).getObject().getDescription() != null){
+                    }else if(model(from(templateFormInputDto)).getObject().getName() != null && model(from(templateFormInputDto)).getObject().getType() != null){
                         templateId = service.editTemplate(BudgeteerSession.get().getProjectId(), templateId, null, model(from(templateFormInputDto)));
                         success(getString("message.success"));
                         updateTemplateID(templateId);
@@ -109,10 +114,27 @@ public class EditTemplatePage extends DialogPageWithBacklink {
 
         templateFormInputDto.setName(service.getById(templateID).getName());
         templateFormInputDto.setDescription(service.getById(templateID).getDescription());
+        templateFormInputDto.setType(service.getById(templateID).getType());
         form.add(DeleteTemplateButton("deleteButton"));
         form.add(DownloadFileButton("downloadFileButton"));
         form.add(new TextField<>("name", model(from(templateFormInputDto).getName())));
         form.add(new TextField<>("description", model(from(templateFormInputDto).getDescription())));
+        DropDownChoice<ReportType> typeDropDown = new DropDownChoice<>("type", model(from(templateFormInputDto).getType()),
+                new LoadableDetachableModel<List<ReportType>>() {
+                    @Override
+                    protected List<ReportType> load() {
+                        return Arrays.asList(ReportType.values());
+                    }
+                },
+                new AbstractChoiceRenderer<ReportType>() {
+                    @Override
+                    public Object getDisplayValue(ReportType object) {
+                        return object == null ? "Unnamed" : object.toString();
+                    }
+                }
+                );
+        typeDropDown.setNullValid(false);
+        form.add(typeDropDown);
     }
 
     private void updateTemplateID(long newID){

@@ -5,6 +5,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.budgeteer.IntegrationTestTemplate;
+import org.wickedsource.budgeteer.service.ReportType;
 
 import java.util.List;
 
@@ -24,7 +25,7 @@ public class TemplateRepositoryTest extends IntegrationTestTemplate {
 
     @Test
     public void deleteTemplateTest() {
-        TemplateEntity templateEntity = new TemplateEntity("template1", "desc1", new XSSFWorkbook(), 1L);
+        TemplateEntity templateEntity = new TemplateEntity("template1", "desc1", ReportType.BUDGET_REPORT, new XSSFWorkbook(), 1L);
         templateRepository.save(templateEntity);
         templateRepository.delete(templateEntity.getId());
         Assert.assertEquals(0, templateRepository.findByProjectId(1L).size());
@@ -38,6 +39,6 @@ public class TemplateRepositoryTest extends IntegrationTestTemplate {
     }
 
     private void addTemplateToProject(long projectId){
-        templateRepository.save(new TemplateEntity("template1", "desc1", new XSSFWorkbook(), projectId));
+        templateRepository.save(new TemplateEntity("template1", "desc1", ReportType.BUDGET_REPORT, new XSSFWorkbook(), projectId));
     }
 }

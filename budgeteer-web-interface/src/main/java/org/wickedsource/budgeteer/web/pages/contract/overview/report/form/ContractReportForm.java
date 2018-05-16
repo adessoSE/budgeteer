@@ -14,6 +14,7 @@ import org.apache.wicket.util.resource.FileResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.wickedsource.budgeteer.service.ReportType;
 import org.wickedsource.budgeteer.service.contract.ContractService;
+import org.wickedsource.budgeteer.service.contract.report.ContractReportService;
 import org.wickedsource.budgeteer.service.template.Template;
 import org.wickedsource.budgeteer.service.template.TemplateService;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
@@ -42,6 +43,9 @@ public class ContractReportForm extends Form<ContractReportMetaInformation> {
 
 	@SpringBean
 	private ContractService contractService;
+
+    @SpringBean
+    private ContractReportService contractReportService;
 
 	@SpringBean
 	private TemplateService templateService;
@@ -87,6 +91,7 @@ public class ContractReportForm extends Form<ContractReportMetaInformation> {
 					@Override
 					protected List<? extends Template> load() {
 						List<Template> temp = new ArrayList<>();
+						temp.add(contractReportService.getDefaultTemplate());
 						for(Template e : templateService.getTemplatesInProject(BudgeteerSession.get().getProjectId())){
 							if(e.getType() == ReportType.CONTRACT_REPORT){
 								temp.add(e);

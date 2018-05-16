@@ -33,7 +33,7 @@ public class TemplateEntity implements Serializable {
     private String name;
 
     @Column(name="DESCRIPTION", length = 512)
-    private String description;
+    private String description = "";
 
     @Column(name="TYPE", length = 64)
     private ReportType type;

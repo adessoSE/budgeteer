@@ -1,8 +1,10 @@
 package org.wickedsource.budgeteer.web.pages.templates.templateimport;
 
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.ListMultipleChoice;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
@@ -24,8 +26,11 @@ import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.ClassAwareWrappingModel;
 import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
+import org.wickedsource.budgeteer.web.components.multiselect.MultiselectBehavior;
 import org.wickedsource.budgeteer.web.pages.base.AbstractChoiceRenderer;
 import org.wickedsource.budgeteer.web.pages.base.dialogpage.DialogPageWithBacklink;
+import org.wickedsource.budgeteer.web.pages.templates.TemplateFilter;
+import org.wicketstuff.lazymodel.LazyModel;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
@@ -33,6 +38,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import static org.wicketstuff.lazymodel.LazyModel.from;
@@ -63,15 +69,11 @@ public class ImportTemplatesPage extends DialogPageWithBacklink {
                     if(model(from(templateFormInputDto)).getObject().getName() == null){
                         error(getString("message.error.no.name"));
                     }
-                    if(model(from(templateFormInputDto)).getObject().getDescription() == null){
-                        error(getString("message.error.no.description"));
-                    }
                     if(model(from(templateFormInputDto)).getObject().getType() == null){
                         error(getString("message.error.no.type"));
                     }
                     ImportFile file = new ImportFile(fileUploads.get(0).getClientFileName(), fileUploads.get(0).getInputStream());
-                    if(model(from(templateFormInputDto)).getObject().getName() != null && model(from(templateFormInputDto)).getObject().getDescription() != null
-                            && model(from(templateFormInputDto)).getObject().getType() != null){
+                    if(model(from(templateFormInputDto)).getObject().getName() != null && model(from(templateFormInputDto)).getObject().getType() != null){
                         service.doImport(BudgeteerSession.get().getProjectId(), file, model(from(templateFormInputDto)));
                         success(getString("message.success"));
                     }

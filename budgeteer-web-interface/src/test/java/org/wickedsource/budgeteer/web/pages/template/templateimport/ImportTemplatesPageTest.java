@@ -81,7 +81,7 @@ public class ImportTemplatesPageTest extends AbstractWebTestTemplate {
         formTester.submit();
         tester.assertRenderedPage(ImportTemplatesPage.class);
         tester.assertErrorMessages("You have not entered a name.",
-                "You have not entered a description");
+                "You have not selected a type");
         assertThat(tester.getFeedbackMessages(null)).hasSize(2);
     }
 
@@ -97,6 +97,7 @@ public class ImportTemplatesPageTest extends AbstractWebTestTemplate {
         formTester.setFile("fileUpload", getExampleTemplate(), "xlsx");
         formTester.setValue("name", "TEST_N");
         formTester.setValue("description", "TEST_D");
+        formTester.select("type", 1);
         formTester.submit();
         tester.assertRenderedPage(ImportTemplatesPage.class);
         tester.assertNoErrorMessage();

@@ -64,6 +64,7 @@ public class BudgetReportForm extends Form<ReportMetaInformation> {
                     @Override
                     protected List<? extends Template> load() {
                         List<Template> temp = new ArrayList<>();
+                        temp.add(service.getDefaultTemplate());
                         for(Template e : templateService.getTemplatesInProject(BudgeteerSession.get().getProjectId())){
                             if(e.getType() == ReportType.BUDGET_REPORT){
                                 temp.add(e);

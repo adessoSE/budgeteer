@@ -7,6 +7,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.kubek2k.springockito.annotations.ReplaceWithMock;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.wickedsource.budgeteer.service.ReportType;
 import org.wickedsource.budgeteer.service.template.Template;
 import org.wickedsource.budgeteer.service.template.TemplateService;
 import org.wickedsource.budgeteer.web.AbstractWebTestTemplate;
@@ -59,7 +60,7 @@ public class EditTemplatePageTest extends AbstractWebTestTemplate {
         formTester.submit();
         tester.assertRenderedPage(EditTemplatePage.class);
         tester.assertErrorMessages("You have not entered a name.",
-                "You have not entered a description");
+                "You have not selected a type");
         assertThat(tester.getFeedbackMessages(null)).hasSize(2);
     }
 
@@ -72,6 +73,7 @@ public class EditTemplatePageTest extends AbstractWebTestTemplate {
         FormTester formTester = tester.newFormTester("editForm", true);
         formTester.setValue("name", "TEST_N");
         formTester.setValue("description", "TEST_D");
+        formTester.select("type", 1);
         formTester.setFile("fileUpload", null, "");
         formTester.submit();
         tester.assertRenderedPage(EditTemplatePage.class);
@@ -93,7 +95,7 @@ public class EditTemplatePageTest extends AbstractWebTestTemplate {
 
     @Override
     public void setupTest(){
-        when(templateService.getById(anyLong())).thenReturn(new Template(1L, null, null, null, 1L));
+        when(templateService.getById(anyLong())).thenReturn(new Template(1L, null, null,null, null, 1L));
         when(templateService.editTemplate(anyLong(), anyLong(), any(), any())).thenReturn(1L);
     }
 }
