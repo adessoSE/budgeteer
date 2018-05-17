@@ -50,12 +50,7 @@
                         </button>
                     </div>
                     <div class="col-lg-6">
-                        <button type="submit" id="submitButton" class="btn bg-olive btn-block"><wicket:message key="page.button.start">Start import</wicket:message></button>
-                        <script>
-                            this.form.submit(function(event){
-                            event.preventDefault();
-                        })
-                        </script>
+                        <button wicket:id="save" id="submitButton" class="btn bg-olive btn-block"><wicket:message key="page.button.start">Start import</wicket:message></button>
                     </div>
                 </div>
             </div>

@@ -35,7 +35,6 @@
                     <select id="typeSelect" wicket:id="type" name="name" class="form-control"/>
                     <p class="help-block"><wicket:message key="page.template.types.hint">The Type of this template.</wicket:message></p>
                 </div>
-
             </div>
             <div class="footer">
                 <div class="row">
@@ -55,7 +54,7 @@
                         </button>
                     </div>
                     <div class="col-lg-3">
-                        <button type="submit" id="submitButton" class="btn bg-olive btn-block">
+                        <button wicket:id="save" id="submitButton" class="btn bg-olive btn-block">
                             <i class="fa fa-check"></i>
                             <wicket:message key="page.button.start">Start import</wicket:message>
                         </button>
@@ -63,6 +62,7 @@
                 </div>
             </div>
         </form>
+
     </div>
     <script src="js/enterAndEscape.js"></script>
 </wicket:extend>

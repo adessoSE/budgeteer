@@ -15,6 +15,7 @@ import org.wickedsource.budgeteer.web.pages.templates.TemplateFilter;
 import org.wickedsource.budgeteer.web.pages.templates.templateimport.TemplateFormInputDto;
 
 import javax.transaction.Transactional;
+import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +56,7 @@ public class TemplateService {
      * @param filter The Filter to use.
      * @return All the templates in the current project.
      */
-    public List<Template> getFillteredTemplatesInProject(TemplateFilter filter){
+    public List<Template> getFilteredTemplatesInProject(@NotNull TemplateFilter filter){
         List<Template> result = new ArrayList<>();
         for(TemplateEntity E : templateRepository.findByProjectId(filter.getProjectId())){
             for(ReportType type : filter.getTypesList()){

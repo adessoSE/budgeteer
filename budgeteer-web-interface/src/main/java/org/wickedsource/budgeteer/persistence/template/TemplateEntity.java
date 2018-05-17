@@ -29,13 +29,13 @@ public class TemplateEntity implements Serializable {
     @Column(name="PROJECT_ID")
     private long projectId;
 
-    @Column(name="NAME", length = 64)
+    @Column(name="NAME", length = 128)
     private String name;
 
     @Column(name="DESCRIPTION", length = 512)
     private String description = "";
 
-    @Column(name="TYPE", length = 64)
+    @Column(name="TYPE", length = 128)
     private ReportType type;
 
     //Transient because Hibernate cannot save the Workbook directly in the db
@@ -90,8 +90,7 @@ public class TemplateEntity implements Serializable {
     //Causing the templates to be invisible and non-deletable by the user without a tool to browse the DB.
     public ReportType getType(){
         if(this.type == null){
-            type = ReportType.BUDGET_REPORT;
-            return type;
+            return ReportType.BUDGET_REPORT;
         }else{
             return this.type;
         }
