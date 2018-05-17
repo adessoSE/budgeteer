@@ -24,12 +24,14 @@ import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPa
 import org.wickedsource.budgeteer.web.components.daterange.DateRangeInputField;
 import org.wickedsource.budgeteer.web.pages.base.basepage.BasePage;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
+import org.wickedsource.budgeteer.web.pages.base.delete.DeleteDialog;
 import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 import org.wickedsource.budgeteer.web.pages.user.login.LoginPage;
 import org.wickedsource.budgeteer.web.pages.user.selectproject.SelectProjectPage;
 import org.wickedsource.budgeteer.web.pages.user.selectproject.SelectProjectWithKeycloakPage;
 
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import static org.wicketstuff.lazymodel.LazyModel.from;
 import static org.wicketstuff.lazymodel.LazyModel.model;
@@ -108,12 +110,24 @@ public class ProjectAdministrationPage extends BasePage {
         return new Link(id) {
             @Override
             public void onClick() {
-                projectService.deleteProject(BudgeteerSession.get().getProjectId());
-                if (settings.isKeycloakActivated()) {
-                    setResponsePage(new SelectProjectWithKeycloakPage());
-                } else {
-                    setResponsePage(new SelectProjectPage(LoginPage.class, new PageParameters()));
-                }
+                setResponsePage(new DeleteDialog(new Callable<Void>() {
+                    @Override
+                    public Void call() {
+                        projectService.deleteProject(BudgeteerSession.get().getProjectId());
+                        if (settings.isKeycloakActivated()) {
+                            setResponsePage(new SelectProjectWithKeycloakPage());
+                        } else {
+                            setResponsePage(new SelectProjectPage(LoginPage.class, new PageParameters()));
+                        }
+                        return null;
+                    }
+                }, new Callable<Void>() {
+                    @Override
+                    public Void call() {
+                        setResponsePage(ProjectAdministrationPage.class, getPageParameters());
+                        return null;
+                    }
+                }));
             }
         };
     }

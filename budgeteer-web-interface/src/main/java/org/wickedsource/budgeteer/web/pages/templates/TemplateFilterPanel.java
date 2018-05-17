@@ -1,7 +1,6 @@
 package org.wickedsource.budgeteer.web.pages.templates;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -53,7 +52,7 @@ public class TemplateFilterPanel extends Panel {
                 return object.toString();
             }
         });
-        selectedTypes.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+        selectedTypes.add(new AjaxFormComponentUpdatingBehavior("change") {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 BudgeteerSession.get().setTemplateFilter((TemplateFilter)getDefaultModel().getObject());

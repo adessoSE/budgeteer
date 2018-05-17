@@ -1,8 +1,6 @@
 package org.wickedsource.budgeteer.web.pages.templates;
 
 import lombok.Getter;
-import lombok.Setter;
-import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.wickedsource.budgeteer.service.ReportType;
 
 import java.io.Serializable;

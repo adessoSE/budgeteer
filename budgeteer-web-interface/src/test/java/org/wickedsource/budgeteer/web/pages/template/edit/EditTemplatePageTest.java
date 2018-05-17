@@ -10,8 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.budgeteer.service.template.Template;
 import org.wickedsource.budgeteer.service.template.TemplateService;
 import org.wickedsource.budgeteer.web.AbstractWebTestTemplate;
+import org.wickedsource.budgeteer.web.pages.base.delete.DeleteDialog;
 import org.wickedsource.budgeteer.web.pages.templates.TemplatesPage;
-import org.wickedsource.budgeteer.web.pages.templates.edit.DeleteDialog;
 import org.wickedsource.budgeteer.web.pages.templates.edit.EditTemplatePage;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
