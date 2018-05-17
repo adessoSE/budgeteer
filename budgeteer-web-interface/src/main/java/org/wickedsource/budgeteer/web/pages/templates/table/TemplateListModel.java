@@ -1,5 +1,7 @@
 package org.wickedsource.budgeteer.web.pages.templates.table;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -14,6 +16,8 @@ public class TemplateListModel extends LoadableDetachableModel<List<Template>> {
     @SpringBean
     private TemplateService service;
 
+    @Getter
+    @Setter
     private TemplateFilter filter;
 
     public TemplateListModel(TemplateFilter filter) {

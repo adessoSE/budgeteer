@@ -1,5 +1,9 @@
 package org.wickedsource.budgeteer.web.pages.templates;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.ListMultipleChoice;
@@ -26,13 +30,7 @@ public class TemplateFilterPanel extends Panel {
     public TemplateFilterPanel(String id, TemplateFilter filter) {
         super(id, model(from(filter)));
         IModel<TemplateFilter> model = (IModel<TemplateFilter>) getDefaultModel();
-        Form<TemplateFilter> form = new Form<TemplateFilter>("filterForm", model) {
-            @Override
-            protected void onSubmit() {
-                BudgeteerSession.get().setTemplateFilter(getModelObject());
-                setResponsePage(new TemplatesPage());
-            }
-        };
+        Form<TemplateFilter> form = new Form<TemplateFilter>("filterForm", model);
         form.add(createTypeFilter("typesFilterContainer", form));
         add(form);
     }
@@ -53,6 +51,13 @@ public class TemplateFilterPanel extends Panel {
             @Override
             public Object getDisplayValue(ReportType object) {
                 return object.toString();
+            }
+        });
+        selectedTypes.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                BudgeteerSession.get().setTemplateFilter((TemplateFilter)getDefaultModel().getObject());
+                send(getPage(), Broadcast.BREADTH, getDefaultModelObject());
             }
         });
         selectedTypes.setRequired(false);
