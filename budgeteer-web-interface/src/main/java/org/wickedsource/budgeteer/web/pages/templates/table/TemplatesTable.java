@@ -11,6 +11,7 @@ import org.apache.wicket.model.IModel;
 import org.wickedsource.budgeteer.service.template.Template;
 import org.wickedsource.budgeteer.web.ClassAwareWrappingModel;
 import org.wickedsource.budgeteer.web.components.dataTable.DataTableBehavior;
+import org.wickedsource.budgeteer.web.pages.templates.TemplateFilter;
 import org.wickedsource.budgeteer.web.pages.templates.TemplatesPage;
 import org.wickedsource.budgeteer.web.pages.templates.edit.EditTemplatePage;
 
@@ -41,6 +42,7 @@ public class TemplatesTable extends Panel {
                 item.setOutputMarkupId(true);
                 item.add(new Label("name", model(from(item.getModel()).getName())));
                 item.add(new Label("description", model(from(item.getModel()).getDescription())));
+                item.add(new Label("type", model(from(item.getModel()).getType()).getObject().toString()));
                 item.add(new Link("editPage") {
                     @Override
                     public void onClick() {
@@ -55,6 +57,11 @@ public class TemplatesTable extends Panel {
                 return super.newItem(index, new ClassAwareWrappingModel<>(itemModel, Template.class));
             }
         };
+    }
+
+    public void updateFilter(TemplateFilter filter){
+        this.getDefaultModel().detach();
+        this.setDefaultModel(new TemplateListModel(filter));
     }
 
     public ListView<Template> getRows() {

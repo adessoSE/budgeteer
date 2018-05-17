@@ -4,6 +4,7 @@ import org.apache.wicket.protocol.http.WebSession;
 import org.apache.wicket.request.Request;
 import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
 import org.wickedsource.budgeteer.service.user.User;
+import org.wickedsource.budgeteer.web.pages.templates.TemplateFilter;
 
 import java.util.HashMap;
 
@@ -12,6 +13,8 @@ public class BudgeteerSession extends WebSession {
     //Tags are saved in a Map and correspond to a projectID
     //This makes them persistent when switching projects
     private HashMap<Long, BudgetTagFilter> budgetFilter = new HashMap<>();
+
+    private HashMap<Long, TemplateFilter> templateFilter = new HashMap<>();
 
     private Double selectedBudgetUnit = 1d;
 
@@ -63,6 +66,17 @@ public class BudgeteerSession extends WebSession {
 
     public void setBudgetFilter(BudgetTagFilter budgetFilter) {
         this.budgetFilter.put(projectId, budgetFilter);
+    }
+    public TemplateFilter getTemplateFilter() {
+        if(templateFilter.get(getProjectId()) == null){
+            return new TemplateFilter(getProjectId());
+        }else {
+            return templateFilter.get(getProjectId());
+        }
+    }
+
+    public void setTemplateFilter(TemplateFilter templateFilter) {
+        this.templateFilter.put(projectId, templateFilter);
     }
 
     /**

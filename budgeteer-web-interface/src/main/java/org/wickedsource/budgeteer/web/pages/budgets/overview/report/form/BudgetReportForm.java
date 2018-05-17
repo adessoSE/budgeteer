@@ -12,6 +12,7 @@ import org.apache.wicket.util.file.Files;
 import org.apache.wicket.util.resource.FileResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.wickedsource.budgeteer.service.DateRange;
+import org.wickedsource.budgeteer.service.ReportType;
 import org.wickedsource.budgeteer.service.budget.report.BudgetReportService;
 import org.wickedsource.budgeteer.service.budget.report.ReportMetaInformation;
 import org.wickedsource.budgeteer.service.template.Template;
@@ -25,6 +26,7 @@ import org.wickedsource.budgeteer.web.pages.budgets.overview.report.BudgetReport
 
 import javax.inject.Inject;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -61,7 +63,14 @@ public class BudgetReportForm extends Form<ReportMetaInformation> {
                 new LoadableDetachableModel<List<? extends Template>>() {
                     @Override
                     protected List<? extends Template> load() {
-                        return templateService.getTemplatesInProject(BudgeteerSession.get().getProjectId());
+                        List<Template> temp = new ArrayList<>();
+                        temp.add(service.getDefaultTemplate());
+                        for(Template e : templateService.getTemplatesInProject(BudgeteerSession.get().getProjectId())){
+                            if(e.getType() == ReportType.BUDGET_REPORT){
+                                temp.add(e);
+                            }
+                        }
+                        return temp;
                     }
                 },
                 new AbstractChoiceRenderer<Template>() {
