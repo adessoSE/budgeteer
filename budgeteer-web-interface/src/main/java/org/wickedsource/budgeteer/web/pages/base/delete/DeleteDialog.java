@@ -1,4 +1,4 @@
-package org.wickedsource.budgeteer.web.pages.templates.edit;
+package org.wickedsource.budgeteer.web.pages.base.delete;
 
 import org.apache.wicket.markup.html.link.Link;
 import org.wickedsource.budgeteer.web.pages.base.dialogpage.DialogPage;
