@@ -85,4 +85,14 @@ public class TemplateEntity implements Serializable {
         }
         return null;
     }
+
+    //This getter is necessary for old test databases that did not contain a type for the templates,
+    //Causing the templates to be invisible and non-deletable by the user without a tool to browse the DB.
+    public ReportType getType(){
+        if(this.type == null){
+            return ReportType.BUDGET_REPORT;
+        }else{
+            return this.type;
+        }
+    }
 }

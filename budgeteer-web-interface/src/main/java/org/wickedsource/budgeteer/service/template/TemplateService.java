@@ -45,7 +45,7 @@ public class TemplateService {
     public List<Template> getTemplatesInProject(long projectID){
         List<Template> result = new ArrayList<>();
         for(TemplateEntity E : templateRepository.findByProjectId(projectID)){
-            result.add(new Template(E.getId(), E.getName(), E.getDescription(), E.getType(), E.getWb(), E.getProjectId()));
+            result.add(new Template(E.getId(), E.getName(), E.getDescription(), E.getType() , E.getWb(), E.getProjectId()));
         }
         return result;
     }
