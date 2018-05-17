@@ -7,17 +7,17 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.kubek2k.springockito.annotations.ReplaceWithMock;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.wickedsource.budgeteer.service.ReportType;
 import org.wickedsource.budgeteer.service.template.Template;
 import org.wickedsource.budgeteer.service.template.TemplateService;
 import org.wickedsource.budgeteer.web.AbstractWebTestTemplate;
 import org.wickedsource.budgeteer.web.pages.templates.TemplatesPage;
+import org.wickedsource.budgeteer.web.pages.templates.edit.DeleteDialog;
 import org.wickedsource.budgeteer.web.pages.templates.edit.EditTemplatePage;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 public class EditTemplatePageTest extends AbstractWebTestTemplate {
 
@@ -64,6 +64,8 @@ public class EditTemplatePageTest extends AbstractWebTestTemplate {
         assertThat(tester.getFeedbackMessages(null)).hasSize(2);
     }
 
+
+
     @Test
     public void AllCorrectInputForm(){
         WicketTester tester = getTester();
@@ -83,14 +85,29 @@ public class EditTemplatePageTest extends AbstractWebTestTemplate {
     }
 
     @Test
+    public void NoTypeTest(){
+        WicketTester tester = getTester();
+        EditTemplatePage testPage = new EditTemplatePage(TemplatesPage.class, new PageParameters(), 1L);
+        tester.startPage(testPage);
+        Assert.assertNotNull(testPage.get("editForm"));
+        FormTester formTester = tester.newFormTester("editForm", true);
+        formTester.setClearFeedbackMessagesBeforeSubmit(true);
+        formTester.setValue("name", "TEST_N");
+        formTester.setValue("description", "TEST_D");
+        formTester.submit();
+        tester.assertRenderedPage(EditTemplatePage.class);
+        tester.assertErrorMessages( "You have not selected a type");
+        assertThat(tester.getFeedbackMessages(null)).hasSize(1);
+    }
+
+    @Test
     public void DeleteButtonTest(){
         WicketTester tester = getTester();
         EditTemplatePage testPage = new EditTemplatePage(TemplatesPage.class, new PageParameters(), 1L);
         tester.startPage(testPage);
         Assert.assertNotNull(testPage.get("editForm:deleteButton"));
         tester.clickLink("editForm:deleteButton");
-        verify(templateService, times(1)).deleteTemplate(anyLong());
-        tester.assertRenderedPage(TemplatesPage.class);
+        tester.assertRenderedPage(DeleteDialog.class);
     }
 
     @Override

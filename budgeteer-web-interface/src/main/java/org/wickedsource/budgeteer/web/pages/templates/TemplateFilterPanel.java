@@ -6,6 +6,7 @@ import org.apache.wicket.markup.html.form.ListMultipleChoice;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.wickedsource.budgeteer.service.ReportType;
+import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.components.multiselect.MultiselectBehavior;
 import org.wickedsource.budgeteer.web.pages.base.AbstractChoiceRenderer;
 import org.wicketstuff.lazymodel.LazyModel;
@@ -26,11 +27,10 @@ public class TemplateFilterPanel extends Panel {
         super(id, model(from(filter)));
         IModel<TemplateFilter> model = (IModel<TemplateFilter>) getDefaultModel();
         Form<TemplateFilter> form = new Form<TemplateFilter>("filterForm", model) {
-
             @Override
             protected void onSubmit() {
-                getModelObject().setActive(true);
-                setResponsePage(new TemplatesPage(getModelObject()));
+                BudgeteerSession.get().setTemplateFilter(getModelObject());
+                setResponsePage(new TemplatesPage());
             }
         };
         form.add(createTypeFilter("typesFilterContainer", form));
@@ -46,17 +46,15 @@ public class TemplateFilterPanel extends Panel {
         };
 
         LazyModel<List<ReportType>> chosenTypes = model(from(form.getModelObject().getTypesList()));
-
         List<ReportType> possibleTypesFromFilter = form.getModelObject().getPossibleTypes();
         List<ReportType> possibleTypes = possibleTypesFromFilter.isEmpty() ? Arrays.asList(ReportType.values()) : possibleTypesFromFilter;
         ListMultipleChoice<ReportType> selectedTypes = new ListMultipleChoice<>("typesSelect", chosenTypes,
-                        possibleTypes, new AbstractChoiceRenderer<ReportType>() {
-                @Override
-                public Object getDisplayValue(ReportType object) {
-                    return object.toString();
-                }
-            });
-
+                possibleTypes, new AbstractChoiceRenderer<ReportType>() {
+            @Override
+            public Object getDisplayValue(ReportType object) {
+                return object.toString();
+            }
+        });
         selectedTypes.setRequired(false);
         HashMap<String, String> options = MultiselectBehavior.getRecommendedOptions();
         options.put("buttonWidth","'160px'");

@@ -1,10 +1,8 @@
 package org.wickedsource.budgeteer.web.pages.templates.templateimport;
 
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.ListMultipleChoice;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
@@ -26,11 +24,8 @@ import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.ClassAwareWrappingModel;
 import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
-import org.wickedsource.budgeteer.web.components.multiselect.MultiselectBehavior;
 import org.wickedsource.budgeteer.web.pages.base.AbstractChoiceRenderer;
 import org.wickedsource.budgeteer.web.pages.base.dialogpage.DialogPageWithBacklink;
-import org.wickedsource.budgeteer.web.pages.templates.TemplateFilter;
-import org.wicketstuff.lazymodel.LazyModel;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
@@ -38,7 +33,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 import static org.wicketstuff.lazymodel.LazyModel.from;
@@ -58,6 +52,7 @@ public class ImportTemplatesPage extends DialogPageWithBacklink {
     public ImportTemplatesPage(Class<? extends WebPage> backlinkPage, PageParameters backlinkParameters) {
         super(backlinkPage, backlinkParameters);
         add(createBacklink("backlink1"));
+
         IModel formModel = model(from(templateFormInputDto));
 
         this.setDefaultModel(formModel);
@@ -83,7 +78,11 @@ public class ImportTemplatesPage extends DialogPageWithBacklink {
                     error(String.format(getString("message.importError"), e.getMessage()));
                 }
             }
+
+
         };
+
+        form.setMultiPart(true);
 
         add(form);
 
@@ -141,3 +140,5 @@ public class ImportTemplatesPage extends DialogPageWithBacklink {
         };
     }
 }
+
+

@@ -5,6 +5,7 @@ import lombok.Setter;
 import org.wickedsource.budgeteer.service.ReportType;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -15,10 +16,6 @@ public class TemplateFilter implements Serializable {
     private long projectId;
 
     @Getter
-    @Setter
-    private boolean isActive = false;
-
-    @Getter
     private List<ReportType> typesList = new LinkedList<>();
 
     @Getter
@@ -26,5 +23,6 @@ public class TemplateFilter implements Serializable {
 
     public TemplateFilter(long projectId) {
         this.projectId = projectId;
+        typesList = new LinkedList(Arrays.asList(ReportType.values()));
     }
 }

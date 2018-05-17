@@ -9,11 +9,9 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.wickedsource.budgeteer.service.template.Template;
-import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.ClassAwareWrappingModel;
 import org.wickedsource.budgeteer.web.components.dataTable.DataTableBehavior;
 import org.wickedsource.budgeteer.web.pages.templates.TemplateFilter;
-import org.wickedsource.budgeteer.web.pages.templates.TemplateFilterPanel;
 import org.wickedsource.budgeteer.web.pages.templates.TemplatesPage;
 import org.wickedsource.budgeteer.web.pages.templates.edit.EditTemplatePage;
 
@@ -59,6 +57,11 @@ public class TemplatesTable extends Panel {
                 return super.newItem(index, new ClassAwareWrappingModel<>(itemModel, Template.class));
             }
         };
+    }
+
+    public void updateFilter(TemplateFilter filter){
+        this.getDefaultModel().detach();
+        this.setDefaultModel(new TemplateListModel(filter));
     }
 
     public ListView<Template> getRows() {

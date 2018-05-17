@@ -21,6 +21,7 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
 import org.wickedsource.budgeteer.IntegrationTestConfiguration;
 import org.wickedsource.budgeteer.imports.api.ImportFile;
 import org.wickedsource.budgeteer.persistence.template.TemplateRepository;
+import org.wickedsource.budgeteer.service.ReportType;
 import org.wickedsource.budgeteer.web.pages.templates.templateimport.TemplateFormInputDto;
 
 import java.io.IOException;
@@ -51,12 +52,14 @@ public class TemplateServiceTest {
         TemplateFormInputDto testDto = new TemplateFormInputDto(1);
         testDto.setName("TEST");
         testDto.setDescription("TEST_D");
+        testDto.setType(ReportType.BUDGET_REPORT);
         templateService.doImport(1, new ImportFile("exampleTemplate1.xlsx",
                         getClass().getResourceAsStream("exampleTemplate1.xlsx")),
                 model(from(testDto)));
         Assert.assertEquals(1, templateService.getTemplatesInProject(1).size());
         Assert.assertEquals(testDto.getName(), templateService.getTemplatesInProject(1).get(0).getName());
         Assert.assertEquals("TEST_D", templateService.getTemplatesInProject(1).get(0).getDescription());
+        Assert.assertEquals(ReportType.BUDGET_REPORT, templateService.getTemplatesInProject(1).get(0).getType());
         Assert.assertNotNull(templateService.getTemplates().get(0).getWb());
     }
 
@@ -68,6 +71,7 @@ public class TemplateServiceTest {
         TemplateFormInputDto testDto = new TemplateFormInputDto(1);
         testDto.setName("TEST");
         testDto.setDescription("TEST_D");
+        testDto.setType(ReportType.BUDGET_REPORT);
         Assert.assertEquals(2, templateService.getTemplatesInProject(1).size());
 
         long newId = templateService.editTemplate(1, templateService.getTemplatesInProject(1).get(0).getId(),
@@ -76,6 +80,7 @@ public class TemplateServiceTest {
 
         Assert.assertEquals("TEST", templateService.getById(newId).getName());
         Assert.assertEquals("TEST_D", templateService.getById(newId).getDescription());
+        Assert.assertEquals(ReportType.BUDGET_REPORT, templateService.getById(newId).getType());
         Assert.assertNotNull(templateService.getById(newId).getWb());
     }
 

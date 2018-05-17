@@ -1,10 +1,8 @@
 package org.wickedsource.budgeteer.web.pages.templates;
 
 import org.apache.wicket.markup.html.link.Link;
-import org.wickedsource.budgeteer.service.record.WorkRecordFilter;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.Mount;
-import org.wickedsource.budgeteer.web.components.burntable.filter.FilterPanel;
 import org.wickedsource.budgeteer.web.pages.base.basepage.BasePage;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
 import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
@@ -15,18 +13,10 @@ import org.wickedsource.budgeteer.web.pages.templates.templateimport.ImportTempl
 @Mount("templates")
 public class TemplatesPage extends BasePage {
 
-
     public TemplatesPage() {
-        TemplatesTable table = new TemplatesTable("templateTable", new TemplateListModel(new TemplateFilter(BudgeteerSession.get().getProjectId())));
+        TemplatesTable table = new TemplatesTable("templateTable", new TemplateListModel(BudgeteerSession.get().getTemplateFilter()));
         add(table);
-        add(new TemplateFilterPanel("filter", new TemplateFilter(BudgeteerSession.get().getProjectId())));
-        add(createImportLink("importLink"));
-    }
-
-    public TemplatesPage(TemplateFilter filter) {
-        TemplatesTable table = new TemplatesTable("templateTable", new TemplateListModel(filter));
-        add(table);
-        add(new TemplateFilterPanel("filter", filter));
+        add(new TemplateFilterPanel("filter", BudgeteerSession.get().getTemplateFilter()));
         add(createImportLink("importLink"));
     }
 

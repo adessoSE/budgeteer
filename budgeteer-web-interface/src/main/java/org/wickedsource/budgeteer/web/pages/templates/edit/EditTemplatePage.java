@@ -25,6 +25,7 @@ import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
 import org.wickedsource.budgeteer.web.pages.base.AbstractChoiceRenderer;
 import org.wickedsource.budgeteer.web.pages.base.dialogpage.DialogPageWithBacklink;
+import org.wickedsource.budgeteer.web.pages.templates.TemplatesPage;
 import org.wickedsource.budgeteer.web.pages.templates.templateimport.TemplateFormInputDto;
 
 import javax.servlet.http.HttpServletResponse;
@@ -33,6 +34,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import static org.wicketstuff.lazymodel.LazyModel.from;
 import static org.wicketstuff.lazymodel.LazyModel.model;
@@ -170,8 +172,20 @@ public class EditTemplatePage extends DialogPageWithBacklink {
         return new Link<Void>(wicketId) {
             @Override
             public void onClick() {
-                service.deleteTemplate(templateID);
-                goBack(); //Go back to the templates overview after deleting the template
+                setResponsePage(new DeleteDialog(new Callable<Void>() {
+                    @Override
+                    public Void call(){
+                        service.deleteTemplate(templateID);
+                        goBack();
+                        return null;
+                    }
+                }, new Callable<Void>() {
+                    @Override
+                    public Void call(){
+                        setResponsePage(new EditTemplatePage(TemplatesPage.class, getPage().getPageParameters(), templateID));
+                        return null;
+                    }
+                }));
             }
         };
     }

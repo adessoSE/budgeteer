@@ -56,9 +56,6 @@ public class TemplateService {
      * @return All the templates in the current project.
      */
     public List<Template> getFillteredTemplatesInProject(TemplateFilter filter){
-        if(!filter.isActive()){
-            return getTemplatesInProject(filter.getProjectId());
-        }
         List<Template> result = new ArrayList<>();
         for(TemplateEntity E : templateRepository.findByProjectId(filter.getProjectId())){
             for(ReportType type : filter.getTypesList()){
