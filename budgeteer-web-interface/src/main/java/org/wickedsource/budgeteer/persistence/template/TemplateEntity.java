@@ -90,7 +90,8 @@ public class TemplateEntity implements Serializable {
     //Causing the templates to be invisible and non-deletable by the user without a tool to browse the DB.
     public ReportType getType(){
         if(this.type == null){
-            return ReportType.BUDGET_REPORT;
+            type = ReportType.BUDGET_REPORT;
+            return type;
         }else{
             return this.type;
         }
