@@ -61,6 +61,7 @@ public class BudgetReportForm extends Form<ReportMetaInformation> {
                 DateRangeInputField.DROP_LOCATION.DOWN));
         DropDownChoice<Template> templateDropDown = new DropDownChoice<Template>("template", model(from(getModel()).getTemplate()),
                 new LoadableDetachableModel<List<? extends Template>>() {
+
                     @Override
                     protected List<? extends Template> load() {
                         List<Template> temp = new ArrayList<>();
@@ -78,7 +79,12 @@ public class BudgetReportForm extends Form<ReportMetaInformation> {
                     public Object getDisplayValue(Template object) {
                         return object == null ? "Unnamed" : object.getName();
                     }
-                });
+                }){
+            @Override
+            public String getModelValue (){
+                return null;
+            }
+        };
         templateDropDown.setNullValid(false);
         add(templateDropDown);
     }

@@ -105,7 +105,12 @@ public class ContractReportForm extends Form<ContractReportMetaInformation> {
 					public Object getDisplayValue(Template object) {
 						return object == null ? "Unnamed" : object.getName();
 					}
-				});
+				}){
+			@Override
+			public String getModelValue (){
+				return null;
+			}
+		};;
 		templateDropDown.setNullValid(false);
 		add(templateDropDown);
 
