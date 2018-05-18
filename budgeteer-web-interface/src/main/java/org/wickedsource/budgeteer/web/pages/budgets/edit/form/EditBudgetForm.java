@@ -57,6 +57,15 @@ public class EditBudgetForm extends Form<EditBudgetData> {
         TagsTextField tagsField = new TagsTextField("tagsInput", model(from(getModel()).getTags()));
         tagsField.setOutputMarkupId(true);
         add(tagsField);
+        tagsField.add(new AjaxEventBehavior("change") {
+            @SuppressWarnings("unchecked")
+            @Override
+            protected void onEvent(AjaxRequestTarget target) {
+                if(getModelObject().getTags().size() > 0) {
+                    getModelObject().getTags().remove(0);
+                }
+            }
+        });
         add(new CustomFeedbackPanel("feedback"));
         add(new RequiredTextField<String>("name", model(from(getModel()).getTitle())));
         add(new TextField<String>("description", model(from(getModel()).getDescription())));
