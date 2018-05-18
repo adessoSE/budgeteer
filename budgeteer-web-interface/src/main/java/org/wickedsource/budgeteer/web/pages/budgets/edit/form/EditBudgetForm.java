@@ -62,7 +62,7 @@ public class EditBudgetForm extends Form<EditBudgetData> {
             @Override
             protected void onEvent(AjaxRequestTarget target) {
                 if(getModelObject().getTags().size() > 0) {
-                    getModelObject().getTags().remove(0);
+                    BudgeteerSession.get().getBudgetFilter().getSelectedTags().remove(getModelObject().getTags().remove(0));
                 }
             }
         });
