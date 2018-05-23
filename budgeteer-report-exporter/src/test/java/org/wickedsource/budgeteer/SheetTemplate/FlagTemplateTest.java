@@ -1,16 +1,16 @@
 package org.wickedsource.budgeteer.SheetTemplate;
 
-import static org.junit.Assert.*;
-
-import java.io.FileInputStream;
-import java.io.InputStream;
-
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.io.FileInputStream;
+import java.io.InputStream;
+
+import static org.junit.Assert.*;
 
 public class FlagTemplateTest {
 

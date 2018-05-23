@@ -17,6 +17,7 @@ import org.wickedsource.budgeteer.web.pages.hours.HoursPage;
 import org.wickedsource.budgeteer.web.pages.imports.ImportsOverviewPage;
 import org.wickedsource.budgeteer.web.pages.invoice.overview.InvoiceOverviewPage;
 import org.wickedsource.budgeteer.web.pages.person.overview.PeopleOverviewPage;
+import org.wickedsource.budgeteer.web.pages.templates.TemplatesPage;
 
 @Mount("dashboard")
 public class DashboardPage extends BasePage {
@@ -47,6 +48,8 @@ public class DashboardPage extends BasePage {
         add(new BookmarkablePageLink<InvoiceOverviewPage>("invoiceLink", InvoiceOverviewPage.class));
 
         add(new BookmarkablePageLink<ImportsOverviewPage>("importsLink", ImportsOverviewPage.class));
+
+        add(new BookmarkablePageLink<ImportsOverviewPage>("templatesLink", TemplatesPage.class));
     }
 
     @Override
