@@ -31,8 +31,8 @@ public class TemplatesTableTest extends AbstractWebTestTemplate {
     }
 
     private List<Template> createTemplates(){
-        return Arrays.asList(new Template(1, "temp1", "temp1Desc", ReportType.BUDGET_REPORT,null, 1),
-                new Template(2, "temp2", "temp2Desc", ReportType.BUDGET_REPORT,null, 1));
+        return Arrays.asList(new Template(1, "temp1", "temp1Desc", ReportType.BUDGET_REPORT,null,false, 1),
+                new Template(2, "temp2", "temp2Desc", ReportType.BUDGET_REPORT,null,false, 1));
     }
 
     @Override

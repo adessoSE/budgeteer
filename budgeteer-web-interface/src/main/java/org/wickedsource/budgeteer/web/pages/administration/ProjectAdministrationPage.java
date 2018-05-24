@@ -22,6 +22,7 @@ import org.wickedsource.budgeteer.web.ClassAwareWrappingModel;
 import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
 import org.wickedsource.budgeteer.web.components.daterange.DateRangeInputField;
+import org.wickedsource.budgeteer.web.components.security.NeedsLogin;
 import org.wickedsource.budgeteer.web.pages.base.basepage.BasePage;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
 import org.wickedsource.budgeteer.web.pages.base.delete.DeleteDialog;
@@ -61,9 +62,13 @@ public class ProjectAdministrationPage extends BasePage {
             @Override
             protected void onSubmit() {
                 super.onSubmit();
-                Project ent = getModelObject();
-                projectService.save(ent);
-                success(getString("project.saved"));
+                if(getModelObject().getName() == null){
+                    error(getString("error.no.name"));
+                }else {
+                    Project ent = getModelObject();
+                    projectService.save(ent);
+                    success(getString("project.saved"));
+                }
             }
         };
         form.add(new TextField<String>("projectTitle", model(from(form.getModelObject()).getName())));
@@ -80,7 +85,21 @@ public class ProjectAdministrationPage extends BasePage {
                 item.add(new Link("deleteButton") {
                     @Override
                     public void onClick() {
-                        userService.removeUserFromProject(BudgeteerSession.get().getProjectId(), item.getModelObject().getId());
+
+                        setResponsePage(new DeleteDialog(new Callable<Void>() {
+                            @Override
+                            public Void call() {
+                                userService.removeUserFromProject(BudgeteerSession.get().getProjectId(), item.getModelObject().getId());
+                                setResponsePage(ProjectAdministrationPage.class, getPageParameters());
+                                return null;
+                            }
+                        }, new Callable<Void>() {
+                            @Override
+                            public Void call() {
+                                setResponsePage(ProjectAdministrationPage.class, getPageParameters());
+                                return null;
+                            }
+                        }));
                     }
                 });
             }
@@ -93,7 +112,7 @@ public class ProjectAdministrationPage extends BasePage {
     }
 
     private Form<User> createAddUserForm(String id) {
-        Form<User> form = new Form<User>(id, new Model<User>(new User())) {
+        Form<User> form = new Form<User>(id, new Model<>(new User())) {
             @Override
             protected void onSubmit() {
                 userService.addUserToProject(BudgeteerSession.get().getProjectId(), getModelObject().getId());

@@ -19,21 +19,34 @@
                     </div>
                 </div>
 
-                <div class="form-group">
+                <div>
                     <label for="titleInput"><wicket:message key="page.template.name">Template Name</wicket:message></label>
-                    <input wicket:id="name"type="text" name="name" id="nameInput" class="form-control"/>
+                    <div class="input-group mb-3">
+                       <span class="bg-olive input-group-addon">
+                            <input type="checkbox" wicket:id="favourite" class="bg-olive glyphicon glyphicon-star-empty"/>
+                        </span>
+                        <input wicket:id="name" type="text" class="form-control" placeholder="">
+                    </div>
                     <p class="help-block"><wicket:message key="page.template.name.hint">The name of the template.</wicket:message></p>
                 </div>
 
-                <div class="form-group">
+                <div>
                     <label for="titleInput"><wicket:message key="page.template.description">Template Descripion</wicket:message></label>
-                    <input wicket:id="description"type="text" name="name" id="descriptionInput" class="form-control"/>
+                    <div class="input-group mb-3">
+                        <span class="bg-olive input-group-addon"><i class="bg-olive glyphicon glyphicon-pencil"></i>
+                        </span>
+                        <input wicket:id="description" type="text" class="form-control" placeholder="">
+                    </div>
                     <p class="help-block"><wicket:message key="page.template.description.hint">A description of the purpose of the template.</wicket:message></p>
                 </div>
 
-                <div class="form-group">
+                <div>
                     <label for="typeInput"><wicket:message key="page.template.type">Type</wicket:message></label>
-                    <select id="typeSelect" wicket:id="type" name="name" class="form-control"/>
+                    <div class="input-group">
+                        <span class="bg-olive input-group-addon"><i class="bg-olive glyphicon glyphicon-filter"></i>
+                        </span>
+                        <select id="typeSelect" wicket:id="type" name="name" class="form-control"/>
+                    </div>
                     <p class="help-block"><wicket:message key="page.template.types.hint">The Type of this template.</wicket:message></p>
                 </div>
 
@@ -44,10 +57,15 @@
                         <button wicket:id="backlink2" id="cancel" type="button" class="btn bg-olive btn-block">Cancel</button>
                     </div>
                     <div class="col-lg-3">
-                        <button wicket:id="exampleFileButton" class="btn bg-olive btn-block" data-toggle="tooltip" title
-                                data-original-title="Download an example file to see the format for templates.">
-                            <i class="fa fa-download"></i>&nbsp;&nbsp;&nbsp;Example Template
-                        </button>
+                        <div class="input-group">
+                            <select wicket:id="exampleFileList" class="btn bg-olive form-control">
+                                <option>Budget template</option>
+                            </select>
+                            <div class="input-group-btn">
+                                <button  wicket:id="exampleDownloadButton" class="btn bg-olive glyphicon glyphicon-download-alt" style="top: 0" data-toggle="tooltip" title
+                                         data-original-title="Download the selected template."></button>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-lg-6">
                         <button wicket:id="save" id="submitButton" class="btn bg-olive btn-block"><wicket:message key="page.button.start">Start import</wicket:message></button>

@@ -112,7 +112,6 @@ public class EditTemplatePageTest extends AbstractWebTestTemplate {
 
     @Override
     public void setupTest(){
-        when(templateService.getById(anyLong())).thenReturn(new Template(1L, null, null,null, null, 1L));
-        when(templateService.editTemplate(anyLong(), anyLong(), any(), any())).thenReturn(1L);
+        when(templateService.getById(anyLong())).thenReturn(new Template(1L, null, null,null, null, false,1L));
     }
 }

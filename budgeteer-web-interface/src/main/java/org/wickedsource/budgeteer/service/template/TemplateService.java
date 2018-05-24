@@ -18,6 +18,8 @@ import javax.transaction.Transactional;
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -34,7 +36,7 @@ public class TemplateService {
     public List<Template> getTemplates(){
         List<Template> result = new ArrayList<>();
         for(TemplateEntity E : templateRepository.findAll()){
-            result.add(new Template(E.getId(), E.getName(), E.getDescription(), E.getType(), E.getWb(), E.getProjectId()));
+            result.add(new Template(E.getId(), E.getName(), E.getDescription(), E.getType(), E.getWb(), E.isDefault(), E.getProjectId()));
         }
         return result;
     }
@@ -46,11 +48,21 @@ public class TemplateService {
     public List<Template> getTemplatesInProject(long projectID){
         List<Template> result = new ArrayList<>();
         for(TemplateEntity E : templateRepository.findByProjectId(projectID)){
-            result.add(new Template(E.getId(), E.getName(), E.getDescription(), E.getType() , E.getWb(), E.getProjectId()));
+            result.add(new Template(E.getId(), E.getName(), E.getDescription(), E.getType() , E.getWb(), E.isDefault(), E.getProjectId()));
         }
         return result;
     }
 
+    public Template getDefault(ReportType type, long projectID){
+        for(Template E : getTemplatesInProject(projectID)){
+            if(E.getType() == type){
+                if(E.isDefault()){
+                    return E;
+                }
+            }
+        }
+        return null;
+    }
 
     /**
      * @param filter The Filter to use.
@@ -61,7 +73,7 @@ public class TemplateService {
         for(TemplateEntity E : templateRepository.findByProjectId(filter.getProjectId())){
             for(ReportType type : filter.getTypesList()){
                 if(type == E.getType()){
-                    result.add(new Template(E.getId(), E.getName(), E.getDescription(), E.getType(), E.getWb(), E.getProjectId()));
+                    result.add(new Template(E.getId(), E.getName(), E.getDescription(), E.getType(), E.getWb(), E.isDefault(), E.getProjectId()));
                 }
             }
         }
@@ -76,7 +88,7 @@ public class TemplateService {
     public Template getById(long templateID){
         for(TemplateEntity E : templateRepository.findAll()){
             if(E.getId() == templateID){
-                return new Template(E.getId(), E.getName(), E.getDescription(), E.getType(), E.getWb(), E.getProjectId());
+                return new Template(E.getId(), E.getName(), E.getDescription(), E.getType(), E.getWb(), E.isDefault(), E.getProjectId());
             }
         }
         return null;
@@ -90,34 +102,49 @@ public class TemplateService {
         templateRepository.delete(templateID);
     }
 
+    public void resolveDefaults(long templateId, IModel<TemplateFormInputDto> temModel){
+        if(temModel.getObject().isDefault()){
+            for(TemplateEntity E : templateRepository.findAll()){
+                if(E.getType() == temModel.getObject().getType() && E.getId() != templateId){
+                    if(E.isDefault()){
+                        templateRepository.save(new TemplateEntity(E.getId(), E.getName(), E.getDescription(), E.getType(),
+                                E.getWb(), false, E.getProjectId()));
+                    }
+                }
+            }
+        }
+    }
+
     /**
      *
      * @param projectId The id of the current project
      * @param templateId The id of the template to edit
      * @param importFile The file if containing the Workbook (can be null if we do not want to reupload)
      * @param temModel The model for the template that is being edited
-     * @return Returns the id of the new template, as it will be different (we create a new one with the edited data
-     * and destroy the old one.
      */
-    public long editTemplate(long projectId, long templateId, ImportFile importFile, IModel<TemplateFormInputDto> temModel) {
+    public void editTemplate(long projectId, long templateId, ImportFile importFile, IModel<TemplateFormInputDto> temModel) {
+        resolveDefaults(templateId, temModel);
         TemplateEntity temp;
         if(importFile != null) {
             try {
-                temp = new TemplateEntity(temModel.getObject().getName(), temModel.getObject().getDescription(), temModel.getObject().getType(),
-                        (XSSFWorkbook)WorkbookFactory.create(importFile.getInputStream()), projectId);
-                templateRepository.delete(templateId);
+                temp = new TemplateEntity(templateId, temModel.getObject().getName(),
+                        temModel.getObject().getDescription(),
+                        temModel.getObject().getType(),
+                        (XSSFWorkbook)WorkbookFactory.create(importFile.getInputStream()),
+                        temModel.getObject().isDefault(),
+                        projectId);
                 templateRepository.save(temp);
-                return temp.getId();
             } catch (IOException | InvalidFormatException e) {
                 e.printStackTrace();
-                return 0;
             }
         }else{
-            temp = new TemplateEntity(temModel.getObject().getName(),
-                    temModel.getObject().getDescription(), temModel.getObject().getType(), getById(templateId).getWb(), projectId);
-            templateRepository.delete(templateId);
+            temp = new TemplateEntity(templateId, temModel.getObject().getName(),
+                    temModel.getObject().getDescription(),
+                    temModel.getObject().getType(),
+                    getById(templateId).getWb(),
+                    temModel.getObject().isDefault(),
+                    projectId);
             templateRepository.save(temp);
-            return temp.getId();
         }
     }
 
@@ -128,11 +155,15 @@ public class TemplateService {
      * @param temModel The data model (name, description, id).
      */
     public void doImport(long projectId, ImportFile importFile, IModel<TemplateFormInputDto> temModel) {
-        List<TemplateEntity> imports = new ArrayList<>();
         try {
-            imports.add(new TemplateEntity(temModel.getObject().getName(), temModel.getObject().getDescription(), temModel.getObject().getType(),
-                    (XSSFWorkbook)WorkbookFactory.create(importFile.getInputStream()), projectId));
-            templateRepository.save(imports);
+            TemplateEntity temp = new TemplateEntity(temModel.getObject().getName(),
+                    temModel.getObject().getDescription(),
+                    temModel.getObject().getType(),
+                    (XSSFWorkbook)WorkbookFactory.create(importFile.getInputStream()),
+                    temModel.getObject().isDefault(),
+                    projectId);
+            resolveDefaults(temp.getId(), temModel);
+            templateRepository.save(Collections.singletonList(temp));
         } catch (IOException | InvalidFormatException e){
             e.printStackTrace();
         }
@@ -142,10 +173,14 @@ public class TemplateService {
      *
      * @return An example file that shows how a template could look
      */
-    public ExampleFile getExampleFile() {
+    public ExampleFile getExampleFile(ReportType type) {
         ExampleFile file = new ExampleFile();
-        file.setFileName("example_template.xlsx");
-        file.setInputStream(getClass().getResourceAsStream("/report-template.xlsx"));
+        file.setFileName("Example_" + type.toString().toLowerCase() +"_template.xlsx");
+        if(type == ReportType.BUDGET_REPORT) {
+            file.setInputStream(getClass().getResourceAsStream("/report-template.xlsx"));
+        }else if(type == ReportType.CONTRACT_REPORT){
+            file.setInputStream(getClass().getResourceAsStream("/contract-report-template.xlsx"));
+        }
         return file;
     }
 }

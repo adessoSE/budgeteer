@@ -72,16 +72,17 @@ public class TemplateServiceTest {
         testDto.setName("TEST");
         testDto.setDescription("TEST_D");
         testDto.setType(ReportType.BUDGET_REPORT);
+        long id = templateService.getTemplatesInProject(1).get(0).getId();
         Assert.assertEquals(2, templateService.getTemplatesInProject(1).size());
 
-        long newId = templateService.editTemplate(1, templateService.getTemplatesInProject(1).get(0).getId(),
+        templateService.editTemplate(1, id,
                 new ImportFile("exampleTemplate1.xlsx",
                         getClass().getResourceAsStream("exampleTemplate1.xlsx")), model(from(testDto)));
 
-        Assert.assertEquals("TEST", templateService.getById(newId).getName());
-        Assert.assertEquals("TEST_D", templateService.getById(newId).getDescription());
-        Assert.assertEquals(ReportType.BUDGET_REPORT, templateService.getById(newId).getType());
-        Assert.assertNotNull(templateService.getById(newId).getWb());
+        Assert.assertEquals("TEST", templateService.getById(id).getName());
+        Assert.assertEquals("TEST_D", templateService.getById(id).getDescription());
+        Assert.assertEquals(ReportType.BUDGET_REPORT, templateService.getById(id).getType());
+        Assert.assertNotNull(templateService.getById(id).getWb());
     }
 
     @Test
@@ -111,7 +112,7 @@ public class TemplateServiceTest {
     @Test
     public void getExampleFileTest(){
         try {
-            XSSFWorkbook testWorkbok = (XSSFWorkbook)WorkbookFactory.create(templateService.getExampleFile().getInputStream());
+            XSSFWorkbook testWorkbok = (XSSFWorkbook)WorkbookFactory.create(templateService.getExampleFile(ReportType.CONTRACT_REPORT).getInputStream());
             Assert.assertNotNull(testWorkbok);
         }catch (IOException | InvalidFormatException e){
             e.printStackTrace();

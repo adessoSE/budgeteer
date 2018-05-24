@@ -3,9 +3,7 @@ package org.wickedsource.budgeteer.web.pages.templates.edit;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
-import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.link.Link;
@@ -46,7 +44,6 @@ public class EditForm extends Form<TemplateFormInputDto> {
     private TemplateFormInputDto templateFormInputDto = new TemplateFormInputDto(BudgeteerSession.get().getProjectId());
 
     private long templateID;
-    private long templateId;
 
     public EditForm(String id, IModel<TemplateFormInputDto> formModel, long temID){
         super(id, formModel);
@@ -59,6 +56,7 @@ public class EditForm extends Form<TemplateFormInputDto> {
         fileUpload.setRequired(false);
 
         add(fileUpload);
+        //add(createFavouriteButton("favourite"));
         add(createCancelButton("backlink2"));
         add(DeleteTemplateButton("deleteButton"));
         add(DownloadFileButton("downloadFileButton"));
@@ -76,11 +74,11 @@ public class EditForm extends Form<TemplateFormInputDto> {
                     if(fileUploads != null && fileUploads.size() > 0){
                         ImportFile file = new ImportFile(fileUploads.get(0).getClientFileName(), fileUploads.get(0).getInputStream());
                         if(model(from(templateFormInputDto)).getObject().getName() != null && model(from(templateFormInputDto)).getObject().getType() != null){
-                            updateTemplateID(service.editTemplate(BudgeteerSession.get().getProjectId(), templateID, file, model(from(templateFormInputDto))));
+                            service.editTemplate(BudgeteerSession.get().getProjectId(), templateID, file, model(from(templateFormInputDto)));
                             success(getString("message.success"));
                         }
                     }else if(model(from(templateFormInputDto)).getObject().getName() != null && model(from(templateFormInputDto)).getObject().getType() != null){
-                        updateTemplateID(service.editTemplate(BudgeteerSession.get().getProjectId(), templateID, null, model(from(templateFormInputDto))));
+                        service.editTemplate(BudgeteerSession.get().getProjectId(), templateID, null, model(from(templateFormInputDto)));
                         success(getString("message.success"));
                     }
                 } catch (IOException e) {
@@ -100,6 +98,9 @@ public class EditForm extends Form<TemplateFormInputDto> {
         templateFormInputDto.setName(service.getById(templateID).getName());
         templateFormInputDto.setDescription(service.getById(templateID).getDescription());
         templateFormInputDto.setType(service.getById(templateID).getType());
+        templateFormInputDto.setDefault(service.getById(templateID).isDefault());
+
+        add(new CheckBox("favourite", model(from(templateFormInputDto).isDefault())));
         add(new TextField<>("name", model(from(templateFormInputDto).getName())));
         add(new TextField<>("description", model(from(templateFormInputDto).getDescription())));
         DropDownChoice<ReportType> typeDropDown = new DropDownChoice<>("type", model(from(templateFormInputDto).getType()),
@@ -120,10 +121,6 @@ public class EditForm extends Form<TemplateFormInputDto> {
         add(typeDropDown);
     }
 
-    private void updateTemplateID(long newID){
-        templateID = newID;
-    }
-
     /**
      * Creates a button to download the template that is being edited.
      */
@@ -142,6 +139,18 @@ public class EditForm extends Form<TemplateFormInputDto> {
                 getRequestCycle().scheduleRequestHandlerAfterCurrent(handler);
                 HttpServletResponse response = (HttpServletResponse) getRequestCycle().getResponse().getContainerResponse();
                 response.setContentType(null);
+            }
+        };
+    }
+
+    /**
+     * Creates a button to download the template that is being edited.
+     */
+    private Link createFavouriteButton(String wicketId) {
+        return new Link<Void>(wicketId) {
+            @Override
+            public void onClick() {
+                templateFormInputDto.setDefault(!templateFormInputDto.isDefault());
             }
         };
     }

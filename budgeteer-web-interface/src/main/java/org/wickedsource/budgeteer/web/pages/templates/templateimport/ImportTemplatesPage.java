@@ -1,11 +1,11 @@
 package org.wickedsource.budgeteer.web.pages.templates.templateimport;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.link.Link;
@@ -26,8 +26,12 @@ import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.ClassAwareWrappingModel;
 import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
+import org.wickedsource.budgeteer.web.components.multiselect.MultiselectBehavior;
 import org.wickedsource.budgeteer.web.pages.base.AbstractChoiceRenderer;
 import org.wickedsource.budgeteer.web.pages.base.dialogpage.DialogPageWithBacklink;
+import org.wickedsource.budgeteer.web.pages.budgets.overview.report.form.BudgetReportForm;
+import org.wickedsource.budgeteer.web.pages.templates.TemplateFilter;
+import org.wicketstuff.lazymodel.LazyModel;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
@@ -35,6 +39,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import static org.wicketstuff.lazymodel.LazyModel.from;
@@ -47,6 +52,8 @@ public class ImportTemplatesPage extends DialogPageWithBacklink {
     private TemplateService service;
 
     private List<FileUpload> fileUploads = new ArrayList<FileUpload>();
+
+    ReportType exampleTemplateType = ReportType.BUDGET_REPORT;
 
     private TemplateFormInputDto templateFormInputDto = new TemplateFormInputDto(BudgeteerSession.get().getProjectId());
 
@@ -101,9 +108,11 @@ public class ImportTemplatesPage extends DialogPageWithBacklink {
             }
         });
 
-        form.add(createExampleFileButton("exampleFileButton"));
+        form.add(createExampleFileList("exampleFileList"));
+        form.add(createExampleFileButton("exampleDownloadButton"));
         form.add(new TextField<>("name", model(from(templateFormInputDto).getName())));
         form.add(new TextField<>("description", model(from(templateFormInputDto).getDescription())));
+        form.add(new CheckBox("favourite", model(from(templateFormInputDto).isDefault())));
         DropDownChoice<ReportType> typeDropDown = new DropDownChoice<>("type", model(from(templateFormInputDto).getType()),
                 new LoadableDetachableModel<List<ReportType>>() {
                     @Override
@@ -122,13 +131,41 @@ public class ImportTemplatesPage extends DialogPageWithBacklink {
     }
 
     /**
-     * Creates a button to download an example template.
+     * Creates a list with all example templates available to download.
      */
-    private Link createExampleFileButton(String wicketId) {
+    private DropDownChoice createExampleFileList(String wicketId) {
+        DropDownChoice<ReportType> dropDownChoice = new DropDownChoice<ReportType>(wicketId, new Model<>(exampleTemplateType),
+                model(from(new ArrayList<>(Arrays.asList(ReportType.values())))),
+                new AbstractChoiceRenderer<ReportType>() {
+                    @Override
+                    public Object getDisplayValue(ReportType object) {
+                        return object.toString() + " template";
+                    }
+        }){
+            @Override
+            public String getModelValue (){
+                return null;
+            }
+        };
+        HashMap<String, String> options = MultiselectBehavior.getRecommendedOptions();
+        options.clear();
+        options.put("buttonClass","'btn bg-olive btn-block'");
+        dropDownChoice.add(new MultiselectBehavior(options));
+        dropDownChoice.add(new AjaxFormComponentUpdatingBehavior("change") {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                exampleTemplateType = (ReportType)this.getComponent().getDefaultModel().getObject();
+            }
+        });
+        return dropDownChoice;
+
+    }
+
+    private Link<Void> createExampleFileButton(String wicketId){
         return new Link<Void>(wicketId) {
             @Override
             public void onClick() {
-                final ExampleFile downloadFile = service.getExampleFile();
+                final ExampleFile downloadFile = service.getExampleFile(exampleTemplateType);
                 AbstractResourceStreamWriter streamWriter = new AbstractResourceStreamWriter() {
                     @Override
                     public void write(OutputStream output) throws IOException {

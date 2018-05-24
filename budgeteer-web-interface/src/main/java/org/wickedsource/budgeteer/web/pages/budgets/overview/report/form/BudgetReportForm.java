@@ -42,7 +42,7 @@ public class BudgetReportForm extends Form<ReportMetaInformation> {
     @SpringBean
     private BudgetReportService service;
 
-    @Inject
+    @SpringBean
     private TemplateService templateService;
 
     public BudgetReportForm(String id) {
@@ -65,11 +65,21 @@ public class BudgetReportForm extends Form<ReportMetaInformation> {
                     @Override
                     protected List<? extends Template> load() {
                         List<Template> temp = new ArrayList<>();
-                        temp.add(service.getDefaultTemplate());
+                        Template defTemp = templateService.getDefault(ReportType.BUDGET_REPORT, BudgeteerSession.get().getProjectId());
+                        if(defTemp !=  null){
+                            temp.add(defTemp);
+                        }
                         for(Template e : templateService.getTemplatesInProject(BudgeteerSession.get().getProjectId())){
                             if(e.getType() == ReportType.BUDGET_REPORT){
-                                temp.add(e);
+                                if(defTemp == null){
+                                    temp.add(e);
+                                }else if(defTemp.getId() != e.getId()){
+                                    temp.add(e);
+                                }
                             }
+                        }
+                        if(temp.isEmpty()){
+                            temp.add(null);
                         }
                         return temp;
                     }
@@ -77,7 +87,11 @@ public class BudgetReportForm extends Form<ReportMetaInformation> {
                 new AbstractChoiceRenderer<Template>() {
                     @Override
                     public Object getDisplayValue(Template object) {
-                        return object == null ? "Unnamed" : object.getName();
+                        String isDefault = "";
+                        if(object != null && object.isDefault()){
+                            isDefault = " (default)";
+                        }
+                        return object == null ? "No Templates Available" : object.getName() + isDefault;
                     }
                 }){
             @Override

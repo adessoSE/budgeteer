@@ -120,11 +120,7 @@ public class BudgetReportService {
 	}
 
 	private XSSFWorkbook getSheetWorkbook(long id) {
-        if(id == -1){
-            return getDefaultTemplate().getWb();
-        }else {
-            return templateService.getById(id).getWb();
-        }
+    	return templateService.getById(id).getWb();
 	}
 
 	private String getAttribute(String string, List<? extends SheetTemplateSerializable> list) {
@@ -232,17 +228,6 @@ public class BudgetReportService {
             return MoneyUtil.createMoneyFromCents(0L);
 		} else {
 			return MoneyUtil.createMoneyFromCents(Math.round(cents));
-		}
-	}
-
-	public Template getDefaultTemplate(){
-		ClassLoader classLoader = getClass().getClassLoader();
-		InputStream in = classLoader.getResourceAsStream("report-template.xlsx");
-		try {
-			return new Template(-1, "Default", "", ReportType.BUDGET_REPORT, (XSSFWorkbook)WorkbookFactory.create(in), -1);
-		}catch (InvalidFormatException | IOException e){
-			e.printStackTrace();
-			return null;
 		}
 	}
 }

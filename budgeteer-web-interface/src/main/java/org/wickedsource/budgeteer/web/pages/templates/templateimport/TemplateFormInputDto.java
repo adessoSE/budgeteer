@@ -11,6 +11,7 @@ public class TemplateFormInputDto implements Serializable {
     private String name;
     private String description;
     private ReportType type;
+    private boolean isDefault;
 
     public TemplateFormInputDto(long projectId) {
         this.projectId = projectId;

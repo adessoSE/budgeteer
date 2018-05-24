@@ -144,21 +144,6 @@ public class ContractReportService {
 	}
 
     private XSSFWorkbook getSheetWorkbook(long id) {
-        if(id == -1){
-            return getDefaultTemplate().getWb();
-        }else {
-            return templateService.getById(id).getWb();
-        }
-    }
-
-    public Template getDefaultTemplate(){
-        ClassLoader classLoader = getClass().getClassLoader();
-        InputStream in = classLoader.getResourceAsStream("contract-report-template.xlsx");
-        try {
-            return new Template(-1, "Default", "", ReportType.BUDGET_REPORT, (XSSFWorkbook)WorkbookFactory.create(in), -1);
-        }catch (InvalidFormatException | IOException e){
-            e.printStackTrace();
-            return null;
-        }
+		return templateService.getById(id).getWb();
     }
 }

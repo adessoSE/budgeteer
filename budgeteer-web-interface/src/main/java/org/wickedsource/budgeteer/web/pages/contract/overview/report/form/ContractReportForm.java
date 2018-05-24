@@ -91,11 +91,21 @@ public class ContractReportForm extends Form<ContractReportMetaInformation> {
 					@Override
 					protected List<? extends Template> load() {
 						List<Template> temp = new ArrayList<>();
-						temp.add(contractReportService.getDefaultTemplate());
+						Template defTemp = templateService.getDefault(ReportType.CONTRACT_REPORT, BudgeteerSession.get().getProjectId());
+						if(defTemp !=  null){
+							temp.add(defTemp);
+						}
 						for(Template e : templateService.getTemplatesInProject(BudgeteerSession.get().getProjectId())){
 							if(e.getType() == ReportType.CONTRACT_REPORT){
-								temp.add(e);
+								if(defTemp == null){
+									temp.add(e);
+								}else if(defTemp.getId() != e.getId()){
+									temp.add(e);
+								}
 							}
+						}
+						if(temp.isEmpty()){
+							temp.add(null);
 						}
 						return temp;
 					}
@@ -103,14 +113,18 @@ public class ContractReportForm extends Form<ContractReportMetaInformation> {
 				new AbstractChoiceRenderer<Template>() {
 					@Override
 					public Object getDisplayValue(Template object) {
-						return object == null ? "Unnamed" : object.getName();
+						String isDefault = "";
+						if(object != null && object.isDefault()){
+							isDefault = " (default)";
+						}
+						return object == null ? "No Templates Available" : object.getName() + isDefault;
 					}
 				}){
 			@Override
 			public String getModelValue (){
 				return null;
 			}
-		};;
+		};
 		templateDropDown.setNullValid(false);
 		add(templateDropDown);
 
