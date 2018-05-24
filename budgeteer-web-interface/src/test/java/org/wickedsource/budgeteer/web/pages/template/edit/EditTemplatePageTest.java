@@ -3,8 +3,8 @@ package org.wickedsource.budgeteer.web.pages.template.edit;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.tester.FormTester;
 import org.apache.wicket.util.tester.WicketTester;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.kubek2k.springockito.annotations.ReplaceWithMock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.budgeteer.service.template.Template;
@@ -25,14 +25,14 @@ public class EditTemplatePageTest extends AbstractWebTestTemplate {
     private TemplateService templateService;
 
     @Test
-    public void testRender() {
+    void testRender() {
         WicketTester tester = getTester();
         tester.startPage(new EditTemplatePage(TemplatesPage.class, new PageParameters(), 1L));
         tester.assertRenderedPage(EditTemplatePage.class);
     }
 
     @Test
-    public void testBacklink1Click() {
+    void testBacklink1Click() {
         WicketTester tester = getTester();
         tester.startPage(new EditTemplatePage(TemplatesPage.class, new PageParameters(), 1L));
         tester.clickLink("backlink1");
@@ -40,7 +40,7 @@ public class EditTemplatePageTest extends AbstractWebTestTemplate {
     }
 
     @Test
-    public void testBacklink2Click() {
+    void testBacklink2Click() {
         WicketTester tester = getTester();
         tester.startPage(new EditTemplatePage(TemplatesPage.class, new PageParameters(), 1L));
         tester.clickLink("editForm:backlink2");
@@ -48,11 +48,11 @@ public class EditTemplatePageTest extends AbstractWebTestTemplate {
     }
 
     @Test
-    public void NoDataFormSubmitTest(){
+    void NoDataFormSubmitTest(){
         WicketTester tester = getTester();
         EditTemplatePage testPage = new EditTemplatePage(TemplatesPage.class, new PageParameters(), 1L);
         tester.startPage(testPage);
-        Assert.assertNotNull(testPage.get("editForm"));
+        Assertions.assertNotNull(testPage.get("editForm"));
         FormTester formTester = tester.newFormTester("editForm", true);
         formTester.setClearFeedbackMessagesBeforeSubmit(true);
         formTester.setFile("fileUpload", null, "");
@@ -64,11 +64,11 @@ public class EditTemplatePageTest extends AbstractWebTestTemplate {
     }
 
     @Test
-    public void AllCorrectInputForm(){
+    void AllCorrectInputForm(){
         WicketTester tester = getTester();
         EditTemplatePage testPage = new EditTemplatePage(TemplatesPage.class, new PageParameters(), 1L);
         tester.startPage(testPage);
-        Assert.assertNotNull(testPage.get("editForm"));
+        Assertions.assertNotNull(testPage.get("editForm"));
         FormTester formTester = tester.newFormTester("editForm", true);
         formTester.setValue("name", "TEST_N");
         formTester.setValue("description", "TEST_D");
@@ -81,11 +81,11 @@ public class EditTemplatePageTest extends AbstractWebTestTemplate {
     }
 
     @Test
-    public void DeleteButtonTest(){
+    void DeleteButtonTest(){
         WicketTester tester = getTester();
         EditTemplatePage testPage = new EditTemplatePage(TemplatesPage.class, new PageParameters(), 1L);
         tester.startPage(testPage);
-        Assert.assertNotNull(testPage.get("editForm:deleteButton"));
+        Assertions.assertNotNull(testPage.get("editForm:deleteButton"));
         tester.clickLink("editForm:deleteButton");
         verify(templateService, times(1)).deleteTemplate(anyLong());
         tester.assertRenderedPage(TemplatesPage.class);

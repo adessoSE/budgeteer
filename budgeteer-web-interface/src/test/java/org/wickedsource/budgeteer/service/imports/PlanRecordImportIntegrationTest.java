@@ -4,8 +4,8 @@ package org.wickedsource.budgeteer.service.imports;
 import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.budgeteer.IntegrationTestTemplate;
 import org.wickedsource.budgeteer.importer.resourceplan.ResourcePlanImporter;
@@ -15,7 +15,6 @@ import org.wickedsource.budgeteer.imports.api.InvalidFileFormatException;
 import org.wickedsource.budgeteer.persistence.budget.BudgetRepository;
 import org.wickedsource.budgeteer.persistence.imports.ImportEntity;
 import org.wickedsource.budgeteer.persistence.imports.ImportRepository;
-import org.wickedsource.budgeteer.persistence.person.DailyRateRepository;
 import org.wickedsource.budgeteer.persistence.person.PersonRepository;
 import org.wickedsource.budgeteer.persistence.record.PlanRecordEntity;
 import org.wickedsource.budgeteer.persistence.record.PlanRecordRepository;
@@ -24,10 +23,9 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-public class PlanRecordImportIntegrationTest extends IntegrationTestTemplate {
+class PlanRecordImportIntegrationTest extends IntegrationTestTemplate {
 
     private DateFormat format = new SimpleDateFormat("dd.MM.yyyy");
 
@@ -46,13 +44,10 @@ public class PlanRecordImportIntegrationTest extends IntegrationTestTemplate {
     @Autowired
     private ImportRepository importRepository;
 
-    @Autowired
-    private DailyRateRepository dailyRateRepository;
-
     @Test
     @DatabaseSetup("doImportWithEmptyDatabase.xml")
     @DatabaseTearDown(value = "doImportWithEmptyDatabase.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testDoImportWithEmptyDatabase() throws Exception {
+    void testDoImportWithEmptyDatabase() throws Exception {
         doImport();
         assertCounts(1);
         assertImportedRecords();
@@ -62,7 +57,7 @@ public class PlanRecordImportIntegrationTest extends IntegrationTestTemplate {
     @Test
     @DatabaseSetup("doImportWithExistingPersonsAndBudgets.xml")
     @DatabaseTearDown(value = "doImportWithExistingPersonsAndBudgets.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testDoImportWithExistingPersonsAndBudgets() throws Exception {
+    void testDoImportWithExistingPersonsAndBudgets() throws Exception {
         doImport();
         assertCounts(2);
         assertImportedRecords();
@@ -72,7 +67,7 @@ public class PlanRecordImportIntegrationTest extends IntegrationTestTemplate {
     @Test
     @DatabaseSetup("doImportWithExistingDailyRates.xml")
     @DatabaseTearDown(value = "doImportWithExistingDailyRates.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testDoImportWithExistingDailyRates() throws Exception {
+    void testDoImportWithExistingDailyRates() throws Exception {
         doImport();
         assertCounts(2);
         assertImportedRecords();
@@ -82,35 +77,32 @@ public class PlanRecordImportIntegrationTest extends IntegrationTestTemplate {
     private void doImport() throws ImportException, InvalidFileFormatException {
         List<ImportFile> importFiles = new ArrayList<ImportFile>();
         importFiles.add(new ImportFile("resource_plan.xlsx", getClass().getResourceAsStream("resource_plan.xlsx")));
-        importService.doImport(1l, new ResourcePlanImporter(), importFiles);
+        importService.doImport(1L, new ResourcePlanImporter(), importFiles);
     }
 
     private void assertImportRecord() throws ParseException {
         ImportEntity importRecord = importRepository.findAll().iterator().next();
-        Assert.assertNotNull(importRecord.getProject());
-        Assert.assertNotNull(importRecord.getImportDate());
-        Assert.assertNotNull(importRecord.getImportType());
-        Assert.assertEquals(format.parse("01.01.2014"), importRecord.getStartDate());
-        Assert.assertEquals(format.parse("01.02.2014"), importRecord.getEndDate());
+        Assertions.assertNotNull(importRecord.getProject());
+        Assertions.assertNotNull(importRecord.getImportDate());
+        Assertions.assertNotNull(importRecord.getImportType());
+        Assertions.assertEquals(format.parse("01.01.2014"), importRecord.getStartDate());
+        Assertions.assertEquals(format.parse("01.02.2014"), importRecord.getEndDate());
     }
 
     private void assertImportedRecords() {
-        Iterator<PlanRecordEntity> iterator = planRecordRepository.findAll().iterator();
-        while (iterator.hasNext()) {
-            PlanRecordEntity record = iterator.next();
-            Assert.assertNotNull(record.getBudget());
-            Assert.assertNotNull(record.getPerson());
-            Assert.assertNotNull(record.getDate());
-            Assert.assertNotNull(record.getMinutes());
+        for (PlanRecordEntity record : planRecordRepository.findAll()) {
+            Assertions.assertNotNull(record.getBudget());
+            Assertions.assertNotNull(record.getPerson());
+            Assertions.assertNotNull(record.getDate());
         }
     }
 
     private void assertCounts(int personCount) {
-        Assert.assertEquals(26, planRecordRepository.count());
-        Assert.assertEquals(2, budgetRepository.count());
-        Assert.assertEquals(personCount, personRepository.count());
-        Assert.assertEquals(1, importRepository.count());
-        //Assert.assertEquals(2, dailyRateRepository.count());
+        Assertions.assertEquals(26, planRecordRepository.count());
+        Assertions.assertEquals(2, budgetRepository.count());
+        Assertions.assertEquals(personCount, personRepository.count());
+        Assertions.assertEquals(1, importRepository.count());
+        //Assertions.assertEquals(2, dailyRateRepository.count());
     }
 
 }

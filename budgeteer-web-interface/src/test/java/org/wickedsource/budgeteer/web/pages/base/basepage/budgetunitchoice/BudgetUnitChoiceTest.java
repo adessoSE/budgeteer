@@ -1,7 +1,7 @@
 package org.wickedsource.budgeteer.web.pages.base.basepage.budgetunitchoice;
 
 import org.apache.wicket.util.tester.WicketTester;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.budgeteer.service.budget.BudgetService;
 import org.wickedsource.budgeteer.web.AbstractWebTestTemplate;
@@ -17,10 +17,10 @@ public class BudgetUnitChoiceTest extends AbstractWebTestTemplate {
     BudgetService service;
 
     @Test
-    public void testRender() {
+    void testRender() {
         WicketTester tester = getTester();
-        when(service.loadBudgetUnits(1l)).thenReturn(createBudgetUnits());
-        BudgetUnitModel model = new BudgetUnitModel(1l);
+        when(service.loadBudgetUnits(1L)).thenReturn(createBudgetUnits());
+        BudgetUnitModel model = new BudgetUnitModel(1L);
         BudgetUnitChoice dropdown = new BudgetUnitChoice("budgetUnit", model);
         tester.startComponentInPage(dropdown);
     }

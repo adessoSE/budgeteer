@@ -4,8 +4,8 @@ import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 import com.querydsl.core.types.Predicate;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.budgeteer.IntegrationTestTemplate;
 import org.wickedsource.budgeteer.ListUtil;
@@ -19,7 +19,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-public class WorkRecordQueriesIntegrationTest extends IntegrationTestTemplate {
+class WorkRecordQueriesIntegrationTest extends IntegrationTestTemplate {
 
     private DateFormat format = new SimpleDateFormat("dd.MM.yyyy");
 
@@ -29,57 +29,57 @@ public class WorkRecordQueriesIntegrationTest extends IntegrationTestTemplate {
     @Test
     @DatabaseSetup("findByFilter.xml")
     @DatabaseTearDown(value = "findByFilter.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testFindByEmptyFilter() throws Exception {
+    void testFindByEmptyFilter() throws Exception {
         WorkRecordFilter filter = new WorkRecordFilter(1L);
         Predicate query = WorkRecordQueries.findByFilter(filter);
         List<WorkRecordEntity> records = ListUtil.toArrayList(repository.findAll(query));
-        Assert.assertEquals(4, records.size());
+        Assertions.assertEquals(4, records.size());
     }
 
     @Test
     @DatabaseSetup("findByFilter.xml")
     @DatabaseTearDown(value = "findByFilter.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testFindByPersonFilter() throws Exception {
+    void testFindByPersonFilter() throws Exception {
         WorkRecordFilter filter = new WorkRecordFilter(1L);
         filter.getPersonList().add(new PersonBaseData(1L));
         Predicate query = WorkRecordQueries.findByFilter(filter);
         List<WorkRecordEntity> records = ListUtil.toArrayList(repository.findAll(query));
-        Assert.assertEquals(2, records.size());
+        Assertions.assertEquals(2, records.size());
     }
 
     @Test
     @DatabaseSetup("findByFilter.xml")
     @DatabaseTearDown(value = "findByFilter.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testFindByBudgetFilter() throws Exception {
+    void testFindByBudgetFilter() throws Exception {
         WorkRecordFilter filter = new WorkRecordFilter(1L);
         filter.getBudgetList().add(new BudgetBaseData(1L, "budget1"));
         Predicate query = WorkRecordQueries.findByFilter(filter);
         List<WorkRecordEntity> records = ListUtil.toArrayList(repository.findAll(query));
-        Assert.assertEquals(2, records.size());
+        Assertions.assertEquals(2, records.size());
     }
 
     @Test
     @DatabaseSetup("findByFilter.xml")
     @DatabaseTearDown(value = "findByFilter.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testFindByDateFilter() throws Exception {
+    void testFindByDateFilter() throws Exception {
         WorkRecordFilter filter = new WorkRecordFilter(1L);
         filter.setDateRange(new DateRange(format.parse("01.01.2015"), format.parse("15.08.2015")));
         Predicate query = WorkRecordQueries.findByFilter(filter);
         List<WorkRecordEntity> records = ListUtil.toArrayList(repository.findAll(query));
-        Assert.assertEquals(3, records.size());
+        Assertions.assertEquals(3, records.size());
     }
 
     @Test
     @DatabaseSetup("findByFilter.xml")
     @DatabaseTearDown(value = "findByFilter.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testFindByMixedFilter() throws Exception {
+    void testFindByMixedFilter() throws Exception {
         WorkRecordFilter filter = new WorkRecordFilter(1L);
         filter.getPersonList().add(new PersonBaseData(1L));
         filter.getBudgetList().add(new BudgetBaseData(1L, "budget1"));
         filter.setDateRange(new DateRange(format.parse("01.01.2015"), format.parse("02.01.2015")));
         Predicate query = WorkRecordQueries.findByFilter(filter);
         List<WorkRecordEntity> records = ListUtil.toArrayList(repository.findAll(query));
-        Assert.assertEquals(2, records.size());
+        Assertions.assertEquals(2, records.size());
     }
 
 }
