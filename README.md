@@ -31,7 +31,3 @@ spring.autoconfigure.exclude=org.keycloak.adapters.springboot.KeycloakSpringBoot
 ```
 
  You can find more details about how to install and configure Keycloak [here](https://keycloak.gitbooks.io/documentation/securing_apps/topics/oidc/java/spring-boot-adapter.html).
- 
- ## Licence
- This project is not under any licence yet, since I have to sort out licencing of the Highcharts library, which is used to display eye-pleasing charts. Feel free to get in touch with me. 
- 
