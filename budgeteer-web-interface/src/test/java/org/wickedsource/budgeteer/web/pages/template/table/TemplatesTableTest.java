@@ -1,7 +1,7 @@
 package org.wickedsource.budgeteer.web.pages.template.table;
 
 import org.apache.wicket.util.tester.WicketTester;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.budgeteer.service.template.Template;
 import org.wickedsource.budgeteer.service.template.TemplateService;
@@ -21,7 +21,7 @@ public class TemplatesTableTest extends AbstractWebTestTemplate {
     private TemplateService templateService;
 
     @Test
-    public void testRender() {
+    void testRender() {
         WicketTester tester = getTester();
         TemplateListModel model = new TemplateListModel(1L);
         TemplatesTable table = new TemplatesTable("table", model);

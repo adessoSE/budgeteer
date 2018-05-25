@@ -5,12 +5,12 @@ import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 import org.apache.commons.lang3.time.DateUtils;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
@@ -24,7 +24,7 @@ import java.util.*;
 
 import static org.junit.Assert.*;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {IntegrationTestConfiguration.class})
 @TestExecutionListeners({
         DbUnitTestExecutionListener.class,
@@ -32,7 +32,7 @@ import static org.junit.Assert.*;
         DependencyInjectionTestExecutionListener.class,
         TransactionalTestExecutionListener.class
 })
-public class ContractServiceTest{
+class ContractServiceTest{
 
 
     @Autowired
@@ -50,7 +50,7 @@ public class ContractServiceTest{
     @Test
     @DatabaseSetup("contractTest.xml")
     @DatabaseTearDown(value = "contractTest.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testSaveNewContract(){
+    void testSaveNewContract(){
         ContractBaseData testObject = new ContractBaseData();
         testObject.setBudget(MoneyUtil.createMoney(12));
         testObject.setContractId(0);
@@ -61,7 +61,7 @@ public class ContractServiceTest{
 
         long newContractId = service.save(testObject);
 
-        assertTrue(newContractId != 0l);
+        assertTrue(newContractId != 0L);
 
         ContractBaseData savedContract = service.getContractById(newContractId);
         assertEquals(MoneyUtil.createMoney(12), savedContract.getBudget());
@@ -77,7 +77,7 @@ public class ContractServiceTest{
     @Test
     @DatabaseSetup("contractTest.xml")
     @DatabaseTearDown(value = "contractTest.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testSaveNewContract2(){
+    void testSaveNewContract2(){
         ContractBaseData testObject = new ContractBaseData();
         testObject.setContractId(0);
         testObject.setProjectId(2);
@@ -87,7 +87,7 @@ public class ContractServiceTest{
 
         long newContractId = service.save(testObject);
 
-        assertTrue(newContractId != 0l);
+        assertTrue(newContractId != 0L);
 
         ContractBaseData savedContract = service.getContractById(newContractId);
         assertTrue(savedContract.getContractId() > 0);
@@ -102,7 +102,7 @@ public class ContractServiceTest{
     @Test
     @DatabaseSetup("contractTest.xml")
     @DatabaseTearDown(value = "contractTest.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testUpdateContract(){
+    void testUpdateContract(){
         ContractBaseData testObject = service.getContractById(4);
 
         testObject.setBudget(MoneyUtil.createMoney(12));
@@ -145,7 +145,7 @@ public class ContractServiceTest{
     @Test
     @DatabaseSetup("contractTest.xml")
     @DatabaseTearDown(value = "contractTest.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testUpdateContract1(){
+    void testUpdateContract1(){
         ContractBaseData testObject = service.getContractById(5);
 
         testObject.setBudget(MoneyUtil.createMoney(12));
@@ -186,7 +186,7 @@ public class ContractServiceTest{
     @Test
     @DatabaseSetup("contractTest.xml")
     @DatabaseTearDown(value = "contractTest.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testGetEmptyContractModel() {
+    void testGetEmptyContractModel() {
         ContractBaseData baseData = service.getEmptyContractModel(1);
         assertEquals(0, baseData.getContractAttributes().size());
 
@@ -199,7 +199,7 @@ public class ContractServiceTest{
     @Test
     @DatabaseSetup("contractTest.xml")
     @DatabaseTearDown(value = "contractTest.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testGetContractById() {
+    void testGetContractById() {
         ContractBaseData testObject = service.getContractById(3);
 
         assertEquals(3, testObject.getContractId());
@@ -226,7 +226,7 @@ public class ContractServiceTest{
     @Test
     @DatabaseSetup("contractTest.xml")
     @DatabaseTearDown(value = "contractTest.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testGetContractByIdWithInvoices() {
+    void testGetContractByIdWithInvoices() {
         ContractBaseData testObject = service.getContractById(6);
         assertEquals(2, testObject.getBelongingInvoices().size());
     }
@@ -246,7 +246,7 @@ public class ContractServiceTest{
     @Test
     @DatabaseSetup("contractDeletionTest.xml")
     @DatabaseTearDown(value = "contractDeletionTest.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testDeleteContract() {
+    void testDeleteContract() {
         assertNotNull(service.getContractById(3));
         assertEquals(contractRepository.findContractFieldsByContractId(3L).size(), 2);
         assertEquals(contractRepository.findContractFieldsByContractId(4L).size(), 1);

@@ -2,7 +2,7 @@ package org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs;
 
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.tester.WicketTester;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.wickedsource.budgeteer.web.AbstractWebTestTemplate;
 import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 
@@ -12,7 +12,7 @@ import java.util.List;
 public class BreadcrumbsPanelTest extends AbstractWebTestTemplate {
 
     @Test
-    public void testRender() {
+    void testRender() {
         WicketTester tester = getTester();
         BreadcrumbsPanel panel = new BreadcrumbsPanel("breadcrumbs", new DummyBreadcrumbsModel());
         tester.startComponentInPage(panel);

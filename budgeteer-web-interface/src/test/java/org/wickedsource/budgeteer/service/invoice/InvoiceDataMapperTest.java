@@ -1,7 +1,7 @@
 package org.wickedsource.budgeteer.service.invoice;
 
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.persistence.contract.ContractEntity;
 import org.wickedsource.budgeteer.persistence.contract.ContractInvoiceField;
@@ -17,13 +17,13 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class InvoiceDataMapperTest {
+class InvoiceDataMapperTest {
 
     /**
      * Tests whether different invoiced associated with different contracts will get the same dynamic attributes
      */
     @Test
-    public void testMapWithDifferentProjectsButSameAttributes(){
+    void testMapWithDifferentProjectsButSameAttributes(){
         InvoiceDataMapper mapper = new InvoiceDataMapper();
 
         List<InvoiceEntity> invoiceList = new LinkedList<InvoiceEntity>();
@@ -54,7 +54,7 @@ public class InvoiceDataMapperTest {
 
 
     @Test
-    public void testMap(){
+    void testMap(){
         InvoiceDataMapper mapper = new InvoiceDataMapper();
         InvoiceBaseData mappedElement = mapper.map(getDummyInvoiceEntity());
 
@@ -81,7 +81,7 @@ public class InvoiceDataMapperTest {
         project1.setId(1);
         project1.setName("Project1");
 
-        /**
+        /*
          * Set up a contract
          */
         ContractEntity contract1 = new ContractEntity();
@@ -90,7 +90,7 @@ public class InvoiceDataMapperTest {
         contract1.setName("Contract 1");
         contract1.setInvoiceFields(new HashSet<ContractInvoiceField>());
 
-        /**
+        /*
          * Add zwo ContractInvoiceFields to the contract
          */
         ContractInvoiceField contractInvoiceField1 = new ContractInvoiceField();
@@ -105,7 +105,7 @@ public class InvoiceDataMapperTest {
         contractInvoiceField2.setFieldName("contractInvoiceField2 Name");
         contract1.getInvoiceFields().add(contractInvoiceField2);
 
-        /**
+        /*
          * Create the first Invoice
          */
         InvoiceEntity invoiceEntity = new InvoiceEntity();
@@ -123,7 +123,7 @@ public class InvoiceDataMapperTest {
 
         invoiceEntity.setContract(contract1);
         invoiceEntity.setDynamicFields(new LinkedList<InvoiceFieldEntity>());
-        /**
+        /*
          * Add some Dynamic Invoice Fields
          */
         InvoiceFieldEntity dynamicField1 = new InvoiceFieldEntity();

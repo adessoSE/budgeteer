@@ -1,7 +1,7 @@
 package org.wickedsource.budgeteer.web.components.aggregatedrecordtable;
 
 import org.apache.wicket.util.tester.WicketTester;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.service.record.AggregatedRecord;
@@ -24,10 +24,10 @@ public class AggregatedRecordTableTest extends AbstractWebTestTemplate {
     private Random random = new Random();
 
     @Test
-    public void render() {
+    void render() {
         WicketTester tester = getTester();
-        when(service.getWeeklyAggregationForPerson(1l)).thenReturn(getWeeklyAggregationForPerson(1l));
-        PersonWeeklyAggregatedRecordsModel model = new PersonWeeklyAggregatedRecordsModel(1l);
+        when(service.getWeeklyAggregationForPerson(1L)).thenReturn(getWeeklyAggregationForPerson(1L));
+        PersonWeeklyAggregatedRecordsModel model = new PersonWeeklyAggregatedRecordsModel(1L);
         AggregatedRecordTable table = new AggregatedRecordTable("table", model);
         tester.startComponentInPage(table);
     }

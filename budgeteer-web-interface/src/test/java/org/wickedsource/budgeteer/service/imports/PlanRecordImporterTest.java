@@ -3,13 +3,14 @@ package org.wickedsource.budgeteer.service.imports;
 import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.kubek2k.springockito.annotations.SpringockitoContextLoader;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.wickedsource.budgeteer.importer.resourceplan.ResourcePlanImporter;
 import org.wickedsource.budgeteer.imports.api.ImportException;
@@ -22,9 +23,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @ContextConfiguration(loader = SpringockitoContextLoader.class, locations = {"classpath:spring-service.xml", "classpath:spring-repository-mock.xml"})
-public class PlanRecordImporterTest {
+class PlanRecordImporterTest {
 
     @Autowired
     private ProjectRepository projectRepository;
@@ -42,17 +43,17 @@ public class PlanRecordImporterTest {
     @Test
     @DatabaseSetup("doImportWithEmptyDatabase.xml")
     @DatabaseTearDown(value = "doImportWithEmptyDatabase.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testGetSkippedRecordsNoSkippedRecords() throws Exception {
+    void testGetSkippedRecordsNoSkippedRecords() throws Exception {
         Mockito.when(projectRepository.findOne(Mockito.anyLong())).thenReturn(new ProjectEntity());
         doImport();
         List<List<String>> skippedRecords = importService.getSkippedRecords();
-        Assert.assertEquals(0, skippedRecords.size());
+        Assertions.assertEquals(0, skippedRecords.size());
     }
 
     @Test
     @DatabaseSetup("doImportWithEmptyDatabase.xml")
     @DatabaseTearDown(value = "doImportWithEmptyDatabase.xml", type = DatabaseOperation.DELETE_ALL)
-    public void testGetSkippedRecordsSomeSkippedRecords() throws Exception {
+    void testGetSkippedRecordsSomeSkippedRecords() throws Exception {
         SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yy");
         ProjectEntity project = new ProjectEntity();
         project.setProjectStart(formatter.parse("02.01.2014"));
@@ -60,6 +61,6 @@ public class PlanRecordImporterTest {
         Mockito.when(projectRepository.findOne(Mockito.anyLong())).thenReturn(project);
         doImport();
         List<List<String>> skippedRecords = importService.getSkippedRecords();
-        Assert.assertEquals(75, skippedRecords.size());
+        Assertions.assertEquals(75, skippedRecords.size());
     }
 }

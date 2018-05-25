@@ -1,7 +1,7 @@
 package org.wickedsource.budgeteer.web.pages.budgets.details.highlights;
 
 import org.apache.wicket.util.tester.WicketTester;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.service.budget.BudgetDetailData;
@@ -22,17 +22,17 @@ public class BudgetHighlightsPanelTest extends AbstractWebTestTemplate {
     private Random random = new Random();
 
     @Test
-    public void render() {
-        when(service.loadBudgetDetailData(1l)).thenReturn(createDetailData());
+    void render() {
+        when(service.loadBudgetDetailData(1L)).thenReturn(createDetailData());
         WicketTester tester = getTester();
-        BudgetHighlightsModel model = new BudgetHighlightsModel(1l);
+        BudgetHighlightsModel model = new BudgetHighlightsModel(1L);
         BudgetHighlightsPanel panel = new BudgetHighlightsPanel("panel", model);
         tester.startComponentInPage(panel);
 
         tester.assertContains("Budget 1");
     }
 
-    public BudgetDetailData createDetailData() {
+    private BudgetDetailData createDetailData() {
         BudgetDetailData data = new BudgetDetailData();
         data.setLastUpdated(new Date());
         data.setName("Budget 1");

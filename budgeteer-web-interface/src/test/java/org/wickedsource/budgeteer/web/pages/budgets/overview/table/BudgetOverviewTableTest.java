@@ -2,7 +2,7 @@ package org.wickedsource.budgeteer.web.pages.budgets.overview.table;
 
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.tester.WicketTester;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.service.budget.BudgetDetailData;
@@ -28,7 +28,7 @@ public class BudgetOverviewTableTest extends AbstractWebTestTemplate {
     private Random random = new Random();
 
     @Test
-    public void render() {
+    void render() {
         WicketTester tester = getTester();
         when(service.loadBudgetsDetailData(anyLong(), any(BudgetTagFilter.class))).thenReturn(createTestData());
         FilteredBudgetModel model = new FilteredBudgetModel(1, Model.of(new BudgetTagFilter(EMPTY_STRING_LIST, 1L)));
@@ -36,7 +36,7 @@ public class BudgetOverviewTableTest extends AbstractWebTestTemplate {
         tester.startComponentInPage(table);
     }
 
-    public List<BudgetDetailData> createTestData() {
+    private List<BudgetDetailData> createTestData() {
         List<BudgetDetailData> list = new ArrayList<>();
         for (int i = 0; i < 20; i++) {
             BudgetDetailData data = new BudgetDetailData();
