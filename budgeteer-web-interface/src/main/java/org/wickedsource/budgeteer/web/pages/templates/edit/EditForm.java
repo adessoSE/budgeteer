@@ -5,8 +5,9 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.*;
+import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.link.Link;
@@ -30,7 +31,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -106,29 +106,27 @@ public class EditForm extends Form<TemplateFormInputDto> {
         templateFormInputDto.setType(service.getById(templateID).getType());
         templateFormInputDto.setDefault(service.getById(templateID).isDefault());
 
-        Label checkBoxLabel = new Label("checkBoxLabel");
-        if(templateFormInputDto.isDefault()){
-            checkBoxLabel.add(starChecked);
-        }else{
-            checkBoxLabel.add(starUnchecked);
-        }
         AjaxLink checkBox = new AjaxLink("setAsDefault") {
             @Override
             public void onClick(AjaxRequestTarget ajaxRequestTarget) {
                 if(templateFormInputDto.isDefault()){
                     EditForm.this.getModel().getObject().setDefault(false);
-                    checkBoxLabel.add(starUnchecked);
+                    this.add(starUnchecked);
                     templateFormInputDto.setDefault(false);
                 }else{
                     EditForm.this.getModel().getObject().setDefault(true);
-                    checkBoxLabel.add(starChecked);
+                    this.add(starChecked);
                     templateFormInputDto.setDefault(true);
                 }
                 ajaxRequestTarget.add(this, this.getMarkupId());
             }
         };
+        if(templateFormInputDto.isDefault()){
+            checkBox.add(starChecked);
+        }else{
+            checkBox.add(starUnchecked);
+        }
         checkBox.setOutputMarkupId(true);
-        checkBox.add(checkBoxLabel);
         add(checkBox);
         add(new TextField<>("name", model(from(templateFormInputDto).getName())));
         add(new TextField<>("description", model(from(templateFormInputDto).getDescription())));
@@ -138,7 +136,7 @@ public class EditForm extends Form<TemplateFormInputDto> {
                     protected List<ReportType> load() {
                         List<ReportType> list = new ArrayList<>();
                         list.add(templateFormInputDto.getType());
-                        for(ReportType E : Arrays.asList(ReportType.values())){
+                        for(ReportType E : ReportType.values()){
                             if(!E.equals(templateFormInputDto.getType())){
                                 list.add(E);
                             }

@@ -24,7 +24,6 @@ import org.wickedsource.budgeteer.web.components.notificationlist.NotificationLi
 import org.wickedsource.budgeteer.web.pages.base.AbstractChoiceRenderer;
 import org.wickedsource.budgeteer.web.pages.budgets.overview.report.BudgetReportFileModel;
 
-import javax.inject.Inject;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;

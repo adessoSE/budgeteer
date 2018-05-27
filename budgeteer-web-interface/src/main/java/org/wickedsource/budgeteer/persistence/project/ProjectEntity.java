@@ -2,11 +2,13 @@ package org.wickedsource.budgeteer.persistence.project;
 
 import lombok.Data;
 import org.wickedsource.budgeteer.persistence.user.UserEntity;
-import org.wickedsource.budgeteer.service.ReportType;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "PROJECT",

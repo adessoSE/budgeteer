@@ -1,7 +1,6 @@
 package org.wickedsource.budgeteer.service.template;
 
 import lombok.Data;
-import lombok.Getter;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.wickedsource.budgeteer.service.ReportType;
 

@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.hibernate.annotations.Type;
 import org.wickedsource.budgeteer.service.ReportType;
 import org.wickedsource.budgeteer.service.template.Template;
 

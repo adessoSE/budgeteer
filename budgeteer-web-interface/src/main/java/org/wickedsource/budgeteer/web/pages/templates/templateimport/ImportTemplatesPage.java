@@ -5,10 +5,10 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
-import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.*;
+import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.link.Link;
@@ -32,10 +32,6 @@ import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPa
 import org.wickedsource.budgeteer.web.components.multiselect.MultiselectBehavior;
 import org.wickedsource.budgeteer.web.pages.base.AbstractChoiceRenderer;
 import org.wickedsource.budgeteer.web.pages.base.dialogpage.DialogPageWithBacklink;
-import org.wickedsource.budgeteer.web.pages.budgets.overview.report.form.BudgetReportForm;
-import org.wickedsource.budgeteer.web.pages.templates.TemplateFilter;
-import org.wickedsource.budgeteer.web.pages.templates.edit.EditForm;
-import org.wicketstuff.lazymodel.LazyModel;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
@@ -120,29 +116,27 @@ public class ImportTemplatesPage extends DialogPageWithBacklink {
         form.add(createExampleFileButton("exampleDownloadButton"));
         form.add(new TextField<>("name", model(from(templateFormInputDto).getName())));
         form.add(new TextField<>("description", model(from(templateFormInputDto).getDescription())));
-        Label checkBoxLabel = new Label("checkBoxLabel");
-        if(templateFormInputDto.isDefault()){
-            checkBoxLabel.add(starChecked);
-        }else{
-            checkBoxLabel.add(starUnchecked);
-        }
         AjaxLink checkBox = new AjaxLink("setAsDefault") {
             @Override
             public void onClick(AjaxRequestTarget ajaxRequestTarget) {
                 if(templateFormInputDto.isDefault()){
                     form.getModel().getObject().setDefault(false);
-                    checkBoxLabel.add(starUnchecked);
+                    this.add(starUnchecked);
                     templateFormInputDto.setDefault(false);
                 }else{
                     form.getModel().getObject().setDefault(true);
-                    checkBoxLabel.add(starChecked);
+                    this.add(starChecked);
                     templateFormInputDto.setDefault(true);
                 }
                 ajaxRequestTarget.add(this, this.getMarkupId());
             }
         };
+        if(templateFormInputDto.isDefault()){
+            checkBox.add(starChecked);
+        }else{
+            checkBox.add(starUnchecked);
+        }
         checkBox.setOutputMarkupId(true);
-        checkBox.add(checkBoxLabel);
         form.add(checkBox);
         DropDownChoice<ReportType> typeDropDown = new DropDownChoice<ReportType>("type", model(from(templateFormInputDto).getType()),
                 new LoadableDetachableModel<List<ReportType>>() {

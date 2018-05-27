@@ -1,47 +1,29 @@
 package org.wickedsource.budgeteer.web.pages.templates.table;
 
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.ajax.markup.html.form.AjaxButton;
-import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
-import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.event.IEvent;
-import org.apache.wicket.markup.MarkupFragment;
-import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.CheckBox;
-import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.protocol.http.servlet.MultipartServletWebRequestImpl;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.budgeteer.service.template.Template;
 import org.wickedsource.budgeteer.service.template.TemplateService;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.ClassAwareWrappingModel;
 import org.wickedsource.budgeteer.web.components.dataTable.DataTableBehavior;
-import org.wickedsource.budgeteer.web.components.multiselect.MultiselectBehavior;
 import org.wickedsource.budgeteer.web.pages.templates.TemplateFilter;
 import org.wickedsource.budgeteer.web.pages.templates.TemplatesPage;
 import org.wickedsource.budgeteer.web.pages.templates.edit.EditTemplatePage;
 import org.wickedsource.budgeteer.web.pages.templates.templateimport.TemplateFormInputDto;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.List;
 
 import static org.wicketstuff.lazymodel.LazyModel.from;
@@ -101,11 +83,11 @@ public class TemplatesTable extends Panel {
 
                         templateService.editTemplate(temp.getProjectId(), item.getModelObject().getId(), null, model(from(temp)));
                         ((TemplateListModel)TemplatesTable.this.getDefaultModel()).load();
-                        TemplateListModel tempModel = ((TemplateListModel)TemplatesTable.this.getDefaultModel());
+                        List<Template> tempModel = ((TemplateListModel)TemplatesTable.this.getDefaultModel()).load();
                         for(int i = 0; i < rows.getList().size(); i++){
                             Label check = (Label)table.get("templateList")
                                     .get(Integer.toString(i)).get("setAsDefault").get("checkBoxLabel");
-                            if(tempModel.load().get(i).isDefault()){
+                            if(tempModel.get(i).isDefault()){
                                 check.add(starChecked);
                             }else{
                                 check.add(starUnchecked);
