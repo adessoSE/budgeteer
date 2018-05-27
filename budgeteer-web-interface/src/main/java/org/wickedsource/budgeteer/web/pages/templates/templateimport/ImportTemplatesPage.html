@@ -21,10 +21,10 @@
 
                 <div>
                     <label for="titleInput"><wicket:message key="page.template.name">Template Name</wicket:message></label>
-                    <div class="input-group mb-3">
-                       <span class="bg-olive input-group-addon">
-                            <input type="checkbox" wicket:id="favourite" class="bg-olive glyphicon glyphicon-star-empty"/>
-                        </span>
+                    <div class="input-group">
+                        <div class="input-group-btn">
+                            <a wicket:id="setAsDefault" style="top: 0"><label wicket:id="checkBoxLabel"></label></a>
+                        </div>
                         <input wicket:id="name" type="text" class="form-control" placeholder="">
                     </div>
                     <p class="help-block"><wicket:message key="page.template.name.hint">The name of the template.</wicket:message></p>

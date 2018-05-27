@@ -1,8 +1,11 @@
 package org.wickedsource.budgeteer.web.pages.templates.edit;
 
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
@@ -45,6 +48,10 @@ public class EditForm extends Form<TemplateFormInputDto> {
 
     private long templateID;
 
+    private static final AttributeModifier starChecked = new AttributeModifier("class", "btn bg-olive glyphicon glyphicon-star");
+    private static final AttributeModifier starUnchecked = new AttributeModifier("class", "btn bg-olive glyphicon glyphicon-star-empty");
+
+
     public EditForm(String id, IModel<TemplateFormInputDto> formModel, long temID){
         super(id, formModel);
         this.templateID = temID;
@@ -56,7 +63,6 @@ public class EditForm extends Form<TemplateFormInputDto> {
         fileUpload.setRequired(false);
 
         add(fileUpload);
-        //add(createFavouriteButton("favourite"));
         add(createCancelButton("backlink2"));
         add(DeleteTemplateButton("deleteButton"));
         add(DownloadFileButton("downloadFileButton"));
@@ -100,14 +106,44 @@ public class EditForm extends Form<TemplateFormInputDto> {
         templateFormInputDto.setType(service.getById(templateID).getType());
         templateFormInputDto.setDefault(service.getById(templateID).isDefault());
 
-        add(new CheckBox("favourite", model(from(templateFormInputDto).isDefault())));
+        Label checkBoxLabel = new Label("checkBoxLabel");
+        if(templateFormInputDto.isDefault()){
+            checkBoxLabel.add(starChecked);
+        }else{
+            checkBoxLabel.add(starUnchecked);
+        }
+        AjaxLink checkBox = new AjaxLink("setAsDefault") {
+            @Override
+            public void onClick(AjaxRequestTarget ajaxRequestTarget) {
+                if(templateFormInputDto.isDefault()){
+                    EditForm.this.getModel().getObject().setDefault(false);
+                    checkBoxLabel.add(starUnchecked);
+                    templateFormInputDto.setDefault(false);
+                }else{
+                    EditForm.this.getModel().getObject().setDefault(true);
+                    checkBoxLabel.add(starChecked);
+                    templateFormInputDto.setDefault(true);
+                }
+                ajaxRequestTarget.add(this, this.getMarkupId());
+            }
+        };
+        checkBox.setOutputMarkupId(true);
+        checkBox.add(checkBoxLabel);
+        add(checkBox);
         add(new TextField<>("name", model(from(templateFormInputDto).getName())));
         add(new TextField<>("description", model(from(templateFormInputDto).getDescription())));
-        DropDownChoice<ReportType> typeDropDown = new DropDownChoice<>("type", model(from(templateFormInputDto).getType()),
+        DropDownChoice<ReportType> typeDropDown = new DropDownChoice<ReportType>("type", model(from(templateFormInputDto).getType()),
                 new LoadableDetachableModel<List<ReportType>>() {
                     @Override
                     protected List<ReportType> load() {
-                        return Arrays.asList(ReportType.values());
+                        List<ReportType> list = new ArrayList<>();
+                        list.add(templateFormInputDto.getType());
+                        for(ReportType E : Arrays.asList(ReportType.values())){
+                            if(!E.equals(templateFormInputDto.getType())){
+                                list.add(E);
+                            }
+                        }
+                        return list;
                     }
                 },
                 new AbstractChoiceRenderer<ReportType>() {
@@ -116,7 +152,12 @@ public class EditForm extends Form<TemplateFormInputDto> {
                         return object == null ? "Unnamed" : object.toString();
                     }
                 }
-        );
+        ){
+            @Override
+            public String getModelValue (){
+                return null;
+            }
+        };
         typeDropDown.setNullValid(false);
         add(typeDropDown);
     }
@@ -144,19 +185,7 @@ public class EditForm extends Form<TemplateFormInputDto> {
     }
 
     /**
-     * Creates a button to download the template that is being edited.
-     */
-    private Link createFavouriteButton(String wicketId) {
-        return new Link<Void>(wicketId) {
-            @Override
-            public void onClick() {
-                templateFormInputDto.setDefault(!templateFormInputDto.isDefault());
-            }
-        };
-    }
-
-    /**
-     * Creates a button to download the template that is being edited.
+     * Creates a back button.
      */
     private Link createCancelButton(String wicketId) {
         return new Link<Void>(wicketId) {

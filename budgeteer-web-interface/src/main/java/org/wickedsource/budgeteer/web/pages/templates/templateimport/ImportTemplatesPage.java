@@ -1,10 +1,13 @@
 package org.wickedsource.budgeteer.web.pages.templates.templateimport;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
@@ -31,6 +34,7 @@ import org.wickedsource.budgeteer.web.pages.base.AbstractChoiceRenderer;
 import org.wickedsource.budgeteer.web.pages.base.dialogpage.DialogPageWithBacklink;
 import org.wickedsource.budgeteer.web.pages.budgets.overview.report.form.BudgetReportForm;
 import org.wickedsource.budgeteer.web.pages.templates.TemplateFilter;
+import org.wickedsource.budgeteer.web.pages.templates.edit.EditForm;
 import org.wicketstuff.lazymodel.LazyModel;
 
 import javax.servlet.http.HttpServletResponse;
@@ -50,6 +54,10 @@ public class ImportTemplatesPage extends DialogPageWithBacklink {
 
     @SpringBean
     private TemplateService service;
+
+    private static final AttributeModifier starChecked = new AttributeModifier("class", "btn bg-olive glyphicon glyphicon-star");
+    private static final AttributeModifier starUnchecked = new AttributeModifier("class", "btn bg-olive glyphicon glyphicon-star-empty");
+
 
     private List<FileUpload> fileUploads = new ArrayList<FileUpload>();
 
@@ -112,8 +120,31 @@ public class ImportTemplatesPage extends DialogPageWithBacklink {
         form.add(createExampleFileButton("exampleDownloadButton"));
         form.add(new TextField<>("name", model(from(templateFormInputDto).getName())));
         form.add(new TextField<>("description", model(from(templateFormInputDto).getDescription())));
-        form.add(new CheckBox("favourite", model(from(templateFormInputDto).isDefault())));
-        DropDownChoice<ReportType> typeDropDown = new DropDownChoice<>("type", model(from(templateFormInputDto).getType()),
+        Label checkBoxLabel = new Label("checkBoxLabel");
+        if(templateFormInputDto.isDefault()){
+            checkBoxLabel.add(starChecked);
+        }else{
+            checkBoxLabel.add(starUnchecked);
+        }
+        AjaxLink checkBox = new AjaxLink("setAsDefault") {
+            @Override
+            public void onClick(AjaxRequestTarget ajaxRequestTarget) {
+                if(templateFormInputDto.isDefault()){
+                    form.getModel().getObject().setDefault(false);
+                    checkBoxLabel.add(starUnchecked);
+                    templateFormInputDto.setDefault(false);
+                }else{
+                    form.getModel().getObject().setDefault(true);
+                    checkBoxLabel.add(starChecked);
+                    templateFormInputDto.setDefault(true);
+                }
+                ajaxRequestTarget.add(this, this.getMarkupId());
+            }
+        };
+        checkBox.setOutputMarkupId(true);
+        checkBox.add(checkBoxLabel);
+        form.add(checkBox);
+        DropDownChoice<ReportType> typeDropDown = new DropDownChoice<ReportType>("type", model(from(templateFormInputDto).getType()),
                 new LoadableDetachableModel<List<ReportType>>() {
                     @Override
                     protected List<ReportType> load() {
@@ -125,7 +156,12 @@ public class ImportTemplatesPage extends DialogPageWithBacklink {
                     public Object getDisplayValue(ReportType object) {
                         return object == null ? "Unnamed" : object.toString();
                     }
-                });
+                }){
+            @Override
+            public String getModelValue (){
+                return null;
+            }
+        };
         typeDropDown.setNullValid(false);
         form.add(typeDropDown);
     }
