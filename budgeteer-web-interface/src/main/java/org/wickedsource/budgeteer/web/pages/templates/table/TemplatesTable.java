@@ -92,11 +92,11 @@ public class TemplatesTable extends Panel {
                             }else{
                                 check.add(starUnchecked);
                             }
+                            target.add(check, check.getMarkupId());
                         }
-                        table.detach();
-                        target.add(TemplatesTable.this, TemplatesTable.this.getMarkupId());
                     }
                 };
+                checkBoxLabel.setOutputMarkupId(true);
                 checkBox.add(checkBoxLabel);
                 item.add(checkBox);
                 item.add(new Link("editPage") {
