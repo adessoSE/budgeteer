@@ -82,7 +82,6 @@ public class TemplatesTable extends Panel {
                         temp.setDefault(item.getModelObject().isDefault());
 
                         templateService.editTemplate(temp.getProjectId(), item.getModelObject().getId(), null, model(from(temp)));
-                        ((TemplateListModel)TemplatesTable.this.getDefaultModel()).load();
                         List<Template> tempModel = ((TemplateListModel)TemplatesTable.this.getDefaultModel()).load();
                         for(int i = 0; i < rows.getList().size(); i++){
                             Label check = (Label)table.get("templateList")
