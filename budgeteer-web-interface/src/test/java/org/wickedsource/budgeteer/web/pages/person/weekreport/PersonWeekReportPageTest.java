@@ -1,7 +1,7 @@
 package org.wickedsource.budgeteer.web.pages.person.weekreport;
 
 import org.apache.wicket.util.tester.WicketTester;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.service.person.PersonDetailData;
@@ -18,10 +18,10 @@ public class PersonWeekReportPageTest extends AbstractWebTestTemplate {
     private PersonService service;
 
     @Test
-    public void test() {
+    void test() {
         WicketTester tester = getTester();
-        when(service.loadPersonDetailData(1l)).thenReturn(createPerson());
-        tester.startPage(PersonWeekReportPage.class, PersonWeekReportPage.createParameters(1l));
+        when(service.loadPersonDetailData(1L)).thenReturn(createPerson());
+        tester.startPage(PersonWeekReportPage.class, PersonWeekReportPage.createParameters(1L));
         tester.assertRenderedPage(PersonWeekReportPage.class);
     }
 

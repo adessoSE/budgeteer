@@ -1,15 +1,16 @@
 package org.wickedsource.budgeteer.web.planning;
 
-import org.junit.Assert;
-import org.junit.Test;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 
-public class PercentTest {
+class PercentTest {
 
     @Test
-    public void testOf() throws Exception {
+    void testOf() throws Exception {
         Percent percent = new Percent(32);
-        Assert.assertEquals(BigDecimal.valueOf(32), percent.of(BigDecimal.valueOf(100)));
+        Assertions.assertEquals(BigDecimal.valueOf(32), percent.of(BigDecimal.valueOf(100)));
     }
 }

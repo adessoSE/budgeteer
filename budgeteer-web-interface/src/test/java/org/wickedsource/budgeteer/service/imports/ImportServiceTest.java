@@ -1,7 +1,7 @@
 package org.wickedsource.budgeteer.service.imports;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.budgeteer.persistence.imports.ImportEntity;
 import org.wickedsource.budgeteer.persistence.imports.ImportRepository;
@@ -14,7 +14,7 @@ import java.util.List;
 
 import static org.mockito.Mockito.*;
 
-public class ImportServiceTest extends ServiceTestTemplate {
+class ImportServiceTest extends ServiceTestTemplate {
 
     @Autowired
     private ImportRepository importRepository;
@@ -26,18 +26,18 @@ public class ImportServiceTest extends ServiceTestTemplate {
     private ImportService importService;
 
     @Test
-    public void testLoadImports() throws Exception {
-        when(importRepository.findByProjectId(1l)).thenReturn(Arrays.asList(createImportEntity()));
-        List<Import> imports = importService.loadImports(1l);
-        Assert.assertEquals(1, imports.size());
-        Assert.assertEquals("TestImport", imports.get(0).getImportType());
+    void testLoadImports() throws Exception {
+        when(importRepository.findByProjectId(1L)).thenReturn(Arrays.asList(createImportEntity()));
+        List<Import> imports = importService.loadImports(1L);
+        Assertions.assertEquals(1, imports.size());
+        Assertions.assertEquals("TestImport", imports.get(0).getImportType());
     }
 
     @Test
-    public void testDeleteImport() throws Exception {
-        importService.deleteImport(1l);
-        verify(importRepository, times(1)).delete(1l);
-        verify(workRecordRepository, times(1)).deleteByImport(1l);
+    void testDeleteImport() throws Exception {
+        importService.deleteImport(1L);
+        verify(importRepository, times(1)).delete(1L);
+        verify(workRecordRepository, times(1)).deleteByImport(1L);
     }
 
     private ImportEntity createImportEntity() {
@@ -45,7 +45,7 @@ public class ImportServiceTest extends ServiceTestTemplate {
         entity.setEndDate(new Date());
         entity.setStartDate(new Date());
         entity.setImportType("TestImport");
-        entity.setId(1l);
+        entity.setId(1L);
         return entity;
     }
 
