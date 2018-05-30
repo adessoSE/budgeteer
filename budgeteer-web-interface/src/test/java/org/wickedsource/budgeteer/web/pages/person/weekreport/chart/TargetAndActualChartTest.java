@@ -1,7 +1,7 @@
 package org.wickedsource.budgeteer.web.pages.person.weekreport.chart;
 
 import org.apache.wicket.util.tester.WicketTester;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.service.statistics.MoneySeries;
 import org.wickedsource.budgeteer.service.statistics.TargetAndActual;
@@ -16,9 +16,9 @@ public class TargetAndActualChartTest extends AbstractWebTestTemplate {
     private Random random = new Random();
 
     @Test
-    public void testRender() {
+    void testRender() {
         WicketTester tester = getTester();
-        PersonWeeklyAggregationModel model = new PersonWeeklyAggregationModel(1l);
+        PersonWeeklyAggregationModel model = new PersonWeeklyAggregationModel(1L);
         tester.startComponentInPage(new TargetAndActualChart("chart", model, TargetAndActualChartConfiguration.Mode.WEEKLY));
     }
 

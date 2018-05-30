@@ -1,16 +1,16 @@
 package org.wickedsource.budgeteer.web.planning;
 
 import org.joda.time.LocalDate;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.wickedsource.budgeteer.MoneyUtil;
 
 import java.util.Calendar;
 
-public class ResourcePlanningAssistantTest {
+class ResourcePlanningAssistantTest {
 
     @Test
-    public void testAllocate() throws Exception {
+    void testAllocate() throws Exception {
 
         Task task1 = new Task("Task 1", MoneyUtil.createMoneyFromCents(10000000));
         Task task2 = new Task("Task 2", MoneyUtil.createMoneyFromCents(5000000));
@@ -29,21 +29,21 @@ public class ResourcePlanningAssistantTest {
         assistant.allocate(task2, fullTimePerson, new Percent(10));
         assistant.allocate(task2, partTimePerson, new Percent(10));
 
-        Assert.assertEquals(MoneyUtil.createMoneyFromCents(-4180000), task1.getRestBudget());
-        Assert.assertEquals(MoneyUtil.createMoneyFromCents(2164000), task2.getRestBudget());
-        Assert.assertTrue(partTimePerson.isOverloaded());
-        Assert.assertFalse(fullTimePerson.isOverloaded());
-        Assert.assertTrue(task1.isOverspent());
-        Assert.assertFalse(task2.isOverspent());
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(-4180000), task1.getRestBudget());
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(2164000), task2.getRestBudget());
+        Assertions.assertTrue(partTimePerson.isOverloaded());
+        Assertions.assertFalse(fullTimePerson.isOverloaded());
+        Assertions.assertTrue(task1.isOverspent());
+        Assertions.assertFalse(task2.isOverspent());
 
         assistant.deallocate(task1, partTimePerson);
 
-        Assert.assertEquals(MoneyUtil.createMoneyFromCents(3650000), task1.getRestBudget());
-        Assert.assertEquals(MoneyUtil.createMoneyFromCents(2164000), task2.getRestBudget());
-        Assert.assertFalse(partTimePerson.isOverloaded());
-        Assert.assertFalse(fullTimePerson.isOverloaded());
-        Assert.assertFalse(task1.isOverspent());
-        Assert.assertFalse(task2.isOverspent());
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(3650000), task1.getRestBudget());
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(2164000), task2.getRestBudget());
+        Assertions.assertFalse(partTimePerson.isOverloaded());
+        Assertions.assertFalse(fullTimePerson.isOverloaded());
+        Assertions.assertFalse(task1.isOverspent());
+        Assertions.assertFalse(task2.isOverspent());
     }
 
     private Configuration getConfiguration() {

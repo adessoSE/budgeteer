@@ -1,13 +1,14 @@
 package org.wickedsource.budgeteer.service.imports;
 
-import org.junit.Assert;
-import org.junit.Test;
 
-public class ImporterRegistryTest {
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+class ImporterRegistryTest {
 
     @Test
-    public void testRegistry() {
+    void testRegistry() {
         ImporterRegistry registry = new ImporterRegistry();
-        Assert.assertEquals(2, registry.getWorkingRecordsImporters().size());
+        Assertions.assertEquals(2, registry.getWorkingRecordsImporters().size());
     }
 }

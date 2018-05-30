@@ -1,7 +1,7 @@
 package org.wickedsource.budgeteer.web.components.burntable.table;
 
 import org.apache.wicket.util.tester.WicketTester;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.wickedsource.budgeteer.service.record.WorkRecordFilter;
 import org.wickedsource.budgeteer.web.AbstractWebTestTemplate;
 import org.wickedsource.budgeteer.web.components.burntable.filter.FilteredRecordsModel;
@@ -9,9 +9,9 @@ import org.wickedsource.budgeteer.web.components.burntable.filter.FilteredRecord
 public class BurnTableTest extends AbstractWebTestTemplate {
 
     @Test
-    public void render() {
+    void render() {
         WicketTester tester = getTester();
-        BurnTable table = new BurnTable("table", new FilteredRecordsModel(new WorkRecordFilter(1l)));
+        BurnTable table = new BurnTable("table", new FilteredRecordsModel(new WorkRecordFilter(1L)));
         tester.startComponentInPage(table);
     }
 

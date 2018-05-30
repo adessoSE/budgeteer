@@ -1,7 +1,7 @@
 package org.wickedsource.budgeteer.persistence.user;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.budgeteer.IntegrationTestTemplate;
 import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
@@ -9,7 +9,7 @@ import org.wickedsource.budgeteer.persistence.project.ProjectRepository;
 
 import java.util.List;
 
-public class UserRepositoryTest extends IntegrationTestTemplate {
+class UserRepositoryTest extends IntegrationTestTemplate {
 
     @Autowired
     private UserRepository userRepository;
@@ -18,32 +18,32 @@ public class UserRepositoryTest extends IntegrationTestTemplate {
     private ProjectRepository projectRepository;
 
     @Test
-    public void testFindByNameAndPassword() {
+    void testFindByNameAndPassword() {
         UserEntity user = new UserEntity();
         user.setName("name");
         user.setPassword("password");
         this.userRepository.save(user);
 
         UserEntity result = this.userRepository.findByNameAndPassword("name", "password");
-        Assert.assertNotNull(result);
+        Assertions.assertNotNull(result);
     }
 
     @Test
-    public void testFindNotInProject() {
+    void testFindNotInProject() {
         ProjectEntity savedProject = createProjectAndUsers();
 
         List<UserEntity> usersNotInProject = userRepository.findNotInProject(savedProject.getId());
-        Assert.assertEquals(1, usersNotInProject.size());
-        Assert.assertEquals("user2", usersNotInProject.get(0).getName());
+        Assertions.assertEquals(1, usersNotInProject.size());
+        Assertions.assertEquals("user2", usersNotInProject.get(0).getName());
     }
 
     @Test
-    public void testFindInProject() {
+    void testFindInProject() {
         ProjectEntity savedProject = createProjectAndUsers();
 
         List<UserEntity> usersInProject = userRepository.findInProject(savedProject.getId());
-        Assert.assertEquals(1, usersInProject.size());
-        Assert.assertEquals("user1", usersInProject.get(0).getName());
+        Assertions.assertEquals(1, usersInProject.size());
+        Assertions.assertEquals("user1", usersInProject.get(0).getName());
     }
 
     private ProjectEntity createProjectAndUsers() {

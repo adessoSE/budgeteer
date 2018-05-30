@@ -1,4 +1,4 @@
-[![Build Status](https://circleci.com/gh/thombergs/budgeteer.svg?style=shield&circle-token=:circle-token)](https://circleci.com/gh/thombergs/budgeteer) [![Gradle Status](https://gradleupdate.appspot.com/thombergs/budgeteer/status.svg)](https://gradleupdate.appspot.com/thombergs/budgeteer/status)
+[![Build Status](https://circleci.com/gh/adessoAG/budgeteer.svg?style=shield&circle-token=:circle-token)](https://circleci.com/gh/adessoAG/budgeteer) [![Gradle Status](https://gradleupdate.appspot.com/adessoAG/budgeteer/status.svg)](https://gradleupdate.appspot.com/adessoAG/budgeteer/status)
 
 ## What is Budgeteer?
 Budgeteer is a budget monitoring tool that allows you to track
@@ -10,13 +10,13 @@ your budgets are heading.
 
 ## Screenshots
 ### Start Page
-![Start Page](https://raw.githubusercontent.com/thombergs/budgeteer/master/screenshots/start-page.png)
+![Start Page](https://raw.githubusercontent.com/adessoAG/budgeteer/master/screenshots/start-page.png)
 
 ### Budget Overview
-![Budget Overview](https://raw.githubusercontent.com/thombergs/budgeteer/master/screenshots/budget-overview.png)
+![Budget Overview](https://raw.githubusercontent.com/adessoAG/budgeteer/master/screenshots/budget-overview.png)
 
 ### Month Report
-![Month Report](https://raw.githubusercontent.com/thombergs/budgeteer/master/screenshots/month-report.png)
+![Month Report](https://raw.githubusercontent.com/adessoAG/budgeteer/master/screenshots/month-report.png)
 
 ## SSO using Keycloak
 
@@ -31,7 +31,3 @@ spring.autoconfigure.exclude=org.keycloak.adapters.springboot.KeycloakSpringBoot
 ```
 
  You can find more details about how to install and configure Keycloak [here](https://keycloak.gitbooks.io/documentation/securing_apps/topics/oidc/java/spring-boot-adapter.html).
- 
- ## Licence
- This project is not under any licence yet, since I have to sort out licencing of the Highcharts library, which is used to display eye-pleasing charts. Feel free to get in touch with me. 
- 
