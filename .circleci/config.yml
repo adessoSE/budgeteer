@@ -10,14 +10,11 @@ jobs:
           command: ./gradlew --stacktrace --console=plain resolveDependencies
       - run:
           name: runTests
-          command:
-          - ./gradlew --stacktrace --console=plain build
-
-          - mkdir -p $CIRCLE_TEST_REPORTS/junit/
-          - find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
-
-          - mkdir -p $CIRCLE_TEST_REPORTS/junit-html/
-          - find . -type d -regex ".**/build/reports/tests" -exec sh -c 'cp -a {} $CIRCLE_TEST_REPORTS/junit-html/`echo {} | cut -d / -f2`' \;
-
-          - mkdir -p $CIRCLE_ARTIFACTS/build-artifacts
-          - cp -a budgeteer-web-interface/build/libs/budgeteer-web-interface-*.war $CIRCLE_ARTIFACTS/build-artifacts/
+          command: |
+            ./gradlew --stacktrace --console=plain build
+            mkdir -p $CIRCLE_TEST_REPORTS/junit/
+            find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
+            mkdir -p $CIRCLE_TEST_REPORTS/junit-html/
+            find . -type d -regex ".**/build/reports/tests" -exec sh -c 'cp -a {} $CIRCLE_TEST_REPORTS/junit-html/`echo {} | cut -d / -f2`' \;
+            mkdir -p $CIRCLE_ARTIFACTS/build-artifacts
+            cp -a budgeteer-web-interface/build/libs/budgeteer-web-interface-*.war $CIRCLE_ARTIFACTS/build-artifacts/
