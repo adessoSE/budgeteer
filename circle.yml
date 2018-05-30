@@ -1,4 +1,6 @@
 machine:
+  environment:
+      JAVA_OPTS: "-Xms512m -Xmx1024m"
   java:
     version: oraclejdk8
 
