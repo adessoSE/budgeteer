@@ -2,7 +2,7 @@ package org.wickedsource.budgeteer.importer.ubw;
 
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.wickedsource.budgeteer.imports.api.ExampleFile;
 import org.wickedsource.budgeteer.imports.api.ImportFile;
 import org.wickedsource.budgeteer.imports.api.ImportedWorkRecord;
@@ -14,12 +14,12 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-public class UBWWorkRecordsImporterTest {
+class UBWWorkRecordsImporterTest {
 
     private DateFormat format = new SimpleDateFormat("dd.MM.yyyy");
 
     @Test
-    public void testRead() throws Exception {
+    void testRead() throws Exception {
         UBWWorkRecordsImporter importer = new UBWWorkRecordsImporter();
         List<ImportedWorkRecord> records = importer.importFile(new ImportFile("file.xslx", importer.getExampleFile().getInputStream()));
         assertEquals(15, records.size());
@@ -30,7 +30,7 @@ public class UBWWorkRecordsImporterTest {
     }
 
     @Test
-    public void testGetSkippedDataSets() throws Exception {
+    void testGetSkippedDataSets() throws Exception {
         UBWWorkRecordsImporter importer = new UBWWorkRecordsImporter();
         importer.importFile(new ImportFile("file.xslx", importer.getExampleFile().getInputStream()));
         List<List<String>> skippedRecords = importer.getSkippedRecords();
@@ -40,7 +40,7 @@ public class UBWWorkRecordsImporterTest {
     }
 
     @Test
-    public void testGetExampleFile(){
+    void testGetExampleFile(){
         UBWWorkRecordsImporter importer = new UBWWorkRecordsImporter();
         ExampleFile file = importer.getExampleFile();
         assertNotNull(file.getFileName());
@@ -49,7 +49,7 @@ public class UBWWorkRecordsImporterTest {
     }
 
     @Test
-    public void testValidity() throws IOException {
+    void testValidity() throws IOException {
         UBWWorkRecordsImporter importer = new UBWWorkRecordsImporter();
         Workbook workbook = new XSSFWorkbook(importer.getExampleFile().getInputStream());
         assertTrue(importer.checkValidity(workbook));

@@ -1,8 +1,5 @@
 package org.wickedsource.budgeteer.persistence.record;
 
-import java.util.Date;
-import java.util.List;
-
 import org.joda.money.Money;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
@@ -13,6 +10,9 @@ import org.springframework.data.repository.query.Param;
 import org.wickedsource.budgeteer.persistence.budget.BudgetEntity;
 import org.wickedsource.budgeteer.persistence.person.PersonEntity;
 import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
+
+import java.util.Date;
+import java.util.List;
 
 public interface WorkRecordRepository extends CrudRepository<WorkRecordEntity, Long>, QueryDslPredicateExecutor<WorkRecordEntity>,  RecordRepository , JpaSpecificationExecutor {
 

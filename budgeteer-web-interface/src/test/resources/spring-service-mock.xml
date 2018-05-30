@@ -26,5 +26,6 @@
 
     <mockito:mock id="invoiceService" class="org.wickedsource.budgeteer.service.invoice.InvoiceService"/>
 
+    <mockito:mock id="templateService" class="org.wickedsource.budgeteer.service.template.TemplateService"/>
 
 </beans>

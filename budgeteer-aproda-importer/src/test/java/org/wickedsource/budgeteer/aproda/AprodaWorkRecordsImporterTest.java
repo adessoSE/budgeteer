@@ -1,7 +1,7 @@
 package org.wickedsource.budgeteer.aproda;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.wickedsource.budgeteer.importer.aproda.AprodaWorkRecordsImporter;
 import org.wickedsource.budgeteer.imports.api.*;
 
@@ -10,64 +10,66 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-public class AprodaWorkRecordsImporterTest {
+class AprodaWorkRecordsImporterTest {
 
     private DateFormat format = new SimpleDateFormat("dd.MM.yyyy");
 
     @Test
-    public void testRead() throws Exception {
+    void testRead() throws Exception {
         AprodaWorkRecordsImporter importer = new AprodaWorkRecordsImporter();
         InputStream in = getClass().getResourceAsStream("/aproda-testreport.xlsx");
         List<ImportedWorkRecord> records = importer.importFile(new ImportFile("file.xslx", in));
-        Assert.assertEquals(8, records.size());
-        Assert.assertEquals("Mustermann, Max", records.get(0).getPersonName());
-        Assert.assertEquals("Budget", records.get(0).getBudgetName());
-        Assert.assertEquals(540d, records.get(0).getMinutesWorked(), 1d);
-        Assert.assertEquals(format.parse("06.10.2014"), records.get(0).getDate());
+        Assertions.assertEquals(8, records.size());
+        Assertions.assertEquals("Mustermann, Max", records.get(0).getPersonName());
+        Assertions.assertEquals("Budget", records.get(0).getBudgetName());
+        Assertions.assertEquals(540d, records.get(0).getMinutesWorked(), 1d);
+        Assertions.assertEquals(format.parse("06.10.2014"), records.get(0).getDate());
     }
 
     @Test
-    public void testGetSkippedDataSets() throws Exception {
+    void testGetSkippedDataSets() throws Exception {
         AprodaWorkRecordsImporter importer = new AprodaWorkRecordsImporter();
         InputStream in = getClass().getResourceAsStream("/aproda-testreport.xlsx");
         List<ImportedWorkRecord> records = importer.importFile(new ImportFile("file.xslx", in));
         List<List<String>> skippedRecords = importer.getSkippedRecords();
-        Assert.assertEquals(26, skippedRecords.size());
+        Assertions.assertEquals(26, skippedRecords.size());
 
-        Assert.assertEquals("file.xslx", skippedRecords.get(1).get(0) );
-        Assert.assertEquals("Mustermann, Max", skippedRecords.get(2).get(0));
-//        Assert.assertEquals("30-Okt-2014", skippedRecords.get(2).get(1)); // don't check since locale is ignored
-        Assert.assertEquals("Dortmund", skippedRecords.get(2).get(2));
-        Assert.assertEquals("Projektinfrastruktur", skippedRecords.get(2).get(3));
-        Assert.assertEquals("Projektinfrastruktur", skippedRecords.get(2).get(4));
-        Assert.assertEquals("Budget", skippedRecords.get(2).get(5));
-        Assert.assertEquals("Erstellung Entwicklungs-VM", skippedRecords.get(2).get(6));
-        Assert.assertEquals("9.0", skippedRecords.get(2).get(7));
-        Assert.assertEquals("Nein", skippedRecords.get(2).get(8));
-        Assert.assertEquals("studentische Hilfskraft", skippedRecords.get(2).get(9));
+        Assertions.assertEquals("file.xslx", skippedRecords.get(1).get(0) );
+        Assertions.assertEquals("Mustermann, Max", skippedRecords.get(2).get(0));
+//        Assertions.assertEquals("30-Okt-2014", skippedRecords.get(2).get(1)); // don't check since locale is ignored
+        Assertions.assertEquals("Dortmund", skippedRecords.get(2).get(2));
+        Assertions.assertEquals("Projektinfrastruktur", skippedRecords.get(2).get(3));
+        Assertions.assertEquals("Projektinfrastruktur", skippedRecords.get(2).get(4));
+        Assertions.assertEquals("Budget", skippedRecords.get(2).get(5));
+        Assertions.assertEquals("Erstellung Entwicklungs-VM", skippedRecords.get(2).get(6));
+        Assertions.assertEquals("9.0", skippedRecords.get(2).get(7));
+        Assertions.assertEquals("Nein", skippedRecords.get(2).get(8));
+        Assertions.assertEquals("studentische Hilfskraft", skippedRecords.get(2).get(9));
 
-        Assert.assertEquals("", skippedRecords.get(21).get(0));
-        Assert.assertEquals("", skippedRecords.get(21).get(1));
-        Assert.assertEquals("", skippedRecords.get(21).get(2));
-        Assert.assertEquals("", skippedRecords.get(21).get(3));
-        Assert.assertEquals("8.0", skippedRecords.get(21).get(7));
-        Assert.assertEquals("Ja", skippedRecords.get(21).get(8));
-        Assert.assertEquals("studentische Hilfskraft", skippedRecords.get(22).get(9));
+        Assertions.assertEquals("", skippedRecords.get(21).get(0));
+        Assertions.assertEquals("", skippedRecords.get(21).get(1));
+        Assertions.assertEquals("", skippedRecords.get(21).get(2));
+        Assertions.assertEquals("", skippedRecords.get(21).get(3));
+        Assertions.assertEquals("8.0", skippedRecords.get(21).get(7));
+        Assertions.assertEquals("Ja", skippedRecords.get(21).get(8));
+        Assertions.assertEquals("studentische Hilfskraft", skippedRecords.get(22).get(9));
     }
 
     @Test
-    public void testGetExampleFile(){
+    void testGetExampleFile(){
         AprodaWorkRecordsImporter importer = new AprodaWorkRecordsImporter();
         ExampleFile file = importer.getExampleFile();
-        Assert.assertNotNull(file.getFileName());
-        Assert.assertNotNull(file.getInputStream());
-        Assert.assertNotNull(file.getContentType());
+        Assertions.assertNotNull(file.getFileName());
+        Assertions.assertNotNull(file.getInputStream());
+        Assertions.assertNotNull(file.getContentType());
     }
 
-    @Test(expected = InvalidFileFormatException.class)
-    public void testInvalidFile() throws InvalidFileFormatException, ImportException {
-        AprodaWorkRecordsImporter importer = new AprodaWorkRecordsImporter();
-        InputStream in = getClass().getResourceAsStream("/aproda-testreport_invalid.xlsx");
-        importer.importFile(new ImportFile("aproda-testreport_invalid.xslx", in));
+    @Test
+    void testInvalidFile() {
+        Assertions.assertThrows(InvalidFileFormatException.class, () -> {
+            AprodaWorkRecordsImporter importer = new AprodaWorkRecordsImporter();
+            InputStream in = getClass().getResourceAsStream("/aproda-testreport_invalid.xlsx");
+            importer.importFile(new ImportFile("aproda-testreport_invalid.xslx", in));
+        });
     }
 }

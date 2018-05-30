@@ -3,7 +3,7 @@ package org.wickedsource.budgeteer.web.pages.budgets.edit.form;
 import org.apache.wicket.feedback.IFeedbackMessageFilter;
 import org.apache.wicket.util.tester.FormTester;
 import org.apache.wicket.util.tester.WicketTester;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -13,7 +13,7 @@ import org.wickedsource.budgeteer.web.pages.budgets.edit.EditBudgetPage;
 import org.wickedsource.budgeteer.web.pages.budgets.overview.BudgetsOverviewPage;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 public class EditBudgetFormTest extends AbstractWebTestTemplate {
@@ -23,12 +23,12 @@ public class EditBudgetFormTest extends AbstractWebTestTemplate {
     private WicketTester tester;
 
     @Test
-    public void render() {
+    void render() {
         tester.assertRenderedPage(EditBudgetPage.class);
     }
 
     @Test
-    public void testSubmitEmptyBudget() {
+    void testSubmitEmptyBudget() {
         FormTester formTester = tester.newFormTester("form", false);
         fillName(formTester);
         fillImportKey(formTester);
@@ -38,7 +38,7 @@ public class EditBudgetFormTest extends AbstractWebTestTemplate {
     }
 
     @Test
-    public void testSubmitEmptyName() {
+    void testSubmitEmptyName() {
         FormTester formTester = tester.newFormTester("form", false);
         fillImportKey(formTester);
         fillBudget(formTester);
@@ -48,7 +48,7 @@ public class EditBudgetFormTest extends AbstractWebTestTemplate {
     }
 
     @Test
-    public void testSubmitEmptyImportKey() {
+    void testSubmitEmptyImportKey() {
         FormTester formTester = tester.newFormTester("form", false);
         fillName(formTester);
         fillBudget(formTester);
@@ -58,7 +58,7 @@ public class EditBudgetFormTest extends AbstractWebTestTemplate {
     }
 
     @Test
-    public void testSubmitValidInput() {
+    void testSubmitValidInput() {
         FormTester formTester = tester.newFormTester("form", false);
         fillName(formTester);
         fillImportKey(formTester);
@@ -69,7 +69,7 @@ public class EditBudgetFormTest extends AbstractWebTestTemplate {
     }
 
     @Test
-    public void testDuplicateImportKey() {
+    void testDuplicateImportKey() {
         FormTester formTester = tester.newFormTester("form", false);
         doThrow(new DataIntegrityViolationException("contraints!")).when(budgetServiceMock).saveBudget(any());
 

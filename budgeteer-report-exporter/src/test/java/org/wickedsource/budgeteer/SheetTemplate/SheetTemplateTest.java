@@ -4,8 +4,8 @@ import com.google.common.collect.Multimap;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.assertj.core.api.Assertions;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.util.List;
@@ -15,11 +15,9 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
 
-public class SheetTemplateTest {
-	
-	private Workbook wb;
+class SheetTemplateTest {
+
 	private Sheet sheet;
-	private CellStyle testStyle;
 	private SheetTemplate st;
 	
 	public class TestDTO {
@@ -54,15 +52,15 @@ public class SheetTemplateTest {
 		
 	}
 	
-	@Before
-	public void setUp() {
-		wb = new XSSFWorkbook();
+	@BeforeEach
+	void setUp() {
+		Workbook wb = new XSSFWorkbook();
 		sheet = wb.createSheet();
 		Row templateRow = sheet.createRow(4);
 		templateRow.createCell(2).setCellValue("test");
 		
 		templateRow.createCell(5).setCellValue("{test}");
-		testStyle = templateRow.getCell(5).getCellStyle();
+		CellStyle testStyle = templateRow.getCell(5).getCellStyle();
 		testStyle.setFillBackgroundColor(IndexedColors.BLACK.getIndex());
 
 		templateRow.createCell(3).setCellValue("{foo} - {bar}");
@@ -79,11 +77,11 @@ public class SheetTemplateTest {
 	}
 	
 	@Test
-	public void init() {
+	void init() {
 	}
 	
 	@Test
-	public void testGetCellMapping() {
+	void testGetCellMapping() {
 		Multimap<String,Integer> mapping = st.getFieldMapping();
 		assertNotNull(mapping);
 		
@@ -99,40 +97,40 @@ public class SheetTemplateTest {
 	}
 	
 	@Test
-	public void testCellContainsTemplateTagAndNotContainsTag() {
+	void testCellContainsTemplateTagAndNotContainsTag() {
 		assertFalse(st.cellContainsTemplateTag(sheet.getRow(4).getCell(2)));
 	}
 	
 	@Test
-	public void testDotInField() {
+	void testDotInField() {
 		assertTrue(st.cellContainsTemplateTag(sheet.getRow(4).getCell(15)));
 		assertFalse(st.cellContainsTemplateTag(sheet.getRow(4).getCell(16)));
 		assertFalse(st.cellContainsTemplateTag(sheet.getRow(4).getCell(17)));
 	}
 	
 	@Test
-	public void testCellContainsTemplateTagAndContainsSimpleTag() {
+	void testCellContainsTemplateTagAndContainsSimpleTag() {
 		assertTrue(st.cellContainsTemplateTag(sheet.getRow(4).getCell(5)));
 	}
 	
 	@Test
-	public void testCellContainsTemplateTagAndContainsComplexTag() {
+	void testCellContainsTemplateTagAndContainsComplexTag() {
 		assertTrue(st.cellContainsTemplateTag(sheet.getRow(4).getCell(100)));
 	}
 	
 	@Test
-	public void testCellContainsTemplateTagAndContainsMultipleTags() {
+	void testCellContainsTemplateTagAndContainsMultipleTags() {
 		assertTrue(st.cellContainsTemplateTag(sheet.getRow(4).getCell(100)));
 		assertTrue(st.cellContainsTemplateTag(sheet.getRow(4).getCell(3)));
 	}
 	
 	@Test
-	public void testFindTemplateRow() {
+	void testFindTemplateRow() {
 		assertEquals(4,st.getTemplateRowIndex());
 	}
 
 	@Test
-	public void testmapCellValueToFieldNamesWithDynamicAttribute() {
+	void testmapCellValueToFieldNamesWithDynamicAttribute() {
 		Cell cellMock = Mockito.mock(Cell.class);
 		when(cellMock.getCellTypeEnum()).thenReturn(CellType.STRING);
 		when(cellMock.getStringCellValue()).thenReturn("{dynamic.Bescha-Nr.}"); // valid
@@ -143,7 +141,7 @@ public class SheetTemplateTest {
 	}
 
 	@Test
-	public void testmapCellValueToFieldNamesWithDynamicAttributeAndNoSpecials() {
+	void testmapCellValueToFieldNamesWithDynamicAttributeAndNoSpecials() {
 		Cell cellMock = Mockito.mock(Cell.class);
 		when(cellMock.getCellTypeEnum()).thenReturn(CellType.STRING);
 		when(cellMock.getStringCellValue()).thenReturn("{dynamic.Bescha-Nr}"); //  valid
@@ -155,7 +153,7 @@ public class SheetTemplateTest {
 
 
 	@Test
-	public void testmapCellValueToFieldNamesWithRawValue() {
+	void testmapCellValueToFieldNamesWithRawValue() {
 		Cell cellMock = Mockito.mock(Cell.class);
 		when(cellMock.getCellTypeEnum()).thenReturn(CellType.STRING);
 		when(cellMock.getStringCellValue()).thenReturn("{dynamic}"); // valid
@@ -165,7 +163,7 @@ public class SheetTemplateTest {
 
 
 	@Test
-	public void testmapCellValueToFieldNamesWithStartingDot() {
+	void testmapCellValueToFieldNamesWithStartingDot() {
 		Cell cellMock = Mockito.mock(Cell.class);
 		when(cellMock.getCellTypeEnum()).thenReturn(CellType.STRING);
 		when(cellMock.getStringCellValue()).thenReturn("{.test}"); // not valid
@@ -177,7 +175,7 @@ public class SheetTemplateTest {
 
 
 	@Test
-	public void testmapCellValueToFieldNamesWithMultipleFields() {
+	void testmapCellValueToFieldNamesWithMultipleFields() {
 		Cell cellMock = Mockito.mock(Cell.class);
 		when(cellMock.getCellTypeEnum()).thenReturn(CellType.STRING);
 		when(cellMock.getStringCellValue()).thenReturn("{test} - {dynamic.name}"); // not valid
@@ -191,7 +189,7 @@ public class SheetTemplateTest {
 
 
 	@Test
-	public void testmapCellValueToFieldNamesWithMultipleDynamicFields() {
+	void testmapCellValueToFieldNamesWithMultipleDynamicFields() {
 		st = spy(st);
 		when(st.dtoHasField("dynamic")).thenReturn(true);
 		when(st.dtoHasField("veryDynamic")).thenReturn(true);
@@ -208,7 +206,7 @@ public class SheetTemplateTest {
 	}
 
 	@Test
-	public void testmapCellValueToFieldNamesWithUnderscore() {
+	void testmapCellValueToFieldNamesWithUnderscore() {
 		st = spy(st);
 		when(st.dtoHasField("test_name")).thenReturn(true);
 		Cell cellMock = Mockito.mock(Cell.class);

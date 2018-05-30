@@ -1,8 +1,8 @@
 package org.wickedsource.budgeteer.web.pages.dashboard.burnedbudgetchart;
 
-import java.io.Serializable;
-
 import de.adesso.wickedcharts.wicket7.chartjs.Chart;
+
+import java.io.Serializable;
 
 public class BurnedBudgetChart extends Chart implements Serializable {
 
