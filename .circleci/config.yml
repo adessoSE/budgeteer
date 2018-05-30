@@ -6,11 +6,11 @@ jobs:
     steps:
       - checkout
       - run:
-        name: gradleDependencies
-        command: ./gradlew --stacktrace --console=plain resolveDependencies
+          name: gradleDependencies
+          command: ./gradlew --stacktrace --console=plain resolveDependencies
       - run:
-        name: runTests
-        command:
+          name: runTests
+          command:
           - ./gradlew --stacktrace --console=plain build
 
           - mkdir -p $CIRCLE_TEST_REPORTS/junit/
