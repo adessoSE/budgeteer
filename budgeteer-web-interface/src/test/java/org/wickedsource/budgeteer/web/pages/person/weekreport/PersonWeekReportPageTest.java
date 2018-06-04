@@ -14,26 +14,11 @@ import static org.mockito.Mockito.when;
 
 public class PersonWeekReportPageTest extends AbstractWebTestTemplate {
 
-    @Autowired
-    private PersonService service;
-
     @Test
     void test() {
         WicketTester tester = getTester();
-        when(service.loadPersonDetailData(1L)).thenReturn(createPerson());
         tester.startPage(PersonWeekReportPage.class, PersonWeekReportPage.createParameters(1L));
         tester.assertRenderedPage(PersonWeekReportPage.class);
-    }
-
-    private PersonDetailData createPerson() {
-        PersonDetailData data = new PersonDetailData();
-        data.setAverageDailyRate(MoneyUtil.createMoney(100.0));
-        data.setName("Tom Hombergs");
-        data.setBudgetBurned(MoneyUtil.createMoney(100000.00));
-        data.setFirstBookedDate(new Date());
-        data.setHoursBooked(100.0);
-        data.setLastBookedDate(new Date());
-        return data;
     }
 
     @Override

@@ -16,29 +16,14 @@ import static org.mockito.Mockito.when;
 
 public class PersonHighlightsPanelTest extends AbstractWebTestTemplate {
 
-    @Autowired
-    private PersonService service;
-
     @Test
     void render() {
-        when(service.loadPersonDetailData(1L)).thenReturn(createDetailData());
         WicketTester tester = getTester();
         PersonHighlightsModel model = new PersonHighlightsModel(1L);
         PersonHighlightsPanel panel = new PersonHighlightsPanel("panel", model);
         tester.startComponentInPage(panel);
 
         tester.assertContains("Tom Hombergs");
-    }
-
-    private PersonDetailData createDetailData() {
-        PersonDetailData data = new PersonDetailData();
-        data.setAverageDailyRate(MoneyUtil.createMoney(100.0));
-        data.setName("Tom Hombergs");
-        data.setBudgetBurned(MoneyUtil.createMoney(100000.00));
-        data.setFirstBookedDate(new Date());
-        data.setHoursBooked(100.0);
-        data.setLastBookedDate(new Date());
-        return data;
     }
 
     @Override
