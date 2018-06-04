@@ -106,7 +106,7 @@ public class SelectProjectPage extends DialogPageWithBacklink {
         return form;
     }
 
-    protected Link createLogoutlink(String id) {
+    private Link createLogoutlink(String id) {
         return new Link(id) {
             @Override
             public void onClick() {
