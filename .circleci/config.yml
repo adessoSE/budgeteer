@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: frolvlad/alpine-oraclejdk8:slim
+      - image: circleci/openjdk:8-jdk-node-browsers
     steps:
       - checkout
       - run:
