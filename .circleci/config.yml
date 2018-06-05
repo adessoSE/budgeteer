@@ -17,16 +17,15 @@ jobs:
       - run:
           name: Save test results
           command: |
-            mkdir -p ~/junit/
-            find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} ~/junit/ \;
+            mkdir -p ~/artifacts/junit/
+            find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} ~/artifacts/junit/ \;
           when: always
       - run:
           name: Save .war and .jar files
           command: |
-            mkdir ~/artifacts/
             find . -type f -regex ".*/build/libs/.*war" -exec cp {} ~/artifacts/ \;
             find . -type f -regex ".*/build/libs/.*jar" -exec cp {} ~/artifacts/ \;
       - store_test_results:
-          path: ~/junit
+          path: ~/artifacts/junit
       - store_artifacts:
-          path: ~/junit
+          path: ~/artifacts
