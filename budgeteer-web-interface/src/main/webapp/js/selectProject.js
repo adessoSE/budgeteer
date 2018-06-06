@@ -16,16 +16,19 @@ window.onload = (function () {
         evt = evt || window.event;
         var isEscape = false;
         // get the key
-        if ("key" in evt) {
-            isEscape = (evt.key == "Escape" || evt.key == "Esc");
-        } else {
-            isEscape = (evt.keyCode == 27);
-        }
-        // if esc is pressed, click logout
-        if (isEscape) {
+        if ("key" in evt) {
+            isEscape = (evt.key == "Escape" || evt.key == "Esc");
+        } else {
+            isEscape = (evt.keyCode == 27);
+        }
+        // if esc is pressed, click backlink or log out
+        if (isEscape) {
             evt.preventDefault();
-            document.getElementById("logout").click();
-        }
+            if (document.getElementById("backlink1") != null)
+                document.getElementById("backlink1").click();
+            else
+                document.getElementById("logout").click();
+        }
     });
 
     // add listener for keypress-event
