@@ -13,23 +13,12 @@ import static org.mockito.Mockito.when;
 
 public class BudgetUnitChoiceTest extends AbstractWebTestTemplate {
 
-    @Autowired
-    BudgetService service;
-
     @Test
     void testRender() {
         WicketTester tester = getTester();
-        when(service.loadBudgetUnits(1L)).thenReturn(createBudgetUnits());
         BudgetUnitModel model = new BudgetUnitModel(1L);
         BudgetUnitChoice dropdown = new BudgetUnitChoice("budgetUnit", model);
         tester.startComponentInPage(dropdown);
-    }
-
-    private List<Double> createBudgetUnits() {
-        List<Double> units = new ArrayList<Double>();
-        units.add(1d);
-        units.add(500d);
-        return units;
     }
 
     @Override

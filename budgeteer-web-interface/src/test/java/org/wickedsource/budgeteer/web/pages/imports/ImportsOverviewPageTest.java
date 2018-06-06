@@ -15,28 +15,11 @@ import static org.mockito.Mockito.when;
 
 public class ImportsOverviewPageTest extends AbstractWebTestTemplate {
 
-    @Autowired
-    private ImportService service;
-
     @Test
     void render() {
         WicketTester tester = getTester();
-        when(service.loadImports(1L)).thenReturn(createImports());
         tester.startPage(ImportsOverviewPage.class);
         tester.assertRenderedPage(ImportsOverviewPage.class);
-    }
-
-    private List<Import> createImports() {
-        List<Import> list = new ArrayList<Import>();
-        for (int i = 0; i < 20; i++) {
-            Import importRecord = new Import();
-            importRecord.setEndDate(new Date());
-            importRecord.setStartDate(new Date());
-            importRecord.setImportDate(new Date());
-            importRecord.setImportType("aproda import");
-            list.add(importRecord);
-        }
-        return list;
     }
 
     @Override

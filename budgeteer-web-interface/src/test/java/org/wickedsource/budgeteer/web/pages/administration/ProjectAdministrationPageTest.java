@@ -16,34 +16,11 @@ import static org.mockito.Mockito.when;
 
 public class ProjectAdministrationPageTest extends AbstractWebTestTemplate {
 
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private ProjectService projectService;
-
     @Test
     void test() {
         WicketTester tester = getTester();
-        when(userService.getUsersInProject(1L)).thenReturn(getUsersInProject());
-        when(projectService.findProjectById(anyLong())).thenReturn(getNewProject());
         tester.startPage(ProjectAdministrationPage.class);
         tester.assertRenderedPage(ProjectAdministrationPage.class);
-    }
-
-    private Project getNewProject() {
-        return new Project(1L, null, null, "TestProject");
-    }
-
-    private List<User> getUsersInProject() {
-        List<User> users = new ArrayList<User>();
-        for (int i = 1; i <= 5; i++) {
-            User user = new User();
-            user.setId(i);
-            user.setName("User " + i);
-            users.add(user);
-        }
-        return users;
     }
 
     @Override
