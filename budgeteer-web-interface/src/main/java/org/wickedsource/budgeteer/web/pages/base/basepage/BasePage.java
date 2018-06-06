@@ -108,7 +108,7 @@ public abstract class BasePage extends WebPage {
                 if (settings.isKeycloakActivated()) {
                     setResponsePage(new SelectProjectWithKeycloakPage());
                 } else {
-                    setResponsePage(new SelectProjectPage(LoginPage.class, new PageParameters()));
+                    setResponsePage(new SelectProjectPage(this.getWebPage().getClass(), new PageParameters()));
                 }
             }
         };
