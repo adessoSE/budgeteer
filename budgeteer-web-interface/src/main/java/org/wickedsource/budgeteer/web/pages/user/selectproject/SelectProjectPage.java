@@ -7,6 +7,7 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -19,6 +20,7 @@ import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
 import org.wickedsource.budgeteer.web.pages.base.dialogpage.DialogPageWithBacklink;
 import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
+import org.wickedsource.budgeteer.web.pages.user.login.LoginPage;
 
 @Mount("/selectProject")
 public class SelectProjectPage extends DialogPageWithBacklink {
@@ -34,7 +36,7 @@ public class SelectProjectPage extends DialogPageWithBacklink {
     public SelectProjectPage(Class<? extends WebPage> backlinkPage, PageParameters backlinkParameters) {
         super(backlinkPage, backlinkParameters);
         add(createBacklink("backlink1"));
-        add(createBacklink("backlink2"));
+        add(createLogoutlink("logoutLink"));
         add(createNewProjectForm("newProjectForm"));
         add(createChooseProjectForm("chooseProjectForm"));
         Form feedbackForm = new Form("feedbackForm", new Model<String>());
@@ -77,20 +79,20 @@ public class SelectProjectPage extends DialogPageWithBacklink {
         });
         form.add(choice);
 
-        AjaxSubmitLink markProjectAsDefault = new AjaxSubmitLink ("markProject") {
+        AjaxSubmitLink markProjectAsDefault = new AjaxSubmitLink("markProject") {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 try {
                     projectService.setDefaultProject(BudgeteerSession.get().getLoggedInUser().getId(), ((ProjectBaseData) form.getModelObject()).getId());
                     info(getString("chooseProjectForm.defaultProject.successful"));
-                } catch(Exception e){
+                } catch (Exception e) {
                     error(getString("chooseProjectForm.defaultProject.failed"));
                 }
                 target.add(form, feedbackPanel);
             }
         };
 
-        AjaxSubmitLink goButton = new AjaxSubmitLink ("goButton") {
+        AjaxSubmitLink goButton = new AjaxSubmitLink("goButton") {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 BudgeteerSession.get().setProjectId(((ProjectBaseData) form.getModelObject()).getId());
@@ -102,6 +104,15 @@ public class SelectProjectPage extends DialogPageWithBacklink {
         form.add(markProjectAsDefault);
         form.add(goButton);
         return form;
+    }
+
+    private Link createLogoutlink(String id) {
+        return new Link(id) {
+            @Override
+            public void onClick() {
+                setResponsePage(LoginPage.class);
+            }
+        };
     }
 
 }

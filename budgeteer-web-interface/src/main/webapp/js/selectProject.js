@@ -21,10 +21,13 @@ window.onload = (function () {
         } else {
             isEscape = (evt.keyCode == 27);
         }
-        // if esc is pressed, click logout
+        // if esc is pressed, click backlink or log out
         if (isEscape) {
             evt.preventDefault();
-            document.getElementById("logout").click();
+            if (document.getElementById("backlink1") != null)
+                document.getElementById("backlink1").click();
+            else
+                document.getElementById("logout").click();
         }
     });
 
