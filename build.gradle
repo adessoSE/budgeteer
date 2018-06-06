@@ -32,8 +32,10 @@ subprojects {
 
     dependencies {
         testCompile group: 'junit', name: 'junit', version: junit_version
+        testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: junit5_version
         testCompile group: 'org.springframework', name: 'spring-test', version: spring_version
         testCompile group: 'org.mockito', name: 'mockito-core', version: mockito_version
+        testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: junit5_version
     }
 
     compileJava {
@@ -47,5 +49,10 @@ subprojects {
             csv.enabled false
             html.destination "${buildDir}/jacocoHtml"
         }
+    }
+
+    test {
+        // Enable JUnit 5 (Gradle 4.6+).
+        useJUnitPlatform()
     }
 }

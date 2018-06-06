@@ -1,14 +1,14 @@
 package org.wickedsource.budgeteer.web;
 
 import org.apache.wicket.util.tester.WicketTester;
-import org.junit.Before;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.wickedsource.budgeteer.service.user.User;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @ContextConfiguration(locations = {"classpath:spring-web.xml", "classpath:spring-service-mock.xml"})
 public abstract class AbstractWebTestTemplate {
 
@@ -17,7 +17,7 @@ public abstract class AbstractWebTestTemplate {
 
     private static WicketTester tester;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         if (tester == null) {
             tester = new WicketTester(application);
@@ -32,9 +32,9 @@ public abstract class AbstractWebTestTemplate {
      */
     protected abstract void setupTest();
 
-    public void login() {
+    private void login() {
         User user = new User();
-        user.setId(1l);
+        user.setId(1L);
         user.setName("username");
         BudgeteerSession.get().login(user);
     }

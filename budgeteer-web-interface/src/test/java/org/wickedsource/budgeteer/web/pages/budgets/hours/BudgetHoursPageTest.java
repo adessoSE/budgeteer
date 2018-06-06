@@ -1,7 +1,7 @@
 package org.wickedsource.budgeteer.web.pages.budgets.hours;
 
 import org.apache.wicket.util.tester.WicketTester;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
 import org.wickedsource.budgeteer.service.budget.BudgetService;
@@ -15,15 +15,15 @@ public class BudgetHoursPageTest extends AbstractWebTestTemplate {
     private BudgetService service;
 
     @Test
-    public void render() {
+    void render() {
         WicketTester tester = getTester();
-        when(service.loadBudgetBaseData(1l)).thenReturn(createBudget());
-        tester.startPage(BudgetHoursPage.class, BudgetHoursPage.createParameters(1l));
+        when(service.loadBudgetBaseData(1L)).thenReturn(createBudget());
+        tester.startPage(BudgetHoursPage.class, BudgetHoursPage.createParameters(1L));
         tester.assertRenderedPage(BudgetHoursPage.class);
     }
 
     private BudgetBaseData createBudget() {
-        return new BudgetBaseData(1l, "Budget 1");
+        return new BudgetBaseData(1L, "Budget 1");
     }
 
     @Override

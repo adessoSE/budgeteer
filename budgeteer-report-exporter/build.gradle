@@ -3,9 +3,7 @@ dependencies {
 	compile group: 'org.apache.poi', name: 'poi-ooxml', version: "${poi_version}"
 	compile group: 'com.google.guava', name: 'guava', version: '23.0'
 
-    testCompile 'junit:junit:4.12'
     testCompile group: 'org.assertj', name: 'assertj-core', version: '3.9.1'
-    
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {

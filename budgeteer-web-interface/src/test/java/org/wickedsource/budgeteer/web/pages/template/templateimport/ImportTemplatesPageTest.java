@@ -4,8 +4,8 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.file.File;
 import org.apache.wicket.util.tester.FormTester;
 import org.apache.wicket.util.tester.WicketTester;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.wickedsource.budgeteer.web.AbstractWebTestTemplate;
 import org.wickedsource.budgeteer.web.pages.templates.TemplatesPage;
 import org.wickedsource.budgeteer.web.pages.templates.templateimport.ImportTemplatesPage;
@@ -17,14 +17,14 @@ import static org.assertj.core.api.Java6Assertions.assertThat;
 public class ImportTemplatesPageTest extends AbstractWebTestTemplate {
 
     @Test
-    public void testRender() {
+    void testRender() {
         WicketTester tester = getTester();
         tester.startPage(new ImportTemplatesPage(TemplatesPage.class, new PageParameters()));
         tester.assertRenderedPage(ImportTemplatesPage.class);
     }
 
     @Test
-    public void testBacklink1Click() {
+    void testBacklink1Click() {
         WicketTester tester = getTester();
         tester.startPage(new ImportTemplatesPage(TemplatesPage.class, new PageParameters()));
         tester.clickLink("backlink1");
@@ -32,7 +32,7 @@ public class ImportTemplatesPageTest extends AbstractWebTestTemplate {
     }
 
     @Test
-    public void testBacklink2Click() {
+    void testBacklink2Click() {
         WicketTester tester = getTester();
         tester.startPage(new ImportTemplatesPage(TemplatesPage.class, new PageParameters()));
         tester.clickLink("importForm:backlink2");
@@ -40,11 +40,11 @@ public class ImportTemplatesPageTest extends AbstractWebTestTemplate {
     }
 
     @Test
-    public void NoDataFormSubmitTest(){
+    void NoDataFormSubmitTest(){
         WicketTester tester = getTester();
         ImportTemplatesPage testPage = new ImportTemplatesPage(TemplatesPage.class, new PageParameters());
         tester.startPage(testPage);
-        Assert.assertNotNull(testPage.get("importForm"));
+        Assertions.assertNotNull(testPage.get("importForm"));
         FormTester formTester = tester.newFormTester("importForm", false);
         formTester.setClearFeedbackMessagesBeforeSubmit(true);
         formTester.submit();
@@ -54,11 +54,11 @@ public class ImportTemplatesPageTest extends AbstractWebTestTemplate {
     }
 
     @Test
-    public void NameAndDescriptionFormSubmitTest(){
+    void NameAndDescriptionFormSubmitTest(){
         WicketTester tester = getTester();
         ImportTemplatesPage testPage = new ImportTemplatesPage(TemplatesPage.class, new PageParameters());
         tester.startPage(testPage);
-        Assert.assertNotNull(testPage.get("importForm"));
+        Assertions.assertNotNull(testPage.get("importForm"));
         FormTester formTester = tester.newFormTester("importForm", false);
         formTester.setClearFeedbackMessagesBeforeSubmit(true);
         formTester.setValue("name", "TEST_N");
@@ -70,11 +70,11 @@ public class ImportTemplatesPageTest extends AbstractWebTestTemplate {
     }
 
     @Test
-    public void NoNameNoDescriptionWithFileTest(){ //yes I know this is a horrible name
+    void NoNameNoDescriptionWithFileTest(){ //yes I know this is a horrible name
         WicketTester tester = getTester();
         ImportTemplatesPage testPage = new ImportTemplatesPage(TemplatesPage.class, new PageParameters());
         tester.startPage(testPage);
-        Assert.assertNotNull(testPage.get("importForm"));
+        Assertions.assertNotNull(testPage.get("importForm"));
         FormTester formTester = tester.newFormTester("importForm", true);
         formTester.setClearFeedbackMessagesBeforeSubmit(true);
         formTester.setFile("fileUpload", getExampleTemplate(), "xlsx");
@@ -87,11 +87,11 @@ public class ImportTemplatesPageTest extends AbstractWebTestTemplate {
 
 
     @Test
-    public void AllCorrectInputForm(){
+    void AllCorrectInputForm(){
         WicketTester tester = getTester();
         ImportTemplatesPage testPage = new ImportTemplatesPage(TemplatesPage.class, new PageParameters());
         tester.startPage(testPage);
-        Assert.assertNotNull(testPage.get("importForm"));
+        Assertions.assertNotNull(testPage.get("importForm"));
         FormTester formTester = tester.newFormTester("importForm", true);
         formTester.setClearFeedbackMessagesBeforeSubmit(true);
         formTester.setFile("fileUpload", getExampleTemplate(), "xlsx");

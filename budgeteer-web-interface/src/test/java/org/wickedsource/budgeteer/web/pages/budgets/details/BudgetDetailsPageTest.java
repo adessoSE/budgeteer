@@ -3,7 +3,7 @@ package org.wickedsource.budgeteer.web.pages.budgets.details;
 import org.apache.wicket.util.tester.WicketTester;
 import org.joda.money.CurrencyUnit;
 import org.joda.money.Money;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
 import org.wickedsource.budgeteer.service.budget.BudgetDetailData;
@@ -18,11 +18,11 @@ public class BudgetDetailsPageTest extends AbstractWebTestTemplate {
     private BudgetService service;
 
     @Test
-    public void render() {
+    void render() {
         WicketTester tester = getTester();
-        when(service.loadBudgetDetailData(1l)).thenReturn(createBudget());
-        when(service.loadBudgetBaseData(1l)).thenReturn(new BudgetBaseData(1L, "Budget 1"));
-        tester.startPage(BudgetDetailsPage.class, BudgetDetailsPage.createParameters(1l));
+        when(service.loadBudgetDetailData(1L)).thenReturn(createBudget());
+        when(service.loadBudgetBaseData(1L)).thenReturn(new BudgetBaseData(1L, "Budget 1"));
+        tester.startPage(BudgetDetailsPage.class, BudgetDetailsPage.createParameters(1L));
         tester.assertRenderedPage(BudgetDetailsPage.class);
     }
 

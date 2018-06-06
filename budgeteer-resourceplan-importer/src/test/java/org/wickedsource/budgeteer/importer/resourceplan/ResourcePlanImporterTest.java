@@ -1,51 +1,53 @@
 package org.wickedsource.budgeteer.importer.resourceplan;
 
 import org.joda.money.CurrencyUnit;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.wickedsource.budgeteer.imports.api.*;
 
 import java.util.List;
 
-public class ResourcePlanImporterTest {
+class ResourcePlanImporterTest {
 
     @Test
-    public void testImportFile() throws Exception {
+    void testImportFile() throws Exception {
         ResourcePlanImporter importer = new ResourcePlanImporter();
         ImportFile file = new ImportFile("resource_plan.xlsx", getClass().getResourceAsStream("/resource_plan.xlsx"));
         List<ImportedPlanRecord> records = importer.importFile(file, CurrencyUnit.EUR);
 
-        Assert.assertEquals(26, records.size());
+        Assertions.assertEquals(26, records.size());
 
-        Assert.assertEquals(480, records.get(2).getMinutesPlanned());
-        Assert.assertEquals("Tom", records.get(2).getPersonName());
-        Assert.assertEquals("Budget 1", records.get(2).getBudgetName());
-        Assert.assertEquals(50000, records.get(2).getDailyRate().getAmountMinorInt());
+        Assertions.assertEquals(480, records.get(2).getMinutesPlanned());
+        Assertions.assertEquals("Tom", records.get(2).getPersonName());
+        Assertions.assertEquals("Budget 1", records.get(2).getBudgetName());
+        Assertions.assertEquals(50000, records.get(2).getDailyRate().getAmountMinorInt());
 
-        Assert.assertEquals(240, records.get(11).getMinutesPlanned());
-        Assert.assertEquals("Tom", records.get(11).getPersonName());
-        Assert.assertEquals("Budget 1", records.get(11).getBudgetName());
-        Assert.assertEquals(50000, records.get(11).getDailyRate().getAmountMinorInt());
+        Assertions.assertEquals(240, records.get(11).getMinutesPlanned());
+        Assertions.assertEquals("Tom", records.get(11).getPersonName());
+        Assertions.assertEquals("Budget 1", records.get(11).getBudgetName());
+        Assertions.assertEquals(50000, records.get(11).getDailyRate().getAmountMinorInt());
 
-        Assert.assertEquals(480, records.get(22).getMinutesPlanned());
-        Assert.assertEquals("Tom", records.get(22).getPersonName());
-        Assert.assertEquals("Budget 2", records.get(22).getBudgetName());
-        Assert.assertEquals(100000, records.get(22).getDailyRate().getAmountMinorInt());
+        Assertions.assertEquals(480, records.get(22).getMinutesPlanned());
+        Assertions.assertEquals("Tom", records.get(22).getPersonName());
+        Assertions.assertEquals("Budget 2", records.get(22).getBudgetName());
+        Assertions.assertEquals(100000, records.get(22).getDailyRate().getAmountMinorInt());
     }
 
     @Test
-    public void testGetExampleFile(){
+    void testGetExampleFile(){
         ResourcePlanImporter importer = new ResourcePlanImporter();
         ExampleFile file = importer.getExampleFile();
-        Assert.assertNotNull(file.getFileName());
-        Assert.assertNotNull(file.getInputStream());
-        Assert.assertNotNull(file.getContentType());
+        Assertions.assertNotNull(file.getFileName());
+        Assertions.assertNotNull(file.getInputStream());
+        Assertions.assertNotNull(file.getContentType());
     }
 
-    @Test(expected = InvalidFileFormatException.class)
-    public void testInvalidFile() throws ImportException, InvalidFileFormatException {
-        ResourcePlanImporter importer = new ResourcePlanImporter();
-        ImportFile file = new ImportFile("resource_plan_invalid.xlsx", getClass().getResourceAsStream("/resource_plan_invalid.xlsx"));
-        importer.importFile(file, CurrencyUnit.EUR);
+    @Test
+    void testInvalidFile() {
+        Assertions.assertThrows(InvalidFileFormatException.class, () -> {
+            ResourcePlanImporter importer = new ResourcePlanImporter();
+            ImportFile file = new ImportFile("resource_plan_invalid.xlsx", getClass().getResourceAsStream("/resource_plan_invalid.xlsx"));
+            importer.importFile(file, CurrencyUnit.EUR);
+        });
     }
 }
