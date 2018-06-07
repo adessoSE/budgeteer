@@ -38,7 +38,7 @@ public class LoginPage extends DialogPage {
         if (settings.isKeycloakActivated()) { // Skip Login Page if Keycloak is activated
             HttpServletRequest request = (HttpServletRequest) getRequestCycle().getRequest().getContainerRequest();
             AccessToken accessToken = ((KeycloakPrincipal) request.getUserPrincipal()).getKeycloakSecurityContext().getToken();
-            User user = userService.login(accessToken.getName());
+            User user = userService.login(accessToken.getPreferredUsername());
             BudgeteerSession.get().login(user);
             setResponsePage(new SelectProjectWithKeycloakPage());
         } else {
