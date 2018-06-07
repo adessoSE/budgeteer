@@ -13,6 +13,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.wickedsource.budgeteer.service.budget.BudgetService;
@@ -26,7 +27,9 @@ import org.wickedsource.budgeteer.web.components.money.MoneyTextField;
 import org.wickedsource.budgeteer.web.components.notificationlist.NotificationListPanel;
 import org.wickedsource.budgeteer.web.pages.base.AbstractChoiceRenderer;
 import org.wickedsource.budgeteer.web.pages.budgets.BudgetTagsModel;
+import org.wickedsource.budgeteer.web.pages.budgets.edit.EditBudgetPage;
 import org.wickedsource.budgeteer.web.pages.budgets.edit.tagsfield.TagsTextField;
+import org.wickedsource.budgeteer.web.pages.budgets.overview.BudgetsOverviewPage;
 
 import java.util.List;
 
@@ -41,16 +44,29 @@ public class EditBudgetForm extends Form<EditBudgetData> {
     @SpringBean
     private ContractService contractService;
 
-    public EditBudgetForm(String id){
-        super(id, new ClassAwareWrappingModel<EditBudgetData>(Model.of(new EditBudgetData(BudgeteerSession.get().getProjectId())), EditBudgetData.class));
-        addComponents();
-    }
+    private boolean isEditing;
 
+    public EditBudgetForm(String id){
+        super(id, new ClassAwareWrappingModel<>(Model.of(new EditBudgetData(BudgeteerSession.get().getProjectId())), EditBudgetData.class));
+        addComponents();
+        this.isEditing = false;
+    }
 
     public EditBudgetForm(String id, IModel<EditBudgetData> model) {
         super(id, model);
+        this.isEditing = true;
         Injector.get().inject(this);
         addComponents();
+    }
+
+    public EditBudgetForm(String id, IModel<EditBudgetData> model, boolean success) {
+        super(id, model);
+        this.isEditing = true;
+        Injector.get().inject(this);
+        addComponents();
+        if(success){
+            this.success("Budget sucessfully created");
+        }
     }
 
     private void addComponents() {
@@ -76,6 +92,15 @@ public class EditBudgetForm extends Form<EditBudgetData> {
         add(contractDropDown);
         add(createTagsList("tagsList", new BudgetTagsModel(BudgeteerSession.get().getProjectId()), tagsField));
         add(new NotificationListPanel("notificationList", new BudgetNotificationsModel(getModel().getObject().getId())));
+
+        //Label for the submit button
+        Label submitButtonLabel;
+        if(isEditing) {
+            submitButtonLabel = new Label("submitButtonLabel", "Save Changes");
+        }else{
+            submitButtonLabel = new Label("submitButtonLabel", "Create Budget");
+        }
+        add(submitButtonLabel);
     }
 
     private ListView<String> createTagsList(String id, IModel<List<String>> model, final Component tagsField) {
@@ -105,8 +130,16 @@ public class EditBudgetForm extends Form<EditBudgetData> {
     @Override
     protected void onSubmit() {
         try {
-            service.saveBudget(getModelObject());
-            this.success(getString("feedback.success"));
+            if(!isEditing) {
+                isEditing = true;
+                long newID = service.saveBudget(getModelObject());
+                this.success(getString("feedback.success"));
+                setResponsePage(new EditBudgetPage(EditBudgetPage.createParameters(
+                        newID) ,BudgetsOverviewPage.class, new PageParameters(), true));
+            }else{
+                this.success(getString("feedback.success"));
+                service.saveBudget(getModelObject());
+            }
         } catch (DataIntegrityViolationException e) {
             this.error(getString("feedback.error.constraint"));
         }

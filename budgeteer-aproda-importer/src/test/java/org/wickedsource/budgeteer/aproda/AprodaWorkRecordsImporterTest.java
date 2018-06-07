@@ -3,7 +3,10 @@ package org.wickedsource.budgeteer.aproda;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.wickedsource.budgeteer.importer.aproda.AprodaWorkRecordsImporter;
-import org.wickedsource.budgeteer.imports.api.*;
+import org.wickedsource.budgeteer.imports.api.ExampleFile;
+import org.wickedsource.budgeteer.imports.api.ImportFile;
+import org.wickedsource.budgeteer.imports.api.ImportedWorkRecord;
+import org.wickedsource.budgeteer.imports.api.InvalidFileFormatException;
 
 import java.io.InputStream;
 import java.text.DateFormat;
