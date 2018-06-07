@@ -169,17 +169,17 @@ public class TemplateService {
     }
 
     /**
+     * Reads an example template file from disk.
+     * The file must be named like in the following format:
+     * type-report-template.xlsx
      *
+     * where type is any of the available template types.
      * @return An example file that shows how a template could look
      */
     public ExampleFile getExampleFile(ReportType type) {
         ExampleFile file = new ExampleFile();
         file.setFileName("Example_" + type.toString().toLowerCase() +"_template.xlsx");
-        if(type == ReportType.BUDGET_REPORT) {
-            file.setInputStream(getClass().getResourceAsStream("/report-template.xlsx"));
-        }else if(type == ReportType.CONTRACT_REPORT){
-            file.setInputStream(getClass().getResourceAsStream("/contract-report-template.xlsx"));
-        }
+        file.setInputStream(getClass().getResourceAsStream("/" + type.toString().toLowerCase() + "-report-template.xlsx"));
         return file;
     }
 }
