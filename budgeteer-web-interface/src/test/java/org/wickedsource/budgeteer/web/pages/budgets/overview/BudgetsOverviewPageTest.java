@@ -22,17 +22,21 @@ public class BudgetsOverviewPageTest extends AbstractWebTestTemplate {
 
     @Test
     public void netGrossLinkWithManDays(){
+        WicketTester tester = getTester();
+        tester.startPage(BudgetsOverviewPage.class);
         BudgeteerSession.get().setTaxEnabled(true);
         BudgeteerSession.get().setSelectedBudgetUnit(13.0);
-        getTester().clickLink("netGrossLink");
+        tester.clickLink("netGrossLink");
         Assertions.assertTrue(BudgeteerSession.get().isTaxEnabled());
     }
 
     @Test
     public void netGrossLink(){
+        WicketTester tester = getTester();
+        tester.startPage(BudgetsOverviewPage.class);
         BudgeteerSession.get().setTaxEnabled(true);
         BudgeteerSession.get().setSelectedBudgetUnit(1.0);
-        getTester().clickLink("netGrossLink");
+        tester.clickLink("netGrossLink");
         Assertions.assertFalse(BudgeteerSession.get().isTaxEnabled());
     }
 }
