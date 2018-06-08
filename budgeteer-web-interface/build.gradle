@@ -2,7 +2,6 @@ import org.apache.tools.ant.filters.ReplaceTokens
 
 buildscript {
     repositories {
-        maven { url 'https://plugins.gradle.org/m2/' }
         mavenCentral()
         jcenter()
     }
@@ -10,12 +9,7 @@ buildscript {
     dependencies {
         classpath group: 'org.springframework.boot', name: 'spring-boot-gradle-plugin', version: "${spring_boot_version}"
         classpath group: 'org.springframework', name: 'springloaded', version: "${springloaded_version}"
-        classpath 'com.diffplug.spotless:spotless-plugin-gradle:3.4.0'
     }
-}
-
-plugins {
-    id "com.diffplug.gradle.spotless" version "3.4.0"
 }
 
 apply plugin: 'war'
@@ -202,20 +196,5 @@ idea {
     }
 }
 
-spotless {
-    format 'misc', {
-        target '**/*.gradle', '**/*.md', '**/.gitignore'
-        trimTrailingWhitespace()
-        indentWithTabs()
-        endWithNewline()
-    }
 
-    java {
-        googleJavaFormat()
-        importOrder(['java', 'javax', 'org', 'com'])
-        trimTrailingWhitespace()
-        removeUnusedImports()
-        indentWithTabs()
-    }
-}
 
