@@ -2,13 +2,20 @@ import org.apache.tools.ant.filters.ReplaceTokens
 
 buildscript {
     repositories {
+        maven { url 'https://plugins.gradle.org/m2/' }
+        mavenCentral()
         jcenter()
     }
 
     dependencies {
         classpath group: 'org.springframework.boot', name: 'spring-boot-gradle-plugin', version: "${spring_boot_version}"
         classpath group: 'org.springframework', name: 'springloaded', version: "${springloaded_version}"
+        classpath 'com.diffplug.spotless:spotless-plugin-gradle:3.4.0'
     }
+}
+
+plugins {
+    id "com.diffplug.gradle.spotless" version "3.4.0"
 }
 
 apply plugin: 'war'
@@ -35,10 +42,10 @@ sourceSets {
 
 processResources {
     from('src/main/java') {
-    	exclude '**/*.xlsx'
-	    filter ReplaceTokens, tokens: [
-	            "application.version": project.property("version")
-	    ]
+        exclude '**/*.xlsx'
+        filter ReplaceTokens, tokens: [
+                "application.version": project.property("version")
+        ]
     }
 }
 
@@ -170,27 +177,44 @@ idea {
 
     module.iml.withXml {
         def springFacet = '''
-            <component name="FacetManager">
-                <facet type="Spring" name="Spring">
-                  <configuration>
-                    <fileset id="fileset" name="Spring Application Context" removed="false">
-                      <file>file://$MODULE_DIR$/src/main/java/org/wickedsource/budgeteer/boot/WebInitializer.java</file>
-                    </fileset>
-                  </configuration>
-                </facet>
-                <facet type="web" name="Web">
-                  <configuration>
-                    <webroots>
-                      <root url="file://$MODULE_DIR$/src/main/webapp" relative="/" />
-                    </webroots>
-                    <sourceRoots>
-                      <root url="file://$MODULE_DIR$/src/generated/java" />
-                      <root url="file://$MODULE_DIR$/src/main/java" />
-                      <root url="file://$MODULE_DIR$/src/main/resources" />
-                    </sourceRoots>
-                  </configuration>
-                </facet>
-            </component>'''
+			<component name="FacetManager">
+				<facet type="Spring" name="Spring">
+				<configuration>
+					<fileset id="fileset" name="Spring Application Context" removed="false">
+					<file>file://$MODULE_DIR$/src/main/java/org/wickedsource/budgeteer/boot/WebInitializer.java</file>
+					</fileset>
+				</configuration>
+				</facet>
+				<facet type="web" name="Web">
+				<configuration>
+					<webroots>
+					<root url="file://$MODULE_DIR$/src/main/webapp" relative="/" />
+					</webroots>
+					<sourceRoots>
+					<root url="file://$MODULE_DIR$/src/generated/java" />
+					<root url="file://$MODULE_DIR$/src/main/java" />
+					<root url="file://$MODULE_DIR$/src/main/resources" />
+					</sourceRoots>
+				</configuration>
+				</facet>
+			</component>'''
         it.asNode().append(new XmlParser().parseText(springFacet))
+    }
+}
+
+spotless {
+    format 'misc', {
+        target '**/*.gradle', '**/*.md', '**/.gitignore'
+        trimTrailingWhitespace()
+        indentWithTabs()
+        endWithNewline()
+    }
+
+    java {
+        googleJavaFormat()
+        importOrder(['java', 'javax', 'org', 'com'])
+        trimTrailingWhitespace()
+        removeUnusedImports()
+        indentWithTabs()
     }
 }
