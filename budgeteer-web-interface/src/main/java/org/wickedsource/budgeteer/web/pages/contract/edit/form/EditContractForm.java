@@ -1,5 +1,6 @@
 package org.wickedsource.budgeteer.web.pages.contract.edit.form;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.injection.Injector;
@@ -37,20 +38,26 @@ public class EditContractForm extends Form<ContractBaseData> {
 
     private WebMarkupContainer table;
 
+    private String sumbitButtonText;
+
     private TextField<String> newAttributeField;
     private CustomFeedbackPanel feedbackPanel;
 
     public EditContractForm(String id){
         super(id);
         super.setDefaultModel(Model.of(service.getEmptyContractModel(BudgeteerSession.get().getProjectId())));
+        sumbitButtonText = "Create Contract";
         addComponents();
+
     }
 
 
     public EditContractForm(String id, IModel<ContractBaseData> model) {
         super(id, model);
         Injector.get().inject(this);
+        sumbitButtonText = "Save Changes";
         addComponents();
+
     }
 
     private void addComponents() {
@@ -113,15 +120,23 @@ public class EditContractForm extends Form<ContractBaseData> {
                 }
             }
         };
+        addAttribute.setOutputMarkupId(true);
         add(addAttribute);
-        add(new AjaxButton("save") {
+        add(new AjaxButton("save", model(from(sumbitButtonText))) {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 try {
                     ((ContractBaseData) form.getModelObject()).getFileModel().setFile(fileUpload.getFile());
                     ((ContractBaseData) form.getModelObject()).getFileModel().setFileName(fileUpload.getFileName());
                     ((ContractBaseData) form.getModelObject()).setContractId(service.save((ContractBaseData) form.getModelObject()));
-                    this.success(getString("feedback.success"));
+                    if(sumbitButtonText.equals("Create Contract")){
+                        sumbitButtonText = "Save Changes";
+                        this.setDefaultModel(model(from(sumbitButtonText)));
+                        target.add(this);
+                        this.success("Successfully created contract");
+                    }else {
+                        this.success(getString("feedback.success"));
+                    }
                 } catch (DataIntegrityViolationException e) {
                     this.error(getString("feedback.error.dataformat.taxrate"));
                 } catch (Exception e) {
@@ -135,6 +150,6 @@ public class EditContractForm extends Form<ContractBaseData> {
             protected void onError(AjaxRequestTarget target, Form<?> form) {
                 target.add(feedbackPanel);
             }
-        });
+        }.setOutputMarkupId(true));
     }
 }
