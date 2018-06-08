@@ -13,6 +13,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -52,20 +53,13 @@ public class EditBudgetForm extends Form<EditBudgetData> {
         this.isEditing = false;
     }
 
-    public EditBudgetForm(String id, IModel<EditBudgetData> model) {
+    public EditBudgetForm(String id, IModel<EditBudgetData> model, boolean isEditingNewBudget) {
         super(id, model);
         this.isEditing = true;
         Injector.get().inject(this);
         addComponents();
-    }
-
-    public EditBudgetForm(String id, IModel<EditBudgetData> model, boolean success) {
-        super(id, model);
-        this.isEditing = true;
-        Injector.get().inject(this);
-        addComponents();
-        if(success){
-            this.success("Budget sucessfully created");
+        if(isEditingNewBudget){
+            this.success("Budget successfully created.");
         }
     }
 
@@ -96,9 +90,9 @@ public class EditBudgetForm extends Form<EditBudgetData> {
         //Label for the submit button
         Label submitButtonLabel;
         if(isEditing) {
-            submitButtonLabel = new Label("submitButtonLabel", "Save Changes");
+            submitButtonLabel = new Label("submitButtonLabel", new ResourceModel("button.save.editmode"));
         }else{
-            submitButtonLabel = new Label("submitButtonLabel", "Create Budget");
+            submitButtonLabel = new Label("submitButtonLabel", new ResourceModel("button.save.createmode"));
         }
         add(submitButtonLabel);
     }
@@ -131,9 +125,10 @@ public class EditBudgetForm extends Form<EditBudgetData> {
     protected void onSubmit() {
         try {
             if(!isEditing) {
+                //This prevents the user from creating a completely new budget when trying to
+                //edit a newly created budget from the same form
                 isEditing = true;
                 long newID = service.saveBudget(getModelObject());
-                this.success(getString("feedback.success"));
                 setResponsePage(new EditBudgetPage(EditBudgetPage.createParameters(
                         newID) ,BudgetsOverviewPage.class, new PageParameters(), true));
             }else{
