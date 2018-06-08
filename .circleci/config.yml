@@ -12,6 +12,9 @@ jobs:
           name: build
           command: ./gradlew --stacktrace --console=plain assemble
       - run:
+          name: spotless code check
+          command: ./gradlew --stacktrace --console=plain spotlessCheck
+      - run:
           name: test
           command: ./gradlew --stacktrace --console=plain test
       - run:
