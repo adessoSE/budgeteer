@@ -55,7 +55,7 @@ public class ProjectAdministrationPage extends BasePage {
     }
 
     private Form<Project> createEditProjectForm(String formId) {
-        Form<Project> form = new Form<Project>(formId, model(from(projectService.findProjectById(BudgeteerSession.get().getProjectId())))){
+        Form<Project> form = new Form<Project>(formId, model(from(projectService.findProjectById(BudgeteerSession.get().getProjectId())))) {
             @Override
             protected void onSubmit() {
                 super.onSubmit();
@@ -71,16 +71,21 @@ public class ProjectAdministrationPage extends BasePage {
     }
 
     private ListView<User> createUserList(String id, IModel<List<User>> model) {
+        User thisUser = BudgeteerSession.get().getLoggedInUser();
         return new ListView<User>(id, model) {
             @Override
             protected void populateItem(final ListItem<User> item) {
                 item.add(new Label("username", model(from(item.getModel()).getName())));
-                item.add(new Link("deleteButton") {
+                Link deleteButton = new Link("deleteButton") {
                     @Override
                     public void onClick() {
                         userService.removeUserFromProject(BudgeteerSession.get().getProjectId(), item.getModelObject().getId());
                     }
-                });
+                };
+                // a user may not delete herself/himself
+                if (item.getModelObject().equals(thisUser))
+                    deleteButton.setVisible(false);
+                item.add(deleteButton);
             }
 
             @Override
