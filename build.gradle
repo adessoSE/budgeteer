@@ -42,8 +42,8 @@ subprojects {
         }
 		maven {
 			url 'https://oss.jfrog.org/artifactory/oss-snapshot-local'
-		} 
-        
+		}
+
     }
 
     dependencies {
@@ -83,8 +83,12 @@ subprojects {
         }
 
         java {
+            target project.fileTree(project.rootDir) {
+                include '**/*.java'
+                exclude '**/generated/**/*.*'
+            }
             googleJavaFormat()
-            importOrder(['java', 'javax', 'org', 'com'])
+            importOrder 'java', 'javax', 'org', 'com'
             trimTrailingWhitespace()
             removeUnusedImports()
             indentWithTabs()
