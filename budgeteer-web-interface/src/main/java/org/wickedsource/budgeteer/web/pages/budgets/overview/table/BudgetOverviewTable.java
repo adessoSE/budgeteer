@@ -15,6 +15,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.service.budget.BudgetDetailData;
 import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
 import org.wickedsource.budgeteer.service.contract.ContractService;
+import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.ClassAwareWrappingModel;
 import org.wickedsource.budgeteer.web.components.dataTable.DataTableBehavior;
 import org.wickedsource.budgeteer.web.components.money.BudgetUnitMoneyModel;
@@ -86,10 +87,21 @@ public class BudgetOverviewTable extends Panel {
     @Override
     public void onEvent(IEvent<?> event) {
         super.onEvent(event);
-        if (event.getPayload() instanceof BudgetTagFilter) {
+        Object payload = event.getPayload();
+        if (payload instanceof BudgetTagFilter) {
             BudgetTagFilter filter = (BudgetTagFilter) event.getPayload();
             FilteredBudgetModel model = (FilteredBudgetModel) getDefaultModel();
             model.setFilter(model(from(filter)));
+        }else if(payload instanceof String){
+            Long remainingFilter;
+            try {
+                remainingFilter = Long.parseLong((String)event.getPayload());
+            }catch (NumberFormatException e){
+                return;
+            }
+            FilteredBudgetModel model = (FilteredBudgetModel) getDefaultModel();
+            model.setRemainingFilterModel(model(from(remainingFilter)));
+            BudgeteerSession.get().setBudgetRemainingFilter(remainingFilter);
         }
     }
 

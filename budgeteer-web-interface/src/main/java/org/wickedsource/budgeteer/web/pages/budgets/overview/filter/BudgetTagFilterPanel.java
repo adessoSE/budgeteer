@@ -12,6 +12,7 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
+import org.wickedsource.budgeteer.web.pages.budgets.overview.BudgetsOverviewPage;
 
 import java.util.List;
 
@@ -35,6 +36,8 @@ public class BudgetTagFilterPanel extends Panel {
             @Override
             public void onSubmit() {
                 getFilter().getSelectedTags().clear();
+                BudgeteerSession.get().setBudgetRemainingFilter(0L);
+                setResponsePage(BudgetsOverviewPage.class);
             }
 
             @Override
