@@ -1,22 +1,22 @@
 package org.wickedsource.budgeteer.web.pages.person.edit;
 
+import java.io.Serializable;
+
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.wickedsource.budgeteer.web.pages.person.edit.personrateform.EditPersonForm;
 
-import java.io.Serializable;
-
 /**
- * Strategy for the EditPersonPage, which can either be used to UPDATE an existing person or to CREATE a new person.
+ * Strategy for the EditPersonPage, which can either be used to UPDATE an existing person or to
+ * CREATE a new person.
  */
 public interface IEditPersonPageStrategy extends Serializable {
 
-    Label createPageTitleLabel(String id);
+	Label createPageTitleLabel(String id);
 
-    Label createSubmitButtonLabel(String id);
+	Label createSubmitButtonLabel(String id);
 
-    Panel createNotificationList(String id, long personId);
+	Panel createNotificationList(String id, long personId);
 
-    EditPersonForm createForm(String id, long personId);
-
+	EditPersonForm createForm(String id, long personId);
 }

@@ -1,5 +1,10 @@
 package org.wickedsource.budgeteer.web.pages.budgets.edit.form;
 
+import static org.wicketstuff.lazymodel.LazyModel.from;
+import static org.wicketstuff.lazymodel.LazyModel.model;
+
+import java.util.List;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -28,87 +33,95 @@ import org.wickedsource.budgeteer.web.pages.base.AbstractChoiceRenderer;
 import org.wickedsource.budgeteer.web.pages.budgets.BudgetTagsModel;
 import org.wickedsource.budgeteer.web.pages.budgets.edit.tagsfield.TagsTextField;
 
-import java.util.List;
-
-import static org.wicketstuff.lazymodel.LazyModel.from;
-import static org.wicketstuff.lazymodel.LazyModel.model;
-
 public class EditBudgetForm extends Form<EditBudgetData> {
 
-    @SpringBean
-    private BudgetService service;
+	@SpringBean private BudgetService service;
 
-    @SpringBean
-    private ContractService contractService;
+	@SpringBean private ContractService contractService;
 
-    public EditBudgetForm(String id){
-        super(id, new ClassAwareWrappingModel<EditBudgetData>(Model.of(new EditBudgetData(BudgeteerSession.get().getProjectId())), EditBudgetData.class));
-        addComponents();
-    }
+	public EditBudgetForm(String id) {
+		super(
+				id,
+				new ClassAwareWrappingModel<EditBudgetData>(
+						Model.of(new EditBudgetData(BudgeteerSession.get().getProjectId())),
+						EditBudgetData.class));
+		addComponents();
+	}
 
+	public EditBudgetForm(String id, IModel<EditBudgetData> model) {
+		super(id, model);
+		Injector.get().inject(this);
+		addComponents();
+	}
 
-    public EditBudgetForm(String id, IModel<EditBudgetData> model) {
-        super(id, model);
-        Injector.get().inject(this);
-        addComponents();
-    }
+	private void addComponents() {
+		TagsTextField tagsField = new TagsTextField("tagsInput", model(from(getModel()).getTags()));
+		tagsField.setOutputMarkupId(true);
+		add(tagsField);
+		add(new CustomFeedbackPanel("feedback"));
+		add(new RequiredTextField<String>("name", model(from(getModel()).getTitle())));
+		add(new TextField<String>("description", model(from(getModel()).getDescription())));
+		add(new RequiredTextField<String>("importKey", model(from(getModel()).getImportKey())));
+		MoneyTextField totalField = new MoneyTextField("total", model(from(getModel()).getTotal()));
+		totalField.setRequired(true);
+		add(totalField);
+		DropDownChoice<ContractBaseData> contractDropDown =
+				new DropDownChoice<ContractBaseData>(
+						"contract",
+						model(from(getModel()).getContract()),
+						contractService.getContractsByProject(BudgeteerSession.get().getProjectId()),
+						new AbstractChoiceRenderer<ContractBaseData>() {
+							@Override
+							public Object getDisplayValue(ContractBaseData object) {
+								return object == null ? getString("no.contract") : object.getContractName();
+							}
+						});
+		contractDropDown.setNullValid(true);
+		add(contractDropDown);
+		add(
+				createTagsList(
+						"tagsList", new BudgetTagsModel(BudgeteerSession.get().getProjectId()), tagsField));
+		add(
+				new NotificationListPanel(
+						"notificationList", new BudgetNotificationsModel(getModel().getObject().getId())));
+	}
 
-    private void addComponents() {
-        TagsTextField tagsField = new TagsTextField("tagsInput", model(from(getModel()).getTags()));
-        tagsField.setOutputMarkupId(true);
-        add(tagsField);
-        add(new CustomFeedbackPanel("feedback"));
-        add(new RequiredTextField<String>("name", model(from(getModel()).getTitle())));
-        add(new TextField<String>("description", model(from(getModel()).getDescription())));
-        add(new RequiredTextField<String>("importKey", model(from(getModel()).getImportKey())));
-        MoneyTextField totalField = new MoneyTextField("total", model(from(getModel()).getTotal()));
-        totalField.setRequired(true);
-        add(totalField);
-        DropDownChoice<ContractBaseData> contractDropDown = new DropDownChoice<ContractBaseData>("contract", model(from(getModel()).getContract()),
-                contractService.getContractsByProject(BudgeteerSession.get().getProjectId()),
-                new AbstractChoiceRenderer<ContractBaseData>() {
-                    @Override
-                    public Object getDisplayValue(ContractBaseData object) {
-                        return object == null ? getString("no.contract") : object.getContractName();
-                    }
-                });
-        contractDropDown.setNullValid(true);
-        add(contractDropDown);
-        add(createTagsList("tagsList", new BudgetTagsModel(BudgeteerSession.get().getProjectId()), tagsField));
-        add(new NotificationListPanel("notificationList", new BudgetNotificationsModel(getModel().getObject().getId())));
-    }
+	private ListView<String> createTagsList(
+			String id, IModel<List<String>> model, final Component tagsField) {
+		return new ListView<String>(id, model) {
+			@Override
+			protected void populateItem(final ListItem<String> item) {
+				Label label = new Label("tag", model(from(item.getModel())));
+				label.setRenderBodyOnly(true);
+				item.add(label);
+				item.add(
+						new AjaxEventBehavior("click") {
+							@SuppressWarnings("unchecked")
+							@Override
+							protected void onEvent(AjaxRequestTarget target) {
+								((List<String>) tagsField.getDefaultModelObject()).add(item.getModelObject());
+								target.appendJavaScript(
+										String.format(
+												"$('#%s').tagsinput('add', '%s');",
+												tagsField.getMarkupId(), item.getModelObject()));
+							}
+						});
+			}
 
-    private ListView<String> createTagsList(String id, IModel<List<String>> model, final Component tagsField) {
-        return new ListView<String>(id, model) {
-            @Override
-            protected void populateItem(final ListItem<String> item) {
-                Label label = new Label("tag", model(from(item.getModel())));
-                label.setRenderBodyOnly(true);
-                item.add(label);
-                item.add(new AjaxEventBehavior("click") {
-                    @SuppressWarnings("unchecked")
-                    @Override
-                    protected void onEvent(AjaxRequestTarget target) {
-                        ((List<String>) tagsField.getDefaultModelObject()).add(item.getModelObject());
-                        target.appendJavaScript(String.format("$('#%s').tagsinput('add', '%s');", tagsField.getMarkupId(), item.getModelObject()));
-                    }
-                });
-            }
+			@Override
+			protected ListItem<String> newItem(int index, IModel<String> itemModel) {
+				return super.newItem(index, new ClassAwareWrappingModel<String>(itemModel, String.class));
+			}
+		};
+	}
 
-            @Override
-            protected ListItem<String> newItem(int index, IModel<String> itemModel) {
-                return super.newItem(index, new ClassAwareWrappingModel<String>(itemModel, String.class));
-            }
-        };
-    }
-
-    @Override
-    protected void onSubmit() {
-        try {
-            service.saveBudget(getModelObject());
-            this.success(getString("feedback.success"));
-        } catch (DataIntegrityViolationException e) {
-            this.error(getString("feedback.error.constraint"));
-        }
-    }
+	@Override
+	protected void onSubmit() {
+		try {
+			service.saveBudget(getModelObject());
+			this.success(getString("feedback.success"));
+		} catch (DataIntegrityViolationException e) {
+			this.error(getString("feedback.error.constraint"));
+		}
+	}
 }

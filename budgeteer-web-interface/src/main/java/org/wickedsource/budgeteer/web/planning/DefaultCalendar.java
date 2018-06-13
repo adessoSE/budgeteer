@@ -1,44 +1,36 @@
 package org.wickedsource.budgeteer.web.planning;
 
-import lombok.Getter;
-import org.joda.time.LocalDate;
-import org.joda.time.ReadablePeriod;
+import static org.joda.time.DateTimeConstants.*;
+import static org.joda.time.Period.years;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.joda.time.DateTimeConstants.*;
-import static org.joda.time.Period.years;
+import lombok.Getter;
 
-/**
- * Calendar in which weekends and optionally holidays are marked as non-working.
- */
+import org.joda.time.LocalDate;
+import org.joda.time.ReadablePeriod;
+
+/** Calendar in which weekends and optionally holidays are marked as non-working. */
 public class DefaultCalendar extends Calendar {
 
 	public static DefaultCalendar calendarYear(int year) {
 		return new DefaultCalendar(new LocalDate(year, JANUARY, 1), years(1));
 	}
 
-	/**
-	 * Mapping every date to a Day object.
-	 */
+	/** Mapping every date to a Day object. */
 	private Map<LocalDate, Day> days;
 
-	@Getter
-	private LocalDate start;
+	@Getter private LocalDate start;
 
-	@Getter
-	private LocalDate end;
+	@Getter private LocalDate end;
 
-	@Getter
-	private HolidayConfiguration holidayManager;
+	@Getter private HolidayConfiguration holidayManager;
 
-	@Getter
-	private transient int numberOfWorkingDays;
+	@Getter private transient int numberOfWorkingDays;
 
-	@Getter
-	private transient int numberOfHolidays;
+	@Getter private transient int numberOfHolidays;
 
 	private boolean initialized;
 
@@ -133,11 +125,11 @@ public class DefaultCalendar extends Calendar {
 
 	private boolean checkDateIsOnWeekend(LocalDate date) {
 		switch (date.getDayOfWeek()) {
-		case SATURDAY:
-		case SUNDAY:
-			return true;
-		default:
-			return false;
+			case SATURDAY:
+			case SUNDAY:
+				return true;
+			default:
+				return false;
 		}
 	}
 

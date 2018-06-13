@@ -8,16 +8,14 @@ import org.wickedsource.budgeteer.web.pages.user.login.LoginPage;
 
 public class SelectProjectPageTest extends AbstractWebTestTemplate {
 
-    @Test
-    void test() {
-        WicketTester tester = getTester();
-        SelectProjectPage page = new SelectProjectPage(LoginPage.class, new PageParameters());
-        tester.startPage(page);
-        tester.assertRenderedPage(SelectProjectPage.class);
-    }
+	@Test
+	void test() {
+		WicketTester tester = getTester();
+		SelectProjectPage page = new SelectProjectPage(LoginPage.class, new PageParameters());
+		tester.startPage(page);
+		tester.assertRenderedPage(SelectProjectPage.class);
+	}
 
-    @Override
-    protected void setupTest() {
-
-    }
+	@Override
+	protected void setupTest() {}
 }

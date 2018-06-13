@@ -21,72 +21,76 @@ import org.wickedsource.budgeteer.web.pages.contract.overview.report.ContractRep
 import org.wickedsource.budgeteer.web.pages.contract.overview.table.ContractOverviewTable;
 import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 
-
 @Mount("contracts")
-public class ContractOverviewPage extends BasePage{
+public class ContractOverviewPage extends BasePage {
 
-    @SpringBean
-    private ContractService contractService;
+	@SpringBean private ContractService contractService;
 
-    private ContractOverviewTable table;
+	private ContractOverviewTable table;
 
-    private Fragment frag;
+	private Fragment frag;
 
-    public ContractOverviewPage() {
-        table = new ContractOverviewTable("contractTable");
+	public ContractOverviewPage() {
+		table = new ContractOverviewTable("contractTable");
 
-        add(table);
-        add(new Link("createContractLink") {
-            @Override
-            public void onClick() {
-                WebPage page = new EditContractPage(ContractOverviewPage.class, getPageParameters());
-                setResponsePage(page);
-            }
-        });
+		add(table);
+		add(
+				new Link("createContractLink") {
+					@Override
+					public void onClick() {
+						WebPage page = new EditContractPage(ContractOverviewPage.class, getPageParameters());
+						setResponsePage(page);
+					}
+				});
 
-
-        add(createReportLink("createReportLink"));
-        add(createNetGrossLink("netGrossLink"));
-    }
-
-
-    private Link createNetGrossLink(String string) {
-        Link link = new Link(string) {
-            @Override
-            public void onClick() {
-                if (BudgeteerSession.get().isTaxEnabled()) {
-                    BudgeteerSession.get().setTaxEnabled(false);
-                } else {
-                    BudgeteerSession.get().setTaxEnabled(true);
-                }
-            }
-        };
-        link.add(new Label("title", new TaxSwitchLabelModel(
-                new StringResourceModel("links.tax.label.net", this),
-                new StringResourceModel("links.tax.label.gross", this)
-        )));
-        return link;
-    }
-
-    private Component createReportLink(String string) {
-        Link link = new Link(string) {
-            @Override
-            public void onClick() {
-                setResponsePage(new ContractReportDialog(ContractOverviewPage.class, new PageParameters()));
-            }
-        };
-
-        if (!contractService.projectHasContracts(BudgeteerSession.get().getProjectId())) {
-            link.setEnabled(false);
-            link.add(new AttributeAppender("style", "cursor: not-allowed;", " "));
-            link.add(new AttributeModifier("title", ContractOverviewPage.this.getString("links.contract.label.no.contract")));
-        }
-        return link;
+		add(createReportLink("createReportLink"));
+		add(createNetGrossLink("netGrossLink"));
 	}
 
-    @SuppressWarnings("unchecked")
-    @Override
-    protected BreadcrumbsModel getBreadcrumbsModel() {
-        return new BreadcrumbsModel(DashboardPage.class, ContractOverviewPage.class);
-    }
+	private Link createNetGrossLink(String string) {
+		Link link =
+				new Link(string) {
+					@Override
+					public void onClick() {
+						if (BudgeteerSession.get().isTaxEnabled()) {
+							BudgeteerSession.get().setTaxEnabled(false);
+						} else {
+							BudgeteerSession.get().setTaxEnabled(true);
+						}
+					}
+				};
+		link.add(
+				new Label(
+						"title",
+						new TaxSwitchLabelModel(
+								new StringResourceModel("links.tax.label.net", this),
+								new StringResourceModel("links.tax.label.gross", this))));
+		return link;
+	}
+
+	private Component createReportLink(String string) {
+		Link link =
+				new Link(string) {
+					@Override
+					public void onClick() {
+						setResponsePage(
+								new ContractReportDialog(ContractOverviewPage.class, new PageParameters()));
+					}
+				};
+
+		if (!contractService.projectHasContracts(BudgeteerSession.get().getProjectId())) {
+			link.setEnabled(false);
+			link.add(new AttributeAppender("style", "cursor: not-allowed;", " "));
+			link.add(
+					new AttributeModifier(
+							"title", ContractOverviewPage.this.getString("links.contract.label.no.contract")));
+		}
+		return link;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	protected BreadcrumbsModel getBreadcrumbsModel() {
+		return new BreadcrumbsModel(DashboardPage.class, ContractOverviewPage.class);
+	}
 }

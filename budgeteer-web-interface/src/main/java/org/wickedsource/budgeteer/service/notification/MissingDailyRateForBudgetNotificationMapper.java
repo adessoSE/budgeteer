@@ -5,17 +5,18 @@ import org.wickedsource.budgeteer.persistence.record.MissingDailyRateForBudgetBe
 import org.wickedsource.budgeteer.service.AbstractMapper;
 
 @Component
-public class MissingDailyRateForBudgetNotificationMapper extends AbstractMapper<MissingDailyRateForBudgetBean, Notification> {
+public class MissingDailyRateForBudgetNotificationMapper
+		extends AbstractMapper<MissingDailyRateForBudgetBean, Notification> {
 
-    @Override
-    public Notification map(MissingDailyRateForBudgetBean rate) {
-        MissingDailyRateForBudgetNotification notification = new MissingDailyRateForBudgetNotification();
-        notification.setStartDate(rate.getStartDate());
-        notification.setEndDate(rate.getEndDate());
-        notification.setPersonId(rate.getPersonId());
-        notification.setPersonName(rate.getPersonName());
-        notification.setBudgetName(rate.getBudgetName());
-        return notification;
-    }
-
+	@Override
+	public Notification map(MissingDailyRateForBudgetBean rate) {
+		MissingDailyRateForBudgetNotification notification =
+				new MissingDailyRateForBudgetNotification();
+		notification.setStartDate(rate.getStartDate());
+		notification.setEndDate(rate.getEndDate());
+		notification.setPersonId(rate.getPersonId());
+		notification.setPersonName(rate.getPersonName());
+		notification.setBudgetName(rate.getBudgetName());
+		return notification;
+	}
 }

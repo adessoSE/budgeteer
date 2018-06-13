@@ -1,16 +1,16 @@
 package org.wickedsource.budgeteer.SheetTemplate;
 
+import static org.junit.Assert.*;
+
+import java.io.FileInputStream;
+import java.io.InputStream;
+
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.io.FileInputStream;
-import java.io.InputStream;
-
-import static org.junit.Assert.*;
 
 class FlagTemplateTest {
 
@@ -34,9 +34,12 @@ class FlagTemplateTest {
 
 	@Test
 	void testFlagMappings() {
-		assertEquals(sheet.getRow(0).getCell(0).getCellStyle(),flagTemplate.getCellStyleFor("warning1"));
-		assertEquals(sheet.getRow(0).getCell(1).getCellStyle(),flagTemplate.getCellStyleFor("warning2"));
-		assertEquals(sheet.getRow(0).getCell(2).getCellStyle(),flagTemplate.getCellStyleFor("warning3"));
+		assertEquals(
+				sheet.getRow(0).getCell(0).getCellStyle(), flagTemplate.getCellStyleFor("warning1"));
+		assertEquals(
+				sheet.getRow(0).getCell(1).getCellStyle(), flagTemplate.getCellStyleFor("warning2"));
+		assertEquals(
+				sheet.getRow(0).getCell(2).getCellStyle(), flagTemplate.getCellStyleFor("warning3"));
 		assertNull(flagTemplate.getCellStyleFor("doesnotexist"));
 	}
 
@@ -47,5 +50,4 @@ class FlagTemplateTest {
 		assertFalse(flagTemplate.isFlagTag("{flag}"));
 		assertFalse(flagTemplate.isFlagTag("{test}"));
 	}
-
 }

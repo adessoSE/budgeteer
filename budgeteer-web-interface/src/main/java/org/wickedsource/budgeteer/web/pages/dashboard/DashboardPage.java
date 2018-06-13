@@ -1,6 +1,5 @@
 package org.wickedsource.budgeteer.web.pages.dashboard;
 
-
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
@@ -22,38 +21,38 @@ import org.wickedsource.budgeteer.web.pages.templates.TemplatesPage;
 @Mount("dashboard")
 public class DashboardPage extends BasePage {
 
-    /**
-	 * 
-	 */
+	/** */
 	private static final long serialVersionUID = 1L;
 
 	public DashboardPage() {
-        BurnedBudgetChartModel burnedBudgetModel = new BurnedBudgetChartModel(BudgeteerSession.get().getProjectId(), 8);
-        add(new BurnedBudgetChart("burnedBudgetChart", burnedBudgetModel));
-        
-        add(new Label("username", new UsernameModel()));
+		BurnedBudgetChartModel burnedBudgetModel =
+				new BurnedBudgetChartModel(BudgeteerSession.get().getProjectId(), 8);
+		add(new BurnedBudgetChart("burnedBudgetChart", burnedBudgetModel));
 
-        add(new Label("projectname", new ProjectnameModel()));
+		add(new Label("username", new UsernameModel()));
 
-        AverageDailyRateChartModel avgDailyRateModel = new AverageDailyRateChartModel(BudgeteerSession.get().getProjectId(), 30);
-        add(new AverageDailyRateChart("averageDailyRateChart", avgDailyRateModel));
-        add(new BookmarkablePageLink<PeopleOverviewPage>("peopleLink", PeopleOverviewPage.class));
+		add(new Label("projectname", new ProjectnameModel()));
 
-        add(new BookmarkablePageLink<HoursPage>("hoursLink", HoursPage.class));
+		AverageDailyRateChartModel avgDailyRateModel =
+				new AverageDailyRateChartModel(BudgeteerSession.get().getProjectId(), 30);
+		add(new AverageDailyRateChart("averageDailyRateChart", avgDailyRateModel));
+		add(new BookmarkablePageLink<PeopleOverviewPage>("peopleLink", PeopleOverviewPage.class));
 
-        add(new BookmarkablePageLink<BudgetsOverviewPage>("budgetsLink", BudgetsOverviewPage.class));
+		add(new BookmarkablePageLink<HoursPage>("hoursLink", HoursPage.class));
 
-        add(new BookmarkablePageLink<BudgetsOverviewPage>("contractsLink", ContractOverviewPage.class));
+		add(new BookmarkablePageLink<BudgetsOverviewPage>("budgetsLink", BudgetsOverviewPage.class));
 
-        add(new BookmarkablePageLink<InvoiceOverviewPage>("invoiceLink", InvoiceOverviewPage.class));
+		add(new BookmarkablePageLink<BudgetsOverviewPage>("contractsLink", ContractOverviewPage.class));
 
-        add(new BookmarkablePageLink<ImportsOverviewPage>("importsLink", ImportsOverviewPage.class));
+		add(new BookmarkablePageLink<InvoiceOverviewPage>("invoiceLink", InvoiceOverviewPage.class));
 
-        add(new BookmarkablePageLink<ImportsOverviewPage>("templatesLink", TemplatesPage.class));
-    }
+		add(new BookmarkablePageLink<ImportsOverviewPage>("importsLink", ImportsOverviewPage.class));
 
-    @Override
-    protected BreadcrumbsModel getBreadcrumbsModel() {
-        return new BreadcrumbsModel(DashboardPage.class);
-    }
+		add(new BookmarkablePageLink<ImportsOverviewPage>("templatesLink", TemplatesPage.class));
+	}
+
+	@Override
+	protected BreadcrumbsModel getBreadcrumbsModel() {
+		return new BreadcrumbsModel(DashboardPage.class);
+	}
 }

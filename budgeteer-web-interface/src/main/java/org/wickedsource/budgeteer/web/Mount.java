@@ -7,9 +7,6 @@ import java.lang.annotation.*;
 @Documented
 public @interface Mount {
 
-    /**
-     * The url the annotated page should be mounted to.
-     */
-    String[] value();
-
+	/** The url the annotated page should be mounted to. */
+	String[] value();
 }

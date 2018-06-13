@@ -11,15 +11,18 @@ import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 @Mount("budgetsForContract")
 public class BudgetForContractOverviewPage extends BasePage {
 
-    public BudgetForContractOverviewPage(PageParameters pageParameters) {
-        super(pageParameters);
-        add(new BudgetOverviewTable("budgetTable", new FilteredBudgetModelByContract(getParameterId()), getBreadcrumbsModel()));
-    }
+	public BudgetForContractOverviewPage(PageParameters pageParameters) {
+		super(pageParameters);
+		add(
+				new BudgetOverviewTable(
+						"budgetTable",
+						new FilteredBudgetModelByContract(getParameterId()),
+						getBreadcrumbsModel()));
+	}
 
-    @SuppressWarnings("unchecked")
-    @Override
-    protected BreadcrumbsModel getBreadcrumbsModel() {
-        return new BreadcrumbsModel(DashboardPage.class, BudgetForContractOverviewPage.class);
-    }
-
+	@SuppressWarnings("unchecked")
+	@Override
+	protected BreadcrumbsModel getBreadcrumbsModel() {
+		return new BreadcrumbsModel(DashboardPage.class, BudgetForContractOverviewPage.class);
+	}
 }

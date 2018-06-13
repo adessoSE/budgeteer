@@ -1,5 +1,7 @@
 package org.wickedsource.budgeteer.web.pages.budgets.hours;
 
+import javax.inject.Inject;
+
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
 import org.wickedsource.budgeteer.service.person.PersonService;
@@ -15,31 +17,30 @@ import org.wickedsource.budgeteer.web.pages.budgets.details.BudgetDetailsPage;
 import org.wickedsource.budgeteer.web.pages.budgets.overview.BudgetsOverviewPage;
 import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 
-import javax.inject.Inject;
-
 @Mount("budgets/hours/${id}")
 public class BudgetHoursPage extends BasePage {
 
-    @Inject
-    private PersonService personService;
+	@Inject private PersonService personService;
 
-    public BudgetHoursPage(PageParameters parameters) {
-        super(parameters);
+	public BudgetHoursPage(PageParameters parameters) {
+		super(parameters);
 
-        WorkRecordFilter filter = new WorkRecordFilter(BudgeteerSession.get().getProjectId());
-        filter.getBudgetList().add(new BudgetBaseData(getParameterId(), ""));
-        filter.getPossiblePersons().addAll(personService.loadPeopleBaseDataByBudget(getParameterId()));
+		WorkRecordFilter filter = new WorkRecordFilter(BudgeteerSession.get().getProjectId());
+		filter.getBudgetList().add(new BudgetBaseData(getParameterId(), ""));
+		filter.getPossiblePersons().addAll(personService.loadPeopleBaseDataByBudget(getParameterId()));
 
-        BurnTableWithFilter table = new BurnTableWithFilter("burnTable", filter);
-        table.setBudgetFilterEnabled(false);
-        add(table);
-    }
+		BurnTableWithFilter table = new BurnTableWithFilter("burnTable", filter);
+		table.setBudgetFilterEnabled(false);
+		add(table);
+	}
 
-    protected BreadcrumbsModel getBreadcrumbsModel() {
-        BreadcrumbsModel model = new BreadcrumbsModel(DashboardPage.class, BudgetsOverviewPage.class);
-        model.addBreadcrumb(new Breadcrumb(BudgetDetailsPage.class, getPageParameters(), new BudgetNameModel(getParameterId())));
-        model.addBreadcrumb(new Breadcrumb(BudgetHoursPage.class, getPageParameters(), getString("breadcrumb.title")));
-        return model;
-    }
-
+	protected BreadcrumbsModel getBreadcrumbsModel() {
+		BreadcrumbsModel model = new BreadcrumbsModel(DashboardPage.class, BudgetsOverviewPage.class);
+		model.addBreadcrumb(
+				new Breadcrumb(
+						BudgetDetailsPage.class, getPageParameters(), new BudgetNameModel(getParameterId())));
+		model.addBreadcrumb(
+				new Breadcrumb(BudgetHoursPage.class, getPageParameters(), getString("breadcrumb.title")));
+		return model;
+	}
 }

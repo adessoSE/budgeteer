@@ -1,27 +1,26 @@
 package org.wickedsource.budgeteer.web.pages.templates.table;
 
+import java.util.List;
+
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.service.template.Template;
 import org.wickedsource.budgeteer.service.template.TemplateService;
 
-import java.util.List;
-
 public class TemplateListModel extends LoadableDetachableModel<List<Template>> {
 
-    @SpringBean
-    private TemplateService service;
+	@SpringBean private TemplateService service;
 
-    private long projectId;
+	private long projectId;
 
-    public TemplateListModel(long projectId) {
-        Injector.get().inject(this);
-        this.projectId = projectId;
-    }
+	public TemplateListModel(long projectId) {
+		Injector.get().inject(this);
+		this.projectId = projectId;
+	}
 
-    @Override
-    protected List<Template> load() {
-        return service.getTemplatesInProject(projectId);
-    }
+	@Override
+	protected List<Template> load() {
+		return service.getTemplatesInProject(projectId);
+	}
 }

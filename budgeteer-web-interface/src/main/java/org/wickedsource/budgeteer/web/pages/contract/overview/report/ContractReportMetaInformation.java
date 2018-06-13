@@ -1,9 +1,10 @@
 package org.wickedsource.budgeteer.web.pages.contract.overview.report;
 
-import lombok.Data;
-import org.wickedsource.budgeteer.web.pages.contract.overview.report.form.FormattedDate;
-
 import java.io.Serializable;
+
+import lombok.Data;
+
+import org.wickedsource.budgeteer.web.pages.contract.overview.report.form.FormattedDate;
 
 @Data
 public class ContractReportMetaInformation implements Serializable {

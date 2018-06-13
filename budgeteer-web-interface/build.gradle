@@ -1,176 +1,176 @@
 import org.apache.tools.ant.filters.ReplaceTokens
 
 buildscript {
-    repositories {
-        mavenCentral()
-        jcenter()
-    }
+	repositories {
+		mavenCentral()
+		jcenter()
+	}
 
-    dependencies {
-        classpath group: 'org.springframework.boot', name: 'spring-boot-gradle-plugin', version: "${spring_boot_version}"
-        classpath group: 'org.springframework', name: 'springloaded', version: "${springloaded_version}"
-    }
+	dependencies {
+		classpath group: 'org.springframework.boot', name: 'spring-boot-gradle-plugin', version: "${spring_boot_version}"
+		classpath group: 'org.springframework', name: 'springloaded', version: "${springloaded_version}"
+	}
 }
 
 apply plugin: 'war'
 apply plugin: 'org.springframework.boot'
 
 configurations {
-    querydslapt
+	querydslapt
 
-    all*.exclude group: 'org.slf4j', module: 'slf4j-log4j12'
-    all*.exclude group: 'log4j', module: 'log4j'
-    all*.exclude group: 'org.slf4j', module: 'log4j-over-slf4j'
-    all*.exclude group: 'org.apache.wicket', module: 'wicket'
+	all*.exclude group: 'org.slf4j', module: 'slf4j-log4j12'
+	all*.exclude group: 'log4j', module: 'log4j'
+	all*.exclude group: 'org.slf4j', module: 'log4j-over-slf4j'
+	all*.exclude group: 'org.apache.wicket', module: 'wicket'
 }
 
 sourceSets {
-    main {
-        java {
-            srcDir 'src/main/java'
-        }
-        /* all .java files are added to war */
-        resources.srcDirs = ['src/main/java', 'src/main/resources']
-    }
+	main {
+		java {
+			srcDir 'src/main/java'
+		}
+		/* all .java files are added to war */
+		resources.srcDirs = ['src/main/java', 'src/main/resources']
+	}
 }
 
 processResources {
-    from('src/main/java') {
-        exclude '**/*.xlsx'
-        filter ReplaceTokens, tokens: [
-                "application.version": project.property("version")
-        ]
-    }
+	from('src/main/java') {
+		exclude '**/*.xlsx'
+		filter ReplaceTokens, tokens: [
+				"application.version": project.property("version")
+		]
+	}
 }
 
 repositories {
-    mavenCentral()
-    maven { url 'https://jitpack.io' }
+	mavenCentral()
+	maven { url 'https://jitpack.io' }
 }
 
 dependencies {
-    compile project(':budgeteer-aproda-importer')
-    compile project(':budgeteer-ubw-importer')
-    compile project(':budgeteer-resourceplan-importer')
-    compile project(':budgeteer-report-exporter')
+	compile project(':budgeteer-aproda-importer')
+	compile project(':budgeteer-ubw-importer')
+	compile project(':budgeteer-resourceplan-importer')
+	compile project(':budgeteer-report-exporter')
 
-    compile(
-            [group: 'org.apache.wicket', name: 'wicket-spring', version: "${wicket_spring_version}"],
-            [group: 'org.wicketstuff', name: 'wicketstuff-lazymodel', version: "${wicketstuff_lazymodel_version}"],
-            [group: 'de.adesso.wicked-charts', name: 'wicked-charts-wicket7', version: "${wicketcharts_version}"]
-    )
+	compile(
+			[group: 'org.apache.wicket', name: 'wicket-spring', version: "${wicket_spring_version}"],
+			[group: 'org.wicketstuff', name: 'wicketstuff-lazymodel', version: "${wicketstuff_lazymodel_version}"],
+			[group: 'de.adesso.wicked-charts', name: 'wicked-charts-wicket7', version: "${wicketcharts_version}"]
+	)
 
-    compile group: 'org.springframework', name: 'spring-webmvc', version: "${spring_version}"
-    compile(
-            [group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: "${spring_boot_version}"],
-            [group: 'org.springframework.boot', name: 'spring-boot-starter-logging', version: "${spring_boot_version}"],
-            [group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: "${spring_boot_version}"],
-    )
-    providedCompile(group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat', version: "${spring_boot_version}")
+	compile group: 'org.springframework', name: 'spring-webmvc', version: "${spring_version}"
+	compile(
+			[group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: "${spring_boot_version}"],
+			[group: 'org.springframework.boot', name: 'spring-boot-starter-logging', version: "${spring_boot_version}"],
+			[group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: "${spring_boot_version}"],
+	)
+	providedCompile(group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat', version: "${spring_boot_version}")
 
-    compile group: 'org.slf4j', name: 'slf4j-api', version: "${slf4j_version}"
-    compile group: 'ch.qos.logback', name: 'logback-classic', version: "${logback_version}"
-    compile group: 'ch.qos.logback', name: 'logback-core', version: "${logback_version}"
+	compile group: 'org.slf4j', name: 'slf4j-api', version: "${slf4j_version}"
+	compile group: 'ch.qos.logback', name: 'logback-classic', version: "${logback_version}"
+	compile group: 'ch.qos.logback', name: 'logback-core', version: "${logback_version}"
 
-    compile group: 'org.reflections', name: 'reflections', version: "${reflections_version}"
-    compile group: 'org.apache.commons', name: 'commons-lang3', version: "${commons_lang_version}"
-    compile group: 'commons-codec', name: 'commons-codec', version: "${commons_codec_version}"
+	compile group: 'org.reflections', name: 'reflections', version: "${reflections_version}"
+	compile group: 'org.apache.commons', name: 'commons-lang3', version: "${commons_lang_version}"
+	compile group: 'commons-codec', name: 'commons-codec', version: "${commons_codec_version}"
 
-    compile group: 'joda-time', name: 'joda-time', version: "${joda_time_version}"
-    providedCompile group: 'org.joda', name: 'joda-convert', version: "${joda_convert_version}"
-    compile group: 'org.joda', name: 'joda-money', version: "${joda_money_version}"
-    compile group: 'de.jollyday', name: 'jollyday', version: "${jollyday_version}"
+	compile group: 'joda-time', name: 'joda-time', version: "${joda_time_version}"
+	providedCompile group: 'org.joda', name: 'joda-convert', version: "${joda_convert_version}"
+	compile group: 'org.joda', name: 'joda-money', version: "${joda_money_version}"
+	compile group: 'de.jollyday', name: 'jollyday', version: "${jollyday_version}"
 
-    compile(
-            [group: 'com.querydsl', name: 'querydsl-apt', version: "${query_dsl_version}"],
-            [group: 'com.querydsl', name: 'querydsl-jpa', version: "${query_dsl_version}"]
-    )
+	compile(
+			[group: 'com.querydsl', name: 'querydsl-apt', version: "${query_dsl_version}"],
+			[group: 'com.querydsl', name: 'querydsl-jpa', version: "${query_dsl_version}"]
+	)
 
-    compile (
-            [group: 'org.keycloak', name: 'keycloak-spring-boot-adapter', version: "${keycloak_spring_boot_version}"],
-            [group: 'org.keycloak', name: 'keycloak-tomcat8-adapter', version: "${keycloak_spring_boot_version}"]
-    )
+	compile (
+			[group: 'org.keycloak', name: 'keycloak-spring-boot-adapter', version: "${keycloak_spring_boot_version}"],
+			[group: 'org.keycloak', name: 'keycloak-tomcat8-adapter', version: "${keycloak_spring_boot_version}"]
+	)
 
-    runtime(
-            [group: 'org.hsqldb', name: 'hsqldb', version: "${hsqldb_version}"],
-            [group: 'mysql', name: 'mysql-connector-java', version: "${mysql_version}"],
-            files("lib/ojdbc7.jar", "lib/orai18n.jar")
-    )
+	runtime(
+			[group: 'org.hsqldb', name: 'hsqldb', version: "${hsqldb_version}"],
+			[group: 'mysql', name: 'mysql-connector-java', version: "${mysql_version}"],
+			files("lib/ojdbc7.jar", "lib/orai18n.jar")
+	)
 
-    testCompile(
-            [group: 'org.kubek2k', name: 'springockito', version: "${springockito_version}"],
-            [group: 'org.kubek2k', name: 'springockito-annotations', version: "${springockito_version}"],
-            [group: 'com.github.springtestdbunit', name: 'spring-test-dbunit', version: "${spring_dbunit_version}"],
-            [group: 'org.dbunit', name: 'dbunit', version: "${dbunit_version}"],
-    )
+	testCompile(
+			[group: 'org.kubek2k', name: 'springockito', version: "${springockito_version}"],
+			[group: 'org.kubek2k', name: 'springockito-annotations', version: "${springockito_version}"],
+			[group: 'com.github.springtestdbunit', name: 'spring-test-dbunit', version: "${spring_dbunit_version}"],
+			[group: 'org.dbunit', name: 'dbunit', version: "${dbunit_version}"],
+	)
 
-    testCompile "org.springframework.boot:spring-boot-starter-test"
-    testCompile('org.junit.platform:junit-platform-launcher:1.0.3')
-    testCompile('com.github.sbrannen:spring-test-junit5:1.0.3')
+	testCompile "org.springframework.boot:spring-boot-starter-test"
+	testCompile('org.junit.platform:junit-platform-launcher:1.0.3')
+	testCompile('com.github.sbrannen:spring-test-junit5:1.0.3')
 
-    providedCompile group: 'org.projectlombok', name: 'lombok', version: "${lombok_version}"
+	providedCompile group: 'org.projectlombok', name: 'lombok', version: "${lombok_version}"
 }
 
 sourceSets {
-    generated {
-        java {
-            srcDirs = ['src/generated/java']
-        }
-    }
+	generated {
+		java {
+			srcDirs = ['src/generated/java']
+		}
+	}
 }
 
 task generateQueryDSL(type: JavaCompile, group: 'build', description: 'Generates the QueryDSL query types') {
 
-    source = sourceSets.main.java
-    classpath = configurations.compile + configurations.querydslapt
-    options.compilerArgs = [
-            "-proc:only",
-            "-processor", "com.querydsl.apt.jpa.JPAAnnotationProcessor"
-    ]
+	source = sourceSets.main.java
+	classpath = configurations.compile + configurations.querydslapt
+	options.compilerArgs = [
+			"-proc:only",
+			"-processor", "com.querydsl.apt.jpa.JPAAnnotationProcessor"
+	]
 
-    destinationDir = sourceSets.generated.java.srcDirs.iterator().next()
+	destinationDir = sourceSets.generated.java.srcDirs.iterator().next()
 }
 
 compileJava {
-    dependsOn generateQueryDSL
-    source generateQueryDSL.destinationDir
+	dependsOn generateQueryDSL
+	source generateQueryDSL.destinationDir
 }
 
 compileGeneratedJava {
-    dependsOn generateQueryDSL
-    options.warnings = false
-    classpath += sourceSets.main.runtimeClasspath
+	dependsOn generateQueryDSL
+	options.warnings = false
+	classpath += sourceSets.main.runtimeClasspath
 }
 
 clean {
-    delete sourceSets.generated.java.srcDirs
+	delete sourceSets.generated.java.srcDirs
 }
 
 bootRun {
-    // default application configuration for running application via bootRun in development mode
-    // (in production, these properties are defined in application.properties)
-    jvmArgs '-Xdebug',
-            '-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=9009',
-            '-Dserver.port=8080',
-            '-Dwicket.configurationType=DEVELOPMENT',
-            //'-Dspring.datasource.url=jdbc:hsqldb:file:../../database/budgeteer;shutdown=true;hsqldb.write_delay=false;',
-            '-Dspring.datasource.url=jdbc:hsqldb:mem:budgeteer',
-            //'-Dspring.datasource.url=jdbc:hsqldb:hsql://localhost/budgeteer',
-            //'-Dspring.datasource.driverClassName=org.hsqldb.jdbcDriver',
-            '-Dspring.datasource.username=sa',
-            '-Dspring.datasource.password=',
-            '-Dspring.jpa.hibernate.ddl-auto=update'
+	// default application configuration for running application via bootRun in development mode
+	// (in production, these properties are defined in application.properties)
+	jvmArgs '-Xdebug',
+			'-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=9009',
+			'-Dserver.port=8080',
+			'-Dwicket.configurationType=DEVELOPMENT',
+			//'-Dspring.datasource.url=jdbc:hsqldb:file:../../database/budgeteer;shutdown=true;hsqldb.write_delay=false;',
+			'-Dspring.datasource.url=jdbc:hsqldb:mem:budgeteer',
+			//'-Dspring.datasource.url=jdbc:hsqldb:hsql://localhost/budgeteer',
+			//'-Dspring.datasource.driverClassName=org.hsqldb.jdbcDriver',
+			'-Dspring.datasource.username=sa',
+			'-Dspring.datasource.password=',
+			'-Dspring.jpa.hibernate.ddl-auto=update'
 }
 
 idea {
-    module {
-        scopes.PROVIDED.plus += [configurations.providedCompile]
-        sourceDirs += sourceSets.generated.java.srcDirs
-        downloadSources = true
-    }
+	module {
+		scopes.PROVIDED.plus += [configurations.providedCompile]
+		sourceDirs += sourceSets.generated.java.srcDirs
+		downloadSources = true
+	}
 
-    module.iml.withXml {
-        def springFacet = '''
+	module.iml.withXml {
+		def springFacet = '''
 			<component name="FacetManager">
 				<facet type="Spring" name="Spring">
 				<configuration>
@@ -192,9 +192,6 @@ idea {
 				</configuration>
 				</facet>
 			</component>'''
-        it.asNode().append(new XmlParser().parseText(springFacet))
-    }
+		it.asNode().append(new XmlParser().parseText(springFacet))
+	}
 }
-
-
-

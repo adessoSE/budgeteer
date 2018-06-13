@@ -13,63 +13,73 @@ import org.wickedsource.budgeteer.web.components.notificationlist.NotificationMe
 
 public class NotificationDropdown extends Panel {
 
-    private NotificationLinkFactory notificationLinkFactory = new NotificationLinkFactory();
+	private NotificationLinkFactory notificationLinkFactory = new NotificationLinkFactory();
 
-    private NotificationMessageFactory notificationMessageFactory = new NotificationMessageFactory();
+	private NotificationMessageFactory notificationMessageFactory = new NotificationMessageFactory();
 
-    public NotificationDropdown(String id, NotificationModel model) {
-        super(id, model);
-        add(createNotificationCountLabel("notificationCountLabel"));
-        add(createDropDownHeader("dropdownHeader"));
-        add(createDropdownMenu("dropdownMenu"));
-    }
+	public NotificationDropdown(String id, NotificationModel model) {
+		super(id, model);
+		add(createNotificationCountLabel("notificationCountLabel"));
+		add(createDropDownHeader("dropdownHeader"));
+		add(createDropdownMenu("dropdownMenu"));
+	}
 
-    @SuppressWarnings("unchecked")
-    private NotificationModel getModel() {
-        return (NotificationModel) getDefaultModel();
-    }
+	@SuppressWarnings("unchecked")
+	private NotificationModel getModel() {
+		return (NotificationModel) getDefaultModel();
+	}
 
-    private Label createNotificationCountLabel(String wicketId) {
-        Label label = new Label(wicketId, getModel().getNotificationCountModel()) {
-            @Override
-            public boolean isVisible() {
-                return 0 != (Integer) getDefaultModelObject();
-            }
-        };
-        return label;
-    }
+	private Label createNotificationCountLabel(String wicketId) {
+		Label label =
+				new Label(wicketId, getModel().getNotificationCountModel()) {
+					@Override
+					public boolean isVisible() {
+						return 0 != (Integer) getDefaultModelObject();
+					}
+				};
+		return label;
+	}
 
-    private Label createDropDownHeader(String wicketId) {
-        return new Label(wicketId, getModel().getHeaderModel());
-    }
+	private Label createDropDownHeader(String wicketId) {
+		return new Label(wicketId, getModel().getHeaderModel());
+	}
 
-    private WebMarkupContainer createDropdownMenu(String wicketId) {
-        final ListView<Notification> listview = new ListView<Notification>("notificationList", getModel()) {
-            @Override
-            protected void populateItem(final ListItem<Notification> item) {
-                Link link = new Link("notificationLink") {
-                    @SuppressWarnings("unchecked")
-                    @Override
-                    public void onClick() {
-                        setResponsePage(notificationLinkFactory.getLinkForNotification(item.getModelObject(), (Class<? extends WebPage>) getPage().getClass(), getPage().getPageParameters()));
-                    }
-                };
-                item.add(link);
+	private WebMarkupContainer createDropdownMenu(String wicketId) {
+		final ListView<Notification> listview =
+				new ListView<Notification>("notificationList", getModel()) {
+					@Override
+					protected void populateItem(final ListItem<Notification> item) {
+						Link link =
+								new Link("notificationLink") {
+									@SuppressWarnings("unchecked")
+									@Override
+									public void onClick() {
+										setResponsePage(
+												notificationLinkFactory.getLinkForNotification(
+														item.getModelObject(),
+														(Class<? extends WebPage>) getPage().getClass(),
+														getPage().getPageParameters()));
+									}
+								};
+						item.add(link);
 
-                Label messageLabel = new Label("notificationMessage", notificationMessageFactory.getMessageForNotification(item.getModelObject()));
-                link.add(messageLabel);
-            }
-        };
+						Label messageLabel =
+								new Label(
+										"notificationMessage",
+										notificationMessageFactory.getMessageForNotification(item.getModelObject()));
+						link.add(messageLabel);
+					}
+				};
 
-        WebMarkupContainer menu = new WebMarkupContainer(wicketId) {
-            @Override
-            public boolean isVisible() {
-                return 0 != listview.getModelObject().size();
-            }
-        };
-        menu.add(listview);
+		WebMarkupContainer menu =
+				new WebMarkupContainer(wicketId) {
+					@Override
+					public boolean isVisible() {
+						return 0 != listview.getModelObject().size();
+					}
+				};
+		menu.add(listview);
 
-        return menu;
-    }
-
+		return menu;
+	}
 }

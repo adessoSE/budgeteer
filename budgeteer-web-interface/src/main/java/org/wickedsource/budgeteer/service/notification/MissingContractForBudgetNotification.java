@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper=false)
-public class MissingContractForBudgetNotification extends Notification{
-    private long budgetId;
+@EqualsAndHashCode(callSuper = false)
+public class MissingContractForBudgetNotification extends Notification {
+	private long budgetId;
 }

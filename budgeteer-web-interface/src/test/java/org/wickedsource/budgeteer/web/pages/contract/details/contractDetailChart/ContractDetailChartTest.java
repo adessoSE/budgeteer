@@ -8,16 +8,13 @@ import org.wickedsource.budgeteer.web.pages.budgets.details.chart.PeopleDistribu
 
 public class ContractDetailChartTest extends AbstractWebTestTemplate {
 
-
 	@Test
-    void testRender() {
-        WicketTester tester = getTester();
-        PeopleDistributionChartModel model = new PeopleDistributionChartModel(1L);
-        tester.startComponentInPage(new PeopleDistributionChart("chart", model));
+	void testRender() {
+		WicketTester tester = getTester();
+		PeopleDistributionChartModel model = new PeopleDistributionChartModel(1L);
+		tester.startComponentInPage(new PeopleDistributionChart("chart", model));
 	}
 
-    @Override
-    protected void setupTest() {
-
-    }
+	@Override
+	protected void setupTest() {}
 }

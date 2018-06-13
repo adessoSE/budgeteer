@@ -1,5 +1,7 @@
 package org.wickedsource.budgeteer.web.pages.budgets.overview.table;
 
+import java.util.List;
+
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
@@ -8,29 +10,26 @@ import org.wickedsource.budgeteer.service.budget.BudgetDetailData;
 import org.wickedsource.budgeteer.service.budget.BudgetService;
 import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
 
-import java.util.List;
-
 public class FilteredBudgetModel extends LoadableDetachableModel<List<BudgetDetailData>> {
 
-    @SpringBean
-    private BudgetService service;
+	@SpringBean private BudgetService service;
 
-    private long projectId;
+	private long projectId;
 
-    private IModel<BudgetTagFilter> filterModel;
+	private IModel<BudgetTagFilter> filterModel;
 
-    public FilteredBudgetModel(long projectId, IModel<BudgetTagFilter> filterModel) {
-        Injector.get().inject(this);
-        this.filterModel = filterModel;
-        this.projectId = projectId;
-    }
+	public FilteredBudgetModel(long projectId, IModel<BudgetTagFilter> filterModel) {
+		Injector.get().inject(this);
+		this.filterModel = filterModel;
+		this.projectId = projectId;
+	}
 
-    @Override
-    protected List<BudgetDetailData> load() {
-        return service.loadBudgetsDetailData(projectId, filterModel.getObject());
-    }
+	@Override
+	protected List<BudgetDetailData> load() {
+		return service.loadBudgetsDetailData(projectId, filterModel.getObject());
+	}
 
-    public void setFilter(IModel<BudgetTagFilter> filterModel) {
-        this.filterModel = filterModel;
-    }
+	public void setFilter(IModel<BudgetTagFilter> filterModel) {
+		this.filterModel = filterModel;
+	}
 }

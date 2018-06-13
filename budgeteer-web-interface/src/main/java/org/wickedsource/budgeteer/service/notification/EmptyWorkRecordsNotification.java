@@ -1,5 +1,3 @@
 package org.wickedsource.budgeteer.service.notification;
 
-public class EmptyWorkRecordsNotification extends Notification {
-
-}
+public class EmptyWorkRecordsNotification extends Notification {}

@@ -1,5 +1,10 @@
 package org.wickedsource.budgeteer.web.pages.budgets.overview;
 
+import static org.wicketstuff.lazymodel.LazyModel.from;
+import static org.wicketstuff.lazymodel.LazyModel.model;
+
+import java.util.ArrayList;
+
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.AttributeAppender;
@@ -27,91 +32,101 @@ import org.wickedsource.budgeteer.web.pages.budgets.overview.table.FilteredBudge
 import org.wickedsource.budgeteer.web.pages.budgets.weekreport.multi.MultiBudgetWeekReportPage;
 import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 
-import java.util.ArrayList;
-
-import static org.wicketstuff.lazymodel.LazyModel.from;
-import static org.wicketstuff.lazymodel.LazyModel.model;
-
 @Mount("budgets")
 public class BudgetsOverviewPage extends BasePage {
 
-    @SpringBean
-    private BudgetService budgetService;
+	@SpringBean private BudgetService budgetService;
 
-    public BudgetsOverviewPage() {
-        BudgetTagsModel tagsModel = new BudgetTagsModel(BudgeteerSession.get().getProjectId());
-        if (BudgeteerSession.get().getBudgetFilter() == null) {
-            BudgetTagFilter filter = new BudgetTagFilter(new ArrayList<String>(), BudgeteerSession.get().getProjectId());
-            BudgeteerSession.get().setBudgetFilter(filter);
-        }
-        add(new BudgetTagFilterPanel("tagFilter", tagsModel));
-        add(new BudgetOverviewTable("budgetTable", new FilteredBudgetModel(BudgeteerSession.get().getProjectId(), model(from(BudgeteerSession.get().getBudgetFilter()))), getBreadcrumbsModel()));
+	public BudgetsOverviewPage() {
+		BudgetTagsModel tagsModel = new BudgetTagsModel(BudgeteerSession.get().getProjectId());
+		if (BudgeteerSession.get().getBudgetFilter() == null) {
+			BudgetTagFilter filter =
+					new BudgetTagFilter(new ArrayList<String>(), BudgeteerSession.get().getProjectId());
+			BudgeteerSession.get().setBudgetFilter(filter);
+		}
+		add(new BudgetTagFilterPanel("tagFilter", tagsModel));
+		add(
+				new BudgetOverviewTable(
+						"budgetTable",
+						new FilteredBudgetModel(
+								BudgeteerSession.get().getProjectId(),
+								model(from(BudgeteerSession.get().getBudgetFilter()))),
+						getBreadcrumbsModel()));
 
-        add(new BookmarkablePageLink<MultiBudgetWeekReportPage>("weekReportLink", MultiBudgetWeekReportPage.class));
-        add(new BookmarkablePageLink<MultiBudgetMonthReportPage>("monthReportLink", MultiBudgetMonthReportPage.class));
-        add(createNewBudgetLink("createBudgetLink"));
-        add(createReportLink("createReportLink"));
+		add(
+				new BookmarkablePageLink<MultiBudgetWeekReportPage>(
+						"weekReportLink", MultiBudgetWeekReportPage.class));
+		add(
+				new BookmarkablePageLink<MultiBudgetMonthReportPage>(
+						"monthReportLink", MultiBudgetMonthReportPage.class));
+		add(createNewBudgetLink("createBudgetLink"));
+		add(createReportLink("createReportLink"));
 
-        add(createNetGrossLink("netGrossLink"));
-    }
-
-
-    private Component createReportLink(String string) {
-        Link link = new Link(string) {
-			@Override
-			public void onClick() {
-				setResponsePage(new BudgetReportPage(BudgetsOverviewPage.class, new PageParameters()));
-			}
-		};
-
-
-        if (!budgetService.projectHasBudgets(BudgeteerSession.get().getProjectId())) {
-            link.setEnabled(false);
-            link.add(new AttributeAppender("style", "cursor: not-allowed;", " "));
-            link.add(new AttributeModifier("title", BudgetsOverviewPage.this.getString("links.budget.label.no.budget")));
-        }
-        return link;
+		add(createNetGrossLink("netGrossLink"));
 	}
 
+	private Component createReportLink(String string) {
+		Link link =
+				new Link(string) {
+					@Override
+					public void onClick() {
+						setResponsePage(new BudgetReportPage(BudgetsOverviewPage.class, new PageParameters()));
+					}
+				};
 
-    private Link createNewBudgetLink(String id) {
-        return new Link(id) {
-            @Override
-            public void onClick() {
-                WebPage page = new EditBudgetPage(BudgetsOverviewPage.class, getPageParameters());
-                setResponsePage(page);
-            }
-        };
-    }
+		if (!budgetService.projectHasBudgets(BudgeteerSession.get().getProjectId())) {
+			link.setEnabled(false);
+			link.add(new AttributeAppender("style", "cursor: not-allowed;", " "));
+			link.add(
+					new AttributeModifier(
+							"title", BudgetsOverviewPage.this.getString("links.budget.label.no.budget")));
+		}
+		return link;
+	}
 
-    @SuppressWarnings("unchecked")
-    @Override
-    protected BreadcrumbsModel getBreadcrumbsModel() {
-        return new BreadcrumbsModel(DashboardPage.class, BudgetsOverviewPage.class);
-    }
+	private Link createNewBudgetLink(String id) {
+		return new Link(id) {
+			@Override
+			public void onClick() {
+				WebPage page = new EditBudgetPage(BudgetsOverviewPage.class, getPageParameters());
+				setResponsePage(page);
+			}
+		};
+	}
 
-    private Link createNetGrossLink(String string) {
-        Link link = new Link(string) {
-            @Override
-            public void onClick() {
-                if (BudgeteerSession.get().isTaxEnabled() && Math.abs(BudgeteerSession.get().getSelectedBudgetUnit() - 1.0) < Math.ulp(1)) {
-                    BudgeteerSession.get().setTaxEnabled(false);
-                } else {
-                    BudgeteerSession.get().setTaxEnabled(true);
-                }
-            }
-        };
-        link.add(new Label("title", new TaxSwitchLabelModel(
-                new StringResourceModel("links.tax.label.net", this),
-                new StringResourceModel("links.tax.label.gross", this)
-        )));
-        if(Math.abs(BudgeteerSession.get().getSelectedBudgetUnit() - 1.0) > Math.ulp(1)){
-            link.add(new AttributeAppender("style", "cursor: not-allowed;", " "));
-            link.add(new AttributeModifier("title", BudgetsOverviewPage.this.getString("links.budge.label.gross.value")));
-            link.setEnabled(false);
-            BudgeteerSession.get().setTaxEnabled(false);
-        }
-        return link;
-    }
+	@SuppressWarnings("unchecked")
+	@Override
+	protected BreadcrumbsModel getBreadcrumbsModel() {
+		return new BreadcrumbsModel(DashboardPage.class, BudgetsOverviewPage.class);
+	}
 
+	private Link createNetGrossLink(String string) {
+		Link link =
+				new Link(string) {
+					@Override
+					public void onClick() {
+						if (BudgeteerSession.get().isTaxEnabled()
+								&& Math.abs(BudgeteerSession.get().getSelectedBudgetUnit() - 1.0) < Math.ulp(1)) {
+							BudgeteerSession.get().setTaxEnabled(false);
+						} else {
+							BudgeteerSession.get().setTaxEnabled(true);
+						}
+					}
+				};
+		link.add(
+				new Label(
+						"title",
+						new TaxSwitchLabelModel(
+								new StringResourceModel("links.tax.label.net", this),
+								new StringResourceModel("links.tax.label.gross", this))));
+		if (Math.abs(BudgeteerSession.get().getSelectedBudgetUnit() - 1.0) > Math.ulp(1)) {
+			link.add(new AttributeAppender("style", "cursor: not-allowed;", " "));
+			link.add(
+					new AttributeModifier(
+							"title", BudgetsOverviewPage.this.getString("links.budge.label.gross.value")));
+			link.setEnabled(false);
+			BudgeteerSession.get().setTaxEnabled(false);
+		}
+		return link;
+	}
 }
