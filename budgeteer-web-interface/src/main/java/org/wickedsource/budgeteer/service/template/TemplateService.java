@@ -18,7 +18,6 @@ import javax.transaction.Transactional;
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -162,7 +161,7 @@ public class TemplateService {
                     temModel.getObject().isDefault(),
                     projectId);
             resolveDefaults(temp.getId(), temModel);
-            templateRepository.save(Collections.singletonList(temp));
+            templateRepository.save(temp);
         } catch (IOException | InvalidFormatException e){
             e.printStackTrace();
         }

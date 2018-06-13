@@ -34,9 +34,6 @@ public class TemplatesTable extends Panel {
     private ListView<Template> rows;
     private WebMarkupContainer table;
 
-    private static final AttributeModifier starChecked = new AttributeModifier("class", "btn btn-default btn-sm glyphicon glyphicon-star");
-    private static final AttributeModifier starUnchecked = new AttributeModifier("class", "btn btn-default btn-sm glyphicon glyphicon-star-empty");
-
     @SpringBean
     private TemplateService templateService;
 
@@ -59,45 +56,7 @@ public class TemplatesTable extends Panel {
                 item.add(new Label("name", model(from(item.getModel()).getName())));
                 item.add(new Label("description", model(from(item.getModel()).getDescription())));
                 item.add(new Label("type", model(from(item.getModel()).getType()).getObject().toString()));
-                Label checkBoxLabel = new Label("checkBoxLabel");
-                if(item.getModelObject().isDefault()){
-                    checkBoxLabel.add(starChecked);
-                }else{
-                    checkBoxLabel.add(starUnchecked);
-                }
-
-                //Unfortunately I came across quite a few issues with checkboxes, so
-                //in the end they are simulated with Links + Labels (which in turn have their own problems,
-                //like not being sortable in the table
-                AjaxLink checkBox = new AjaxLink("setAsDefault"){
-
-                    @Override
-                    public void onClick(AjaxRequestTarget target){
-                        TemplateFormInputDto temp = new TemplateFormInputDto(BudgeteerSession.get().getProjectId());
-                        temp.setName(item.getModelObject().getName());
-                        temp.setDescription(item.getModelObject().getDescription());
-                        temp.setType(item.getModelObject().getType());
-
-                        item.getModelObject().setDefault(!item.getModelObject().isDefault());
-                        temp.setDefault(item.getModelObject().isDefault());
-
-                        templateService.editTemplate(temp.getProjectId(), item.getModelObject().getId(), null, model(from(temp)));
-                        List<Template> tempModel = ((TemplateListModel)TemplatesTable.this.getDefaultModel()).load();
-                        for(int i = 0; i < rows.getList().size(); i++){
-                            Label check = (Label)table.get("templateList")
-                                    .get(Integer.toString(i)).get("setAsDefault").get("checkBoxLabel");
-                            if(tempModel.get(i).isDefault()){
-                                check.add(starChecked);
-                            }else{
-                                check.add(starUnchecked);
-                            }
-                            target.add(check, check.getMarkupId());
-                        }
-                    }
-                };
-                checkBoxLabel.setOutputMarkupId(true);
-                checkBox.add(checkBoxLabel);
-                item.add(checkBox);
+                item.add(createCheckbox(item));
                 item.add(new Link("editPage") {
                     @Override
                     public void onClick() {
@@ -112,6 +71,52 @@ public class TemplatesTable extends Panel {
                 return super.newItem(index, new ClassAwareWrappingModel<>(itemModel, Template.class));
             }
         };
+    }
+
+    private AjaxLink createCheckbox(ListItem<Template> item){
+
+        final AttributeModifier starChecked = new AttributeModifier("class", "btn btn-default btn-sm glyphicon glyphicon-star");
+        final AttributeModifier starUnchecked = new AttributeModifier("class", "btn btn-default btn-sm glyphicon glyphicon-star-empty");
+
+        Label checkBoxLabel = new Label("checkBoxLabel");
+        if(item.getModelObject().isDefault()){
+            checkBoxLabel.add(starChecked);
+        }else{
+            checkBoxLabel.add(starUnchecked);
+        }
+
+        //Unfortunately I came across quite a few issues with checkboxes, so
+        //in the end they are simulated with Links + Labels (which in turn have their own problems,
+        //like not being sortable in the table
+        AjaxLink checkBox = new AjaxLink("setAsDefault"){
+
+            @Override
+            public void onClick(AjaxRequestTarget target){
+                TemplateFormInputDto temp = new TemplateFormInputDto(BudgeteerSession.get().getProjectId());
+                temp.setName(item.getModelObject().getName());
+                temp.setDescription(item.getModelObject().getDescription());
+                temp.setType(item.getModelObject().getType());
+
+                item.getModelObject().setDefault(!item.getModelObject().isDefault());
+                temp.setDefault(item.getModelObject().isDefault());
+
+                templateService.editTemplate(temp.getProjectId(), item.getModelObject().getId(), null, model(from(temp)));
+                List<Template> tempModel = ((TemplateListModel)TemplatesTable.this.getDefaultModel()).load();
+                for(int i = 0; i < rows.getList().size(); i++){
+                    Label check = (Label)table.get("templateList")
+                            .get(Integer.toString(i)).get("setAsDefault").get("checkBoxLabel");
+                    if(tempModel.get(i).isDefault()){
+                        check.add(starChecked);
+                    }else{
+                        check.add(starUnchecked);
+                    }
+                    target.add(check, check.getMarkupId());
+                }
+            }
+        };
+        checkBoxLabel.setOutputMarkupId(true);
+        checkBox.add(checkBoxLabel);
+        return checkBox;
     }
 
     @Override

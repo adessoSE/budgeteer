@@ -31,7 +31,7 @@ public class EditTemplatePage extends DialogPageWithBacklink {
         add(createBacklink("backlink1"));
         IModel<TemplateFormInputDto> formModel = model(from(new TemplateFormInputDto(BudgeteerSession.get().getProjectId())));
         this.setDefaultModel(formModel);
-        Form<TemplateFormInputDto> form = new EditForm("editForm", formModel, templateID);
+        Form<TemplateFormInputDto> form = new EditTemplateForm("editForm", formModel, templateID);
         add(form);
     }
 }

@@ -37,7 +37,7 @@ import java.util.concurrent.Callable;
 import static org.wicketstuff.lazymodel.LazyModel.from;
 import static org.wicketstuff.lazymodel.LazyModel.model;
 
-public class EditForm extends Form<TemplateFormInputDto> {
+public class EditTemplateForm extends Form<TemplateFormInputDto> {
 
     @SpringBean
     private TemplateService service;
@@ -52,7 +52,7 @@ public class EditForm extends Form<TemplateFormInputDto> {
     private static final AttributeModifier starUnchecked = new AttributeModifier("class", "btn bg-olive glyphicon glyphicon-star-empty");
 
 
-    public EditForm(String id, IModel<TemplateFormInputDto> formModel, long temID){
+    public EditTemplateForm(String id, IModel<TemplateFormInputDto> formModel, long temID){
         super(id, formModel);
         this.templateID = temID;
         CustomFeedbackPanel feedback = new CustomFeedbackPanel("feedback");
@@ -120,11 +120,11 @@ public class EditForm extends Form<TemplateFormInputDto> {
             @Override
             public void onClick(AjaxRequestTarget ajaxRequestTarget) {
                 if(templateFormInputDto.isDefault()){
-                    EditForm.this.getModel().getObject().setDefault(false);
+                    EditTemplateForm.this.getModel().getObject().setDefault(false);
                     this.add(starUnchecked);
                     templateFormInputDto.setDefault(false);
                 }else{
-                    EditForm.this.getModel().getObject().setDefault(true);
+                    EditTemplateForm.this.getModel().getObject().setDefault(true);
                     this.add(starChecked);
                     templateFormInputDto.setDefault(true);
                 }
@@ -215,7 +215,7 @@ public class EditForm extends Form<TemplateFormInputDto> {
                     @Override
                     public Void call(){
                         service.deleteTemplate(templateID);
-                        ((EditTemplatePage)EditForm.this.getPage()).goBack();
+                        ((EditTemplatePage)EditTemplateForm.this.getPage()).goBack();
                         return null;
                     }
                 }, new Callable<Void>() {

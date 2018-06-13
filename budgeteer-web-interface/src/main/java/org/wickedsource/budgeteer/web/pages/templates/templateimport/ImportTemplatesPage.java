@@ -189,7 +189,8 @@ public class ImportTemplatesPage extends DialogPageWithBacklink {
         };
         HashMap<String, String> options = MultiselectBehavior.getRecommendedOptions();
         options.clear();
-        options.put("buttonClass","'btn bg-olive btn-block'");
+        options.put("buttonClass","'btn bg-olive'");
+        options.put("buttonWidth","'140px'");
         dropDownChoice.add(new MultiselectBehavior(options));
         dropDownChoice.add(new AjaxFormComponentUpdatingBehavior("change") {
             @Override
