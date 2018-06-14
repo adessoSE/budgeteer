@@ -9,14 +9,14 @@ jobs:
           name: gradleDependencies
           command: ./gradlew --stacktrace --console=plain resolveDependencies
       - run:
-          name: spotless code check
-          command: ./gradlew --stacktrace --console=plain spotlessCheck
-      - run:
           name: build
           command: ./gradlew --stacktrace --console=plain assemble
       - run:
           name: test
           command: ./gradlew --stacktrace --console=plain test
+      - run:
+          name: spotless code check
+          command: ./gradlew --stacktrace --console=plain spotlessCheck
       - run:
           name: Save test results
           command: |
