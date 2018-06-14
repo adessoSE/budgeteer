@@ -3,7 +3,6 @@ package org.wickedsource.budgeteer.web.components.money;
 import org.apache.wicket.util.convert.ConversionException;
 import org.apache.wicket.util.convert.IConverter;
 import org.joda.money.Money;
-import org.springframework.format.number.CurrencyStyleFormatter;
 import org.wickedsource.budgeteer.MoneyUtil;
 
 import java.text.NumberFormat;
