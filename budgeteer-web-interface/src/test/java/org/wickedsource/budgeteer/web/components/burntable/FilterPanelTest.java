@@ -8,13 +8,15 @@ import org.wickedsource.budgeteer.web.components.burntable.filter.FilterPanel;
 
 public class FilterPanelTest extends AbstractWebTestTemplate {
 
-	@Test
-	void render() {
-		WicketTester tester = getTester();
-		FilterPanel panel = new FilterPanel("panel", new WorkRecordFilter(1L));
-		tester.startComponentInPage(panel);
-	}
+    @Test
+    void render() {
+        WicketTester tester = getTester();
+        FilterPanel panel = new FilterPanel("panel", new WorkRecordFilter(1L));
+        tester.startComponentInPage(panel);
+    }
 
-	@Override
-	protected void setupTest() {}
+    @Override
+    protected void setupTest() {
+
+    }
 }

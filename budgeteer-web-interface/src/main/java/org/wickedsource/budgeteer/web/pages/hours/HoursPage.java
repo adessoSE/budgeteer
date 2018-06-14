@@ -11,15 +11,15 @@ import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 @Mount("hours")
 public class HoursPage extends BasePage {
 
-	public HoursPage() {
-		long projectId = BudgeteerSession.get().getProjectId();
-		BurnTableWithFilter table =
-				new BurnTableWithFilter("burnTable", new WorkRecordFilter(projectId), true);
-		add(table);
-	}
+    public HoursPage() {
+        long projectId = BudgeteerSession.get().getProjectId();
+        BurnTableWithFilter table = new BurnTableWithFilter("burnTable", new WorkRecordFilter(projectId), true);
+        add(table);
+    }
 
-	@Override
-	protected BreadcrumbsModel getBreadcrumbsModel() {
-		return new BreadcrumbsModel(DashboardPage.class, HoursPage.class);
-	}
+    @Override
+    protected BreadcrumbsModel getBreadcrumbsModel() {
+        return new BreadcrumbsModel(DashboardPage.class, HoursPage.class);
+    }
+
 }

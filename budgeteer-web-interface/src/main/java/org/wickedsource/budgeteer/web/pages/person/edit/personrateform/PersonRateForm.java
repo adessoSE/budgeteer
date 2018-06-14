@@ -1,11 +1,5 @@
 package org.wickedsource.budgeteer.web.pages.person.edit.personrateform;
 
-import static org.wicketstuff.lazymodel.LazyModel.from;
-import static org.wicketstuff.lazymodel.LazyModel.model;
-
-import java.util.HashMap;
-import java.util.List;
-
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
@@ -24,98 +18,88 @@ import org.wickedsource.budgeteer.web.components.listMultipleChoiceWithGroups.Op
 import org.wickedsource.budgeteer.web.components.money.MoneyTextField;
 import org.wickedsource.budgeteer.web.components.multiselect.MultiselectBehavior;
 
+import java.util.HashMap;
+import java.util.List;
+
+import static org.wicketstuff.lazymodel.LazyModel.from;
+import static org.wicketstuff.lazymodel.LazyModel.model;
+
 public abstract class PersonRateForm extends Form<PersonRateForm.PersonRateFormModel> {
 
-	public static class PersonRateFormModel extends PersonRate {
-		private ListModel<BudgetBaseData> chosenBudgets = new ListModel<>();
+    public static class PersonRateFormModel extends PersonRate {
+        private ListModel<BudgetBaseData> chosenBudgets = new ListModel<>();
 
-		public ListModel<BudgetBaseData> getChosenBudgets() {
-			return chosenBudgets;
-		}
-	}
+        public ListModel<BudgetBaseData> getChosenBudgets() {
+            return chosenBudgets;
+        }
+    }
 
-	@SpringBean private BudgetService budgetService;
+    @SpringBean
+    private BudgetService budgetService;
 
-	public PersonRateForm(String id, long personId) {
-		super(id, model(from(new PersonRateFormModel())));
-		Injector.get().inject(this);
 
-		MoneyTextField rateField = new MoneyTextField("rateField", model(from(getModel()).getRate()));
-		rateField.setRequired(true);
-		add(rateField);
+    public PersonRateForm(String id, long personId) {
+        super(id, model(from(new PersonRateFormModel())));
+        Injector.get().inject(this);
 
-		DateRangeInputField dateRangeField =
-				new DateRangeInputField(
-						"dateRangeField",
-						model(from(getModel()).getDateRange()),
-						DateRangeInputField.DROP_LOCATION.UP);
-		dateRangeField.setRequired(true);
-		add(dateRangeField);
+        MoneyTextField rateField = new MoneyTextField("rateField", model(from(getModel()).getRate()));
+        rateField.setRequired(true);
+        add(rateField);
 
-		List<OptionGroup<BudgetBaseData>> possibleBudgets =
-				budgetService.getPossibleBudgetDataForPersonAndProject(
-						BudgeteerSession.get().getProjectId(), personId);
-		ListMultipleChoice<BudgetBaseData> budgetChoice =
-				new ListMultipleChoiceWithGroups<>(
-						"budgetField",
-						getModelObject().getChosenBudgets(),
-						possibleBudgets,
-						new BudgetBaseDataChoiceRenderer());
+        DateRangeInputField dateRangeField = new DateRangeInputField("dateRangeField", model(from(getModel()).getDateRange()), DateRangeInputField.DROP_LOCATION.UP);
+        dateRangeField.setRequired(true);
+        add(dateRangeField);
 
-		budgetChoice.setRequired(true);
-		budgetChoice.setChoiceRenderer(new BudgetBaseDataChoiceRenderer());
+        List<OptionGroup<BudgetBaseData>> possibleBudgets = budgetService.getPossibleBudgetDataForPersonAndProject(BudgeteerSession.get().getProjectId(), personId);
+        ListMultipleChoice<BudgetBaseData> budgetChoice =
+                new ListMultipleChoiceWithGroups<>("budgetField", getModelObject().getChosenBudgets(), possibleBudgets, new BudgetBaseDataChoiceRenderer());
 
-		HashMap<String, String> multiselectOptions = MultiselectBehavior.getRecommendedOptions();
-		multiselectOptions.put("includeSelectAllOption", "false");
-		budgetChoice.add(new MultiselectBehavior(multiselectOptions));
+        budgetChoice.setRequired(true);
+        budgetChoice.setChoiceRenderer(new BudgetBaseDataChoiceRenderer());
 
-		add(budgetChoice);
+        HashMap<String, String> multiselectOptions = MultiselectBehavior.getRecommendedOptions();
+        multiselectOptions.put("includeSelectAllOption","false");
+        budgetChoice.add(new MultiselectBehavior(multiselectOptions));
 
-		add(new Button("submitButton"));
-	}
+        add(budgetChoice);
 
-	@Override
-	protected void onSubmit() {
-		PersonRateFormModel addedPersonRate = getModelObject();
-		for (BudgetBaseData budget : addedPersonRate.getChosenBudgets().getObject()) {
-			List<PersonRate> overlappingRate =
-					getOverlappingRates(addedPersonRate.getDateRange(), budget);
-			if (overlappingRate == null || overlappingRate.isEmpty()) {
-				rateAdded(
-						new PersonRate(addedPersonRate.getRate(), budget, addedPersonRate.getDateRange()));
-			} else {
-				StringBuilder overlappingEntryNames = new StringBuilder();
-				overlappingEntryNames.append(System.getProperty("line.separator"));
-				for (int i = 0; i < overlappingRate.size(); i++) {
-					PersonRate p = overlappingRate.get(i);
-					overlappingEntryNames.append(p.getBudget().getName());
-					overlappingEntryNames.append(" ");
-					overlappingEntryNames.append(p.getDateRange().toString());
-					if (i < overlappingRate.size() - 1) {
-						overlappingEntryNames.append(",");
-						overlappingEntryNames.append(System.getProperty("line.separator"));
-					}
-				}
-				error(
-						String.format(
-								getString("personRateForm.overlappingRates"), overlappingEntryNames.toString()));
-				return;
-			}
-		}
-		addedPersonRate.getChosenBudgets().getObject().clear();
-		addedPersonRate.reset();
-	}
+        add(new Button("submitButton"));
+    }
 
-	protected abstract void rateAdded(PersonRate rate);
+    @Override
+    protected void onSubmit() {
+        PersonRateFormModel addedPersonRate = getModelObject();
+        for (BudgetBaseData budget : addedPersonRate.getChosenBudgets().getObject()) {
+            List<PersonRate> overlappingRate = getOverlappingRates(addedPersonRate.getDateRange(), budget);
+            if(overlappingRate == null || overlappingRate.isEmpty()) {
+                rateAdded(new PersonRate(addedPersonRate.getRate(), budget, addedPersonRate.getDateRange()));
+            }else {
+                StringBuilder overlappingEntryNames = new StringBuilder();
+                overlappingEntryNames.append(System.getProperty("line.separator"));
+                for(int i=0; i < overlappingRate.size(); i++){
+                    PersonRate p = overlappingRate.get(i);
+                    overlappingEntryNames.append(p.getBudget().getName());
+                    overlappingEntryNames.append(" ");
+                    overlappingEntryNames.append(p.getDateRange().toString());
+                    if(i < overlappingRate.size() - 1){
+                        overlappingEntryNames.append(",");
+                        overlappingEntryNames.append(System.getProperty("line.separator"));
+                    }
+                }
+                error(String.format(getString("personRateForm.overlappingRates"), overlappingEntryNames.toString()));
+                return;
+            }
+        }
+        addedPersonRate.getChosenBudgets().getObject().clear();
+        addedPersonRate.reset();
+    }
 
-	/**
-	 * Returns a List<PersonRate> where the startDate or the endDate is in the given dateRange
-	 * (alternatively a empty List)
-	 *
-	 * @param dateRange the dateRange to be checked
-	 * @return a List of PersonRates (if there are no PersonRates that end or start in the dateRange,
-	 *     a empty List will be returned)
-	 */
-	protected abstract List<PersonRate> getOverlappingRates(
-			DateRange dateRange, BudgetBaseData budget);
+    protected abstract void rateAdded(PersonRate rate);
+
+    /**
+     * Returns a List<PersonRate> where the startDate or the endDate is in the given dateRange (alternatively a empty List)
+     * @param dateRange the dateRange to be checked
+     * @return a List of PersonRates (if there are no PersonRates that end or start in the dateRange, a empty List will be returned)
+     */
+    protected abstract List<PersonRate> getOverlappingRates(DateRange dateRange, BudgetBaseData budget);
 }

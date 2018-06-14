@@ -7,6 +7,6 @@ import lombok.Data;
 @AllArgsConstructor
 public class MissingBudgetTotalBean {
 
-	private long budgetId;
-	private String budgetName;
+    private long budgetId;
+    private String budgetName;
 }

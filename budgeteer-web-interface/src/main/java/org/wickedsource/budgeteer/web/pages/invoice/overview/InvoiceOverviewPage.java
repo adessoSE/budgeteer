@@ -13,58 +13,44 @@ import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 import org.wickedsource.budgeteer.web.pages.invoice.edit.EditInvoicePage;
 import org.wickedsource.budgeteer.web.pages.invoice.overview.table.InvoiceOverviewTable;
 
+
 @Mount({"invoices/${id}", "invoices/"})
 public class InvoiceOverviewPage extends BasePage {
 
-	@SpringBean private InvoiceService invoiceService;
+    @SpringBean
+    private InvoiceService invoiceService;
 
-	/**
-	 * Shows the overview page of all invoices beloging to the given contract or the current project
-	 *
-	 * @param parameters if the id property of the pageparameters is 0l, the pages shows the invoices
-	 *     for the current project <br>
-	 *     otherwise the given id will be considered as contract id and the pages shows the invoices
-	 *     associated with this contract
-	 */
-	public InvoiceOverviewPage(PageParameters parameters) {
-		super(parameters);
-		InvoiceOverviewTable table;
-		if (getParameterId() == 0l) {
-			table =
-					new InvoiceOverviewTable(
-							"invoiceTable",
-							invoiceService.getInvoiceOverviewByProject(BudgeteerSession.get().getProjectId()),
-							getBreadcrumbsModel());
-		} else {
-			table =
-					new InvoiceOverviewTable(
-							"invoiceTable",
-							invoiceService.getInvoiceOverviewByContract(getParameterId()),
-							getBreadcrumbsModel());
-		}
-		add(table);
-		add(
-				new Link("createInvoiceLink") {
-					@Override
-					public void onClick() {
-						WebPage page =
-								new EditInvoicePage(
-										EditInvoicePage.createNewInvoiceParameters(getParameterId()),
-										InvoiceOverviewPage.class,
-										getPageParameters());
-						setResponsePage(page);
-					}
+    /**
+     * Shows the overview page of all invoices beloging to the given contract or the current project
+     * @param parameters if the id property of the pageparameters is 0l, the pages shows the invoices for the current project <br />
+     *                   otherwise the given id will be considered as contract id and the pages shows the invoices associated with this contract
+     */
+    public InvoiceOverviewPage(PageParameters parameters) {
+        super(parameters);
+        InvoiceOverviewTable table;
+        if(getParameterId() == 0l){
+             table = new InvoiceOverviewTable("invoiceTable", invoiceService.getInvoiceOverviewByProject(BudgeteerSession.get().getProjectId()), getBreadcrumbsModel());
+        } else {
+             table = new InvoiceOverviewTable("invoiceTable", invoiceService.getInvoiceOverviewByContract(getParameterId()), getBreadcrumbsModel());
+        }
+        add(table);
+        add(new Link("createInvoiceLink") {
+            @Override
+            public void onClick() {
+                WebPage page = new EditInvoicePage(EditInvoicePage.createNewInvoiceParameters(getParameterId()), InvoiceOverviewPage.class, getPageParameters());
+                setResponsePage(page);
+            }
 
-					@Override
-					public boolean isVisible() {
-						return getParameterId() != 0l;
-					}
-				});
-	}
+            @Override
+            public boolean isVisible() {
+                return getParameterId() != 0l;
+            }
+        });
+    }
 
-	@SuppressWarnings("unchecked")
-	@Override
-	protected BreadcrumbsModel getBreadcrumbsModel() {
-		return new BreadcrumbsModel(DashboardPage.class, InvoiceOverviewPage.class);
-	}
+    @SuppressWarnings("unchecked")
+    @Override
+    protected BreadcrumbsModel getBreadcrumbsModel() {
+        return new BreadcrumbsModel(DashboardPage.class, InvoiceOverviewPage.class);
+    }
 }

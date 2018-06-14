@@ -1,30 +1,30 @@
 package org.wickedsource.budgeteer.web.pages.imports.fileimport;
 
-import java.io.Serializable;
-import java.util.List;
-
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.wickedsource.budgeteer.imports.api.Importer;
 
-public class ImportFormBean implements Serializable {
+import java.io.Serializable;
+import java.util.List;
 
-	private List<FileUpload> filesToImport;
+public class ImportFormBean implements Serializable{
 
-	private Importer importer;
+    private List<FileUpload> filesToImport;
 
-	public List<FileUpload> getFilesToImport() {
-		return filesToImport;
-	}
+    private Importer importer;
 
-	public void setFilesToImport(List<FileUpload> filesToImport) {
-		this.filesToImport = filesToImport;
-	}
+    public List<FileUpload> getFilesToImport() {
+        return filesToImport;
+    }
 
-	public Importer getImporter() {
-		return importer;
-	}
+    public void setFilesToImport(List<FileUpload> filesToImport) {
+        this.filesToImport = filesToImport;
+    }
 
-	public void setImporter(Importer importer) {
-		this.importer = importer;
-	}
+    public Importer getImporter() {
+        return importer;
+    }
+
+    public void setImporter(Importer importer) {
+        this.importer = importer;
+    }
 }

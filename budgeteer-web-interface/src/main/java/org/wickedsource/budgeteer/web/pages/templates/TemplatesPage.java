@@ -13,27 +13,24 @@ import org.wickedsource.budgeteer.web.pages.templates.templateimport.ImportTempl
 @Mount("templates")
 public class TemplatesPage extends BasePage {
 
-	public TemplatesPage() {
-		TemplatesTable table =
-				new TemplatesTable(
-						"templateTable", new TemplateListModel(BudgeteerSession.get().getProjectId()));
-		add(table);
-		add(createImportLink("importLink"));
-	}
+    public TemplatesPage() {
+        TemplatesTable table = new TemplatesTable("templateTable", new TemplateListModel(BudgeteerSession.get().getProjectId()));
+        add(table);
+        add(createImportLink("importLink"));
+    }
 
-	@Override
-	protected BreadcrumbsModel getBreadcrumbsModel() {
-		return new BreadcrumbsModel(DashboardPage.class, TemplatesPage.class);
-	}
+    @Override
+    protected BreadcrumbsModel getBreadcrumbsModel() {
+        return new BreadcrumbsModel(DashboardPage.class, TemplatesPage.class);
+    }
 
-	private Link createImportLink(String id) {
-		final ImportTemplatesPage importPage =
-				new ImportTemplatesPage(TemplatesPage.class, getPageParameters());
-		return new Link(id) {
-			@Override
-			public void onClick() {
-				setResponsePage(importPage);
-			}
-		};
-	}
+    private Link createImportLink(String id) {
+        final ImportTemplatesPage importPage = new ImportTemplatesPage(TemplatesPage.class, getPageParameters());
+        return new Link(id) {
+            @Override
+            public void onClick() {
+                setResponsePage(importPage);
+            }
+        };
+    }
 }

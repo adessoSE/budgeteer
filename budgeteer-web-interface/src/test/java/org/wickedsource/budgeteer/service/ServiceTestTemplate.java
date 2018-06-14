@@ -11,25 +11,23 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(
-	loader = SpringockitoContextLoader.class,
-	locations = {"classpath:spring-service.xml", "classpath:spring-repository-mock.xml"}
-)
+@ContextConfiguration(loader = SpringockitoContextLoader.class, locations = {"classpath:spring-service.xml", "classpath:spring-repository-mock.xml"})
 public abstract class ServiceTestTemplate {
 
-	@Autowired private ApplicationContext context;
+    @Autowired
+    private ApplicationContext context;
 
-	@BeforeEach
-	public void resetMocks() {
-		for (String name : context.getBeanDefinitionNames()) {
-			if (!"workRecordDatabaseImporter".equals(name)
-					&& !"planRecordDatabaseImporter".equals(name)) {
-				// excluding prototype beans with constructor arguments
-				Object bean = context.getBean(name);
-				if (MockUtil.isMock(bean)) {
-					Mockito.reset(bean);
-				}
-			}
-		}
-	}
+    @BeforeEach
+    public void resetMocks() {
+        for (String name : context.getBeanDefinitionNames()) {
+            if (!"workRecordDatabaseImporter".equals(name) && !"planRecordDatabaseImporter".equals(name)) {
+                // excluding prototype beans with constructor arguments
+                Object bean = context.getBean(name);
+                if (MockUtil.isMock(bean)) {
+                    Mockito.reset(bean);
+                }
+            }
+        }
+    }
+
 }

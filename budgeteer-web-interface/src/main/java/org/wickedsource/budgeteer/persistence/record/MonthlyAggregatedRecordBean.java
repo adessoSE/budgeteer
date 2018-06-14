@@ -7,12 +7,14 @@ import lombok.Data;
 @AllArgsConstructor
 public class MonthlyAggregatedRecordBean {
 
-	private int year;
+    private int year;
 
-	/** The month of this record (0-based). */
-	private int month;
+    /**
+     * The month of this record (0-based).
+     */
+    private int month;
 
-	private Double hours;
+    private Double hours;
 
-	private long valueInCents;
+    private long valueInCents;
 }

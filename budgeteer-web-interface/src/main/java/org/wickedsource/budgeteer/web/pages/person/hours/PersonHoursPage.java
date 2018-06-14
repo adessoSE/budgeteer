@@ -1,7 +1,5 @@
 package org.wickedsource.budgeteer.web.pages.person.hours;
 
-import javax.inject.Inject;
-
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.wickedsource.budgeteer.service.budget.BudgetService;
 import org.wickedsource.budgeteer.service.person.PersonBaseData;
@@ -17,35 +15,32 @@ import org.wickedsource.budgeteer.web.pages.person.PersonNameModel;
 import org.wickedsource.budgeteer.web.pages.person.details.PersonDetailsPage;
 import org.wickedsource.budgeteer.web.pages.person.overview.PeopleOverviewPage;
 
+import javax.inject.Inject;
+
 @Mount("people/hours/${id}")
 public class PersonHoursPage extends BasePage {
 
-	@Inject private BudgetService budgetService;
+    @Inject
+    private BudgetService budgetService;
 
-	public PersonHoursPage(PageParameters parameters) {
-		super(parameters);
+    public PersonHoursPage(PageParameters parameters) {
+        super(parameters);
 
-		WorkRecordFilter filter = new WorkRecordFilter(BudgeteerSession.get().getProjectId());
-		filter.getPersonList().add(new PersonBaseData(getParameterId()));
-		filter
-				.getPossibleBudgets()
-				.addAll(budgetService.loadBudgetBaseDataByPersonId(getParameterId()));
+        WorkRecordFilter filter = new WorkRecordFilter(BudgeteerSession.get().getProjectId());
+        filter.getPersonList().add(new PersonBaseData(getParameterId()));
+        filter.getPossibleBudgets().addAll(budgetService.loadBudgetBaseDataByPersonId(getParameterId()));
 
-		BurnTableWithFilter table = new BurnTableWithFilter("burnTable", filter);
-		table.setPersonFilterEnabled(false);
-		add(table);
-	}
+        BurnTableWithFilter table = new BurnTableWithFilter("burnTable", filter);
+        table.setPersonFilterEnabled(false);
+        add(table);
+    }
 
-	@SuppressWarnings("unchecked")
-	protected BreadcrumbsModel getBreadcrumbsModel() {
-		BreadcrumbsModel model = new BreadcrumbsModel(DashboardPage.class, PeopleOverviewPage.class);
-		model.addBreadcrumb(
-				new Breadcrumb(
-						PersonDetailsPage.class,
-						PersonDetailsPage.createParameters(getParameterId()),
-						new PersonNameModel(getParameterId())));
-		model.addBreadcrumb(
-				new Breadcrumb(PersonHoursPage.class, getPageParameters(), getString("breadcrumb.title")));
-		return model;
-	}
+    @SuppressWarnings("unchecked")
+    protected BreadcrumbsModel getBreadcrumbsModel() {
+        BreadcrumbsModel model = new BreadcrumbsModel(DashboardPage.class, PeopleOverviewPage.class);
+        model.addBreadcrumb(new Breadcrumb(PersonDetailsPage.class, PersonDetailsPage.createParameters(getParameterId()), new PersonNameModel(getParameterId())));
+        model.addBreadcrumb(new Breadcrumb(PersonHoursPage.class, getPageParameters(), getString("breadcrumb.title")));
+        return model;
+    }
+
 }

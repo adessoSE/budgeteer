@@ -7,31 +7,32 @@ import org.wickedsource.budgeteer.web.BudgeteerSession;
 
 public class TaxSwitchLabelModel<T> extends AbstractReadOnlyModel<T> {
 
-	private IModel<T> netModel;
-	private IModel<T> grossModel;
+    private IModel<T> netModel;
+    private IModel<T> grossModel;
 
-	public TaxSwitchLabelModel(T netValue, T grossValue) {
-		this.netModel = Model.of(netModel);
-		this.grossModel = Model.of(grossModel);
-	}
+    public TaxSwitchLabelModel(T netValue, T grossValue) {
+        this.netModel = Model.of(netModel);
+        this.grossModel = Model.of(grossModel);
+    }
 
-	public TaxSwitchLabelModel(IModel<T> netModel, IModel<T> grossModel) {
-		this.netModel = netModel;
-		this.grossModel = grossModel;
-	}
+    public TaxSwitchLabelModel(IModel<T> netModel, IModel<T> grossModel) {
+        this.netModel = netModel;
+        this.grossModel = grossModel;
+    }
 
-	@Override
-	public T getObject() {
-		if (BudgeteerSession.get().isTaxEnabled()) {
-			return grossModel.getObject();
-		} else {
-			return netModel.getObject();
-		}
-	}
+    @Override
+    public T getObject() {
+        if (BudgeteerSession.get().isTaxEnabled()) {
+            return grossModel.getObject();
+        } else {
+            return netModel.getObject();
+        }
+    }
 
-	@Override
-	public void detach() {
-		netModel.detach();
-		grossModel.detach();
-	}
+    @Override
+    public void detach() {
+        netModel.detach();
+        grossModel.detach();
+    }
+
 }

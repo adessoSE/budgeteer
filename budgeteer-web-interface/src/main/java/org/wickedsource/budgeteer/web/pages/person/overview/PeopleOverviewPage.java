@@ -11,15 +11,16 @@ import org.wickedsource.budgeteer.web.pages.person.overview.table.PeopleOverview
 @Mount("people")
 public class PeopleOverviewPage extends BasePage {
 
-	public PeopleOverviewPage() {
-		PeopleModel model = new PeopleModel(BudgeteerSession.get().getProjectId());
-		PeopleOverviewTable table = new PeopleOverviewTable("peopleOverviewTable", model);
-		add(table);
-	}
+    public PeopleOverviewPage() {
+        PeopleModel model = new PeopleModel(BudgeteerSession.get().getProjectId());
+        PeopleOverviewTable table = new PeopleOverviewTable("peopleOverviewTable", model);
+        add(table);
+    }
 
-	@SuppressWarnings("unchecked")
-	@Override
-	protected BreadcrumbsModel getBreadcrumbsModel() {
-		return new BreadcrumbsModel(DashboardPage.class, PeopleOverviewPage.class);
-	}
+    @SuppressWarnings("unchecked")
+    @Override
+    protected BreadcrumbsModel getBreadcrumbsModel() {
+        return new BreadcrumbsModel(DashboardPage.class, PeopleOverviewPage.class);
+    }
+
 }

@@ -1,7 +1,5 @@
 package org.wickedsource.budgeteer.web.pages.budgets.components.weekreporttable;
 
-import java.util.List;
-
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
@@ -10,34 +8,35 @@ import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
 import org.wickedsource.budgeteer.service.record.AggregatedRecord;
 import org.wickedsource.budgeteer.service.record.RecordService;
 
-public class BudgetsWeeklyAggregatedRecordsModel
-		extends LoadableDetachableModel<List<AggregatedRecord>> {
+import java.util.List;
 
-	@SpringBean private RecordService service;
+public class BudgetsWeeklyAggregatedRecordsModel extends LoadableDetachableModel<List<AggregatedRecord>> {
 
-	private long budgetId;
+    @SpringBean
+    private RecordService service;
 
-	private IModel<BudgetTagFilter> filterModel;
+    private long budgetId;
 
-	public BudgetsWeeklyAggregatedRecordsModel(long budgetId) {
-		Injector.get().inject(this);
-		this.budgetId = budgetId;
-	}
+    private IModel<BudgetTagFilter> filterModel;
 
-	public BudgetsWeeklyAggregatedRecordsModel(IModel<BudgetTagFilter> filterModel) {
-		Injector.get().inject(this);
-		this.filterModel = filterModel;
-	}
+    public BudgetsWeeklyAggregatedRecordsModel(long budgetId) {
+        Injector.get().inject(this);
+        this.budgetId = budgetId;
+    }
 
-	@Override
-	protected List<AggregatedRecord> load() {
-		if (budgetId != 0) {
-			return service.getWeeklyAggregationForBudget(budgetId);
-		} else if (filterModel != null && filterModel.getObject() != null) {
-			return service.getWeeklyAggregationForBudgets(filterModel.getObject());
-		} else {
-			throw new IllegalStateException(
-					"Neither budgetId nor filter specified. Specify at least one of these attributes in the constructor!");
-		}
-	}
+    public BudgetsWeeklyAggregatedRecordsModel(IModel<BudgetTagFilter> filterModel) {
+        Injector.get().inject(this);
+        this.filterModel = filterModel;
+    }
+
+    @Override
+    protected List<AggregatedRecord> load() {
+        if (budgetId != 0) {
+            return service.getWeeklyAggregationForBudget(budgetId);
+        } else if (filterModel != null && filterModel.getObject() != null) {
+            return service.getWeeklyAggregationForBudgets(filterModel.getObject());
+        } else {
+            throw new IllegalStateException("Neither budgetId nor filter specified. Specify at least one of these attributes in the constructor!");
+        }
+    }
 }

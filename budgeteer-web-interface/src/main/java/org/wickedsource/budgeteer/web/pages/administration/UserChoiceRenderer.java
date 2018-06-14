@@ -5,8 +5,8 @@ import org.wickedsource.budgeteer.web.pages.base.AbstractChoiceRenderer;
 
 public class UserChoiceRenderer extends AbstractChoiceRenderer<User> {
 
-	@Override
-	public Object getDisplayValue(User object) {
-		return object.getName();
-	}
+    @Override
+    public Object getDisplayValue(User object) {
+        return object.getName();
+    }
 }

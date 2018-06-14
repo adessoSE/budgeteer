@@ -1,8 +1,5 @@
 package org.wickedsource.budgeteer.web.components.daterange;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.head.CssReferenceHeaderItem;
@@ -13,53 +10,51 @@ import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.wickedsource.budgeteer.web.BudgeteerReferences;
 
-public class DateRangePickerBehavior extends Behavior {
-	private HashMap<String, String> options;
+import java.util.HashMap;
+import java.util.Map;
 
-	/**
-	 * Implements the DateRangePicker
-	 *
-	 * @param options @see <a href="http://www.daterangepicker.com/#options">Options</a>
-	 */
-	public DateRangePickerBehavior(HashMap<String, String> options) {
-		this.options = options;
-	}
 
-	@Override
-	public void renderHead(Component component, IHeaderResponse response) {
-		response.render(
-				JavaScriptReferenceHeaderItem.forReference(BudgeteerReferences.getJQueryReference()));
-		response.render(
-				JavaScriptReferenceHeaderItem.forReference(BudgeteerReferences.getMomentJsReference()));
-		// include daterangepicker.js
-		ResourceReference jsResource =
-				new PackageResourceReference(DateRangeInputField.class, "daterangepicker.js");
-		response.render(JavaScriptReferenceHeaderItem.forReference(jsResource));
-		// include css
-		ResourceReference cssResource =
-				new PackageResourceReference(DateRangeInputField.class, "daterangepicker-bs3.css");
-		response.render(CssReferenceHeaderItem.forReference(cssResource));
-		// activate daterangepicker on this input field
-		component.setOutputMarkupId(true);
-		response.render(OnDomReadyHeaderItem.forScript(getScript(component)));
-	}
+public class DateRangePickerBehavior extends Behavior{
+    private HashMap<String, String> options;
 
-	public String getScript(Component component) {
-		StringBuilder script =
-				new StringBuilder("$('#" + component.getMarkupId() + "').daterangepicker(");
-		if (options != null && !options.isEmpty()) {
-			script.append("{");
-			int index = 1;
-			for (Map.Entry<String, String> entry : options.entrySet()) {
-				script.append(entry.getKey() + ": " + entry.getValue());
-				if (index < options.size()) {
-					script.append(",");
-				}
-				index++;
-			}
-			script.append("}");
-		}
-		script.append(");");
-		return script.toString();
-	}
+    /**
+    * Implements the DateRangePicker
+    * @param options @see <a href="http://www.daterangepicker.com/#options">Options</a>
+    */
+    public DateRangePickerBehavior(HashMap<String, String> options){
+        this.options = options;
+    }
+
+    @Override
+    public void renderHead(Component component, IHeaderResponse response) {
+        response.render(JavaScriptReferenceHeaderItem.forReference(BudgeteerReferences.getJQueryReference()));
+        response.render(JavaScriptReferenceHeaderItem.forReference(BudgeteerReferences.getMomentJsReference()));
+        // include daterangepicker.js
+        ResourceReference jsResource = new PackageResourceReference(DateRangeInputField.class, "daterangepicker.js");
+        response.render(JavaScriptReferenceHeaderItem.forReference(jsResource));
+        // include css
+        ResourceReference cssResource = new PackageResourceReference(DateRangeInputField.class, "daterangepicker-bs3.css");
+        response.render(CssReferenceHeaderItem.forReference(cssResource));
+        // activate daterangepicker on this input field
+        component.setOutputMarkupId(true);
+        response.render(OnDomReadyHeaderItem.forScript(getScript(component)));
+    }
+
+    public String getScript(Component component) {
+        StringBuilder script = new StringBuilder("$('#"+component.getMarkupId()+"').daterangepicker(");
+        if(options != null && ! options.isEmpty()){
+            script.append("{");
+            int index = 1;
+            for(Map.Entry<String, String> entry : options.entrySet()) {
+                script.append(entry.getKey() + ": " + entry.getValue());
+                if(index < options.size()){
+                    script.append(",");
+                }
+                index++;
+            }
+            script.append("}");
+        }
+        script.append(");");
+        return script.toString();
+    }
 }

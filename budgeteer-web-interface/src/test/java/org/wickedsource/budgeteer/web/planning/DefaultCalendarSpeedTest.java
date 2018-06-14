@@ -1,14 +1,14 @@
 package org.wickedsource.budgeteer.web.planning;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.joda.time.LocalDate;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Arrays;
+import java.util.List;
 
 class DefaultCalendarSpeedTest {
 
@@ -29,12 +29,10 @@ class DefaultCalendarSpeedTest {
 		DefaultCalendar calWithHolidays = DefaultCalendar.calendarYear(2015);
 		calWithHolidays.setHolidayManager(new HolidayConfiguration("de", "nw"));
 
-		List<TimePeriod> periods =
-				Arrays.asList(
-						new TimePeriod(new LocalDate(2015, 3, 1), new LocalDate(2015, 3, 31)),
-						new TimePeriod(new LocalDate(2015, 4, 30), new LocalDate(2015, 4, 30)),
-						new TimePeriod(new LocalDate(2015, 5, 3), new LocalDate(2015, 5, 7)),
-						new TimePeriod(new LocalDate(2015, 7, 19), new LocalDate(2015, 8, 6)));
+		List<TimePeriod> periods = Arrays.asList(new TimePeriod(new LocalDate(2015, 3, 1), new LocalDate(2015, 3, 31)),
+				new TimePeriod(new LocalDate(2015, 4, 30), new LocalDate(2015, 4, 30)),
+				new TimePeriod(new LocalDate(2015, 5, 3), new LocalDate(2015, 5, 7)),
+				new TimePeriod(new LocalDate(2015, 7, 19), new LocalDate(2015, 8, 6)));
 
 		long beforeStart = System.currentTimeMillis();
 
@@ -51,15 +49,9 @@ class DefaultCalendarSpeedTest {
 		long after = System.currentTimeMillis();
 
 		long millisWith = after - inBetween;
-		logger.warn(
-				"to calculate working days with holidays " + TIMES + " times takes " + millisWith + "ms");
+		logger.warn("to calculate working days with holidays " + TIMES + " times takes " + millisWith + "ms");
 		long millisWithout = inBetween - beforeStart;
-		logger.warn(
-				"to calculate working days without holidays "
-						+ TIMES
-						+ " times takes "
-						+ millisWithout
-						+ "ms");
+		logger.warn("to calculate working days without holidays " + TIMES + " times takes " + millisWithout + "ms");
 
 		Assertions.assertTrue(Double.compare(millisWithout * 1.2 + 5, millisWith) > 0);
 	}

@@ -89,9 +89,9 @@ subprojects {
             }
             googleJavaFormat()
             importOrder 'java', 'javax', 'org', 'com'
-            indentWithTabs 2
-            replaceRegex 'class-level javadoc indentation fix', /^\*/, ' *'
-            replaceRegex 'method-level javadoc indentation fix', /\t\*/, '\t *'
+            trimTrailingWhitespace()
+            removeUnusedImports()
+            indentWithTabs()
         }
     }
 }

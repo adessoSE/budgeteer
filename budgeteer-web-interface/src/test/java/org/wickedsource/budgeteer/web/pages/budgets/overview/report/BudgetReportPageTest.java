@@ -7,13 +7,15 @@ import org.wickedsource.budgeteer.web.pages.budgets.overview.BudgetsOverviewPage
 
 public class BudgetReportPageTest extends AbstractWebTestTemplate {
 
-	@Test
-	void render() {
-		WicketTester tester = getTester();
-		tester.startPage(BudgetsOverviewPage.class);
-		tester.assertRenderedPage(BudgetsOverviewPage.class);
-	}
+    @Test
+    void render() {
+        WicketTester tester = getTester();
+        tester.startPage(BudgetsOverviewPage.class);
+        tester.assertRenderedPage(BudgetsOverviewPage.class);
+    }
 
-	@Override
-	protected void setupTest() {}
+    @Override
+    protected void setupTest() {
+
+    }
 }

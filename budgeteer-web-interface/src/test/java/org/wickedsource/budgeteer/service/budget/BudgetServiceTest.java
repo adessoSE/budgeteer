@@ -1,10 +1,5 @@
 package org.wickedsource.budgeteer.service.budget;
 
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.*;
-
-import java.util.*;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -22,204 +17,208 @@ import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
 import org.wickedsource.budgeteer.service.ServiceTestTemplate;
 import org.wickedsource.budgeteer.service.contract.ContractBaseData;
 
+import java.util.*;
+
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.*;
+
 class BudgetServiceTest extends ServiceTestTemplate {
 
-	@Autowired private BudgetRepository budgetRepository;
+    @Autowired
+    private BudgetRepository budgetRepository;
 
-	@Autowired private BudgetService budgetService;
+    @Autowired
+    private BudgetService budgetService;
 
-	@Autowired private WorkRecordRepository workRecordRepository;
+    @Autowired
+    private WorkRecordRepository workRecordRepository;
 
-	@Autowired private PlanRecordRepository planRecordRepository;
+    @Autowired
+    private PlanRecordRepository planRecordRepository;
 
-	@Autowired private DailyRateRepository rateRepository;
+    @Autowired
+    private DailyRateRepository rateRepository;
 
-	@Autowired private ContractRepository contractRepository;
+    @Autowired
+    private ContractRepository contractRepository;
 
-	@Test
-	void testLoadBudgetBaseDataForProject() {
-		when(budgetRepository.findByProjectIdOrderByNameAsc(1L))
-				.thenReturn(Arrays.asList(createBudgetEntity()));
-		List<BudgetBaseData> budgets = budgetService.loadBudgetBaseDataForProject(1L);
-		Assertions.assertEquals(1, budgets.size());
-		Assertions.assertEquals(1, budgets.get(0).getId());
-		Assertions.assertEquals("Budget 123", budgets.get(0).getName());
-	}
+    @Test
+    void testLoadBudgetBaseDataForProject() {
+        when(budgetRepository.findByProjectIdOrderByNameAsc(1L)).thenReturn(Arrays.asList(createBudgetEntity()));
+        List<BudgetBaseData> budgets = budgetService.loadBudgetBaseDataForProject(1L);
+        Assertions.assertEquals(1, budgets.size());
+        Assertions.assertEquals(1, budgets.get(0).getId());
+        Assertions.assertEquals("Budget 123", budgets.get(0).getName());
+    }
 
-	@Test
-	void testLoadBudgetBaseData() {
-		when(budgetRepository.findOne(1L)).thenReturn(createBudgetEntity());
-		BudgetBaseData data = budgetService.loadBudgetBaseData(1L);
-		Assertions.assertEquals(1L, data.getId());
-		Assertions.assertEquals("Budget 123", data.getName());
-	}
+    @Test
+    void testLoadBudgetBaseData() {
+        when(budgetRepository.findOne(1L)).thenReturn(createBudgetEntity());
+        BudgetBaseData data = budgetService.loadBudgetBaseData(1L);
+        Assertions.assertEquals(1L, data.getId());
+        Assertions.assertEquals("Budget 123", data.getName());
+    }
 
-	@Test
-	void testLoadBudgetTags() {
-		List<String> tags = new ArrayList<String>();
-		tags.add("1");
-		tags.add("2");
-		when(budgetRepository.getAllTagsInProject(1L)).thenReturn(tags);
-		List<String> loadedTags = budgetService.loadBudgetTags(1L);
-		Assertions.assertEquals(2, loadedTags.size());
-		Assertions.assertTrue(loadedTags.contains("1"));
-		Assertions.assertTrue(loadedTags.contains("2"));
-	}
+    @Test
+    void testLoadBudgetTags() {
+        List<String> tags = new ArrayList<String>();
+        tags.add("1");
+        tags.add("2");
+        when(budgetRepository.getAllTagsInProject(1L)).thenReturn(tags);
+        List<String> loadedTags = budgetService.loadBudgetTags(1L);
+        Assertions.assertEquals(2, loadedTags.size());
+        Assertions.assertTrue(loadedTags.contains("1"));
+        Assertions.assertTrue(loadedTags.contains("2"));
+    }
 
-	@Test
-	void testLoadBudgetDetailData() {
-		Date date = new Date();
-		when(budgetRepository.findOne(1L)).thenReturn(createBudgetEntity());
-		when(workRecordRepository.getLatestWorkRecordDate(1L)).thenReturn(date);
-		when(workRecordRepository.getSpentBudget(1L)).thenReturn(100000.0);
-		when(planRecordRepository.getPlannedBudget(1L)).thenReturn(200000.0);
-		when(workRecordRepository.getAverageDailyRate(1L)).thenReturn(50000.0);
-		BudgetDetailData data = budgetService.loadBudgetDetailData(1L);
-		Assertions.assertEquals(100000.0d, data.getSpent().getAmountMinor().doubleValue(), 1d);
-		Assertions.assertEquals(-100000.0d, data.getUnplanned().getAmountMinor().doubleValue(), 1d);
-		Assertions.assertEquals(50000.0d, data.getAvgDailyRate().getAmountMinor().doubleValue(), 1d);
-	}
+    @Test
+    void testLoadBudgetDetailData() {
+        Date date = new Date();
+        when(budgetRepository.findOne(1L)).thenReturn(createBudgetEntity());
+        when(workRecordRepository.getLatestWorkRecordDate(1L)).thenReturn(date);
+        when(workRecordRepository.getSpentBudget(1L)).thenReturn(100000.0);
+        when(planRecordRepository.getPlannedBudget(1L)).thenReturn(200000.0);
+        when(workRecordRepository.getAverageDailyRate(1L)).thenReturn(50000.0);
+        BudgetDetailData data = budgetService.loadBudgetDetailData(1L);
+        Assertions.assertEquals(100000.0d, data.getSpent().getAmountMinor().doubleValue(), 1d);
+        Assertions.assertEquals(-100000.0d, data.getUnplanned().getAmountMinor().doubleValue(), 1d);
+        Assertions.assertEquals(50000.0d, data.getAvgDailyRate().getAmountMinor().doubleValue(), 1d);
+    }
 
-	@Test
-	void testLoadBudgetsDetailData() {
-		Date date = new Date();
-		when(budgetRepository.findByAtLeastOneTag(1L, Arrays.asList("1", "2", "3")))
-				.thenReturn(Arrays.asList(createBudgetEntity()));
-		when(workRecordRepository.getLatestWorkRecordDate(1L)).thenReturn(date);
-		when(workRecordRepository.getSpentBudget(1L)).thenReturn(100000.0);
-		when(planRecordRepository.getPlannedBudget(1L)).thenReturn(200000.0);
-		when(workRecordRepository.getAverageDailyRate(1L)).thenReturn(50000.0);
-		List<BudgetDetailData> data =
-				budgetService.loadBudgetsDetailData(
-						1L, new BudgetTagFilter(Arrays.asList("1", "2", "3"), 1L));
-		Assertions.assertEquals(1, data.size());
-		Assertions.assertEquals(100000.0d, data.get(0).getSpent().getAmountMinor().doubleValue(), 1d);
-		Assertions.assertEquals(
-				-100000.0d, data.get(0).getUnplanned().getAmountMinor().doubleValue(), 1d);
-		Assertions.assertEquals(
-				50000.0d, data.get(0).getAvgDailyRate().getAmountMinor().doubleValue(), 1d);
-	}
+    @Test
+    void testLoadBudgetsDetailData() {
+        Date date = new Date();
+        when(budgetRepository.findByAtLeastOneTag(1L, Arrays.asList("1", "2", "3"))).thenReturn(Arrays.asList(createBudgetEntity()));
+        when(workRecordRepository.getLatestWorkRecordDate(1L)).thenReturn(date);
+        when(workRecordRepository.getSpentBudget(1L)).thenReturn(100000.0);
+        when(planRecordRepository.getPlannedBudget(1L)).thenReturn(200000.0);
+        when(workRecordRepository.getAverageDailyRate(1L)).thenReturn(50000.0);
+        List<BudgetDetailData> data = budgetService.loadBudgetsDetailData(1L, new BudgetTagFilter(Arrays.asList("1", "2", "3"), 1L));
+        Assertions.assertEquals(1, data.size());
+        Assertions.assertEquals(100000.0d, data.get(0).getSpent().getAmountMinor().doubleValue(), 1d);
+        Assertions.assertEquals(-100000.0d, data.get(0).getUnplanned().getAmountMinor().doubleValue(), 1d);
+        Assertions.assertEquals(50000.0d, data.get(0).getAvgDailyRate().getAmountMinor().doubleValue(), 1d);
+    }
 
-	@Test
-	void testLoadBudgetToEdit() {
-		BudgetEntity budget = createBudgetEntity();
-		when(budgetRepository.findOne(1L)).thenReturn(budget);
-		EditBudgetData data = budgetService.loadBudgetToEdit(1L);
+    @Test
+    void testLoadBudgetToEdit() {
+        BudgetEntity budget = createBudgetEntity();
+        when(budgetRepository.findOne(1L)).thenReturn(budget);
+        EditBudgetData data = budgetService.loadBudgetToEdit(1L);
 
-		verify(budgetRepository, times(1)).findOne(1L);
-		Assertions.assertEquals(budget.getTotal(), data.getTotal());
-		Assertions.assertEquals(mapEntitiesToTags(budget.getTags()), data.getTags());
-		Assertions.assertEquals(budget.getImportKey(), data.getImportKey());
-		Assertions.assertEquals(budget.getName(), data.getTitle());
-		Assertions.assertEquals(budget.getId(), data.getId());
-	}
+        verify(budgetRepository, times(1)).findOne(1L);
+        Assertions.assertEquals(budget.getTotal(), data.getTotal());
+        Assertions.assertEquals(mapEntitiesToTags(budget.getTags()), data.getTags());
+        Assertions.assertEquals(budget.getImportKey(), data.getImportKey());
+        Assertions.assertEquals(budget.getName(), data.getTitle());
+        Assertions.assertEquals(budget.getId(), data.getId());
+    }
 
-	@Test
-	void testSaveBudget() {
-		BudgetEntity budget = createBudgetEntity();
-		when(budgetRepository.findOne(1L)).thenReturn(budget);
+    @Test
+    void testSaveBudget() {
+        BudgetEntity budget = createBudgetEntity();
+        when(budgetRepository.findOne(1L)).thenReturn(budget);
 
-		EditBudgetData data = getEditBudgetEntity();
+        EditBudgetData data = getEditBudgetEntity();
 
-		budgetService.saveBudget(data);
+        budgetService.saveBudget(data);
 
-		Assertions.assertEquals(1L, budget.getId());
-		Assertions.assertEquals(data.getImportKey(), budget.getImportKey());
-		Assertions.assertEquals(data.getTags(), mapEntitiesToTags(budget.getTags()));
-		Assertions.assertEquals(data.getTitle(), budget.getName());
-		Assertions.assertEquals(data.getTotal(), budget.getTotal());
-		Assertions.assertNull(data.getContract());
-	}
+        Assertions.assertEquals(1L, budget.getId());
+        Assertions.assertEquals(data.getImportKey(), budget.getImportKey());
+        Assertions.assertEquals(data.getTags(), mapEntitiesToTags(budget.getTags()));
+        Assertions.assertEquals(data.getTitle(), budget.getName());
+        Assertions.assertEquals(data.getTotal(), budget.getTotal());
+        Assertions.assertNull(data.getContract());
+    }
 
-	@Test
-	void testSaveBudgetWithContract() {
-		BudgetEntity budget = createBudgetEntity();
-		when(budgetRepository.findOne(1L)).thenReturn(budget);
+    @Test
+    void testSaveBudgetWithContract() {
+        BudgetEntity budget = createBudgetEntity();
+        when(budgetRepository.findOne(1L)).thenReturn(budget);
 
-		ContractEntity contractEntity = createContract();
-		when(contractRepository.findOne(1L)).thenReturn(contractEntity);
+        ContractEntity contractEntity = createContract();
+        when(contractRepository.findOne(1L)).thenReturn(contractEntity);
 
-		EditBudgetData data = new EditBudgetData();
-		data.setId(1L);
-		ContractBaseData contractBaseData = new ContractBaseData();
-		contractBaseData.setContractId(1L);
-		data.setContract(contractBaseData);
+        EditBudgetData data = new EditBudgetData();
+        data.setId(1L);
+        ContractBaseData contractBaseData = new ContractBaseData();
+        contractBaseData.setContractId(1L);
+        data.setContract(contractBaseData);
 
-		budgetService.saveBudget(data);
+        budgetService.saveBudget(data);
 
-		Assertions.assertEquals(1L, budget.getId());
-		Assertions.assertEquals(1L, budget.getContract().getId());
-	}
+        Assertions.assertEquals(1L, budget.getId());
+        Assertions.assertEquals(1L, budget.getContract().getId());
+    }
 
-	private ContractEntity createContract() {
-		ContractEntity entity = new ContractEntity();
-		entity.setId(1);
-		entity.setName("TestName");
-		entity.setBudgets(new LinkedList<BudgetEntity>());
-		return entity;
-	}
+    private ContractEntity createContract() {
+        ContractEntity entity = new ContractEntity();
+        entity.setId(1);
+        entity.setName("TestName");
+        entity.setBudgets(new LinkedList<BudgetEntity>());
+        return entity;
+    }
 
-	private List<String> mapEntitiesToTags(List<BudgetTagEntity> tagEntities) {
-		List<String> tags = new ArrayList<String>();
-		for (BudgetTagEntity entity : tagEntities) {
-			tags.add(entity.getTag());
-		}
-		return tags;
-	}
+    private List<String> mapEntitiesToTags(List<BudgetTagEntity> tagEntities) {
+        List<String> tags = new ArrayList<String>();
+        for (BudgetTagEntity entity : tagEntities) {
+            tags.add(entity.getTag());
+        }
+        return tags;
+    }
 
-	@Test
-	void testLoadBudgetUnits() {
-		when(rateRepository.getDistinctRatesInCents(1L))
-				.thenReturn(Arrays.asList(MoneyUtil.createMoney(100d), MoneyUtil.createMoney(200d)));
-		List<Double> units = budgetService.loadBudgetUnits(1L);
-		Assertions.assertEquals(3, units.size());
-		Assertions.assertTrue(units.contains(1d));
-		Assertions.assertTrue(units.contains(100d));
-		Assertions.assertTrue(units.contains(200d));
-	}
+    @Test
+    void testLoadBudgetUnits() {
+        when(rateRepository.getDistinctRatesInCents(1L)).thenReturn(Arrays.asList(MoneyUtil.createMoney(100d), MoneyUtil.createMoney(200d)));
+        List<Double> units = budgetService.loadBudgetUnits(1L);
+        Assertions.assertEquals(3, units.size());
+        Assertions.assertTrue(units.contains(1d));
+        Assertions.assertTrue(units.contains(100d));
+        Assertions.assertTrue(units.contains(200d));
+    }
 
-	@Test
-	void shouldThrowExceptionWhenConstraintIsViolated() {
-		given(budgetRepository.save(Mockito.any(BudgetEntity.class)))
-				.willThrow(new DataIntegrityViolationException("constraint violation"));
-		when(budgetRepository.findOne(1L)).thenReturn(createBudgetEntity());
-		try {
-			budgetService.saveBudget(createBudgetEditEntity());
-			Assertions.fail("No Exception!");
-		} catch (DataIntegrityViolationException e) {
-			// yay
-		}
-	}
+    @Test
+    void shouldThrowExceptionWhenConstraintIsViolated() {
+        given(budgetRepository.save(Mockito.any(BudgetEntity.class)))
+                .willThrow(new DataIntegrityViolationException("constraint violation"));
+        when(budgetRepository.findOne(1L)).thenReturn(createBudgetEntity());
+        try {
+            budgetService.saveBudget(createBudgetEditEntity());
+            Assertions.fail("No Exception!");
+        } catch (DataIntegrityViolationException e) {
+            // yay
+        }
+    }
 
-	private BudgetEntity createBudgetEntity() {
-		BudgetEntity budget = new BudgetEntity();
-		budget.setId(1L);
-		budget.setTotal(MoneyUtil.createMoneyFromCents(100000));
-		budget.setName("Budget 123");
-		budget.getTags().add(new BudgetTagEntity("Tag1"));
-		budget.getTags().add(new BudgetTagEntity("Tag2"));
-		budget.getTags().add(new BudgetTagEntity("Tag3"));
-		budget.setImportKey("budget123");
-		return budget;
-	}
+    private BudgetEntity createBudgetEntity() {
+        BudgetEntity budget = new BudgetEntity();
+        budget.setId(1L);
+        budget.setTotal(MoneyUtil.createMoneyFromCents(100000));
+        budget.setName("Budget 123");
+        budget.getTags().add(new BudgetTagEntity("Tag1"));
+        budget.getTags().add(new BudgetTagEntity("Tag2"));
+        budget.getTags().add(new BudgetTagEntity("Tag3"));
+        budget.setImportKey("budget123");
+        return budget;
+    }
 
-	private EditBudgetData createBudgetEditEntity() {
-		EditBudgetData data = new EditBudgetData();
-		data.setId(1L);
-		data.setImportKey("budget123");
-		data.setTags(Arrays.asList("1", "2"));
-		data.setTitle("title");
-		data.setTotal(MoneyUtil.createMoneyFromCents(123));
-		return data;
-	}
+    private EditBudgetData createBudgetEditEntity() {
+        EditBudgetData data = new EditBudgetData();
+        data.setId(1L);
+        data.setImportKey("budget123");
+        data.setTags(Arrays.asList("1", "2"));
+        data.setTitle("title");
+        data.setTotal(MoneyUtil.createMoneyFromCents(123));
+        return data;
+    }
 
-	private EditBudgetData getEditBudgetEntity() {
-		EditBudgetData data = new EditBudgetData();
-		data.setId(1L);
-		data.setImportKey("import");
-		data.setTags(Arrays.asList("1", "2"));
-		data.setTitle("title");
-		data.setTotal(MoneyUtil.createMoneyFromCents(123));
-		return data;
-	}
+    private EditBudgetData getEditBudgetEntity() {
+        EditBudgetData data = new EditBudgetData();
+        data.setId(1L);
+        data.setImportKey("import");
+        data.setTags(Arrays.asList("1", "2"));
+        data.setTitle("title");
+        data.setTotal(MoneyUtil.createMoneyFromCents(123));
+        return data;
+    }
 }

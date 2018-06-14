@@ -7,25 +7,25 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.service.person.PersonDetailData;
 import org.wickedsource.budgeteer.service.person.PersonService;
 
-public class PersonHighlightsModel extends LoadableDetachableModel<PersonDetailData>
-		implements IObjectClassAwareModel<PersonDetailData> {
+public class PersonHighlightsModel extends LoadableDetachableModel<PersonDetailData> implements IObjectClassAwareModel<PersonDetailData> {
 
-	@SpringBean private PersonService service;
+    @SpringBean
+    private PersonService service;
 
-	private long personId;
+    private long personId;
 
-	public PersonHighlightsModel(long personId) {
-		Injector.get().inject(this);
-		this.personId = personId;
-	}
+    public PersonHighlightsModel(long personId) {
+        Injector.get().inject(this);
+        this.personId = personId;
+    }
 
-	@Override
-	protected PersonDetailData load() {
-		return service.loadPersonDetailData(personId);
-	}
+    @Override
+    protected PersonDetailData load() {
+        return service.loadPersonDetailData(personId);
+    }
 
-	@Override
-	public Class getObjectClass() {
-		return PersonDetailData.class;
-	}
+    @Override
+    public Class getObjectClass() {
+        return PersonDetailData.class;
+    }
 }

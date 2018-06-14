@@ -5,8 +5,8 @@ import org.wickedsource.budgeteer.web.BudgeteerSession;
 
 public class UsernameModel extends AbstractReadOnlyModel<String> {
 
-	@Override
-	public String getObject() {
-		return BudgeteerSession.get().getLoggedInUser().getName();
-	}
+    @Override
+    public String getObject() {
+        return BudgeteerSession.get().getLoggedInUser().getName();
+    }
 }

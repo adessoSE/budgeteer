@@ -1,10 +1,5 @@
 package org.wickedsource.budgeteer.web.pages.budgets.overview.table;
 
-import static org.wicketstuff.lazymodel.LazyModel.from;
-import static org.wicketstuff.lazymodel.LazyModel.model;
-
-import java.util.List;
-
 import org.apache.wicket.event.IEvent;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
@@ -33,183 +28,153 @@ import org.wickedsource.budgeteer.web.pages.budgets.overview.BudgetsOverviewPage
 import org.wickedsource.budgeteer.web.pages.budgets.overview.table.progressbar.ProgressBar;
 import org.wickedsource.budgeteer.web.pages.contract.details.ContractDetailsPage;
 
+import java.util.List;
+
+import static org.wicketstuff.lazymodel.LazyModel.from;
+import static org.wicketstuff.lazymodel.LazyModel.model;
+
 public class BudgetOverviewTable extends Panel {
 
-	@SpringBean private ContractService contractService;
+    @SpringBean
+    private ContractService contractService;
 
-	private final BreadcrumbsModel breadcrumbsModel;
+    private final BreadcrumbsModel breadcrumbsModel;
 
-	public BudgetOverviewTable(
-			String id, IModel<List<BudgetDetailData>> model, BreadcrumbsModel breadcrumbsModel) {
-		super(id, model);
-		this.breadcrumbsModel = breadcrumbsModel;
-		WebMarkupContainer table = new WebMarkupContainer("table");
-		table.add(new DataTableBehavior(DataTableBehavior.getRecommendedOptions()));
+    public BudgetOverviewTable(String id, IModel<List<BudgetDetailData>> model, BreadcrumbsModel breadcrumbsModel) {
+        super(id, model);
+        this.breadcrumbsModel = breadcrumbsModel;
+        WebMarkupContainer table = new WebMarkupContainer("table");
+        table.add(new DataTableBehavior(DataTableBehavior.getRecommendedOptions()));
 
-		createNetGrossOverviewLabels(table);
+        createNetGrossOverviewLabels(table);
 
-		table.add(createBudgetList("budgetList", model));
-		addTableSummaryLabels(table, model);
+        table.add(createBudgetList("budgetList", model));
+        addTableSummaryLabels(table, model);
 
-		add(table);
-	}
+        add(table);
+    }
 
-	private void addTableSummaryLabels(
-			WebMarkupContainer table, IModel<List<BudgetDetailData>> model) {
+    private void addTableSummaryLabels(WebMarkupContainer table, IModel<List<BudgetDetailData>> model) {
 
-		IModel<BudgetDetailData> totalModel = new TotalBudgetDetailsModel(model);
-		table.add(new Label("totalLastUpdated", model(from(totalModel).getLastUpdated())));
+        IModel<BudgetDetailData> totalModel = new TotalBudgetDetailsModel(model);
+        table.add(new Label("totalLastUpdated", model(from(totalModel).getLastUpdated())));
 
-		table.add(
-				new MoneyLabel(
-						"totalAmount",
-						new TaxBudgetUnitMoneyModel(
-								new BudgetUnitMoneyModel(model(from(totalModel).getTotal())),
-								new BudgetUnitMoneyModel(model(from(totalModel).getTotal_gross())))));
-		table.add(
-				new MoneyLabel(
-						"totalSpent",
-						new TaxBudgetUnitMoneyModel(
-								new BudgetUnitMoneyModel(model(from(totalModel).getSpent())),
-								new BudgetUnitMoneyModel(model(from(totalModel).getSpent_gross())))));
-		table.add(
-				new MoneyLabel(
-						"totalRemaining",
-						new TaxBudgetUnitMoneyModel(
-								new BudgetUnitMoneyModel(model(from(totalModel).getRemaining())),
-								new BudgetUnitMoneyModel(model(from(totalModel).getRemaining_gross())))));
-		table.add(
-				new MoneyLabel(
-						"totalUnplanned",
-						new TaxBudgetUnitMoneyModel(
-								new BudgetUnitMoneyModel(model(from(totalModel).getUnplanned())),
-								new BudgetUnitMoneyModel(model(from(totalModel).getUnplanned_gross())))));
+        table.add(new MoneyLabel("totalAmount",
+                new TaxBudgetUnitMoneyModel(
+                        new BudgetUnitMoneyModel(model(from(totalModel).getTotal())),
+                        new BudgetUnitMoneyModel(model(from(totalModel).getTotal_gross()))
+                )));
+        table.add(new MoneyLabel("totalSpent",
+                new TaxBudgetUnitMoneyModel(
+                        new BudgetUnitMoneyModel(model(from(totalModel).getSpent())),
+                        new BudgetUnitMoneyModel(model(from(totalModel).getSpent_gross()))
+                )));
+        table.add(new MoneyLabel("totalRemaining",
+                new TaxBudgetUnitMoneyModel(
+                        new BudgetUnitMoneyModel(model(from(totalModel).getRemaining())),
+                        new BudgetUnitMoneyModel(model(from(totalModel).getRemaining_gross()))
+                )));
+        table.add(new MoneyLabel("totalUnplanned",
+                new TaxBudgetUnitMoneyModel(
+                        new BudgetUnitMoneyModel(model(from(totalModel).getUnplanned())),
+                        new BudgetUnitMoneyModel(model(from(totalModel).getUnplanned_gross()))
+                )));
 
-		table.add(new ProgressBar("totalProgressBar", model(from(totalModel).getProgressInPercent())));
-	}
+        table.add(new ProgressBar("totalProgressBar", model(from(totalModel).getProgressInPercent())));
+    }
 
-	@Override
-	public void onEvent(IEvent<?> event) {
-		super.onEvent(event);
-		if (event.getPayload() instanceof BudgetTagFilter) {
-			BudgetTagFilter filter = (BudgetTagFilter) event.getPayload();
-			FilteredBudgetModel model = (FilteredBudgetModel) getDefaultModel();
-			model.setFilter(model(from(filter)));
-		}
-	}
+    @Override
+    public void onEvent(IEvent<?> event) {
+        super.onEvent(event);
+        if (event.getPayload() instanceof BudgetTagFilter) {
+            BudgetTagFilter filter = (BudgetTagFilter) event.getPayload();
+            FilteredBudgetModel model = (FilteredBudgetModel) getDefaultModel();
+            model.setFilter(model(from(filter)));
+        }
+    }
 
-	private ListView<BudgetDetailData> createBudgetList(
-			String id, IModel<List<BudgetDetailData>> model) {
-		return new ListView<BudgetDetailData>(id, model) {
-			@Override
-			protected void populateItem(final ListItem<BudgetDetailData> item) {
-				BookmarkablePageLink link =
-						new BookmarkablePageLink(
-								"detailLink",
-								BudgetDetailsPage.class,
-								BudgetDetailsPage.createParameters(item.getModelObject().getId()));
-				Label linkTitle = new Label("detailLinkTitle", model(from(item.getModel()).getName()));
-				link.add(linkTitle);
-				item.add(link);
-				item.add(new Label("lastUpdated", model(from(item.getModel()).getLastUpdated())));
-				Link clink =
-						new Link("contractLink") {
-							@Override
-							public void onClick() {
-								WebPage page =
-										new ContractDetailsPage(
-												ContractDetailsPage.createParameters(
-														item.getModelObject().getContractId())) {
-											@Override
-											protected BreadcrumbsModel getBreadcrumbsModel() {
-												BreadcrumbsModel m = breadcrumbsModel;
-												m.addBreadcrumb(
-														ContractDetailsPage.class,
-														ContractDetailsPage.createParameters(
-																item.getModelObject().getContractId()));
-												return m;
-											}
-										};
-								setResponsePage(page);
-							}
-						};
-				Label clinkTitle =
-						new Label("contractTitle", model(from(item.getModel()).getContractName()));
-				clink.add(clinkTitle);
-				item.add(clink);
+    private ListView<BudgetDetailData> createBudgetList(String id, IModel<List<BudgetDetailData>> model) {
+        return new ListView<BudgetDetailData>(id, model) {
+            @Override
+            protected void populateItem(final ListItem<BudgetDetailData> item) {
+                BookmarkablePageLink link = new BookmarkablePageLink("detailLink", BudgetDetailsPage.class,
+                        BudgetDetailsPage.createParameters(item.getModelObject().getId()));
+                Label linkTitle = new Label("detailLinkTitle", model(from(item.getModel()).getName()));
+                link.add(linkTitle);
+                item.add(link);
+                item.add(new Label("lastUpdated", model(from(item.getModel()).getLastUpdated())));
+                Link clink =  new Link("contractLink") {
+                    @Override
+                    public void onClick() {
+                        WebPage page = new ContractDetailsPage(ContractDetailsPage.createParameters(item.getModelObject().getContractId())){
+                            @Override
+                            protected BreadcrumbsModel getBreadcrumbsModel() {
+                                BreadcrumbsModel m = breadcrumbsModel;
+                                m.addBreadcrumb(ContractDetailsPage.class,
+                                        ContractDetailsPage.createParameters(item.getModelObject().getContractId()));
+                                return m;
+                            }
+                        };
+                        setResponsePage(page);
+                    }
+                };
+                Label clinkTitle = new Label("contractTitle",model(from(item.getModel()).getContractName()));
+                clink.add(clinkTitle);
+                item.add(clink);
 
-				createBudgetListEntry(item);
+                createBudgetListEntry(item);
 
-				item.add(
-						new ProgressBar("progressBar", model(from(item.getModel()).getProgressInPercent())));
-				Link editPersonLink =
-						new Link("editPage") {
-							@Override
-							public void onClick() {
-								WebPage page =
-										new EditBudgetPage(
-												EditBudgetPage.createParameters(item.getModelObject().getId()),
-												BudgetsOverviewPage.class,
-												null);
-								setResponsePage(page);
-							}
-						};
-				item.add(editPersonLink);
-			}
+                item.add(new ProgressBar("progressBar", model(from(item.getModel()).getProgressInPercent())));
+                Link editPersonLink = new Link("editPage") {
+                    @Override
+                    public void onClick() {
+                        WebPage page = new EditBudgetPage(EditBudgetPage.createParameters(
+                                item.getModelObject().getId()), BudgetsOverviewPage.class, null);
+                        setResponsePage(page);
+                    }
+                };
+                item.add(editPersonLink);
+            }
 
-			@Override
-			protected ListItem<BudgetDetailData> newItem(int index, IModel<BudgetDetailData> itemModel) {
-				return super.newItem(
-						index,
-						new ClassAwareWrappingModel<BudgetDetailData>(itemModel, BudgetDetailData.class));
-			}
-		};
-	}
+            @Override
+            protected ListItem<BudgetDetailData> newItem(int index, IModel<BudgetDetailData> itemModel) {
+                return super.newItem(index,
+                        new ClassAwareWrappingModel<BudgetDetailData>(itemModel, BudgetDetailData.class));
+            }
+        };
+    }
 
-	private void createBudgetListEntry(ListItem<BudgetDetailData> item) {
-		item.add(
-				new MoneyLabel(
-						"amount",
-						new TaxBudgetUnitMoneyModel(
-								new BudgetUnitMoneyModel(model(from(item.getModel()).getTotal())),
-								new BudgetUnitMoneyModel(model(from(item.getModel()).getTotal_gross())))));
-		item.add(
-				new MoneyLabel(
-						"spent",
-						new TaxBudgetUnitMoneyModel(
-								new BudgetUnitMoneyModel(model(from(item.getModel()).getSpent())),
-								new BudgetUnitMoneyModel(model(from(item.getModel()).getSpent_gross())))));
-		item.add(
-				new MoneyLabel(
-						"remaining",
-						new TaxBudgetUnitMoneyModel(
-								new BudgetUnitMoneyModel(model(from(item.getModel()).getRemaining())),
-								new BudgetUnitMoneyModel(model(from(item.getModel()).getRemaining_gross())))));
-		item.add(
-				new MoneyLabel(
-						"unplanned",
-						new TaxBudgetUnitMoneyModel(
-								new BudgetUnitMoneyModel(model(from(item.getModel()).getUnplanned())),
-								new BudgetUnitMoneyModel(model(from(item.getModel()).getUnplanned_gross())))));
-	}
+    private void createBudgetListEntry(ListItem<BudgetDetailData> item) {
+        item.add(new MoneyLabel("amount",
+                new TaxBudgetUnitMoneyModel(
+                        new BudgetUnitMoneyModel(model(from(item.getModel()).getTotal())),
+                        new BudgetUnitMoneyModel(model(from(item.getModel()).getTotal_gross()))
+                )));
+        item.add(new MoneyLabel("spent",
+                new TaxBudgetUnitMoneyModel(
+                        new BudgetUnitMoneyModel(model(from(item.getModel()).getSpent())),
+                        new BudgetUnitMoneyModel(model(from(item.getModel()).getSpent_gross()))
+                )));
+        item.add(new MoneyLabel("remaining",
+                new TaxBudgetUnitMoneyModel(
+                        new BudgetUnitMoneyModel(model(from(item.getModel()).getRemaining())),
+                        new BudgetUnitMoneyModel(model(from(item.getModel()).getRemaining_gross()))
+                )));
+        item.add(new MoneyLabel("unplanned",
+                new TaxBudgetUnitMoneyModel(
+                        new BudgetUnitMoneyModel(model(from(item.getModel()).getUnplanned())),
+                        new BudgetUnitMoneyModel(model(from(item.getModel()).getUnplanned_gross()))
+                )));
+    }
 
-	private void createNetGrossOverviewLabels(WebMarkupContainer table) {
-		table.add(
-				new Label(
-						"totalLabel",
-						new TaxLabelModel(new StringResourceModel("overview.table.budget.totalLabel", this))));
-		table.add(
-				new Label(
-						"leftLabel",
-						new TaxLabelModel(new StringResourceModel("overview.table.budget.leftLabel", this))));
-		table.add(
-				new Label(
-						"spentLabel",
-						new TaxLabelModel(new StringResourceModel("overview.table.budget.spentLabel", this))));
-		table.add(
-				new Label(
-						"unplannedLabel",
-						new TaxLabelModel(
-								new StringResourceModel("overview.table.budget.unplannedLabel", this))));
-	}
+    private void createNetGrossOverviewLabels(WebMarkupContainer table) {
+        table.add(new Label("totalLabel", new TaxLabelModel(
+                new StringResourceModel("overview.table.budget.totalLabel", this))));
+        table.add(new Label("leftLabel", new TaxLabelModel(
+                new StringResourceModel("overview.table.budget.leftLabel", this))));
+        table.add(new Label("spentLabel", new TaxLabelModel(
+                new StringResourceModel("overview.table.budget.spentLabel", this))));
+        table.add(new Label("unplannedLabel", new TaxLabelModel(
+                new StringResourceModel("overview.table.budget.unplannedLabel", this))));
+    }
 }

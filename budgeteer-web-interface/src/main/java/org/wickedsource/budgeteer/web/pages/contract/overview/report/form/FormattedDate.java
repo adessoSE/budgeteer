@@ -7,7 +7,7 @@ import java.util.Date;
 public class FormattedDate implements Serializable {
 	private String label;
 	private Date date;
-
+	
 	public FormattedDate(Date date, SimpleDateFormat format) {
 		this.label = format.format(date);
 		this.date = date;
@@ -28,4 +28,6 @@ public class FormattedDate implements Serializable {
 	public void setDate(Date date) {
 		this.date = date;
 	}
+	
+	
 }

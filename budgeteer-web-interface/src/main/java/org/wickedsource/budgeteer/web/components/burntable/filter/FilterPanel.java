@@ -1,11 +1,5 @@
 package org.wickedsource.budgeteer.web.components.burntable.filter;
 
-import static org.wicketstuff.lazymodel.LazyModel.from;
-import static org.wicketstuff.lazymodel.LazyModel.model;
-
-import java.util.HashMap;
-import java.util.List;
-
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
@@ -25,129 +19,123 @@ import org.wickedsource.budgeteer.web.components.multiselect.MultiselectBehavior
 import org.wickedsource.budgeteer.web.components.person.PersonBaseDataChoiceRenderer;
 import org.wicketstuff.lazymodel.LazyModel;
 
+import java.util.HashMap;
+import java.util.List;
+
+import static org.wicketstuff.lazymodel.LazyModel.from;
+import static org.wicketstuff.lazymodel.LazyModel.model;
+
 public class FilterPanel extends Panel {
 
-	private boolean personFilterEnabled = true;
+    private boolean personFilterEnabled = true;
 
-	private boolean budgetFilterEnabled = true;
+    private boolean budgetFilterEnabled = true;
 
-	private boolean daterangeFilterEnabled = true;
+    private boolean daterangeFilterEnabled = true;
 
-	@SpringBean private PersonService personService;
+    @SpringBean
+    private PersonService personService;
 
-	@SpringBean private BudgetService budgetService;
+    @SpringBean
+    private BudgetService budgetService;
 
-	@SuppressWarnings("unchecked")
-	public FilterPanel(String id, WorkRecordFilter filter) {
-		super(id, model(from(filter)));
-		IModel<WorkRecordFilter> model = (IModel<WorkRecordFilter>) getDefaultModel();
-		Form<WorkRecordFilter> form =
-				new Form<WorkRecordFilter>("filterForm", model) {
-					@Override
-					protected void onSubmit() {
-						send(getPage(), Broadcast.BREADTH, getModel().getObject());
-					}
-				};
-		form.add(createPersonFilter("personFilterContainer", form));
-		form.add(createBudgetFilter("budgetFilterContainer", form));
-		form.add(createDaterangeFilter("daterangeFilterContainer", form));
-		add(form);
-	}
+    @SuppressWarnings("unchecked")
+    public FilterPanel(String id, WorkRecordFilter filter) {
+        super(id, model(from(filter)));
+        IModel<WorkRecordFilter> model = (IModel<WorkRecordFilter>) getDefaultModel();
+        Form<WorkRecordFilter> form = new Form<WorkRecordFilter>("filterForm", model) {
+            @Override
+            protected void onSubmit() {
+                send(getPage(), Broadcast.BREADTH, getModel().getObject());
+            }
+        };
+        form.add(createPersonFilter("personFilterContainer", form));
+        form.add(createBudgetFilter("budgetFilterContainer", form));
+        form.add(createDaterangeFilter("daterangeFilterContainer", form));
+        add(form);
+    }
 
-	private WebMarkupContainer createPersonFilter(String id, Form<WorkRecordFilter> form) {
-		WebMarkupContainer container =
-				new WebMarkupContainer(id) {
-					@Override
-					public boolean isVisible() {
-						return isPersonFilterEnabled();
-					}
-				};
-		container.setVisible(isPersonFilterEnabled());
-		LazyModel<List<PersonBaseData>> chosenPersons =
-				model(from(form.getModelObject().getPersonList()));
-		List<PersonBaseData> possiblePersonsFromFilter = form.getModelObject().getPossiblePersons();
-		List<PersonBaseData> possiblePersons =
-				possiblePersonsFromFilter.isEmpty()
-						? personService.loadPeopleBaseData(BudgeteerSession.get().getProjectId())
-						: possiblePersonsFromFilter;
-		ListMultipleChoice<PersonBaseData> selectedPersons =
-				new ListMultipleChoice<PersonBaseData>(
-						"personSelect", chosenPersons, possiblePersons, new PersonBaseDataChoiceRenderer());
+    private WebMarkupContainer createPersonFilter(String id, Form<WorkRecordFilter> form) {
+        WebMarkupContainer container = new WebMarkupContainer(id) {
+            @Override
+            public boolean isVisible() {
+                return isPersonFilterEnabled();
+            }
+        };
+        container.setVisible(isPersonFilterEnabled());
+        LazyModel<List<PersonBaseData>> chosenPersons = model(from(form.getModelObject().getPersonList()));
+        List<PersonBaseData> possiblePersonsFromFilter = form.getModelObject().getPossiblePersons();
+        List<PersonBaseData> possiblePersons = possiblePersonsFromFilter.isEmpty() ?  personService.loadPeopleBaseData(BudgeteerSession.get().getProjectId()) : possiblePersonsFromFilter;
+        ListMultipleChoice<PersonBaseData> selectedPersons =
+                new ListMultipleChoice<PersonBaseData>("personSelect", chosenPersons,
+                        possiblePersons, new PersonBaseDataChoiceRenderer());
 
-		selectedPersons.setRequired(false);
-		HashMap<String, String> options = MultiselectBehavior.getRecommendedOptions();
-		options.put("buttonWidth", "'250px'");
-		options.remove("buttonClass");
-		selectedPersons.add(new MultiselectBehavior(options));
-		container.add(selectedPersons);
-		return container;
-	}
 
-	private WebMarkupContainer createBudgetFilter(String id, Form<WorkRecordFilter> form) {
-		WebMarkupContainer container =
-				new WebMarkupContainer(id) {
-					@Override
-					public boolean isVisible() {
-						return isBudgetFilterEnabled();
-					}
-				};
-		container.setVisible(isBudgetFilterEnabled());
-		List<BudgetBaseData> possibleBudgetsFromFilter = form.getModelObject().getPossibleBudgets();
-		List<BudgetBaseData> possibleBudgets =
-				possibleBudgetsFromFilter.isEmpty()
-						? budgetService.loadBudgetBaseDataForProject(BudgeteerSession.get().getProjectId())
-						: possibleBudgetsFromFilter;
-		LazyModel<List<BudgetBaseData>> chosenBudgets =
-				model(from(form.getModelObject().getBudgetList()));
-		ListMultipleChoice<BudgetBaseData> selectedBudgets =
-				new ListMultipleChoice<>(
-						"budgetSelect", chosenBudgets, possibleBudgets, new BudgetBaseDataChoiceRenderer());
+        selectedPersons.setRequired(false);
+        HashMap<String, String> options = MultiselectBehavior.getRecommendedOptions();
+        options.put("buttonWidth","'250px'");
+        options.remove("buttonClass");
+        selectedPersons.add(new MultiselectBehavior(options));
+        container.add(selectedPersons);
+        return container;
+    }
 
-		HashMap<String, String> options = MultiselectBehavior.getRecommendedOptions();
-		options.put("buttonWidth", "'250px'");
-		options.remove("buttonClass");
-		selectedBudgets.add(new MultiselectBehavior(options));
-		selectedBudgets.setRequired(false);
-		container.add(selectedBudgets);
-		return container;
-	}
+    private WebMarkupContainer createBudgetFilter(String id, Form<WorkRecordFilter> form) {
+        WebMarkupContainer container = new WebMarkupContainer(id) {
+            @Override
+            public boolean isVisible() {
+                return isBudgetFilterEnabled();
+            }
+        };
+        container.setVisible(isBudgetFilterEnabled());
+        List<BudgetBaseData> possibleBudgetsFromFilter = form.getModelObject().getPossibleBudgets();
+        List<BudgetBaseData> possibleBudgets = possibleBudgetsFromFilter.isEmpty() ? budgetService.loadBudgetBaseDataForProject(BudgeteerSession.get().getProjectId()) : possibleBudgetsFromFilter;
+        LazyModel<List<BudgetBaseData>> chosenBudgets = model(from(form.getModelObject().getBudgetList()));
+        ListMultipleChoice<BudgetBaseData> selectedBudgets = new ListMultipleChoice<>("budgetSelect", chosenBudgets, possibleBudgets, new BudgetBaseDataChoiceRenderer());
 
-	private WebMarkupContainer createDaterangeFilter(String id, Form<WorkRecordFilter> form) {
-		WebMarkupContainer container =
-				new WebMarkupContainer(id) {
-					@Override
-					public boolean isVisible() {
-						return isDaterangeFilterEnabled();
-					}
-				};
-		DateRangeInputField field =
-				new DateRangeInputField("daterangeInput", model(from(form.getModel()).getDateRange()));
-		field.setRequired(false);
-		container.add(field);
-		return container;
-	}
+        HashMap<String, String> options = MultiselectBehavior.getRecommendedOptions();
+        options.put("buttonWidth","'250px'");
+        options.remove("buttonClass");
+        selectedBudgets.add(new MultiselectBehavior(options));
+        selectedBudgets.setRequired(false);
+        container.add(selectedBudgets);
+        return container;
+    }
 
-	public boolean isPersonFilterEnabled() {
-		return personFilterEnabled;
-	}
+    private WebMarkupContainer createDaterangeFilter(String id, Form<WorkRecordFilter> form) {
+        WebMarkupContainer container = new WebMarkupContainer(id) {
+            @Override
+            public boolean isVisible() {
+                return isDaterangeFilterEnabled();
+            }
+        };
+        DateRangeInputField field = new DateRangeInputField("daterangeInput", model(from(form.getModel()).getDateRange()));
+        field.setRequired(false);
+        container.add(field);
+        return container;
+    }
 
-	public void setPersonFilterEnabled(boolean personFilterEnabled) {
-		this.personFilterEnabled = personFilterEnabled;
-	}
+    public boolean isPersonFilterEnabled() {
+        return personFilterEnabled;
+    }
 
-	public boolean isBudgetFilterEnabled() {
-		return budgetFilterEnabled;
-	}
+    public void setPersonFilterEnabled(boolean personFilterEnabled) {
+        this.personFilterEnabled = personFilterEnabled;
+    }
 
-	public void setBudgetFilterEnabled(boolean budgetFilterEnabled) {
-		this.budgetFilterEnabled = budgetFilterEnabled;
-	}
+    public boolean isBudgetFilterEnabled() {
+        return budgetFilterEnabled;
+    }
 
-	public boolean isDaterangeFilterEnabled() {
-		return daterangeFilterEnabled;
-	}
+    public void setBudgetFilterEnabled(boolean budgetFilterEnabled) {
+        this.budgetFilterEnabled = budgetFilterEnabled;
+    }
 
-	public void setDaterangeFilterEnabled(boolean daterangeFilterEnabled) {
-		this.daterangeFilterEnabled = daterangeFilterEnabled;
-	}
+    public boolean isDaterangeFilterEnabled() {
+        return daterangeFilterEnabled;
+    }
+
+    public void setDaterangeFilterEnabled(boolean daterangeFilterEnabled) {
+        this.daterangeFilterEnabled = daterangeFilterEnabled;
+    }
 }

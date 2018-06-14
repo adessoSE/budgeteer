@@ -19,39 +19,36 @@ import org.wickedsource.budgeteer.web.pages.invoice.edit.EditInvoicePage;
 @Mount("invoices/details/${id}")
 public class InvoiceDetailsPage extends BasePage {
 
-	@SpringBean private InvoiceService invoiceService;
+    @SpringBean
+    private InvoiceService invoiceService;
 
-	public InvoiceDetailsPage(PageParameters parameters) {
-		super(parameters);
-		add(new InvoiceHighlightsPanel("highlightsPanel", new InvoiceDetailModel(getParameterId())));
-		add(
-				new Link("editLink") {
-					@Override
-					public void onClick() {
-						WebPage page =
-								new EditInvoicePage(
-										EditInvoicePage.createEditInvoiceParameters(getParameterId()),
-										InvoiceDetailsPage.class,
-										getPageParameters());
-						setResponsePage(page);
-					}
-				});
-		Form deleteForm =
-				new ConfirmationForm("deleteForm", this, "confirmation.delete") {
-					@Override
-					public void onSubmit() {
-						invoiceService.deleteInvoice(getParameterId());
-						setResponsePage(DashboardPage.class);
-					}
-				};
-		deleteForm.add(new SubmitLink("deleteLink"));
-		add(deleteForm);
-	}
+    public InvoiceDetailsPage(PageParameters parameters) {
+        super(parameters);
+        add(new InvoiceHighlightsPanel("highlightsPanel", new InvoiceDetailModel(getParameterId())));
+        add(new Link("editLink") {
+            @Override
+            public void onClick() {
+                WebPage page = new EditInvoicePage(EditInvoicePage.createEditInvoiceParameters(getParameterId()), InvoiceDetailsPage.class, getPageParameters());
+                setResponsePage(page);
+            }
+        });
+        Form deleteForm = new ConfirmationForm("deleteForm", this, "confirmation.delete") {
+            @Override
+            public void onSubmit() {
+                invoiceService.deleteInvoice(getParameterId());
+                setResponsePage(DashboardPage.class);
+            }
+        };
+        deleteForm.add(new SubmitLink("deleteLink"));
+        add(deleteForm);
+    }
 
-	@Override
-	protected BreadcrumbsModel getBreadcrumbsModel() {
-		BreadcrumbsModel model = new BreadcrumbsModel(DashboardPage.class, ContractDetailsPage.class);
-		model.addBreadcrumb(InvoiceDetailsPage.class, getPageParameters());
-		return model;
-	}
+
+    @Override
+    protected BreadcrumbsModel getBreadcrumbsModel() {
+        BreadcrumbsModel model = new BreadcrumbsModel(DashboardPage.class, ContractDetailsPage.class);
+        model.addBreadcrumb(InvoiceDetailsPage.class, getPageParameters());
+        return model;
+    }
+
 }

@@ -7,10 +7,11 @@ import org.apache.wicket.Component;
  */
 public class NotificationMessageAnchor extends Component {
 
-	public NotificationMessageAnchor() {
-		super("dummy");
-	}
+    public NotificationMessageAnchor() {
+        super("dummy");
+    }
 
-	@Override
-	protected void onRender() {}
+    @Override
+    protected void onRender() {
+    }
 }

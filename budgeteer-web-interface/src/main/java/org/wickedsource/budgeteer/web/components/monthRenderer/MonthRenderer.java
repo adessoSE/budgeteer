@@ -5,13 +5,13 @@ import org.wickedsource.budgeteer.web.pages.base.AbstractChoiceRenderer;
 import org.wickedsource.budgeteer.web.pages.base.basepage.BasePage;
 
 public class MonthRenderer extends AbstractChoiceRenderer<Integer> {
-	@Override
-	public Object getDisplayValue(Integer object) {
-		return PropertyLoader.getProperty(BasePage.class, "monthRenderer.name." + object);
-	}
+    @Override
+    public Object getDisplayValue(Integer object) {
+        return PropertyLoader.getProperty(BasePage.class, "monthRenderer.name." + object);
+    }
 
-	@Override
-	public String getIdValue(Integer object, int index) {
-		return "" + index;
-	}
+    @Override
+    public String getIdValue(Integer object, int index) {
+        return "" + index;
+    }
 }
