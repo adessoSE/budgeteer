@@ -63,9 +63,14 @@ public class ProjectService {
      * @param projectName name of the project.
      * @return the base data of the newly create project.
      */
-    public ProjectBaseData createProject(String projectName, long initialUserId) {
+    public ProjectBaseData createProject(String projectName, long initialUserId) throws Exception {
         UserEntity user = userRepository.findOne(initialUserId);
         ProjectEntity project = new ProjectEntity();
+        for(ProjectEntity e : projectRepository.findAll()){
+            if(e.getName().equals(projectName)){
+                throw new Exception("A");
+            }
+        }
         project.setName(projectName);
         project.getAuthorizedUsers().add(user);
         ProjectEntity savedProject = projectRepository.save(project);

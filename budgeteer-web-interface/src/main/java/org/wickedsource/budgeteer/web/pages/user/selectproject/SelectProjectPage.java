@@ -50,9 +50,14 @@ public class SelectProjectPage extends DialogPageWithBacklink {
         Form<String> form = new Form<String>(id, new Model<String>("")) {
             @Override
             protected void onSubmit() {
-                ProjectBaseData project = projectService.createProject(getModelObject(), BudgeteerSession.get().getLoggedInUser().getId());
-                BudgeteerSession.get().setProjectId(project.getId());
-                setResponsePage(DashboardPage.class);
+                try {
+                    ProjectBaseData project = projectService.createProject(getModelObject(), BudgeteerSession.get().getLoggedInUser().getId());
+                    BudgeteerSession.get().setProjectId(project.getId());
+                    setResponsePage(DashboardPage.class);
+                }catch (Exception e){
+                    this.error("Project name already in use");
+                }
+
             }
         };
         form.add(new RequiredTextField<String>("projectName", form.getModel()));
