@@ -68,7 +68,7 @@ public class ProjectService {
         ProjectEntity project = new ProjectEntity();
         for(ProjectEntity e : projectRepository.findAll()){
             if(e.getName().equals(projectName)){
-                throw new Exception("A");
+                throw new ProjectNameAlreadyInUseException();
             }
         }
         project.setName(projectName);

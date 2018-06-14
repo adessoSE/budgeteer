@@ -55,7 +55,7 @@ public class SelectProjectPage extends DialogPageWithBacklink {
                     BudgeteerSession.get().setProjectId(project.getId());
                     setResponsePage(DashboardPage.class);
                 }catch (Exception e){
-                    this.error("Project name already in use");
+                    this.error(getString("newProjectForm.projectName.AlreadyInUse"));
                 }
 
             }
