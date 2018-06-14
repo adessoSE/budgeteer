@@ -155,7 +155,7 @@ public class BudgetOverviewTable extends Panel {
                         new BudgetUnitMoneyModel(model(from(item.getModel()).getSpent())),
                         new BudgetUnitMoneyModel(model(from(item.getModel()).getSpent_gross()))
                 )));
-        item.add(new Label("remaining",
+        item.add(new MoneyLabel("remaining",
                 new TaxBudgetUnitMoneyModel(
                         new BudgetUnitMoneyModel(model(from(item.getModel()).getRemaining())),
                         new BudgetUnitMoneyModel(model(from(item.getModel()).getRemaining_gross()))
