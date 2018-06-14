@@ -13,6 +13,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.service.project.ProjectBaseData;
+import org.wickedsource.budgeteer.service.project.ProjectNameAlreadyInUseException;
 import org.wickedsource.budgeteer.service.project.ProjectService;
 import org.wickedsource.budgeteer.service.user.UserService;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
@@ -50,9 +51,14 @@ public class SelectProjectPage extends DialogPageWithBacklink {
         Form<String> form = new Form<String>(id, new Model<String>("")) {
             @Override
             protected void onSubmit() {
-                ProjectBaseData project = projectService.createProject(getModelObject(), BudgeteerSession.get().getLoggedInUser().getId());
-                BudgeteerSession.get().setProjectId(project.getId());
-                setResponsePage(DashboardPage.class);
+                try {
+                    ProjectBaseData project = projectService.createProject(getModelObject(), BudgeteerSession.get().getLoggedInUser().getId());
+                    BudgeteerSession.get().setProjectId(project.getId());
+                    setResponsePage(DashboardPage.class);
+                }catch (ProjectNameAlreadyInUseException exception){
+                    this.error(getString("newProjectForm.projectName.AlreadyInUse"));
+                }
+
             }
         };
         form.add(new RequiredTextField<String>("projectName", form.getModel()));
