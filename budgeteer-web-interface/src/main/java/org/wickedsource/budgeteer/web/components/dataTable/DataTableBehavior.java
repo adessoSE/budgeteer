@@ -95,7 +95,7 @@ public class DataTableBehavior extends Behavior{
         result.put("ordering", "true");
         result.put("info", "true");
         if(BudgeteerSession.get().getLocale().getLanguage().equals("de")) {
-            result.put("language", String.format("{decimal: %s, thousands: %s}", "\",\"", "\".\""));
+            result.put("language", String.format("{decimal: \"%s\", thousands: \"%s\"}", ",", "."));
         }
         return result;
     }
