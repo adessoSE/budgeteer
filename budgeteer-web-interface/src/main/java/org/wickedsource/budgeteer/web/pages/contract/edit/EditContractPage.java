@@ -1,6 +1,7 @@
 package org.wickedsource.budgeteer.web.pages.contract.edit;
 
 import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -31,6 +32,7 @@ public class EditContractPage extends DialogPageWithBacklink {
         super(backlinkPage, backlinkParameters);
         Form<ContractBaseData> form = new EditContractForm("form");
         addComponents(form);
+        add(new Label("pageTitle", "Create Contract"));
     }
 
     /**
@@ -43,6 +45,7 @@ public class EditContractPage extends DialogPageWithBacklink {
         ContractBaseData contractBaseData = service.getContractById(getContractId());
         EditContractForm form = new EditContractForm("form", model(from(contractBaseData)));
         addComponents(form);
+        add(new Label("pageTitle", "Edit Contract"));
     }
 
     private void addComponents(Form<ContractBaseData> form) {

@@ -141,7 +141,7 @@ public class BudgetOverviewTable extends Panel {
                     @Override
                     public void onClick() {
                         WebPage page = new EditBudgetPage(EditBudgetPage.createParameters(
-                                item.getModelObject().getId()), BudgetsOverviewPage.class, null);
+                                item.getModelObject().getId()), BudgetsOverviewPage.class, null, false);
                         setResponsePage(page);
                     }
                 };

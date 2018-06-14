@@ -249,9 +249,10 @@ public class BudgetService {
     /**
      * Stores the data to the given budget.
      *
-     * @param data the data to store in the database.
+     * @param data the data to store in the database
+     * @return the
      */
-    public void saveBudget(EditBudgetData data) {
+    public long saveBudget(EditBudgetData data) {
         assert data != null;
         BudgetEntity budget = new BudgetEntity();
         if (data.getId() != 0) {
@@ -273,6 +274,7 @@ public class BudgetService {
             budget.setContract(contractEntity);
         }
         budgetRepository.save(budget);
+        return budget.getId();
     }
 
     /**

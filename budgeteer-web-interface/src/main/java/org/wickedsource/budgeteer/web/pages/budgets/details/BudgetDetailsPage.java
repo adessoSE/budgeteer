@@ -95,7 +95,7 @@ public class BudgetDetailsPage extends BasePage {
         return new Link(id) {
             @Override
             public void onClick() {
-                WebPage page = new EditBudgetPage(BasePage.createParameters(getParameterId()), BudgetDetailsPage.class, getPageParameters());
+                WebPage page = new EditBudgetPage(BasePage.createParameters(getParameterId()), BudgetDetailsPage.class, getPageParameters(), false);
                 setResponsePage(page);
             }
         };
