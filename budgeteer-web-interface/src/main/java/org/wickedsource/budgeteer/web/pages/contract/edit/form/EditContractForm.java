@@ -44,17 +44,23 @@ public class EditContractForm extends Form<ContractBaseData> {
     private CustomFeedbackPanel feedbackPanel;
 
     public EditContractForm(String id){
-        super(id);
-        super.setDefaultModel(Model.of(service.getEmptyContractModel(BudgeteerSession.get().getProjectId())));
-        submitButtonTextKey = "button.save.createmode";
-        addComponents();
+        this(id, null, "button.save.createmode");
     }
 
 
     public EditContractForm(String id, IModel<ContractBaseData> model) {
-        super(id, model);
+        this(id, model, "button.save.editmode");
+    }
+
+    private EditContractForm(String id, IModel<ContractBaseData> model, String submitButtonTextKey) {
+        super(id);
+        if (model != null) {
+            super.setDefaultModel(model);
+        } else {
+            super.setDefaultModel(Model.of(service.getEmptyContractModel(BudgeteerSession.get().getProjectId())));
+        }
         Injector.get().inject(this);
-        submitButtonTextKey = "button.save.editmode";
+        this.submitButtonTextKey = submitButtonTextKey;
         addComponents();
     }
 
