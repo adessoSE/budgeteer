@@ -19,6 +19,8 @@ public class FilteredBudgetModel extends LoadableDetachableModel<List<BudgetDeta
 
     private IModel<BudgetTagFilter> filterModel;
 
+    private IModel<Long> remainingFilterModel = null;
+
     public FilteredBudgetModel(long projectId, IModel<BudgetTagFilter> filterModel) {
         Injector.get().inject(this);
         this.filterModel = filterModel;
@@ -27,10 +29,18 @@ public class FilteredBudgetModel extends LoadableDetachableModel<List<BudgetDeta
 
     @Override
     protected List<BudgetDetailData> load() {
-        return service.loadBudgetsDetailData(projectId, filterModel.getObject());
+        if(remainingFilterModel == null) {
+            return service.loadBudgetsDetailData(projectId, filterModel.getObject());
+        }else{
+            return service.loadBudgetsDetailData(projectId, filterModel.getObject(), remainingFilterModel.getObject());
+        }
     }
 
     public void setFilter(IModel<BudgetTagFilter> filterModel) {
         this.filterModel = filterModel;
+    }
+
+    public void setRemainingFilterModel(IModel<Long> remainingFilterModel){
+        this.remainingFilterModel = remainingFilterModel;
     }
 }
