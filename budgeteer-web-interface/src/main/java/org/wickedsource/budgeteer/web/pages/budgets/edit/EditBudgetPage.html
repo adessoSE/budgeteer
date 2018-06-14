@@ -1,4 +1,4 @@
-<wicket:extend xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+<wicket:extend xmlns:wicket="http://www.w3.org/1999/xhtml">
     <div class="form-box wide" id="login-box">
         <div class="header"><span wicket:id="pageTitle"></span>
             <div class="box-tools pull-right">
@@ -21,7 +21,7 @@
                 </div>
                 <div class="form-group">
                     <label for="totalInput"><wicket:message key="page.budget.total">Budget Total</wicket:message></label>
-                    <input wicket:id="total" type="number" step="any" min="0" name="name" id="totalInput" class="form-control"/>
+                    <input wicket:id="total" type="text" name="name" id="totalInput" class="form-control"/>
                     <p class="help-block"><wicket:message key="page.budget.total.hint">The total money available in this budget.</wicket:message></p>
                 </div>
                 <div class="form-group">

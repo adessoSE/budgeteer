@@ -1,5 +1,6 @@
 package org.wickedsource.budgeteer.service.budget;
 
+import org.joda.money.BigMoney;
 import org.joda.money.Money;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.components.listMultipleChoiceWithGroups.OptionGroup;
 
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Date;
@@ -76,17 +78,17 @@ public class BudgetService {
         BudgetEntity budget = budgetRepository.findOne(budgetId);
         return budgetBaseDataMapper.map(budget);
     }
-    
-    
-	private List<BudgetEntity> loadBudgetEntitys(long projectId, BudgetTagFilter filter) {
-		List<BudgetEntity> budgets;
+
+
+    private List<BudgetEntity> loadBudgetEntitys(long projectId, BudgetTagFilter filter) {
+        List<BudgetEntity> budgets;
         if (filter.getSelectedTags().isEmpty()) {
             budgets = budgetRepository.findByProjectIdOrderByNameAsc(projectId);
         } else {
             budgets = budgetRepository.findByAtLeastOneTag(projectId, filter.getSelectedTags());
         }
-		return budgets;
-	}
+        return budgets;
+    }
 
     /**
      * Loads the base data of a single budget from the database.
@@ -192,6 +194,34 @@ public class BudgetService {
             dataList.add(enrichBudgetEntity(entity));
         }
         return dataList;
+    }
+
+    /**
+     * Loads all budgets the given user has access to that match the tag and remaining filter.
+     *
+     * @param projectId ID of the project
+     * @param filter    the filter to apply when loading the budgets
+     * @param remainingFilter budgets with values above this will be included
+     * @return list of budgets that match the filter.
+     */
+    public List<BudgetDetailData> loadBudgetsDetailData(long projectId, BudgetTagFilter filter, Long remainingFilter) {
+        List<BudgetDetailData> temp = loadBudgetsDetailData(projectId, filter);
+        List<BudgetDetailData> result = new ArrayList<>();
+        if(remainingFilter == 0){
+            return temp;
+        }
+        for(BudgetDetailData e : temp){
+            if(!BudgeteerSession.get().isTaxEnabled()){
+                if(e.getRemaining().isGreaterThan(() -> BigMoney.of(e.getRemaining().getCurrencyUnit(), new BigDecimal(remainingFilter)))){
+                    result.add(e);
+                }
+            }else{
+                if(e.getRemaining_gross().isGreaterThan(() -> BigMoney.of(e.getRemaining_gross().getCurrencyUnit(), new BigDecimal(remainingFilter)))){
+                    result.add(e);
+                }
+            }
+        }
+        return result;
     }
 
     /**

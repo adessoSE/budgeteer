@@ -5,8 +5,10 @@ import org.apache.wicket.Component;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -18,8 +20,10 @@ import org.wickedsource.budgeteer.web.components.tax.TaxSwitchLabelModel;
 import org.wickedsource.budgeteer.web.pages.base.basepage.BasePage;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
 import org.wickedsource.budgeteer.web.pages.budgets.BudgetTagsModel;
+import org.wickedsource.budgeteer.web.pages.budgets.RemainingBudgetFilterModel;
 import org.wickedsource.budgeteer.web.pages.budgets.edit.EditBudgetPage;
 import org.wickedsource.budgeteer.web.pages.budgets.monthreport.multi.MultiBudgetMonthReportPage;
+import org.wickedsource.budgeteer.web.pages.budgets.overview.filter.BudgetRemainingFilterPanel;
 import org.wickedsource.budgeteer.web.pages.budgets.overview.filter.BudgetTagFilterPanel;
 import org.wickedsource.budgeteer.web.pages.budgets.overview.report.BudgetReportPage;
 import org.wickedsource.budgeteer.web.pages.budgets.overview.table.BudgetOverviewTable;
@@ -28,6 +32,7 @@ import org.wickedsource.budgeteer.web.pages.budgets.weekreport.multi.MultiBudget
 import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.wicketstuff.lazymodel.LazyModel.from;
 import static org.wicketstuff.lazymodel.LazyModel.model;
@@ -41,18 +46,20 @@ public class BudgetsOverviewPage extends BasePage {
     public BudgetsOverviewPage() {
         BudgetTagsModel tagsModel = new BudgetTagsModel(BudgeteerSession.get().getProjectId());
         if (BudgeteerSession.get().getBudgetFilter() == null) {
-            BudgetTagFilter filter = new BudgetTagFilter(new ArrayList<String>(), BudgeteerSession.get().getProjectId());
+            BudgetTagFilter filter = new BudgetTagFilter(new ArrayList<>(), BudgeteerSession.get().getProjectId());
             BudgeteerSession.get().setBudgetFilter(filter);
         }
+        add(new BudgetRemainingFilterPanel("remainingFilter", new RemainingBudgetFilterModel(BudgeteerSession.get().getProjectId())));
         add(new BudgetTagFilterPanel("tagFilter", tagsModel));
-        add(new BudgetOverviewTable("budgetTable", new FilteredBudgetModel(BudgeteerSession.get().getProjectId(), model(from(BudgeteerSession.get().getBudgetFilter()))), getBreadcrumbsModel()));
-
+        FilteredBudgetModel filteredBudgetModel = new FilteredBudgetModel(BudgeteerSession.get().getProjectId(), model(from(BudgeteerSession.get().getBudgetFilter())));
+        filteredBudgetModel.setRemainingFilterModel(model(from(BudgeteerSession.get().getRemainingBudgetFilterValue())));
+        add(new BudgetOverviewTable("budgetTable", filteredBudgetModel ,getBreadcrumbsModel()));
         add(new BookmarkablePageLink<MultiBudgetWeekReportPage>("weekReportLink", MultiBudgetWeekReportPage.class));
         add(new BookmarkablePageLink<MultiBudgetMonthReportPage>("monthReportLink", MultiBudgetMonthReportPage.class));
         add(createNewBudgetLink("createBudgetLink"));
         add(createReportLink("createReportLink"));
-
         add(createNetGrossLink("netGrossLink"));
+        add(createResetButton("resetButton"));
     }
 
 
@@ -112,6 +119,17 @@ public class BudgetsOverviewPage extends BasePage {
             BudgeteerSession.get().setTaxEnabled(false);
         }
         return link;
+    }
+
+    private Link createResetButton(String id) {
+        return new Link(id) {
+            @Override
+            public void onClick() {
+                BudgeteerSession.get().getBudgetFilter().getSelectedTags().clear();
+                BudgeteerSession.get().setRemainingBudetFilterValue(0L);
+                setResponsePage(BudgetsOverviewPage.class);
+            }
+        };
     }
 
 }
