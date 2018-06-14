@@ -63,7 +63,7 @@ public class ProjectService {
      * @param projectName name of the project.
      * @return the base data of the newly create project.
      */
-    public ProjectBaseData createProject(String projectName, long initialUserId) throws Exception {
+    public ProjectBaseData createProject(String projectName, long initialUserId) throws ProjectNameAlreadyInUseException {
         UserEntity user = userRepository.findOne(initialUserId);
         ProjectEntity project = new ProjectEntity();
         for(ProjectEntity e : projectRepository.findAll()){
