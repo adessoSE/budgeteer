@@ -38,7 +38,7 @@ public class EditContractForm extends Form<ContractBaseData> {
 
     private WebMarkupContainer table;
 
-    private String sumbitButtonTextKey;
+    private String submitButtonTextKey;
 
     private TextField<String> newAttributeField;
     private CustomFeedbackPanel feedbackPanel;
@@ -46,7 +46,7 @@ public class EditContractForm extends Form<ContractBaseData> {
     public EditContractForm(String id){
         super(id);
         super.setDefaultModel(Model.of(service.getEmptyContractModel(BudgeteerSession.get().getProjectId())));
-        sumbitButtonTextKey = "button.save.createmode";
+        submitButtonTextKey = "button.save.createmode";
         addComponents();
     }
 
@@ -54,7 +54,7 @@ public class EditContractForm extends Form<ContractBaseData> {
     public EditContractForm(String id, IModel<ContractBaseData> model) {
         super(id, model);
         Injector.get().inject(this);
-        sumbitButtonTextKey = "button.save.editmode";
+        submitButtonTextKey = "button.save.editmode";
         addComponents();
     }
 
@@ -120,16 +120,16 @@ public class EditContractForm extends Form<ContractBaseData> {
         };
         addAttribute.setOutputMarkupId(true);
         add(addAttribute);
-        add(new AjaxButton("save", new StringResourceModel(sumbitButtonTextKey)) {
+        add(new AjaxButton("save", new StringResourceModel(submitButtonTextKey)) {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 try {
                     ((ContractBaseData) form.getModelObject()).getFileModel().setFile(fileUpload.getFile());
                     ((ContractBaseData) form.getModelObject()).getFileModel().setFileName(fileUpload.getFileName());
                     ((ContractBaseData) form.getModelObject()).setContractId(service.save((ContractBaseData) form.getModelObject()));
-                    if(sumbitButtonTextKey.equals("button.save.createmode")){
-                        sumbitButtonTextKey = "button.save.editmode";
-                        this.setDefaultModel(new StringResourceModel(sumbitButtonTextKey));
+                    if(submitButtonTextKey.equals("button.save.createmode")){
+                        submitButtonTextKey = "button.save.editmode";
+                        this.setDefaultModel(new StringResourceModel(submitButtonTextKey));
                         target.add(this);
                         this.success(getString("feedback.success.creation"));
                     }else {
