@@ -3,6 +3,7 @@ package org.wickedsource.budgeteer.web.components.money;
 import org.apache.wicket.util.convert.ConversionException;
 import org.apache.wicket.util.convert.IConverter;
 import org.joda.money.Money;
+import org.springframework.format.number.CurrencyStyleFormatter;
 import org.wickedsource.budgeteer.MoneyUtil;
 
 import java.text.NumberFormat;
@@ -40,7 +41,7 @@ public class MoneyConverter implements IConverter<Money> {
 
     /**
      * @param value     The given value, to be converted.
-     * @param locale    Local of a certain country. Depending on the country the currency is chosen.
+     * @param locale    Locale of a certain country. Depending on the country the currency is chosen.
      * If format is set to false, the converter tries to parse the given value to a double.
      * If format is true, the method convertToObject converts Strings of certain patterns.
      * The pattern has to be;
@@ -63,11 +64,8 @@ public class MoneyConverter implements IConverter<Money> {
             } else {
                 number = Double.valueOf(value);
             }
-
             return MoneyUtil.createMoney(number.doubleValue());
-        } catch (ParseException e ) {
-            throw new ConversionException(e);
-        } catch (ArithmeticException e){
+        } catch (ParseException | ArithmeticException e) {
             throw new ConversionException(e);
         }
     }
@@ -77,6 +75,7 @@ public class MoneyConverter implements IConverter<Money> {
         String formatted;
         if (isFormat()) {
             NumberFormat format = NumberFormat.getInstance(locale);
+            format.setMinimumFractionDigits(2);
             formatted = format.format(value.getAmount().doubleValue());
         } else {
             formatted = String.valueOf(value.getAmount().doubleValue());

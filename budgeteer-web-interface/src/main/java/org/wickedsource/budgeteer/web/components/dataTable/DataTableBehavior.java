@@ -7,6 +7,7 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.wickedsource.budgeteer.web.BudgeteerReferences;
+import org.wickedsource.budgeteer.web.BudgeteerSession;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -44,11 +45,11 @@ public class DataTableBehavior extends Behavior{
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("$.fn.dataTable.moment('D.MM.YY');");
         stringBuilder.append("$.fn.dataTable.moment('YYYY/MM');");
-        stringBuilder.append(getCustomSortin());
+        stringBuilder.append(getCustomSorting());
         return stringBuilder.toString();
     }
 
-    private String getCustomSortin() {
+    private String getCustomSorting() {
         return "$.fn.dataTable.ext.type.detect.unshift(\n" +
                 "    function ( d ) {\n" +
                 "        var t = $.parseHTML(d); return $(t).find('.wicketBehaviorclick').length > 0 ?\n" +
@@ -85,7 +86,7 @@ public class DataTableBehavior extends Behavior{
 
     /**
      * Returns a HashMap with the mostly used options set. E.g. Pagination oder sortable columns are enabled.
-     * @return
+     * @return a map containing the recommended options.
      */
     public static HashMap<String, String> getRecommendedOptions(){
         HashMap<String, String> result = new HashMap<String, String>();
@@ -93,6 +94,13 @@ public class DataTableBehavior extends Behavior{
         result.put("lengthChange", "false");
         result.put("ordering", "true");
         result.put("info", "true");
+        if(BudgeteerSession.get().getLocale().getLanguage().equals("de")) {
+            result.put("language",
+                    "{\n" +
+                            "decimal: \",\"" + ",\n" +
+                            "thounsands: \".\""
+                            + "}\n");
+        }
         return result;
     }
 }
