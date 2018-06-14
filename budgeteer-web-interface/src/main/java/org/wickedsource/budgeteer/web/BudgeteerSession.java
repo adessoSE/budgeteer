@@ -13,7 +13,7 @@ public class BudgeteerSession extends WebSession {
     //This makes them persistent when switching projects
     private HashMap<Long, BudgetTagFilter> budgetFilter = new HashMap<>();
 
-    private Long budgetRemainingFilter = 0L;
+    private Long remainingBudgetFilterValue = 0L;
 
     private Double selectedBudgetUnit = 1d;
 
@@ -90,11 +90,11 @@ public class BudgeteerSession extends WebSession {
         return taxEnabled;
     }
 
-    public Long getBudgetRemainingFilter() {
-        return budgetRemainingFilter;
+    public Long getRemainingBudgetFilterValue() {
+        return remainingBudgetFilterValue;
     }
 
-    public void setBudgetRemainingFilter(Long budgetRemainingFilter) {
-        this.budgetRemainingFilter = budgetRemainingFilter;
+    public void setRemainingBudetFilterValue(Long budgetRemainingFilter) {
+        this.remainingBudgetFilterValue = budgetRemainingFilter;
     }
 }

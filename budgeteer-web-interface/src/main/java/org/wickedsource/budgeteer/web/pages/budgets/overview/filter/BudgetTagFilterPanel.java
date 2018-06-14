@@ -12,7 +12,6 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
-import org.wickedsource.budgeteer.web.pages.budgets.overview.BudgetsOverviewPage;
 
 import java.util.List;
 
@@ -27,24 +26,7 @@ public class BudgetTagFilterPanel extends Panel {
             }
         };
         form.add(createTagButtonList("tagButtonList", tagsModel));
-        form.add(createResetButton("resetButton", tagsModel));
         add(form);
-    }
-
-    private Button createResetButton(String id, final IModel<List<String>> tagsModel) {
-        return new Button(id) {
-            @Override
-            public void onSubmit() {
-                getFilter().getSelectedTags().clear();
-                BudgeteerSession.get().setBudgetRemainingFilter(0L);
-                setResponsePage(BudgetsOverviewPage.class);
-            }
-
-            @Override
-            public boolean isVisible() {
-                return !tagsModel.getObject().isEmpty();
-            }
-        };
     }
 
     private ListView<String> createTagButtonList(String id, IModel<List<String>> tagsModel) {

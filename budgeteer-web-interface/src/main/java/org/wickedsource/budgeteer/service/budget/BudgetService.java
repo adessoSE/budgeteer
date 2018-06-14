@@ -207,6 +207,9 @@ public class BudgetService {
     public List<BudgetDetailData> loadBudgetsDetailData(long projectId, BudgetTagFilter filter, Long remainingFilter) {
         List<BudgetDetailData> temp = loadBudgetsDetailData(projectId, filter);
         List<BudgetDetailData> result = new ArrayList<>();
+        if(remainingFilter == 0){
+            return temp;
+        }
         for(BudgetDetailData e : temp){
             if(!BudgeteerSession.get().isTaxEnabled()){
                 if(e.getRemaining().isGreaterThan(() -> BigMoney.of(e.getRemaining().getCurrencyUnit(), new BigDecimal(remainingFilter)))){

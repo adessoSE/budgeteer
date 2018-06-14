@@ -101,7 +101,7 @@ public class BudgetOverviewTable extends Panel {
             }
             FilteredBudgetModel model = (FilteredBudgetModel) getDefaultModel();
             model.setRemainingFilterModel(model(from(remainingFilter)));
-            BudgeteerSession.get().setBudgetRemainingFilter(remainingFilter);
+            BudgeteerSession.get().setRemainingBudetFilterValue(remainingFilter);
         }
     }
 

@@ -20,6 +20,6 @@ public class RemainingBudgetFilterModel extends LoadableDetachableModel<Long> {
 
     @Override
     protected Long load() {
-        return BudgeteerSession.get().getBudgetRemainingFilter();
+        return BudgeteerSession.get().getRemainingBudgetFilterValue();
     }
 }
