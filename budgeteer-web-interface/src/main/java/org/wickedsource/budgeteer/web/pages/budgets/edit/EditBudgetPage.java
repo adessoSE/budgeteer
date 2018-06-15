@@ -1,7 +1,9 @@
 package org.wickedsource.budgeteer.web.pages.budgets.edit;
 
 import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.StringValue;
@@ -20,12 +22,14 @@ public class EditBudgetPage extends DialogPageWithBacklink {
     @SpringBean
     private BudgetService service;
 
+    private final boolean isEditing;
 
     /**
      * Use this constructor to create a page with a form to create a new budget.
      */
     public EditBudgetPage(Class<? extends WebPage> backlinkPage, PageParameters backlinkParameters) {
         super(backlinkPage, backlinkParameters);
+        isEditing = false;
         Form<EditBudgetData> form = new EditBudgetForm("form");
         addComponents(form);
     }
@@ -35,16 +39,22 @@ public class EditBudgetPage extends DialogPageWithBacklink {
      *
      * @param parameters page parameters containing the id of the budget to edit.
      */
-    public EditBudgetPage(PageParameters parameters, Class<? extends WebPage> backlinkPage, PageParameters backlinkParameters) {
+    public EditBudgetPage(PageParameters parameters, Class<? extends WebPage> backlinkPage, PageParameters backlinkParameters, boolean isEditingNewBudget) {
         super(parameters, backlinkPage, backlinkParameters);
+        isEditing = true;
         EditBudgetData budgetData = service.loadBudgetToEdit(getBudgetId());
-        Form<EditBudgetData> form = new EditBudgetForm("form", model(from(budgetData)));
+        Form<EditBudgetData> form = new EditBudgetForm("form", model(from(budgetData)), isEditingNewBudget);
         addComponents(form);
     }
 
     private void addComponents(Form<EditBudgetData> form) {
         add(createBacklink("cancelButton1"));
         form.add(createBacklink("cancelButton2"));
+        if(isEditing) {
+            add(new Label("pageTitle", new ResourceModel("page.title.editmode")));
+        }else{
+            add(new Label("pageTitle", new ResourceModel("page.title.createmode")));
+        }
         add(form);
     }
 
@@ -63,10 +73,9 @@ public class EditBudgetPage extends DialogPageWithBacklink {
     private long getBudgetId() {
         StringValue value = getPageParameters().get("id");
         if (value == null || value.isEmpty() || value.isNull()) {
-            return 0l;
+            return 0L;
         } else {
             return value.toLong();
         }
     }
-
 }

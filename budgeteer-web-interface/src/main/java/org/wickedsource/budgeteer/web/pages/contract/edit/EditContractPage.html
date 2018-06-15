@@ -1,6 +1,6 @@
 <wicket:extend xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
     <div class="form-box wide" id="login-box">
-        <div class="header"><span wicket:it="pageTitle"><wicket:message key="page.title">Edit Contract Details</wicket:message></span>
+        <div class="header"><span wicket:id="pageTitle"></span>
             <div class="box-tools pull-right">
                 <button wicket:id="cancelButton1" class="btn bg-olive btn-sm"><i class="fa fa-times"></i></button>
             </div>
@@ -36,7 +36,7 @@
                         </div>
                         <div class="form-group">
                             <label for="budget"><wicket:message key="page.contract.budget">Budget</wicket:message></label>
-                            <input wicket:id="budget" style="width: 100%;" type="number" step="0.01" class="form-control" id="budget"/>
+                            <input wicket:id="budget" style="width: 100%;" type="text" class="form-control" id="budget"/>
                         </div>
                         <div class="form-group">
                             <label for="taxrate"><wicket:message key="page.contract.taxrate">Taxrate in percent</wicket:message></label>
@@ -87,7 +87,7 @@
                         <button wicket:id="cancelButton2" id="cancel" type="button" class="btn bg-olive btn-block">Cancel</button>
                     </div>
                     <div class="col-lg-9">
-                        <button type="button" wicket:id="save" id="submitButton" class="btn bg-olive btn-block">Create contract / Save Changes</button>
+                        <button type="button" wicket:id="save" id="submitButton" class="btn bg-olive btn-block"></button>
                     </div>
                 </div>
             </div>

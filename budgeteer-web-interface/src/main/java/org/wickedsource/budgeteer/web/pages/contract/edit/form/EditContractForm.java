@@ -10,6 +10,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.wickedsource.budgeteer.persistence.contract.ContractEntity;
@@ -37,19 +38,29 @@ public class EditContractForm extends Form<ContractBaseData> {
 
     private WebMarkupContainer table;
 
+    private String submitButtonTextKey;
+
     private TextField<String> newAttributeField;
     private CustomFeedbackPanel feedbackPanel;
 
     public EditContractForm(String id){
-        super(id);
-        super.setDefaultModel(Model.of(service.getEmptyContractModel(BudgeteerSession.get().getProjectId())));
-        addComponents();
+        this(id, null, "button.save.createmode");
     }
 
 
     public EditContractForm(String id, IModel<ContractBaseData> model) {
-        super(id, model);
+        this(id, model, "button.save.editmode");
+    }
+
+    private EditContractForm(String id, IModel<ContractBaseData> model, String submitButtonTextKey) {
+        super(id);
+        if (model != null) {
+            super.setDefaultModel(model);
+        } else {
+            super.setDefaultModel(Model.of(service.getEmptyContractModel(BudgeteerSession.get().getProjectId())));
+        }
         Injector.get().inject(this);
+        this.submitButtonTextKey = submitButtonTextKey;
         addComponents();
     }
 
@@ -113,15 +124,23 @@ public class EditContractForm extends Form<ContractBaseData> {
                 }
             }
         };
+        addAttribute.setOutputMarkupId(true);
         add(addAttribute);
-        add(new AjaxButton("save") {
+        add(new AjaxButton("save", new StringResourceModel(submitButtonTextKey)) {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 try {
                     ((ContractBaseData) form.getModelObject()).getFileModel().setFile(fileUpload.getFile());
                     ((ContractBaseData) form.getModelObject()).getFileModel().setFileName(fileUpload.getFileName());
                     ((ContractBaseData) form.getModelObject()).setContractId(service.save((ContractBaseData) form.getModelObject()));
-                    this.success(getString("feedback.success"));
+                    if(submitButtonTextKey.equals("button.save.createmode")){
+                        submitButtonTextKey = "button.save.editmode";
+                        this.setDefaultModel(new StringResourceModel(submitButtonTextKey));
+                        target.add(this);
+                        this.success(getString("feedback.success.creation"));
+                    }else {
+                        this.success(getString("feedback.success"));
+                    }
                 } catch (DataIntegrityViolationException e) {
                     this.error(getString("feedback.error.dataformat.taxrate"));
                 } catch (Exception e) {
@@ -135,6 +154,6 @@ public class EditContractForm extends Form<ContractBaseData> {
             protected void onError(AjaxRequestTarget target, Form<?> form) {
                 target.add(feedbackPanel);
             }
-        });
+        }.setOutputMarkupId(true));
     }
 }
