@@ -48,14 +48,14 @@ public class TargetAndActualChartConfiguration extends ChartConfiguration implem
 				MoneySeries series = model.getObject().getActualSeries().get(i);
 				Dataset newDataset = new Dataset().setLabel(series.getName())
 						.setData(DoubleValue.of(
-								MoneyUtil.toDouble(series.getValues(), BudgeteerSession.get().getSelectedBudgetUnit())))
+								MoneyUtil.toDouble(series.getMoneyValues(), BudgeteerSession.get().getSelectedBudgetUnit())))
 						.setBackgroundColor(colorList.get(i % colorList.size()));
 				datasets.add(newDataset);
 			}
 
 			Dataset planDataset = new Dataset()
 					.setLabel("Plan")
-					.setData(DoubleValue.of(MoneyUtil.toDouble(model.getObject().getTargetSeries().getValues(),
+					.setData(DoubleValue.of(MoneyUtil.toDouble(model.getObject().getTargetSeries().getMoneyValues(),
 			 BudgeteerSession.get().getSelectedBudgetUnit())))
 					.setFill(false)
 					.setType(ChartType.LINE)
