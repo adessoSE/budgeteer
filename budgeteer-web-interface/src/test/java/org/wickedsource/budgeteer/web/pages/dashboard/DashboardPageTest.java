@@ -15,6 +15,5 @@ public class DashboardPageTest extends AbstractWebTestTemplate {
 
     @Override
     protected void setupTest() {
-
     }
 }

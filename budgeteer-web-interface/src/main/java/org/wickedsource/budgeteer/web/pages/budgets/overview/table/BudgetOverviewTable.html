@@ -1,4 +1,4 @@
-<wicket:panel>
+<wicket:panel xmlns:wicket="http://www.w3.org/1999/xhtml">
     <table class="table table-hover smallLastColumn" wicket:id="table">
         <thead>
         <tr>
@@ -12,7 +12,7 @@
                 <span wicket:id="spentLabel">Spent</span>
             </th>
             <th style="width:100px">
-                <span wicket:id="leftLabel">Left</span>
+                <span wicket:id="leftLabel ">Left</span>
             </th>
             <th style="width:150px ">
                 <span wicket:id="unplannedLabel">Unplanned</span>
@@ -26,10 +26,10 @@
             <td><a wicket:id="detailLink"><span wicket:id="detailLinkTitle">Implementation of Feature XYZ</span></a></td>
             <td wicket:id="lastUpdated">28.09.2014</td>
             <td><a wicket:id="contractLink"><span wicket:id="contractTitle">Contract</span></a></td>
-            <td wicket:id="amount">€100.000</td>
-            <td wicket:id="spent">€60.000</td>
-            <td wicket:id="remaining">€40.000</td>
-            <td wicket:id="unplanned">€40.000</td>
+            <td align="right" wicket:id="amount">€100.000</td>
+            <td align="right" wicket:id="spent">€60.000</td>
+            <td align="right" wicket:id="remaining">€40.000</td>
+            <td align="right" wicket:id="unplanned">€40.000</td>
             <td>
                 <div wicket:id="progressBar"></div>
             </td>
@@ -40,10 +40,10 @@
                 <td><strong>Filter Total</strong></td>
                 <td><strong wicket:id="totalLastUpdated">28.09.2014</strong></td>
                 <td><strong></strong></td>
-                <td><strong wicket:id="totalAmount">€400.000</strong></td>
-                <td><strong wicket:id="totalSpent">€360.000</strong></td>
-                <td><strong wicket:id="totalRemaining">€240.000</strong></td>
-                <td><strong wicket:id="totalUnplanned">€240.000</strong></td>
+                <td align="right"><strong wicket:id="totalAmount">€400.000</strong></td>
+                <td align="right"><strong wicket:id="totalSpent">€360.000</strong></td>
+                <td align="right"><strong wicket:id="totalRemaining">€240.000</strong></td>
+                <td align="right"><strong wicket:id="totalUnplanned">€240.000</strong></td>
                 <td>
                     <div wicket:id="totalProgressBar"></div>
                 </td>

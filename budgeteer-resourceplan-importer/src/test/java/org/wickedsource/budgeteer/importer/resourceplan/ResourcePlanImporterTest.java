@@ -3,7 +3,10 @@ package org.wickedsource.budgeteer.importer.resourceplan;
 import org.joda.money.CurrencyUnit;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.wickedsource.budgeteer.imports.api.*;
+import org.wickedsource.budgeteer.imports.api.ExampleFile;
+import org.wickedsource.budgeteer.imports.api.ImportFile;
+import org.wickedsource.budgeteer.imports.api.ImportedPlanRecord;
+import org.wickedsource.budgeteer.imports.api.InvalidFileFormatException;
 
 import java.util.List;
 

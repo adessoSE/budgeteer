@@ -25,11 +25,12 @@ public class EditBudgetData implements Serializable {
 
     public EditBudgetData(long projectId) {
         this.projectId = projectId;
+        this.tags = new ArrayList<>();
     }
 
     public void setTags(List<String> tags) {
         if (tags != null) {
-            this.tags = new ArrayList<String>(tags);
+            this.tags = new ArrayList<>(tags);
         }
     }
 }

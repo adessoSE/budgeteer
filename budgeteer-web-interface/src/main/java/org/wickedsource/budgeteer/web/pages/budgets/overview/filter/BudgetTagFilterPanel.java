@@ -26,22 +26,7 @@ public class BudgetTagFilterPanel extends Panel {
             }
         };
         form.add(createTagButtonList("tagButtonList", tagsModel));
-        form.add(createResetButton("resetButton", tagsModel));
         add(form);
-    }
-
-    private Button createResetButton(String id, final IModel<List<String>> tagsModel) {
-        return new Button(id) {
-            @Override
-            public void onSubmit() {
-                getFilter().getSelectedTags().clear();
-            }
-
-            @Override
-            public boolean isVisible() {
-                return !tagsModel.getObject().isEmpty();
-            }
-        };
     }
 
     private ListView<String> createTagButtonList(String id, IModel<List<String>> tagsModel) {
