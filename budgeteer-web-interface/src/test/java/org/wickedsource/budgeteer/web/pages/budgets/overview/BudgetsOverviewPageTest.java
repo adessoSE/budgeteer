@@ -26,7 +26,7 @@ public class BudgetsOverviewPageTest extends AbstractWebTestTemplate {
         tester.startPage(BudgetsOverviewPage.class);
         BudgeteerSession.get().setTaxEnabled(true);
         BudgeteerSession.get().setSelectedBudgetUnit(13.0);
-        tester.clickLink("netGrossLink");
+        tester.clickLink("netGrossLink:link");
         Assertions.assertTrue(BudgeteerSession.get().isTaxEnabled());
     }
 
@@ -36,7 +36,7 @@ public class BudgetsOverviewPageTest extends AbstractWebTestTemplate {
         tester.startPage(BudgetsOverviewPage.class);
         BudgeteerSession.get().setTaxEnabled(true);
         BudgeteerSession.get().setSelectedBudgetUnit(1.0);
-        tester.clickLink("netGrossLink");
+        tester.clickLink("netGrossLink:link");
         Assertions.assertFalse(BudgeteerSession.get().isTaxEnabled());
     }
 }
