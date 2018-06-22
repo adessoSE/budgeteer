@@ -1,0 +1,8 @@
+<dataset>
+    <!-- Project without Templates -->
+    <PROJECT id="1" name="project1"/>
+
+    <TEMPLATE id="1" project_id="1" name="test" description="test_d" type="0" isdefault="true" template="null"/>
+
+
+</dataset>

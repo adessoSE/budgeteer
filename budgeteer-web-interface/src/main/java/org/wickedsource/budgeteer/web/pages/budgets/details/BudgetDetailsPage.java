@@ -20,6 +20,7 @@ import org.wickedsource.budgeteer.web.components.confirm.ConfirmationForm;
 import org.wickedsource.budgeteer.web.pages.base.basepage.BasePage;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.Breadcrumb;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
+import org.wickedsource.budgeteer.web.pages.base.delete.DeleteDialog;
 import org.wickedsource.budgeteer.web.pages.budgets.BudgetNameModel;
 import org.wickedsource.budgeteer.web.pages.budgets.details.chart.PeopleDistributionChart;
 import org.wickedsource.budgeteer.web.pages.budgets.details.chart.PeopleDistributionChartModel;
@@ -32,6 +33,8 @@ import org.wickedsource.budgeteer.web.pages.budgets.overview.BudgetsOverviewPage
 import org.wickedsource.budgeteer.web.pages.budgets.weekreport.single.SingleBudgetWeekReportPage;
 import org.wickedsource.budgeteer.web.pages.contract.details.ContractDetailsPage;
 import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
+
+import java.util.concurrent.Callable;
 
 @Mount("budgets/details/${id}")
 public class BudgetDetailsPage extends BasePage {
@@ -60,8 +63,21 @@ public class BudgetDetailsPage extends BasePage {
         Form deleteForm = new ConfirmationForm("deleteForm", this, "confirmation.delete") {
             @Override
             public void onSubmit() {
-                budgetService.deleteBudget(getParameterId());
-                setResponsePage(BudgetsOverviewPage.class);
+
+                setResponsePage(new DeleteDialog(new Callable<Void>() {
+                    @Override
+                    public Void call(){
+                        budgetService.deleteBudget(getParameterId());
+                        setResponsePage(BudgetsOverviewPage.class);
+                        return null;
+                    }
+                }, new Callable<Void>() {
+                    @Override
+                    public Void call(){
+                        setResponsePage(new BudgetDetailsPage(getPageParameters()));
+                        return null;
+                    }
+                }));
             }
         };
         deleteForm.add(new SubmitLink("deleteLink"));

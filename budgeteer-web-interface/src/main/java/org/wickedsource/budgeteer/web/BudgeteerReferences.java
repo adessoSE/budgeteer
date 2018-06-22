@@ -17,10 +17,6 @@ public class BudgeteerReferences {
         return new UrlResourceReference(Url.parse("js/jquery/jquery.min.js")).setContextRelative(true);
     }
 
-    public static ResourceReference getHighchartsReference() {
-        return new UrlResourceReference(Url.parse("js/highcharts/highcharts.js")).setContextRelative(true);
-    }
-
     public static ResourceReference getBootstrapMultiselectJSReference() {
         return new UrlResourceReference(Url.parse("js/plugins/bootstrap-multiselect/bootstrap.multiselect.js")).setContextRelative(true);
     }

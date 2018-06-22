@@ -36,10 +36,10 @@ sourceSets {
 
 processResources {
     from('src/main/java') {
-        exclude '**/*.xlsx'
-        filter ReplaceTokens, tokens: [
-                "application.version": project.property("version")
-        ]
+    	exclude '**/*.xlsx'
+	    filter ReplaceTokens, tokens: [
+	            "application.version": project.property("version")
+	    ]
     }
 }
 
@@ -195,6 +195,3 @@ idea {
         it.asNode().append(new XmlParser().parseText(springFacet))
     }
 }
-
-
-
