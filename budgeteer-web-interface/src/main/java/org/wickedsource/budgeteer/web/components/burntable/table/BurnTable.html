@@ -1,4 +1,4 @@
-<wicket:panel>
+<wicket:panel xmlns:wicket="http://www.w3.org/1999/xhtml">
 
     <div wicket:id="feedback"></div>
     <p class="pull-right">Total burned budget with current filter: <strong wicket:id="total">€120.000</strong></p><br/>
@@ -35,5 +35,10 @@
         </tr>
         </tfoot>
     </table>
-
+    <label wicket:id="pageLabel">label</label>
+    <br/>
+    <form wicket:id="itemsPerPageForm">
+    Records per page<input type="number" wicket:id="itemsPerPage">
+    </form>
+    <div style="float: right; margin-right: 100px" wicket:id="pager"></div>
 </wicket:panel>
