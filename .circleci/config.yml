@@ -26,7 +26,8 @@ jobs:
             ./gradlew sonarqube \
               -Dsonar.host.url=https://sonarcloud.io \
               -Dsonar.organization=adessoAG-github \
-              -Dsonar.login=$SONARCLOUD_BUDGETEER_KEY
+              -Dsonar.login=$SONARCLOUD_BUDGETEER_KEY \
+              -Dsonar.branch.name=`git symbolic-ref --short HEAD`
       - run:
           name: Save .war and .jar files
           command: |
