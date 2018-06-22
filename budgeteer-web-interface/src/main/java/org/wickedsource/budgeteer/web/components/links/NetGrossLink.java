@@ -41,42 +41,4 @@ public class NetGrossLink extends Panel {
         }
         this.add(link);
     }
-/*
-    @Override
-    public void onClick()
-    {
-        if (BudgeteerSession.get().isTaxEnabled() && Math.abs(BudgeteerSession.get().getSelectedBudgetUnit() - 1.0) < Math.ulp(1)) {
-            BudgeteerSession.get().setTaxEnabled(false);
-        } else {
-            BudgeteerSession.get().setTaxEnabled(true);
-        }
-    }
-    */
-
-    /*
-    public static Link createNetGrossLink(String string) {
-        Link link = new Link(string) {
-            @Override
-            public void onClick() {
-                if (BudgeteerSession.get().isTaxEnabled() && Math.abs(BudgeteerSession.get().getSelectedBudgetUnit() - 1.0) < Math.ulp(1)) {
-                    BudgeteerSession.get().setTaxEnabled(false);
-                } else {
-                    BudgeteerSession.get().setTaxEnabled(true);
-                }
-            }
-        };
-        link.add(new Label("title", new TaxSwitchLabelModel(
-                new StringResourceModel("links.tax.label.net", this),
-                new StringResourceModel("links.tax.label.gross", this)
-        )));
-
-        if(Math.abs(BudgeteerSession.get().getSelectedBudgetUnit() - 1.0) > Math.ulp(1)){
-            link.add(new AttributeAppender("style", "cursor: not-allowed;", " "));
-            link.add(new AttributeModifier("title", NetGrossLink.this.getString("links.budge.label.gross.value")));
-            link.setEnabled(false);
-            BudgeteerSession.get().setTaxEnabled(false);
-        }
-        return link;
-    }
-    */
 }

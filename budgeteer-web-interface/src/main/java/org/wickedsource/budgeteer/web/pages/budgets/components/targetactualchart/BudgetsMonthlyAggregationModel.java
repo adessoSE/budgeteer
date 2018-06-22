@@ -32,10 +32,8 @@ public class BudgetsMonthlyAggregationModel extends LoadableDetachableModel<Targ
     protected TargetAndActual load() {
         if (budgetId != 0) {
             return service.getMonthStatsForBudgetWithTax(budgetId, 12);
-            //return service.getMonthStatsForBudget(budgetId, 12);
         } else if (filterModel != null && filterModel.getObject() != null) {
             return service.getMonthStatsForBudgetsWithTax(filterModel.getObject(), 12);
-            //return service.getMonthStatsForBudgets(filterModel.getObject(), 12);
         } else {
             throw new IllegalStateException("Neither budgetId nor filter specified. Specify at least one of these attributes in the constructor!");
         }

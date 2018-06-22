@@ -47,15 +47,15 @@ public class AggregatedRecordTable extends Panel {
                 item.add(new Label("endDate", model(from(item.getModel()).getAggregationPeriodEnd())));
                 item.add(new Label("hours", model(from(item.getModel()).getHours())));
 
-                item.add(new MoneyLabel( "budgetBurned",
+                item.add(new MoneyLabel( "budgetBurned_net",
                         new TaxBudgetUnitMoneyModel(
-                                new BudgetUnitMoneyModel(model(from(item.getModel()).getBudgetBurned())),
+                                new BudgetUnitMoneyModel(model(from(item.getModel()).getBudgetBurned_net())),
                                 new BudgetUnitMoneyModel(model(from(item.getModel()).getBudgetBurned_gross()))
                         )));
 
-                item.add(new MoneyLabel( "budgetPlanned",
+                item.add(new MoneyLabel( "budgetPlanned_net",
                         new TaxBudgetUnitMoneyModel(
-                                new BudgetUnitMoneyModel(model(from(item.getModel()).getBudgetPlanned())),
+                                new BudgetUnitMoneyModel(model(from(item.getModel()).getBudgetPlanned_net())),
                                 new BudgetUnitMoneyModel(model(from(item.getModel()).getBudgetPlanned_gross()))
                         )));
 

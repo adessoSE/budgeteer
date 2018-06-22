@@ -32,9 +32,7 @@ public class BudgetsWeeklyAggregationModel extends LoadableDetachableModel<Targe
     protected TargetAndActual load() {
         if (budgetId != 0) {
             return service.getWeekStatsForBudgetWithTax(budgetId, 12);
-            //return service.getWeekStatsForBudget(budgetId, 12);
         } else if (filterModel != null && filterModel.getObject() != null) {
-            //return service.getWeekStatsForBudgets(filterModel.getObject(), 12);
             return service.getWeekStatsForBudgetsWithTax(filterModel.getObject(), 12);
         } else {
             throw new IllegalStateException("Neither budgetId nor filter specified. Specify at least one of these attributes in the constructor!");
