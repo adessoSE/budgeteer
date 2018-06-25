@@ -1,11 +1,10 @@
-package org.wickedsource.budgeteer.web.pages.templates.templateimport;
+package org.wickedsource.budgeteer.web.pages.templates.edit;
 
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
-import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
@@ -14,76 +13,61 @@ import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.apache.wicket.util.io.IOUtils;
 import org.apache.wicket.util.resource.AbstractResourceStreamWriter;
-import org.wickedsource.budgeteer.imports.api.ExampleFile;
 import org.wickedsource.budgeteer.imports.api.ImportFile;
 import org.wickedsource.budgeteer.service.ReportType;
 import org.wickedsource.budgeteer.service.template.TemplateService;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
-import org.wickedsource.budgeteer.web.ClassAwareWrappingModel;
-import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
-import org.wickedsource.budgeteer.web.components.multiselect.MultiselectBehavior;
 import org.wickedsource.budgeteer.web.pages.base.AbstractChoiceRenderer;
-import org.wickedsource.budgeteer.web.pages.base.dialogpage.DialogPageWithBacklink;
+import org.wickedsource.budgeteer.web.pages.base.delete.DeleteDialog;
+import org.wickedsource.budgeteer.web.pages.templates.TemplatesPage;
+import org.wickedsource.budgeteer.web.pages.templates.templateimport.TemplateFormInputDto;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import static org.wicketstuff.lazymodel.LazyModel.from;
 import static org.wicketstuff.lazymodel.LazyModel.model;
 
-@Mount("templates/importTemplates")
-public class ImportTemplatesPage extends DialogPageWithBacklink {
+public class EditTemplateForm extends Form<TemplateFormInputDto> {
 
     @SpringBean
     private TemplateService service;
+
+    private List<FileUpload> fileUploads = new ArrayList<>();
+
+    private TemplateFormInputDto templateFormInputDto = new TemplateFormInputDto(BudgeteerSession.get().getProjectId());
+
+    private long templateID;
 
     private static final AttributeModifier starChecked = new AttributeModifier("class", "btn bg-olive glyphicon glyphicon-star");
     private static final AttributeModifier starUnchecked = new AttributeModifier("class", "btn bg-olive glyphicon glyphicon-star-empty");
 
 
-    private List<FileUpload> fileUploads = new ArrayList<FileUpload>();
-
-    ReportType exampleTemplateType = ReportType.BUDGET_REPORT;
-
-    private TemplateFormInputDto templateFormInputDto = new TemplateFormInputDto(BudgeteerSession.get().getProjectId());
-
-
-    public ImportTemplatesPage(Class<? extends WebPage> backlinkPage, PageParameters backlinkParameters) {
-        super(backlinkPage, backlinkParameters);
-        add(createBacklink("backlink1"));
-
-        IModel formModel = model(from(templateFormInputDto));
-
-        this.setDefaultModel(formModel);
-        final Form<TemplateFormInputDto> form = new Form<TemplateFormInputDto>("importForm", new ClassAwareWrappingModel<>(new Model<>(new TemplateFormInputDto(BudgeteerSession.get().getProjectId())), TemplateFormInputDto.class));
-        form.setMultiPart(true);
-
-        add(form);
-
+    public EditTemplateForm(String id, IModel<TemplateFormInputDto> formModel, long temID){
+        super(id, formModel);
+        this.templateID = temID;
         CustomFeedbackPanel feedback = new CustomFeedbackPanel("feedback");
         feedback.setOutputMarkupId(true);
-        form.add(feedback);
 
+        add(feedback);
         FileUploadField fileUpload = new FileUploadField("fileUpload", new PropertyModel<>(this, "fileUploads"));
-        fileUpload.setRequired(true);
+        fileUpload.setRequired(false);
 
-        form.add(fileUpload);
-        form.add(createBacklink("backlink2"));
-        form.add(new AjaxButton("save") {
+        add(fileUpload);
+        add(createCancelButton("backlink2"));
+        add(DeleteTemplateButton("deleteButton"));
+        add(DownloadFileButton("downloadFileButton"));
+
+        add(new AjaxButton("save") {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 try {
@@ -103,12 +87,17 @@ public class ImportTemplatesPage extends DialogPageWithBacklink {
                         target.add(feedback);
                         return;
                     }
-                    ImportFile file = new ImportFile(fileUploads.get(0).getClientFileName(), fileUploads.get(0).getInputStream());
-                    if(model(from(templateFormInputDto)).getObject().getName() != null && model(from(templateFormInputDto)).getObject().getType() != null){
-                        service.doImport(BudgeteerSession.get().getProjectId(), file, model(from(templateFormInputDto)));
+                    if(fileUploads != null && fileUploads.size() > 0){
+                        ImportFile file = new ImportFile(fileUploads.get(0).getClientFileName(), fileUploads.get(0).getInputStream());
+                        if(model(from(templateFormInputDto)).getObject().getName() != null && model(from(templateFormInputDto)).getObject().getType() != null){
+                            service.editTemplate(BudgeteerSession.get().getProjectId(), templateID, file, model(from(templateFormInputDto)));
+                            success(getString("message.success"));
+                        }
+                    }else if(model(from(templateFormInputDto)).getObject().getName() != null && model(from(templateFormInputDto)).getObject().getType() != null){
+                        service.editTemplate(BudgeteerSession.get().getProjectId(), templateID, null, model(from(templateFormInputDto)));
                         success(getString("message.success"));
                     }
-                }  catch (IOException e) {
+                } catch (IOException e) {
                     error(String.format(getString("message.ioError"), e.getMessage()));
                 }  catch (IllegalArgumentException e) {
                     error(String.format(getString("message.importError"), e.getMessage()));
@@ -122,19 +111,20 @@ public class ImportTemplatesPage extends DialogPageWithBacklink {
             }
         });
 
-        form.add(createExampleFileList("exampleFileList"));
-        form.add(createExampleFileButton("exampleDownloadButton"));
-        form.add(new TextField<>("name", model(from(templateFormInputDto).getName())));
-        form.add(new TextField<>("description", model(from(templateFormInputDto).getDescription())));
+        templateFormInputDto.setName(service.getById(templateID).getName());
+        templateFormInputDto.setDescription(service.getById(templateID).getDescription());
+        templateFormInputDto.setType(service.getById(templateID).getType());
+        templateFormInputDto.setDefault(service.getById(templateID).isDefault());
+
         AjaxLink checkBox = new AjaxLink("setAsDefault") {
             @Override
             public void onClick(AjaxRequestTarget ajaxRequestTarget) {
                 if(templateFormInputDto.isDefault()){
-                    form.getModel().getObject().setDefault(false);
+                    EditTemplateForm.this.getModel().getObject().setDefault(false);
                     this.add(starUnchecked);
                     templateFormInputDto.setDefault(false);
                 }else{
-                    form.getModel().getObject().setDefault(true);
+                    EditTemplateForm.this.getModel().getObject().setDefault(true);
                     this.add(starChecked);
                     templateFormInputDto.setDefault(true);
                 }
@@ -147,12 +137,21 @@ public class ImportTemplatesPage extends DialogPageWithBacklink {
             checkBox.add(starUnchecked);
         }
         checkBox.setOutputMarkupId(true);
-        form.add(checkBox);
+        add(checkBox);
+        add(new TextField<>("name", model(from(templateFormInputDto).getName())));
+        add(new TextField<>("description", model(from(templateFormInputDto).getDescription())));
         DropDownChoice<ReportType> typeDropDown = new DropDownChoice<ReportType>("type", model(from(templateFormInputDto).getType()),
                 new LoadableDetachableModel<List<ReportType>>() {
                     @Override
                     protected List<ReportType> load() {
-                        return Arrays.asList(ReportType.values());
+                        List<ReportType> list = new ArrayList<>();
+                        list.add(templateFormInputDto.getType());
+                        for(ReportType E : ReportType.values()){
+                            if(!E.equals(templateFormInputDto.getType())){
+                                list.add(E);
+                            }
+                        }
+                        return list;
                     }
                 },
                 new AbstractChoiceRenderer<ReportType>() {
@@ -160,68 +159,73 @@ public class ImportTemplatesPage extends DialogPageWithBacklink {
                     public Object getDisplayValue(ReportType object) {
                         return object == null ? "Unnamed" : object.toString();
                     }
-                }){
+                }
+        ){
             @Override
             public String getModelValue (){
                 return null;
             }
         };
         typeDropDown.setNullValid(false);
-        form.add(typeDropDown);
+        add(typeDropDown);
     }
 
     /**
-     * Creates a list with all example templates available to download.
+     * Creates a button to download the template that is being edited.
      */
-    private DropDownChoice createExampleFileList(String wicketId) {
-        DropDownChoice<ReportType> dropDownChoice = new DropDownChoice<ReportType>(wicketId, new Model<>(exampleTemplateType),
-                model(from(new ArrayList<>(Arrays.asList(ReportType.values())))),
-                new AbstractChoiceRenderer<ReportType>() {
-                    @Override
-                    public Object getDisplayValue(ReportType object) {
-                        return object.toString() + " template";
-                    }
-        }){
-            @Override
-            public String getModelValue (){
-                return null;
-            }
-        };
-        HashMap<String, String> options = MultiselectBehavior.getRecommendedOptions();
-        options.clear();
-        options.put("buttonClass","'btn bg-olive'");
-        options.put("buttonWidth","'140px'");
-        dropDownChoice.add(new MultiselectBehavior(options));
-        dropDownChoice.add(new AjaxFormComponentUpdatingBehavior("change") {
-            @Override
-            protected void onUpdate(AjaxRequestTarget target) {
-                exampleTemplateType = (ReportType)this.getComponent().getDefaultModel().getObject();
-            }
-        });
-        return dropDownChoice;
-
-    }
-
-    private Link<Void> createExampleFileButton(String wicketId){
+    private Link DownloadFileButton(String wicketId) {
         return new Link<Void>(wicketId) {
             @Override
             public void onClick() {
-                final ExampleFile downloadFile = service.getExampleFile(exampleTemplateType);
+                XSSFWorkbook wb = service.getById(templateID).getWb();
                 AbstractResourceStreamWriter streamWriter = new AbstractResourceStreamWriter() {
                     @Override
                     public void write(OutputStream output) throws IOException {
-                        ByteArrayOutputStream out = new ByteArrayOutputStream();
-                        IOUtils.copy(downloadFile.getInputStream(), out);
-                        output.write(out.toByteArray());
+                        wb.write(output);
                     }
                 };
-                ResourceStreamRequestHandler handler = new ResourceStreamRequestHandler(streamWriter, downloadFile.getFileName());
+                ResourceStreamRequestHandler handler = new ResourceStreamRequestHandler(streamWriter, service.getById(templateID).getName() + ".xlsx");
                 getRequestCycle().scheduleRequestHandlerAfterCurrent(handler);
                 HttpServletResponse response = (HttpServletResponse) getRequestCycle().getResponse().getContainerResponse();
-                response.setContentType(downloadFile.getContentType());
+                response.setContentType(null);
+            }
+        };
+    }
+
+    /**
+     * Creates a back button.
+     */
+    private Link createCancelButton(String wicketId) {
+        return new Link<Void>(wicketId) {
+            @Override
+            public void onClick() {
+                ((EditTemplatePage)this.getPage()).goBack();
+            }
+        };
+    }
+
+    /**
+     * Creates a button to delete the template that is being edited.
+     */
+    private Link DeleteTemplateButton(String wicketId) {
+        return new Link<Void>(wicketId) {
+            @Override
+            public void onClick() {
+                setResponsePage(new DeleteDialog(new Callable<Void>() {
+                    @Override
+                    public Void call(){
+                        service.deleteTemplate(templateID);
+                        ((EditTemplatePage)EditTemplateForm.this.getPage()).goBack();
+                        return null;
+                    }
+                }, new Callable<Void>() {
+                    @Override
+                    public Void call(){
+                        setResponsePage(new EditTemplatePage(TemplatesPage.class, getPage().getPageParameters(), templateID));
+                        return null;
+                    }
+                }));
             }
         };
     }
 }
-
-

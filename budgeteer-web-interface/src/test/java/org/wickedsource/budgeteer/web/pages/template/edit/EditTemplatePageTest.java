@@ -10,13 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.budgeteer.service.template.Template;
 import org.wickedsource.budgeteer.service.template.TemplateService;
 import org.wickedsource.budgeteer.web.AbstractWebTestTemplate;
+import org.wickedsource.budgeteer.web.pages.base.delete.DeleteDialog;
 import org.wickedsource.budgeteer.web.pages.templates.TemplatesPage;
 import org.wickedsource.budgeteer.web.pages.templates.edit.EditTemplatePage;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 public class EditTemplatePageTest extends AbstractWebTestTemplate {
 
@@ -56,12 +56,14 @@ public class EditTemplatePageTest extends AbstractWebTestTemplate {
         FormTester formTester = tester.newFormTester("editForm", true);
         formTester.setClearFeedbackMessagesBeforeSubmit(true);
         formTester.setFile("fileUpload", null, "");
-        formTester.submit();
+        tester.executeAjaxEvent("editForm:save", "onclick");
         tester.assertRenderedPage(EditTemplatePage.class);
         tester.assertErrorMessages("You have not entered a name.",
-                "You have not entered a description");
+                "You have not selected a type");
         assertThat(tester.getFeedbackMessages(null)).hasSize(2);
     }
+
+
 
     @Test
     void AllCorrectInputForm(){
@@ -72,8 +74,9 @@ public class EditTemplatePageTest extends AbstractWebTestTemplate {
         FormTester formTester = tester.newFormTester("editForm", true);
         formTester.setValue("name", "TEST_N");
         formTester.setValue("description", "TEST_D");
+        formTester.select("type", 1);
         formTester.setFile("fileUpload", null, "");
-        formTester.submit();
+        tester.executeAjaxEvent("editForm:save", "onclick");
         tester.assertRenderedPage(EditTemplatePage.class);
         tester.assertNoErrorMessage();
         tester.assertFeedbackMessages(null, "The template was edited successfully");
@@ -81,19 +84,33 @@ public class EditTemplatePageTest extends AbstractWebTestTemplate {
     }
 
     @Test
-    void DeleteButtonTest(){
+    public void NoTypeTest(){
+        WicketTester tester = getTester();
+        EditTemplatePage testPage = new EditTemplatePage(TemplatesPage.class, new PageParameters(), 1L);
+        tester.startPage(testPage);
+        Assertions.assertNotNull(testPage.get("editForm"));
+        FormTester formTester = tester.newFormTester("editForm", true);
+        formTester.setClearFeedbackMessagesBeforeSubmit(true);
+        formTester.setValue("name", "TEST_N");
+        formTester.setValue("description", "TEST_D");
+        tester.executeAjaxEvent("editForm:save", "onclick");
+        tester.assertRenderedPage(EditTemplatePage.class);
+        tester.assertErrorMessages( "You have not selected a type");
+        assertThat(tester.getFeedbackMessages(null)).hasSize(1);
+    }
+
+    @Test
+    public void DeleteButtonTest(){
         WicketTester tester = getTester();
         EditTemplatePage testPage = new EditTemplatePage(TemplatesPage.class, new PageParameters(), 1L);
         tester.startPage(testPage);
         Assertions.assertNotNull(testPage.get("editForm:deleteButton"));
         tester.clickLink("editForm:deleteButton");
-        verify(templateService, times(1)).deleteTemplate(anyLong());
-        tester.assertRenderedPage(TemplatesPage.class);
+        tester.assertRenderedPage(DeleteDialog.class);
     }
 
     @Override
     public void setupTest(){
-        when(templateService.getById(anyLong())).thenReturn(new Template(1L, null, null, null, 1L));
-        when(templateService.editTemplate(anyLong(), anyLong(), any(), any())).thenReturn(1L);
+        when(templateService.getById(anyLong())).thenReturn(new Template(1L, null, null,null, null, false,1L));
     }
 }

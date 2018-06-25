@@ -225,5 +225,4 @@ public class BudgetReportService {
 			return MoneyUtil.createMoneyFromCents(Math.round(cents));
 		}
 	}
-
 }

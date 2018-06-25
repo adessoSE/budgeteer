@@ -78,13 +78,30 @@ public class ImportTemplatesPageTest extends AbstractWebTestTemplate {
         FormTester formTester = tester.newFormTester("importForm", true);
         formTester.setClearFeedbackMessagesBeforeSubmit(true);
         formTester.setFile("fileUpload", getExampleTemplate(), "xlsx");
-        formTester.submit();
+        formTester.select("type", 1);
+        tester.executeAjaxEvent("importForm:save", "onclick");
         tester.assertRenderedPage(ImportTemplatesPage.class);
-        tester.assertErrorMessages("You have not entered a name.",
-                "You have not entered a description");
-        assertThat(tester.getFeedbackMessages(null)).hasSize(2);
+        tester.assertErrorMessages("You have not entered a name.");
+
+        assertThat(tester.getFeedbackMessages(null)).hasSize(1);
     }
 
+    @Test
+    public void NoTypeTest(){
+        WicketTester tester = getTester();
+        ImportTemplatesPage testPage = new ImportTemplatesPage(TemplatesPage.class, new PageParameters());
+        tester.startPage(testPage);
+        Assertions.assertNotNull(testPage.get("importForm"));
+        FormTester formTester = tester.newFormTester("importForm", true);
+        formTester.setClearFeedbackMessagesBeforeSubmit(true);
+        formTester.setFile("fileUpload", getExampleTemplate(), "xlsx");
+        formTester.setValue("name", "TEST_N");
+        formTester.setValue("description", "TEST_D");
+        tester.executeAjaxEvent("importForm:save", "onclick");
+        tester.assertRenderedPage(ImportTemplatesPage.class);
+        tester.assertErrorMessages( "You have not selected a type");
+        assertThat(tester.getFeedbackMessages(null)).hasSize(1);
+    }
 
     @Test
     void AllCorrectInputForm(){
@@ -97,7 +114,8 @@ public class ImportTemplatesPageTest extends AbstractWebTestTemplate {
         formTester.setFile("fileUpload", getExampleTemplate(), "xlsx");
         formTester.setValue("name", "TEST_N");
         formTester.setValue("description", "TEST_D");
-        formTester.submit();
+        formTester.select("type", 1);
+        tester.executeAjaxEvent("importForm:save", "onclick");
         tester.assertRenderedPage(ImportTemplatesPage.class);
         tester.assertNoErrorMessage();
         tester.assertFeedbackMessages(null, "The selected files were imported successfully");

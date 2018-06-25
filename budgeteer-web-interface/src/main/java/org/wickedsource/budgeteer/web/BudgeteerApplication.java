@@ -99,7 +99,6 @@ public class BudgeteerApplication extends WebApplication implements ApplicationC
     }
 
     private void initWickedCharts() {
-        //JavaScriptResourceRegistry.getInstance().setHighchartsReference(BudgeteerReferences.getHighchartsReference());
         JavaScriptResourceRegistry.getInstance().setChartJsReference(BudgeteerReferences.getChartjsReference());
         JavaScriptResourceRegistry.getInstance().setJQueryReference(BudgeteerReferences.getJQueryReference());
     }
