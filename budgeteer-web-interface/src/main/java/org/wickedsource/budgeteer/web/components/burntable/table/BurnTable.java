@@ -4,6 +4,8 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.AjaxSelfUpdatingTimerBehavior;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.event.IEvent;
@@ -14,6 +16,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.NumberTextField;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.navigation.paging.IPagingLabelProvider;
@@ -21,6 +24,7 @@ import org.apache.wicket.markup.html.navigation.paging.PagingNavigation;
 import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.markup.repeater.data.EmptyDataProvider;
 import org.apache.wicket.markup.repeater.data.GridView;
@@ -53,8 +57,7 @@ public class BurnTable extends Panel {
     private CustomFeedbackPanel feedbackPanel;
     private boolean dailyRateIsEditable;
     private DataView <WorkRecord> rows;
-    private PagingNavigator pager;
-    private Label pageLabel;
+
     WebMarkupContainer table;
 
     private Model<Long> recordsPerPageModel = new Model<Long>(15L);
@@ -69,12 +72,12 @@ public class BurnTable extends Panel {
     public BurnTable(String id, FilteredRecordsModel model, boolean dailyRateIsEditable) {
         super(id, model);
         this.dailyRateIsEditable = dailyRateIsEditable;
-
         feedbackPanel = new CustomFeedbackPanel("feedback");
         feedbackPanel.setOutputMarkupId(true);
         add(feedbackPanel);
 
         table = new WebMarkupContainer("table");
+
         HashMap<String, String> options = DataTableBehavior.getRecommendedOptions();
         options.put("orderClasses", "false");
         options.put("paging", "false");
@@ -82,36 +85,215 @@ public class BurnTable extends Panel {
         options.put("info", "false");
         table.add(new DataTableBehavior(options));
         rows = createList("recordList", model, table);
-        pager = new PagingNavigator("pager", rows);
-        this.add(pager);
         table.add(rows);
-        pageLabel = new Label("pageLabel", "Showing " + Long.toString(rows.getFirstItemOffset()+1) + " to "
-                + Long.toString(rows.getFirstItemOffset() + rows.getItemsPerPage()) + " entries from total " + getRows().getItemCount());
-        pageLabel.setOutputMarkupId(true);
-        add(pageLabel);
         add(table);
         add(new MoneyLabel("total", new BudgetUnitMoneyModel(new TotalBudgetModel(model))));
 
+        createPageNavigation();
+        createItemsPerPageInput();
+        createTableInfoLabel();
+        createPageNavButtons();
+    }
+
+    private void createTableInfoLabel() {
+        Label pageLabel = new Label("pageLabel", "Showing " + Long.toString(rows.getFirstItemOffset()+1) + " to "
+                + Long.toString(rows.getFirstItemOffset() + rows.getItemsPerPage()) + " entries from total " + getRows().getItemCount()){
+            @Override
+            protected void onBeforeRender() {
+                super.onBeforeRender();
+                if(rows.getCurrentPage() == rows.getPageCount()-1){
+                    this.setDefaultModelObject("Showing " + Long.toString(rows.getFirstItemOffset()+1) + " to "
+                            + Long.toString(rows.getFirstItemOffset() + (rows.getItemCount() % rows.getItemsPerPage())) + " entries from total " + getRows().getItemCount());
+                }else{
+                    this.setDefaultModelObject("Showing " + Long.toString(rows.getFirstItemOffset()+1) + " to "
+                            + Long.toString(rows.getFirstItemOffset() + rows.getItemsPerPage()) + " entries from total " + getRows().getItemCount());
+                }
+            }
+        };
+        pageLabel.setOutputMarkupId(true);
+        add(pageLabel);
+    }
+
+    private void createItemsPerPageInput() {
         Form form = new Form("itemsPerPageForm") {
             @Override
             protected void onSubmit() {
                 getRows().setItemsPerPage(recordsPerPageModel.getObject());
+                updatePreviousAndNextButtons();
             }
         };
-        form.add(new NumberTextField<>("itemsPerPage", recordsPerPageModel).setMinimum(1L).setMaximum(getRows().getItemCount()));
+        form.add(new NumberTextField<>("itemsPerPage", recordsPerPageModel).setMinimum(1L).setMaximum(rows.getItemCount()));
         add(form);
     }
 
-    @Override
-    protected void onBeforeRender() {
-        super.onBeforeRender();
+
+    private Link previousPage;
+    private Link nextPage;
+
+    private void createPageNavigation() {
+        previousPage = new Link<Void>("previousPage") {
+            @Override
+            public void onClick() {
+                if(rows.getCurrentPage() > 0){
+                    rows.setCurrentPage(rows.getCurrentPage()-1);
+                    updatePreviousAndNextButtons();
+                }
+            }
+        };
+        nextPage = new Link<Void>("nextPage") {
+            @Override
+            public void onClick() {
+                if(rows.getCurrentPage() < rows.getPageCount()){
+                    rows.setCurrentPage(rows.getCurrentPage()+1);
+                    updatePreviousAndNextButtons();
+                }
+            }
+        };
+
+        updatePreviousAndNextButtons();
+        this.add(nextPage);
+        this.add(previousPage);
+    }
+
+    private void updatePreviousAndNextButtons(){
         if(rows.getCurrentPage() == rows.getPageCount()-1){
-            pageLabel.setDefaultModelObject("Showing " + Long.toString(rows.getFirstItemOffset()+1) + " to "
-                    + Long.toString(rows.getFirstItemOffset() + (rows.getItemCount() % rows.getItemsPerPage())) + " entries from total " + getRows().getItemCount());
-        }else{
-            pageLabel.setDefaultModelObject("Showing " + Long.toString(rows.getFirstItemOffset()+1) + " to "
-                    + Long.toString(rows.getFirstItemOffset() + rows.getItemsPerPage()) + " entries from total " + getRows().getItemCount());
+            nextPage.add(new AttributeModifier("class", "paginate_button disabled"));
+            nextPage.setEnabled(false);
+        }else {
+            nextPage.add(new AttributeModifier("class", "paginate_button enabled"));
+            nextPage.setEnabled(true);
         }
+        if(rows.getCurrentPage() == 0){
+            previousPage.add(new AttributeModifier("class", "paginate_button disabled"));
+            previousPage.setEnabled(false);
+        }else {
+            previousPage.add(new AttributeModifier("class", "paginate_button enabled"));
+            previousPage.setEnabled(true);
+        }
+    }
+
+    private void createPageNavButtons(){
+        RepeatingView pageNavButtons = new RepeatingView("pageNavButtons"){
+            @Override
+            protected void onBeforeRender() {
+                super.onBeforeRender();
+                this.removeAll();
+                if(rows.getPageCount() < 5){
+                    for(int i = 0; i < rows.getPageCount(); i++){
+                        final int pageIndex = i;
+                        Link link = (Link)new Link<Void>(this.newChildId()) {
+                            @Override
+                            public void onClick() {
+                                rows.setCurrentPage(pageIndex);
+                            }
+                        }.add(new Label("pageNavLabel", Long.toString(i+1)));
+                        if(rows.getCurrentPage() == i){
+                            link.add(new AttributeModifier("class", "active"));
+                        }
+                        this.add(link);
+                    }
+                }else {
+                    if (rows.getCurrentPage() < 3) {
+                        for (int i = 0; i < 4; i++) {
+                            final int pageIndex = i;
+                            Link link = (Link)new Link<Void>(this.newChildId()) {
+                                @Override
+                                public void onClick() {
+                                    rows.setCurrentPage(pageIndex);
+                                }
+                            }.add(new Label("pageNavLabel", Long.toString(i+1)));
+                            if(rows.getCurrentPage() == i){
+                                link.add(new AttributeModifier("class", "active"));
+                            }
+                            this.add(link);
+                        }
+                        this.add(new Link<Void>(this.newChildId()) {
+                            @Override
+                            public void onClick() {
+
+                            }
+                        }.add(new Label("pageNavLabel", "...")).add(new AttributeModifier("class", "disabled")).setEnabled(false));
+                        this.add(new Link<Void>(this.newChildId()) {
+                            @Override
+                            public void onClick() {
+                                rows.setCurrentPage(rows.getPageCount() - 1);
+                            }
+                        }.add(new Label("pageNavLabel", Long.toString(rows.getPageCount()))));
+                    } else if (rows.getCurrentPage() > rows.getPageCount() - 4) {
+                        this.add(new Link<Void>(this.newChildId()) {
+                            @Override
+                            public void onClick() {
+                                rows.setCurrentPage(0);
+                            }
+                        }.add(new Label("pageNavLabel", "1")));
+                        this.add(new Link<Void>(this.newChildId()) {
+                            @Override
+                            public void onClick() {
+
+                            }
+                        }.add(new Label("pageNavLabel", "...")).add(new AttributeModifier("class", "disabled")).setEnabled(false));
+                        for (long i = rows.getPageCount() - 4; i < rows.getPageCount(); i++) {
+                            final long pageIndex = i;
+                            Link link = (Link)new Link<Void>(this.newChildId()) {
+                                @Override
+                                public void onClick() {
+                                    rows.setCurrentPage(pageIndex);
+                                }
+                            }.add(new Label("pageNavLabel", Long.toString(i+1)));
+                            if(rows.getCurrentPage() == i){
+                                link.add(new AttributeModifier("class", "active"));
+                            }
+                            this.add(link);
+                        }
+                    } else{
+                        this.add(new Link<Void>(this.newChildId()) {
+                            @Override
+                            public void onClick() {
+                                rows.setCurrentPage(0);
+                            }
+                        }.add(new Label("pageNavLabel", "1")));
+                        this.add(new Link<Void>(this.newChildId()) {
+                            @Override
+                            public void onClick() {
+
+                            }
+                        }.add(new Label("pageNavLabel", "...")).add(new AttributeModifier("class", "disabled")).setEnabled(false));
+                        this.add(new Link<Void>(this.newChildId()) {
+                            @Override
+                            public void onClick() {
+                                rows.setCurrentPage(rows.getCurrentPage() - 1);
+                            }
+                        }.add(new Label("pageNavLabel", Long.toString(rows.getCurrentPage()))));
+                        this.add(new Link<Void>(this.newChildId()) {
+                            @Override
+                            public void onClick() {
+                                rows.setCurrentPage(rows.getCurrentPage());
+                            }
+                        }.add(new Label("pageNavLabel", Long.toString(rows.getCurrentPage()+1))).add(new AttributeModifier("class", "active")));
+                        this.add(new Link<Void>(this.newChildId()) {
+                            @Override
+                            public void onClick() {
+                                rows.setCurrentPage(rows.getCurrentPage()+1);
+                            }
+                        }.add(new Label("pageNavLabel", Long.toString(rows.getCurrentPage()+2))));
+                        this.add(new Link<Void>(this.newChildId()) {
+                            @Override
+                            public void onClick() {
+
+                            }
+                        }.add(new Label("pageNavLabel", "...")).add(new AttributeModifier("class", "disabled")).setEnabled(false));
+                        this.add(new Link<Void>(this.newChildId()) {
+                            @Override
+                            public void onClick() {
+                                rows.setCurrentPage(rows.getPageCount() - 1);
+                            }
+                        }.add(new Label("pageNavLabel", Long.toString(rows.getPageCount()))));
+                    }
+                }
+                updatePreviousAndNextButtons();
+            }
+        };
+        add(pageNavButtons);
     }
 
     @Override

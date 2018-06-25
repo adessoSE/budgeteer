@@ -3,7 +3,7 @@
     <div wicket:id="feedback"></div>
     <p class="pull-right">Total burned budget with current filter: <strong wicket:id="total">€120.000</strong></p><br/>
 
-    <table class="table table-bordered table-hover" wicket:id="table">
+    <table id="hoursTable" class="table table-bordered table-hover" wicket:id="table">
         <thead>
         <tr>
             <th>Budget</th>
@@ -40,5 +40,17 @@
     <form wicket:id="itemsPerPageForm">
     Records per page<input type="number" wicket:id="itemsPerPage">
     </form>
-    <div style="float: right; margin-right: 100px" wicket:id="pager"></div>
+    <div class="dataTables_paginate paging_simple_numbers" id="hoursTable_paginate">
+        <ul class="pagination">
+            <li class="paginate_button" wicket:id="previousPage" style="cursor: pointer" aria-controls="hoursTable" tabindex="0" id="hoursTable_previous">
+                 <a>Previous</a>
+            </li>
+            <li wicket:id="pageNavButtons" class="paginate_button" style="cursor: pointer" aria-controls="hoursTable" tabindex="0">
+                <a wicket:id="pageNavLabel">1</a>
+            </li>
+            <li class="paginate_button" wicket:id="nextPage" style="cursor: pointer" aria-controls="hoursTable" tabindex="0" id="hoursTable_next">
+                <a >Next</a>
+            </li>
+        </ul>
+    </div>
 </wicket:panel>

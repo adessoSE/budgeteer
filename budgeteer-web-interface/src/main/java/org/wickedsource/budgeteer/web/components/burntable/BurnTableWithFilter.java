@@ -35,7 +35,7 @@ public class BurnTableWithFilter extends Panel {
 
         FilteredRecordsModel tableModel = new FilteredRecordsModel(initialFilter);
         burnTable = new BurnTable("table", tableModel, dailyRateIsEditable);
-        add(burnTable);
+        add(burnTable.setOutputMarkupId(true));
 
         IModel<File> fileModel = new AbstractReadOnlyModel<File>() {
             @Override
