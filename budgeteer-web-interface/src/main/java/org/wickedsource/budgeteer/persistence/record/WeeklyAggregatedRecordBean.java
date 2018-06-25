@@ -14,5 +14,4 @@ public class WeeklyAggregatedRecordBean {
     private Double hours;
 
     private long valueInCents;
-
 }

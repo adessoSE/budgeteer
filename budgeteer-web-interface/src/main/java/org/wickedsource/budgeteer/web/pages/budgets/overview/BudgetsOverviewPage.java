@@ -12,10 +12,12 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.aspectj.weaver.ast.Var;
 import org.wickedsource.budgeteer.service.budget.BudgetService;
 import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.Mount;
+import org.wickedsource.budgeteer.web.components.links.NetGrossLink;
 import org.wickedsource.budgeteer.web.components.tax.TaxSwitchLabelModel;
 import org.wickedsource.budgeteer.web.pages.base.basepage.BasePage;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
@@ -58,10 +60,9 @@ public class BudgetsOverviewPage extends BasePage {
         add(new BookmarkablePageLink<MultiBudgetMonthReportPage>("monthReportLink", MultiBudgetMonthReportPage.class));
         add(createNewBudgetLink("createBudgetLink"));
         add(createReportLink("createReportLink"));
-        add(createNetGrossLink("netGrossLink"));
+        add(new NetGrossLink("netGrossLink"));
         add(createResetButton("resetButton"));
     }
-
 
     private Component createReportLink(String string) {
         Link link = new Link(string) {
@@ -71,7 +72,6 @@ public class BudgetsOverviewPage extends BasePage {
 			}
 		};
 
-
         if (!budgetService.projectHasBudgets(BudgeteerSession.get().getProjectId())) {
             link.setEnabled(false);
             link.add(new AttributeAppender("style", "cursor: not-allowed;", " "));
@@ -79,7 +79,6 @@ public class BudgetsOverviewPage extends BasePage {
         }
         return link;
 	}
-
 
     private Link createNewBudgetLink(String id) {
         return new Link(id) {
@@ -97,30 +96,6 @@ public class BudgetsOverviewPage extends BasePage {
         return new BreadcrumbsModel(DashboardPage.class, BudgetsOverviewPage.class);
     }
 
-    private Link createNetGrossLink(String string) {
-        Link link = new Link(string) {
-            @Override
-            public void onClick() {
-                if (BudgeteerSession.get().isTaxEnabled() && Math.abs(BudgeteerSession.get().getSelectedBudgetUnit() - 1.0) < Math.ulp(1)) {
-                    BudgeteerSession.get().setTaxEnabled(false);
-                } else {
-                    BudgeteerSession.get().setTaxEnabled(true);
-                }
-            }
-        };
-        link.add(new Label("title", new TaxSwitchLabelModel(
-                new StringResourceModel("links.tax.label.net", this),
-                new StringResourceModel("links.tax.label.gross", this)
-        )));
-        if(Math.abs(BudgeteerSession.get().getSelectedBudgetUnit() - 1.0) > Math.ulp(1)){
-            link.add(new AttributeAppender("style", "cursor: not-allowed;", " "));
-            link.add(new AttributeModifier("title", BudgetsOverviewPage.this.getString("links.budge.label.gross.value")));
-            link.setEnabled(false);
-            BudgeteerSession.get().setTaxEnabled(false);
-        }
-        return link;
-    }
-
     private Link createResetButton(String id) {
         return new Link(id) {
             @Override
@@ -131,5 +106,4 @@ public class BudgetsOverviewPage extends BasePage {
             }
         };
     }
-
 }
