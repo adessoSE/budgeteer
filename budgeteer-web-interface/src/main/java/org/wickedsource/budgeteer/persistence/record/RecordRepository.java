@@ -21,13 +21,21 @@ public interface RecordRepository {
 
     List<WeeklyAggregatedRecordBean> aggregateByWeekAndBudget(long budgetId);
 
+    List<WeeklyAggregatedRecordWithTaxBean> aggregateByWeekAndBudgetWithTax(long budgetId);
+
     void updateDailyRates(long budgetId, long personId, Date fromDate, Date toDate, Money dailyRate);
 
     List<MonthlyAggregatedRecordBean> aggregateByMonthAndBudget(long budgetId);
 
+    List<MonthlyAggregatedRecordWithTaxBean> aggregateByMonthAndBudgetWithTax(long budgetId);
+
     List<WeeklyAggregatedRecordBean> aggregateByWeekAndBudgetTags(long projectId, List<String> tags);
 
+    List<WeeklyAggregatedRecordWithTaxBean> aggregateByWeekAndBudgetTagsWithTax(long projectId, List<String> tags);
+
     List<MonthlyAggregatedRecordBean> aggregateByMonthAndBudgetTags(long projectId, List<String> tags);
+
+    List<MonthlyAggregatedRecordWithTaxBean> aggregateByMonthAndBudgetTagsWithTax(long projectId, List<String> tags);
 
     List<WeeklyAggregatedRecordBean> aggregateByWeekForProject(long projectId, Date start);
 
@@ -37,13 +45,23 @@ public interface RecordRepository {
 
     List<WeeklyAggregatedRecordWithTitleBean> aggregateByWeekAndPersonForBudget(long budgetId, Date startDate);
 
+    List<WeeklyAggregatedRecordWithTitleAndTaxBean> aggregateByWeekAndPersonForBudgetWithTax(long budgetId, Date startDate);
+
     List<WeeklyAggregatedRecordBean> aggregateByWeekForBudget(long budgetId, Date start);
+
+    List<WeeklyAggregatedRecordWithTaxBean> aggregateByWeekForBudgetWithTax(long budgetId, Date start);
 
     List<WeeklyAggregatedRecordWithTitleBean> aggregateByWeekAndPersonForBudgets(long projectId, List<String> tags, Date startDate);
 
+    List<WeeklyAggregatedRecordWithTitleAndTaxBean> aggregateByWeekAndPersonForBudgetsWithTax(long projectId, List<String> tags, Date startDate);
+
     List<WeeklyAggregatedRecordWithTitleBean> aggregateByWeekAndPersonForBudgets(long projectId, Date startDate);
 
+    List<WeeklyAggregatedRecordWithTitleAndTaxBean> aggregateByWeekAndPersonForBudgetsWithTax(long projectId, Date startDate);
+
     List<WeeklyAggregatedRecordBean> aggregateByWeekForBudgets(long projectId, List<String> tags, Date start);
+
+    List<WeeklyAggregatedRecordWithTaxBean> aggregateByWeekForBudgetsWithTax(long projectId, List<String> tags, Date start);
 
     List<MonthlyAggregatedRecordBean> aggregateByMonthForPerson(long personId, Date startDate);
 
@@ -51,22 +69,39 @@ public interface RecordRepository {
 
     List<MonthlyAggregatedRecordBean> aggregateByMonthForBudget(long budgetId, Date startDate);
 
+    List<MonthlyAggregatedRecordWithTaxBean> aggregateByMonthForBudgetWithTax(long budgetId, Date startDate);
+
     List<MonthlyAggregatedRecordWithTitleBean> aggregateByMonthAndPersonForBudget(long budgetId, Date startDate);
+
+    List<MonthlyAggregatedRecordWithTitleAndTaxBean> aggregateByMonthAndPersonForBudgetWithTax(long budgetId, Date startDate);
 
     List<MonthlyAggregatedRecordBean> aggregateByMonthForBudgets(long projectId, List<String> tags, Date startDate);
 
     List<MonthlyAggregatedRecordBean> aggregateByMonthForBudgets(long projectId, Date startDate);
 
+    List<MonthlyAggregatedRecordWithTaxBean> aggregateByMonthForBudgetsWithTax(long projectId, List<String> tags, Date startDate);
+
+    List<MonthlyAggregatedRecordWithTaxBean> aggregateByMonthForBudgetsWithTax(long projectId, Date startDate);
+
     List<MonthlyAggregatedRecordBean> aggregateByMonth(long projectId);
 
+    List<MonthlyAggregatedRecordWithTaxBean> aggregateByMonthWithTax(long projectId);
+
     List<WeeklyAggregatedRecordBean> aggregateByWeek(long projectId);
+
+    List<WeeklyAggregatedRecordWithTaxBean> aggregateByWeekWithTax(long projectId);
 
     List<MonthlyAggregatedRecordWithTitleBean> aggregateByMonthAndPersonForBudgets(long projectId, List<String> tags, Date startDate);
 
     List<MonthlyAggregatedRecordWithTitleBean> aggregateByMonthAndPersonForBudgets(long projectId, Date startDate);
 
+    List<MonthlyAggregatedRecordWithTitleAndTaxBean> aggregateByMonthAndPersonForBudgetsWithTax(long projectId, List<String> tags, Date startDate);
+
+    List<MonthlyAggregatedRecordWithTitleAndTaxBean> aggregateByMonthAndPersonForBudgetsWithTax(long projectId, Date startDate);
+
     Long countByProjectId(long projectId);
 
     List<WeeklyAggregatedRecordBean> aggregateByWeekForBudgets(long projectId,Date start);
 
+    List<WeeklyAggregatedRecordWithTaxBean> aggregateByWeekForBudgetsWithTax(long projectId,Date start);
 }
