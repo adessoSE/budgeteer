@@ -32,9 +32,11 @@ public class BudgetsMonthlyAggregatedRecordsModel extends LoadableDetachableMode
 	@Override
 	protected List<AggregatedRecord> load() {
 		if (budgetId != 0) {
-			return service.getMonthlyAggregationForBudget(budgetId);
+			//return service.getMonthlyAggregationForBudget(budgetId);
+			return service.getMonthlyAggregationForBudgetWithTax(budgetId);
 		} else if (filterModel != null && filterModel.getObject() != null) {
-			return service.getMonthlyAggregationForBudgets(filterModel.getObject());
+			//return service.getMonthlyAggregationForBudgets(filterModel.getObject());
+			return service.getMonthlyAggregationForBudgetsWithTax(filterModel.getObject());
 		} else {
 			throw new IllegalStateException("Neither budgetId nor filter specified. Specify at least one of these attributes in the constructor!");
 		}

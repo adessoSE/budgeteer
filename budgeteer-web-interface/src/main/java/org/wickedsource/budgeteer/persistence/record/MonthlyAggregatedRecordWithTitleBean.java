@@ -7,8 +7,8 @@ public class MonthlyAggregatedRecordWithTitleBean extends MonthlyAggregatedRecor
 	@Getter @Setter
 	private String title;
 
-	public MonthlyAggregatedRecordWithTitleBean(int year, int week, Double hours, long valueInCents, String title) {
-		super(year, week, hours, valueInCents);
+	public MonthlyAggregatedRecordWithTitleBean(int year, int month, Double hours, long valueInCents, String title) {
+		super(year, month, hours, valueInCents);
 		this.title = title;
 	}
 }

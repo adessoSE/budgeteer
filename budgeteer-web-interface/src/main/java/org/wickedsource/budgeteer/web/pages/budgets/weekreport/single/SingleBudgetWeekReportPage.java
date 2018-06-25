@@ -13,6 +13,7 @@ import org.wickedsource.budgeteer.service.statistics.TargetAndActual;
 import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.components.aggregatedrecordtable.AggregatedRecordTable;
 import org.wickedsource.budgeteer.web.components.budget.dropdown.BudgetLinkDropdownForm;
+import org.wickedsource.budgeteer.web.components.links.NetGrossLink;
 import org.wickedsource.budgeteer.web.components.targetactualchart.TargetAndActualChart;
 import org.wickedsource.budgeteer.web.components.targetactualchart.TargetAndActualChartConfiguration;
 import org.wickedsource.budgeteer.web.pages.base.basepage.BasePage;
@@ -40,6 +41,7 @@ public class SingleBudgetWeekReportPage extends BasePage {
 		add(new AggregatedRecordTable("table", tableModel));
 
 		add(new BudgetLinkDropdownForm("budgetLinkDropdownForm").setLinkType(BudgetLinkDropdownForm.BudgetLinkType.WEEKLY));
+		add(new NetGrossLink("netGrossLink"));
 	}
 
 	@Override

@@ -12,6 +12,7 @@ import org.wickedsource.budgeteer.service.statistics.TargetAndActual;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.components.aggregatedrecordtable.AggregatedRecordTable;
+import org.wickedsource.budgeteer.web.components.links.NetGrossLink;
 import org.wickedsource.budgeteer.web.components.targetactualchart.TargetAndActualChart;
 import org.wickedsource.budgeteer.web.components.targetactualchart.TargetAndActualChartConfiguration;
 import org.wickedsource.budgeteer.web.pages.base.basepage.BasePage;
@@ -32,6 +33,8 @@ public class MultiBudgetWeekReportPage extends BasePage {
 
 		IModel<List<AggregatedRecord>> tableModel = new BudgetsWeeklyAggregatedRecordsModel(model(from(BudgeteerSession.get().getBudgetFilter())));
 		add(new AggregatedRecordTable("table", tableModel));
+
+		add(new NetGrossLink("netGrossLink"));
 	}
 
 	@Override
@@ -39,4 +42,5 @@ public class MultiBudgetWeekReportPage extends BasePage {
 	protected BreadcrumbsModel getBreadcrumbsModel() {
 		return new BreadcrumbsModel(DashboardPage.class, BudgetsOverviewPage.class, MultiBudgetWeekReportPage.class);
 	}
+
 }
