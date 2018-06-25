@@ -8,18 +8,18 @@ import org.wickedsource.budgeteer.web.pages.person.details.highlights.PersonHigh
 
 public class PersonHighlightsPanelTest extends AbstractWebTestTemplate {
 
-    @Test
-    void render() {
-        WicketTester tester = getTester();
-        PersonHighlightsModel model = new PersonHighlightsModel(1L);
-        PersonHighlightsPanel panel = new PersonHighlightsPanel("panel", model);
-        tester.startComponentInPage(panel);
+	@Test
+	void render() {
+		WicketTester tester = getTester();
+		PersonHighlightsModel model = new PersonHighlightsModel(1L);
+		PersonHighlightsPanel panel = new PersonHighlightsPanel("panel", model);
+		tester.startComponentInPage(panel);
 
-        tester.assertContains("Tom Hombergs");
-    }
+		tester.assertContains("Tom Hombergs");
+	}
 
-    @Override
-    protected void setupTest() {
+	@Override
+	protected void setupTest() {
 
-    }
+	}
 }

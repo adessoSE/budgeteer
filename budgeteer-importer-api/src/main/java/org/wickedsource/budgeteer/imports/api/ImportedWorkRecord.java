@@ -2,13 +2,13 @@ package org.wickedsource.budgeteer.imports.api;
 
 public class ImportedWorkRecord extends ImportedRecord {
 
-    private int minutesWorked;
+	private int minutesWorked;
 
-    public int getMinutesWorked() {
-        return minutesWorked;
-    }
+	public int getMinutesWorked() {
+		return minutesWorked;
+	}
 
-    public void setMinutesWorked(int minutesWorked) {
-        this.minutesWorked = minutesWorked;
-    }
+	public void setMinutesWorked(int minutesWorked) {
+		this.minutesWorked = minutesWorked;
+	}
 }

@@ -1,12 +1,13 @@
 package org.wickedsource.budgeteer.web.planning;
 
+import static de.jollyday.HolidayType.OFFICIAL_HOLIDAY;
+import static de.jollyday.HolidayType.UNOFFICIAL_HOLIDAY;
+
+import org.joda.time.LocalDate;
+
 import de.jollyday.HolidayManager;
 import de.jollyday.ManagerParameter;
 import de.jollyday.ManagerParameters;
-import org.joda.time.LocalDate;
-
-import static de.jollyday.HolidayType.OFFICIAL_HOLIDAY;
-import static de.jollyday.HolidayType.UNOFFICIAL_HOLIDAY;
 
 public class HolidayConfiguration {
 

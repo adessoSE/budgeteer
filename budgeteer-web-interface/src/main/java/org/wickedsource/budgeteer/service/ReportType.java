@@ -1,16 +1,16 @@
 package org.wickedsource.budgeteer.service;
 
 public enum ReportType {
-    BUDGET_REPORT("Budget"),
-    CONTRACT_REPORT("Contract");
+	BUDGET_REPORT("Budget"),
+	CONTRACT_REPORT("Contract");
 
-    private final String type;
+	private final String type;
 
-    ReportType(String s) {
-        type = s;
-    }
+	ReportType(String s) {
+		type = s;
+	}
 
-    public String toString() {
-        return this.type;
-    }
+	public String toString() {
+		return this.type;
+	}
 }

@@ -1,27 +1,28 @@
 package org.wickedsource.budgeteer.web.pages.templates;
 
-import lombok.Getter;
-import org.wickedsource.budgeteer.service.ReportType;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import lombok.Getter;
+
+import org.wickedsource.budgeteer.service.ReportType;
+
 public class TemplateFilter implements Serializable {
 
-    @Getter
-    private long projectId;
+	@Getter
+	private long projectId;
 
-    @Getter
-    private List<ReportType> typesList;
+	@Getter
+	private List<ReportType> typesList;
 
-    @Getter
-    private List<ReportType> possibleTypes = new LinkedList<>();
+	@Getter
+	private List<ReportType> possibleTypes = new LinkedList<>();
 
-    public TemplateFilter(long projectId) {
-        this.projectId = projectId;
-        typesList = new ArrayList<>(Arrays.asList(ReportType.values()));
-    }
+	public TemplateFilter(long projectId) {
+		this.projectId = projectId;
+		typesList = new ArrayList<>(Arrays.asList(ReportType.values()));
+	}
 }

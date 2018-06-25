@@ -1,10 +1,10 @@
 package org.wickedsource.budgeteer.web.planning;
 
+import static org.joda.time.DateTimeConstants.*;
+
 import org.joda.time.LocalDate;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import static org.joda.time.DateTimeConstants.*;
 
 class DefaultCalendarTest {
 

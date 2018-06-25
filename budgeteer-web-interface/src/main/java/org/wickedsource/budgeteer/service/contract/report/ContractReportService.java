@@ -1,5 +1,13 @@
 package org.wickedsource.budgeteer.service.contract.report;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import javax.transaction.Transactional;
+
 import org.apache.poi.xssf.usermodel.XSSFFormulaEvaluator;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -12,13 +20,6 @@ import org.wickedsource.budgeteer.persistence.contract.ContractEntity;
 import org.wickedsource.budgeteer.persistence.contract.ContractRepository;
 import org.wickedsource.budgeteer.service.template.TemplateService;
 
-import javax.transaction.Transactional;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.*;
-import java.util.stream.Collectors;
-
 @Transactional
 @Service
 public class ContractReportService {
@@ -28,13 +29,13 @@ public class ContractReportService {
 
 	@Autowired
 	private ContractReportDataMapper mapper;
-	
+
 	@Autowired
 	private ContractReportMonthlyDataMapper monthlyMapper;
 
 	@Autowired
 	private TemplateService templateService;
-	
+
 	public File createReportFile(long templateId, long projectId,Date endDate) {
 		XSSFWorkbook wb = getSheetWorkbook(templateId);
 
@@ -45,7 +46,7 @@ public class ContractReportService {
 		List<ContractReportSummary> summary = createSummary(contractReportList);
 		writeSummary(wb.getSheetAt(0), summary,false);
 
-		 // Monthly summary
+		// Monthly summary
 		List<ContractReportData> monthlyContractReportList = loadMonthlyContractReportData(projectId, endDate);
 		writeContractData(wb.getSheetAt(1),monthlyContractReportList);
 
@@ -62,8 +63,8 @@ public class ContractReportService {
 		tw.setEntries(summary);
 		tw.write();
 		if(removeFlagSheet) {
-            tw.removeFlagSheet();
-        }
+			tw.removeFlagSheet();
+		}
 	}
 
 	private List<ContractReportSummary> createSummary(List<ContractReportData> contractReportList) {
@@ -108,7 +109,7 @@ public class ContractReportService {
 		tw.setEntries(reportList);
 		setWarnings(reportList, tw);
 		tw.write();
-		
+
 	}
 
 	private void setWarnings(List<ContractReportData> list, TemplateWriter<ContractReportData> tw) {
@@ -138,7 +139,7 @@ public class ContractReportService {
 		return monthlyMapper.map(contracts,endDate);
 	}
 
-    private XSSFWorkbook getSheetWorkbook(long id) {
+	private XSSFWorkbook getSheetWorkbook(long id) {
 		return templateService.getById(id).getWb();
-    }
+	}
 }

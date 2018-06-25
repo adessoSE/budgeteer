@@ -8,19 +8,19 @@ import org.joda.money.Money;
 
 public class MoneyTextField extends TextField<Money> {
 
-    public MoneyTextField(String id, IModel<Money> model) {
-        super(id, model);
-    }
+	public MoneyTextField(String id, IModel<Money> model) {
+		super(id, model);
+	}
 
-    @Override
-    @SuppressWarnings("unchecked")
-    public <Money> IConverter<Money> getConverter(Class<Money> type) {
-        MoneyConverter converter = new MoneyConverter();
-        return (IConverter<Money>) converter;
-    }
+	@Override
+	@SuppressWarnings("unchecked")
+	public <Money> IConverter<Money> getConverter(Class<Money> type) {
+		MoneyConverter converter = new MoneyConverter();
+		return (IConverter<Money>) converter;
+	}
 
-    @Override
-    protected String[] getInputTypes() {
-        return new String[]{"text"};
-    }
+	@Override
+	protected String[] getInputTypes() {
+		return new String[]{"text"};
+	}
 }

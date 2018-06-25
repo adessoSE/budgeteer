@@ -1,5 +1,7 @@
 package org.wickedsource.budgeteer.web.pages.contract.details;
 
+import java.util.concurrent.Callable;
+
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.SubmitLink;
@@ -24,106 +26,104 @@ import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 import org.wickedsource.budgeteer.web.pages.invoice.edit.EditInvoicePage;
 import org.wickedsource.budgeteer.web.pages.invoice.overview.InvoiceOverviewPage;
 
-import java.util.concurrent.Callable;
-
 @Mount("contracts/details/${id}")
 public class ContractDetailsPage extends BasePage {
 
-    @SpringBean
-    private ContractService contractService;
+	@SpringBean
+	private ContractService contractService;
 
-    private static final int numberOfMonths = 6;
+	private static final int numberOfMonths = 6;
 
-    private ContractDetailModel contractModel;
+	private ContractDetailModel contractModel;
 
-    public ContractDetailsPage(PageParameters parameters) {
-        super(parameters);
-        contractModel = new ContractDetailModel(getParameterId());
+	public ContractDetailsPage(PageParameters parameters) {
+		super(parameters);
+		contractModel = new ContractDetailModel(getParameterId());
 
-        add(new ContractHighlightsPanel("highlightsPanel", contractModel));
-        add(new ContractDetailChart("comparisonChart", new ContractDetailChartModel(getParameterId(), numberOfMonths)));
-        add(new DifferenceTable("differenceTable", new DifferenceTableModel(getParameterId(), contractModel.getObject().getStartDate())));
+		add(new ContractHighlightsPanel("highlightsPanel", contractModel));
+		add(new ContractDetailChart("comparisonChart", new ContractDetailChartModel(getParameterId(), numberOfMonths)));
+		add(new DifferenceTable("differenceTable", new DifferenceTableModel(getParameterId(), contractModel.getObject().getStartDate())));
 
-        add(new Link("editLink") {
-            @Override
-            public void onClick() {
-                WebPage page = new EditContractPage(createParameters(getParameterId()), ContractDetailsPage.class, getPageParameters());
-                setResponsePage(page);
-            }
-        });
-        add(new Link("addInvoiceLink"){
-            @Override
-            public void onClick() {
-                WebPage page = new EditInvoicePage(EditInvoicePage.createNewInvoiceParameters(getParameterId()), ContractDetailsPage.class, getPageParameters());
-                setResponsePage(page);
-            }
-        });
-        add(new Link("showInvoiceLink"){
-            @Override
-            public void onClick() {
-                WebPage page = new InvoiceOverviewPage(InvoiceOverviewPage.createParameters(getParameterId())){
+		add(new Link("editLink") {
+			@Override
+			public void onClick() {
+				WebPage page = new EditContractPage(createParameters(getParameterId()), ContractDetailsPage.class, getPageParameters());
+				setResponsePage(page);
+			}
+		});
+		add(new Link("addInvoiceLink"){
+			@Override
+			public void onClick() {
+				WebPage page = new EditInvoicePage(EditInvoicePage.createNewInvoiceParameters(getParameterId()), ContractDetailsPage.class, getPageParameters());
+				setResponsePage(page);
+			}
+		});
+		add(new Link("showInvoiceLink"){
+			@Override
+			public void onClick() {
+				WebPage page = new InvoiceOverviewPage(InvoiceOverviewPage.createParameters(getParameterId())){
 
-                    @Override
-                    protected BreadcrumbsModel getBreadcrumbsModel() {
-                        BreadcrumbsModel m = ContractDetailsPage.this.getBreadcrumbsModel();
-                        m.addBreadcrumb(InvoiceOverviewPage.class, getPageParameters());
-                        return m;
-                    }
-                };
-                setResponsePage(page);
-            }
-        });
-        add(new Link("showContractLink"){
-            @Override
-            public void onClick() {
-                WebPage page = new BudgetForContractOverviewPage(BudgetForContractOverviewPage.createParameters(getParameterId())){
+					@Override
+					protected BreadcrumbsModel getBreadcrumbsModel() {
+						BreadcrumbsModel m = ContractDetailsPage.this.getBreadcrumbsModel();
+						m.addBreadcrumb(InvoiceOverviewPage.class, getPageParameters());
+						return m;
+					}
+				};
+				setResponsePage(page);
+			}
+		});
+		add(new Link("showContractLink"){
+			@Override
+			public void onClick() {
+				WebPage page = new BudgetForContractOverviewPage(BudgetForContractOverviewPage.createParameters(getParameterId())){
 
-                    @Override
-                    protected BreadcrumbsModel getBreadcrumbsModel() {
-                        BreadcrumbsModel m = ContractDetailsPage.this.getBreadcrumbsModel();
-                        m.addBreadcrumb(BudgetForContractOverviewPage.class, BudgetForContractOverviewPage.createParameters(getParameterId()));
-                        return m;
-                    }
-                };
-                setResponsePage(page);
-            }
-        });
-        Form deleteForm = new ConfirmationForm("deleteForm", this, "confirmation.delete") {
-            @Override
-            public void onSubmit() {
-                setResponsePage(new DeleteDialog(new Callable<Void>() {
-                    @Override
-                    public Void call() {
-                        contractService.deleteContract(getParameterId());
-                        setResponsePage(ContractOverviewPage.class);
-                        return null;
-                    }
-                }, new Callable<Void>(){
-                    @Override
-                    public Void call(){
-                        setResponsePage(ContractDetailsPage.class, getPageParameters());
-                        return null;
-                    }
-                }));
-
-
-            }
-        };
-        deleteForm.add(new SubmitLink("deleteLink"));
-        add(deleteForm);
-    }
+					@Override
+					protected BreadcrumbsModel getBreadcrumbsModel() {
+						BreadcrumbsModel m = ContractDetailsPage.this.getBreadcrumbsModel();
+						m.addBreadcrumb(BudgetForContractOverviewPage.class, BudgetForContractOverviewPage.createParameters(getParameterId()));
+						return m;
+					}
+				};
+				setResponsePage(page);
+			}
+		});
+		Form deleteForm = new ConfirmationForm("deleteForm", this, "confirmation.delete") {
+			@Override
+			public void onSubmit() {
+				setResponsePage(new DeleteDialog(new Callable<Void>() {
+					@Override
+					public Void call() {
+						contractService.deleteContract(getParameterId());
+						setResponsePage(ContractOverviewPage.class);
+						return null;
+					}
+				}, new Callable<Void>(){
+					@Override
+					public Void call(){
+						setResponsePage(ContractDetailsPage.class, getPageParameters());
+						return null;
+					}
+				}));
 
 
-    @Override
-    protected BreadcrumbsModel getBreadcrumbsModel() {
-        BreadcrumbsModel model = new BreadcrumbsModel(DashboardPage.class, ContractOverviewPage.class);
-        model.addBreadcrumb(ContractDetailsPage.class, getPageParameters());
-        return model;
-    }
+			}
+		};
+		deleteForm.add(new SubmitLink("deleteLink"));
+		add(deleteForm);
+	}
 
-    @Override
-    protected void onDetach() {
-        contractModel.detach();
-        super.onDetach();
-    }
+
+	@Override
+	protected BreadcrumbsModel getBreadcrumbsModel() {
+		BreadcrumbsModel model = new BreadcrumbsModel(DashboardPage.class, ContractOverviewPage.class);
+		model.addBreadcrumb(ContractDetailsPage.class, getPageParameters());
+		return model;
+	}
+
+	@Override
+	protected void onDetach() {
+		contractModel.detach();
+		super.onDetach();
+	}
 }

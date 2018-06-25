@@ -1,10 +1,11 @@
 package org.wickedsource.budgeteer.service.budget.report;
 
-import lombok.Data;
-import org.wickedsource.budgeteer.SheetTemplate.SheetTemplateSerializable;
-
 import java.util.Date;
 import java.util.List;
+
+import lombok.Data;
+
+import org.wickedsource.budgeteer.SheetTemplate.SheetTemplateSerializable;
 
 @Data
 class BudgetReportData {

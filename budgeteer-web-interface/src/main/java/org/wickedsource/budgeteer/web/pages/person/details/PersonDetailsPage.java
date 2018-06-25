@@ -1,5 +1,7 @@
 package org.wickedsource.budgeteer.web.pages.person.details;
 
+import java.util.concurrent.Callable;
+
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.SubmitLink;
@@ -26,63 +28,61 @@ import org.wickedsource.budgeteer.web.pages.person.monthreport.PersonMonthReport
 import org.wickedsource.budgeteer.web.pages.person.overview.PeopleOverviewPage;
 import org.wickedsource.budgeteer.web.pages.person.weekreport.PersonWeekReportPage;
 
-import java.util.concurrent.Callable;
-
 @Mount("people/details/${id}")
 public class PersonDetailsPage extends BasePage {
 
-    @SpringBean
-    private PersonService personService;
+	@SpringBean
+	private PersonService personService;
 
-    public PersonDetailsPage(PageParameters parameters) {
-        super(parameters);
-        add(new PersonHighlightsPanel("highlightsPanel", new PersonHighlightsModel(getParameterId())));
-        add(new BudgetDistributionChart("distributionChart", new BudgetDistributionChartModel(getParameterId())));
-        add(createEditPersonLink("editPersonLink"));
-        add(new BookmarkablePageLink<PersonWeekReportPage>("weekReportLink", PersonWeekReportPage.class, PersonWeekReportPage.createParameters(getParameterId())));
-        add(new BookmarkablePageLink<PersonWeekReportPage>("monthReportLink", PersonMonthReportPage.class, PersonMonthReportPage.createParameters(getParameterId())));
-        add(new BookmarkablePageLink<PersonWeekReportPage>("hoursLink", PersonHoursPage.class, PersonHoursPage.createParameters(getParameterId())));
+	public PersonDetailsPage(PageParameters parameters) {
+		super(parameters);
+		add(new PersonHighlightsPanel("highlightsPanel", new PersonHighlightsModel(getParameterId())));
+		add(new BudgetDistributionChart("distributionChart", new BudgetDistributionChartModel(getParameterId())));
+		add(createEditPersonLink("editPersonLink"));
+		add(new BookmarkablePageLink<PersonWeekReportPage>("weekReportLink", PersonWeekReportPage.class, PersonWeekReportPage.createParameters(getParameterId())));
+		add(new BookmarkablePageLink<PersonWeekReportPage>("monthReportLink", PersonMonthReportPage.class, PersonMonthReportPage.createParameters(getParameterId())));
+		add(new BookmarkablePageLink<PersonWeekReportPage>("hoursLink", PersonHoursPage.class, PersonHoursPage.createParameters(getParameterId())));
 
-        Form deleteForm = new ConfirmationForm("deleteForm", this, "confirmation.delete") {
-            @Override
-            public void onSubmit() {
+		Form deleteForm = new ConfirmationForm("deleteForm", this, "confirmation.delete") {
+			@Override
+			public void onSubmit() {
 
-                setResponsePage(new DeleteDialog(new Callable<Void>() {
-                    @Override
-                    public Void call() {
-                        personService.deletePerson(getParameterId());
-                        setResponsePage(PeopleOverviewPage.class);
-                        return null;
-                    }
-                }, new Callable<Void>() {
-                    @Override
-                    public Void call(){
-                        setResponsePage(PersonDetailsPage.class, getPageParameters());
-                        return  null;
-                    }
-                }));
-            }
-        };
-        deleteForm.add(new SubmitLink("deletePersonLink"));
-        add(deleteForm);
-    }
+				setResponsePage(new DeleteDialog(new Callable<Void>() {
+					@Override
+					public Void call() {
+						personService.deletePerson(getParameterId());
+						setResponsePage(PeopleOverviewPage.class);
+						return null;
+					}
+				}, new Callable<Void>() {
+					@Override
+					public Void call(){
+						setResponsePage(PersonDetailsPage.class, getPageParameters());
+						return  null;
+					}
+				}));
+			}
+		};
+		deleteForm.add(new SubmitLink("deletePersonLink"));
+		add(deleteForm);
+	}
 
-    private Link createEditPersonLink(String id) {
-        return new Link(id) {
-            @Override
-            public void onClick() {
-                WebPage page = new EditPersonPage(EditPersonPage.createParameters(getParameterId()), PersonDetailsPage.class, getPageParameters());
-                setResponsePage(page);
-            }
-        };
-    }
+	private Link createEditPersonLink(String id) {
+		return new Link(id) {
+			@Override
+			public void onClick() {
+				WebPage page = new EditPersonPage(EditPersonPage.createParameters(getParameterId()), PersonDetailsPage.class, getPageParameters());
+				setResponsePage(page);
+			}
+		};
+	}
 
-    @Override
-    @SuppressWarnings("unchecked")
-    protected BreadcrumbsModel getBreadcrumbsModel() {
-        BreadcrumbsModel model = new BreadcrumbsModel(DashboardPage.class, PeopleOverviewPage.class);
-        model.addBreadcrumb(new Breadcrumb(PersonDetailsPage.class, getPageParameters(), new PersonNameModel(getParameterId())));
-        return model;
-    }
+	@Override
+	@SuppressWarnings("unchecked")
+	protected BreadcrumbsModel getBreadcrumbsModel() {
+		BreadcrumbsModel model = new BreadcrumbsModel(DashboardPage.class, PeopleOverviewPage.class);
+		model.addBreadcrumb(new Breadcrumb(PersonDetailsPage.class, getPageParameters(), new PersonNameModel(getParameterId())));
+		return model;
+	}
 
 }

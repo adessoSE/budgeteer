@@ -6,16 +6,16 @@ import org.wickedsource.budgeteer.web.AbstractWebTestTemplate;
 
 public class BudgetUnitChoiceTest extends AbstractWebTestTemplate {
 
-    @Test
-    void testRender() {
-        WicketTester tester = getTester();
-        BudgetUnitModel model = new BudgetUnitModel(1L);
-        BudgetUnitChoice dropdown = new BudgetUnitChoice("budgetUnit", model);
-        tester.startComponentInPage(dropdown);
-    }
+	@Test
+	void testRender() {
+		WicketTester tester = getTester();
+		BudgetUnitModel model = new BudgetUnitModel(1L);
+		BudgetUnitChoice dropdown = new BudgetUnitChoice("budgetUnit", model);
+		tester.startComponentInPage(dropdown);
+	}
 
-    @Override
-    protected void setupTest() {
+	@Override
+	protected void setupTest() {
 
-    }
+	}
 }

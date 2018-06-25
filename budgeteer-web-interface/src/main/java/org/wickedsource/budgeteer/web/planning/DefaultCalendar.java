@@ -1,19 +1,20 @@
 package org.wickedsource.budgeteer.web.planning;
 
-import lombok.Getter;
-import org.joda.time.LocalDate;
-import org.joda.time.ReadablePeriod;
+import static org.joda.time.DateTimeConstants.*;
+import static org.joda.time.Period.years;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.joda.time.DateTimeConstants.*;
-import static org.joda.time.Period.years;
+import lombok.Getter;
+
+import org.joda.time.LocalDate;
+import org.joda.time.ReadablePeriod;
 
 /**
- * Calendar in which weekends and optionally holidays are marked as non-working.
- */
+* Calendar in which weekends and optionally holidays are marked as non-working.
+*/
 public class DefaultCalendar extends Calendar {
 
 	public static DefaultCalendar calendarYear(int year) {
@@ -21,8 +22,8 @@ public class DefaultCalendar extends Calendar {
 	}
 
 	/**
-	 * Mapping every date to a Day object.
-	 */
+	* Mapping every date to a Day object.
+	*/
 	private Map<LocalDate, Day> days;
 
 	@Getter

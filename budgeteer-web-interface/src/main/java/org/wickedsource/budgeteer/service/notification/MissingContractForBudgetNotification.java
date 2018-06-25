@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper=false)
 public class MissingContractForBudgetNotification extends Notification{
-    private long budgetId;
+	private long budgetId;
 }

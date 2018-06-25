@@ -1,11 +1,9 @@
 package org.wickedsource.budgeteer.web.components.targetactualchart;
 
-import de.adesso.wickedcharts.chartjs.ChartConfiguration;
-import de.adesso.wickedcharts.chartjs.chartoptions.*;
-import de.adesso.wickedcharts.chartjs.chartoptions.colors.RgbColor;
-import de.adesso.wickedcharts.chartjs.chartoptions.colors.SimpleColor;
-import de.adesso.wickedcharts.chartjs.chartoptions.label.TextLabel;
-import de.adesso.wickedcharts.chartjs.chartoptions.valueType.DoubleValue;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.wicket.model.IModel;
 import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.service.statistics.MoneySeries;
@@ -15,9 +13,12 @@ import org.wickedsource.budgeteer.web.PropertyLoader;
 import org.wickedsource.budgeteer.web.charts.ChartStyling;
 import org.wickedsource.budgeteer.web.charts.ChartUtils;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import de.adesso.wickedcharts.chartjs.ChartConfiguration;
+import de.adesso.wickedcharts.chartjs.chartoptions.*;
+import de.adesso.wickedcharts.chartjs.chartoptions.colors.RgbColor;
+import de.adesso.wickedcharts.chartjs.chartoptions.colors.SimpleColor;
+import de.adesso.wickedcharts.chartjs.chartoptions.label.TextLabel;
+import de.adesso.wickedcharts.chartjs.chartoptions.valueType.DoubleValue;
 
 public class TargetAndActualChartConfiguration extends ChartConfiguration implements Serializable {
 
@@ -56,7 +57,7 @@ public class TargetAndActualChartConfiguration extends ChartConfiguration implem
 			Dataset planDataset = new Dataset()
 					.setLabel("Plan")
 					.setData(DoubleValue.of(MoneyUtil.toDouble(model.getObject().getTargetSeries().getValues(),
-			 BudgeteerSession.get().getSelectedBudgetUnit())))
+			BudgeteerSession.get().getSelectedBudgetUnit())))
 					.setFill(false)
 					.setType(ChartType.LINE)
 					.setBackgroundColor(SimpleColor.RED)

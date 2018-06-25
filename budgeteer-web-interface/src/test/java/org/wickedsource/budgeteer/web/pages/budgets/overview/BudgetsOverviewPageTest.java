@@ -8,35 +8,35 @@ import org.wickedsource.budgeteer.web.BudgeteerSession;
 
 public class BudgetsOverviewPageTest extends AbstractWebTestTemplate {
 
-    @Test
-    void render() {
-        WicketTester tester = getTester();
-        tester.startPage(BudgetsOverviewPage.class);
-        tester.assertRenderedPage(BudgetsOverviewPage.class);
-    }
+	@Test
+	void render() {
+		WicketTester tester = getTester();
+		tester.startPage(BudgetsOverviewPage.class);
+		tester.assertRenderedPage(BudgetsOverviewPage.class);
+	}
 
-    @Override
-    protected void setupTest() {
+	@Override
+	protected void setupTest() {
 
-    }
+	}
 
-    @Test
-    public void netGrossLinkWithManDays(){
-        WicketTester tester = getTester();
-        tester.startPage(BudgetsOverviewPage.class);
-        BudgeteerSession.get().setTaxEnabled(true);
-        BudgeteerSession.get().setSelectedBudgetUnit(13.0);
-        tester.clickLink("netGrossLink");
-        Assertions.assertTrue(BudgeteerSession.get().isTaxEnabled());
-    }
+	@Test
+	public void netGrossLinkWithManDays(){
+		WicketTester tester = getTester();
+		tester.startPage(BudgetsOverviewPage.class);
+		BudgeteerSession.get().setTaxEnabled(true);
+		BudgeteerSession.get().setSelectedBudgetUnit(13.0);
+		tester.clickLink("netGrossLink");
+		Assertions.assertTrue(BudgeteerSession.get().isTaxEnabled());
+	}
 
-    @Test
-    public void netGrossLink(){
-        WicketTester tester = getTester();
-        tester.startPage(BudgetsOverviewPage.class);
-        BudgeteerSession.get().setTaxEnabled(true);
-        BudgeteerSession.get().setSelectedBudgetUnit(1.0);
-        tester.clickLink("netGrossLink");
-        Assertions.assertFalse(BudgeteerSession.get().isTaxEnabled());
-    }
+	@Test
+	public void netGrossLink(){
+		WicketTester tester = getTester();
+		tester.startPage(BudgetsOverviewPage.class);
+		BudgeteerSession.get().setTaxEnabled(true);
+		BudgeteerSession.get().setSelectedBudgetUnit(1.0);
+		tester.clickLink("netGrossLink");
+		Assertions.assertFalse(BudgeteerSession.get().isTaxEnabled());
+	}
 }

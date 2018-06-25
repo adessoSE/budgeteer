@@ -87,7 +87,6 @@ subprojects {
                 include '**/*.java'
                 exclude '**/generated/**/*.*'
             }
-            googleJavaFormat()
             importOrder 'java', 'javax', 'org', 'com'
             trimTrailingWhitespace()
             removeUnusedImports()

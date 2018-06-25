@@ -7,15 +7,15 @@ import org.wickedsource.budgeteer.web.pages.person.weekreport.table.PersonWeekly
 
 public class AggregatedRecordTableTest extends AbstractWebTestTemplate {
 
-    @Test
-    void render() {
-        WicketTester tester = getTester();
-        PersonWeeklyAggregatedRecordsModel model = new PersonWeeklyAggregatedRecordsModel(1L);
-        AggregatedRecordTable table = new AggregatedRecordTable("table", model);
-        tester.startComponentInPage(table);
-    }
+	@Test
+	void render() {
+		WicketTester tester = getTester();
+		PersonWeeklyAggregatedRecordsModel model = new PersonWeeklyAggregatedRecordsModel(1L);
+		AggregatedRecordTable table = new AggregatedRecordTable("table", model);
+		tester.startComponentInPage(table);
+	}
 
-    @Override
-    protected void setupTest() {
-    }
+	@Override
+	protected void setupTest() {
+	}
 }

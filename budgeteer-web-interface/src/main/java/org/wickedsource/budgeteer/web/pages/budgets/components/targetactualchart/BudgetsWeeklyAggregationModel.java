@@ -11,36 +11,36 @@ import org.wickedsource.budgeteer.service.statistics.TargetAndActual;
 
 public class BudgetsWeeklyAggregationModel extends LoadableDetachableModel<TargetAndActual> implements IObjectClassAwareModel<TargetAndActual> {
 
-    @SpringBean
-    private StatisticsService service;
+	@SpringBean
+	private StatisticsService service;
 
-    private long budgetId;
+	private long budgetId;
 
-    private IModel<BudgetTagFilter> filterModel;
+	private IModel<BudgetTagFilter> filterModel;
 
-    public BudgetsWeeklyAggregationModel(long budgetId) {
-        Injector.get().inject(this);
-        this.budgetId = budgetId;
-    }
+	public BudgetsWeeklyAggregationModel(long budgetId) {
+		Injector.get().inject(this);
+		this.budgetId = budgetId;
+	}
 
-    public BudgetsWeeklyAggregationModel(IModel<BudgetTagFilter> filterModel) {
-        this.filterModel = filterModel;
-        Injector.get().inject(this);
-    }
+	public BudgetsWeeklyAggregationModel(IModel<BudgetTagFilter> filterModel) {
+		this.filterModel = filterModel;
+		Injector.get().inject(this);
+	}
 
-    @Override
-    protected TargetAndActual load() {
-        if (budgetId != 0) {
-            return service.getWeekStatsForBudget(budgetId, 12);
-        } else if (filterModel != null && filterModel.getObject() != null) {
-            return service.getWeekStatsForBudgets(filterModel.getObject(), 12);
-        } else {
-            throw new IllegalStateException("Neither budgetId nor filter specified. Specify at least one of these attributes in the constructor!");
-        }
-    }
+	@Override
+	protected TargetAndActual load() {
+		if (budgetId != 0) {
+			return service.getWeekStatsForBudget(budgetId, 12);
+		} else if (filterModel != null && filterModel.getObject() != null) {
+			return service.getWeekStatsForBudgets(filterModel.getObject(), 12);
+		} else {
+			throw new IllegalStateException("Neither budgetId nor filter specified. Specify at least one of these attributes in the constructor!");
+		}
+	}
 
-    @Override
-    public Class<TargetAndActual> getObjectClass() {
-        return TargetAndActual.class;
-    }
+	@Override
+	public Class<TargetAndActual> getObjectClass() {
+		return TargetAndActual.class;
+	}
 }
