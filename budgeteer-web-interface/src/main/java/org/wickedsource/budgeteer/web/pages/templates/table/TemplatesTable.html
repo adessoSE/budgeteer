@@ -7,6 +7,8 @@
         <tr>
             <th>Name</th>
             <th>Desription</th>
+            <th>Type</th>
+            <th>Default</th>
             <th></th>
         </tr>
         </thead>
@@ -14,13 +16,20 @@
         <tr wicket:id="templateList">
             <td wicket:id="name">Template</td>
             <td wicket:id="description">Some description.</td>
-            <td><button class="btn btn-default btn-sm fa fa-edit" wicket:id="editPage"> </button></td>
+            <td wicket:id="type">Budget template.</td>
+            <td wicket:id="setAsDefault">
+                <label wicket:id="checkBoxLabel"></label>
+            </td>
+            <td>
+                <button class="btn btn-default btn-sm fa fa-edit" wicket:id="editPage"></button></td>
         </tr>
         </tbody>
         <tfoot>
         <tr>
             <th>Name</th>
             <th>Desription</th>
+            <th>Type</th>
+            <th>Default</th>
             <th></th>
         </tr>
         </tfoot>
