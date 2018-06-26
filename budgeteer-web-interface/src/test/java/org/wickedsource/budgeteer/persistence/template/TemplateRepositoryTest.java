@@ -1,6 +1,8 @@
 package org.wickedsource.budgeteer.persistence.template;
 
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import com.github.springtestdbunit.annotation.DatabaseOperation;
+import com.github.springtestdbunit.annotation.DatabaseSetup;
+import com.github.springtestdbunit.annotation.DatabaseTearDown;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,30 +16,31 @@ class TemplateRepositoryTest extends IntegrationTestTemplate {
     TemplateRepository templateRepository;
 
     @Test
+    @DatabaseSetup("templateTest.xml")
+    @DatabaseTearDown(value = "templateTest.xml", type = DatabaseOperation.DELETE_ALL)
     void testFindInProject() {
-        addTemplateToProject(1L);
-
         List<TemplateEntity> templatesInProject = templateRepository.findByProjectId(1L);
         Assertions.assertEquals(1, templatesInProject.size());
-        Assertions.assertEquals("template1", templatesInProject.get(0).getName());
+        Assertions.assertEquals("test", templatesInProject.get(0).getName());
     }
 
     @Test
+    @DatabaseSetup("templateTest.xml")
+    @DatabaseTearDown(value = "templateTest.xml", type = DatabaseOperation.DELETE_ALL)
     void deleteTemplateTest() {
-        TemplateEntity templateEntity = new TemplateEntity("template1", "desc1", new XSSFWorkbook(), 1L);
-        templateRepository.save(templateEntity);
-        templateRepository.delete(templateEntity.getId());
+        List<TemplateEntity> templatesInProject = templateRepository.findByProjectId(1L);
+        Assertions.assertEquals(1, templatesInProject.size());
+        templateRepository.delete(templatesInProject.get(0).getId());
         Assertions.assertEquals(0, templateRepository.findByProjectId(1L).size());
     }
 
     @Test
+    @DatabaseSetup("templateTestMany.xml")
+    @DatabaseTearDown(value = "templateTest.xml", type = DatabaseOperation.DELETE_ALL)
     void deleteAllTest() {
-        addTemplateToProject(1L);
+        List<TemplateEntity> templatesInProject = templateRepository.findByProjectId(1L);
+        Assertions.assertEquals(5, templatesInProject.size());
         templateRepository.deleteAll();
         Assertions.assertEquals(0, templateRepository.findByProjectId(1L).size());
-    }
-
-    private void addTemplateToProject(long projectId){
-        templateRepository.save(new TemplateEntity("template1", "desc1", new XSSFWorkbook(), projectId));
     }
 }

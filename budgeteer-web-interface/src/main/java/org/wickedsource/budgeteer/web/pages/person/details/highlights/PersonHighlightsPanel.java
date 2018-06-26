@@ -25,7 +25,7 @@ public class PersonHighlightsPanel extends GenericPanel<PersonDetailData> {
         add(new DateLabel("firstBookedDate", model(from(getModel()).getFirstBookedDate())));
         add(new DateLabel("lastBookedDate", model(from(getModel()).getLastBookedDate())));
         add(new Label("hoursBooked", nullsafeDoubleModel(model(from(getModel()).getHoursBooked()))));
-        add(new MoneyLabel("budgetBurned", model(from(getModel()).getBudgetBurned()), true));
+        add(new MoneyLabel("budgetBurned_net", model(from(getModel()).getBudgetBurned()), true));
     }
 
     private IModel<String> nullsafeModel(IModel<String> wrappedModel){

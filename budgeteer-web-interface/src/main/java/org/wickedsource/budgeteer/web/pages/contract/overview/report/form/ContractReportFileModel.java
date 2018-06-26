@@ -45,7 +45,7 @@ public class ContractReportFileModel extends LoadableDetachableModel<File> {
     		endDate = Date.from(adjustedDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
     	}
     	
-    	return reportService.createReportFile(projectId,endDate);
+    	return reportService.createReportFile(reportModel.getObject().getTemplate().getId(), projectId,endDate);
     }
 
 }

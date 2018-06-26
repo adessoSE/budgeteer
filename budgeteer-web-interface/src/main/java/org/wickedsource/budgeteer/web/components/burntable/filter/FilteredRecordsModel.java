@@ -21,7 +21,6 @@ public class FilteredRecordsModel extends LoadableDetachableModel<List<WorkRecor
         this.filter = filter;
     }
 
-
     @Override
     protected List<WorkRecord> load() {
         return service.getFilteredRecords(filter);

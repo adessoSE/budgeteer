@@ -20,7 +20,8 @@ public class BudgetUnitMoneyModel implements IModel<Money> {
     public Money getObject() {
         if (sourceModel.getObject() == null) {
             return MoneyUtil.createMoney(0d);
-        } else {
+        }
+        else {
             return sourceModel.getObject().dividedBy(BudgeteerSession.get().getSelectedBudgetUnit(), RoundingMode.FLOOR);
         }
     }
