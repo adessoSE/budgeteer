@@ -1,9 +1,9 @@
 package org.wickedsource.budgeteer.web.planning;
 
-import org.joda.time.LocalDate;
-
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+
+import org.joda.time.LocalDate;
 
 public class Day implements Iterable<Day> {
 
@@ -11,24 +11,24 @@ public class Day implements Iterable<Day> {
 
 	private final boolean nonWorking;
 
-    private Day nextDay;
+	private Day nextDay;
 
 	public Day(LocalDate localDate, boolean nonWorking) {
 		this.localDate = localDate;
 		this.nonWorking = nonWorking;
-    }
+	}
 
-    protected void setNextDay(Day nextDay) {
+	protected void setNextDay(Day nextDay) {
 		// be almost immutable
 		if (this.nextDay != null) {
 			throw new IllegalStateException("cannot reset next day");
 		}
-        this.nextDay = nextDay;
-    }
+		this.nextDay = nextDay;
+	}
 
 	public LocalDate getLocalDate() {
 		return localDate;
-    }
+	}
 
 	public boolean isNonWorking() {
 		return this.nonWorking;
@@ -60,5 +60,5 @@ public class Day implements Iterable<Day> {
 			}
 			return current;
 		}
-    }
+	}
 }

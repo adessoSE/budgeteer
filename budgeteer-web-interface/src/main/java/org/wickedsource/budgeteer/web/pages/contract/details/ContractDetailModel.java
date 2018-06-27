@@ -8,19 +8,19 @@ import org.wickedsource.budgeteer.service.contract.ContractService;
 
 public class ContractDetailModel extends LoadableDetachableModel<ContractBaseData>{
 
-    @SpringBean
-    private ContractService service;
+	@SpringBean
+	private ContractService service;
 
-    private long contractId;
+	private long contractId;
 
-    public ContractDetailModel(long contractId) {
-        Injector.get().inject(this);
-        this.contractId = contractId;
-    }
+	public ContractDetailModel(long contractId) {
+		Injector.get().inject(this);
+		this.contractId = contractId;
+	}
 
-    @Override
-    protected ContractBaseData load() {
-        return service.getContractById(contractId);
-    }
+	@Override
+	protected ContractBaseData load() {
+		return service.getContractById(contractId);
+	}
 
 }

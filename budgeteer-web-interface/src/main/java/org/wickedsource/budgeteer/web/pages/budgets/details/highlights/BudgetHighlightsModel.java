@@ -9,23 +9,23 @@ import org.wickedsource.budgeteer.service.budget.BudgetService;
 
 public class BudgetHighlightsModel extends LoadableDetachableModel<BudgetDetailData> implements IObjectClassAwareModel<BudgetDetailData> {
 
-    @SpringBean
-    private BudgetService service;
+	@SpringBean
+	private BudgetService service;
 
-    private long budgetId;
+	private long budgetId;
 
-    public BudgetHighlightsModel(long budgetId) {
-        Injector.get().inject(this);
-        this.budgetId = budgetId;
-    }
+	public BudgetHighlightsModel(long budgetId) {
+		Injector.get().inject(this);
+		this.budgetId = budgetId;
+	}
 
-    @Override
-    protected BudgetDetailData load() {
-        return service.loadBudgetDetailData(budgetId);
-    }
+	@Override
+	protected BudgetDetailData load() {
+		return service.loadBudgetDetailData(budgetId);
+	}
 
-    @Override
-    public Class getObjectClass() {
-        return BudgetDetailData.class;
-    }
+	@Override
+	public Class getObjectClass() {
+		return BudgetDetailData.class;
+	}
 }

@@ -1,17 +1,17 @@
 package org.wickedsource.budgeteer.service;
 
-import org.springframework.stereotype.Component;
-
 import java.util.Date;
 
+import org.springframework.stereotype.Component;
+
 /**
- * Simple provider for the current date so that the date can be mocked in tests.
- */
+* Simple provider for the current date so that the date can be mocked in tests.
+*/
 @Component
 public class DateProvider {
 
-    public Date currentDate() {
-        return new Date();
-    }
+	public Date currentDate() {
+		return new Date();
+	}
 
 }

@@ -7,13 +7,13 @@ import org.apache.wicket.util.convert.IConverter;
 public class PercentageLabel extends Label {
 
 
-    public PercentageLabel(String id, IModel<Double> model) {
-        super(id, model);
-    }
+	public PercentageLabel(String id, IModel<Double> model) {
+		super(id, model);
+	}
 
-    @Override
-    @SuppressWarnings("unchecked")
-    public <Double> IConverter<Double> getConverter(Class<Double> type) {
-        return (IConverter<Double>) new PercentageConverter();
-    }
+	@Override
+	@SuppressWarnings("unchecked")
+	public <Double> IConverter<Double> getConverter(Class<Double> type) {
+		return (IConverter<Double>) new PercentageConverter();
+	}
 }

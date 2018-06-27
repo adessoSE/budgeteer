@@ -15,85 +15,85 @@ import org.wickedsource.budgeteer.web.components.money.MoneyTextField;
 
 public abstract class EditableMoneyField extends GenericPanel<Money> {
 
-    private boolean isEditable;
-    private Label label;
+	private boolean isEditable;
+	private Label label;
 
-    private final WebMarkupContainer container;
-    private TextField<Money> rateField;
-    private Form<Money> form;
+	private final WebMarkupContainer container;
+	private TextField<Money> rateField;
+	private Form<Money> form;
 
-    public EditableMoneyField(final String id, final MarkupContainer table, final IModel<Money> model) {
-        this(id, table, model, false);
-    }
-    public EditableMoneyField(final String id, final MarkupContainer table, final IModel<Money> model, boolean editable) {
-        super(id, model);
-        this.isEditable = editable;
-        container = new WebMarkupContainer("container");
-        container.setOutputMarkupId(true);
-        label = new Label("label", getModel()){
-            @Override
-            public boolean isVisible() {
-                return !isEditable;
-            }
-        };
-        label.setOutputMarkupId(true);
-        this.add(label);
+	public EditableMoneyField(final String id, final MarkupContainer table, final IModel<Money> model) {
+		this(id, table, model, false);
+	}
+	public EditableMoneyField(final String id, final MarkupContainer table, final IModel<Money> model, boolean editable) {
+		super(id, model);
+		this.isEditable = editable;
+		container = new WebMarkupContainer("container");
+		container.setOutputMarkupId(true);
+		label = new Label("label", getModel()){
+			@Override
+			public boolean isVisible() {
+				return !isEditable;
+			}
+		};
+		label.setOutputMarkupId(true);
+		this.add(label);
 
-        form = new Form<Money>("editor", getModel()){
-            @Override
-            public boolean isVisible() {
-                return isEditable;
-            }
-        };
-        rateField = new MoneyTextField("input", getModel());
-        rateField.setOutputMarkupId(true);
+		form = new Form<Money>("editor", getModel()){
+			@Override
+			public boolean isVisible() {
+				return isEditable;
+			}
+		};
+		rateField = new MoneyTextField("input", getModel());
+		rateField.setOutputMarkupId(true);
 
-        AjaxButton save = new AjaxButton("save", form) {
-            @Override
-            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                isEditable = false;
-                target.add(container);
-                save(target, EditableMoneyField.this.form);
-            }
-            @Override
-            protected void onError(AjaxRequestTarget target, Form<?> form){
-                isEditable = true;
-                target.add(container);
-                convertError(target);
-            }
-        };
-        AjaxButton cancel = new AjaxButton("cancel"){
-            @Override
-            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                isEditable = false;
-                target.add(container);
-            }
-        };
-        cancel.setDefaultFormProcessing(false);
+		AjaxButton save = new AjaxButton("save", form) {
+			@Override
+			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+				isEditable = false;
+				target.add(container);
+				save(target, EditableMoneyField.this.form);
+			}
+			@Override
+			protected void onError(AjaxRequestTarget target, Form<?> form){
+				isEditable = true;
+				target.add(container);
+				convertError(target);
+			}
+		};
+		AjaxButton cancel = new AjaxButton("cancel"){
+			@Override
+			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+				isEditable = false;
+				target.add(container);
+			}
+		};
+		cancel.setDefaultFormProcessing(false);
 
-        form.setOutputMarkupId(true);
-        rateField.setRequired(true);
-        form.add(rateField);
-        form.add(save);
-        form.add(cancel);
+		form.setOutputMarkupId(true);
+		rateField.setRequired(true);
+		form.add(rateField);
+		form.add(save);
+		form.add(cancel);
 
-        container.add(label);
-        container.add(form);
+		container.add(label);
+		container.add(form);
 
-        super.add(container);
-        super.setOutputMarkupPlaceholderTag(true);
-        label.add(new CustomDataTableEventBehavior(table, "click") {
-            @Override
-            protected void onEvent(AjaxRequestTarget target) {
-                isEditable = true;
-                target.add(container);
-            }
-        });
-    }
+		super.add(container);
+		super.setOutputMarkupPlaceholderTag(true);
+		label.add(new CustomDataTableEventBehavior(table, "click") {
+			@Override
+			protected void onEvent(AjaxRequestTarget target) {
+				isEditable = true;
+				target.add(container);
+			}
+		});
+	}
 
-    protected abstract void save(AjaxRequestTarget target, Form<Money> form);
-    protected abstract void cancel(AjaxRequestTarget target, Form<Money> form);
-    protected abstract void convertError(AjaxRequestTarget target);
+	protected abstract void save(AjaxRequestTarget target, Form<Money> form);
+	protected abstract void cancel(AjaxRequestTarget target, Form<Money> form);
+	protected abstract void convertError(AjaxRequestTarget target);
 
 
 

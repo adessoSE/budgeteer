@@ -6,15 +6,15 @@ import org.wickedsource.budgeteer.web.AbstractWebTestTemplate;
 
 public class BudgetDristibutionChartTest extends AbstractWebTestTemplate{
 
-    @Test
-    void testRender() {
-        WicketTester tester = getTester();
-        BudgetDistributionChartModel model = new BudgetDistributionChartModel(1L);
-        tester.startComponentInPage(new BudgetDistributionChart("chart", model));
-    }
+	@Test
+	void testRender() {
+		WicketTester tester = getTester();
+		BudgetDistributionChartModel model = new BudgetDistributionChartModel(1L);
+		tester.startComponentInPage(new BudgetDistributionChart("chart", model));
+	}
 
-    @Override
-    protected void setupTest() {
+	@Override
+	protected void setupTest() {
 
-    }
+	}
 }

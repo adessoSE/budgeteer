@@ -1,5 +1,15 @@
 package org.wickedsource.budgeteer.web.pages.contract.overview.report.form;
 
+import static org.wicketstuff.lazymodel.LazyModel.from;
+import static org.wicketstuff.lazymodel.LazyModel.model;
+
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
@@ -24,28 +34,18 @@ import org.wickedsource.budgeteer.web.pages.base.AbstractChoiceRenderer;
 import org.wickedsource.budgeteer.web.pages.budgets.overview.report.form.BudgetReportNotificationModel;
 import org.wickedsource.budgeteer.web.pages.contract.overview.report.ContractReportMetaInformation;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import static org.wicketstuff.lazymodel.LazyModel.from;
-import static org.wicketstuff.lazymodel.LazyModel.model;
-
 public class ContractReportForm extends Form<ContractReportMetaInformation> {
 
 	/**
-	 * 
-	 */
+	*
+	*/
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean
 	private ContractService contractService;
 
-    @SpringBean
-    private ContractReportService contractReportService;
+	@SpringBean
+	private ContractReportService contractReportService;
 
 	@SpringBean
 	private TemplateService templateService;
@@ -61,29 +61,29 @@ public class ContractReportForm extends Form<ContractReportMetaInformation> {
 
 		getModelObject().setSelectedMonth(formattedMonths.get(formattedMonths.size()-1));
 
-        IChoiceRenderer<FormattedDate> choiceRenderer = new IChoiceRenderer<FormattedDate>() {
-            @Override
-            public Object getDisplayValue(FormattedDate object) {
-                return object.getLabel();
-            }
+		IChoiceRenderer<FormattedDate> choiceRenderer = new IChoiceRenderer<FormattedDate>() {
+			@Override
+			public Object getDisplayValue(FormattedDate object) {
+				return object.getLabel();
+			}
 
-            @Override
-            public String getIdValue(FormattedDate object, int index) {
-                return String.valueOf(formattedMonths.indexOf(object));
-            }
+			@Override
+			public String getIdValue(FormattedDate object, int index) {
+				return String.valueOf(formattedMonths.indexOf(object));
+			}
 
-            @Override
-            public FormattedDate getObject(String id, IModel<? extends List<? extends FormattedDate>> choices) {
-                getModelObject().setSelectedMonth(choices.getObject().get(Integer.parseInt(id)));
-                return choices.getObject().get(Integer.parseInt(id));
-            }
-        };
+			@Override
+			public FormattedDate getObject(String id, IModel<? extends List<? extends FormattedDate>> choices) {
+				getModelObject().setSelectedMonth(choices.getObject().get(Integer.parseInt(id)));
+				return choices.getObject().get(Integer.parseInt(id));
+			}
+		};
 
 		DropDownChoice<FormattedDate> choice = new DropDownChoice<FormattedDate>(
-                "selectMonth",
-                model(from(getModel()).getSelectedMonth()),
-                formattedMonths,
-                choiceRenderer) {};
+				"selectMonth",
+				model(from(getModel()).getSelectedMonth()),
+				formattedMonths,
+				choiceRenderer) {};
 		add(choice);
 
 		DropDownChoice<Template> templateDropDown = new DropDownChoice<Template>("template", model(from(getModel()).getTemplate()),
@@ -138,21 +138,21 @@ public class ContractReportForm extends Form<ContractReportMetaInformation> {
 
 	protected void onSubmit() {
 		String filename = "contract-report.xlsx";
-        if((getModelObject()).getTemplate() == null){
-            this.error(getString("feedback.error.no.template"));
-        }else {
-            this.success(getString("feedback.success"));
-            IModel<File> fileModel = new ContractReportFileModel(BudgeteerSession.get().getProjectId(), getModel());
-            final File file = fileModel.getObject();
-            IResourceStream resourceStream = new FileResourceStream(file);
-            getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream) {
-                @Override
-                public void respond(IRequestCycle requestCycle) {
-                    super.respond(requestCycle);
-                    Files.remove(file);
-                }
-            }.setFileName(filename).setContentDisposition(ContentDisposition.ATTACHMENT));
-        }
+		if((getModelObject()).getTemplate() == null){
+			this.error(getString("feedback.error.no.template"));
+		}else {
+			this.success(getString("feedback.success"));
+			IModel<File> fileModel = new ContractReportFileModel(BudgeteerSession.get().getProjectId(), getModel());
+			final File file = fileModel.getObject();
+			IResourceStream resourceStream = new FileResourceStream(file);
+			getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(resourceStream) {
+				@Override
+				public void respond(IRequestCycle requestCycle) {
+					super.respond(requestCycle);
+					Files.remove(file);
+				}
+			}.setFileName(filename).setContentDisposition(ContentDisposition.ATTACHMENT));
+		}
 
 	}
 }

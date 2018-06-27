@@ -7,12 +7,12 @@ import org.wickedsource.budgeteer.service.AbstractMapper;
 @Component
 public class MissingBudgetTotalNotificationMapper extends AbstractMapper<MissingBudgetTotalBean, Notification> {
 
-    @Override
-    public Notification map(MissingBudgetTotalBean missingTotal) {
-        MissingBudgetTotalNotification notification = new MissingBudgetTotalNotification();
-        notification.setBudgetId(missingTotal.getBudgetId());
-        notification.setBudgetName(missingTotal.getBudgetName());
-        return notification;
-    }
+	@Override
+	public Notification map(MissingBudgetTotalBean missingTotal) {
+		MissingBudgetTotalNotification notification = new MissingBudgetTotalNotification();
+		notification.setBudgetId(missingTotal.getBudgetId());
+		notification.setBudgetName(missingTotal.getBudgetName());
+		return notification;
+	}
 
 }

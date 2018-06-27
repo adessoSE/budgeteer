@@ -6,14 +6,14 @@ import org.wickedsource.budgeteer.web.AbstractWebTestTemplate;
 
 public class PersonHoursPageTest extends AbstractWebTestTemplate {
 
-    @Test
-    void render() {
-        WicketTester tester = getTester();
-        tester.startPage(PersonHoursPage.class, PersonHoursPage.createParameters(1L));
-        tester.assertRenderedPage(PersonHoursPage.class);
-    }
-    @Override
-    protected void setupTest() {
+	@Test
+	void render() {
+		WicketTester tester = getTester();
+		tester.startPage(PersonHoursPage.class, PersonHoursPage.createParameters(1L));
+		tester.assertRenderedPage(PersonHoursPage.class);
+	}
+	@Override
+	protected void setupTest() {
 
-    }
+	}
 }

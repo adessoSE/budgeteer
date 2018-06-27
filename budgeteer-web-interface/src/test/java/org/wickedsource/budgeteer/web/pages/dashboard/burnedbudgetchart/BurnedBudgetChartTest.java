@@ -6,15 +6,15 @@ import org.wickedsource.budgeteer.web.AbstractWebTestTemplate;
 
 public class BurnedBudgetChartTest extends AbstractWebTestTemplate  {
 
-    @Test
-    void testRender() {
-        WicketTester tester = getTester();
-        BurnedBudgetChartModel model = new BurnedBudgetChartModel(1L, 5);
-        tester.startComponentInPage(new BurnedBudgetChart("chart", model));
-    }
+	@Test
+	void testRender() {
+		WicketTester tester = getTester();
+		BurnedBudgetChartModel model = new BurnedBudgetChartModel(1L, 5);
+		tester.startComponentInPage(new BurnedBudgetChart("chart", model));
+	}
 
-    @Override
-    protected void setupTest() {
+	@Override
+	protected void setupTest() {
 
-    }
+	}
 }

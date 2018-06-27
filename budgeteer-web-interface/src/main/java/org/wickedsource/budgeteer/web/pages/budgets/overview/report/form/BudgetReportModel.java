@@ -12,11 +12,11 @@ public class BudgetReportModel implements IModel<ReportMetaInformation>, IObject
 	public BudgetReportModel(ReportMetaInformation metaInfo) {
 		this.wrappedModel = Model.of(metaInfo);
 	}
-	
+
 	public BudgetReportModel(IModel<ReportMetaInformation> wrappedModel) {
 		this.wrappedModel = wrappedModel;
 	}
-	
+
 	@Override
 	public void detach() {
 		wrappedModel.detach();

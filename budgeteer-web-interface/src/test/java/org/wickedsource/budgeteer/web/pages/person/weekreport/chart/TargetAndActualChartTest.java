@@ -8,15 +8,15 @@ import org.wickedsource.budgeteer.web.components.targetactualchart.TargetAndActu
 
 public class TargetAndActualChartTest extends AbstractWebTestTemplate {
 
-    @Test
-    void testRender() {
-        WicketTester tester = getTester();
-        PersonWeeklyAggregationModel model = new PersonWeeklyAggregationModel(1L);
-        tester.startComponentInPage(new TargetAndActualChart("chart", model, TargetAndActualChartConfiguration.Mode.WEEKLY));
-    }
+	@Test
+	void testRender() {
+		WicketTester tester = getTester();
+		PersonWeeklyAggregationModel model = new PersonWeeklyAggregationModel(1L);
+		tester.startComponentInPage(new TargetAndActualChart("chart", model, TargetAndActualChartConfiguration.Mode.WEEKLY));
+	}
 
-    @Override
-    protected void setupTest() {
+	@Override
+	protected void setupTest() {
 
-    }
+	}
 }

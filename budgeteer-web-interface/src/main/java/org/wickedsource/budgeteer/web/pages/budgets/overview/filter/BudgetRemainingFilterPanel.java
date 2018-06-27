@@ -8,19 +8,19 @@ import org.apache.wicket.model.IModel;
 
 public class BudgetRemainingFilterPanel extends Panel {
 
-    public BudgetRemainingFilterPanel(String id, IModel<Long> filterModel) {
-        super(id);
-        Form form = new Form("remainingFilterForm") {
-            @Override
-            protected void onSubmit() {
-                send(getPage(), Broadcast.BREADTH, filterModel.getObject());
-            }
-        };
-        form.add(createTextInputField("remainingFilterInput", filterModel));
-        add(form);
-    }
+	public BudgetRemainingFilterPanel(String id, IModel<Long> filterModel) {
+		super(id);
+		Form form = new Form("remainingFilterForm") {
+			@Override
+			protected void onSubmit() {
+				send(getPage(), Broadcast.BREADTH, filterModel.getObject());
+			}
+		};
+		form.add(createTextInputField("remainingFilterInput", filterModel));
+		add(form);
+	}
 
-    private TextField<Long> createTextInputField(String id, IModel<Long> value){
-        return new TextField<>(id, value);
-    }
+	private TextField<Long> createTextInputField(String id, IModel<Long> value){
+		return new TextField<>(id, value);
+	}
 }

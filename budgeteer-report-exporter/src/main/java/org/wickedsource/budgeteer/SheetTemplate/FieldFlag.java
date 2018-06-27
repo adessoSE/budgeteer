@@ -3,7 +3,7 @@ package org.wickedsource.budgeteer.SheetTemplate;
 public class FieldFlag {
 	private String field;
 	private String flag;
-	
+
 	public FieldFlag(String field, String flag) {
 		super();
 		this.field = field;
@@ -50,5 +50,5 @@ public class FieldFlag {
 			return false;
 		return true;
 	}
-	
+
 }

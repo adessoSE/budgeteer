@@ -8,20 +8,20 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties("wicket")
 public class BudgeteerSettings {
 
-    private String configurationType;
+	private String configurationType;
 
-    @Value("${adapter.keycloak.activated}")
-    private String keycloakActivated;
+	@Value("${adapter.keycloak.activated}")
+	private String keycloakActivated;
 
-    public String getConfigurationType() {
-        return configurationType;
-    }
+	public String getConfigurationType() {
+		return configurationType;
+	}
 
-    public void setConfigurationType(String configurationType) {
-        this.configurationType = configurationType;
-    }
+	public void setConfigurationType(String configurationType) {
+		this.configurationType = configurationType;
+	}
 
-    public boolean isKeycloakActivated() {
-        return Boolean.valueOf(keycloakActivated);
-    }
+	public boolean isKeycloakActivated() {
+		return Boolean.valueOf(keycloakActivated);
+	}
 }

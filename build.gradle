@@ -13,11 +13,27 @@ allprojects {
     version = getBuildVersion('1.0.9.BETA')
 }
 
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "com.diffplug.spotless:spotless-plugin-gradle:3.13.0"
+    }
+}
+
 subprojects {
     apply plugin: 'java'
     apply plugin: 'jacoco'
+    apply plugin: 'com.diffplug.gradle.spotless'
+
 
     repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
         jcenter()
         mavenLocal()
         maven {
@@ -26,17 +42,19 @@ subprojects {
         }
 		maven {
 			url 'https://oss.jfrog.org/artifactory/oss-snapshot-local'
-		} 
-        
+		}
+
     }
 
     dependencies {
+
         testCompile group: 'junit', name: 'junit', version: junit_version
         testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: junit5_version
         testCompile group: 'org.springframework', name: 'spring-test', version: spring_version
         testCompile group: 'org.mockito', name: 'mockito-core', version: mockito_version
         testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: junit5_version
     }
+
 
     compileJava {
         sourceCompatibility = '1.8'
@@ -54,5 +72,25 @@ subprojects {
     test {
         // Enable JUnit 5 (Gradle 4.6+).
         useJUnitPlatform()
+    }
+
+    spotless {
+        format 'misc', {
+            target '**/*.gradle', '**/*.md', '**/.gitignore'
+            trimTrailingWhitespace()
+            indentWithTabs()
+            endWithNewline()
+        }
+
+        java {
+            target project.fileTree(project.rootDir) {
+                include '**/*.java'
+                exclude '**/generated/**/*.*'
+            }
+            importOrder 'java', 'javax', 'org', 'com'
+            trimTrailingWhitespace()
+            removeUnusedImports()
+            indentWithTabs()
+        }
     }
 }

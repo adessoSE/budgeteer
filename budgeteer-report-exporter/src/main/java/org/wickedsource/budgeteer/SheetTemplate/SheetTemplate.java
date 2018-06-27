@@ -1,12 +1,5 @@
 package org.wickedsource.budgeteer.SheetTemplate;
 
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Multimap;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellType;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -14,10 +7,18 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
+
 public class SheetTemplate {
 
-    public static final Pattern TEMPLATE_TAG_PATTERN = Pattern.compile("\\{([a-zA-Z0-9\\_\\-]+)(?:\\.(?<attribute>[a-zA-Z0-9\\-\\_\\.]+))?\\}");
-	
+	public static final Pattern TEMPLATE_TAG_PATTERN = Pattern.compile("\\{([a-zA-Z0-9\\_\\-]+)(?:\\.(?<attribute>[a-zA-Z0-9\\-\\_\\.]+))?\\}");
+
 	private Multimap<String,Integer> fieldMapping;
 
 	private Sheet sheet;
@@ -25,7 +26,7 @@ public class SheetTemplate {
 	private List<String> fieldList;
 	private Class<?> dtoClass;
 	private FlagTemplate flagTemplate;
-	
+
 	public SheetTemplate(Class<?> dtoClass, Sheet sheet) {
 		this.sheet = sheet;
 		this.dtoClass = dtoClass;
@@ -39,13 +40,13 @@ public class SheetTemplate {
 				.map(field -> field.getName())
 				.collect(Collectors.toList());
 	}
-	
+
 	private void processSheet() {
-        if (sheet != null) {
-            findTemplateRow();
-            createFieldMapping();
-            checkForFlagTemplate();
-        }
+		if (sheet != null) {
+			findTemplateRow();
+			createFieldMapping();
+			checkForFlagTemplate();
+		}
 	}
 
 	private void checkForFlagTemplate() {
@@ -74,7 +75,7 @@ public class SheetTemplate {
 			}
 		}
 	}
-	
+
 	private boolean rowContainsTemplate(Row currentRow) {
 		for(Cell cell : currentRow) {
 			if(cellContainsTemplateTag(cell)) {
@@ -84,61 +85,61 @@ public class SheetTemplate {
 		return false;
 	}
 
-    String getCellValue(Cell cell) {
-        String cellValue = null;
-        if (cell.getCellTypeEnum().equals(CellType.FORMULA)) {
-            cellValue = cell.getCellFormula();
-        } else if (cell.getCellTypeEnum().equals(CellType.STRING)) {
-            cellValue = cell.getStringCellValue();
-        }
-        return cellValue;
-    }
+	String getCellValue(Cell cell) {
+		String cellValue = null;
+		if (cell.getCellTypeEnum().equals(CellType.FORMULA)) {
+			cellValue = cell.getCellFormula();
+		} else if (cell.getCellTypeEnum().equals(CellType.STRING)) {
+			cellValue = cell.getStringCellValue();
+		}
+		return cellValue;
+	}
 
-
-    /**
-     * @param cell
-     * @return
-     * @throws IllegalArgumentException
-     */
-    List<String> mapCellValueToFieldNames(Cell cell) {
-        String cellValue = getCellValue(cell);
-        if (cellValue == null) {
-            return null;
-        }
-
-        List<String> fields = getFieldFromCellValue(cellValue);
-        return fields;
-    }
-
-    private List<String> getFieldFromCellValue(String cellValue) {
-        Matcher matcher = TEMPLATE_TAG_PATTERN.matcher(cellValue);
-        List<String> fields = new ArrayList<String>(matcher.groupCount());
-        while (matcher.find()) {
-            String field = matcher.group(1);
-            if (dtoHasField(field)) {
-                if (matcher.group("attribute") == null) {
-                    fields.add(field);
-                } else {
-                    fields.add(field + "." + matcher.group("attribute"));
-                }
-            }
-        }
-        return fields;
-    }
-
-    boolean dtoHasField(String group) {
-        if (group.charAt(0) == '.') {
-            return false;
-        }
-        String[] tokens = group.split("\\.");
-        return fieldList.contains(tokens[0]);
-    }
 
 	/**
-	 * 
-	 * @param cell
-	 * @return
-	 */
+	* @param cell
+	* @return
+	* @throws IllegalArgumentException
+	*/
+	List<String> mapCellValueToFieldNames(Cell cell) {
+		String cellValue = getCellValue(cell);
+		if (cellValue == null) {
+			return null;
+		}
+
+		List<String> fields = getFieldFromCellValue(cellValue);
+		return fields;
+	}
+
+	private List<String> getFieldFromCellValue(String cellValue) {
+		Matcher matcher = TEMPLATE_TAG_PATTERN.matcher(cellValue);
+		List<String> fields = new ArrayList<String>(matcher.groupCount());
+		while (matcher.find()) {
+			String field = matcher.group(1);
+			if (dtoHasField(field)) {
+				if (matcher.group("attribute") == null) {
+					fields.add(field);
+				} else {
+					fields.add(field + "." + matcher.group("attribute"));
+				}
+			}
+		}
+		return fields;
+	}
+
+	boolean dtoHasField(String group) {
+		if (group.charAt(0) == '.') {
+			return false;
+		}
+		String[] tokens = group.split("\\.");
+		return fieldList.contains(tokens[0]);
+	}
+
+	/**
+	*
+	* @param cell
+	* @return
+	*/
 	boolean cellContainsTemplateTag(Cell cell) {
 		List<String> fields = mapCellValueToFieldNames(cell);
 		return (null != fields && fields.size() > 0);
@@ -147,7 +148,7 @@ public class SheetTemplate {
 	public Multimap<String, Integer> getFieldMapping() {
 		return fieldMapping;
 	}
-	
+
 	public int getTemplateRowIndex() {
 		return templateRowIndex;
 	}
@@ -163,10 +164,10 @@ public class SheetTemplate {
 	public List<String> getFieldList() {
 		return fieldList;
 	}
-	
+
 	FlagTemplate getFlagTemplate() {
 		return flagTemplate;
 	}
-	
-	
+
+
 }

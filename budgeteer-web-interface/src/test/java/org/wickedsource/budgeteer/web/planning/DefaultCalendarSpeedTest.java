@@ -1,14 +1,14 @@
 package org.wickedsource.budgeteer.web.planning;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.joda.time.LocalDate;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Arrays;
-import java.util.List;
 
 class DefaultCalendarSpeedTest {
 
@@ -17,9 +17,9 @@ class DefaultCalendarSpeedTest {
 	private static final int TIMES = 50000;
 
 	/*
-	 * Do not run in regular regressions, as speed depends on platform and
-	 * parallel jobs
-	 */
+	* Do not run in regular regressions, as speed depends on platform and
+	* parallel jobs
+	*/
 	@Disabled
 	@Test
 	void findsHolidaysInFeasibleTime() {

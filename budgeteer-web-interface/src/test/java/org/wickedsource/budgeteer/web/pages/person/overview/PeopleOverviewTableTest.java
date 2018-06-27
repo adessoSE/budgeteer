@@ -8,16 +8,16 @@ import org.wickedsource.budgeteer.web.pages.person.overview.table.PeopleOverview
 
 public class PeopleOverviewTableTest extends AbstractWebTestTemplate {
 
-    @Test
-    void testRender() {
-        WicketTester tester = getTester();
-        PeopleModel model = new PeopleModel(1L);
-        PeopleOverviewTable table = new PeopleOverviewTable("table", model);
-        tester.startComponentInPage(table);
-    }
+	@Test
+	void testRender() {
+		WicketTester tester = getTester();
+		PeopleModel model = new PeopleModel(1L);
+		PeopleOverviewTable table = new PeopleOverviewTable("table", model);
+		tester.startComponentInPage(table);
+	}
 
-    @Override
-    protected void setupTest() {
+	@Override
+	protected void setupTest() {
 
-    }
+	}
 }

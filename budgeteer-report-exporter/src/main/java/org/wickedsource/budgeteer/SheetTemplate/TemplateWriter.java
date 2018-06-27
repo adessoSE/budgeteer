@@ -1,18 +1,19 @@
 package org.wickedsource.budgeteer.SheetTemplate;
 
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Multimap;
-import org.apache.poi.ss.usermodel.*;
-
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
 
+import org.apache.poi.ss.usermodel.*;
+
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
+
 public class TemplateWriter<T> {
-	
+
 	private static final String TEMPLATE_TAG_FORMAT = "\\{%s\\}";
-	
+
 	private SheetTemplate template;
 	private Sheet sheet;
 	private List<T> entries;
@@ -26,18 +27,18 @@ public class TemplateWriter<T> {
 		this.sheet = sheetTemplate.getSheet();
 		flagMapping = ArrayListMultimap.create();
 	}
-	
+
 	public TemplateWriter(SheetTemplate sheetTemplate, List<T> entries) {
 		this.template = sheetTemplate;
 		this.sheet = sheetTemplate.getSheet();
 		this.entries = entries;
 		flagMapping = ArrayListMultimap.create();
 	}
-	
+
 	public void setEntries(List<T> entries) {
 		this.entries = entries;
 	}
-	
+
 	public void write() {
 		insertRows(); // insert Rows with template tags
 		if(null != entries && !entries.isEmpty()) {
@@ -113,7 +114,7 @@ public class TemplateWriter<T> {
 			String newCellValue = cellValue.replaceAll(templateTag, fieldValueString);
 			currentCell.setCellValue(newCellValue);
 		}
-		
+
 	}
 
 	private void mapFieldValueToCell(Object fieldValue, Cell cell) {
@@ -151,18 +152,18 @@ public class TemplateWriter<T> {
 		String[] tokens = fieldname.split("\\.");
 		return tokens.length > 1;
 	}
-	
+
 	String getFieldnameOf(String dynamicField) {
 		String[] tokens = dynamicField.split("\\.");
 		return tokens[0];
 	}
 
-    String subkeyOf(String tagname) {
-        int dotIndex = tagname.indexOf(".");
-        if (dotIndex == -1) {
-            return null;
-        }
-        return tagname.substring(dotIndex + 1, tagname.length());
+	String subkeyOf(String tagname) {
+		int dotIndex = tagname.indexOf(".");
+		if (dotIndex == -1) {
+			return null;
+		}
+		return tagname.substring(dotIndex + 1, tagname.length());
 	}
 
 	void insertRows() {
@@ -173,20 +174,20 @@ public class TemplateWriter<T> {
 		} else {
 			numberOfRows = 0;
 		}
-		
+
 		boolean templateRowIsLastRow = (template.getTemplateRowIndex() == sheet.getLastRowNum());
-		
+
 		if(!templateRowIsLastRow && numberOfRows == 0) { // if we do not have data, we have to remove the template row
 			sheet.removeRow(sheet.getRow(template.getTemplateRowIndex()));
 			sheet.shiftRows(template.getTemplateRowIndex(), sheet.getLastRowNum(), -1);
-		} 
-		
+		}
+
 		// copy template row numberOfRows-1 times
 		for(int i = 0; i < numberOfRows-1; i++) {
 			copyRow(sheet,template.getTemplateRowIndex()+i);
 		}
 	}
-	
+
 	void copyRow(Sheet sheet, int from) {
 		if(from < sheet.getLastRowNum()) {
 			sheet.shiftRows(from+1, sheet.getLastRowNum(), 1);
@@ -199,7 +200,7 @@ public class TemplateWriter<T> {
 			insertCell.setCellStyle(copyCell.getCellStyle());
 		}
 	}
-	
+
 	void copyCellValues(Cell copyCell, Cell insertCell) {
 		switch (copyCell.getCellTypeEnum()) {
 		case STRING:
@@ -235,13 +236,13 @@ public class TemplateWriter<T> {
 			}
 		}
 	}
-	
+
 	public void addFlag(T dto, String fieldname, String flag) {
 		if(template.getFieldMapping().containsKey(fieldname) && null != template.getFlagTemplate() && template.getFlagTemplate().contains(flag)) {
 			flagMapping.put(dto, new FieldFlag(fieldname,flag));
 		}
 	}
-	
+
 	public void removeFlagSheet() {
 		Sheet flagSheet = sheet.getWorkbook().getSheet("Flags");
 		if(null != flagSheet) {

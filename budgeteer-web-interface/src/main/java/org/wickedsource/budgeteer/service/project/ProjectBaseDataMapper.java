@@ -7,11 +7,11 @@ import org.wickedsource.budgeteer.service.AbstractMapper;
 @Component
 public class ProjectBaseDataMapper extends AbstractMapper<ProjectEntity, ProjectBaseData> {
 
-    @Override
-    public ProjectBaseData map(ProjectEntity entity) {
-        ProjectBaseData project = new ProjectBaseData();
-        project.setId(entity.getId());
-        project.setName(entity.getName());
-        return project;
-    }
+	@Override
+	public ProjectBaseData map(ProjectEntity entity) {
+		ProjectBaseData project = new ProjectBaseData();
+		project.setId(entity.getId());
+		project.setName(entity.getName());
+		return project;
+	}
 }

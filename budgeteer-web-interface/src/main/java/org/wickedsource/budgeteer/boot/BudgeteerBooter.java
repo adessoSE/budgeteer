@@ -15,8 +15,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @ComponentScan("org.wickedsource.budgeteer")
 public class BudgeteerBooter {
 
-    public static void main(String[] args) {
-        SpringApplication.run(BudgeteerBooter.class, args);
-    }
+	public static void main(String[] args) {
+		SpringApplication.run(BudgeteerBooter.class, args);
+	}
 
 }

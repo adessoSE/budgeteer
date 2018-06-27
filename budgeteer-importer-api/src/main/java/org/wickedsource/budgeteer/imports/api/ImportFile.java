@@ -4,20 +4,20 @@ import java.io.InputStream;
 
 public class ImportFile {
 
-    private String filename;
+	private String filename;
 
-    private InputStream inputStream;
+	private InputStream inputStream;
 
-    public ImportFile(String filename, InputStream inputStream) {
-        this.filename = filename;
-        this.inputStream = inputStream;
-    }
+	public ImportFile(String filename, InputStream inputStream) {
+		this.filename = filename;
+		this.inputStream = inputStream;
+	}
 
-    public String getFilename() {
-        return filename;
-    }
+	public String getFilename() {
+		return filename;
+	}
 
-    public InputStream getInputStream() {
-        return inputStream;
-    }
+	public InputStream getInputStream() {
+		return inputStream;
+	}
 }

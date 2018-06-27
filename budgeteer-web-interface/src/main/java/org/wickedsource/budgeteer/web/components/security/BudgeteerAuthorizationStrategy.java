@@ -10,24 +10,24 @@ import org.wickedsource.budgeteer.web.BudgeteerSession;
 
 public class BudgeteerAuthorizationStrategy implements IAuthorizationStrategy {
 
-    @Override
-    public <T extends IRequestableComponent> boolean isInstantiationAuthorized(Class<T> componentClass) {
-        NeedsLogin annotation = componentClass.getAnnotation(NeedsLogin.class);
-        boolean isAnnotated = (annotation != null);
-        if (!isAnnotated) {
-            return true;
-        } else {
-            return BudgeteerSession.get().isLoggedIn();
-        }
-    }
+	@Override
+	public <T extends IRequestableComponent> boolean isInstantiationAuthorized(Class<T> componentClass) {
+		NeedsLogin annotation = componentClass.getAnnotation(NeedsLogin.class);
+		boolean isAnnotated = (annotation != null);
+		if (!isAnnotated) {
+			return true;
+		} else {
+			return BudgeteerSession.get().isLoggedIn();
+		}
+	}
 
-    @Override
-    public boolean isActionAuthorized(Component component, Action action) {
-        return true;
-    }
+	@Override
+	public boolean isActionAuthorized(Component component, Action action) {
+		return true;
+	}
 
-    @Override
-    public boolean isResourceAuthorized(IResource resource, PageParameters parameters) {
-        return true;
-    }
+	@Override
+	public boolean isResourceAuthorized(IResource resource, PageParameters parameters) {
+		return true;
+	}
 }

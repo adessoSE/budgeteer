@@ -8,18 +8,18 @@ import org.wickedsource.budgeteer.web.BudgeteerSession;
 
 public class RemainingBudgetFilterModel extends LoadableDetachableModel<Long> {
 
-    @SpringBean
-    private BudgetService service;
+	@SpringBean
+	private BudgetService service;
 
-    private long projectId;
+	private long projectId;
 
-    public RemainingBudgetFilterModel(long projectId) {
-        Injector.get().inject(this);
-        this.projectId = projectId;
-    }
+	public RemainingBudgetFilterModel(long projectId) {
+		Injector.get().inject(this);
+		this.projectId = projectId;
+	}
 
-    @Override
-    protected Long load() {
-        return BudgeteerSession.get().getRemainingBudgetFilterValue();
-    }
+	@Override
+	protected Long load() {
+		return BudgeteerSession.get().getRemainingBudgetFilterValue();
+	}
 }
