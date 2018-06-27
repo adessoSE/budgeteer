@@ -23,6 +23,7 @@ jobs:
       - run:
           name: Static code analysis
           command: |
+            echo $SONARCLOUD_BUDGETEER_KEY
             ./gradlew sonarqube \
             -Dsonar.host.url=https://sonarcloud.io \
             -Dsonar.organization=tbuss93-github \
