@@ -27,7 +27,8 @@ jobs:
             -Dsonar.host.url=https://sonarcloud.io \
             -Dsonar.organization=tbuss93-github \
             -Dsonar.login=$SONARCLOUD_BUDGETEER_KEY \
-            -Dsonar.branch.name=`git symbolic-ref --short HEAD`
+            -Dsonar.branch.name=`git symbolic-ref --short HEAD` \
+            --stacktrace
       - run:
           name: Save .war and .jar files
           command: |
