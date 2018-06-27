@@ -23,7 +23,11 @@ jobs:
       - run:
           name: Static code analysis
           command: |
-            ./gradlew sonarqube -Dsonar.host.url=https://sonarcloud.io -Dsonar.organization=tbuss93-github -Dsonar.login=$SONARCLOUD_BUDGETEER_KEY -Dsonar.branch.name=`git symbolic-ref --short HEAD`
+            ./gradlew sonarqube \
+            -Dsonar.host.url=https://sonarcloud.io \
+            -Dsonar.organization=tbuss93-github \
+            -Dsonar.login=${SONARCLOUD_BUDGETEER_KEY} \
+            -Dsonar.branch.name=`git symbolic-ref --short HEAD`
       - run:
           name: Save .war and .jar files
           command: |
