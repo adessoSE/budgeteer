@@ -139,48 +139,42 @@ public class BurnTable extends Panel {
                 //If there are less than 5 Pages
                 if(rows.getPageCount() < 5){
                     for(int i = 0; i < rows.getPageCount(); i++){
-                        AjaxLink link = createNumberedNavButton(this.newChildId(), i);
+                        AjaxLink link = createNumberedNavButton(newChildId(), i);
                         if(rows.getCurrentPage() == i){
                             link.add(new AttributeModifier("class", "active"));
                         }
-                        this.add(link);
+                        add(link);
                     }
                 }else { //If we are on the first 3 Pages
                     if (rows.getCurrentPage() < 3) {
                         for (int i = 0; i < 4; i++) {
-                            AjaxLink link = createNumberedNavButton(this.newChildId(), i);
+                            AjaxLink link = createNumberedNavButton(newChildId(), i);
                             if(rows.getCurrentPage() == i){
                                 link.add(new AttributeModifier("class", "active"));
                             }
-                            this.add(link);
+                            add(link);
                         }
-                        this.add(createDottedNavButton(this.newChildId()));
-                        this.add(createNumberedNavButton(this.newChildId(), rows.getPageCount()-1));
+                        add(createDottedNavButton(newChildId()));
+                        add(createNumberedNavButton(newChildId(), rows.getPageCount()-1));
                     }
                     else if (rows.getCurrentPage() > rows.getPageCount() - 4) { //If we are on the last 3 Pages
-                        this.add(createNumberedNavButton(this.newChildId(), 0));
-                        this.add(createDottedNavButton(this.newChildId()));
+                        add(createNumberedNavButton(newChildId(), 0));
+                        add(createDottedNavButton(newChildId()));
                         for (long i = rows.getPageCount() - 4; i < rows.getPageCount(); i++) {
-                            AjaxLink link = createNumberedNavButton(this.newChildId(), i);
+                            AjaxLink link = createNumberedNavButton(newChildId(), i);
                             if(rows.getCurrentPage() == i){
                                 link.add(new AttributeModifier("class", "active"));
                             }
-                            this.add(link);
+                            add(link);
                         }
                     } else{ //If the selected page is anywhere in between.
-                        this.add(new AjaxLink<Void>(this.newChildId()) {
-                            @Override
-                            public void onClick(AjaxRequestTarget target) {
-                                rows.setCurrentPage(0);
-                                target.add(tableComponents);
-                            }
-                        }.add(new Label("pageNavLabel", "1")));
-                        this.add(createDottedNavButton(this.newChildId()));
-                        this.add(createNumberedNavButton(this.newChildId(), rows.getCurrentPage()-1));
-                        this.add(createNumberedNavButton(this.newChildId(), rows.getCurrentPage()).add(new AttributeModifier("class", "active")));
-                        this.add(createNumberedNavButton(this.newChildId(), rows.getCurrentPage()+1));
-                        this.add(createDottedNavButton(this.newChildId()));
-                        this.add(createNumberedNavButton(this.newChildId(), rows.getPageCount()-1));
+                        add(createNumberedNavButton(newChildId(), 0));
+                        add(createDottedNavButton(newChildId()));
+                        add(createNumberedNavButton(newChildId(), rows.getCurrentPage()-1));
+                        add(createNumberedNavButton(newChildId(), rows.getCurrentPage()).add(new AttributeModifier("class", "active")));
+                        add(createNumberedNavButton(newChildId(), rows.getCurrentPage()+1));
+                        add(createDottedNavButton(newChildId()));
+                        add(createNumberedNavButton(newChildId(), rows.getPageCount()-1));
                     }
                 }
                 updatePreviousAndNextButtons();
@@ -227,7 +221,8 @@ public class BurnTable extends Panel {
         return (Link)new Link<Void>(id) {
             @Override
             public void onClick(){}
-        }.add(new Label("pageNavLabel", "...")).add(new AttributeModifier("class", "disabled")).setEnabled(false);
+        }.add(new Label("pageNavLabel", "...")).add(new AttributeModifier("class", "disabled"))
+                .setEnabled(false);
     }
 
     @Override
