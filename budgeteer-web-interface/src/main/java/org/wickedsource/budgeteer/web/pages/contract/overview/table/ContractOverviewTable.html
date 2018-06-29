@@ -22,28 +22,39 @@
             </tr>
         </thead>
         <tbody>
-            <tr wicket:id="contractRows">
-                <td><a wicket:id="editContract"><span wicket:id="contractName"></span></a></td>
-                <td><span wicket:id="internalNumber"></span></td>
-                <td><span wicket:id="startDate"></span></td>
-                <td><span wicket:id="type"></span></td>
-                <td wicket:id="contractRow"><span wicket:id="contractRowText">Title</span></td>
-                <td><span wicket:id="budgetTotal"></span></td>
-                <td><span wicket:id="budgetSpent"></span></td>
-                <td><span wicket:id="budgetLeft"></span></td>
-                <td><span>
-                    <a wicket:id="editLink" class="btn btn-default btn-sm fa fa-edit"></a>
-                </span></td>
-            </tr>
-        <tfoot>
-            <tr>
-                <td wicket:id="footerRow">
-                    <strong>
-                        <span wicket:id="footerItem">Contract Title</span>
-                    </strong>
-                </td>
-            </tr>
-        </tfoot>
+                <tr wicket:id="contractRows">
+                    <td><a wicket:id="editContract"><span wicket:id="contractName"></span></a></td>
+                    <td><span wicket:id="internalNumber"></span></td>
+                    <td><span wicket:id="startDate"></span></td>
+                    <td><span wicket:id="type"></span></td>
+                    <td wicket:id="contractRow"><span wicket:id="contractRowText">Title</span></td>
+                    <td align="right"><span wicket:id="budgetTotal"></span></td>
+                    <td align="right"><span wicket:id="budgetSpent"></span></td>
+                    <td align="right"><span wicket:id="budgetLeft"></span></td>
+                    <td><span>
+                        <a wicket:id="editLink" class="btn btn-default btn-sm fa fa-edit"></a>
+                    </span></td>
+                </tr>
+            <tfoot>
+                <tr>
+                    <td wicket:id="footerRow">
+                        <strong>
+                            <span wicket:id="footerItem">Contract Title</span>
+                        </strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>Filter Total</strong></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td wicket:id="emptyRow"><span wicket:id="emptyRowText">Title</span></td>
+                    <td align="right"><strong wicket:id="totalAmount">€400.000</strong></td>
+                    <td align="right"><strong wicket:id="totalSpent">€360.000</strong></td>
+                    <td align="right"><strong wicket:id="totalRemaining">€240.000</strong></td>
+                    <td></td>
+                </tr>
+            </tfoot>
         </tbody>
     </table>
 </wicket:panel>

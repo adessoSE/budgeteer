@@ -7,6 +7,7 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -18,9 +19,15 @@ import org.wickedsource.budgeteer.service.contract.DynamicAttributeField;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.components.dataTable.DataTableBehavior;
 import org.wickedsource.budgeteer.web.components.datelabel.DateLabel;
+import org.wickedsource.budgeteer.web.components.money.BudgetUnitMoneyModel;
+import org.wickedsource.budgeteer.web.components.money.MoneyLabel;
+import org.wickedsource.budgeteer.web.components.tax.TaxBudgetUnitMoneyModel;
 import org.wickedsource.budgeteer.web.components.tax.TaxLabelModel;
 import org.wickedsource.budgeteer.web.pages.contract.details.ContractDetailsPage;
 import org.wickedsource.budgeteer.web.pages.contract.edit.EditContractPage;
+import org.wickedsource.budgeteer.service.contract.ContractTotalData;
+
+import java.util.List;
 
 import static org.wicketstuff.lazymodel.LazyModel.from;
 import static org.wicketstuff.lazymodel.LazyModel.model;
@@ -29,7 +36,6 @@ public class ContractOverviewTable extends Panel{
 
     @SpringBean
     private ContractService contractService;
-
 
     public ContractOverviewTable(String id) {
         super(id);
@@ -77,13 +83,47 @@ public class ContractOverviewTable extends Panel{
                         EditContractPage.createParameters(contractId)));
             }
         });
+
         table.add(new ListView<String>("footerRow", model(from(data).getFooter()) ) {
             @Override
             protected void populateItem(ListItem<String> item) {
                 item.add(new Label("footerItem", item.getModelObject()));
             }
         });
+
+        addTableSummaryLabels(table,model(from(data.getContracts())));
         add(table);
+    }
+
+    private void addTableSummaryLabels(WebMarkupContainer table, IModel<List<ContractBaseData>> model){
+
+        IModel<ContractTotalData> totalModel = new TotalContractDetailsModel(model);
+
+        // Add empty table cells in the contract attribute columns
+        List<String> contractAttributes = ((TotalContractDetailsModel) totalModel).getContractAttributes();
+
+        table.add(new ListView<String>("emptyRow", contractAttributes) {
+            @Override
+            protected void populateItem(ListItem<String> item) {
+                item.add(new Label("emptyRowText", Model.of("")));
+            }
+        });
+
+        table.add(new MoneyLabel("totalAmount",
+                new TaxBudgetUnitMoneyModel(
+                        new BudgetUnitMoneyModel(model(from(totalModel).getBudget())),
+                        new BudgetUnitMoneyModel(model(from(totalModel).getBudgetGross()))
+                )));
+        table.add(new MoneyLabel("totalSpent",
+                new TaxBudgetUnitMoneyModel(
+                        new BudgetUnitMoneyModel(model(from(totalModel).getBudgetSpent())),
+                        new BudgetUnitMoneyModel(model(from(totalModel).getBudgetSpentGross()))
+                )));
+        table.add(new MoneyLabel("totalRemaining",
+                new TaxBudgetUnitMoneyModel(
+                        new BudgetUnitMoneyModel(model(from(totalModel).getBudgetLeft())),
+                        new BudgetUnitMoneyModel(model(from(totalModel).getBudgetLeftGross()))
+                )));
     }
 
     private void createNetGrossLabels(WebMarkupContainer table) {
