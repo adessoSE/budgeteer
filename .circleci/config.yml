@@ -22,7 +22,7 @@ jobs:
           when: always
       - run:
           name: Static code analysis
-          command: ./gradlew --stacktrace sonarqube -Dsonar.organization=maximatanasov-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONARCLOUD_MAXIM_KEY -Dsonar.branch.name=`git symbolic-ref --short HEAD`
+          command: ./gradlew --stacktrace sonarqube -Dsonar.organization=tbuss93-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=SONARCLOUD_BUDGETEER_KEY -Dsonar.branch=sonarcloud
       - run:
           name: Save .war and .jar files
           command: |
