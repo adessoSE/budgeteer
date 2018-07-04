@@ -12,6 +12,7 @@ import org.apache.wicket.util.file.Files;
 import org.apache.wicket.util.resource.FileResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.wickedsource.budgeteer.service.DateRange;
+import org.wickedsource.budgeteer.service.ReportType;
 import org.wickedsource.budgeteer.service.budget.report.BudgetReportService;
 import org.wickedsource.budgeteer.service.budget.report.ReportMetaInformation;
 import org.wickedsource.budgeteer.service.template.Template;
@@ -23,8 +24,8 @@ import org.wickedsource.budgeteer.web.components.notificationlist.NotificationLi
 import org.wickedsource.budgeteer.web.pages.base.AbstractChoiceRenderer;
 import org.wickedsource.budgeteer.web.pages.budgets.overview.report.BudgetReportFileModel;
 
-import javax.inject.Inject;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -40,7 +41,7 @@ public class BudgetReportForm extends Form<ReportMetaInformation> {
     @SpringBean
     private BudgetReportService service;
 
-    @Inject
+    @SpringBean
     private TemplateService templateService;
 
     public BudgetReportForm(String id) {
@@ -59,17 +60,44 @@ public class BudgetReportForm extends Form<ReportMetaInformation> {
                 DateRangeInputField.DROP_LOCATION.DOWN));
         DropDownChoice<Template> templateDropDown = new DropDownChoice<Template>("template", model(from(getModel()).getTemplate()),
                 new LoadableDetachableModel<List<? extends Template>>() {
+
                     @Override
                     protected List<? extends Template> load() {
-                        return templateService.getTemplatesInProject(BudgeteerSession.get().getProjectId());
+                        List<Template> temp = new ArrayList<>();
+                        Template defTemp = templateService.getDefault(ReportType.BUDGET_REPORT, BudgeteerSession.get().getProjectId());
+                        if(defTemp !=  null){
+                            temp.add(defTemp);
+                        }
+                        for(Template e : templateService.getTemplatesInProject(BudgeteerSession.get().getProjectId())){
+                            if(e.getType() == ReportType.BUDGET_REPORT){
+                                if(defTemp == null){
+                                    temp.add(e);
+                                }else if(defTemp.getId() != e.getId()){
+                                    temp.add(e);
+                                }
+                            }
+                        }
+                        if(temp.isEmpty()){
+                            temp.add(null);
+                        }
+                        return temp;
                     }
                 },
                 new AbstractChoiceRenderer<Template>() {
                     @Override
                     public Object getDisplayValue(Template object) {
-                        return object == null ? "Unnamed" : object.getName();
+                        String isDefault = "";
+                        if(object != null && object.isDefault()){
+                            isDefault = " (default)";
+                        }
+                        return object == null ? "No Templates Available" : object.getName() + isDefault;
                     }
-                });
+                }){
+            @Override
+            public String getModelValue (){
+                return null;
+            }
+        };
         templateDropDown.setNullValid(false);
         add(templateDropDown);
     }

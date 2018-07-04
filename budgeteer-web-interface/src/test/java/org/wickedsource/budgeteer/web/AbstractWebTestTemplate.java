@@ -89,8 +89,8 @@ public abstract class AbstractWebTestTemplate {
             record.setAggregationPeriodTitle("Week #" + i);
             record.setAggregationPeriodStart(new Date());
             record.setAggregationPeriodStart(new Date());
-            record.setBudgetBurned(MoneyUtil.createMoneyFromCents(random.nextInt(8000)));
-            record.setBudgetPlanned(MoneyUtil.createMoneyFromCents(random.nextInt(4000)));
+            record.setBudgetBurned_net(MoneyUtil.createMoneyFromCents(random.nextInt(8000)));
+            record.setBudgetPlanned_net(MoneyUtil.createMoneyFromCents(random.nextInt(4000)));
             record.setHours(random.nextDouble());
             list.add(record);
         }

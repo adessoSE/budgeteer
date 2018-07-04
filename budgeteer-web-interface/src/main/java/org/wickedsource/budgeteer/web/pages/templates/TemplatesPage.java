@@ -14,8 +14,9 @@ import org.wickedsource.budgeteer.web.pages.templates.templateimport.ImportTempl
 public class TemplatesPage extends BasePage {
 
     public TemplatesPage() {
-        TemplatesTable table = new TemplatesTable("templateTable", new TemplateListModel(BudgeteerSession.get().getProjectId()));
+        TemplatesTable table = new TemplatesTable("templateTable", new TemplateListModel(BudgeteerSession.get().getTemplateFilter()));
         add(table);
+        add(new TemplateFilterPanel("filter", BudgeteerSession.get().getTemplateFilter()));
         add(createImportLink("importLink"));
     }
 

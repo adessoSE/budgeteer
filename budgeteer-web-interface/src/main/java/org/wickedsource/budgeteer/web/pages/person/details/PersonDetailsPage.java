@@ -13,6 +13,7 @@ import org.wickedsource.budgeteer.web.components.confirm.ConfirmationForm;
 import org.wickedsource.budgeteer.web.pages.base.basepage.BasePage;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.Breadcrumb;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
+import org.wickedsource.budgeteer.web.pages.base.delete.DeleteDialog;
 import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 import org.wickedsource.budgeteer.web.pages.person.PersonNameModel;
 import org.wickedsource.budgeteer.web.pages.person.details.chart.BudgetDistributionChart;
@@ -24,6 +25,8 @@ import org.wickedsource.budgeteer.web.pages.person.hours.PersonHoursPage;
 import org.wickedsource.budgeteer.web.pages.person.monthreport.PersonMonthReportPage;
 import org.wickedsource.budgeteer.web.pages.person.overview.PeopleOverviewPage;
 import org.wickedsource.budgeteer.web.pages.person.weekreport.PersonWeekReportPage;
+
+import java.util.concurrent.Callable;
 
 @Mount("people/details/${id}")
 public class PersonDetailsPage extends BasePage {
@@ -43,8 +46,21 @@ public class PersonDetailsPage extends BasePage {
         Form deleteForm = new ConfirmationForm("deleteForm", this, "confirmation.delete") {
             @Override
             public void onSubmit() {
-                personService.deletePerson(getParameterId());
-                setResponsePage(PeopleOverviewPage.class);
+
+                setResponsePage(new DeleteDialog(new Callable<Void>() {
+                    @Override
+                    public Void call() {
+                        personService.deletePerson(getParameterId());
+                        setResponsePage(PeopleOverviewPage.class);
+                        return null;
+                    }
+                }, new Callable<Void>() {
+                    @Override
+                    public Void call(){
+                        setResponsePage(PersonDetailsPage.class, getPageParameters());
+                        return  null;
+                    }
+                }));
             }
         };
         deleteForm.add(new SubmitLink("deletePersonLink"));
