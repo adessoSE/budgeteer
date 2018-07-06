@@ -7,10 +7,12 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.joda.money.Money;
 import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.persistence.contract.ContractEntity;
 import org.wickedsource.budgeteer.service.contract.ContractBaseData;
@@ -26,13 +28,14 @@ import org.wickedsource.budgeteer.web.components.tax.TaxLabelModel;
 import org.wickedsource.budgeteer.web.pages.contract.details.ContractDetailsPage;
 import org.wickedsource.budgeteer.web.pages.contract.edit.EditContractPage;
 import org.wickedsource.budgeteer.service.contract.ContractTotalData;
+import org.wicketstuff.lazymodel.LazyModel;
 
 import java.util.List;
 
 import static org.wicketstuff.lazymodel.LazyModel.from;
 import static org.wicketstuff.lazymodel.LazyModel.model;
 
-public class ContractOverviewTable extends Panel{
+public class ContractOverviewTable extends Panel {
 
     @SpringBean
     private ContractService contractService;
@@ -45,7 +48,7 @@ public class ContractOverviewTable extends Panel{
         createNetGrossLabels(table);
 
         table.add(new DataTableBehavior(DataTableBehavior.getRecommendedOptions()));
-        table.add(new ListView<String>("headerRow",  model(from(data).getHeadline()) ) {
+        table.add(new ListView<String>("headerRow", model(from(data).getHeadline())) {
             @Override
             protected void populateItem(ListItem<String> item) {
                 item.add(new Label("headerItem", item.getModelObject()));
@@ -84,45 +87,43 @@ public class ContractOverviewTable extends Panel{
             }
         });
 
-        table.add(new ListView<String>("footerRow", model(from(data).getFooter()) ) {
+        table.add(new ListView<String>("footerRow", model(from(data).getFooter())) {
             @Override
             protected void populateItem(ListItem<String> item) {
                 item.add(new Label("footerItem", item.getModelObject()));
             }
         });
 
-        addTableSummaryLabels(table,model(from(data.getContracts())));
+        addTableSummaryLabels(table, model(from(data.getContracts())));
         add(table);
     }
 
-    private void addTableSummaryLabels(WebMarkupContainer table, IModel<List<ContractBaseData>> model){
+    private void addTableSummaryLabels(WebMarkupContainer table, IModel<List<ContractBaseData>> model) {
 
         IModel<ContractTotalData> totalModel = new TotalContractDetailsModel(model);
 
-        // Add empty table cells in the contract attribute columns
-        List<String> contractAttributes = ((TotalContractDetailsModel) totalModel).getContractAttributes();
+        // Fill up the columns which contain the contract attributes with empty cells
+        RepeatingView repeatingView = new RepeatingView("contractAttributeCell");
+        for (int i = 0; i < ((TotalContractDetailsModel) totalModel).getContractAttributeSize(); i++) {
+            repeatingView.add(new Label(repeatingView.newChildId(), ""));
+        }
 
-        table.add(new ListView<String>("emptyRow", contractAttributes) {
-            @Override
-            protected void populateItem(ListItem<String> item) {
-                item.add(new Label("emptyRowText", Model.of("")));
-            }
-        });
+        table.add(repeatingView);
 
         table.add(new MoneyLabel("totalAmount",
                 new TaxBudgetUnitMoneyModel(
-                        new BudgetUnitMoneyModel(model(from(totalModel).getBudget())),
-                        new BudgetUnitMoneyModel(model(from(totalModel).getBudgetGross()))
+                        new BudgetUnitMoneyModel(model(from(totalModel.getObject().getBudget()))),
+                        new BudgetUnitMoneyModel(model(from(totalModel.getObject().getBudgetGross())))
                 )));
         table.add(new MoneyLabel("totalSpent",
                 new TaxBudgetUnitMoneyModel(
-                        new BudgetUnitMoneyModel(model(from(totalModel).getBudgetSpent())),
-                        new BudgetUnitMoneyModel(model(from(totalModel).getBudgetSpentGross()))
+                        new BudgetUnitMoneyModel(model(from(totalModel.getObject().getBudgetSpent()))),
+                        new BudgetUnitMoneyModel(model(from(totalModel.getObject().getBudgetSpentGross())))
                 )));
         table.add(new MoneyLabel("totalRemaining",
                 new TaxBudgetUnitMoneyModel(
-                        new BudgetUnitMoneyModel(model(from(totalModel).getBudgetLeft())),
-                        new BudgetUnitMoneyModel(model(from(totalModel).getBudgetLeftGross()))
+                        new BudgetUnitMoneyModel(model(from(totalModel.getObject().getBudgetLeft()))),
+                        new BudgetUnitMoneyModel(model(from(totalModel.getObject().getBudgetLeftGross())))
                 )));
     }
 

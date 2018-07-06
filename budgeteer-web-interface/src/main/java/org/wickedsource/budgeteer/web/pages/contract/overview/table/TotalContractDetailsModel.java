@@ -18,15 +18,14 @@ import java.util.List;
 import static org.wicketstuff.lazymodel.LazyModel.from;
 import static org.wicketstuff.lazymodel.LazyModel.model;
 
-public class TotalContractDetailsModel extends LoadableDetachableModel<ContractTotalData> implements IObjectClassAwareModel<ContractTotalData> {
+public class TotalContractDetailsModel extends LoadableDetachableModel<ContractTotalData> {
     private IModel<List<ContractTotalData>> wrappedModel;
 
-    public TotalContractDetailsModel(IModel<List<ContractBaseData>> sourceModel){
+    public TotalContractDetailsModel(IModel<List<ContractBaseData>> sourceModel) {
         List<ContractTotalData> totalDataList = new ArrayList<>();
 
         // Cast given sourceModel to a model of ContractTotalData.
-        for(ContractBaseData baseData: sourceModel.getObject())
-        {
+        for (ContractBaseData baseData : sourceModel.getObject()) {
             totalDataList.add(new ContractTotalData(baseData));
         }
 
@@ -34,24 +33,17 @@ public class TotalContractDetailsModel extends LoadableDetachableModel<ContractT
     }
 
     /**
-     * Creates a list of emtpy strings.
-     * The length of the list is equal to the number of the contract attributes of a contract.
-     * @return a list of empty strings
+     * @return Size of the contract attributes in each contract
      */
-    public List<String> getContractAttributes()
+    public int getContractAttributeSize()
+
     {
         List<DynamicAttributeField> fields = new ArrayList<DynamicAttributeField>();
-        if(wrappedModel.getObject().size()>0)
-        {
+        if (wrappedModel.getObject().size() > 0) {
             ContractTotalData data = wrappedModel.getObject().get(0);
             fields = data.getContractAttributes();
         }
-        List<String> result = new ArrayList<>();
-        for(DynamicAttributeField field: fields)
-        {
-            result.add("");
-        }
-        return result;
+        return fields.size();
     }
 
     @Override
@@ -67,8 +59,7 @@ public class TotalContractDetailsModel extends LoadableDetachableModel<ContractT
         totalData.setBudgetSpentGross(MoneyUtil.createMoney(0d));
 
         // Sum up the money amounts for all contracts with and without taxes
-        for(ContractTotalData single : wrappedModel.getObject())
-        {
+        for (ContractTotalData single : wrappedModel.getObject()) {
             totalData.setBudgetSpent(totalData.getBudgetSpent().plus(single.getBudgetSpent()));
             totalData.setBudget(totalData.getBudget().plus(single.getBudget()));
             totalData.setBudgetLeft(totalData.getBudgetLeft().plus(single.getBudgetLeft()));
@@ -79,9 +70,5 @@ public class TotalContractDetailsModel extends LoadableDetachableModel<ContractT
         }
 
         return totalData;
-    }
-
-    public Class<ContractTotalData> getObjectClass() {
-        return ContractTotalData.class;
     }
 }
