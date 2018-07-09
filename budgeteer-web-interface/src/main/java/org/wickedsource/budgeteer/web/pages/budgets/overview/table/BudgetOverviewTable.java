@@ -1,6 +1,8 @@
 package org.wickedsource.budgeteer.web.pages.budgets.overview.table;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.event.IEvent;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
@@ -154,7 +156,17 @@ public class BudgetOverviewTable extends Panel {
                         }, () -> {setResponsePage(BudgetsOverviewPage.class);return null;}));
                     }
                 };
-                item.add(deleteBudgetButton);
+                //Creating a separate tooltip is necessary because disabling the button also causes tooltips to disappear.
+                WebMarkupContainer deleteBudgetTooltip = new WebMarkupContainer("deleteBudgetTooltip");
+                if(item.getModelObject().getContractName() != null){
+                    deleteBudgetTooltip.add(new AttributeAppender("style", "cursor: not-allowed;", " "));
+                    deleteBudgetTooltip.add(new AttributeModifier("title", getString("contract.still.exist")));
+                    deleteBudgetButton.setEnabled(false);
+                }else{
+                    deleteBudgetTooltip.add(new AttributeModifier("title", getString("delete.budget")));
+                }
+                deleteBudgetTooltip.add(deleteBudgetButton);
+                item.add(deleteBudgetTooltip);
 
                 Link editBudgetLink = new Link("editPage") {
                     @Override

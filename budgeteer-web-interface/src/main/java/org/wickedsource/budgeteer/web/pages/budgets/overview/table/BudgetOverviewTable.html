@@ -34,7 +34,12 @@
             <td>
                 <div wicket:id="progressBar"></div>
             </td>
-            <td width="50px"><button title="Delete this budget" class="btn btn-default btn-sm fa fa-trash" wicket:id="deleteBudget"> </button></td>
+            <td width="50px">
+                <span wicket:id="deleteBudgetTooltip">
+                    <button class="btn btn-default btn-sm fa fa-trash" wicket:id="deleteBudget">
+                    </button>
+                </span>
+            </td>
             <td><button title="Edit this budget" class="btn btn-default btn-sm fa fa-edit" wicket:id="editPage"> </button></td>
         </tr>
         <tfoot>
