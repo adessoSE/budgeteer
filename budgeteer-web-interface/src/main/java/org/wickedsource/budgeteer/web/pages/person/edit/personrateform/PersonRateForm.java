@@ -12,13 +12,16 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.joda.money.Money;
 import org.wickedsource.budgeteer.service.DateRange;
 import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
 import org.wickedsource.budgeteer.service.budget.BudgetService;
 import org.wickedsource.budgeteer.service.person.PersonRate;
+import org.wickedsource.budgeteer.service.person.PersonService;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.components.daterange.DateRangeInputField;
 import org.wickedsource.budgeteer.web.components.listMultipleChoiceWithGroups.OptionGroup;
+import org.wickedsource.budgeteer.web.components.money.BudgetUnitMoneyModel;
 import org.wickedsource.budgeteer.web.components.money.MoneyTextField;
 import org.wickedsource.budgeteer.web.components.multiselect.MultiselectBehavior;
 
@@ -29,45 +32,36 @@ import java.util.List;
 import static org.wicketstuff.lazymodel.LazyModel.from;
 import static org.wicketstuff.lazymodel.LazyModel.model;
 
-public abstract class PersonRateForm extends Form<PersonRateForm.PersonRateFormModel> {
-
-    public static class PersonRateFormModel extends PersonRate {
-        private Model<ArrayList<BudgetBaseData>> chosenBudgets = new Model<>(new ArrayList<>());
-
-        public Model<ArrayList<BudgetBaseData>> getChosenBudgets() {
-            return chosenBudgets;
-        }
-    }
+public abstract class PersonRateForm extends Form<PersonRateFormDto> {
 
     @SpringBean
     private BudgetService budgetService;
 
+    MoneyTextField rateField;
 
-    public PersonRateForm(String id, long personId) {
-        super(id, model(from(new PersonRateFormModel())));
+    DateRangeInputField dateRangeField;
+
+    PersonRateForm(PersonRateFormDto data) {
+        super("addRateForm", new Model<>(data));
         Injector.get().inject(this);
-
-        MoneyTextField rateField = new MoneyTextField("rateField", model(from(getModel()).getRate()));
+        rateField = new MoneyTextField("rateField", new Model<>(getModelObject().getRate()));
         rateField.setRequired(true);
         add(rateField);
-
-        DateRangeInputField dateRangeField = new DateRangeInputField("dateRangeField", model(from(getModel()).getDateRange()), DateRangeInputField.DROP_LOCATION.UP);
+        dateRangeField = new DateRangeInputField("dateRangeField", new Model<>(getModelObject().getDateRange()), DateRangeInputField.DROP_LOCATION.UP);
         dateRangeField.setRequired(true);
         add(dateRangeField);
-
-        List<OptionGroup<BudgetBaseData>> possibleBudgets = budgetService.getPossibleBudgetDataForPersonAndProject(BudgeteerSession.get().getProjectId(), personId);
+        List<OptionGroup<BudgetBaseData>> possibleBudgets = budgetService.getPossibleBudgetDataForPersonAndProject(BudgeteerSession.get().getProjectId(), data.getPersonId());
         addBudgetsDropdown(possibleBudgets);
-
         add(new Button("submitButton"));
     }
 
     @Override
     protected void onSubmit() {
-        PersonRateFormModel addedPersonRate = getModelObject();
+        PersonRateFormDto addedPersonRate = getModelObject();
         for(BudgetBaseData budget : addedPersonRate.getChosenBudgets().getObject()) {
-            List<PersonRate> overlappingRate = getOverlappingRates(addedPersonRate.getDateRange(), budget);
+            List<PersonRate> overlappingRate = getOverlappingRates(dateRangeField.getModelObject(), budget);
             if (overlappingRate == null || overlappingRate.isEmpty()) {
-                rateAdded(new PersonRate(addedPersonRate.getRate(), budget, addedPersonRate.getDateRange()));
+                rateAdded(new PersonRate(rateField.getModelObject(), budget, dateRangeField.getModelObject()));
             } else {
                 StringBuilder overlappingEntryNames = new StringBuilder();
                 overlappingEntryNames.append(System.getProperty("line.separator"));
@@ -86,7 +80,6 @@ public abstract class PersonRateForm extends Form<PersonRateForm.PersonRateFormM
             }
         }
         addedPersonRate.getChosenBudgets().getObject().clear();
-        addedPersonRate.reset();
     }
 
     protected abstract void rateAdded(PersonRate rate);
