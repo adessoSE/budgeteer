@@ -56,7 +56,17 @@
                         <form wicket:id="addRateForm">
                             <tr>
                                 <td><input wicket:id="rateField" type="text"/><span> &#x80;</span></td>
-                                <td><select wicket:id="budgetField" id="budgetField"></select></td>
+                                <td>
+                                    <select wicket:id="select" multiple="multiple">
+                                        <wicket:container wicket:id="repeatingView">
+                                            <optgroup wicket:id="optGroup">
+                                                <wicket:container wicket:id="selectOptions">
+                                                    <option wicket:id="option"></option>
+                                                </wicket:container>
+                                            </optgroup>
+                                        </wicket:container>
+                                    </select>
+                                </td>
                                 <td><input wicket:id="dateRangeField" type="text"/></td>
                                 <td>
                                     <button wicket:id="submitButton" type="submit"
