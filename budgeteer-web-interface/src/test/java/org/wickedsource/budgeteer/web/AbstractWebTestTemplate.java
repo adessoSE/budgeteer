@@ -63,7 +63,7 @@ public abstract class AbstractWebTestTemplate {
 
         if (tester == null) {
             tester = new WicketTester(application);
-            login();
+            loginAndSetProject();
         }
         setupTest();
     }
@@ -74,11 +74,15 @@ public abstract class AbstractWebTestTemplate {
      */
     protected abstract void setupTest();
 
-    private void login() {
+    private void loginAndSetProject() {
         User user = new User();
         user.setId(1L);
         user.setName("username");
         BudgeteerSession.get().login(user);
+
+        // TODO: BudgeteerSession#isProjectSelected() has to return true for render tests of project dependent pages like DashboardPage
+        // TODO: mockable session bean would be much more convenient
+        BudgeteerSession.get().setProjectId(1L);
     }
 
     private List<AggregatedRecord> getWeeklyAggregationForPerson(long personId) {
