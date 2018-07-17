@@ -1,8 +1,10 @@
 package org.wickedsource.budgeteer.web.components.initialization;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.RestartResponseAtInterceptPageException;
 import org.apache.wicket.application.IComponentInstantiationListener;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
+import org.wickedsource.budgeteer.web.pages.base.basepage.BasePage;
 import org.wickedsource.budgeteer.web.pages.user.selectproject.SelectProjectPage;
 
 /**
@@ -21,8 +23,7 @@ public class BudgeteerRequiresProjectInstantiationListener implements IComponent
 
         if(requiresProject) {
             if(!BudgeteerSession.get().isProjectSelected()) {
-                // redirect to the project selection page
-                component.setResponsePage(SelectProjectPage.class);
+                throw new RestartResponseAtInterceptPageException(SelectProjectPage.class);
             }
         }
     }
