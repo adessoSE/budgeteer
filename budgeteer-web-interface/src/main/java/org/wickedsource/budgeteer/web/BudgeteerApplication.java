@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
+import org.wickedsource.budgeteer.web.components.initialization.BudgeteerRequiresProjectInstantiationListener;
 import org.wickedsource.budgeteer.web.components.security.BudgeteerAuthorizationStrategy;
 import org.wickedsource.budgeteer.web.components.security.BudgeteerUnauthorizedComponentInstantiationListener;
 import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
@@ -44,6 +45,7 @@ public class BudgeteerApplication extends WebApplication implements ApplicationC
 
         getMarkupSettings().setStripWicketTags(true);
         getComponentInstantiationListeners().add(new SpringComponentInjector(this, context));
+        getComponentInstantiationListeners().add(new BudgeteerRequiresProjectInstantiationListener());
         initWickedCharts();
         getJavaScriptLibrarySettings().setJQueryReference(BudgeteerReferences.getJQueryReference());
         mountPages();

@@ -34,8 +34,13 @@ public class SelectProjectPage extends DialogPageWithBacklink {
 
     private CustomFeedbackPanel feedbackPanel;
 
+    public SelectProjectPage() {
+        this(LoginPage.class, new PageParameters());
+    }
+
     public SelectProjectPage(Class<? extends WebPage> backlinkPage, PageParameters backlinkParameters) {
         super(backlinkPage, backlinkParameters);
+
         add(createBacklink("backlink1"));
         add(createLogoutlink("logoutLink"));
         add(createNewProjectForm("newProjectForm"));
