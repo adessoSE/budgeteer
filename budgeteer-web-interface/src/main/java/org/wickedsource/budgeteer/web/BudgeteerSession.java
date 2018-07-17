@@ -64,8 +64,6 @@ public class BudgeteerSession extends WebSession {
      *          <i>true</i> when a project is currently selected, <i>false</i> otherwise.
      */
     public boolean isProjectSelected() {
-        // TODO: when is a project selected?
-
         return this.projectId >= 0;
     }
 
