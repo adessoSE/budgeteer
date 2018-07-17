@@ -1,4 +1,4 @@
-package org.wickedsource.budgeteer.web.components.initialization;
+package org.wickedsource.budgeteer.web.components.instantiation;
 
 import java.lang.annotation.*;
 

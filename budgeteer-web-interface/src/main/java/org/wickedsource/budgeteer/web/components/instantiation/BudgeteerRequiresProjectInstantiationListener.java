@@ -1,4 +1,4 @@
-package org.wickedsource.budgeteer.web.components.initialization;
+package org.wickedsource.budgeteer.web.components.instantiation;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.RestartResponseAtInterceptPageException;
