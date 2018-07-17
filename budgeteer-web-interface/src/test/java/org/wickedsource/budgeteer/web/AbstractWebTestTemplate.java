@@ -79,10 +79,7 @@ public abstract class AbstractWebTestTemplate {
         user.setId(1L);
         user.setName("username");
         BudgeteerSession.get().login(user);
-
-        // TODO: BudgeteerSession#isProjectSelected() has to return true for render tests of project dependent pages like DashboardPage
-        // TODO: mockable session bean would be much more convenient
-        BudgeteerSession.get().setProjectId(1L);
+        BudgeteerSession.get().setProjectSelected(true);
     }
 
     private List<AggregatedRecord> getWeeklyAggregationForPerson(long personId) {

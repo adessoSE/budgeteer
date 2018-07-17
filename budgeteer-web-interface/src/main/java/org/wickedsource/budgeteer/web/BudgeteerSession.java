@@ -24,7 +24,9 @@ public class BudgeteerSession extends WebSession {
 
     private User loggedInUser;
 
-    private long projectId = -1L;
+    private boolean projectSelected;
+
+    private long projectId;
 
     public BudgeteerSession(Request request) {
         super(request);
@@ -56,15 +58,15 @@ public class BudgeteerSession extends WebSession {
 
     public void setProjectId(long projectId) {
         this.projectId = projectId;
+        this.setProjectSelected(true);
     }
 
-    /**
-     *
-     * @return
-     *          <i>true</i> when a project is currently selected, <i>false</i> otherwise.
-     */
     public boolean isProjectSelected() {
-        return this.projectId >= 0;
+        return projectSelected;
+    }
+
+    public void setProjectSelected(boolean projectSelected) {
+        this.projectSelected = projectSelected;
     }
 
     public static BudgeteerSession get() {
