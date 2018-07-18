@@ -1,14 +1,20 @@
 package org.wickedsource.budgeteer.web;
 
+import org.apache.wicket.injection.Injector;
 import org.apache.wicket.protocol.http.WebSession;
 import org.apache.wicket.request.Request;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
+import org.wickedsource.budgeteer.service.project.ProjectService;
 import org.wickedsource.budgeteer.service.user.User;
 import org.wickedsource.budgeteer.web.pages.templates.TemplateFilter;
 
 import java.util.HashMap;
 
 public class BudgeteerSession extends WebSession {
+
+    @SpringBean
+    private ProjectService projectService;
 
     //Tags are saved in a Map and correspond to a projectID
     //This makes them persistent when switching projects
@@ -30,6 +36,8 @@ public class BudgeteerSession extends WebSession {
 
     public BudgeteerSession(Request request) {
         super(request);
+
+        Injector.get().inject(this);
     }
 
     public User getLoggedInUser() {
@@ -62,7 +70,16 @@ public class BudgeteerSession extends WebSession {
     }
 
     public boolean isProjectSelected() {
-        return projectSelected;
+        if(projectSelected) {
+            if(this.projectService.doesProjectExist(projectId)) {
+                return true;
+            } else {
+                this.setProjectSelected(false);
+                return false;
+            }
+        } else {
+            return false;
+        }
     }
 
     public void setProjectSelected(boolean projectSelected) {
