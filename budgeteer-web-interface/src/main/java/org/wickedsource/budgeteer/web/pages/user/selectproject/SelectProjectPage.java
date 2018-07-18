@@ -121,6 +121,7 @@ public class SelectProjectPage extends DialogPageWithBacklink {
         return new Link(id) {
             @Override
             public void onClick() {
+                BudgeteerSession.get().logout();
                 setResponsePage(LoginPage.class);
             }
         };
