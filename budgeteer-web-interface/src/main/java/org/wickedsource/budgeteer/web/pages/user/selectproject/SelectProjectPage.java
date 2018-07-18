@@ -52,6 +52,21 @@ public class SelectProjectPage extends DialogPageWithBacklink {
         add(feedbackForm);
     }
 
+    /**
+     * Constructs a new select project page and displays a
+     * error message.
+     *
+     * @param errMsg
+     *          A error errMsg to display.
+     */
+    public SelectProjectPage(String errMsg) {
+        this();
+
+        if(errMsg != null && !errMsg.isEmpty()) {
+            this.error(errMsg);
+        }
+    }
+
     private Form<String> createNewProjectForm(String id) {
         Form<String> form = new Form<String>(id, new Model<String>("")) {
             @Override
