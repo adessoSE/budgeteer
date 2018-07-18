@@ -1,22 +1,29 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:wicket="http://www.w3.org/1999/xhtml">
     <wicket:panel>
-        <td><span wicket:id="rate">€790</span> &#x80;</td>
-        <td wicket:id="budget">Project Management</td>
-        <td><span wicket:id="startDate"></span> - <span wicket:id="endDate"></span></td>
-        <td width="30px">
-            <button wicket:id="editButton"
-                    class="btn btn-default btn-no-padding"><i
-                    class="fa fa-edit" data-toggle="tooltip"
-                    title="Edit this Rate"></i>
-            </button>
-        </td>
-        <td>
-            <button wicket:id="deleteButton" type="submit"
-                    class="btn btn-default btn-no-padding"><i
-                    class="fa fa-minus-circle" data-toggle="tooltip"
-                    title="Remove this Rate"></i>
-            </button>
-        </td>
+        <div wicket:id="feedback"></div>
+        <form wicket:id="addRateForm">
+            <tr>
+                <td><input wicket:id="rateField" type="text"/><span> &#x80;</span></td>
+                <td>
+                    <select wicket:id="select" multiple="multiple">
+                        <wicket:container wicket:id="repeatingView">
+                            <optgroup wicket:id="optGroup">
+                                <wicket:container wicket:id="selectOptions">
+                                    <option wicket:id="option"></option>
+                                </wicket:container>
+                            </optgroup>
+                        </wicket:container>
+                    </select>
+                </td>
+                <td><input wicket:id="dateRangeField" type="text"/></td>
+                <td>
+                    <button wicket:id="submitButton" class="btn btn-default btn-no-padding">
+                        <i wicket:id="submitIcon" class="fa fa-edit" data-toggle="tooltip"
+                           title="Edit this budget"></i>
+                    </button>
+                </td>
+            </tr>
+        </form>
     </wicket:panel>
 </html>

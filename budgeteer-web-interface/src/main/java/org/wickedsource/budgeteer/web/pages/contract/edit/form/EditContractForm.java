@@ -34,8 +34,6 @@ public class EditContractForm extends Form<ContractBaseData> {
     @SpringBean
     private ContractService service;
 
-    private String nameOfAttribute = "";
-
     private WebMarkupContainer table;
 
     private String submitButtonTextKey;
@@ -109,7 +107,7 @@ public class EditContractForm extends Form<ContractBaseData> {
             }
         });
         add(table);
-        newAttributeField = new TextField<String>("nameOfNewAttribute", Model.of(nameOfAttribute));
+        newAttributeField = new TextField<String>("nameOfNewAttribute", Model.of(" "));
         newAttributeField.setOutputMarkupId(true);
         add(newAttributeField);
         Button addAttribute = new AjaxButton("addAttribute") {

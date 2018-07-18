@@ -56,7 +56,7 @@ public class EditPersonPage extends DialogPageWithBacklink {
     private long getPersonId() {
         StringValue value = getPageParameters().get("id");
         if (value == null || value.isEmpty() || value.isNull()) {
-            return 0l;
+            return 0L;
         } else {
             return value.toLong();
         }
