@@ -56,14 +56,14 @@ public class SelectProjectPage extends DialogPageWithBacklink {
      * Constructs a new select project page and displays a
      * error message.
      *
-     * @param errMsg
-     *          A error errMsg to display.
+     * @param errMsgKey
+     *          A property key.
      */
-    public SelectProjectPage(String errMsg) {
+    public SelectProjectPage(String errMsgKey) {
         this();
 
-        if(errMsg != null && !errMsg.isEmpty()) {
-            this.error(errMsg);
+        if(errMsgKey != null && !errMsgKey.isEmpty()) {
+            this.error(this.getString(errMsgKey));
         }
     }
 

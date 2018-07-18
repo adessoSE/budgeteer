@@ -23,8 +23,6 @@ import org.wickedsource.budgeteer.web.pages.user.selectproject.SelectProjectWith
  */
 public class BudgeteerRequiresProjectListener implements IComponentOnBeforeRenderListener, IComponentInstantiationListener {
 
-    private static final String ERR_NO_PROJ_MSG = "A project needs to be selected to access this page";
-
     @SpringBean
     private BudgeteerSettings settings;
 
@@ -61,7 +59,8 @@ public class BudgeteerRequiresProjectListener implements IComponentOnBeforeRende
                 if(settings.isKeycloakActivated()) {
                     throw new RestartResponseAtInterceptPageException(SelectProjectWithKeycloakPage.class);
                 } else {
-                    throw new RestartResponseAtInterceptPageException(new SelectProjectPage(ERR_NO_PROJ_MSG));
+                    final SelectProjectPage responsePage = new SelectProjectPage("chooseProjectForm.projectPresent.failed");
+                    throw new RestartResponseAtInterceptPageException(responsePage);
                 }
             }
         }
