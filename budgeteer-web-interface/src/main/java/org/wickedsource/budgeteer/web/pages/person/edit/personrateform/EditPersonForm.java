@@ -2,7 +2,7 @@ package org.wickedsource.budgeteer.web.pages.person.edit.personrateform;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
+import org.apache.wicket.event.IEvent;
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
@@ -10,16 +10,22 @@ import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.joda.money.CurrencyUnit;
 import org.joda.money.Money;
 import org.wickedsource.budgeteer.service.DateRange;
 import org.wickedsource.budgeteer.service.DateUtil;
 import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
+import org.wickedsource.budgeteer.service.budget.BudgetService;
+import org.wickedsource.budgeteer.service.notification.MissingDailyRateForBudgetNotification;
+import org.wickedsource.budgeteer.service.notification.Notification;
 import org.wickedsource.budgeteer.service.person.PersonRate;
 import org.wickedsource.budgeteer.service.person.PersonService;
 import org.wickedsource.budgeteer.service.person.PersonWithRates;
+import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.components.dataTable.DataTableBehavior;
+import org.wickedsource.budgeteer.web.components.listMultipleChoiceWithGroups.OptionGroup;
 import org.wickedsource.budgeteer.web.pages.person.edit.EditPersonPage;
 import org.wickedsource.budgeteer.web.pages.person.edit.IEditPersonPageStrategy;
 
@@ -32,6 +38,9 @@ public class EditPersonForm extends Form<PersonWithRates> {
 
     @SpringBean
     private PersonService peopleService;
+
+    @SpringBean
+    private BudgetService budgetService;
 
     private IEditPersonPageStrategy strategy;
 
@@ -58,8 +67,9 @@ public class EditPersonForm extends Form<PersonWithRates> {
         setOutputMarkupId(true);
         WebMarkupContainer table = new WebMarkupContainer("ratesTable");
         HashMap<String, String> options = DataTableBehavior.getRecommendedOptions();
-        options.put("info", "false");
-        options.put("paging", "false");
+        options.put("info", Boolean.toString(false));
+        options.put("paging", Boolean.toString(false));
+        options.put("searching", Boolean.toString(false));
         table.add(new DataTableBehavior(options));
 
         add(new RequiredTextField<>("name", model(from(getModel()).getName())));
@@ -99,6 +109,26 @@ public class EditPersonForm extends Form<PersonWithRates> {
         submitButton.add(strategy.createSubmitButtonLabel("submitButtonTitle"));
         add(submitButton);
         add(table);
+    }
+
+    @Override
+    public void onEvent(IEvent<?> event) {
+        if(event.getPayload() instanceof Notification){
+            MissingDailyRateForBudgetNotification notification = (MissingDailyRateForBudgetNotification)event.getPayload();
+            DateRange dateRange = new DateRange(notification.getStartDate(), notification.getEndDate());
+            String budgetName = notification.getBudgetName();
+            BudgetBaseData budgetData;
+            for(OptionGroup<BudgetBaseData> e : budgetService.getPossibleBudgetDataForPersonAndProject(BudgeteerSession.get().getProjectId(), getModelObject().getPersonId())){
+                for(BudgetBaseData budget : e.getOptions()){
+                    if(budget.getName().equals(budgetName)){
+                        budgetData = budget;
+                        ((PersonEditPanel)this.get("ratesTable").get("newRatePanel")).setData(new PersonRateFormDto(this.getModelObject().getPersonId(),
+                                Collections.singletonList(budgetData), Money.zero(CurrencyUnit.EUR), dateRange));
+                    }
+                }
+            }
+            RequestCycle.get().find(AjaxRequestTarget.class).add(this);
+        }
     }
 
     private ListView<PersonRate> createRatesList(String id) {

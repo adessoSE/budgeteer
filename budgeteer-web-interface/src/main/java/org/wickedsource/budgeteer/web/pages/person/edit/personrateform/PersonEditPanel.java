@@ -69,6 +69,13 @@ public abstract class PersonEditPanel extends Panel {
         add(form);
     }
 
+    public void setData(PersonRateFormDto dto){
+        selectedBudgets.setObject(new ArrayList<>(dto.getChosenBudgets()));
+        rateField.setModelObject(dto.getRate());
+        rateField.setRequired(true);
+        dateRangeField.setModelObject(dto.getDateRange());
+    }
+
     private Button createSubmitButton(){
         Button submitButton = new Button("submitButton") {
 
@@ -76,6 +83,10 @@ public abstract class PersonEditPanel extends Panel {
             public void onSubmit() {
                 for(BudgetBaseData budget : selectedBudgets.getObject()) {
                     List<PersonRate> overlappingRate = getOverlappingRates(dateRangeField.getModelObject(), budget);
+                    if(rateField.getModelObject().isNegativeOrZero()){
+                        feedbackPanel.error("Rate cannot be zero or negative!");
+                        return;
+                    }
                     if (overlappingRate == null || overlappingRate.isEmpty()) {
                         rateAdded(new PersonRate(rateField.getModelObject(), budget, dateRangeField.getModelObject()));
                     } else {

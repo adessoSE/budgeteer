@@ -1,6 +1,10 @@
-<wicket:panel>
+<wicket:panel xmlns:wicket="http://www.w3.org/1999/xhtml">
     <div wicket:id="notificationList" class="alert alert-warning">
-        <p wicket:id="text">Missing daily rate for budget Implementation of Feature XYZ between 01.01.2014
-            and 31.12.2014</p>
+        <label wicket:id="text">Missing daily rate for budget Implementation of Feature XYZ between 01.01.2014
+            and 31.12.2014
+        </label>
+        <button wicket:id="addMissingRate" class="btn btn-default btn-no-padding"><i class="fa fa-edit" data-toggle="tooltip"
+                                                                                     title="Add missing rate"></i>
+        </button>
     </div>
 </wicket:panel>

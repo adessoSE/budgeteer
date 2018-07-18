@@ -6,6 +6,7 @@ import org.wickedsource.budgeteer.persistence.budget.BudgetRepository;
 import org.wickedsource.budgeteer.persistence.person.DailyRateEntity;
 import org.wickedsource.budgeteer.persistence.person.PersonEntity;
 import org.wickedsource.budgeteer.persistence.person.PersonRepository;
+import org.wickedsource.budgeteer.persistence.record.MissingDailyRateForBudgetBean;
 import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
 import org.wickedsource.budgeteer.service.DateRange;
 import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
@@ -127,4 +128,9 @@ public class PersonService {
     public List<PersonBaseData> loadPeopleBaseDataByBudget(long budgetId) {
         return personBaseDataMapper.map(personRepository.findBaseDataByBudgetId(budgetId));
     }
+
+    public List<MissingDailyRateForBudgetBean> getMissingDailyRatesForPerson(long personId){
+        return workRecordRepository.getMissingDailyRatesForPerson(personId);
+    }
+
 }
