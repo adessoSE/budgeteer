@@ -31,7 +31,7 @@
                 <div class="form-group">
                     <label><wicket:message key="page.person.budget.title">Daily Rates</wicket:message></label>
                     <p class="help-block"><wicket:message key="page.person.budget.hint">Define daily rates for different budgets and different date ranges in the table below.</wicket:message></p>
-                    <table class="table table-condensed">
+                    <table wicket:id="ratesTable" class="table table-condensed">
                         <thead>
                         <tr>
                             <th><wicket:message key="page.person.budget.table.columnDescription.rate">Rate</wicket:message></th>

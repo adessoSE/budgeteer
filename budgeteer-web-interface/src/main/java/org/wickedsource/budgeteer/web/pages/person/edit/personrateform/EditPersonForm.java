@@ -2,7 +2,9 @@ package org.wickedsource.budgeteer.web.pages.person.edit.personrateform;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.injection.Injector;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -17,6 +19,7 @@ import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
 import org.wickedsource.budgeteer.service.person.PersonRate;
 import org.wickedsource.budgeteer.service.person.PersonService;
 import org.wickedsource.budgeteer.service.person.PersonWithRates;
+import org.wickedsource.budgeteer.web.components.dataTable.DataTableBehavior;
 import org.wickedsource.budgeteer.web.pages.person.edit.EditPersonPage;
 import org.wickedsource.budgeteer.web.pages.person.edit.IEditPersonPageStrategy;
 
@@ -53,9 +56,15 @@ public class EditPersonForm extends Form<PersonWithRates> {
 
     private void addComponents() {
         setOutputMarkupId(true);
+        WebMarkupContainer table = new WebMarkupContainer("ratesTable");
+        HashMap<String, String> options = DataTableBehavior.getRecommendedOptions();
+        options.put("info", "false");
+        options.put("paging", "false");
+        table.add(new DataTableBehavior(options));
+
         add(new RequiredTextField<>("name", model(from(getModel()).getName())));
         add(new RequiredTextField<>("importKey", model(from(getModel()).getImportKey())));
-        add(createRatesList("ratesList").setOutputMarkupId(true));
+        table.add(createRatesList("ratesList").setOutputMarkupId(true));
         PersonEditPanel personEditPanel = new PersonEditPanel("newRatePanel", new PersonRateFormDto(getModelObject().getPersonId(),
                 new ArrayList<>(), Money.zero(CurrencyUnit.EUR), new DateRange(new Date(), new Date())), false) {
 
@@ -76,7 +85,7 @@ public class EditPersonForm extends Form<PersonWithRates> {
             }
         };
 
-        add(personEditPanel);
+        table.add(personEditPanel);
 
         AjaxButton submitButton = new AjaxButton("submitButton"){
             @Override
@@ -89,6 +98,7 @@ public class EditPersonForm extends Form<PersonWithRates> {
         submitButton.setDefaultFormProcessing(false);
         submitButton.add(strategy.createSubmitButtonLabel("submitButtonTitle"));
         add(submitButton);
+        add(table);
     }
 
     private ListView<PersonRate> createRatesList(String id) {
