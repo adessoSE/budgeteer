@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Random;
 
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
@@ -54,6 +55,7 @@ public abstract class AbstractWebTestTemplate {
         // Provide default recordServiceMock mocks for tests.
         // If required, explicit behavior can be implemented for each test class in setupTest()
         when(projectServiceMock.findProjectById(anyLong())).thenReturn(new Project(0,new Date(), new Date(),"test"));
+        when(projectServiceMock.doesProjectExist(anyLong())).thenReturn(true);
         when(budgetServiceMock.loadBudgetBaseData(anyLong())).thenReturn(new BudgetBaseData(0, "test"));
         when(budgetServiceMock.loadBudgetDetailData(1L)).thenReturn(createBudget());
         when(recordServiceMock.getWeeklyAggregationForPerson(1L)).thenReturn(getWeeklyAggregationForPerson(1L));

@@ -151,6 +151,10 @@ public class ProjectService {
         return new Project(entity.getId(), entity.getProjectStart(), entity.getProjectEnd(), entity.getName());
     }
 
+    public boolean doesProjectExist(long projectId) {
+        return this.projectRepository.findOne(projectId) != null;
+    }
+
     public void save(Project project) {
         ProjectEntity projectEntity = projectRepository.findOne(project.getProjectId());
         projectEntity.setName(project.getName());

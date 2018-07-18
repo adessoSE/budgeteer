@@ -59,7 +59,8 @@ public class BudgeteerRequiresProjectListener implements IComponentOnBeforeRende
                 if(settings.isKeycloakActivated()) {
                     throw new RestartResponseAtInterceptPageException(SelectProjectWithKeycloakPage.class);
                 } else {
-                    throw new RestartResponseAtInterceptPageException(SelectProjectPage.class);
+                    final SelectProjectPage responsePage = new SelectProjectPage("chooseProjectForm.projectPresent.failed");
+                    throw new RestartResponseAtInterceptPageException(responsePage);
                 }
             }
         }
