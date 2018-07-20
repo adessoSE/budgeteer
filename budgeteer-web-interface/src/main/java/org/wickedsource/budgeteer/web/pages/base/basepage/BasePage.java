@@ -15,6 +15,7 @@ import org.keycloak.representations.AccessToken;
 import org.wickedsource.budgeteer.web.BudgeteerReferences;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.BudgeteerSettings;
+import org.wickedsource.budgeteer.web.components.instantiation.NeedsProject;
 import org.wickedsource.budgeteer.web.components.security.NeedsLogin;
 import org.wickedsource.budgeteer.web.pages.administration.ProjectAdministrationPage;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
@@ -33,6 +34,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.HashSet;
 
 @NeedsLogin
+@NeedsProject
 public abstract class BasePage extends WebPage {
     protected NotificationDropdown notificationDropdown;
 
