@@ -63,7 +63,7 @@ public abstract class AbstractWebTestTemplate {
 
         if (tester == null) {
             tester = new WicketTester(application);
-            login();
+            loginAndSetProject();
         }
         setupTest();
     }
@@ -74,11 +74,12 @@ public abstract class AbstractWebTestTemplate {
      */
     protected abstract void setupTest();
 
-    private void login() {
+    private void loginAndSetProject() {
         User user = new User();
         user.setId(1L);
         user.setName("username");
         BudgeteerSession.get().login(user);
+        BudgeteerSession.get().setProjectSelected(true);
     }
 
     private List<AggregatedRecord> getWeeklyAggregationForPerson(long personId) {

@@ -1,12 +1,14 @@
 package org.wickedsource.budgeteer.web.components.security;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.RestartResponseAtInterceptPageException;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authorization.IAuthorizationStrategy;
 import org.apache.wicket.request.component.IRequestableComponent;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.IResource;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
+import org.wickedsource.budgeteer.web.pages.user.login.LoginPage;
 
 public class BudgeteerAuthorizationStrategy implements IAuthorizationStrategy {
 
@@ -17,7 +19,11 @@ public class BudgeteerAuthorizationStrategy implements IAuthorizationStrategy {
         if (!isAnnotated) {
             return true;
         } else {
-            return BudgeteerSession.get().isLoggedIn();
+            if(!BudgeteerSession.get().isLoggedIn()) {
+                throw new RestartResponseAtInterceptPageException(LoginPage.class);
+            } else {
+                return true;
+            }
         }
     }
 
