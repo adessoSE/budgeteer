@@ -4,7 +4,10 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.event.IEvent;
 import org.apache.wicket.injection.Injector;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -45,8 +48,6 @@ public class EditPersonForm extends Form<PersonWithRates> {
 
     private IEditPersonPageStrategy strategy;
 
-    private CustomFeedbackPanel feedbackPanel;
-
     private TextField nameTextField;
     private TextField importKeyTextField;
 
@@ -71,7 +72,7 @@ public class EditPersonForm extends Form<PersonWithRates> {
 
     private void addComponents() {
         setOutputMarkupId(true);
-        feedbackPanel = new CustomFeedbackPanel("mainFormFeedback");
+        CustomFeedbackPanel feedbackPanel = new CustomFeedbackPanel("mainFormFeedback");
         feedbackPanel.setOutputMarkupId(true);
         add(feedbackPanel);
         WebMarkupContainer table = new WebMarkupContainer("ratesTable");
@@ -79,10 +80,10 @@ public class EditPersonForm extends Form<PersonWithRates> {
         options.put("info", Boolean.toString(false));
         options.put("paging", Boolean.toString(false));
         options.put("searching", Boolean.toString(false));
+        options.put("order", "[]");
         table.add(new DataTableBehavior(options));
-
-        nameTextField = new TextField<String>("name", model(from(getModelObject()).getName()));
-        importKeyTextField = new TextField<String>("importKey", model(from(getModelObject()).getImportKey()));
+        nameTextField = new TextField<>("name", model(from(getModelObject()).getName()));
+        importKeyTextField = new TextField<>("importKey", model(from(getModelObject()).getImportKey()));
         add(nameTextField, importKeyTextField);
 
         table.add(createRatesList("ratesList").setOutputMarkupId(true));
@@ -108,23 +109,20 @@ public class EditPersonForm extends Form<PersonWithRates> {
 
         table.add(personEditPanel);
 
-        AjaxButton submitButton = new AjaxButton("submitButton"){
+        Button submitButton = new Button("submitButton"){
             @Override
-            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+            public void onSubmit() {
                 if(importKeyTextField.getInput() == null || importKeyTextField.getInput().isEmpty()){
-                    feedbackPanel.error("A valid import key is required");
-                    target.add(feedbackPanel);
+                    this.error(getString("form.missing.import.key"));
                 }
                 if(nameTextField.getInput() == null || nameTextField.getInput().isEmpty()){
-                    feedbackPanel.error("A valid name is required");
-                    target.add(feedbackPanel);
+                    this.error(getString("form.missing.name"));
                 }
                 if(!nameTextField.getInput().isEmpty() && !importKeyTextField.getInput().isEmpty()) {
                     EditPersonForm.this.getModelObject().setName(nameTextField.getInput());
                     EditPersonForm.this.getModelObject().setImportKey(importKeyTextField.getInput());
                     peopleService.savePersonWithRates(EditPersonForm.this.getModelObject());
-                    feedbackPanel.success("Changes have been saved successfully");
-                    target.add(feedbackPanel);
+                    this.success(getString("form.success"));
                 }
             }
         };
@@ -162,23 +160,23 @@ public class EditPersonForm extends Form<PersonWithRates> {
             @Override
             protected void populateItem(final ListItem<PersonRate> item) {
                 item.setOutputMarkupId(true);
-                item.add(new PersonInfoPanel(infoOrEditPanel, item.getModelObject(),EditPersonForm.this.getModelObject().getRates()){
+                item.add(new PersonInfoPanel(infoOrEditPanel, item.getModelObject(), EditPersonForm.this.getModelObject().getRates()) {
 
-                    @Override
-                    protected ListItem<PersonRate> getEditPanel() {
+                        @Override
+                        protected ListItem<PersonRate> getEditPanel() {
 
-                        PersonRateFormDto dto = new PersonRateFormDto(EditPersonForm.this.getModelObject().getPersonId(),
-                               Collections.singletonList(item.getModelObject().getBudget()),
-                                item.getModelObject().getRate(),
-                                item.getModelObject().getDateRange());
-                        PersonEditPanel editPanel = createPanelToEditExistingPerson(infoOrEditPanel, dto, item.getModelObject());
-                        editPanel.setOutputMarkupId(true);
-                        item.remove(infoOrEditPanel);
-                        item.add(editPanel);
-                        return item;
-                    }
-                }.setOutputMarkupId(true));
-            }
+                            PersonRateFormDto dto = new PersonRateFormDto(EditPersonForm.this.getModelObject().getPersonId(),
+                                    Collections.singletonList(item.getModelObject().getBudget()),
+                                    item.getModelObject().getRate(),
+                                    item.getModelObject().getDateRange());
+                            PersonEditPanel editPanel = createPanelToEditExistingPerson(infoOrEditPanel, dto, item.getModelObject());
+                            editPanel.setOutputMarkupId(true);
+                            item.remove(infoOrEditPanel);
+                            item.add(editPanel);
+                            return item;
+                        }
+                    }.setOutputMarkupId(true));
+                }
 
             @Override
             protected ListItem<PersonRate> newItem(int index, IModel<PersonRate> itemModel) {

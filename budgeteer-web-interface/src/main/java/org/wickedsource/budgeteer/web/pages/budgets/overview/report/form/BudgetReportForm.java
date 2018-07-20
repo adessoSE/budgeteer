@@ -20,7 +20,7 @@ import org.wickedsource.budgeteer.service.template.TemplateService;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
 import org.wickedsource.budgeteer.web.components.daterange.DateRangeInputField;
-import org.wickedsource.budgeteer.web.components.notificationlist.PersonNotificationListPanel;
+import org.wickedsource.budgeteer.web.components.notificationlist.NotificationListPanel;
 import org.wickedsource.budgeteer.web.pages.base.AbstractChoiceRenderer;
 import org.wickedsource.budgeteer.web.pages.budgets.overview.report.BudgetReportFileModel;
 
@@ -52,7 +52,7 @@ public class BudgetReportForm extends Form<ReportMetaInformation> {
         getModel().getObject().setOverallTimeRange(new DateRange(startDate, endDate));
         getModel().getObject().setMonthlyTimeRange(new DateRange(monthlyStartDate, endDate));
 
-        add(new PersonNotificationListPanel("notificationList", new BudgetReportNotificationModel()));
+        add(new NotificationListPanel("notificationList", new BudgetReportNotificationModel()));
         add(new CustomFeedbackPanel("feedback"));
         add(new DateRangeInputField("monthlyRange", model(from(getModel()).getMonthlyTimeRange()),
                 DateRangeInputField.DROP_LOCATION.DOWN));

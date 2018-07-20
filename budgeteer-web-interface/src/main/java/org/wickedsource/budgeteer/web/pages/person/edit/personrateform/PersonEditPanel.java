@@ -1,6 +1,11 @@
 package org.wickedsource.budgeteer.web.pages.person.edit.personrateform;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.extensions.markup.html.form.select.IOptionRenderer;
 import org.apache.wicket.extensions.markup.html.form.select.Select;
 import org.apache.wicket.extensions.markup.html.form.select.SelectOptions;
@@ -9,6 +14,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
@@ -42,7 +48,6 @@ public abstract class PersonEditPanel extends Panel {
         super(id);
         this.isEditing = isEditing;
 
-
         Injector.get().inject(this);
 
         selectedBudgets = new Model<>(new ArrayList<>(data.getChosenBudgets()));
@@ -71,7 +76,7 @@ public abstract class PersonEditPanel extends Panel {
         dateRangeField.setModelObject(dto.getDateRange());
     }
 
-    private Button createSubmitButton(){
+    private WebMarkupContainer createSubmitButton(){
         Button submitButton = new Button("submitButton") {
 
             @Override
@@ -79,11 +84,11 @@ public abstract class PersonEditPanel extends Panel {
                 boolean containsError = false;
                 if(rateField.getModelObject().isNegativeOrZero()){
                     containsError = true;
-                    this.error("Rate cannot be zero or negative!");
+                    PersonEditPanel.this.getParent().getParent().error(getString("rate.not.zero"));
                 }
                 if (selectedBudgets.getObject().isEmpty()){
                     containsError = true;
-                    this.error("Select at least one budget!");
+                    PersonEditPanel.this.getParent().getParent().error(getString("select.budget"));
                 }else{
                     for(BudgetBaseData budget : selectedBudgets.getObject()) {
                         List<PersonRate> overlappingRate = getOverlappingRates(dateRangeField.getModelObject(), budget);
@@ -93,8 +98,8 @@ public abstract class PersonEditPanel extends Panel {
                             }
                         } else {
                             containsError = true;
-                            this.error(String.format(getString("personRateForm.overlappingRates"),
-                                    constructOverlappingRatesString(overlappingRate)));
+                            PersonEditPanel.this.getParent().getParent().error(String.format(getString("personRateForm.overlappingRates"),
+                                        constructOverlappingRatesString(overlappingRate)));
                         }
                     }
                 }
@@ -128,7 +133,8 @@ public abstract class PersonEditPanel extends Panel {
         dateRangeField.setModelObject(new DateRange(new Date(), new Date()));
     }
 
-    private Button addIconToSubmitButton(Button submitButton) {
+    private WebMarkupContainer addIconToSubmitButton(WebMarkupContainer submitButton) {
+
         Label submitIcon = new Label("submitIcon");
         if(isEditing){
             submitIcon.add(new AttributeModifier("class", "fa fa-check"));

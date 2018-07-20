@@ -19,7 +19,7 @@ import org.wickedsource.budgeteer.service.template.Template;
 import org.wickedsource.budgeteer.service.template.TemplateService;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
-import org.wickedsource.budgeteer.web.components.notificationlist.PersonNotificationListPanel;
+import org.wickedsource.budgeteer.web.components.notificationlist.NotificationListPanel;
 import org.wickedsource.budgeteer.web.pages.base.AbstractChoiceRenderer;
 import org.wickedsource.budgeteer.web.pages.budgets.overview.report.form.BudgetReportNotificationModel;
 import org.wickedsource.budgeteer.web.pages.contract.overview.report.ContractReportMetaInformation;
@@ -128,7 +128,7 @@ public class ContractReportForm extends Form<ContractReportMetaInformation> {
 		templateDropDown.setNullValid(false);
 		add(templateDropDown);
 
-		add(new PersonNotificationListPanel("notificationList", new BudgetReportNotificationModel()));
+		add(new NotificationListPanel("notificationList", new BudgetReportNotificationModel()));
 		add(new CustomFeedbackPanel("feedback"));
 	}
 
