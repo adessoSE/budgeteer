@@ -37,15 +37,11 @@ public abstract class PersonEditPanel extends Panel {
     private MoneyTextField rateField;
     private DateRangeInputField dateRangeField;
     private Model<ArrayList<BudgetBaseData>> selectedBudgets;
-    private CustomFeedbackPanel feedbackPanel;
 
     PersonEditPanel(String id, PersonRateFormDto data, boolean isEditing){
         super(id);
         this.isEditing = isEditing;
 
-        feedbackPanel = new CustomFeedbackPanel("feedback");
-        feedbackPanel.setOutputMarkupId(true);
-        add(feedbackPanel);
 
         Injector.get().inject(this);
 
@@ -72,7 +68,6 @@ public abstract class PersonEditPanel extends Panel {
     public void setData(PersonRateFormDto dto){
         selectedBudgets.setObject(new ArrayList<>(dto.getChosenBudgets()));
         rateField.setModelObject(dto.getRate());
-        rateField.setRequired(true);
         dateRangeField.setModelObject(dto.getDateRange());
     }
 
@@ -81,21 +76,31 @@ public abstract class PersonEditPanel extends Panel {
 
             @Override
             public void onSubmit() {
-                for(BudgetBaseData budget : selectedBudgets.getObject()) {
-                    List<PersonRate> overlappingRate = getOverlappingRates(dateRangeField.getModelObject(), budget);
-                    if(rateField.getModelObject().isNegativeOrZero()){
-                        feedbackPanel.error("Rate cannot be zero or negative!");
-                        return;
-                    }
-                    if (overlappingRate == null || overlappingRate.isEmpty()) {
-                        rateAdded(new PersonRate(rateField.getModelObject(), budget, dateRangeField.getModelObject()));
-                    } else {
-                        feedbackPanel.error(String.format(getString("personRateForm.overlappingRates"),
-                                constructOverlappingRatesString(overlappingRate)));
-                        return;
+                boolean containsError = false;
+                if(rateField.getModelObject().isNegativeOrZero()){
+                    containsError = true;
+                    this.error("Rate cannot be zero or negative!");
+                }
+                if (selectedBudgets.getObject().isEmpty()){
+                    containsError = true;
+                    this.error("Select at least one budget!");
+                }else{
+                    for(BudgetBaseData budget : selectedBudgets.getObject()) {
+                        List<PersonRate> overlappingRate = getOverlappingRates(dateRangeField.getModelObject(), budget);
+                        if (overlappingRate == null || overlappingRate.isEmpty()) {
+                            if(!containsError) {
+                                rateAdded(new PersonRate(rateField.getModelObject(), budget, dateRangeField.getModelObject()));
+                            }
+                        } else {
+                            containsError = true;
+                            this.error(String.format(getString("personRateForm.overlappingRates"),
+                                    constructOverlappingRatesString(overlappingRate)));
+                        }
                     }
                 }
-                clearFormData();
+                if(!containsError) {
+                    clearFormData();
+                }
             }
         };
         return addIconToSubmitButton(submitButton);
@@ -184,7 +189,7 @@ public abstract class PersonEditPanel extends Panel {
                     })
             );
         }
-        select.setRequired(true).add(new MultiselectBehavior(multiselectOptions));
+        select.add(new MultiselectBehavior(multiselectOptions));
         return select;
     }
 }

@@ -13,11 +13,11 @@ import org.wickedsource.budgeteer.service.notification.Notification;
 
 import java.util.List;
 
-public class NotificationListPanel extends Panel {
+public class PersonNotificationListPanel extends Panel {
 
     private NotificationMessageFactory notificationMessageFactory = new NotificationMessageFactory();
 
-    public NotificationListPanel(String id, IModel<? extends List<Notification>> model) {
+    public PersonNotificationListPanel(String id, IModel<? extends List<Notification>> model) {
         super(id, model);
         setRenderBodyOnly(true);
         add(createNotificationList("notificationList", model));

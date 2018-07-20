@@ -6,10 +6,11 @@ import org.apache.wicket.event.IEvent;
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.RequiredTextField;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.joda.money.CurrencyUnit;
@@ -24,9 +25,9 @@ import org.wickedsource.budgeteer.service.person.PersonRate;
 import org.wickedsource.budgeteer.service.person.PersonService;
 import org.wickedsource.budgeteer.service.person.PersonWithRates;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
+import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
 import org.wickedsource.budgeteer.web.components.dataTable.DataTableBehavior;
 import org.wickedsource.budgeteer.web.components.listMultipleChoiceWithGroups.OptionGroup;
-import org.wickedsource.budgeteer.web.pages.person.edit.EditPersonPage;
 import org.wickedsource.budgeteer.web.pages.person.edit.IEditPersonPageStrategy;
 
 import java.util.*;
@@ -43,6 +44,11 @@ public class EditPersonForm extends Form<PersonWithRates> {
     private BudgetService budgetService;
 
     private IEditPersonPageStrategy strategy;
+
+    private CustomFeedbackPanel feedbackPanel;
+
+    private TextField nameTextField;
+    private TextField importKeyTextField;
 
     /**
      * Use this constructor for a form that creates a new user.
@@ -65,6 +71,9 @@ public class EditPersonForm extends Form<PersonWithRates> {
 
     private void addComponents() {
         setOutputMarkupId(true);
+        feedbackPanel = new CustomFeedbackPanel("mainFormFeedback");
+        feedbackPanel.setOutputMarkupId(true);
+        add(feedbackPanel);
         WebMarkupContainer table = new WebMarkupContainer("ratesTable");
         HashMap<String, String> options = DataTableBehavior.getRecommendedOptions();
         options.put("info", Boolean.toString(false));
@@ -72,8 +81,10 @@ public class EditPersonForm extends Form<PersonWithRates> {
         options.put("searching", Boolean.toString(false));
         table.add(new DataTableBehavior(options));
 
-        add(new RequiredTextField<>("name", model(from(getModel()).getName())));
-        add(new RequiredTextField<>("importKey", model(from(getModel()).getImportKey())));
+        nameTextField = new TextField<String>("name", model(from(getModelObject()).getName()));
+        importKeyTextField = new TextField<String>("importKey", model(from(getModelObject()).getImportKey()));
+        add(nameTextField, importKeyTextField);
+
         table.add(createRatesList("ratesList").setOutputMarkupId(true));
         PersonEditPanel personEditPanel = new PersonEditPanel("newRatePanel", new PersonRateFormDto(getModelObject().getPersonId(),
                 new ArrayList<>(), Money.zero(CurrencyUnit.EUR), new DateRange(new Date(), new Date())), false) {
@@ -100,9 +111,21 @@ public class EditPersonForm extends Form<PersonWithRates> {
         AjaxButton submitButton = new AjaxButton("submitButton"){
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                PersonWithRates model = (PersonWithRates)form.getModelObject();
-                peopleService.savePersonWithRates(model);
-                ((EditPersonPage) getPage()).goBack();
+                if(importKeyTextField.getInput() == null || importKeyTextField.getInput().isEmpty()){
+                    feedbackPanel.error("A valid import key is required");
+                    target.add(feedbackPanel);
+                }
+                if(nameTextField.getInput() == null || nameTextField.getInput().isEmpty()){
+                    feedbackPanel.error("A valid name is required");
+                    target.add(feedbackPanel);
+                }
+                if(!nameTextField.getInput().isEmpty() && !importKeyTextField.getInput().isEmpty()) {
+                    EditPersonForm.this.getModelObject().setName(nameTextField.getInput());
+                    EditPersonForm.this.getModelObject().setImportKey(importKeyTextField.getInput());
+                    peopleService.savePersonWithRates(EditPersonForm.this.getModelObject());
+                    feedbackPanel.success("Changes have been saved successfully");
+                    target.add(feedbackPanel);
+                }
             }
         };
         submitButton.setDefaultFormProcessing(false);

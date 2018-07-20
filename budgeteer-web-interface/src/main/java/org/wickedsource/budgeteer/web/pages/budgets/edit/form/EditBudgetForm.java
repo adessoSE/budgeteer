@@ -25,7 +25,7 @@ import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.ClassAwareWrappingModel;
 import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
 import org.wickedsource.budgeteer.web.components.money.MoneyTextField;
-import org.wickedsource.budgeteer.web.components.notificationlist.NotificationListPanel;
+import org.wickedsource.budgeteer.web.components.notificationlist.PersonNotificationListPanel;
 import org.wickedsource.budgeteer.web.pages.base.AbstractChoiceRenderer;
 import org.wickedsource.budgeteer.web.pages.budgets.BudgetTagsModel;
 import org.wickedsource.budgeteer.web.pages.budgets.edit.EditBudgetPage;
@@ -94,7 +94,7 @@ public class EditBudgetForm extends Form<EditBudgetData> {
         contractDropDown.setNullValid(true);
         add(contractDropDown);
         add(createTagsList("tagsList", new BudgetTagsModel(BudgeteerSession.get().getProjectId()), tagsField));
-        add(new NotificationListPanel("notificationList", new BudgetNotificationsModel(getModel().getObject().getId())));
+        add(new PersonNotificationListPanel("notificationList", new BudgetNotificationsModel(getModel().getObject().getId())));
 
         //Label for the submit button
         Label submitButtonLabel;
