@@ -137,6 +137,8 @@ public class ProjectAdministrationPage extends BasePage {
                     @Override
                     public Void call() {
                         projectService.deleteProject(BudgeteerSession.get().getProjectId());
+                        BudgeteerSession.get().setProjectSelected(false);
+
                         if (settings.isKeycloakActivated()) {
                             setResponsePage(new SelectProjectWithKeycloakPage());
                         } else {
