@@ -7,8 +7,11 @@ import org.mockito.Mockito;
 import org.mockito.internal.util.MockUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.wickedsource.budgeteer.service.security.BudgeteerMethodSecurityExpressionRoot;
+import org.wickedsource.budgeteer.service.security.BudgeteerAuthenticationToken;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(loader = SpringockitoContextLoader.class, locations = {"classpath:spring-service.xml", "classpath:spring-repository-mock.xml"})
@@ -16,6 +19,9 @@ public abstract class ServiceTestTemplate {
 
     @Autowired
     private ApplicationContext context;
+
+    @Autowired
+    private BudgeteerMethodSecurityExpressionRoot root;
 
     @BeforeEach
     public void resetMocks() {
@@ -28,6 +34,19 @@ public abstract class ServiceTestTemplate {
                 }
             }
         }
+
+        this.setAuthorizationAndMock();
+    }
+
+    private void setAuthorizationAndMock() {
+        // set a placeholder authentication
+        SecurityContextHolder.getContext().setAuthentication(new BudgeteerAuthenticationToken("user"));
+
+        Mockito.when(root.canReadInvoice(Mockito.anyLong())).thenReturn(true);
+        Mockito.when(root.canReadContract(Mockito.anyLong())).thenReturn(true);
+        Mockito.when(root.canReadBudget(Mockito.anyLong())).thenReturn(true);
+        Mockito.when(root.canReadPerson(Mockito.anyLong())).thenReturn(true);
+        Mockito.when(root.canReadProject(Mockito.anyLong())).thenReturn(true);
     }
 
 }

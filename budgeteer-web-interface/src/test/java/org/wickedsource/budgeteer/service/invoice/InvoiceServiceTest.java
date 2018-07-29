@@ -16,6 +16,7 @@ import org.springframework.test.context.support.DirtiesContextTestExecutionListe
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 import org.wickedsource.budgeteer.IntegrationTestConfiguration;
 import org.wickedsource.budgeteer.MoneyUtil;
+import org.wickedsource.budgeteer.ServiceIntegrationTestTemplate;
 import org.wickedsource.budgeteer.persistence.contract.ContractEntity;
 import org.wickedsource.budgeteer.persistence.contract.ContractInvoiceField;
 import org.wickedsource.budgeteer.persistence.contract.ContractRepository;
@@ -31,7 +32,7 @@ import java.util.Set;
 @ContextConfiguration(classes = {IntegrationTestConfiguration.class})
 @TestExecutionListeners({DbUnitTestExecutionListener.class, DirtiesContextTestExecutionListener.class, DependencyInjectionTestExecutionListener.class,
         TransactionalTestExecutionListener.class})
-class InvoiceServiceTest {
+class InvoiceServiceTest extends ServiceIntegrationTestTemplate {
 
     @Autowired
     private InvoiceService service;

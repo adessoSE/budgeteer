@@ -1,6 +1,8 @@
 package org.wickedsource.budgeteer.service.person;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.method.P;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.wickedsource.budgeteer.persistence.budget.BudgetRepository;
 import org.wickedsource.budgeteer.persistence.person.DailyRateEntity;
@@ -49,6 +51,7 @@ public class PersonService {
      * @param personId id of the person whose data to load.
      * @return the detailed data of the specified person.
      */
+    @PreAuthorize("canReadPerson(#personId)")
     public PersonDetailData loadPersonDetailData(long personId) {
         return personDetailDataMapper.map(personRepository.findDetailDataByPersonId(personId));
     }
@@ -59,6 +62,7 @@ public class PersonService {
      * @param personId ID of the person whose data to load.
      * @return PersonWithRates object
      */
+    @PreAuthorize("canReadPerson(#personId)")
     public PersonWithRates loadPersonWithRates(long personId) {
         PersonEntity personEntity = personRepository.findOneFetchDailyRates(personId);
 
@@ -88,6 +92,7 @@ public class PersonService {
      *
      * @param person the data to save in the database.
      */
+    @PreAuthorize("#person != null AND canReadPerson(#person.personId)")
     public void savePersonWithRates(PersonWithRates person) {
         PersonEntity personEntity = personRepository.findOne(person.getPersonId());
         personEntity.setName(person.getName());
@@ -116,14 +121,17 @@ public class PersonService {
      * @param personId ID of the person to load.
      * @return base data of the specified person.
      */
+    @PreAuthorize("canReadPerson(#personId)")
     public PersonBaseData loadPersonBaseData(long personId) {
         return personBaseDataMapper.map(personRepository.findBaseDataByPersonId(personId));
     }
 
+    @PreAuthorize("canReadPerson(#personId)")
     public void deletePerson(long personId) {
         personRepository.delete(personId);
     }
 
+    @PreAuthorize("canReadBudget(#budgetId)")
     public List<PersonBaseData> loadPeopleBaseDataByBudget(long budgetId) {
         return personBaseDataMapper.map(personRepository.findBaseDataByBudgetId(budgetId));
     }

@@ -1,6 +1,7 @@
 package org.wickedsource.budgeteer.service.contract;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.wickedsource.budgeteer.persistence.budget.BudgetEntity;
 import org.wickedsource.budgeteer.persistence.budget.BudgetRepository;
@@ -36,22 +37,26 @@ public class ContractService {
     @Autowired
     private ContractDataMapper mapper;
 
+    @PreAuthorize("canReadProject(#projectId)")
     public ContractOverviewTableModel getContractOverviewByProject(long projectId){
         ContractOverviewTableModel result = new ContractOverviewTableModel();
         result.setContracts(mapper.map(contractRepository.findByProjectId(projectId)));
         return result;
     }
 
+    @PreAuthorize("canReadContract(#contractId)")
     public ContractBaseData getContractById(long contractId) {
         return mapper.map(contractRepository.findOne(contractId));
     }
 
+    @PreAuthorize("canReadProject(#projectId)")
     public List<ContractBaseData> getContractsByProject(long projectId) {
         List<ContractEntity> contracts = new LinkedList<ContractEntity>();
         contracts.addAll(contractRepository.findByProjectId(projectId));
         return mapper.map(contracts);
     }
 
+    @PreAuthorize("canReadProject(#projectId)")
     public ContractBaseData getEmptyContractModel(long projectId){
         ProjectEntity project = projectRepository.findOne(projectId);
         ContractBaseData model = new ContractBaseData(projectId);
@@ -62,6 +67,7 @@ public class ContractService {
         return model;
     }
 
+    @PreAuthorize("#contractBaseData != null AND canReadProject(#contractBaseData.projectId)")
     public long save(ContractBaseData contractBaseData) {
         ProjectEntity project = projectRepository.findOne(contractBaseData.getProjectId());
         ContractEntity contractEntity = new ContractEntity();
@@ -81,7 +87,7 @@ public class ContractService {
         contractEntity.setFileName(contractBaseData.getFileModel().getFileName());
         contractEntity.setFile(contractBaseData.getFileModel().getFile());
         if(contractBaseData.getTaxRate() < 0) {
-        	throw new IllegalArgumentException("Taxrate must be positive.");
+            throw new IllegalArgumentException("Taxrate must be positive.");
         } else {
             contractEntity.setTaxRate(new BigDecimal(contractBaseData.getTaxRate()));
         }
@@ -118,6 +124,7 @@ public class ContractService {
         return contractEntity.getId();
     }
 
+    @PreAuthorize("canReadContract(#contractId)")
     public void deleteContract(long contractId) {
         List<BudgetEntity> budgets = budgetRepository.findByContractId(contractId);
         for (BudgetEntity budgetEntity : budgets) {
@@ -130,42 +137,45 @@ public class ContractService {
 
         contractRepository.delete(contractId);
     }
-    
+
+    @PreAuthorize("canReadContract(#contractId)")
     public List<Date> getMonthList(long contractId) {
-    	List<Date> months = new ArrayList<Date>();
-    	ContractEntity contract = contractRepository.findById(contractId);
-    	Calendar cal = Calendar.getInstance();
-    	cal.setTime(contract.getStartDate());
-    	Calendar currentDate = Calendar.getInstance();
-    	currentDate.setTime(new Date());
-    	while(cal.before(currentDate)) {
-    		months.add(cal.getTime());
-    		cal.add(Calendar.MONTH, 1);
-    	}
-    	return months;
-    }
-    
-    public List<Date> getMonthListForProjectId(long projectId) {
-    	List<ContractEntity> contracts = contractRepository.findByProjectId(projectId);
-    	Date startDate = new Date();
-    	for(ContractEntity contract : contracts) {
-    		if(contract.getStartDate().before(startDate)) {
-    			startDate = contract.getStartDate();
-    		}
-    	}
-    	
-    	List<Date> months = new ArrayList<Date>();
-    	Calendar cal = Calendar.getInstance();
-    	cal.setTime(startDate);
-    	Calendar currentDate = Calendar.getInstance();
-    	currentDate.setTime(new Date());
-    	while(cal.before(currentDate)) {
-    		months.add(cal.getTime());
-    		cal.add(Calendar.MONTH, 1);
-    	}
-    	return months;
+        List<Date> months = new ArrayList<Date>();
+        ContractEntity contract = contractRepository.findById(contractId);
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(contract.getStartDate());
+        Calendar currentDate = Calendar.getInstance();
+        currentDate.setTime(new Date());
+        while(cal.before(currentDate)) {
+            months.add(cal.getTime());
+            cal.add(Calendar.MONTH, 1);
+        }
+        return months;
     }
 
+    @PreAuthorize("canReadProject(#projectId)")
+    public List<Date> getMonthListForProjectId(long projectId) {
+        List<ContractEntity> contracts = contractRepository.findByProjectId(projectId);
+        Date startDate = new Date();
+        for(ContractEntity contract : contracts) {
+            if(contract.getStartDate().before(startDate)) {
+                startDate = contract.getStartDate();
+            }
+        }
+
+        List<Date> months = new ArrayList<Date>();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(startDate);
+        Calendar currentDate = Calendar.getInstance();
+        currentDate.setTime(new Date());
+        while(cal.before(currentDate)) {
+            months.add(cal.getTime());
+            cal.add(Calendar.MONTH, 1);
+        }
+        return months;
+    }
+
+    @PreAuthorize("canReadProject(#projectId)")
     public boolean projectHasContracts(long projectId) {
         List<ContractEntity> contracts = contractRepository.findByProjectId(projectId);
         return (null != contracts && !contracts.isEmpty());
