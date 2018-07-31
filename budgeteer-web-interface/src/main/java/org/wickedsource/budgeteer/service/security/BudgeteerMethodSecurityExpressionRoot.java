@@ -102,6 +102,8 @@ public class BudgeteerMethodSecurityExpressionRoot extends SecurityExpressionRoo
      *          <i>true</i>, if the id of the budget is valid and the
      *          {@link BudgetEntity}'s project has the same id as the currently
      *          selected project by the user, <i>false</i> otherwise.
+     *
+     * @see BudgeteerSession#getProjectId()
      */
     public boolean canReadBudget(Long budgetId) {
         BudgetEntity entity = budgetRepository.findOne(budgetId);
@@ -123,6 +125,8 @@ public class BudgeteerMethodSecurityExpressionRoot extends SecurityExpressionRoo
      * @return
      *          <i>true</i>, if the currently selected project has the same
      *          id as the given one.
+     *
+     * @see BudgeteerSession#getProjectId()
      */
     public boolean canReadProject(Long projectId) {
         long selectedProjectId = getCurrentProjectId();
@@ -137,6 +141,8 @@ public class BudgeteerMethodSecurityExpressionRoot extends SecurityExpressionRoo
      *          <i>true</i>, if the associated project of the contract has
      *          the same id as the currently selected project by the user,
      *          <i>false</i> otherwise.
+     *
+     * @see BudgeteerSession#getProjectId()
      */
     public boolean canReadContract(Long contractId) {
         ContractEntity entity = contractRepository.findOne(contractId);
@@ -159,6 +165,8 @@ public class BudgeteerMethodSecurityExpressionRoot extends SecurityExpressionRoo
      *          <i>true</i>, if the associated contract's project has the
      *          same id as the currently selected project by the user,
      *          <i>false</i> otherwise.
+     *
+     * @see BudgeteerSession#getProjectId()
      */
     public boolean canReadInvoice(Long invoiceId) {
         InvoiceEntity entity = invoiceRepository.findOne(invoiceId);
@@ -180,6 +188,8 @@ public class BudgeteerMethodSecurityExpressionRoot extends SecurityExpressionRoo
      * @return
      *          <i>true</i>, if the associated project of the person has
      *          the same id as the currently selected project by the user.
+     *
+     * @see BudgeteerSession#getProjectId()
      */
     public boolean canReadPerson(Long personId) {
         PersonEntity entity = personRepository.findOne(personId);
