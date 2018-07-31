@@ -22,8 +22,8 @@ import javax.transaction.Transactional;
         TransactionalTestExecutionListener.class})
 public abstract class IntegrationTestTemplate {
 
-    @BeforeClass
-    public static void setAuthentication() {
+    @BeforeEach
+    public void setAuthentication() {
         // set placeholder authentication
         SecurityContextHolder.getContext().setAuthentication(new BudgeteerAuthenticationToken("user"));
     }
