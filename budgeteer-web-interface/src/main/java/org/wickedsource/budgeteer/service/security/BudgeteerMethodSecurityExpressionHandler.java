@@ -6,7 +6,14 @@ import org.springframework.security.access.expression.method.DefaultMethodSecuri
 import org.springframework.security.access.expression.method.MethodSecurityExpressionOperations;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
+import org.springframework.security.access.prepost.PreAuthorize;
 
+/**
+ * {@link DefaultMethodSecurityExpressionHandler} to add methods which are specific to securing
+ * method invocations (e.g. via {@link PreAuthorize})
+ *
+ * @see BudgeteerMethodSecurityExpressionRoot
+ */
 @Component
 public class BudgeteerMethodSecurityExpressionHandler extends DefaultMethodSecurityExpressionHandler {
 
