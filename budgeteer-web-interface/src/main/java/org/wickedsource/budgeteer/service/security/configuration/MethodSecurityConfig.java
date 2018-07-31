@@ -1,4 +1,4 @@
-package org.wickedsource.budgeteer.service.security.config;
+package org.wickedsource.budgeteer.service.security.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;

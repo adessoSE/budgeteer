@@ -1,4 +1,4 @@
-package org.wickedsource.budgeteer.service.security.config;
+package org.wickedsource.budgeteer.service.security.configuration;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
