@@ -67,7 +67,6 @@ public class ContractService {
         return model;
     }
 
-    @PreAuthorize("#contractBaseData != null AND canReadProject(#contractBaseData.projectId)")
     public long save(ContractBaseData contractBaseData) {
         ProjectEntity project = projectRepository.findOne(contractBaseData.getProjectId());
         ContractEntity contractEntity = new ContractEntity();

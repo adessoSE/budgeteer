@@ -41,6 +41,7 @@ public class PersonService {
      * @param projectId ID of the project.
      * @return list of PersonBaseData objects for all people the given user can make use of to manage budgets.
      */
+    @PreAuthorize("canReadProject(#projectId)")
     public List<PersonBaseData> loadPeopleBaseData(long projectId) {
         return personBaseDataMapper.map(personRepository.findBaseDataByProjectId(projectId));
     }
@@ -92,7 +93,6 @@ public class PersonService {
      *
      * @param person the data to save in the database.
      */
-    @PreAuthorize("#person != null AND canReadPerson(#person.personId)")
     public void savePersonWithRates(PersonWithRates person) {
         PersonEntity personEntity = personRepository.findOne(person.getPersonId());
         personEntity.setName(person.getName());

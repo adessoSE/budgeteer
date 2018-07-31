@@ -61,7 +61,6 @@ public class InvoiceService {
         return model;
     }
 
-    @PreAuthorize("#invoiceBaseData != null AND canReadContract(#invoiceBaseData.contractId)")
     public long save(InvoiceBaseData invoiceBaseData) {
         ContractEntity contract = contractRepository.findOne(invoiceBaseData.getContractId());
         InvoiceEntity invoiceEntity = new InvoiceEntity();
