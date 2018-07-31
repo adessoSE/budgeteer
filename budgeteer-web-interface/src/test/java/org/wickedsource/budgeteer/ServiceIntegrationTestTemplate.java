@@ -1,6 +1,6 @@
 package org.wickedsource.budgeteer;
 
-import org.junit.BeforeClass;
+import org.junit.jupiter.api.BeforeEach;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.wickedsource.budgeteer.service.security.BudgeteerAuthenticationToken;
 
@@ -10,8 +10,8 @@ import org.wickedsource.budgeteer.service.security.BudgeteerAuthenticationToken;
  */
 public class ServiceIntegrationTestTemplate {
 
-    @BeforeClass
-    public static void setAuthentication() {
+    @BeforeEach
+    public void setAuthentication() {
         // set a placeholder authentication
         SecurityContextHolder.getContext().setAuthentication(new BudgeteerAuthenticationToken("user"));
     }
