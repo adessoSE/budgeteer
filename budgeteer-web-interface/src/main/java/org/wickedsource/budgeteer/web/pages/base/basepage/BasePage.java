@@ -12,6 +12,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.StringValue;
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.representations.AccessToken;
+import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
 import org.wickedsource.budgeteer.web.BudgeteerReferences;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.BudgeteerSettings;
@@ -84,8 +85,14 @@ public abstract class BasePage extends WebPage {
 
     private HashSet<String> loadRolesFromCurrentUser() {
         if (settings.isKeycloakActivated()) {
-            HttpServletRequest request = (HttpServletRequest) getRequestCycle().getRequest().getContainerRequest();
-            AccessToken accessToken = ((KeycloakPrincipal) request.getUserPrincipal()).getKeycloakSecurityContext().getToken();
+
+            // the autoconfiguration of spring security adds a filter (SecurityContextHolderAwareRequestFilter)
+            // that wraps the request in a SecurityContextHolderAwareRequestWrapper, unwrap it and get the
+            // access token
+            SecurityContextHolderAwareRequestWrapper request = (SecurityContextHolderAwareRequestWrapper) getRequestCycle().getRequest().getContainerRequest();
+            HttpServletRequest unwrappedRequest = (HttpServletRequest) request.getRequest();
+            AccessToken accessToken = ((KeycloakPrincipal) unwrappedRequest.getUserPrincipal()).getKeycloakSecurityContext().getToken();
+
             return (HashSet<String>) accessToken.getRealmAccess().getRoles();
         }
         return null;
