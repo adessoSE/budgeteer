@@ -22,13 +22,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        // @formatter:off
         http
                 .headers()
-                .frameOptions().sameOrigin() // allow iframes on the same domain (required for editing contracts)
+                    .frameOptions()
+                        .sameOrigin() // allow iframes on the same domain (required for editing contracts etc.)
                 .and()
-                .csrf().disable() // disable CSRF
-                .addFilter(new SecurityContextPersistenceFilter()) // add a new filter to retrieve the AuthenticationContext from the http session
-                .antMatcher("/**").anonymous(); // @NeedsLogin annotation deals with allowing authenticated access only
+                .csrf()
+                    .disable() // disable CSRF
+                .servletApi()
+                    .disable() // disables the SecurityContextHolderAwareRequestFilter that wraps requests
+                .antMatcher("/**")
+                    .anonymous(); // @NeedsLogin annotation deals with allowing authenticated access only
+        // @formatter:on
     }
+
 
 }
