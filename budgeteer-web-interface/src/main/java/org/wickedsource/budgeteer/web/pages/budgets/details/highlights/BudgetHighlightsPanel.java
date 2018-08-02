@@ -3,6 +3,7 @@ package org.wickedsource.budgeteer.web.pages.budgets.details.highlights;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.StringResourceModel;
 import org.wickedsource.budgeteer.service.budget.BudgetDetailData;
 import org.wickedsource.budgeteer.web.components.money.MoneyLabel;
 import org.wickedsource.budgeteer.web.components.nullmodel.NullsafeModel;
@@ -26,7 +27,7 @@ public class BudgetHighlightsPanel extends Panel {
     }
 
     private IModel<String> nullsafeModel(IModel<String> wrappedModel){
-        return new NullsafeModel<>(wrappedModel, getString("nullString"));
+        return new NullsafeModel<>(wrappedModel, new StringResourceModel("nullString").getString());
     }
 
 }
