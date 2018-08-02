@@ -7,7 +7,6 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.representations.AccessToken;
-import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
 import org.wickedsource.budgeteer.service.user.InvalidLoginCredentialsException;
 import org.wickedsource.budgeteer.service.user.User;
 import org.wickedsource.budgeteer.service.user.UserService;
@@ -37,14 +36,8 @@ public class LoginPage extends DialogPage {
 
     public LoginPage() {
         if (settings.isKeycloakActivated()) { // Skip Login Page if Keycloak is activated
-
-            // the autoconfiguration of spring security adds a filter (SecurityContextHolderAwareRequestFilter)
-            // that wraps the request in a SecurityContextHolderAwareRequestWrapper, unwrap it and get the
-            // access token
-            SecurityContextHolderAwareRequestWrapper request = (SecurityContextHolderAwareRequestWrapper) getRequestCycle().getRequest().getContainerRequest();
-            HttpServletRequest unwrappedRequest = (HttpServletRequest) request.getRequest();
-            AccessToken accessToken = ((KeycloakPrincipal) unwrappedRequest.getUserPrincipal()).getKeycloakSecurityContext().getToken();
-
+            HttpServletRequest request = (HttpServletRequest) getRequestCycle().getRequest().getContainerRequest();
+            AccessToken accessToken = ((KeycloakPrincipal) request.getUserPrincipal()).getKeycloakSecurityContext().getToken();
             User user = userService.login(accessToken.getPreferredUsername());
             BudgeteerSession.get().login(user);
             setResponsePage(new SelectProjectWithKeycloakPage());
