@@ -23,6 +23,8 @@ import org.wickedsource.budgeteer.web.pages.base.dialogpage.DialogPageWithBackli
 import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 import org.wickedsource.budgeteer.web.pages.user.login.LoginPage;
 
+import java.io.Serializable;
+
 @Mount("/selectProject")
 public class SelectProjectPage extends DialogPageWithBacklink {
 
@@ -50,6 +52,23 @@ public class SelectProjectPage extends DialogPageWithBacklink {
         feedbackPanel.setOutputMarkupId(true);
         feedbackForm.add(feedbackPanel);
         add(feedbackForm);
+    }
+
+    /**
+     * Construct a new SelectProjectPage and show a error message.
+     *
+     * @param propertyKey
+     *          A key to a String property of the error message
+     *          you want to display.
+     *
+     * @see #error(Serializable)
+     */
+    public SelectProjectPage(String propertyKey) {
+        this();
+
+        if(propertyKey != null && !propertyKey.isEmpty()) {
+            this.error(this.getString(propertyKey));
+        }
     }
 
     private Form<String> createNewProjectForm(String id) {
