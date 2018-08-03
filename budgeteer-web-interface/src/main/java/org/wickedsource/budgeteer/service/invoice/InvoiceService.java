@@ -1,6 +1,7 @@
 package org.wickedsource.budgeteer.service.invoice;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.wickedsource.budgeteer.persistence.contract.ContractEntity;
 import org.wickedsource.budgeteer.persistence.contract.ContractInvoiceField;
@@ -30,23 +31,27 @@ public class InvoiceService {
     @Autowired
     private ContractRepository contractRepository;
 
+    @PreAuthorize("canReadProject(#projectId)")
     public InvoiceOverviewTableModel getInvoiceOverviewByProject(long projectId){
         InvoiceOverviewTableModel result = new InvoiceOverviewTableModel();
         result.setInvoices(mapper.map(invoiceRepository.findByProjectId(projectId), true));
         return result;
     }
 
-    public InvoiceOverviewTableModel getInvoiceOverviewByContract(long contractId){
+    @PreAuthorize("canReadContract(#contractId)")
+    public InvoiceOverviewTableModel getInvoiceOverviewByContract(long contractId) {
         InvoiceOverviewTableModel result = new InvoiceOverviewTableModel();
         result.setInvoices(mapper.map(invoiceRepository.findByContractId(contractId)));
         return result;
     }
 
+    @PreAuthorize("canReadInvoice(#invoiceId)")
     public InvoiceBaseData getInvoiceById(long invoiceId) {
         return mapper.map(invoiceRepository.findOne(invoiceId));
     }
 
-    public InvoiceBaseData getEmptyInvoiceModel(long contractId){
+    @PreAuthorize("canReadContract(#contractId)")
+    public InvoiceBaseData getEmptyInvoiceModel(long contractId) {
         ContractEntity contract = contractRepository.findOne(contractId);
         InvoiceBaseData model = new InvoiceBaseData(contractId, contract.getName());
         Set<ContractInvoiceField> fields = contract.getInvoiceFields();
@@ -64,7 +69,7 @@ public class InvoiceService {
 
         if(invoiceBaseData.getInvoiceId() != 0){
             invoiceEntity = invoiceRepository.findOne(invoiceBaseData.getInvoiceId());
-       }
+        }
         //Update basic information
         invoiceEntity.setName(invoiceBaseData.getInvoiceName());
         invoiceEntity.setInvoiceSum(invoiceBaseData.getSum());
@@ -75,7 +80,7 @@ public class InvoiceService {
             String date = "01." + invoiceBaseData.getMonth() + "." + invoiceBaseData.getYear();
             invoiceEntity.setDate(formatter.parse(date));
         } catch (ParseException e) {
-          e.printStackTrace();
+            e.printStackTrace();
         }
         invoiceEntity.setPaidDate(invoiceBaseData.getPaidDate());
         invoiceEntity.setDueDate(invoiceBaseData.getDueDate());
@@ -116,6 +121,7 @@ public class InvoiceService {
 
     }
 
+    @PreAuthorize("canReadInvoice(#invoiceId)")
     public void deleteInvoice(long invoiceId) {
         invoiceRepository.delete(invoiceId);
     }
