@@ -1,6 +1,7 @@
 package org.wickedsource.budgeteer.service.project;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.wickedsource.budgeteer.persistence.budget.BudgetRepository;
 import org.wickedsource.budgeteer.persistence.contract.ContractRepository;
@@ -108,6 +109,7 @@ public class ProjectService {
      *
      * @param projectId ID of the project to delete.
      */
+    @PreAuthorize("canReadProject(#projectId)")
     public void deleteProject(long projectId) {
         dailyRateRepository.deleteByProjectId(projectId);
         planRecordRepository.deleteByImportAndProjectId(projectId);

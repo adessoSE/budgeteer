@@ -15,6 +15,7 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 import org.wickedsource.budgeteer.IntegrationTestConfiguration;
+import org.wickedsource.budgeteer.ServiceIntegrationTestTemplate;
 import org.wickedsource.budgeteer.persistence.contract.ContractRepository;
 import org.wickedsource.budgeteer.persistence.invoice.InvoiceRepository;
 import org.wickedsource.budgeteer.persistence.project.ProjectRepository;
@@ -25,7 +26,7 @@ import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
 @ContextConfiguration(classes = {IntegrationTestConfiguration.class})
 @TestExecutionListeners({DbUnitTestExecutionListener.class, DirtiesContextTestExecutionListener.class, DependencyInjectionTestExecutionListener.class,
         TransactionalTestExecutionListener.class})
-class ProjectServiceTestWithDBUnit {
+class ProjectServiceTestWithDBUnit extends ServiceIntegrationTestTemplate {
 
     @Autowired
     private ProjectService projectService;

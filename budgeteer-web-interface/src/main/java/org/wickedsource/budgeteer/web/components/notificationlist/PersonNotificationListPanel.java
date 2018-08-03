@@ -1,5 +1,8 @@
 package org.wickedsource.budgeteer.web.components.notificationlist;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -9,11 +12,11 @@ import org.wickedsource.budgeteer.service.notification.Notification;
 
 import java.util.List;
 
-public class NotificationListPanel extends Panel {
+public class PersonNotificationListPanel extends Panel {
 
     private NotificationMessageFactory notificationMessageFactory = new NotificationMessageFactory();
 
-    public NotificationListPanel(String id, IModel<? extends List<Notification>> model) {
+    public PersonNotificationListPanel(String id, IModel<? extends List<Notification>> model) {
         super(id, model);
         setRenderBodyOnly(true);
         add(createNotificationList("notificationList", model));
@@ -24,6 +27,12 @@ public class NotificationListPanel extends Panel {
             @Override
             protected void populateItem(ListItem<Notification> item) {
                 item.add(new Label("text", notificationMessageFactory.getMessageForNotification(item.getModelObject())));
+                item.add(new AjaxLink("addMissingRate") {
+                    @Override
+                    public void onClick(AjaxRequestTarget target) {
+                        send(getPage(), Broadcast.BREADTH, item.getModelObject());
+                    }
+                });
             }
         };
     }
