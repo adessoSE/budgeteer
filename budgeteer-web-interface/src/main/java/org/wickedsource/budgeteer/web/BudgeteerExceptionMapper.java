@@ -17,9 +17,13 @@ public class BudgeteerExceptionMapper extends DefaultExceptionMapper {
 
     @Override
     protected IRequestHandler mapUnexpectedExceptions(Exception e, Application application) {
-        Throwable cause = ExceptionUtils.getRootCause(e);
+        Throwable rootCause = ExceptionUtils.getRootCause(e);
 
-        if(cause instanceof AccessDeniedException) {
+        if(rootCause == null) {
+            rootCause = e;
+        }
+
+        if(rootCause instanceof AccessDeniedException) {
             return this.handleAccessDenied(e);
         } else {
             return super.mapUnexpectedExceptions(e, application);
