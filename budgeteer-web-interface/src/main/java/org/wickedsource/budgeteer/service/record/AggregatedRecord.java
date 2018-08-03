@@ -4,7 +4,7 @@ import lombok.Data;
 import org.joda.money.Money;
 import org.wickedsource.budgeteer.MoneyUtil;
 
-import java.util.*;
+import java.util.Date;
 
 @Data
 public class AggregatedRecord {
