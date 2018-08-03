@@ -1,6 +1,7 @@
 package org.wickedsource.budgeteer.service.exports;
 
-import org.apache.wicket.markup.html.list.ListView;
+
+import org.apache.wicket.markup.repeater.data.DataView;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -12,13 +13,14 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Iterator;
 
 @Service
 public class ExportService implements ApplicationContextAware {
 
     private ApplicationContext applicationContext;
 
-    public File generateCSVFileFromRecords(ListView<WorkRecord> records) {
+    public File generateCSVFileFromRecords(DataView<WorkRecord> records) {
         File csvFile = null;
         try {
             csvFile = new File("export.csv");
@@ -34,8 +36,9 @@ public class ExportService implements ApplicationContextAware {
                         "Date",
                         "Hours",
                         "Budget"));
-
-                for (WorkRecord record : records.getList()) {
+                Iterator<? extends WorkRecord> it = records.getDataProvider().iterator(0, records.getItemCount());
+                while (it.hasNext()) {
+                    WorkRecord record = it.next();
                     CSVUtils.writeLine(writer, Arrays.asList(
                             record.getBudgetName(),
                             record.getPersonName(),
