@@ -5,6 +5,7 @@ import org.apache.wicket.RestartResponseAtInterceptPageException;
 import org.apache.wicket.application.IComponentInstantiationListener;
 import org.apache.wicket.application.IComponentOnBeforeRenderListener;
 import org.apache.wicket.injection.Injector;
+import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.BudgeteerSettings;
@@ -59,7 +60,8 @@ public class BudgeteerRequiresProjectListener implements IComponentOnBeforeRende
                 if(settings.isKeycloakActivated()) {
                     throw new RestartResponseAtInterceptPageException(SelectProjectWithKeycloakPage.class);
                 } else {
-                    throw new RestartResponseAtInterceptPageException(SelectProjectPage.class);
+                    final WebPage respPage = new SelectProjectPage("projectForm.project.Required");
+                    throw new RestartResponseAtInterceptPageException(respPage);
                 }
             }
         }
