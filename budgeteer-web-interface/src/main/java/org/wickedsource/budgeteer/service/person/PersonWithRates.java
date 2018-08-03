@@ -16,5 +16,5 @@ public class PersonWithRates implements Serializable {
     private long personId;
     private String name;
     private String importKey;
-    private List<PersonRate> rates = new ArrayList<PersonRate>();
+    private List<PersonRate> rates = new ArrayList<>();
 }

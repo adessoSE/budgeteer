@@ -23,7 +23,7 @@ public class BudgetTagFilter implements Serializable {
     }
 
     public void setSelectedTags(List<String> selectedTags) {
-        this.selectedTags = new ArrayList<String>(selectedTags);
+        this.selectedTags = new ArrayList<>(selectedTags);
     }
 
     public void toggleTag(String tag) {

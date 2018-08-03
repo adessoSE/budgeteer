@@ -1,15 +1,11 @@
 package org.wickedsource.budgeteer.web.pages.contract.overview.table;
 
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.IObjectClassAwareModel;
 import org.apache.wicket.model.LoadableDetachableModel;
-import org.apache.wicket.model.Model;
-import org.joda.money.Money;
 import org.wickedsource.budgeteer.MoneyUtil;
-import org.wickedsource.budgeteer.service.contract.ContractTotalData;
 import org.wickedsource.budgeteer.service.contract.ContractBaseData;
+import org.wickedsource.budgeteer.service.contract.ContractTotalData;
 import org.wickedsource.budgeteer.service.contract.DynamicAttributeField;
-import org.wickedsource.budgeteer.web.pages.budgets.overview.table.TotalBudgetDetailsModel;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
