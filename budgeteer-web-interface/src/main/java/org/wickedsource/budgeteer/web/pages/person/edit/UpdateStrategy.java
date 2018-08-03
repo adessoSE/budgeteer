@@ -7,7 +7,7 @@ import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.service.person.PersonService;
 import org.wickedsource.budgeteer.service.person.PersonWithRates;
-import org.wickedsource.budgeteer.web.components.notificationlist.NotificationListPanel;
+import org.wickedsource.budgeteer.web.components.notificationlist.PersonNotificationListPanel;
 import org.wickedsource.budgeteer.web.pages.person.edit.personrateform.EditPersonForm;
 
 /**
@@ -37,7 +37,7 @@ public class UpdateStrategy implements IEditPersonPageStrategy {
 
     @Override
     public Panel createNotificationList(String id, long personId) {
-        return new NotificationListPanel(id, new PersonNotificationsModel(personId));
+        return new PersonNotificationListPanel(id, new PersonNotificationsModel(personId));
     }
 
     @Override

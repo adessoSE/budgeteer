@@ -199,7 +199,6 @@ public class ImportTemplatesPage extends DialogPageWithBacklink {
             }
         });
         return dropDownChoice;
-
     }
 
     private Link<Void> createExampleFileButton(String wicketId){

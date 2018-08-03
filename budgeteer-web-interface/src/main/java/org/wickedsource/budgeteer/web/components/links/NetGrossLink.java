@@ -9,8 +9,6 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.StringResourceModel;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.components.tax.TaxSwitchLabelModel;
-import org.wickedsource.budgeteer.web.pages.budgets.overview.BudgetsOverviewPage;
-import org.wickedsource.budgeteer.web.components.links.NetGrossLink;
 
 public class NetGrossLink extends Panel {
 

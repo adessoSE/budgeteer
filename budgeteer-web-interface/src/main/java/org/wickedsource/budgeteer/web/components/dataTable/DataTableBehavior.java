@@ -89,7 +89,7 @@ public class DataTableBehavior extends Behavior{
      * @return a map containing the recommended options.
      */
     public static HashMap<String, String> getRecommendedOptions(){
-        HashMap<String, String> result = new HashMap<String, String>();
+        HashMap<String, String> result = new HashMap<>();
         result.put("paging", "true");
         result.put("lengthChange", "false");
         result.put("ordering", "true");
