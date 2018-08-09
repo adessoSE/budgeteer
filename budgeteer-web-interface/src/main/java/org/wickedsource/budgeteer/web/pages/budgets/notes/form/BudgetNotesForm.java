@@ -63,11 +63,16 @@ public class BudgetNotesForm extends Form<EditBudgetData> {
      */
     @Override
     protected void onSubmit() {
-        try {
-            service.saveBudget(getModelObject());
-            this.success("Changes successfully saved.");
-        } catch (DataIntegrityViolationException e) {
-            this.error("Changes could not be saved.");
+
+        if (getModelObject().getNote().getBytes().length > 1024 * 10) {
+            this.error("The note is too large to be saved.");
+        } else {
+            try {
+                service.saveBudget(getModelObject());
+                this.success("Changes successfully saved.");
+            } catch (DataIntegrityViolationException e) {
+                this.error("Changes could not be saved.");
+            }
         }
     }
 }
