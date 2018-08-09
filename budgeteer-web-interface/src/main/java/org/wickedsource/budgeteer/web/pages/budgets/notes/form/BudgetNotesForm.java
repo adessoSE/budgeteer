@@ -32,10 +32,10 @@ public class BudgetNotesForm extends Form<EditBudgetData> {
      * The editor with settings and a CustomFeedbackPanel are added.
      */
     private void addComponents() {
-        TinyMCESettings settings = new TinyMCESettings(TinyMCESettings.Theme.modern);
+        TinyMCESettings settings = new TinyMCESettings(TinyMCESettings.Theme.modern, TinyMCESettings.Language.en);
 
         // The names of the plugins are stored in a string array and then added to the settings in a for-each loop.
-        String plugins = "advlist autolink autosave link image lists charmap print preview hr anchor pagebreak spellchecker " +
+        String plugins = "advlist autolink autosave link image lists charmap print preview hr anchor pagebreak " +
                 "searchreplace wordcount visualblocks visualchars code nonbreaking " +
                 "table contextmenu directionality textcolor paste fullpage colorpicker save";
         String[] pluginNames = plugins.split(" ");
@@ -45,11 +45,11 @@ public class BudgetNotesForm extends Form<EditBudgetData> {
         // The toolbars for the editor are added to the settings.
         settings.setMenuBar(false);
         settings.addToolbar(new Toolbar("toolbar1",
-                "newdocument save print spellchecker fullpage | undo redo | cut copy paste | searchreplace | formatselect fontselect fontsizeselect"));
+                "newdocument save print fullpage | undo redo | cut copy paste | searchreplace | formatselect fontselect fontsizeselect"));
         settings.addToolbar(new Toolbar("toolbar2",
-                "forecolor backcolor | bold italic underline strikethrough | bullist numlist | alignleft aligncenter alignright alignjustify | outdent indent blockquote | link unlink anchor image code"));
+                "removeformat | forecolor backcolor | bold italic underline strikethrough | bullist numlist | alignleft aligncenter alignright alignjustify | outdent indent blockquote"));
         settings.addToolbar(new Toolbar("toolbar3",
-                "table | hr removeformat | subscript superscript | charmap | ltr rtl | visualchars visualblocks nonbreaking pagebreak restoredraft"));
+                "table link unlink image | hr pagebreak | visualchars visualblocks"));
 
         TextArea<String> textArea = new TextArea<>("editor", model(from(getModel()).getNote()));
         textArea.add(new TinyMceBehavior(settings));
