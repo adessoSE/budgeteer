@@ -34,9 +34,9 @@ public class BudgetEntity {
 
     private String description;
 
-    // Notes have a maximum size of 10MB
+    // Notes have a maximum size of 10KB
     @Lob
-    @Column(length = 10485760)
+    @Column(length = 10 * 1024)
     private String note;
 
     private Money total;
