@@ -22,7 +22,7 @@ class UBWWorkRecordsImporterTest {
     void testRead() throws Exception {
         UBWWorkRecordsImporter importer = new UBWWorkRecordsImporter();
         List<ImportedWorkRecord> records = importer.importFile(new ImportFile("file.xslx", importer.getExampleFile().getInputStream()));
-        assertEquals(30, records.size());
+        assertEquals(54, records.size());
         assertEquals("Mustermann, Max", records.get(0).getPersonName());
         assertEquals("Testmanagement", records.get(0).getBudgetName());
         assertEquals(180d, records.get(0).getMinutesWorked(), 1d);
