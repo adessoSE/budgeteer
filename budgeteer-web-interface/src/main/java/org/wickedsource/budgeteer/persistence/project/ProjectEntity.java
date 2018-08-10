@@ -22,14 +22,14 @@ public class ProjectEntity implements Serializable {
     @GeneratedValue
     private long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 255)
     private String name;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "PROJECT_USER",
             joinColumns = {@JoinColumn(name = "PROJECT_ID")},
             inverseJoinColumns = {@JoinColumn(name = "USER_ID")})
-    private List<UserEntity> authorizedUsers = new ArrayList<UserEntity>();
+    private List<UserEntity> authorizedUsers = new ArrayList<>();
 
     @Column(nullable = true)
     @Temporal(TemporalType.DATE)

@@ -11,22 +11,22 @@
                 <div wicket:id="feedback"></div>
                 <div class="form-group">
                     <label for="titleInput"><wicket:message key="page.budget.title">Budget Title</wicket:message></label>
-                    <input wicket:id="name"type="text" name="name" id="titleInput" class="form-control"/>
+                    <input wicket:id="name"type="text" maxlength="255" name="name" id="titleInput" class="form-control"/>
                     <p class="help-block"><wicket:message key="page.budget.title.hint">The full title of the budget to be displayed where enough space is available.</wicket:message></p>
                 </div>
                 <div class="form-group">
                     <label for="titleInput"><wicket:message key="page.budget.description">Budget Descripion</wicket:message></label>
-                    <input wicket:id="description"type="text" name="name" id="descriptionInput" class="form-control"/>
+                    <input wicket:id="description"type="text" maxlength="255" name="name" id="descriptionInput" class="form-control"/>
                     <p class="help-block"><wicket:message key="page.budget.description.hint">A description of the purpose of the budget or reason this budget exists.</wicket:message></p>
                 </div>
                 <div class="form-group">
                     <label for="totalInput"><wicket:message key="page.budget.total">Budget Total</wicket:message></label>
-                    <input wicket:id="total" type="text" name="name" id="totalInput" class="form-control"/>
+                    <input wicket:id="total" type="text" maxlength="14" name="name" id="totalInput" class="form-control"/>
                     <p class="help-block"><wicket:message key="page.budget.total.hint">The total money available in this budget.</wicket:message></p>
                 </div>
                 <div class="form-group">
                     <label for="importKeyInput"><wicket:message key="page.budget.key">Import Key</wicket:message></label>
-                    <input wicket:id="importKey" type="text" name="name" id="importKeyInput" class="form-control"/>
+                    <input wicket:id="importKey" type="text" maxlength="255" name="name" id="importKeyInput" class="form-control"/>
                     <p class="help-block"><wicket:message key="page.budget.key.hint">The unique key that identifies this budget when importing data.</wicket:message></p>
                 </div>
                 <div class="form-group">

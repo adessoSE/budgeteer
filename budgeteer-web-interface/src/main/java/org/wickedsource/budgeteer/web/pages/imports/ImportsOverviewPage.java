@@ -16,10 +16,12 @@ import org.wickedsource.budgeteer.web.ClassAwareWrappingModel;
 import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.pages.base.basepage.BasePage;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
+import org.wickedsource.budgeteer.web.pages.base.delete.DeleteDialog;
 import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 import org.wickedsource.budgeteer.web.pages.imports.fileimport.ImportFilesPage;
 
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import static org.wicketstuff.lazymodel.LazyModel.from;
 import static org.wicketstuff.lazymodel.LazyModel.model;
@@ -57,8 +59,14 @@ public class ImportsOverviewPage extends BasePage {
                 item.add(new AjaxLink("deleteButton") {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        importService.deleteImport(impId);
-                        target.add(notificationDropdown, importListContainer);
+                        setResponsePage(new DeleteDialog(() -> {
+                            importService.deleteImport(impId);
+                            setResponsePage(ImportsOverviewPage.class);
+                            return null;
+                        }, () -> {
+                            setResponsePage(ImportsOverviewPage.class);
+                            return null;
+                        }));
                     }
                 });
             }

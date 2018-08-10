@@ -29,9 +29,10 @@ public class BudgetEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_BUDGET_ID")
     private long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 255)
     private String name;
 
+    @Column(length = 255)
     private String description;
 
     private Money total;
@@ -52,7 +53,7 @@ public class BudgetEntity {
     @OneToMany(mappedBy = "budget", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<DailyRateEntity> dailyRates = new ArrayList<DailyRateEntity>();
 
-    @Column(nullable = false, name = "IMPORT_KEY")
+    @Column(nullable = false, name = "IMPORT_KEY", length = 255)
     private String importKey;
 
     @ManyToOne

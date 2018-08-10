@@ -1,4 +1,4 @@
-<wicket:extend>
+<wicket:extend xmlns:wicket="http://www.w3.org/1999/xhtml">
     <div wicket:id="feedback"></div>
     <div class="row">
         <div class="col-md-12">
@@ -11,7 +11,7 @@
                     <div class="box-body">
                         <div class="col-md-3">
                             <label for="projectTitle" class="col-md-4">Project-title: </label>
-                            <input id="projectTitle" name="projectTitle" class="col-md-6" wicket:id="projectTitle">
+                            <input id="projectTitle" type="text" maxlength="255" name="projectTitle" class="col-md-6" wicket:id="projectTitle">
                         </div>
                         <div class="col-md-8">
                             <label for="projectStart" class="col-md-3" >Begin and End of Project: </label>
