@@ -25,7 +25,7 @@ class UBWWorkRecordsImporterTest {
         assertEquals(54, records.size());
         assertEquals("Mustermann, Max", records.get(0).getPersonName());
         assertEquals("Testmanagement", records.get(0).getBudgetName());
-        assertEquals(180d, records.get(0).getMinutesWorked(), 1d);
+        assertEquals(480d, records.get(0).getMinutesWorked(), 1d);
         assertEquals(format.parse("06.07.2016"), records.get(0).getDate());
     }
 
