@@ -8,6 +8,7 @@ import org.wickedsource.budgeteer.imports.api.ImportFile;
 import org.wickedsource.budgeteer.imports.api.ImportedWorkRecord;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -23,13 +24,13 @@ class UBWWorkRecordsImporterTest {
     @Test
     void testRead() throws Exception {
         UBWWorkRecordsImporter importer = new UBWWorkRecordsImporter();
-        List<ImportedWorkRecord> records = importer.importFile(new ImportFile("file.xslx", importer.getExampleFile().getInputStream()));
-        assertEquals(54, records.size());
-        assertEquals("Mustermann, Max", records.get(0).getPersonName());
-        assertEquals("Testmanagement", records.get(0).getBudgetName());
-        assertEquals(480d, records.get(0).getMinutesWorked(), 1d);
-        // Not required because the date in the new example file is dynamic
-        // assertEquals(format.parse("06.07.2016"), records.get(0).getDate());
+        InputStream in = getClass().getResourceAsStream("/demo_ubw_report.xlsx");
+        List<ImportedWorkRecord> records = importer.importFile(new ImportFile("file.xslx", in));
+        assertEquals(1225, records.size());
+        assertEquals("Archie, Holmes", records.get(0).getPersonName());
+        assertEquals("Collecting Requirements", records.get(0).getBudgetName());
+        assertEquals(570d, records.get(0).getMinutesWorked(), 1d);
+        assertEquals(format.parse("09.01.2017"), records.get(0).getDate());
     }
 
     @Test
