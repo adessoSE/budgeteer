@@ -25,6 +25,13 @@ public class BudgetNotesPage extends BasePage {
     @SpringBean
     private BudgetService service;
 
+    public BudgetNotesPage() {
+        super();
+
+        Form<EditBudgetData> form = new BudgetNotesForm("form");
+        add(form);
+    }
+
     /**
      * Load the budget to edit and add a form to the view
      *

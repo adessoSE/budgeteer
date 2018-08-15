@@ -4,10 +4,13 @@ import org.apache.wicket.injection.Injector;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.wickedsource.budgeteer.service.budget.BudgetService;
 import org.wickedsource.budgeteer.service.budget.EditBudgetData;
+import org.wickedsource.budgeteer.web.BudgeteerSession;
+import org.wickedsource.budgeteer.web.ClassAwareWrappingModel;
 import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
 import wicket.contrib.tinymce4.TinyMceBehavior;
 import wicket.contrib.tinymce4.settings.TinyMCESettings;
@@ -17,6 +20,11 @@ import static org.wicketstuff.lazymodel.LazyModel.from;
 import static org.wicketstuff.lazymodel.LazyModel.model;
 
 public class BudgetNotesForm extends Form<EditBudgetData> {
+
+    public BudgetNotesForm(String id){
+        super(id, new ClassAwareWrappingModel<>(Model.of(new EditBudgetData(BudgeteerSession.get().getProjectId())), EditBudgetData.class));
+        addComponents();
+    }
 
     @SpringBean
     private BudgetService service;
