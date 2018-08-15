@@ -2,17 +2,17 @@ package org.wickedsource.budgeteer.importer.ubw;
 
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.wickedsource.budgeteer.imports.api.ExampleFile;
 import org.wickedsource.budgeteer.imports.api.ImportFile;
 import org.wickedsource.budgeteer.imports.api.ImportedWorkRecord;
+import org.wickedsource.budgeteer.imports.api.InvalidFileFormatException;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -44,7 +44,7 @@ class UBWWorkRecordsImporterTest {
     }
 
     @Test
-    void testGetExampleFile(){
+    void testGetExampleFile() {
         UBWWorkRecordsImporter importer = new UBWWorkRecordsImporter();
         ExampleFile file = importer.getExampleFile();
         assertNotNull(file.getFileName());
@@ -57,5 +57,14 @@ class UBWWorkRecordsImporterTest {
         UBWWorkRecordsImporter importer = new UBWWorkRecordsImporter();
         Workbook workbook = new XSSFWorkbook(importer.getExampleFile().getInputStream());
         assertTrue(importer.checkValidity(workbook));
+    }
+
+    @Test
+    void testInvalidFile() {
+        Assertions.assertThrows(InvalidFileFormatException.class, () -> {
+            UBWWorkRecordsImporter importer = new UBWWorkRecordsImporter();
+            InputStream in = getClass().getResourceAsStream("/demo_ubw_report_invalid.xlsx");
+            importer.importFile(new ImportFile("demo_ubw_report_invalid.xslx", in));
+        });
     }
 }
