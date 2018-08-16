@@ -1,6 +1,5 @@
 package org.wickedsource.budgeteer.service.user;
 
-import org.apache.wicket.extensions.markup.html.repeater.data.table.ColGroup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -9,11 +8,13 @@ import org.wickedsource.budgeteer.persistence.project.ProjectRepository;
 import org.wickedsource.budgeteer.persistence.user.UserEntity;
 import org.wickedsource.budgeteer.persistence.user.UserRepository;
 import org.wickedsource.budgeteer.service.UnknownEntityException;
-import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.components.user.UserRole;
 
 import javax.transaction.Transactional;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 
 @Service
 @Transactional
@@ -156,14 +157,13 @@ public class UserService {
 
     public void addRoleToUser(Long userId, Long projectID, UserRole role) {
         UserEntity user = userRepository.findById(userId);
-        if(user.getRoles().get(projectID) == null || user.getRoles().get(projectID).length == 0){
-            String[] newRole = {role.toString()};
-            user.getRoles().put(projectID, newRole);
+        if(user.getRoles().get(projectID) == null || user.getRoles().get(projectID).size() == 0){
+            user.getRoles().put(projectID, new ArrayList<>(Collections.singleton(role.toString())));
         }else{
-            List<String> newRoles = new ArrayList<>(Arrays.asList(user.getRoles().get(projectID)));
+            ArrayList<String> newRoles = user.getRoles().get(projectID);
             if(!newRoles.contains(role.toString())) {
                 newRoles.add(role.toString());
-                user.getRoles().put(projectID, newRoles.toArray(new String[0]));
+                user.getRoles().put(projectID, newRoles);
             }
         }
         userRepository.save(user);
@@ -177,10 +177,10 @@ public class UserService {
 
     private void removeRoleFromUser(long userId, long projectID, UserRole role) {
         UserEntity user = userRepository.findById(userId);
-        if(user.getRoles().get(projectID) != null && user.getRoles().get(projectID).length != 0){
-            List<String> newRoles = new ArrayList<>(Arrays.asList(user.getRoles().get(projectID)));
+        if(user.getRoles().get(projectID) != null && user.getRoles().get(projectID).size() != 0){
+            ArrayList<String> newRoles = user.getRoles().get(projectID);
             newRoles.remove(role.toString());
-            user.getRoles().put(projectID, newRoles.toArray(new String[0]));
+            user.getRoles().put(projectID, newRoles);
             userRepository.save(user);
         }
     }

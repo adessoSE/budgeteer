@@ -31,8 +31,7 @@ import org.wickedsource.budgeteer.web.pages.user.selectproject.SelectProjectWith
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Map;
 
@@ -85,9 +84,9 @@ public abstract class BasePage extends WebPage {
             AccessToken accessToken = ((KeycloakPrincipal) request.getUserPrincipal()).getKeycloakSecurityContext().getToken();
             return (HashSet<String>) accessToken.getRealmAccess().getRoles();
         }else{
-            Map<Long, String[]> roles = BudgeteerSession.get().getLoggedInUser().getRoles();
+            Map<Long, ArrayList<String>> roles = BudgeteerSession.get().getLoggedInUser().getRoles();
             if(roles != null) {
-                return new HashSet<>(Arrays.asList(roles.get(BudgeteerSession.get().getProjectId())));
+                return new HashSet<>(roles.get(BudgeteerSession.get().getProjectId()));
             }else{
                 return new HashSet<>();
             }

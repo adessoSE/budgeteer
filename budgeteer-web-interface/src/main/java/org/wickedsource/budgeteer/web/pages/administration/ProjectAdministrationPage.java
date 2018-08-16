@@ -35,12 +35,9 @@ import org.wickedsource.budgeteer.web.pages.user.login.LoginPage;
 import org.wickedsource.budgeteer.web.pages.user.selectproject.SelectProjectPage;
 import org.wickedsource.budgeteer.web.pages.user.selectproject.SelectProjectWithKeycloakPage;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 import static org.wicketstuff.lazymodel.LazyModel.from;
 import static org.wicketstuff.lazymodel.LazyModel.model;
@@ -117,8 +114,7 @@ public class ProjectAdministrationPage extends BasePage {
                     choices.add(e.toString());
                 }
                 ListMultipleChoice<String> makeAdminList = new ListMultipleChoice<>("roleDropdown", new Model<>(
-                        new ArrayList<>(Arrays.asList(item.getModelObject().getRoles()
-                        .get(projectID)))), choices);
+                        new ArrayList<>(item.getModelObject().getRoles().get(projectID))), choices);
                 HashMap<String, String> options = new HashMap<>();
                 options.clear();
                 options.put("buttonWidth","'120px'");
@@ -143,7 +139,7 @@ public class ProjectAdministrationPage extends BasePage {
                     deleteButton.setVisible(false);
                     makeAdminList.setVisible(false);
                     for(User e : usersInProjects){
-                        if(e.getId() != thisUser.getId() && Arrays.asList(e.getRoles().get(projectID)).contains("admin")){
+                        if(e.getId() != thisUser.getId() && e.getRoles().get(projectID).contains("admin")){
                             deleteButton.setVisible(true);
                             makeAdminList.setVisible(true);
                             break;
@@ -170,7 +166,7 @@ public class ProjectAdministrationPage extends BasePage {
             }
         };
 
-        DropDownChoice<User> userChoice = new DropDownChoice<User>("userChoice", form.getModel(), new UsersNotInProjectModel(BudgeteerSession.get().getProjectId()), new UserChoiceRenderer());
+        DropDownChoice<User> userChoice = new DropDownChoice<>("userChoice", form.getModel(), new UsersNotInProjectModel(BudgeteerSession.get().getProjectId()), new UserChoiceRenderer());
         userChoice.setRequired(true);
         form.add(userChoice);
         return form;
@@ -180,25 +176,19 @@ public class ProjectAdministrationPage extends BasePage {
         return new Link(id) {
             @Override
             public void onClick() {
-                setResponsePage(new DeleteDialog(new Callable<Void>() {
-                    @Override
-                    public Void call() {
-                        projectService.deleteProject(BudgeteerSession.get().getProjectId());
-                        BudgeteerSession.get().setProjectSelected(false);
+                setResponsePage(new DeleteDialog(() -> {
+                    projectService.deleteProject(BudgeteerSession.get().getProjectId());
+                    BudgeteerSession.get().setProjectSelected(false);
 
-                        if (settings.isKeycloakActivated()) {
-                            setResponsePage(new SelectProjectWithKeycloakPage());
-                        } else {
-                            setResponsePage(new SelectProjectPage(LoginPage.class, new PageParameters()));
-                        }
-                        return null;
+                    if (settings.isKeycloakActivated()) {
+                        setResponsePage(new SelectProjectWithKeycloakPage());
+                    } else {
+                        setResponsePage(new SelectProjectPage(LoginPage.class, new PageParameters()));
                     }
-                }, new Callable<Void>() {
-                    @Override
-                    public Void call() {
-                        setResponsePage(ProjectAdministrationPage.class, getPageParameters());
-                        return null;
-                    }
+                    return null;
+                }, () -> {
+                    setResponsePage(ProjectAdministrationPage.class, getPageParameters());
+                    return null;
                 }));
             }
         };
