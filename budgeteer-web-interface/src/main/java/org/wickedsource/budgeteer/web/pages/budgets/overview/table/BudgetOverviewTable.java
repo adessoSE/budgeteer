@@ -1,5 +1,6 @@
 package org.wickedsource.budgeteer.web.pages.budgets.overview.table;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.event.IEvent;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
@@ -36,10 +37,9 @@ import static org.wicketstuff.lazymodel.LazyModel.model;
 
 public class BudgetOverviewTable extends Panel {
 
+    private final BreadcrumbsModel breadcrumbsModel;
     @SpringBean
     private ContractService contractService;
-
-    private final BreadcrumbsModel breadcrumbsModel;
 
     public BudgetOverviewTable(String id, IModel<List<BudgetDetailData>> model, BreadcrumbsModel breadcrumbsModel) {
         super(id, model);
@@ -92,11 +92,11 @@ public class BudgetOverviewTable extends Panel {
             BudgetTagFilter filter = (BudgetTagFilter) event.getPayload();
             FilteredBudgetModel model = (FilteredBudgetModel) getDefaultModel();
             model.setFilter(model(from(filter)));
-        }else if(payload instanceof String){
+        } else if (payload instanceof String) {
             Long remainingFilter;
             try {
-                remainingFilter = Long.parseLong((String)event.getPayload());
-            }catch (NumberFormatException e){
+                remainingFilter = Long.parseLong((String) event.getPayload());
+            } catch (NumberFormatException e) {
                 return;
             }
             FilteredBudgetModel model = (FilteredBudgetModel) getDefaultModel();
@@ -115,10 +115,10 @@ public class BudgetOverviewTable extends Panel {
                 link.add(linkTitle);
                 item.add(link);
                 item.add(new Label("lastUpdated", model(from(item.getModel()).getLastUpdated())));
-                Link clink =  new Link("contractLink") {
+                Link clink = new Link("contractLink") {
                     @Override
                     public void onClick() {
-                        WebPage page = new ContractDetailsPage(ContractDetailsPage.createParameters(item.getModelObject().getContractId())){
+                        WebPage page = new ContractDetailsPage(ContractDetailsPage.createParameters(item.getModelObject().getContractId())) {
                             @Override
                             protected BreadcrumbsModel getBreadcrumbsModel() {
                                 BreadcrumbsModel m = breadcrumbsModel;
@@ -130,7 +130,7 @@ public class BudgetOverviewTable extends Panel {
                         setResponsePage(page);
                     }
                 };
-                Label clinkTitle = new Label("contractTitle",model(from(item.getModel()).getContractName()));
+                Label clinkTitle = new Label("contractTitle", model(from(item.getModel()).getContractName()));
                 clink.add(clinkTitle);
                 item.add(clink);
 
@@ -162,11 +162,16 @@ public class BudgetOverviewTable extends Panel {
                         new BudgetUnitMoneyModel(model(from(item.getModel()).getTotal())),
                         new BudgetUnitMoneyModel(model(from(item.getModel()).getTotal_gross()))
                 )));
-        item.add(new MoneyLabel("spent",
+
+        MoneyLabel spentMoneyLabel = new MoneyLabel("spent",
                 new TaxBudgetUnitMoneyModel(
                         new BudgetUnitMoneyModel(model(from(item.getModel()).getSpent())),
                         new BudgetUnitMoneyModel(model(from(item.getModel()).getSpent_gross()))
-                )));
+                ));
+        if (item.getModelObject().getSpent().compareTo(item.getModelObject().getLimit()) >= 0 && !item.getModelObject().getLimit().isZero())
+            spentMoneyLabel.add(new AttributeModifier("style", "color: red"));
+        item.add(spentMoneyLabel);
+
         item.add(new MoneyLabel("remaining",
                 new TaxBudgetUnitMoneyModel(
                         new BudgetUnitMoneyModel(model(from(item.getModel()).getRemaining())),
