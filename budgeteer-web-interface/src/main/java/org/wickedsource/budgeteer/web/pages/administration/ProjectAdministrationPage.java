@@ -97,9 +97,11 @@ public class ProjectAdministrationPage extends BasePage {
                     @Override
                     public void onClick() {
                         setResponsePage(new DeleteDialog(() -> {
-                            userService.removeUserFromProject(projectID, item.getModelObject().getId());
                             if(thisUser.getId() == item.getModelObject().getId()){
+                                userService.removeUserFromProject(projectID, item.getModelObject().getId());
                                 BudgeteerSession.get().logout(); // Log the user out if he deletes himself
+                            }else{
+                                userService.removeUserFromProject(projectID, item.getModelObject().getId());
                             }
                             setResponsePage(ProjectAdministrationPage.class, getPageParameters());
                             return null;
@@ -124,23 +126,32 @@ public class ProjectAdministrationPage extends BasePage {
                 makeAdminList.add(new AjaxFormComponentUpdatingBehavior("change") {
                     @Override
                     protected void onUpdate(AjaxRequestTarget target) {
-                        userService.removeAllRolesFromUser(item.getModelObject().getId(), projectID);
-                        for(String e : makeAdminList.getModelObject() ){
-                            userService.addRoleToUser(item.getModelObject().getId(), projectID, UserRole.getEnum(e));
+                        if(!makeAdminList.getModelObject().isEmpty()) {
+                            userService.removeAllRolesFromUser(item.getModelObject().getId(), projectID);
+                            for (String e : makeAdminList.getModelObject()) {
+                                userService.addRoleToUser(item.getModelObject().getId(), projectID, UserRole.getEnum(e));
+                            }
                         }
+                        target.add(ProjectAdministrationPage.this);
                     }
                 });
-                item.add(makeAdminList);
-                
-                // a user may not delete herself/himself (unless another admin is present)
-                if (item.getModelObject().getId() == thisUser.getId()) {
+
+
+                // a user may not delete herself/himself unless another admin is present
+                if (item.getModelObject().getId() == thisUser.getId()){
+                    List<User> usersInProjects = userService.getUsersInProject(projectID);
                     deleteButton.setVisible(false);
-                }
-                if(item.getModelObject().getId() != thisUser.getId() //if there is another admin in the project, allow the user to delete himself
-                        && Arrays.asList(item.getModelObject().getRoles().get(projectID)).contains("admin")){
-                    deleteButton.setVisible(true);
+                    makeAdminList.setVisible(false);
+                    for(User e : usersInProjects){
+                        if(e.getId() != thisUser.getId() && Arrays.asList(e.getRoles().get(projectID)).contains("admin")){
+                            deleteButton.setVisible(true);
+                            makeAdminList.setVisible(true);
+                            break;
+                        }
+                    }
                 }
                 item.add(deleteButton);
+                item.add(makeAdminList);
                 item.setOutputMarkupId(true);
             }
 

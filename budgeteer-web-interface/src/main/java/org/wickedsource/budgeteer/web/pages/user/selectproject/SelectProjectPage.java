@@ -79,6 +79,7 @@ public class SelectProjectPage extends DialogPageWithBacklink {
                 try {
                     ProjectBaseData project = projectService.createProject(getModelObject(), BudgeteerSession.get().getLoggedInUser().getId());
                     BudgeteerSession.get().setProjectId(project.getId());
+                    userService.addRoleToUser(BudgeteerSession.get().getLoggedInUser().getId(), project.getId(), UserRole.USER);
                     userService.addRoleToUser(BudgeteerSession.get().getLoggedInUser().getId(), project.getId(), UserRole.ADMIN);
                     BudgeteerSession.get().setLoggedInUser(userService.getUsersInProject(project.getId()).get(0));
                     setResponsePage(DashboardPage.class);
