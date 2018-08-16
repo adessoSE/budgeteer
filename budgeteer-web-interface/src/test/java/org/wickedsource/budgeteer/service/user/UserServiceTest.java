@@ -64,6 +64,7 @@ class UserServiceTest extends ServiceTestTemplate{
     void testAddUserToProjectSuccess() {
         when(userRepository.findOne(1L)).thenReturn(createUserEntity());
         when(projectRepository.findOne(1L)).thenReturn(createProjectEntity());
+        when(userRepository.findById(1L)).thenReturn(createUserEntity());
         service.addUserToProject(1L, 1L);
         // assertion not possible when mocking repository
     }
@@ -88,6 +89,7 @@ class UserServiceTest extends ServiceTestTemplate{
     void testRemoveUserFromProjectSuccess() {
         when(userRepository.findOne(1L)).thenReturn(createUserEntity());
         when(projectRepository.findOne(1L)).thenReturn(createProjectEntity());
+        when(userRepository.findById(1L)).thenReturn(createUserEntity());
         service.removeUserFromProject(1L, 1L);
         // assertion not possible when mocking repository
     }
@@ -96,6 +98,7 @@ class UserServiceTest extends ServiceTestTemplate{
     void testRemoveUserFromProjectFailProjectNotFound() {
         Assertions.assertThrows(UnknownEntityException.class, () -> {
             when(userRepository.findOne(1L)).thenReturn(createUserEntity());
+            when(projectRepository.findById(1L)).thenReturn(createProjectEntity());
             service.removeUserFromProject(1L, 1L);
         });
     }

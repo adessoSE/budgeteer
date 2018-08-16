@@ -17,7 +17,6 @@ import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.BudgeteerSettings;
 import org.wickedsource.budgeteer.web.components.instantiation.NeedsProject;
 import org.wickedsource.budgeteer.web.components.security.NeedsLogin;
-import org.wickedsource.budgeteer.web.components.user.UserRole;
 import org.wickedsource.budgeteer.web.pages.administration.ProjectAdministrationPage;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsPanel;
@@ -35,6 +34,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Map;
 
 @NeedsLogin
 @NeedsProject
@@ -63,7 +63,7 @@ public abstract class BasePage extends WebPage {
         add(notificationDropdown);
         add(new BudgetUnitChoice("budgetUnitDropdown", new BudgetUnitModel(projectId)));
 
-        BookmarkablePageLink pageLink = new BookmarkablePageLink<ProjectAdministrationPage>("administrationLink", ProjectAdministrationPage.class);
+        BookmarkablePageLink<ProjectAdministrationPage> pageLink = new BookmarkablePageLink<ProjectAdministrationPage>("administrationLink", ProjectAdministrationPage.class);
         add(pageLink);
         if (!currentUserIsAdmin()) {
             pageLink.setVisible(false);
@@ -85,8 +85,12 @@ public abstract class BasePage extends WebPage {
             AccessToken accessToken = ((KeycloakPrincipal) request.getUserPrincipal()).getKeycloakSecurityContext().getToken();
             return (HashSet<String>) accessToken.getRealmAccess().getRoles();
         }else{
-            return new HashSet<>(Arrays.asList(BudgeteerSession.get().getLoggedInUser().
-                    getRoles().get(BudgeteerSession.get().getProjectId())));
+            Map<Long, String[]> roles = BudgeteerSession.get().getLoggedInUser().getRoles();
+            if(roles != null) {
+                return new HashSet<>(Arrays.asList(roles.get(BudgeteerSession.get().getProjectId())));
+            }else{
+                return new HashSet<>();
+            }
         }
     }
 
