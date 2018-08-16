@@ -25,7 +25,7 @@ import java.util.List;
 public class BudgetEntity {
 
     @Id
-    @SequenceGenerator(name="SEQ_BUDGET_ID", sequenceName="SEQ_BUDGET_ID")
+    @SequenceGenerator(name = "SEQ_BUDGET_ID", sequenceName = "SEQ_BUDGET_ID")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_BUDGET_ID")
     private long id;
 
@@ -35,6 +35,8 @@ public class BudgetEntity {
     private String description;
 
     private Money total;
+
+    private Money limit;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "PROJECT_ID")
@@ -56,7 +58,7 @@ public class BudgetEntity {
     private String importKey;
 
     @ManyToOne
-    @JoinColumn(name="CONTRACT_ID")
+    @JoinColumn(name = "CONTRACT_ID")
     private ContractEntity contract;
 
     @Override
@@ -76,6 +78,7 @@ public class BudgetEntity {
         if (project != null ? !project.equals(that.project) : that.project != null) return false;
         if (tags != null ? !tags.equals(that.tags) : that.tags != null) return false;
         if (total != null ? !total.equals(that.total) : that.total != null) return false;
+        if (limit != null ? !limit.equals(that.total) : that.limit != null) return false;
         if (workRecords != null ? !workRecords.equals(that.workRecords) : that.workRecords != null) return false;
 
         return true;
@@ -87,6 +90,7 @@ public class BudgetEntity {
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + (total != null ? total.hashCode() : 0);
+        result = 31 * result + (limit != null ? limit.hashCode() : 0);
         result = 31 * result + (project != null ? project.hashCode() : 0);
         result = 31 * result + (tags != null ? tags.hashCode() : 0);
         result = 31 * result + (workRecords != null ? workRecords.hashCode() : 0);
