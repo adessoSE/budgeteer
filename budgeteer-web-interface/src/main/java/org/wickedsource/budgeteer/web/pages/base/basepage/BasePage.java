@@ -73,7 +73,7 @@ public abstract class BasePage extends WebPage {
         add(new HeaderResponseContainer("JavaScriptContainer", "JavaScriptContainer"));
     }
 
-	private boolean currentUserIsAdmin() {
+	protected boolean currentUserIsAdmin() {
         HashSet<String> roles = loadRolesFromCurrentUser();
         return roles != null && roles.contains("admin");
     }

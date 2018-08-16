@@ -38,6 +38,7 @@ import org.wickedsource.budgeteer.web.pages.user.selectproject.SelectProjectWith
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import static org.wicketstuff.lazymodel.LazyModel.from;
 import static org.wicketstuff.lazymodel.LazyModel.model;
@@ -123,10 +124,34 @@ public class ProjectAdministrationPage extends BasePage {
                     @Override
                     protected void onUpdate(AjaxRequestTarget target) {
                         if(!makeAdminList.getModelObject().isEmpty()) {
+
+                            //Check if the user is losing admin privileges and ask if they are sure
+                            if(item.getModelObject().getId() == thisUser.getId() &&
+                                    !makeAdminList.getModelObject().contains("admin") && item.getModelObject().getRoles().get(projectID).contains("admin")){
+                                setResponsePage(new DeleteDialog(() -> {
+                                    userService.removeAllRolesFromUser(item.getModelObject().getId(), projectID);
+                                    for (String e : makeAdminList.getModelObject()) {
+                                        userService.addRoleToUser(item.getModelObject().getId(), projectID, UserRole.getEnum(e));
+                                    }
+                                    if(item.getModelObject().getId() == thisUser.getId()){
+                                        BudgeteerSession.get().setLoggedInUser(item.getModelObject());
+                                    }
+                                    setResponsePage(DashboardPage.class);
+                                    return null;
+                                }, () -> {
+                                    setResponsePage(ProjectAdministrationPage.class);
+                                    return null;
+                                }));
+                                return;
+                            }
+
                             userService.removeAllRolesFromUser(item.getModelObject().getId(), projectID);
                             for (String e : makeAdminList.getModelObject()) {
                                 userService.addRoleToUser(item.getModelObject().getId(), projectID, UserRole.getEnum(e));
                             }
+                        }
+                        if(item.getModelObject().getId() == thisUser.getId()){
+                            BudgeteerSession.get().setLoggedInUser(item.getModelObject());
                         }
                         target.add(ProjectAdministrationPage.this);
                     }
