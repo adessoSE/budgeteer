@@ -1,8 +1,11 @@
 package org.wickedsource.budgeteer.web.pages.administration;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.ListMultipleChoice;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -22,6 +25,8 @@ import org.wickedsource.budgeteer.web.ClassAwareWrappingModel;
 import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
 import org.wickedsource.budgeteer.web.components.daterange.DateRangeInputField;
+import org.wickedsource.budgeteer.web.components.multiselect.MultiselectBehavior;
+import org.wickedsource.budgeteer.web.components.user.UserRole;
 import org.wickedsource.budgeteer.web.pages.base.basepage.BasePage;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
 import org.wickedsource.budgeteer.web.pages.base.delete.DeleteDialog;
@@ -30,6 +35,10 @@ import org.wickedsource.budgeteer.web.pages.user.login.LoginPage;
 import org.wickedsource.budgeteer.web.pages.user.selectproject.SelectProjectPage;
 import org.wickedsource.budgeteer.web.pages.user.selectproject.SelectProjectWithKeycloakPage;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -70,7 +79,7 @@ public class ProjectAdministrationPage extends BasePage {
                 }
             }
         };
-        form.add(new TextField<String>("projectTitle", model(from(form.getModelObject()).getName())));
+        form.add(new TextField<>("projectTitle", model(from(form.getModelObject()).getName())));
         DateRange defaultDateRange = new DateRange(DateUtil.getBeginOfYear(), DateUtil.getEndOfYear());
         form.add(new DateRangeInputField("projectStart", model(from(form.getModelObject()).getDateRange()), defaultDateRange, DateRangeInputField.DROP_LOCATION.DOWN));
         return form;
@@ -78,39 +87,66 @@ public class ProjectAdministrationPage extends BasePage {
 
     private ListView<User> createUserList(String id, IModel<List<User>> model) {
         User thisUser = BudgeteerSession.get().getLoggedInUser();
+        long projectID = BudgeteerSession.get().getProjectId();
         return new ListView<User>(id, model) {
+
             @Override
             protected void populateItem(final ListItem<User> item) {
                 item.add(new Label("username", model(from(item.getModel()).getName())));
                 Link deleteButton = new Link("deleteButton") {
                     @Override
                     public void onClick() {
-
-                        setResponsePage(new DeleteDialog(new Callable<Void>() {
-                            @Override
-                            public Void call() {
-                                userService.removeUserFromProject(BudgeteerSession.get().getProjectId(), item.getModelObject().getId());
-                                setResponsePage(ProjectAdministrationPage.class, getPageParameters());
-                                return null;
+                        setResponsePage(new DeleteDialog(() -> {
+                            userService.removeUserFromProject(projectID, item.getModelObject().getId());
+                            if(thisUser.getId() == item.getModelObject().getId()){
+                                BudgeteerSession.get().logout(); // Log the user out if he deletes himself
                             }
-                        }, new Callable<Void>() {
-                            @Override
-                            public Void call() {
-                                setResponsePage(ProjectAdministrationPage.class, getPageParameters());
-                                return null;
-                            }
+                            setResponsePage(ProjectAdministrationPage.class, getPageParameters());
+                            return null;
+                        }, () -> {
+                            setResponsePage(ProjectAdministrationPage.class, getPageParameters());
+                            return null;
                         }));
                     }
                 };
-                // a user may not delete herself/himself
-                if (item.getModelObject().equals(thisUser))
+
+                List<String> choices = new ArrayList<>();
+                for(UserRole e : UserRole.values()){
+                    choices.add(e.toString());
+                }
+                ListMultipleChoice<String> makeAdminList = new ListMultipleChoice<>("roleDropdown", new Model<>(
+                        new ArrayList<>(Arrays.asList(item.getModelObject().getRoles()
+                        .get(projectID)))), choices);
+                HashMap<String, String> options = new HashMap<>();
+                options.clear();
+                options.put("buttonWidth","'120px'");
+                makeAdminList.add(new MultiselectBehavior(options));
+                makeAdminList.add(new AjaxFormComponentUpdatingBehavior("change") {
+                    @Override
+                    protected void onUpdate(AjaxRequestTarget target) {
+                        userService.removeAllRolesFromUser(item.getModelObject().getId(), projectID);
+                        for(String e : makeAdminList.getModelObject() ){
+                            userService.addRoleToUser(item.getModelObject().getId(), projectID, UserRole.getEnum(e));
+                        }
+                    }
+                });
+                item.add(makeAdminList);
+                
+                // a user may not delete herself/himself (unless another admin is present)
+                if (item.getModelObject().getId() == thisUser.getId()) {
                     deleteButton.setVisible(false);
+                }
+                if(item.getModelObject().getId() != thisUser.getId() //if there is another admin in the project, allow the user to delete himself
+                        && Arrays.asList(item.getModelObject().getRoles().get(projectID)).contains("admin")){
+                    deleteButton.setVisible(true);
+                }
                 item.add(deleteButton);
+                item.setOutputMarkupId(true);
             }
 
             @Override
             protected ListItem<User> newItem(int index, IModel<User> itemModel) {
-                return super.newItem(index, new ClassAwareWrappingModel<User>(itemModel, User.class));
+                return super.newItem(index, new ClassAwareWrappingModel<>(itemModel, User.class));
             }
         };
     }

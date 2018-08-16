@@ -17,6 +17,7 @@ import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.BudgeteerSettings;
 import org.wickedsource.budgeteer.web.components.instantiation.NeedsProject;
 import org.wickedsource.budgeteer.web.components.security.NeedsLogin;
+import org.wickedsource.budgeteer.web.components.user.UserRole;
 import org.wickedsource.budgeteer.web.pages.administration.ProjectAdministrationPage;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsPanel;
@@ -31,6 +32,8 @@ import org.wickedsource.budgeteer.web.pages.user.selectproject.SelectProjectWith
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 
 @NeedsLogin
@@ -73,13 +76,7 @@ public abstract class BasePage extends WebPage {
 
 	private boolean currentUserIsAdmin() {
         HashSet<String> roles = loadRolesFromCurrentUser();
-        if (roles != null && roles.contains("admin")) {
-            return true;
-        } else if (roles == null) {
-            return true;
-        } else {
-            return false;
-        }
+        return roles != null && roles.contains("admin");
     }
 
     private HashSet<String> loadRolesFromCurrentUser() {
@@ -87,9 +84,12 @@ public abstract class BasePage extends WebPage {
             HttpServletRequest request = (HttpServletRequest) getRequestCycle().getRequest().getContainerRequest();
             AccessToken accessToken = ((KeycloakPrincipal) request.getUserPrincipal()).getKeycloakSecurityContext().getToken();
             return (HashSet<String>) accessToken.getRealmAccess().getRoles();
+        }else{
+            return new HashSet<>(Arrays.asList(BudgeteerSession.get().getLoggedInUser().
+                    getRoles().get(BudgeteerSession.get().getProjectId())));
         }
-        return null;
     }
+
 
     @Override
     public void renderHead(IHeaderResponse response) {

@@ -41,7 +41,7 @@ public class RegisterPage extends DialogPage {
         };
         add(form);
         form.add(new CustomFeedbackPanel("feedback"));
-        form.add(new RequiredTextField<String>("username", model(from(form.getModel()).getUsername())));
+        form.add(new RequiredTextField<>("username", model(from(form.getModel()).getUsername())));
         form.add(new PasswordTextField("password", model(from(form.getModel()).getPassword())));
         form.add(new PasswordTextField("passwordConfirmation", model(from(form.getModel()).getPasswordConfirmation())));
         form.add(new BookmarkablePageLink<LoginPage>("loginLink", LoginPage.class));

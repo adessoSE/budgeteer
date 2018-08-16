@@ -19,6 +19,7 @@ import org.wickedsource.budgeteer.service.user.UserService;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
+import org.wickedsource.budgeteer.web.components.user.UserRole;
 import org.wickedsource.budgeteer.web.pages.base.dialogpage.DialogPageWithBacklink;
 import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 import org.wickedsource.budgeteer.web.pages.user.login.LoginPage;
@@ -47,7 +48,7 @@ public class SelectProjectPage extends DialogPageWithBacklink {
         add(createLogoutlink("logoutLink"));
         add(createNewProjectForm("newProjectForm"));
         add(createChooseProjectForm("chooseProjectForm"));
-        Form feedbackForm = new Form("feedbackForm", new Model<String>());
+        Form<String> feedbackForm = new Form<>("feedbackForm", new Model<>());
         feedbackPanel = new CustomFeedbackPanel("feedback");
         feedbackPanel.setOutputMarkupId(true);
         feedbackForm.add(feedbackPanel);
@@ -72,12 +73,14 @@ public class SelectProjectPage extends DialogPageWithBacklink {
     }
 
     private Form<String> createNewProjectForm(String id) {
-        Form<String> form = new Form<String>(id, new Model<String>("")) {
+        Form<String> form = new Form<String>(id, new Model<>("")) {
             @Override
             protected void onSubmit() {
                 try {
                     ProjectBaseData project = projectService.createProject(getModelObject(), BudgeteerSession.get().getLoggedInUser().getId());
                     BudgeteerSession.get().setProjectId(project.getId());
+                    userService.addRoleToUser(BudgeteerSession.get().getLoggedInUser().getId(), project.getId(), UserRole.ADMIN);
+                    BudgeteerSession.get().setLoggedInUser(userService.getUsersInProject(project.getId()).get(0));
                     setResponsePage(DashboardPage.class);
                 }catch (ProjectNameAlreadyInUseException exception){
                     this.error(getString("newProjectForm.projectName.AlreadyInUse"));
@@ -85,7 +88,7 @@ public class SelectProjectPage extends DialogPageWithBacklink {
 
             }
         };
-        form.add(new RequiredTextField<String>("projectName", form.getModel()));
+        form.add(new RequiredTextField<>("projectName", form.getModel()));
         return form;
     }
 
@@ -97,9 +100,9 @@ public class SelectProjectPage extends DialogPageWithBacklink {
                 return projectService.getDefaultProjectForUser(BudgeteerSession.get().getLoggedInUser().getId());
             }
         };
-        final Form<ProjectBaseData> form = new Form<ProjectBaseData>("chooseProjectForm", defaultProjectModel);
+        final Form<ProjectBaseData> form = new Form<>("chooseProjectForm", defaultProjectModel);
 
-        DropDownChoice<ProjectBaseData> choice = new DropDownChoice<ProjectBaseData>("projectChoice", form.getModel(), new ProjectsForUserModel(BudgeteerSession.get().getLoggedInUser().getId()), new ProjectChoiceRenderer());
+        DropDownChoice<ProjectBaseData> choice = new DropDownChoice<>("projectChoice", form.getModel(), new ProjectsForUserModel(BudgeteerSession.get().getLoggedInUser().getId()), new ProjectChoiceRenderer());
         choice.setRequired(true);
         choice.add(new OnChangeAjaxBehavior() {
             @Override

@@ -2,6 +2,7 @@ package org.wickedsource.budgeteer.service.contract;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.wickedsource.budgeteer.persistence.budget.BudgetEntity;
 import org.wickedsource.budgeteer.persistence.budget.BudgetRepository;
@@ -18,8 +19,8 @@ import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.*;
 
-@Service
 @Transactional
+@Service
 public class ContractService {
 
     @Autowired
