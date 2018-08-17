@@ -1,3 +1,7 @@
+plugins {
+    id "org.sonarqube" version "2.6.1"
+}
+
 task wrapper(type: Wrapper) {
     gradleVersion '4.6'
 }
@@ -24,10 +28,6 @@ subprojects {
             name "Apache Snapshots"
             url "https://repository.apache.org/content/repositories/snapshots/"
         }
-		maven {
-			url 'https://oss.jfrog.org/artifactory/oss-snapshot-local'
-		} 
-        
     }
 
     dependencies {

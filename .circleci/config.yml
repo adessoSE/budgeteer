@@ -21,6 +21,9 @@ jobs:
             find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} ~/artifacts/junit/ \;
           when: always
       - run:
+          name: Static code analysis
+          command: ./gradlew --stacktrace sonarqube -Dsonar.organization=maximatanasov-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONARCLOUD_MAXIM_KEY -Dsonar.branch.name=$CIRCLE_BRANCH -Dsonar.projectKey=$CIRCLE_BRANCH
+      - run:
           name: Save .war and .jar files
           command: |
             find . -type f -regex ".*/build/libs/.*war" -exec cp {} ~/artifacts/ \;
