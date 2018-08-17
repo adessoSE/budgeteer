@@ -222,6 +222,11 @@ public class EditTemplateForm extends Form<TemplateFormInputDto> {
                     protected void onNo() {
                         setResponsePage(new EditTemplatePage(TemplatesPage.class, getPage().getPageParameters(), templateID));
                     }
+
+                    @Override
+                    protected String confirmationText() {
+                        return getString("template.delete.confirmation");
+                    }
                 });
             }
         };

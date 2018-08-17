@@ -26,8 +26,6 @@ import org.wickedsource.budgeteer.web.pages.person.monthreport.PersonMonthReport
 import org.wickedsource.budgeteer.web.pages.person.overview.PeopleOverviewPage;
 import org.wickedsource.budgeteer.web.pages.person.weekreport.PersonWeekReportPage;
 
-import java.util.concurrent.Callable;
-
 @Mount("people/details/${id}")
 public class PersonDetailsPage extends BasePage {
 
@@ -57,6 +55,11 @@ public class PersonDetailsPage extends BasePage {
                     @Override
                     protected void onNo() {
                         setResponsePage(PersonDetailsPage.class, getPageParameters());
+                    }
+
+                    @Override
+                    protected String confirmationText() {
+                        return "Are you sure you want to delete this person?";
                     }
                 });
             }

@@ -102,6 +102,11 @@ public class ContractDetailsPage extends BasePage {
                     protected void onNo() {
                         setResponsePage(ContractDetailsPage.class, getPageParameters());
                     }
+
+                    @Override
+                    protected String confirmationText() {
+                        return "Are you sure you want to delete this contract?";
+                    }
                 });
             }
         };

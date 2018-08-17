@@ -1,15 +1,19 @@
 package org.wickedsource.budgeteer.web.pages.base.delete;
 
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.wickedsource.budgeteer.web.pages.base.dialogpage.DialogPage;
-
-import java.util.concurrent.Callable;
 
 public abstract class DeleteDialog extends DialogPage{
 
     public DeleteDialog(){
         add(createNoButton());
         add(createYesButton());
+        add(createConfirmationText());
+    }
+
+    protected Label createConfirmationText(){
+        return new Label("confirmationText", confirmationText());
     }
 
     private Link createYesButton(){
@@ -32,4 +36,5 @@ public abstract class DeleteDialog extends DialogPage{
 
     protected abstract void onYes();
     protected abstract void onNo();
+    protected abstract String confirmationText();
 }

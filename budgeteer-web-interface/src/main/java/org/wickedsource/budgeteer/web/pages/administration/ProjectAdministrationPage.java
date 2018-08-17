@@ -12,6 +12,8 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
+import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.service.DateRange;
@@ -110,6 +112,11 @@ public class ProjectAdministrationPage extends BasePage {
                             protected void onNo() {
                                 setResponsePage(ProjectAdministrationPage.class, getPageParameters());
                             }
+
+                            @Override
+                            protected String confirmationText() {
+                                return "Are you sure you want to remove this user from the project?";
+                            }
                         });
                     }
                 };
@@ -149,6 +156,11 @@ public class ProjectAdministrationPage extends BasePage {
                                             @Override
                                             protected void onNo() {
                                                 setResponsePage(ProjectAdministrationPage.class);
+                                            }
+
+                                            @Override
+                                            protected String confirmationText() {
+                                                return "You will lose admin privileges and access to this page if you proceed, are you sure?";
                                             }
                                         });
                             }
@@ -225,6 +237,11 @@ public class ProjectAdministrationPage extends BasePage {
                     @Override
                     protected void onNo() {
                         setResponsePage(ProjectAdministrationPage.class, getPageParameters());
+                    }
+
+                    @Override
+                    protected String confirmationText() {
+                        return "Deleting the project is irreversible, are you sure?";
                     }
                 });
             }
