@@ -72,7 +72,7 @@ public class UserService {
         }
         user.getAuthorizedProjects().remove(project);
         project.getAuthorizedUsers().remove(user);
-        removeRoleFromUser(user.getId(), projectId, UserRole.USER);
+        removeAllRolesFromUser(user.getId(), projectId);
     }
 
     /**
