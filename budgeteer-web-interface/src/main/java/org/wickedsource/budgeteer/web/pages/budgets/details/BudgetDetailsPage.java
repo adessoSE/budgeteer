@@ -64,20 +64,18 @@ public class BudgetDetailsPage extends BasePage {
             @Override
             public void onSubmit() {
 
-                setResponsePage(new DeleteDialog(new Callable<Void>() {
+                setResponsePage(new DeleteDialog() {
                     @Override
-                    public Void call(){
+                    protected void onYes() {
                         budgetService.deleteBudget(getParameterId());
                         setResponsePage(BudgetsOverviewPage.class);
-                        return null;
                     }
-                }, new Callable<Void>() {
+
                     @Override
-                    public Void call(){
+                    protected void onNo() {
                         setResponsePage(new BudgetDetailsPage(getPageParameters()));
-                        return null;
                     }
-                }));
+                });
             }
         };
         deleteForm.add(new SubmitLink("deleteLink"));

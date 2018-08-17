@@ -5,27 +5,18 @@ import org.wickedsource.budgeteer.web.pages.base.dialogpage.DialogPage;
 
 import java.util.concurrent.Callable;
 
-public class DeleteDialog extends DialogPage{
+public abstract class DeleteDialog extends DialogPage{
 
-    transient private Callable<Void> successMethod;
-    transient private Callable<Void> failMethod;
-
-    public DeleteDialog(Callable<Void> successMethod, Callable<Void> failMethod){
+    public DeleteDialog(){
         add(createNoButton());
         add(createYesButton());
-        this.successMethod = successMethod;
-        this.failMethod = failMethod;
     }
 
     private Link createYesButton(){
         return new Link<Void>("yesButton") {
             @Override
             public void onClick() {
-                try {
-                    successMethod.call();
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
+                onYes();
             }
         };
     }
@@ -34,12 +25,11 @@ public class DeleteDialog extends DialogPage{
         return new Link<Void>("noButton") {
             @Override
             public void onClick() {
-                try {
-                    failMethod.call();
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
+                onNo();
             }
         };
     }
+
+    protected abstract void onYes();
+    protected abstract void onNo();
 }

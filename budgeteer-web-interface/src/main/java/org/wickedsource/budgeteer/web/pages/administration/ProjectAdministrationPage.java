@@ -94,19 +94,23 @@ public class ProjectAdministrationPage extends BasePage {
                 Link deleteButton = new Link("deleteButton") {
                     @Override
                     public void onClick() {
-                        setResponsePage(new DeleteDialog(() -> {
-                            if(thisUser.getId() == item.getModelObject().getId()){
-                                userService.removeUserFromProject(projectID, item.getModelObject().getId());
-                                BudgeteerSession.get().logout(); // Log the user out if he deletes himself
-                            }else{
-                                userService.removeUserFromProject(projectID, item.getModelObject().getId());
+                        setResponsePage(new DeleteDialog() {
+                            @Override
+                            protected void onYes() {
+                                if(thisUser.getId() == item.getModelObject().getId()){
+                                    userService.removeUserFromProject(projectID, item.getModelObject().getId());
+                                    BudgeteerSession.get().logout(); // Log the user out if he deletes himself
+                                }else{
+                                    userService.removeUserFromProject(projectID, item.getModelObject().getId());
+                                }
+                                setResponsePage(ProjectAdministrationPage.class, getPageParameters());
                             }
-                            setResponsePage(ProjectAdministrationPage.class, getPageParameters());
-                            return null;
-                        }, () -> {
-                            setResponsePage(ProjectAdministrationPage.class, getPageParameters());
-                            return null;
-                        }));
+
+                            @Override
+                            protected void onNo() {
+                                setResponsePage(ProjectAdministrationPage.class, getPageParameters());
+                            }
+                        });
                     }
                 };
 
@@ -128,21 +132,25 @@ public class ProjectAdministrationPage extends BasePage {
                             //Check if the user is losing admin privileges and ask if they are sure
                             if(item.getModelObject().getId() == thisUser.getId() &&
                                     !makeAdminList.getModelObject().contains("admin") && item.getModelObject().getRoles().get(projectID).contains("admin")){
-                                setResponsePage(new DeleteDialog(() -> {
-                                    userService.removeAllRolesFromUser(item.getModelObject().getId(), projectID);
-                                    for (String e : makeAdminList.getModelObject()) {
-                                        userService.addRoleToUser(item.getModelObject().getId(), projectID, UserRole.getEnum(e));
-                                    }
-                                    if(item.getModelObject().getId() == thisUser.getId()){
-                                        BudgeteerSession.get().setLoggedInUser(item.getModelObject());
-                                    }
-                                    setResponsePage(DashboardPage.class);
-                                    return null;
-                                }, () -> {
-                                    setResponsePage(ProjectAdministrationPage.class);
-                                    return null;
-                                }));
-                                return;
+                                setResponsePage(
+                                        new DeleteDialog() {
+                                            @Override
+                                            protected void onYes() {
+                                                userService.removeAllRolesFromUser(item.getModelObject().getId(), projectID);
+                                                for (String e : makeAdminList.getModelObject()) {
+                                                    userService.addRoleToUser(item.getModelObject().getId(), projectID, UserRole.getEnum(e));
+                                                }
+                                                if(item.getModelObject().getId() == thisUser.getId()){
+                                                    BudgeteerSession.get().setLoggedInUser(item.getModelObject());
+                                                }
+                                                setResponsePage(DashboardPage.class);
+                                            }
+
+                                            @Override
+                                            protected void onNo() {
+                                                setResponsePage(ProjectAdministrationPage.class);
+                                            }
+                                        });
                             }
 
                             userService.removeAllRolesFromUser(item.getModelObject().getId(), projectID);
@@ -201,20 +209,24 @@ public class ProjectAdministrationPage extends BasePage {
         return new Link(id) {
             @Override
             public void onClick() {
-                setResponsePage(new DeleteDialog(() -> {
-                    projectService.deleteProject(BudgeteerSession.get().getProjectId());
-                    BudgeteerSession.get().setProjectSelected(false);
+                setResponsePage(new DeleteDialog() {
+                    @Override
+                    protected void onYes() {
+                        projectService.deleteProject(BudgeteerSession.get().getProjectId());
+                        BudgeteerSession.get().setProjectSelected(false);
 
-                    if (settings.isKeycloakActivated()) {
-                        setResponsePage(new SelectProjectWithKeycloakPage());
-                    } else {
-                        setResponsePage(new SelectProjectPage(LoginPage.class, new PageParameters()));
+                        if (settings.isKeycloakActivated()) {
+                            setResponsePage(new SelectProjectWithKeycloakPage());
+                        } else {
+                            setResponsePage(new SelectProjectPage(LoginPage.class, new PageParameters()));
+                        }
                     }
-                    return null;
-                }, () -> {
-                    setResponsePage(ProjectAdministrationPage.class, getPageParameters());
-                    return null;
-                }));
+
+                    @Override
+                    protected void onNo() {
+                        setResponsePage(ProjectAdministrationPage.class, getPageParameters());
+                    }
+                });
             }
         };
     }
