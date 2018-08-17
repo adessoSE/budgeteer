@@ -34,8 +34,6 @@ import org.wickedsource.budgeteer.web.pages.budgets.weekreport.single.SingleBudg
 import org.wickedsource.budgeteer.web.pages.contract.details.ContractDetailsPage;
 import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 
-import java.util.concurrent.Callable;
-
 @Mount("budgets/details/${id}")
 public class BudgetDetailsPage extends BasePage {
 

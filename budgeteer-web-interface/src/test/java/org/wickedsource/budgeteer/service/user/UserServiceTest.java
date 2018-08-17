@@ -12,6 +12,7 @@ import org.wickedsource.budgeteer.service.UnknownEntityException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
@@ -132,7 +133,8 @@ class UserServiceTest extends ServiceTestTemplate{
         user.setId(1L);
         user.setName("user");
         user.setPassword(passwordHasher.hash("password"));
-        user.setAuthorizedProjects(new ArrayList<ProjectEntity>());
+        user.setAuthorizedProjects(new ArrayList<>());
+        user.setRoles(new HashMap<>());
         return user;
     }
 
@@ -140,7 +142,7 @@ class UserServiceTest extends ServiceTestTemplate{
         ProjectEntity project = new ProjectEntity();
         project.setId(1L);
         project.setName("name");
-        project.setAuthorizedUsers(new ArrayList<UserEntity>());
+        project.setAuthorizedUsers(new ArrayList<>());
         return project;
     }
 }

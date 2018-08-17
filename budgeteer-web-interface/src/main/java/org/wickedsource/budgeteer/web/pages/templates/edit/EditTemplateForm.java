@@ -32,7 +32,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 import static org.wicketstuff.lazymodel.LazyModel.from;
 import static org.wicketstuff.lazymodel.LazyModel.model;
@@ -65,7 +64,7 @@ public class EditTemplateForm extends Form<TemplateFormInputDto> {
         add(fileUpload);
         add(createCancelButton("backlink2"));
         add(DeleteTemplateButton("deleteButton"));
-        add(DownloadFileButton("downloadFileButton"));
+        add(downloadFileButton("downloadFileButton"));
 
         add(new AjaxButton("save") {
             @Override
@@ -173,7 +172,7 @@ public class EditTemplateForm extends Form<TemplateFormInputDto> {
     /**
      * Creates a button to download the template that is being edited.
      */
-    private Link DownloadFileButton(String wicketId) {
+    private Link downloadFileButton(String wicketId) {
         return new Link<Void>(wicketId) {
             @Override
             public void onClick() {
@@ -225,7 +224,7 @@ public class EditTemplateForm extends Form<TemplateFormInputDto> {
 
                     @Override
                     protected String confirmationText() {
-                        return getString("template.delete.confirmation");
+                        return "Are you sure you want to delete this template?";
                     }
                 });
             }

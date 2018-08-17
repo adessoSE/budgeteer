@@ -24,8 +24,6 @@ import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 import org.wickedsource.budgeteer.web.pages.invoice.edit.EditInvoicePage;
 import org.wickedsource.budgeteer.web.pages.invoice.overview.InvoiceOverviewPage;
 
-import java.util.concurrent.Callable;
-
 @Mount("contracts/details/${id}")
 public class ContractDetailsPage extends BasePage {
 

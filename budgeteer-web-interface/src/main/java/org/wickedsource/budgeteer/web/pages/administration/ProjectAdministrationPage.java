@@ -12,8 +12,6 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.model.ResourceModel;
-import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.service.DateRange;
@@ -40,7 +38,6 @@ import org.wickedsource.budgeteer.web.pages.user.selectproject.SelectProjectWith
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 import static org.wicketstuff.lazymodel.LazyModel.from;
 import static org.wicketstuff.lazymodel.LazyModel.model;
@@ -138,7 +135,8 @@ public class ProjectAdministrationPage extends BasePage {
 
                             //Check if the user is losing admin privileges and ask if they are sure
                             if(item.getModelObject().getId() == thisUser.getId() &&
-                                    !makeAdminList.getModelObject().contains("admin") && item.getModelObject().getRoles().get(projectID).contains("admin")){
+                                    !makeAdminList.getModelObject().contains(UserRole.ADMIN.toString())
+                                    && item.getModelObject().getRoles().get(projectID).contains(UserRole.ADMIN.toString())){
                                 setResponsePage(
                                         new DeleteDialog() {
                                             @Override
@@ -163,11 +161,11 @@ public class ProjectAdministrationPage extends BasePage {
                                                 return "You will lose admin privileges and access to this page if you proceed, are you sure?";
                                             }
                                         });
-                            }
-
-                            userService.removeAllRolesFromUser(item.getModelObject().getId(), projectID);
-                            for (String e : makeAdminList.getModelObject()) {
-                                userService.addRoleToUser(item.getModelObject().getId(), projectID, UserRole.getEnum(e));
+                            }else {
+                                userService.removeAllRolesFromUser(item.getModelObject().getId(), projectID);
+                                for (String e : makeAdminList.getModelObject()) {
+                                    userService.addRoleToUser(item.getModelObject().getId(), projectID, UserRole.getEnum(e));
+                                }
                             }
                         }
                         if(item.getModelObject().getId() == thisUser.getId()){
@@ -184,7 +182,7 @@ public class ProjectAdministrationPage extends BasePage {
                     deleteButton.setVisible(false);
                     makeAdminList.setVisible(false);
                     for(User e : usersInProjects){
-                        if(e.getId() != thisUser.getId() && e.getRoles().get(projectID).contains("admin")){
+                        if(e.getId() != thisUser.getId() && e.getRoles().get(projectID).contains(UserRole.ADMIN.toString())){
                             deleteButton.setVisible(true);
                             makeAdminList.setVisible(true);
                             break;
