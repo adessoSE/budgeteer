@@ -30,6 +30,7 @@ import org.wickedsource.budgeteer.web.pages.budgets.details.highlights.BudgetHig
 import org.wickedsource.budgeteer.web.pages.budgets.edit.EditBudgetPage;
 import org.wickedsource.budgeteer.web.pages.budgets.hours.BudgetHoursPage;
 import org.wickedsource.budgeteer.web.pages.budgets.monthreport.single.SingleBudgetMonthReportPage;
+import org.wickedsource.budgeteer.web.pages.budgets.notes.BudgetNotesPage;
 import org.wickedsource.budgeteer.web.pages.budgets.overview.BudgetsOverviewPage;
 import org.wickedsource.budgeteer.web.pages.budgets.weekreport.single.SingleBudgetWeekReportPage;
 import org.wickedsource.budgeteer.web.pages.contract.details.ContractDetailsPage;
@@ -59,6 +60,7 @@ public class BudgetDetailsPage extends BasePage {
         add(new BookmarkablePageLink<SingleBudgetMonthReportPage>("monthReportLink", SingleBudgetMonthReportPage.class, createParameters(getParameterId())));
         addContractLinks();
         add(new BookmarkablePageLink<BudgetHoursPage>("hoursLink", BudgetHoursPage.class, createParameters(getParameterId())));
+        add(new BookmarkablePageLink<BudgetNotesPage>("notesLink", BudgetNotesPage.class, createParameters(getParameterId())));
         add(createEditLink("editLink"));
 
         Form deleteForm = new ConfirmationForm("deleteForm", this, "confirmation.delete") {
