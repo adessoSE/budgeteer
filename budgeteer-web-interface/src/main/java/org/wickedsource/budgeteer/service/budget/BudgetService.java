@@ -247,6 +247,7 @@ public class BudgetService {
         data.setDescription(budget.getDescription());
         data.setTotal(budget.getTotal());
         data.setTitle(budget.getName());
+        data.setNote(budget.getNote());
         data.setTags(mapEntitiesToTags(budget.getTags()));
         data.setImportKey(budget.getImportKey());
         data.setContract(contractDataMapper.map(budget.getContract()));
@@ -272,6 +273,7 @@ public class BudgetService {
         budget.setDescription(data.getDescription());
         budget.setTotal(data.getTotal());
         budget.setName(data.getTitle());
+        budget.setNote(data.getNote());
         budget.getTags().clear();
         budget.getTags().addAll(mapTagsToEntities(data.getTags(), budget));
         if(data.getContract() == null) {
