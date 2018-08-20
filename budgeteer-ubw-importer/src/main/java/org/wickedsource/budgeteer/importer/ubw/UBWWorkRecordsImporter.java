@@ -90,6 +90,7 @@ public class UBWWorkRecordsImporter implements WorkRecordsImporter {
         ExampleFile file = new ExampleFile();
         file.setFileName("ubw_report.xlsx");
         file.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+
         try {
             Date date = new Date();
             Calendar maxCalendar = Calendar.getInstance();
@@ -107,8 +108,6 @@ public class UBWWorkRecordsImporter implements WorkRecordsImporter {
             style.setBorderRight(BorderStyle.THIN);
             style.setBorderLeft(BorderStyle.THIN);
             style.setDataFormat((short) 14);
-
-            Iterator<Row> rows = sheet.rowIterator();
 
             maxCalendar.setTime(date);
             maxineCalendar.setTime(date);
