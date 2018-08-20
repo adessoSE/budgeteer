@@ -1,15 +1,15 @@
 package org.wickedsource.budgeteer.importer.resourceplan;
 
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellReference;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.xssf.usermodel.*;
 import org.joda.money.CurrencyUnit;
 import org.joda.money.Money;
 import org.wickedsource.budgeteer.imports.api.*;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -146,8 +146,55 @@ public class ResourcePlanImporter implements PlanRecordsImporter {
     public ExampleFile getExampleFile() {
         ExampleFile file = new ExampleFile();
         file.setFileName("resource_plan.xlsx");
-        file.setInputStream(getClass().getResourceAsStream("/example_resource_plan.xlsx"));
         file.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        try {
+            Date date = new Date();
+            Calendar calendar = Calendar.getInstance();
+            XSSFWorkbook workbook = new XSSFWorkbook(getClass().getResourceAsStream("/example_resource_plan.xlsx"));
+            XSSFSheet sheet = workbook.getSheetAt(0);
+            XSSFRow row =  sheet.getRow(0);
+            XSSFCell cell;
+            int i = row.getLastCellNum();
+
+            XSSFCellStyle style = workbook.createCellStyle();
+            style.setDataFormat((short) 14);
+
+            calendar.setTime(date);
+
+            while (i <= 2) {
+                cell = row.createCell(i);
+                cell.setCellValue(calendar.getTime());
+                cell.setCellStyle(style);
+
+                XSSFRow tmpRow1 = sheet.getRow(1);
+                XSSFRow tmpRow2 = sheet.getRow(2);
+                XSSFCell tmpCell1 = tmpRow1.createCell(i);
+                XSSFCell tmpCell2 = tmpRow2.createCell(i);
+                if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY ||calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+                    tmpCell1.setCellValue(0);
+                    tmpCell2.setCellValue(0);
+                } else {
+                    tmpCell1.setCellValue(8);
+                    tmpCell2.setCellValue(4);
+                }
+
+                    calendar.add(Calendar.DATE, -1);
+
+
+                i--;
+            }
+
+            File tmp = File.createTempFile("example_resource_plan", ".xlsx");
+            FileOutputStream fileOutputStream = new FileOutputStream(tmp);
+            workbook.write(fileOutputStream);
+            fileOutputStream.flush();
+            fileOutputStream.close();
+
+            file.setInputStream(new FileInputStream(tmp));
+        } catch (IOException e) {
+            e.printStackTrace();
+            file.setInputStream(getClass().getResourceAsStream("/eexample_resource_plan.xlsx"));
+        }
         return file;
     }
 
