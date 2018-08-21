@@ -97,7 +97,7 @@ public class TemplateService {
      * @param templateID The ID of the template.
      */
     public void deleteTemplate(long templateID){
-        templateRepository.delete(templateID);
+        templateRepository.deleteById(templateID);
     }
 
     public void resolveDefaults(long templateId, IModel<TemplateFormInputDto> temModel){

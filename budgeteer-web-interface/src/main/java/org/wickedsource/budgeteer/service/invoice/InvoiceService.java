@@ -9,12 +9,14 @@ import org.wickedsource.budgeteer.persistence.contract.ContractRepository;
 import org.wickedsource.budgeteer.persistence.invoice.InvoiceEntity;
 import org.wickedsource.budgeteer.persistence.invoice.InvoiceFieldEntity;
 import org.wickedsource.budgeteer.persistence.invoice.InvoiceRepository;
+import org.wickedsource.budgeteer.service.UnknownEntityException;
 import org.wickedsource.budgeteer.service.contract.DynamicAttributeField;
 import org.wickedsource.budgeteer.web.pages.invoice.overview.table.InvoiceOverviewTableModel;
 
 import javax.transaction.Transactional;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -47,28 +49,45 @@ public class InvoiceService {
 
     @PreAuthorize("canReadInvoice(#invoiceId)")
     public InvoiceBaseData getInvoiceById(long invoiceId) {
-        return mapper.map(invoiceRepository.findOne(invoiceId));
+        Optional<InvoiceEntity> invoiceEntity = invoiceRepository.findById(invoiceId);
+        if(invoiceEntity.isPresent()) {
+            return mapper.map(invoiceEntity.get());
+        }else{
+            throw new UnknownEntityException(InvoiceEntity.class, invoiceId);
+        }
     }
 
     @PreAuthorize("canReadContract(#contractId)")
     public InvoiceBaseData getEmptyInvoiceModel(long contractId) {
-        ContractEntity contract = contractRepository.findOne(contractId);
-        InvoiceBaseData model = new InvoiceBaseData(contractId, contract.getName());
-        Set<ContractInvoiceField> fields = contract.getInvoiceFields();
-        for(ContractInvoiceField field : fields){
-            model.getDynamicInvoiceFields().add(new DynamicAttributeField(field.getFieldName(), ""));
+        Optional<ContractEntity> contract = contractRepository.findById(contractId);
+        if(contract.isPresent()) {
+            InvoiceBaseData model = new InvoiceBaseData(contractId, contract.get().getName());
+            Set<ContractInvoiceField> fields = contract.get().getInvoiceFields();
+            for (ContractInvoiceField field : fields) {
+                model.getDynamicInvoiceFields().add(new DynamicAttributeField(field.getFieldName(), ""));
+            }
+            return model;
+        }else{
+            throw new UnknownEntityException(ContractEntity.class, contractId);
         }
-        return model;
     }
 
     public long save(InvoiceBaseData invoiceBaseData) {
-        ContractEntity contract = contractRepository.findOne(invoiceBaseData.getContractId());
+        Optional<ContractEntity> contract = contractRepository.findById(invoiceBaseData.getContractId());
+        if(!contract.isPresent()){
+            throw new UnknownEntityException(ContractEntity.class, invoiceBaseData.getContractId());
+        }
         InvoiceEntity invoiceEntity = new InvoiceEntity();
         invoiceEntity.setId(0);
-        invoiceEntity.setContract(contract);
+        invoiceEntity.setContract(contract.get());
 
         if(invoiceBaseData.getInvoiceId() != 0){
-            invoiceEntity = invoiceRepository.findOne(invoiceBaseData.getInvoiceId());
+            Optional<InvoiceEntity>  invoice = invoiceRepository.findById(invoiceBaseData.getInvoiceId());
+            if(invoice.isPresent()) {
+                invoiceEntity = invoice.get();
+            }else{
+                throw new UnknownEntityException(InvoiceEntity.class, invoiceBaseData.getInvoiceId());
+            }
         }
         //Update basic information
         invoiceEntity.setName(invoiceBaseData.getInvoiceName());
@@ -106,7 +125,7 @@ public class InvoiceService {
                     // see if the Project already contains a field with this name. If not, create a new one
                     ContractInvoiceField contractInvoiceField = contractRepository.findInvoiceFieldByName(invoiceBaseData.getContractId(), fields.getName().trim());
                     if (contractInvoiceField == null) {
-                        contractInvoiceField = new ContractInvoiceField(0, fields.getName().trim(), contract);
+                        contractInvoiceField = new ContractInvoiceField(0, fields.getName().trim(), contract.get());
                     }
                     InvoiceFieldEntity field = new InvoiceFieldEntity();
                     field.setId(0);
@@ -123,6 +142,6 @@ public class InvoiceService {
 
     @PreAuthorize("canReadInvoice(#invoiceId)")
     public void deleteInvoice(long invoiceId) {
-        invoiceRepository.delete(invoiceId);
+        invoiceRepository.deleteById(invoiceId);
     }
 }

@@ -17,6 +17,8 @@ import org.wickedsource.budgeteer.persistence.person.PersonEntity;
 import org.wickedsource.budgeteer.persistence.person.PersonRepository;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 
+import java.util.Optional;
+
 /**
  * A custom {@link SecurityExpressionRoot} that implements the {@link MethodSecurityExpressionOperations} interface
  * for the default expressions like {@link #hasPermission(Object, Object)}.
@@ -106,10 +108,10 @@ public class BudgeteerMethodSecurityExpressionRoot extends SecurityExpressionRoo
      * @see BudgeteerSession#getProjectId()
      */
     public boolean canReadBudget(Long budgetId) {
-        BudgetEntity entity = budgetRepository.findOne(budgetId);
+        Optional<BudgetEntity> entity = budgetRepository.findById(budgetId);
 
-        if(entity != null) {
-            long budgetProjectId = entity.getProject().getId();
+        if(entity.isPresent()) {
+            long budgetProjectId = entity.get().getProject().getId();
             long selectedProjectId = getCurrentProjectId();
 
             return selectedProjectId == budgetProjectId;
@@ -145,10 +147,10 @@ public class BudgeteerMethodSecurityExpressionRoot extends SecurityExpressionRoo
      * @see BudgeteerSession#getProjectId()
      */
     public boolean canReadContract(Long contractId) {
-        ContractEntity entity = contractRepository.findOne(contractId);
+        Optional<ContractEntity> entity = contractRepository.findById(contractId);
 
-        if(entity != null) {
-            long contractProjectId = entity.getProject().getId();
+        if(entity.isPresent()) {
+            long contractProjectId = entity.get().getProject().getId();
             long selectedProjectId = getCurrentProjectId();
 
             return selectedProjectId == contractProjectId;
@@ -169,10 +171,10 @@ public class BudgeteerMethodSecurityExpressionRoot extends SecurityExpressionRoo
      * @see BudgeteerSession#getProjectId()
      */
     public boolean canReadInvoice(Long invoiceId) {
-        InvoiceEntity entity = invoiceRepository.findOne(invoiceId);
+        Optional<InvoiceEntity> entity = invoiceRepository.findById(invoiceId);
 
-        if(entity != null) {
-            long contractProjectId = entity.getContract().getProject().getId();
+        if(entity.isPresent()) {
+            long contractProjectId = entity.get().getContract().getProject().getId();
             long selectedProjectId = getCurrentProjectId();
 
             return selectedProjectId == contractProjectId;
@@ -192,10 +194,10 @@ public class BudgeteerMethodSecurityExpressionRoot extends SecurityExpressionRoo
      * @see BudgeteerSession#getProjectId()
      */
     public boolean canReadPerson(Long personId) {
-        PersonEntity entity = personRepository.findOne(personId);
+        Optional<PersonEntity> entity = personRepository.findById(personId);
 
-        if(entity != null) {
-            long personProjectId = entity.getProject().getId();
+        if(entity.isPresent()) {
+            long personProjectId = entity.get().getProject().getId();
             long selectedProjectId = getCurrentProjectId();
 
             return selectedProjectId == personProjectId;

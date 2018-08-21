@@ -7,7 +7,6 @@ buildscript {
 
     dependencies {
         classpath group: 'org.springframework.boot', name: 'spring-boot-gradle-plugin', version: "${spring_boot_version}"
-        classpath group: 'org.springframework', name: 'springloaded', version: "${springloaded_version}"
     }
 }
 
@@ -108,7 +107,7 @@ dependencies {
             [group: 'org.dbunit', name: 'dbunit', version: "${dbunit_version}"],
     )
 
-    testCompile "org.springframework.boot:spring-boot-starter-test"
+    testCompile "org.springframework.boot:spring-boot-starter-test:${spring_boot_version}"
     testCompile group: 'org.springframework.security', name: 'spring-security-test', version: "${spring_security_test_version}"
 
     testCompile('org.junit.platform:junit-platform-launcher:1.0.3')

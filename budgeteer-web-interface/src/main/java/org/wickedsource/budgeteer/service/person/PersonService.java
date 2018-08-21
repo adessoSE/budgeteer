@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.method.P;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.wickedsource.budgeteer.persistence.budget.BudgetEntity;
 import org.wickedsource.budgeteer.persistence.budget.BudgetRepository;
 import org.wickedsource.budgeteer.persistence.person.DailyRateEntity;
 import org.wickedsource.budgeteer.persistence.person.PersonEntity;
@@ -11,11 +12,13 @@ import org.wickedsource.budgeteer.persistence.person.PersonRepository;
 import org.wickedsource.budgeteer.persistence.record.MissingDailyRateForBudgetBean;
 import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
 import org.wickedsource.budgeteer.service.DateRange;
+import org.wickedsource.budgeteer.service.UnknownEntityException;
 import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -95,25 +98,35 @@ public class PersonService {
      * @param person the data to save in the database.
      */
     public void savePersonWithRates(PersonWithRates person) {
-        PersonEntity personEntity = personRepository.findOne(person.getPersonId());
-        personEntity.setName(person.getName());
-        personEntity.setImportKey(person.getImportKey());
+        Optional<PersonEntity> personEntity = personRepository.findById(person.getPersonId());
+        if(!personEntity.isPresent()){
+            throw new UnknownEntityException(PersonEntity.class, person.getPersonId());
+        }
+        personEntity.get().setName(person.getName());
+        personEntity.get().setImportKey(person.getImportKey());
 
         List<DailyRateEntity> dailyRates = new ArrayList<DailyRateEntity>();
         for (PersonRate rate : person.getRates()) {
             DailyRateEntity rateEntity = new DailyRateEntity();
             rateEntity.setRate(rate.getRate());
-            rateEntity.setBudget(budgetRepository.findOne(rate.getBudget().getId()));
-            rateEntity.setPerson(personEntity);
+            Optional<BudgetEntity> budgetEntity = budgetRepository.findById(rate.getBudget().getId());
+
+            if(budgetEntity.isPresent()) {
+                rateEntity.setBudget(budgetEntity.get());
+            }else{
+                throw new UnknownEntityException(BudgetEntity.class, rate.getBudget().getId());
+            }
+
+            rateEntity.setPerson(personEntity.get());
             rateEntity.setDateStart(rate.getDateRange().getStartDate());
             rateEntity.setDateEnd(rate.getDateRange().getEndDate());
             dailyRates.add(rateEntity);
             workRecordRepository.updateDailyRates(rate.getBudget().getId(), person.getPersonId(), rate.getDateRange().getStartDate(), rate.getDateRange().getEndDate(), rate.getRate());
         }
 
-        personEntity.getDailyRates().clear();
-        personEntity.getDailyRates().addAll(dailyRates);
-        personRepository.save(personEntity);
+        personEntity.get().getDailyRates().clear();
+        personEntity.get().getDailyRates().addAll(dailyRates);
+        personRepository.save(personEntity.get());
     }
 
     /**
@@ -129,7 +142,7 @@ public class PersonService {
 
     @PreAuthorize("canReadPerson(#personId)")
     public void deletePerson(long personId) {
-        personRepository.delete(personId);
+        personRepository.deleteById(personId);
     }
 
     @PreAuthorize("canReadBudget(#budgetId)")

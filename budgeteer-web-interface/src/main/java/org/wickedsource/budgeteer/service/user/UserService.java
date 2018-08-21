@@ -11,6 +11,7 @@ import org.wickedsource.budgeteer.service.UnknownEntityException;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -58,16 +59,16 @@ public class UserService {
      */
     @PreAuthorize("canReadProject(#projectId)")
     public void removeUserFromProject(long projectId, long userId) {
-        ProjectEntity project = projectRepository.findOne(projectId);
-        if (project == null) {
+        Optional<ProjectEntity> project = projectRepository.findById(projectId);
+        if (!project.isPresent()) {
             throw new UnknownEntityException(ProjectEntity.class, projectId);
         }
-        UserEntity user = userRepository.findOne(userId);
-        if (user == null) {
+        Optional<UserEntity> user = userRepository.findById(userId);
+        if (!user.isPresent()) {
             throw new UnknownEntityException(UserEntity.class, userId);
         }
-        user.getAuthorizedProjects().remove(project);
-        project.getAuthorizedUsers().remove(user);
+        user.get().getAuthorizedProjects().remove(project.get());
+        project.get().getAuthorizedUsers().remove(user.get());
     }
 
     /**
@@ -78,16 +79,16 @@ public class UserService {
      */
     @PreAuthorize("canReadProject(#projectId)")
     public void addUserToProject(long projectId, long userId) {
-        ProjectEntity project = projectRepository.findOne(projectId);
-        if (project == null) {
+        Optional<ProjectEntity> project = projectRepository.findById(projectId);
+        if (!project.isPresent()) {
             throw new UnknownEntityException(ProjectEntity.class, projectId);
         }
-        UserEntity user = userRepository.findOne(userId);
-        if (user == null) {
+        Optional<UserEntity> user = userRepository.findById(userId);
+        if (!user.isPresent()) {
             throw new UnknownEntityException(UserEntity.class, userId);
         }
-        user.getAuthorizedProjects().add(project);
-        project.getAuthorizedUsers().add(user);
+        user.get().getAuthorizedProjects().add(project.get());
+        project.get().getAuthorizedUsers().add(user.get());
     }
 
     /**

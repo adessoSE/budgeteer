@@ -3,7 +3,6 @@ package org.wickedsource.budgeteer.service.budget;
 import org.joda.money.BigMoney;
 import org.joda.money.Money;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.method.P;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.wickedsource.budgeteer.MoneyUtil;
@@ -25,10 +24,7 @@ import org.wickedsource.budgeteer.web.components.listMultipleChoiceWithGroups.Op
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 
 @Service
@@ -79,8 +75,12 @@ public class BudgetService {
      */
     @PreAuthorize("canReadBudget(#budgetId)")
     public BudgetBaseData loadBudgetBaseData(long budgetId) {
-        BudgetEntity budget = budgetRepository.findOne(budgetId);
-        return budgetBaseDataMapper.map(budget);
+        Optional<BudgetEntity> budget = budgetRepository.findById(budgetId);
+        if(budget.isPresent()){
+            return budgetBaseDataMapper.map(budget.get());
+        }else{
+            throw new UnknownEntityException(BudgetEntity.class, budgetId);
+        }
     }
 
     private List<BudgetEntity> loadBudgetEntities(long projectId, BudgetTagFilter filter) {
@@ -124,8 +124,12 @@ public class BudgetService {
      */
     @PreAuthorize("canReadBudget(#budgetId)")
     public BudgetDetailData loadBudgetDetailData(long budgetId) {
-        BudgetEntity budget = budgetRepository.findOne(budgetId);
-        return enrichBudgetEntity(budget);
+        Optional<BudgetEntity> budget = budgetRepository.findById(budgetId);
+        if(budget.isPresent()){
+            return enrichBudgetEntity(budget.get());
+        }else{
+            throw new UnknownEntityException(BudgetEntity.class, budgetId);
+        }
     }
 
     private BudgetDetailData enrichBudgetEntity(BudgetEntity entity) {
@@ -158,14 +162,14 @@ public class BudgetService {
 
     private Money toMoneyNullsafe(Double cents) {
         if (cents == null) {
-            return MoneyUtil.createMoneyFromCents(0l);
+            return MoneyUtil.createMoneyFromCents(0L);
         } else {
             return MoneyUtil.createMoneyFromCents(Math.round(cents));
         }
     }
 
     private List<String> mapEntitiesToTags(List<BudgetTagEntity> tagEntities) {
-        List<String> tags = new ArrayList<String>();
+        List<String> tags = new ArrayList<>();
         for (BudgetTagEntity entity : tagEntities) {
             tags.add(entity.getTag());
         }
@@ -173,7 +177,7 @@ public class BudgetService {
     }
 
     private List<BudgetTagEntity> mapTagsToEntities(List<String> tags, BudgetEntity budget) {
-        List<BudgetTagEntity> entities = new ArrayList<BudgetTagEntity>();
+        List<BudgetTagEntity> entities = new ArrayList<>();
         if (tags != null) {
             for (String tag : tags) {
                 BudgetTagEntity entity = new BudgetTagEntity();
@@ -195,7 +199,7 @@ public class BudgetService {
     @PreAuthorize("canReadProject(#projectId)")
     public List<BudgetDetailData> loadBudgetsDetailData(long projectId, BudgetTagFilter filter) {
         List<BudgetEntity> budgets = loadBudgetEntities(projectId, filter);
-        List<BudgetDetailData> dataList = new ArrayList<BudgetDetailData>();
+        List<BudgetDetailData> dataList = new ArrayList<>();
         for (BudgetEntity entity : budgets) {
             // TODO: 4 additional database queries per loop! These can yet be optimized to 4 queries total!
             dataList.add(enrichBudgetEntity(entity));
@@ -239,10 +243,11 @@ public class BudgetService {
      */
     @PreAuthorize("canReadBudget(#budgetId)")
     public EditBudgetData loadBudgetToEdit(long budgetId) {
-        BudgetEntity budget = budgetRepository.findOne(budgetId);
-        if (budget == null) {
+        Optional<BudgetEntity> budgetEntity = budgetRepository.findById(budgetId);
+        if (!budgetEntity.isPresent()) {
             throw new UnknownEntityException(BudgetEntity.class, budgetId);
         }
+        BudgetEntity budget = budgetEntity.get();
         EditBudgetData data = new EditBudgetData();
         data.setId(budget.getId());
         data.setDescription(budget.getDescription());
@@ -265,9 +270,14 @@ public class BudgetService {
         assert data != null;
         BudgetEntity budget = new BudgetEntity();
         if (data.getId() != 0) {
-            budget = budgetRepository.findOne(data.getId());
+            Optional<BudgetEntity> budgetEntity = budgetRepository.findById(data.getId());
+            if (budgetEntity.isPresent()) {
+                budget = budgetEntity.get();
+            }else{
+                throw new UnknownEntityException(BudgetEntity.class, data.getId());
+            }
         } else {
-            ProjectEntity project = projectRepository.findOne(data.getProjectId());
+            ProjectEntity project = projectRepository.findContractFieldById(data.getProjectId());
             budget.setProject(project);
         }
         budget.setImportKey(data.getImportKey());
@@ -280,8 +290,12 @@ public class BudgetService {
         if(data.getContract() == null) {
             budget.setContract(null);
         } else {
-            ContractEntity contractEntity = contractRepository.findOne(data.getContract().getContractId());
-            budget.setContract(contractEntity);
+            Optional<ContractEntity> contractEntity = contractRepository.findById(data.getContract().getContractId());
+            if(contractEntity.isPresent()) {
+                budget.setContract(contractEntity.get());
+            }else{
+                throw new UnknownEntityException(ContractEntity.class, data.getContract().getContractId());
+            }
         }
         budgetRepository.save(budget);
         return budget.getId();
@@ -296,7 +310,7 @@ public class BudgetService {
      */
     @PreAuthorize("canReadProject(#projectId)")
     public List<Double> loadBudgetUnits(long projectId) {
-        List<Double> units = new ArrayList<Double>();
+        List<Double> units = new ArrayList<>();
         units.add(1d);
         List<Money> rates = rateRepository.getDistinctRatesInCents(projectId);
         for (Money rate : rates) {
@@ -307,12 +321,12 @@ public class BudgetService {
 
     @PreAuthorize("canReadBudget(#id)")
     public void deleteBudget(long id) {
-        budgetRepository.delete(id);
+        budgetRepository.deleteById(id);
     }
 
     @PreAuthorize("canReadContract(#cId)")
     public List<BudgetDetailData> loadBudgetByContract(long cId){
-        List<BudgetDetailData> result = new LinkedList<BudgetDetailData>();
+        List<BudgetDetailData> result = new LinkedList<>();
         List<BudgetEntity> temp =budgetRepository.findByContractId(cId);
         if(temp != null){
             for(BudgetEntity b : temp){
@@ -324,12 +338,12 @@ public class BudgetService {
 
     public List<OptionGroup<BudgetBaseData>> getPossibleBudgetDataForPersonAndProject(long projectId, long personId){
 
-        List<BudgetBaseData> allBudgets = loadBudgetBaseDataForProject(BudgeteerSession.get().getProjectId());
+        List<BudgetBaseData> allBudgets = loadBudgetBaseDataForProject(projectId);
         List<BudgetBaseData> personalBudgets = loadBudgetBaseDataForPerson(personId);
 
         allBudgets.removeAll(personalBudgets);
 
-        List<OptionGroup<BudgetBaseData>> result = new LinkedList();
+        List<OptionGroup<BudgetBaseData>> result = new LinkedList<>();
         if(!personalBudgets.isEmpty()) {
             result.add(new OptionGroup<>("Used", personalBudgets));
         }
