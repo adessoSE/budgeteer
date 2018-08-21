@@ -93,13 +93,13 @@ public class UserService {
     /**
      * Checks a users login credentials.
      *
-     * @param username username of the user to login
+     * @param user     username or mail of the user to login
      * @param password plain text password of the user to login
      * @return a User object of the logged in user on successful login.
      * @throws InvalidLoginCredentialsException in case of invalid credentials
      */
-    public User login(String username, String password) throws InvalidLoginCredentialsException {
-        UserEntity entity = userRepository.findByNameAndPassword(username, passwordHasher.hash(password));
+    public User login(String user, String password) throws InvalidLoginCredentialsException {
+        UserEntity entity = userRepository.findByNameOrMailAndPassword(user, passwordHasher.hash(password));
         if (entity == null) {
             throw new InvalidLoginCredentialsException();
         }
@@ -125,14 +125,17 @@ public class UserService {
      * @param username the users name
      * @param password the users password
      */
-    public void registerUser(String username, String password) throws UsernameAlreadyInUseException {
-        if (userRepository.findByName(username) == null) {
+    public void registerUser(String username, String mail, String password) throws UsernameAlreadyInUseException, MailAlreadyInUseException {
+        if (userRepository.findByName(username) != null) {
+            throw new UsernameAlreadyInUseException();
+        } else if (userRepository.findByMail(mail) != null) {
+            throw new MailAlreadyInUseException();
+        } else {
             UserEntity user = new UserEntity();
             user.setName(username);
+            user.setMail(mail);
             user.setPassword(passwordHasher.hash(password));
             userRepository.save(user);
-        } else {
-            throw new UsernameAlreadyInUseException();
         }
     }
 
