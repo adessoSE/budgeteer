@@ -148,4 +148,67 @@ public class UserService {
         userEntity.setPassword("password"); // dummy password
         userRepository.save(userEntity);
     }
+
+    public boolean checkPassword(long id, String password) {
+        UserEntity entity = userRepository.findOne(id);
+
+        if (entity.getPassword().equals(passwordHasher.hash(password)))
+            return true;
+        else
+            return false;
+    }
+
+    public void resetPassword(String mail) throws MailNotFoundException {
+        UserEntity userEntity = userRepository.findByMail(mail);
+
+        if (userEntity == null) {
+            throw new MailNotFoundException();
+        } else {
+
+        }
+    }
+
+    public EditUserData loadUserToEdit(long id) {
+        UserEntity userEntity = userRepository.findOne(id);
+
+        if (userEntity == null)
+            throw new UnknownEntityException(UserEntity.class, id);
+
+        EditUserData editUserData = new EditUserData();
+        editUserData.setId(userEntity.getId());
+        editUserData.setName(userEntity.getName());
+        editUserData.setMail(userEntity.getMail());
+        editUserData.setPassword(userEntity.getPassword());
+        return editUserData;
+    }
+
+    public long saveUser(EditUserData data, boolean changePassword) throws UsernameAlreadyInUseException, MailAlreadyInUseException {
+        assert data != null;
+        UserEntity userEntity = new UserEntity();
+
+        UserEntity testEntity = userRepository.findByName(data.getName());
+        if (testEntity != null)
+            if (testEntity.getId() != data.getId())
+                throw new UsernameAlreadyInUseException();
+
+        testEntity = userRepository.findByMail(data.getMail());
+        if (testEntity != null)
+            if (testEntity.getId() != data.getId())
+                throw new MailAlreadyInUseException();
+
+
+        userEntity = userRepository.findOne(data.getId());
+        userEntity.setId(data.getId());
+        userEntity.setName(data.getName());
+        userEntity.setMail(data.getMail());
+
+        if (changePassword)
+            userEntity.setPassword(passwordHasher.hash(data.getPassword()));
+        else
+            userEntity.setPassword(data.getPassword());
+
+        userRepository.save(userEntity);
+
+        return userEntity.getId();
+    }
 }
