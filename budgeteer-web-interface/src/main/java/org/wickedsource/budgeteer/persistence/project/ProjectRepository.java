@@ -11,6 +11,4 @@ public interface ProjectRepository extends CrudRepository<ProjectEntity, Long> {
 
     @Query("select p from ProjectEntity p join fetch p.contractFields where p.id = :id ")
     public ProjectEntity findContractFieldById(@Param("id") long id);
-
-    Object findOne(long anyLong);
 }

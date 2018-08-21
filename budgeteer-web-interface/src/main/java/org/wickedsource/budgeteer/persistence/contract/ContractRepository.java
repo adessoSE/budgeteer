@@ -61,7 +61,7 @@ public interface ContractRepository extends CrudRepository<ContractEntity, Long>
             "from WorkRecordEntity wr where wr.budget.contract.id = :contractId "+
             "AND (wr.year = :year AND wr.month = :month)" +
             "),0l)," +
-            "coalesce((select sum(i.invoiceSum) from InvoiceEntity i where i.contract.id = :contractId AND (i.year = :year AND i.month = :month) ),0l)" +
+            "coalesce((select sum(i.invoiceSum) from InvoiceEntity i where i.contract.id = :contractId AND (i.year = :year AND i.month = :month) ),0L)" +
             ",:month +0" +
             ") from ContractEntity c where c.id = :contractId")
     ContractStatisticBean getContractStatisticByMonthAndYear(@Param("contractId") Long contractId, @Param("month") Integer month, @Param("year") Integer year);
@@ -69,7 +69,7 @@ public interface ContractRepository extends CrudRepository<ContractEntity, Long>
     @Query("select coalesce(sum(wr.minutes * wr.dailyRate/ 60 / 8),0) from WorkRecordEntity wr where wr.budget.contract.id = :contractId")
     Double getSpentBudgetByContractId(@Param("contractId") long contractId);
 
-    @Query("select (c.budget - coalesce((select sum(wr.minutes * wr.dailyRate)/ 60 / 8 from WorkRecordEntity wr where wr.budget.contract.id = :contractId) ,0)) from ContractEntity c where c.id = :contractId")
+    @Query("select (c.budget - coalesce((select sum(wr.minutes * wr.dailyRate)/ 60 / 8 from WorkRecordEntity wr where wr.budget.contract.id = :contractId) ,0L)) from ContractEntity c where c.id = :contractId")
     Double getBudgetLeftByContractId(@Param("contractId") long contractId);
     
     @Modifying

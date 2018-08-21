@@ -24,13 +24,13 @@ public interface BudgetRepository extends CrudRepository<BudgetEntity, Long> {
     @Query("select distinct b from BudgetEntity b join b.tags t where t.tag in (:tags) and b.project.id=:projectId order by b.name")
     List<BudgetEntity> findByAtLeastOneTag(@Param("projectId") long projectId, @Param("tags") List<String> tags);
 
-    @Query("select new org.wickedsource.budgeteer.persistence.budget.MissingBudgetTotalBean(b.id, b.name) from BudgetEntity b where b.total = 0 and b.project.id=:projectId order by b.name")
+    @Query("select new org.wickedsource.budgeteer.persistence.budget.MissingBudgetTotalBean(b.id, b.name) from BudgetEntity b where b.total = 0L and b.project.id=:projectId order by b.name")
     List<MissingBudgetTotalBean> getMissingBudgetTotalsForProject(@Param("projectId") long projectId);
 
     /**
      * Returns a MissingBudgetTotalBean object for the given Budget if it's budget total is zero. Returns null, if the budget is not zero!
      */
-    @Query("select new org.wickedsource.budgeteer.persistence.budget.MissingBudgetTotalBean(b.id, b.name) from BudgetEntity b where b.total = 0 and b.id=:budgetId order by b.name")
+    @Query("select new org.wickedsource.budgeteer.persistence.budget.MissingBudgetTotalBean(b.id, b.name) from BudgetEntity b where b.total = 0L and b.id=:budgetId order by b.name")
     MissingBudgetTotalBean getMissingBudgetTotalForBudget(@Param("budgetId") long budgetId);
 
 

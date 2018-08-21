@@ -189,7 +189,7 @@ class WorkRecordRepositoryTest extends IntegrationTestTemplate {
         }
         record = repository.findById(6L);
         if(record.isPresent()) {
-            Assertions.assertEquals(MoneyUtil.createMoneyFromCents(50000L), record.get().getDailyRate());
+            Assertions.assertEquals(MoneyUtil.createMoneyFromCents(10000L), record.get().getDailyRate());
         }else{
             throw new UnknownEntityException(WorkRecordEntity.class, 6L);
         }

@@ -45,17 +45,17 @@ public class BudgetEntity {
     @JoinColumn(name = "PROJECT_ID")
     private ProjectEntity project;
 
-    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "budget")
-    private List<BudgetTagEntity> tags = new ArrayList<BudgetTagEntity>();
+    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "budget")
+    private List<BudgetTagEntity> tags = new ArrayList<>();
 
     @OneToMany(mappedBy = "budget", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    private List<WorkRecordEntity> workRecords = new ArrayList<WorkRecordEntity>();
+    private List<WorkRecordEntity> workRecords = new ArrayList<>();
 
     @OneToMany(mappedBy = "budget", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    private List<PlanRecordEntity> planRecords = new ArrayList<PlanRecordEntity>();
+    private List<PlanRecordEntity> planRecords = new ArrayList<>();
 
     @OneToMany(mappedBy = "budget", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    private List<DailyRateEntity> dailyRates = new ArrayList<DailyRateEntity>();
+    private List<DailyRateEntity> dailyRates = new ArrayList<>();
 
     @Column(nullable = false, name = "IMPORT_KEY")
     private String importKey;

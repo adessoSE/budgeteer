@@ -61,7 +61,7 @@ class UserServiceTest extends ServiceTestTemplate{
     @Test
     void testAddUserToProjectSuccess() {
         when(userRepository.findById(1L)).thenReturn(createUserEntity());
-        when(projectRepository.findOne(1L)).thenReturn(createProjectEntity());
+        when(projectRepository.findById(1L)).thenReturn(createProjectEntity());
         service.addUserToProject(1L, 1L);
         // assertion not possible when mocking repository
     }
@@ -77,7 +77,7 @@ class UserServiceTest extends ServiceTestTemplate{
     @Test
     void testAddUserToProjectFailUserNotFound() {
         Assertions.assertThrows(UnknownEntityException.class, () -> {
-            when(projectRepository.findOne(1L)).thenReturn(createProjectEntity());
+            when(projectRepository.findById(1L)).thenReturn(createProjectEntity());
             service.addUserToProject(1L, 1L);
         });
     }
@@ -85,7 +85,7 @@ class UserServiceTest extends ServiceTestTemplate{
     @Test
     void testRemoveUserFromProjectSuccess() {
         when(userRepository.findById(1L)).thenReturn(createUserEntity());
-        when(projectRepository.findOne(1L)).thenReturn(createProjectEntity());
+        when(projectRepository.findById(1L)).thenReturn(createProjectEntity());
         service.removeUserFromProject(1L, 1L);
         // assertion not possible when mocking repository
     }
@@ -101,7 +101,7 @@ class UserServiceTest extends ServiceTestTemplate{
     @Test
     void testRemoveUserFromProjectFailUserNotFound() {
         Assertions.assertThrows(UnknownEntityException.class, () -> {
-            when(projectRepository.findOne(1L)).thenReturn(createProjectEntity());
+            when(projectRepository.findById(1L)).thenReturn(createProjectEntity());
             service.removeUserFromProject(1L, 1L);
         });
     }
@@ -131,11 +131,11 @@ class UserServiceTest extends ServiceTestTemplate{
         return Optional.of(user);
     }
 
-    private ProjectEntity createProjectEntity() {
+    private Optional<ProjectEntity> createProjectEntity() {
         ProjectEntity project = new ProjectEntity();
         project.setId(1L);
         project.setName("name");
         project.setAuthorizedUsers(new ArrayList<>());
-        return project;
+        return Optional.of(project);
     }
 }

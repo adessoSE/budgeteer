@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.budgeteer.IntegrationTestTemplate;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 class BudgetRepositoryTest extends IntegrationTestTemplate {
@@ -43,7 +44,7 @@ class BudgetRepositoryTest extends IntegrationTestTemplate {
     void testFindByAtLeastOneTag() {
         List<BudgetEntity> budgets = budgetRepository.findByAtLeastOneTag(1L, Arrays.asList("Tag 1", "Tag 3"));
         Assertions.assertEquals(2, budgets.size());
-        List<BudgetEntity> budgets2 = budgetRepository.findByAtLeastOneTag(1L, Arrays.asList("Tag 3"));
+        List<BudgetEntity> budgets2 = budgetRepository.findByAtLeastOneTag(1L, Collections.singletonList("Tag 3"));
         Assertions.assertEquals(1, budgets2.size());
     }
 

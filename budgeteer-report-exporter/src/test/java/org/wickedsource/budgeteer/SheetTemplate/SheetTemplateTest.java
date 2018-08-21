@@ -10,7 +10,7 @@ import org.mockito.Mockito;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
@@ -123,7 +123,7 @@ class SheetTemplateTest {
 		assertTrue(st.cellContainsTemplateTag(sheet.getRow(4).getCell(100)));
 		assertTrue(st.cellContainsTemplateTag(sheet.getRow(4).getCell(3)));
 	}
-	
+
 	@Test
 	void testFindTemplateRow() {
 		assertEquals(4,st.getTemplateRowIndex());

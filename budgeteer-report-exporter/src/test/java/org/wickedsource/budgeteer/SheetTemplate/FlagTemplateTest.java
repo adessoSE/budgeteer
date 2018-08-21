@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import java.io.FileInputStream;
 import java.io.InputStream;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 class FlagTemplateTest {
 
@@ -47,5 +47,4 @@ class FlagTemplateTest {
 		assertFalse(flagTemplate.isFlagTag("{flag}"));
 		assertFalse(flagTemplate.isFlagTag("{test}"));
 	}
-
 }
