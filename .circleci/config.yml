@@ -32,7 +32,7 @@ jobs:
               if [ "${CIRCLE_BRANCH}" == "test_deploy" ];
               then ./gradlew budgeteer-web-interface:artifactoryPublish -x test -Dsnapshot=true -Dbintray.user=$BINTRAY_USER
               -Dbintray.key=$BINTRAY_KEY -Dbuild.number=$CIRCLE_BUILD_NUM;
-          fi
+              fi
       - run:
           name: Deploy to bintray
           command:
@@ -40,7 +40,7 @@ jobs:
               if [ "${CIRCLE_BRANCH}" == "master" ];
               then ./gradlew budgeteer-web-interface:bintrayUpload -x test -Dbintray.user=$BINTRAY_USER
               -Dbintray.key=$BINTRAY_KEY -Dbuild.number=$CIRCLE_BUILD_NUM;
-          fi
+              fi
       - store_test_results:
           path: ~/artifacts/junit
       - store_artifacts:
