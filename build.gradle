@@ -13,9 +13,14 @@ allprojects {
     version = getBuildVersion('1.0.9.BETA')
 }
 
+
+
 subprojects {
+
     apply plugin: 'java'
     apply plugin: 'jacoco'
+
+
 
     repositories {
         jcenter()

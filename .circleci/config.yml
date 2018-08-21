@@ -29,3 +29,19 @@ jobs:
           path: ~/artifacts/junit
       - store_artifacts:
           path: ~/artifacts
+  deployment:
+      steps:
+      - type: deploy
+          name: "Deploy snapshot to artifactory"
+        command: |
+          if [ "${CIRCLE_BRANCH}" == "test_deploy" ];
+            then ./gradlew budgeteer-web-interface:artifactoryPublish -x test -Dsnapshot=true -Dbintray.user=$BINTRAY_USER
+                  -Dbintray.key=$BINTRAY_KEY -Dbuild.number=$CIRCLE_BUILD_NUM;
+          fi
+      - type: deploy
+          name: "Deploy to bintray"
+        command: |
+          if [ "${CIRCLE_BRANCH}" == "master" ];
+            then ./gradlew budgeteer-web-interface:bintrayUpload -x test -Dbintray.user=$BINTRAY_USER
+                  -Dbintray.key=$BINTRAY_KEY -Dbuild.number=$CIRCLE_BUILD_NUM;
+          fi
