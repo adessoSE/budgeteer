@@ -112,6 +112,7 @@ class BudgetServiceTest extends ServiceTestTemplate {
         Assertions.assertEquals(budget.getImportKey(), data.getImportKey());
         Assertions.assertEquals(budget.getName(), data.getTitle());
         Assertions.assertEquals(budget.getId(), data.getId());
+        Assertions.assertEquals(budget.getNote(), data.getNote());
     }
 
     @Test
@@ -128,6 +129,7 @@ class BudgetServiceTest extends ServiceTestTemplate {
         Assertions.assertEquals(data.getTags(), mapEntitiesToTags(budget.getTags()));
         Assertions.assertEquals(data.getTitle(), budget.getName());
         Assertions.assertEquals(data.getTotal(), budget.getTotal());
+        Assertions.assertEquals(data.getNote(), budget.getNote());
         Assertions.assertNull(data.getContract());
     }
 
