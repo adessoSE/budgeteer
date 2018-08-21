@@ -15,6 +15,7 @@ import org.wickedsource.budgeteer.web.BudgeteerSettings;
 import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
 import org.wickedsource.budgeteer.web.pages.base.dialogpage.DialogPage;
+import org.wickedsource.budgeteer.web.pages.user.forgotpassword.ForgotPasswordPage;
 import org.wickedsource.budgeteer.web.pages.user.register.RegisterPage;
 import org.wickedsource.budgeteer.web.pages.user.selectproject.SelectProjectPage;
 import org.wickedsource.budgeteer.web.pages.user.selectproject.SelectProjectWithKeycloakPage;
@@ -61,6 +62,7 @@ public class LoginPage extends DialogPage {
             form.add(new RequiredTextField<String>("username", model(from(form.getModel()).getUsername())));
             form.add(new PasswordTextField("password", model(from(form.getModel()).getPassword())));
             form.add(new BookmarkablePageLink<RegisterPage>("registerLink", RegisterPage.class));
+            form.add(new BookmarkablePageLink<ForgotPasswordPage>("forgotPasswordLink", ForgotPasswordPage.class));
         }
     }
 }
