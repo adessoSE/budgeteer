@@ -158,14 +158,15 @@ public class ResourcePlanImporter implements PlanRecordsImporter {
             XSSFSheet sheet = workbook.getSheetAt(0);
             XSSFRow row = sheet.getRow(0);
             XSSFCell cell;
-            int i = row.getLastCellNum();
+            int i = 5;
 
             XSSFCellStyle style = workbook.createCellStyle();
             style.setDataFormat((short) 14);
 
             calendar.setTime(date);
+            calendar.add(Calendar.DATE, -39);
 
-            while (i <= 2) {
+            while (i < 45) {
                 cell = row.createCell(i);
                 cell.setCellValue(calendar.getTime());
                 cell.setCellStyle(style);
@@ -183,8 +184,8 @@ public class ResourcePlanImporter implements PlanRecordsImporter {
                     tmpCell2.setCellValue(4);
                 }
 
-                calendar.add(Calendar.DATE, -1);
-                i--;
+                calendar.add(Calendar.DATE, +1);
+                i++;
             }
 
             File tmp = File.createTempFile("example_resource_plan", ".xlsx");
@@ -196,7 +197,7 @@ public class ResourcePlanImporter implements PlanRecordsImporter {
             file.setInputStream(new FileInputStream(tmp));
         } catch (IOException e) {
             e.printStackTrace();
-            file.setInputStream(getClass().getResourceAsStream("/eexample_resource_plan.xlsx"));
+            file.setInputStream(getClass().getResourceAsStream("/example_resource_plan.xlsx"));
         }
         return file;
     }
