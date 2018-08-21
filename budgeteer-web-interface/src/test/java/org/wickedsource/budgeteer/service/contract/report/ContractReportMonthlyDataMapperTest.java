@@ -12,6 +12,7 @@ import org.wickedsource.budgeteer.persistence.contract.ContractEntity;
 import org.wickedsource.budgeteer.persistence.contract.ContractRepository;
 
 import java.util.Date;
+import java.util.Optional;
 
 class ContractReportMonthlyDataMapperTest extends IntegrationTestTemplate {
 
@@ -25,17 +26,25 @@ class ContractReportMonthlyDataMapperTest extends IntegrationTestTemplate {
     @DatabaseSetup("contractMapperTest.xml")
     @DatabaseTearDown(value = "contractMapperTest.xml", type = DatabaseOperation.DELETE_ALL)
     void whenTaxrateIsNull() {
-        ContractEntity contractEntity = contractRepository.findOne(3L);
-        ContractReportData contractBaseData = testSubject.map(contractEntity, new Date());
-        Assertions.assertThat(contractBaseData.getTaxRate()).isCloseTo(0.00, Percentage.withPercentage(10e-8));
+        Optional<ContractEntity> contractEntity = contractRepository.findById(3L);
+        if(contractEntity.isPresent()) {
+            ContractReportData contractBaseData = testSubject.map(contractEntity.get(), new Date());
+            Assertions.assertThat(contractBaseData.getTaxRate()).isCloseTo(0.00, Percentage.withPercentage(10e-8));
+        }else{
+            Assertions.fail("Entity not found!");
+        }
     }
 
     @Test
     @DatabaseSetup("contractMapperTest.xml")
     @DatabaseTearDown(value = "contractMapperTest.xml", type = DatabaseOperation.DELETE_ALL)
     void whenTaxrateIsNotNull() {
-        ContractEntity contractEntity = contractRepository.findOne(4L);
-        ContractReportData contractBaseData = testSubject.map(contractEntity, new Date());
-        Assertions.assertThat(contractBaseData.getTaxRate()).isCloseTo(1.00, Percentage.withPercentage(10e-8));
+        Optional<ContractEntity> contractEntity = contractRepository.findById(4L);
+        if(contractEntity.isPresent()) {
+            ContractReportData contractBaseData = testSubject.map(contractEntity.get(), new Date());
+            Assertions.assertThat(contractBaseData.getTaxRate()).isCloseTo(1.00, Percentage.withPercentage(10e-8));
+        }else{
+            Assertions.fail("Entity not found!");
+        }
     }
 }

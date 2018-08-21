@@ -8,12 +8,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.budgeteer.IntegrationTestTemplate;
 import org.wickedsource.budgeteer.MoneyUtil;
+import org.wickedsource.budgeteer.service.UnknownEntityException;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 class PlanRecordRepositoryTest extends IntegrationTestTemplate {
 
@@ -35,10 +37,18 @@ class PlanRecordRepositoryTest extends IntegrationTestTemplate {
     @DatabaseTearDown(value = "updateDailyRates.xml", type = DatabaseOperation.DELETE_ALL)
     void testUpdatePlanRecordDailyRates() throws Exception {
         repository.updateDailyRates(1L, 1L, format.parse("01.01.2015"), format.parse("15.08.2015"), MoneyUtil.createMoneyFromCents(50000L));
-        PlanRecordEntity record = repository.findOne(1L);
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(50000L), record.getDailyRate());
-        record = repository.findOne(3L);
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(50000L), record.getDailyRate());
+        Optional<PlanRecordEntity> record = repository.findById(1L);
+        if(record.isPresent()) {
+            Assertions.assertEquals(MoneyUtil.createMoneyFromCents(50000L), record.get().getDailyRate());
+        } else {
+            throw new UnknownEntityException(PlanRecordEntity.class, 1L);
+        }
+        record = repository.findById(3L);
+        if(record.isPresent()) {
+            Assertions.assertEquals(MoneyUtil.createMoneyFromCents(50000L), record.get().getDailyRate());
+        } else {
+            throw new UnknownEntityException(PlanRecordEntity.class, 3L);
+        }
     }
 
     @Test

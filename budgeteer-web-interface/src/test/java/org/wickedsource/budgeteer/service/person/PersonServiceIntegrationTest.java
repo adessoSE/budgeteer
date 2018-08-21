@@ -17,6 +17,7 @@ import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Optional;
 
 class PersonServiceIntegrationTest extends IntegrationTestTemplate {
 
@@ -63,14 +64,14 @@ class PersonServiceIntegrationTest extends IntegrationTestTemplate {
         person.getRates().add(rate2);
         service.savePersonWithRates(person);
 
-        PersonEntity personEntity = personRepository.findOne(1L);
+        PersonEntity personEntity = personRepository.findById(1L).get();
         Assertions.assertEquals(2, personEntity.getDailyRates().size());
 
-        WorkRecordEntity record = workRecordRepository.findOne(1L);
+        WorkRecordEntity record = workRecordRepository.findById(1L).get();
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(32100L), record.getDailyRate());
-        record = workRecordRepository.findOne(2L);
+        record = workRecordRepository.findById(2L).get();
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(12300L), record.getDailyRate());
-        record = workRecordRepository.findOne(3L);
+        record = workRecordRepository.findById(3L).get();
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(32100L), record.getDailyRate());
     }
 

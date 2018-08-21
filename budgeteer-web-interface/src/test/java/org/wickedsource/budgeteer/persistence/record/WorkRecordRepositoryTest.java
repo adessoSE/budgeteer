@@ -10,6 +10,7 @@ import org.wickedsource.budgeteer.IntegrationTestTemplate;
 import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.persistence.budget.BudgetEntity;
 import org.wickedsource.budgeteer.persistence.person.PersonEntity;
+import org.wickedsource.budgeteer.service.UnknownEntityException;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -17,6 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 class WorkRecordRepositoryTest extends IntegrationTestTemplate {
 
@@ -160,10 +162,18 @@ class WorkRecordRepositoryTest extends IntegrationTestTemplate {
     @DatabaseTearDown(value = "updateDailyRates.xml", type = DatabaseOperation.DELETE_ALL)
     void testUpdateWorkRecordDailyRates() throws Exception {
         repository.updateDailyRates(1L, 1L, format.parse("01.01.2015"), format.parse("15.08.2015"), MoneyUtil.createMoneyFromCents(50000L));
-        WorkRecordEntity record = repository.findOne(1L);
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(50000L), record.getDailyRate());
-        record = repository.findOne(3L);
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(50000L), record.getDailyRate());
+        Optional<WorkRecordEntity> record = repository.findById(1L);
+        if(record.isPresent()) {
+            Assertions.assertEquals(MoneyUtil.createMoneyFromCents(50000L), record.get().getDailyRate());
+        }else{
+            throw new UnknownEntityException(WorkRecordEntity.class, 1L);
+        }
+        record = repository.findById(3L);
+        if(record.isPresent()) {
+            Assertions.assertEquals(MoneyUtil.createMoneyFromCents(50000L), record.get().getDailyRate());
+        }else{
+            throw new UnknownEntityException(WorkRecordEntity.class, 3L);
+        }
     }
 
     @Test
@@ -171,10 +181,18 @@ class WorkRecordRepositoryTest extends IntegrationTestTemplate {
     @DatabaseTearDown(value = "updateDailyRates.xml", type = DatabaseOperation.DELETE_ALL)
     void testUpdateWorkRecordDailyRatesWithEditedRecord() throws Exception {
         repository.updateDailyRates(1L, 1L, format.parse("01.01.2015"), format.parse("15.08.2015"), MoneyUtil.createMoneyFromCents(50000L));
-        WorkRecordEntity record = repository.findOne(1L);
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(50000L), record.getDailyRate());
-        record = repository.findOne(6L);
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(10000L), record.getDailyRate());
+        Optional<WorkRecordEntity> record = repository.findById(1L);
+        if(record.isPresent()) {
+            Assertions.assertEquals(MoneyUtil.createMoneyFromCents(50000L), record.get().getDailyRate());
+        }else{
+            throw new UnknownEntityException(WorkRecordEntity.class, 1L);
+        }
+        record = repository.findById(6L);
+        if(record.isPresent()) {
+            Assertions.assertEquals(MoneyUtil.createMoneyFromCents(50000L), record.get().getDailyRate());
+        }else{
+            throw new UnknownEntityException(WorkRecordEntity.class, 6L);
+        }
     }
 
     @Test

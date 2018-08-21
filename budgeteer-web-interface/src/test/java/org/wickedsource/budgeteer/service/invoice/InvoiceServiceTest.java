@@ -69,7 +69,7 @@ class InvoiceServiceTest extends ServiceIntegrationTestTemplate {
         Assertions.assertEquals(MoneyUtil.createMoney(2000), savedInvoice.getSum());
         Assertions.assertTrue(savedInvoice.getInvoiceId() > 0);
         Assertions.assertEquals(5, savedInvoice.getDynamicInvoiceFields().size());
-        Assertions.assertEquals(5, contractRepository.findById(savedInvoice.getContractId()).getInvoiceFields().size());
+        Assertions.assertEquals(5, contractRepository.findByInvoiceFieldsId(savedInvoice.getContractId()).getInvoiceFields().size());
     }
 
     /**
@@ -99,7 +99,7 @@ class InvoiceServiceTest extends ServiceIntegrationTestTemplate {
         Assertions.assertTrue(savedInvoice.getInvoiceId() > 0);
         Assertions.assertEquals(7, savedInvoice.getDynamicInvoiceFields().size());
 
-        ContractEntity contract = contractRepository.findById(savedInvoice.getContractId());
+        ContractEntity contract = contractRepository.findByInvoiceFieldsId(savedInvoice.getContractId());
         Set<ContractInvoiceField> contractInvoiceFields = contract.getInvoiceFields();
         Assertions.assertEquals(7, contractInvoiceFields.size());
         Assertions.assertTrue(contractInvoiceFields.contains(new ContractInvoiceField(3, "Test Contract Field", contract)));
@@ -134,7 +134,7 @@ class InvoiceServiceTest extends ServiceIntegrationTestTemplate {
         Assertions.assertTrue(savedInvoice.getInvoiceId() > 0);
         Assertions.assertEquals(5, savedInvoice.getDynamicInvoiceFields().size());
 
-        ContractEntity contract = contractRepository.findById(savedInvoice.getContractId());
+        ContractEntity contract = contractRepository.findByInvoiceFieldsId(savedInvoice.getContractId());
         Set<ContractInvoiceField> contractInvoiceFields = contract.getInvoiceFields();
         Assertions.assertEquals(5, contractInvoiceFields.size());
     }
@@ -169,7 +169,7 @@ class InvoiceServiceTest extends ServiceIntegrationTestTemplate {
         Assertions.assertTrue(savedInvoice.getDynamicInvoiceFields().contains(new DynamicAttributeField("Test Contract Field", "Test")));
         Assertions.assertTrue(savedInvoice.getDynamicInvoiceFields().contains(new DynamicAttributeField("Test Contract Field 2", "Test 2")));
 
-        ContractEntity contract = contractRepository.findById(savedInvoice.getContractId());
+        ContractEntity contract = contractRepository.findByInvoiceFieldsId(savedInvoice.getContractId());
         Set<ContractInvoiceField> contractInvoiceFields = contract.getInvoiceFields();
         Assertions.assertEquals(7, contractInvoiceFields.size());
     }
@@ -205,7 +205,7 @@ class InvoiceServiceTest extends ServiceIntegrationTestTemplate {
         Assertions.assertTrue(savedInvoice.getInvoiceId() > 0);
         Assertions.assertEquals(2, savedInvoice.getDynamicInvoiceFields().size());
 
-        ContractEntity contract = contractRepository.findById(savedInvoice.getContractId());
+        ContractEntity contract = contractRepository.findByInvoiceFieldsId(savedInvoice.getContractId());
         Set<ContractInvoiceField> contractInvoiceFields = contract.getInvoiceFields();
         Assertions.assertEquals(2, contractInvoiceFields.size());
     }
@@ -227,9 +227,8 @@ class InvoiceServiceTest extends ServiceIntegrationTestTemplate {
 
     private List<DynamicAttributeField> getDummyDynamicInvoiceFields() {
         List<DynamicAttributeField> result = new LinkedList<DynamicAttributeField>();
-        DynamicAttributeField data = new DynamicAttributeField();
         for (int i = 0; i < 5; i++) {
-            data = new DynamicAttributeField();
+            DynamicAttributeField data = new DynamicAttributeField();
             data.setName("test" + i);
             data.setValue("test" + i);
             result.add(data);
@@ -253,8 +252,8 @@ class InvoiceServiceTest extends ServiceIntegrationTestTemplate {
     void testDeleteInvoice() {
         service.deleteInvoice(3);
 
-        Assertions.assertNotNull(contractRepository.findById(3).getInvoiceFields());
-        Assertions.assertEquals(2, contractRepository.findById(3).getInvoiceFields().size());
+        Assertions.assertNotNull(contractRepository.findByInvoiceFieldsId(3).getInvoiceFields());
+        Assertions.assertEquals(2, contractRepository.findByInvoiceFieldsId(3).getInvoiceFields().size());
         Assertions.assertNotNull(contractRepository.findInvoiceFieldByName(3, "Test Contract Field"));
         Assertions.assertNotNull(contractRepository.findInvoiceFieldByName(3, "Test Contract Field 2"));
 
@@ -268,7 +267,7 @@ class InvoiceServiceTest extends ServiceIntegrationTestTemplate {
     // Invoice without any InvoiceFields
     void testDeleteInvoiceWithoutFields() {
         service.deleteInvoice(4);
-        Assertions.assertNull(invoiceRepository.findOne(4L));
+        Assertions.assertFalse(invoiceRepository.findById(4L).isPresent());
     }
 
     @Test
