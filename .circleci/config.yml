@@ -25,10 +25,6 @@ jobs:
           command: |
             find . -type f -regex ".*/build/libs/.*war" -exec cp {} ~/artifacts/ \;
             find . -type f -regex ".*/build/libs/.*jar" -exec cp {} ~/artifacts/ \;
-      - store_test_results:
-          path: ~/artifacts/junit
-      - store_artifacts:
-          path: ~/artifacts
       - run:
           name: "Deploy snapshot to artifactory"
           command: |
@@ -43,3 +39,7 @@ jobs:
           then ./gradlew budgeteer-web-interface:bintrayUpload -x test -Dbintray.user=$BINTRAY_USER
           -Dbintray.key=$BINTRAY_KEY -Dbuild.number=$CIRCLE_BUILD_NUM;
           fi
+      - store_test_results:
+          path: ~/artifacts/junit
+      - store_artifacts:
+          path: ~/artifacts
