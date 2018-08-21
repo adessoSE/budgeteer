@@ -84,6 +84,8 @@ dependencies {
     compile group: 'org.joda', name: 'joda-money', version: "${joda_money_version}"
     compile group: 'de.jollyday', name: 'jollyday', version: "${jollyday_version}"
 
+    compile "org.hibernate:hibernate-core:${hibernate_version}"
+
     compile(
             [group: 'com.querydsl', name: 'querydsl-apt', version: "${query_dsl_version}"],
             [group: 'com.querydsl', name: 'querydsl-jpa', version: "${query_dsl_version}"]

@@ -2,7 +2,8 @@
     <PROJECT id="1" name="project1"/>
 
     <CONTRACT id="3" CONTRACT_NAME="TestContract" PROJECT_ID="1" BUDGET="100" INTERNAL_NUMBER="Test" START_DATE="2015-01-01" CONTRACT_TYPE="1" />
-    <CONTRACT id="4" CONTRACT_NAME="TestContract1" PROJECT_ID="1" BUDGET="100" INTERNAL_NUMBER="Test" START_DATE="2015-01-01" CONTRACT_TYPE="1" />
+
+    <CONTRACT id="4" CONTRACT_NAME="TestContract1" PROJECT_ID="1" BUDGET="100" INTERNAL_NUMBER="Test1" START_DATE="2015-01-01" CONTRACT_TYPE="1" />
 
     <!-- Add a budget to the contract -->
         <BUDGET id="1" name="Budget 1" total="100000" import_key="budget1" project_id="1" CONTRACT_ID="3"/>
