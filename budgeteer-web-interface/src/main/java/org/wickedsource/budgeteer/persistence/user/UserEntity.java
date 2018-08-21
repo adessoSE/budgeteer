@@ -12,7 +12,8 @@ import java.util.List;
 @Entity
 @Table(name = "BUDGETEER_USER",
         uniqueConstraints = {
-                @UniqueConstraint(name = "UNIQUE_USER_NAME", columnNames = {"NAME"})
+                @UniqueConstraint(name = "UNIQUE_USER_NAME", columnNames = {"NAME"}),
+                @UniqueConstraint(name = "UNIQUE_USER_MAIL", columnNames = {"MAIL"})
         })
 @Data
 public class UserEntity {
@@ -27,6 +28,9 @@ public class UserEntity {
     @Column(nullable = false, length = 512)
     private String password;
 
+    @Column(nullable = false, length = 255)
+    private String mail;
+
     @LazyCollection(LazyCollectionOption.FALSE)
     @ManyToMany(mappedBy = "authorizedUsers")
     private List<ProjectEntity> authorizedProjects = new ArrayList<ProjectEntity>();
@@ -35,8 +39,8 @@ public class UserEntity {
     private ProjectEntity defaultProject;
 
     @Override
-    public String toString(){
-        return "User( Id:" + id + ", name: " +name + ")";
+    public String toString() {
+        return "User( Id:" + id + ", name: " + name + ")";
     }
 
 }
