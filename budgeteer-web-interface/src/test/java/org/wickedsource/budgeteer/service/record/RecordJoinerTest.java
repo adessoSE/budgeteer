@@ -4,10 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.budgeteer.MoneyUtil;
-import org.wickedsource.budgeteer.persistence.record.MonthlyAggregatedRecordBean;
-import org.wickedsource.budgeteer.persistence.record.MonthlyAggregatedRecordWithTaxBean;
-import org.wickedsource.budgeteer.persistence.record.WeeklyAggregatedRecordBean;
-import org.wickedsource.budgeteer.persistence.record.WeeklyAggregatedRecordWithTaxBean;
+import org.wickedsource.budgeteer.persistence.record.*;
 import org.wickedsource.budgeteer.service.ServiceTestTemplate;
 import org.wickedsource.budgeteer.service.statistics.MonthlyStats;
 
@@ -164,7 +161,7 @@ class RecordJoinerTest extends ServiceTestTemplate {
     }
 
     private List<WeeklyAggregatedRecordBean> createWeeklyWorkRecords() {
-        List<WeeklyAggregatedRecordBean> beans = new ArrayList<WeeklyAggregatedRecordBean>();
+        List<WeeklyAggregatedRecordBean> beans = new ArrayList<>();
         beans.add(new WeeklyAggregatedRecordBean(2015, 15, 5d, 50000));
         beans.add(new WeeklyAggregatedRecordBean(2015, 16, 6d, 60000));
         beans.add(new WeeklyAggregatedRecordBean(2014, 10, 5d, 50000));
@@ -172,7 +169,7 @@ class RecordJoinerTest extends ServiceTestTemplate {
     }
 
     private List<WeeklyAggregatedRecordWithTitleAndTaxBean> createWeeklyWorkRecordsWithTax() {
-        List<WeeklyAggregatedRecordWithTitleAndTaxBean> beans = new ArrayList<WeeklyAggregatedRecordWithTitleAndTaxBean>();
+        List<WeeklyAggregatedRecordWithTitleAndTaxBean> beans = new ArrayList<>();
         beans.add(new WeeklyAggregatedRecordWithTitleAndTaxBean(2018, 3, 13, 180, MoneyUtil.createMoneyFromCents(10000), BigDecimal.TEN, "Max Mustermann"));
         beans.add(new WeeklyAggregatedRecordWithTitleAndTaxBean(2018, 3, 13, 180, MoneyUtil.createMoneyFromCents(10000), BigDecimal.TEN, "Maria Mustermann"));
         beans.add(new WeeklyAggregatedRecordWithTitleAndTaxBean(2018, 4, 13, 180, MoneyUtil.createMoneyFromCents(10000), BigDecimal.TEN, "Max Mustermann"));
@@ -182,7 +179,7 @@ class RecordJoinerTest extends ServiceTestTemplate {
     }
 
     private List<WeeklyAggregatedRecordBean> createWeeklyPlanRecords() {
-        List<WeeklyAggregatedRecordBean> beans = new ArrayList<WeeklyAggregatedRecordBean>();
+        List<WeeklyAggregatedRecordBean> beans = new ArrayList<>();
         beans.add(new WeeklyAggregatedRecordBean(2015, 15, 5d, 12300));
         beans.add(new WeeklyAggregatedRecordBean(2014, 10, 5d, 12300));
         beans.add(new WeeklyAggregatedRecordBean(2015, 16, 6d, 32100));
@@ -190,7 +187,7 @@ class RecordJoinerTest extends ServiceTestTemplate {
     }
 
     private List<WeeklyAggregatedRecordWithTaxBean> createWeeklyPlanRecordsWithTax() {
-        List<WeeklyAggregatedRecordWithTaxBean> beans = new ArrayList<WeeklyAggregatedRecordWithTaxBean>();
+        List<WeeklyAggregatedRecordWithTaxBean> beans = new ArrayList<>();
         beans.add(new WeeklyAggregatedRecordWithTaxBean(2018, 3, 13, 300, MoneyUtil.createMoneyFromCents(10000), BigDecimal.TEN));
         beans.add(new WeeklyAggregatedRecordWithTaxBean(2018, 4, 13, 300, MoneyUtil.createMoneyFromCents(10000), BigDecimal.TEN));
         beans.add(new WeeklyAggregatedRecordWithTaxBean(2018, 4, 13, 300, MoneyUtil.createMoneyFromCents(10000), BigDecimal.valueOf(5)));
@@ -210,12 +207,11 @@ class RecordJoinerTest extends ServiceTestTemplate {
         workStats.add(new MonthlyAggregatedRecordWithTitleAndTaxBean(2018, 4, 360, MoneyUtil.createMoneyFromCents(10000), "Max Mustermann", BigDecimal.TEN));
         workStats.add(new MonthlyAggregatedRecordWithTitleAndTaxBean(2018, 4, 240, MoneyUtil.createMoneyFromCents(10000), "Max Mustermann", BigDecimal.valueOf(5)));
 
-        MonthlyStats monthlyStats = new MonthlyStats(planStats, workStats);
-        return monthlyStats;
+        return new MonthlyStats(planStats, workStats);
     }
 
     private List<MonthlyAggregatedRecordBean> createMonthlyWorkRecords() {
-        List<MonthlyAggregatedRecordBean> beans = new ArrayList<MonthlyAggregatedRecordBean>();
+        List<MonthlyAggregatedRecordBean> beans = new ArrayList<>();
         beans.add(new MonthlyAggregatedRecordBean(2015, 5, 5d, 50000));
         beans.add(new MonthlyAggregatedRecordBean(2015, 6, 6d, 60000));
         beans.add(new MonthlyAggregatedRecordBean(2014, 0, 5d, 50000));
@@ -223,7 +219,7 @@ class RecordJoinerTest extends ServiceTestTemplate {
     }
 
     private List<MonthlyAggregatedRecordBean> createMonthlyPlanRecords() {
-        List<MonthlyAggregatedRecordBean> beans = new ArrayList<MonthlyAggregatedRecordBean>();
+        List<MonthlyAggregatedRecordBean> beans = new ArrayList<>();
         beans.add(new MonthlyAggregatedRecordBean(2015, 5, 5d, 12300));
         beans.add(new MonthlyAggregatedRecordBean(2014, 0, 5d, 12300));
         beans.add(new MonthlyAggregatedRecordBean(2015, 6, 6d, 32100));
@@ -231,7 +227,7 @@ class RecordJoinerTest extends ServiceTestTemplate {
     }
 
     private List<MonthlyAggregatedRecordWithTaxBean> createMonthlyWorkRecordsWithTax() {
-        List<MonthlyAggregatedRecordWithTaxBean> beans = new ArrayList<MonthlyAggregatedRecordWithTaxBean>();
+        List<MonthlyAggregatedRecordWithTaxBean> beans = new ArrayList<>();
         beans.add(new MonthlyAggregatedRecordWithTaxBean(2015, 5, 5d, 50000, BigDecimal.valueOf(10)));
         beans.add(new MonthlyAggregatedRecordWithTaxBean(2015, 6, 6d, 60000, BigDecimal.valueOf(10)));
         beans.add(new MonthlyAggregatedRecordWithTaxBean(2014, 0, 5d, 50000, BigDecimal.valueOf(10)));
@@ -246,7 +242,7 @@ class RecordJoinerTest extends ServiceTestTemplate {
     }
 
     private List<MonthlyAggregatedRecordWithTaxBean> createMonthlyPlanRecordsWithTax() {
-        List<MonthlyAggregatedRecordWithTaxBean> beans = new ArrayList<MonthlyAggregatedRecordWithTaxBean>();
+        List<MonthlyAggregatedRecordWithTaxBean> beans = new ArrayList<>();
         beans.add(new MonthlyAggregatedRecordWithTaxBean(2015, 5, 5d, 12300, BigDecimal.valueOf(10)));
         beans.add(new MonthlyAggregatedRecordWithTaxBean(2014, 0, 5d, 12300, BigDecimal.valueOf(10)));
         beans.add(new MonthlyAggregatedRecordWithTaxBean(2015, 6, 6d, 10000, BigDecimal.valueOf(10)));
