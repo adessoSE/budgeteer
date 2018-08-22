@@ -211,6 +211,10 @@ idea {
 //=============================
 //Bintray/Artifactory Configuration
 
+// run gradle with "-Dsnapshot=true" to automatically append "-SNAPSHOT" to the version
+version = project.version + (Boolean.valueOf(System.getProperty("snapshot")) ? "-SNAPSHOT" : "")
+sourceCompatibility = 1.8
+
 ext {
     bintrayUser = System.getProperty("bintray.user")
     bintrayKey = System.getProperty("bintray.key")

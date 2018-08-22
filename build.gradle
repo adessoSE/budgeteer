@@ -21,7 +21,6 @@ subprojects {
     apply plugin: 'jacoco'
 
 
-
     repositories {
         jcenter()
         mavenLocal()
