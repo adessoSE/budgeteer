@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.joda.money.Money;
 import org.wickedsource.budgeteer.MoneyUtil;
-import sun.awt.image.IntegerInterleavedRaster;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
