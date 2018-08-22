@@ -7,9 +7,9 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 @Component
-public class PasswordHasher {
+class PasswordHasher {
 
-    public String hash(String plain){
+    String hash(String plain){
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-512");
             byte[] hash = digest.digest(plain.getBytes());

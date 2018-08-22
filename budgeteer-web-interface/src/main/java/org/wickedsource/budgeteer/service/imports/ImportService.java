@@ -14,6 +14,7 @@ import org.wickedsource.budgeteer.persistence.record.PlanRecordRepository;
 import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
 
 import javax.transaction.Transactional;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -22,22 +23,27 @@ import java.util.List;
 @Transactional
 public class ImportService implements ApplicationContextAware {
 
-    @Autowired
-    private ImporterRegistry importerRegistry;
+    private final ImporterRegistry importerRegistry;
 
-    @Autowired
-    private ImportRepository importRepository;
+    private final ImportRepository importRepository;
 
-    @Autowired
-    private WorkRecordRepository workRecordRepository;
+    private final WorkRecordRepository workRecordRepository;
 
-    @Autowired
-    private PlanRecordRepository planRecordRepository;
+    private final PlanRecordRepository planRecordRepository;
 
     private ApplicationContext applicationContext;
 
     @Getter
     private List<List<String>> skippedRecords;
+
+    @Autowired
+    public ImportService(ImporterRegistry importerRegistry, ImportRepository importRepository, WorkRecordRepository workRecordRepository, PlanRecordRepository planRecordRepository) {
+        this.importerRegistry = importerRegistry;
+        this.importRepository = importRepository;
+        this.workRecordRepository = workRecordRepository;
+        this.planRecordRepository = planRecordRepository;
+    }
+
     /**
      * Loads all data imports the given user has made from the database.
      *
@@ -46,7 +52,7 @@ public class ImportService implements ApplicationContextAware {
      */
     public List<Import> loadImports(long projectId) {
         List<ImportEntity> imports = importRepository.findByProjectId(projectId);
-        List<Import> resultList = new ArrayList<Import>();
+        List<Import> resultList = new ArrayList<>();
         for (ImportEntity entity : imports) {
             Import i = new Import();
             i.setId(entity.getId());
@@ -76,8 +82,8 @@ public class ImportService implements ApplicationContextAware {
      *
      * @return all currently registered file importers.
      */
-    public List<? extends Importer> getAvailableImporters() {
-        List<Importer> importers = new ArrayList<Importer>();
+    public List<Importer> getAvailableImporters() {
+        List<Importer> importers = new ArrayList<>();
         importers.addAll(importerRegistry.getWorkingRecordsImporters());
         importers.addAll(importerRegistry.getPlanRecordsImporters());
         return importers;
@@ -91,7 +97,7 @@ public class ImportService implements ApplicationContextAware {
      */
     @Transactional(rollbackOn = ImportException.class)
     public void doImport(long projectId, Importer importer, List<ImportFile> importFiles) throws ImportException, InvalidFileFormatException {
-        skippedRecords = new LinkedList<List<String>>();
+        skippedRecords = new LinkedList<>();
         if (importer instanceof WorkRecordsImporter) {
             WorkRecordsImporter workRecordsImporter = (WorkRecordsImporter) importer;
             WorkRecordDatabaseImporter dbImporter = applicationContext.getBean(WorkRecordDatabaseImporter.class, projectId, workRecordsImporter.getDisplayName());
@@ -117,7 +123,7 @@ public class ImportService implements ApplicationContextAware {
     }
 
     @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+    public void setApplicationContext(@NotNull ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
     }
 }

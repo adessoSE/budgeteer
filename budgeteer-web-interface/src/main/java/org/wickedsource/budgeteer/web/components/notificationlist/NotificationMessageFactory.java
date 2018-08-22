@@ -24,7 +24,7 @@ public class NotificationMessageFactory implements Serializable {
             MissingDailyRateForBudgetNotification n = (MissingDailyRateForBudgetNotification) notification;
             return String.format(PropertyLoader.getProperty(NotificationMessageAnchor.class,"message.missingDailyRateForBudget"), n.getBudgetName(), n.getStartDate(), n.getEndDate());
         }else if (notification instanceof MissingContractForBudgetNotification) {
-            return String.format(PropertyLoader.getProperty(NotificationMessageAnchor.class,"message.missingContract"));
+            return PropertyLoader.getProperty(NotificationMessageAnchor.class,"message.missingContract");
         } else {
             throw new IllegalArgumentException(String.format("Notifications of type %s are not supported!", notification.getClass()));
         }

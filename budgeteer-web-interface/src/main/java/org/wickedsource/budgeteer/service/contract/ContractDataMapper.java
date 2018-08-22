@@ -22,11 +22,15 @@ import java.util.*;
 @Component
 public class ContractDataMapper extends AbstractMapper<ContractEntity, ContractBaseData>{
 
-    @Autowired
-    private InvoiceDataMapper invoiceDataMapper;
+    private final InvoiceDataMapper invoiceDataMapper;
     
+    private final ContractRepository contractRepository;
+
     @Autowired
-    private ContractRepository contractRepository;
+    public ContractDataMapper(InvoiceDataMapper invoiceDataMapper, ContractRepository contractRepository) {
+        this.invoiceDataMapper = invoiceDataMapper;
+        this.contractRepository = contractRepository;
+    }
 
     @Override
     public ContractBaseData map(ContractEntity entity) {
@@ -45,21 +49,21 @@ public class ContractDataMapper extends AbstractMapper<ContractEntity, ContractB
         result.setFileModel(new FileUploadModel(entity.getFileName(), entity.getFile(), entity.getLink()));
         result.setTaxRate(entity.getTaxRate() == null ? 0.0 : entity.getTaxRate().doubleValue());
 
-        Map<String, DynamicAttributeField> contractAttributes = new HashMap<String, DynamicAttributeField>();
+        Map<String, DynamicAttributeField> contractAttributes = new HashMap<>();
         for(ProjectContractField projectContractField:  entity.getProject().getContractFields()){
             contractAttributes.put(projectContractField.getFieldName(), new DynamicAttributeField(projectContractField.getFieldName(), ""));
         }
         for(ContractFieldEntity fieldEntity : entity.getContractFields()){
             contractAttributes.put(fieldEntity.getField().getFieldName(), new DynamicAttributeField(fieldEntity.getField().getFieldName(), fieldEntity.getValue()));
         }
-        result.setContractAttributes(new ArrayList<DynamicAttributeField>(contractAttributes.values()));
+        result.setContractAttributes(new ArrayList<>(contractAttributes.values()));
 
-        result.setBelongingBudgets(new LinkedList<BudgetBaseData>());
+        result.setBelongingBudgets(new LinkedList<>());
         for(BudgetEntity budgetEntity : entity.getBudgets()){
             result.getBelongingBudgets().add(new BudgetBaseData(budgetEntity.getId(), budgetEntity.getName()));
         }
 
-        result.setBelongingInvoices(new LinkedList<InvoiceBaseData>());
+        result.setBelongingInvoices(new LinkedList<>());
         for(InvoiceEntity invoiceEntity: entity.getInvoices()){
             result.getBelongingInvoices().add(invoiceDataMapper.map(invoiceEntity));
         }
@@ -68,7 +72,7 @@ public class ContractDataMapper extends AbstractMapper<ContractEntity, ContractB
     }
 
     public List<ContractBaseData> map(List<ContractEntity> entityList){
-        List<ContractBaseData> result = new LinkedList<ContractBaseData>();
+        List<ContractBaseData> result = new LinkedList<>();
         for(ContractEntity entity : entityList){
             result.add(map(entity));
         }
@@ -77,7 +81,7 @@ public class ContractDataMapper extends AbstractMapper<ContractEntity, ContractB
     
     private Money toMoneyNullsafe(Double cents) {
         if (cents == null) {
-            return MoneyUtil.createMoneyFromCents(0l);
+            return MoneyUtil.createMoneyFromCents(0L);
         } else {
             return MoneyUtil.createMoneyFromCents(Math.round(cents));
         }

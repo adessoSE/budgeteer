@@ -34,11 +34,10 @@ public class InvoiceDataMapper extends AbstractMapper<InvoiceEntity, InvoiceBase
         result.setDueDate(entity.getDueDate());
         result.setFileUploadModel(new FileUploadModel(entity.getFileName(), entity.getFile(), entity.getLink()));
 
-        HashMap<String, DynamicAttributeField> dynamicAttributeFieldMap = new HashMap<String, DynamicAttributeField>();
+        HashMap<String, DynamicAttributeField> dynamicAttributeFieldMap = new HashMap<>();
         if(attributeFieldMap != null) {
-            Iterator it = attributeFieldMap.entrySet().iterator();
-            while (it.hasNext()) {
-                Map.Entry pair = (Map.Entry)it.next();
+            for (Object o : attributeFieldMap.entrySet()) {
+                Map.Entry pair = (Map.Entry) o;
                 dynamicAttributeFieldMap.put((String) pair.getKey(), new DynamicAttributeField((String) pair.getKey(), ""));
             }
         } else {
@@ -51,20 +50,20 @@ public class InvoiceDataMapper extends AbstractMapper<InvoiceEntity, InvoiceBase
         for(InvoiceFieldEntity fieldEntity : entity.getDynamicFields()){
             dynamicAttributeFieldMap.put(fieldEntity.getField().getFieldName(), new DynamicAttributeField(fieldEntity.getField().getFieldName(), fieldEntity.getValue()));
         }
-        result.setDynamicInvoiceFields(new ArrayList<DynamicAttributeField>(dynamicAttributeFieldMap.values()));
+        result.setDynamicInvoiceFields(new ArrayList<>(dynamicAttributeFieldMap.values()));
 
         return result;
     }
 
     /**
      * maps a list of Invoice entities.
-     * @param entityList
+     * @param entityList the entities to map
      * @param differentProjects if true, the method will take care that all DTOs have the same attributes. This is just relevant if you're trying to map entities  with different contracts and due to this fact, with different attributes.
-     * @return
+     * @return a list of InvoiceBaseData objects
      */
         public List<InvoiceBaseData> map(List<InvoiceEntity> entityList, boolean differentProjects){
-            List<InvoiceBaseData> result = new LinkedList<InvoiceBaseData>();
-            HashMap<String, DynamicAttributeField> attributeFieldMap = new HashMap<String, DynamicAttributeField>();
+            List<InvoiceBaseData> result = new LinkedList<>();
+            HashMap<String, DynamicAttributeField> attributeFieldMap = new HashMap<>();
             if(differentProjects){
                 for(InvoiceEntity entity : entityList){
                     for (ContractInvoiceField contractInvoiceField : entity.getContract().getInvoiceFields()) {

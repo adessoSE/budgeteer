@@ -13,12 +13,12 @@ class ContractReportData {
 	private String contractId;
 	private Date from;
 	private Date until;
-	private double budgetSpent_net;
-	private double budgetLeft_net;
-	private double budgetTotal_net;
-	private double budgetSpent_gross;
-	private double budgetLeft_gross;
-	private double budgetTotal_gross;
+	private double budgetspentNet;
+	private double budgetLeftNet;
+	private double budgetTotalNet;
+	private double budgetSpentGross;
+	private double budgetLeftGross;
+	private double budgetTotalGross;
 	private Double taxRate;
 	private Double progress;
 	private List<? extends SheetTemplateSerializable> attributes;

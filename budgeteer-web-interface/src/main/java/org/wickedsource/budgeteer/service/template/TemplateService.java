@@ -24,8 +24,12 @@ import java.util.List;
 @Transactional
 public class TemplateService {
 
+    private final TemplateRepository templateRepository;
+
     @Autowired
-    private TemplateRepository templateRepository;
+    public TemplateService(TemplateRepository templateRepository) {
+        this.templateRepository = templateRepository;
+    }
 
     /**
      *
@@ -53,10 +57,8 @@ public class TemplateService {
 
     public Template getDefault(ReportType type, long projectID){
         for(Template E : getTemplatesInProject(projectID)){
-            if(E.getType() == type){
-                if(E.isDefault()){
-                    return E;
-                }
+            if(E.getType() == type && E.isDefault()){
+                return E;
             }
         }
         return null;
@@ -103,11 +105,9 @@ public class TemplateService {
     public void resolveDefaults(long templateId, IModel<TemplateFormInputDto> temModel){
         if(temModel.getObject().isDefault()){
             for(TemplateEntity E : templateRepository.findAll()){
-                if(E.getType() == temModel.getObject().getType() && E.getId() != templateId){
-                    if(E.isDefault()){
-                        templateRepository.save(new TemplateEntity(E.getId(), E.getName(), E.getDescription(), E.getType(),
+                if(E.getType() == temModel.getObject().getType() && E.getId() != templateId && E.isDefault()){
+                    templateRepository.save(new TemplateEntity(E.getId(), E.getName(), E.getDescription(), E.getType(),
                                 E.getWb(), false, E.getProjectId()));
-                    }
                 }
             }
         }

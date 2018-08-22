@@ -27,6 +27,7 @@ import org.wickedsource.budgeteer.web.components.security.BudgeteerAuthorization
 import org.wickedsource.budgeteer.web.components.security.BudgeteerUnauthorizedComponentInstantiationListener;
 import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 
+import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 @Component
@@ -34,8 +35,12 @@ public class BudgeteerApplication extends WebApplication implements ApplicationC
 
     private ApplicationContext context;
 
+    private final BudgeteerSettings settings;
+
     @Autowired
-    private BudgeteerSettings settings;
+    public BudgeteerApplication(BudgeteerSettings settings) {
+        this.settings = settings;
+    }
 
     @Override
     public Class<? extends WebPage> getHomePage() {
@@ -67,7 +72,7 @@ public class BudgeteerApplication extends WebApplication implements ApplicationC
 
         private String bucketName;
 
-        public JavaScriptToBucketResponseDecorator(String bucketName){
+        JavaScriptToBucketResponseDecorator(String bucketName){
             this.bucketName = bucketName;
         }
 
@@ -120,7 +125,7 @@ public class BudgeteerApplication extends WebApplication implements ApplicationC
     }
 
     @Override
-    public void setApplicationContext(ApplicationContext applicationContext) {
+    public void setApplicationContext(@NotNull  ApplicationContext applicationContext) {
         this.context = applicationContext;
     }
 

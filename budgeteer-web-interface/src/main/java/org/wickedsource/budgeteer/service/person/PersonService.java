@@ -105,7 +105,7 @@ public class PersonService {
         personEntity.get().setName(person.getName());
         personEntity.get().setImportKey(person.getImportKey());
 
-        List<DailyRateEntity> dailyRates = new ArrayList<DailyRateEntity>();
+        List<DailyRateEntity> dailyRates = new ArrayList<>();
         for (PersonRate rate : person.getRates()) {
             DailyRateEntity rateEntity = new DailyRateEntity();
             rateEntity.setRate(rate.getRate());

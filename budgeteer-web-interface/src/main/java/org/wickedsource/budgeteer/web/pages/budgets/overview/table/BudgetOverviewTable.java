@@ -63,22 +63,22 @@ public class BudgetOverviewTable extends Panel {
         table.add(new MoneyLabel("totalAmount",
                 new TaxBudgetUnitMoneyModel(
                         new BudgetUnitMoneyModel(model(from(totalModel).getTotal())),
-                        new BudgetUnitMoneyModel(model(from(totalModel).getTotal_gross()))
+                        new BudgetUnitMoneyModel(model(from(totalModel).getTotalGross()))
                 )));
         table.add(new MoneyLabel("totalSpent",
                 new TaxBudgetUnitMoneyModel(
                         new BudgetUnitMoneyModel(model(from(totalModel).getSpent())),
-                        new BudgetUnitMoneyModel(model(from(totalModel).getSpent_gross()))
+                        new BudgetUnitMoneyModel(model(from(totalModel).getSpentGross()))
                 )));
         table.add(new MoneyLabel("totalRemaining",
                 new TaxBudgetUnitMoneyModel(
                         new BudgetUnitMoneyModel(model(from(totalModel).getRemaining())),
-                        new BudgetUnitMoneyModel(model(from(totalModel).getRemaining_gross()))
+                        new BudgetUnitMoneyModel(model(from(totalModel).getRemainingGross()))
                 )));
         table.add(new MoneyLabel("totalUnplanned",
                 new TaxBudgetUnitMoneyModel(
                         new BudgetUnitMoneyModel(model(from(totalModel).getUnplanned())),
-                        new BudgetUnitMoneyModel(model(from(totalModel).getUnplanned_gross()))
+                        new BudgetUnitMoneyModel(model(from(totalModel).getUnplannedGross()))
                 )));
 
         table.add(new ProgressBar("totalProgressBar", model(from(totalModel).getProgressInPercent())));
@@ -160,22 +160,22 @@ public class BudgetOverviewTable extends Panel {
         item.add(new MoneyLabel("amount",
                 new TaxBudgetUnitMoneyModel(
                         new BudgetUnitMoneyModel(model(from(item.getModel()).getTotal())),
-                        new BudgetUnitMoneyModel(model(from(item.getModel()).getTotal_gross()))
+                        new BudgetUnitMoneyModel(model(from(item.getModel()).getTotalGross()))
                 )));
         item.add(new MoneyLabel("spent",
                 new TaxBudgetUnitMoneyModel(
                         new BudgetUnitMoneyModel(model(from(item.getModel()).getSpent())),
-                        new BudgetUnitMoneyModel(model(from(item.getModel()).getSpent_gross()))
+                        new BudgetUnitMoneyModel(model(from(item.getModel()).getSpentGross()))
                 )));
         item.add(new MoneyLabel("remaining",
                 new TaxBudgetUnitMoneyModel(
                         new BudgetUnitMoneyModel(model(from(item.getModel()).getRemaining())),
-                        new BudgetUnitMoneyModel(model(from(item.getModel()).getRemaining_gross()))
+                        new BudgetUnitMoneyModel(model(from(item.getModel()).getRemainingGross()))
                 )));
         item.add(new MoneyLabel("unplanned",
                 new TaxBudgetUnitMoneyModel(
                         new BudgetUnitMoneyModel(model(from(item.getModel()).getUnplanned())),
-                        new BudgetUnitMoneyModel(model(from(item.getModel()).getUnplanned_gross()))
+                        new BudgetUnitMoneyModel(model(from(item.getModel()).getUnplannedGross()))
                 )));
     }
 

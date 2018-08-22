@@ -40,7 +40,7 @@ public abstract class RecordDatabaseImporter {
 
     private ImportEntity importRecord;
 
-    public RecordDatabaseImporter(long projectId, String importType) {
+    RecordDatabaseImporter(long projectId, String importType) {
         this.projectId = projectId;
         this.importType = importType;
     }
@@ -99,7 +99,7 @@ public abstract class RecordDatabaseImporter {
             newBudget.setImportKey(budgetName);
             newBudget.setName(budgetName);
             newBudget.setProject(project);
-            newBudget.setTotal(MoneyUtil.createMoneyFromCents(0l));
+            newBudget.setTotal(MoneyUtil.createMoneyFromCents(0L));
             budgetRepository.save(newBudget);
             budgetsByImportKey.put(newBudget.getImportKey(), newBudget);
             budget = newBudget;
@@ -112,7 +112,7 @@ public abstract class RecordDatabaseImporter {
      * repeated access to the database.
      */
     private Map<String, PersonEntity> getPersonCache(long projectId) {
-        Map<String, PersonEntity> map = new HashMap<String, PersonEntity>();
+        Map<String, PersonEntity> map = new HashMap<>();
         List<PersonEntity> persons = personRepository.findByProjectIdOrderByNameAsc(projectId);
         for (PersonEntity person : persons) {
             map.put(person.getImportKey(), person);
@@ -125,7 +125,7 @@ public abstract class RecordDatabaseImporter {
      * repeated access to the database.
      */
     private Map<String, BudgetEntity> getBudgetCache(long projectId) {
-        Map<String, BudgetEntity> map = new HashMap<String, BudgetEntity>();
+        Map<String, BudgetEntity> map = new HashMap<>();
         List<BudgetEntity> budgets = budgetRepository.findByProjectIdOrderByNameAsc(projectId);
         for (BudgetEntity budget : budgets) {
             map.put(budget.getImportKey(), budget);

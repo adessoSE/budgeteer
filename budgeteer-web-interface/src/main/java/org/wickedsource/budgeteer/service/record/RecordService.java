@@ -16,17 +16,21 @@ import java.util.Optional;
 @Transactional
 public class RecordService {
 
-    @Autowired
-    private WorkRecordRepository workRecordRepository;
+    private final WorkRecordRepository workRecordRepository;
+
+    private final PlanRecordRepository planRecordRepository;
+
+    private final RecordJoiner recordJoiner;
+
+    private final WorkRecordMapper recordMapper;
 
     @Autowired
-    private PlanRecordRepository planRecordRepository;
-
-    @Autowired
-    private RecordJoiner recordJoiner;
-
-    @Autowired
-    private WorkRecordMapper recordMapper;
+    public RecordService(WorkRecordRepository workRecordRepository, PlanRecordRepository planRecordRepository, RecordJoiner recordJoiner, WorkRecordMapper recordMapper) {
+        this.workRecordRepository = workRecordRepository;
+        this.planRecordRepository = planRecordRepository;
+        this.recordJoiner = recordJoiner;
+        this.recordMapper = recordMapper;
+    }
 
     /**
      * Loads the actual budget burned by the given person and the budget planned for this person aggregated by week.
@@ -138,7 +142,6 @@ public class RecordService {
             workRecords = workRecordRepository.aggregateByWeekWithTax(budgetFilter.getProjectId());
         }
         else {
-            List<String> x = budgetFilter.getSelectedTags();
             planRecords = planRecordRepository.aggregateByWeekAndBudgetTagsWithTax(budgetFilter.getProjectId(), budgetFilter.getSelectedTags());
             workRecords= workRecordRepository.aggregateByWeekAndBudgetTagsWithTax(budgetFilter.getProjectId(), budgetFilter.getSelectedTags());
         }

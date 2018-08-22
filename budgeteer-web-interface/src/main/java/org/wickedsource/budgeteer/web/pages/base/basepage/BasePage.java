@@ -75,11 +75,7 @@ public abstract class BasePage extends WebPage {
         HashSet<String> roles = loadRolesFromCurrentUser();
         if (roles != null && roles.contains("admin")) {
             return true;
-        } else if (roles == null) {
-            return true;
-        } else {
-            return false;
-        }
+        } else return roles == null;
     }
 
     private HashSet<String> loadRolesFromCurrentUser() {
@@ -158,7 +154,7 @@ public abstract class BasePage extends WebPage {
     public long getParameterId() {
         StringValue value = getPageParameters().get("id");
         if (value == null || value.isEmpty() || value.isNull()) {
-            return 0l;
+            return 0L;
         } else {
             return value.toLong();
         }

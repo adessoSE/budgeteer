@@ -43,7 +43,7 @@ public class TemplateEntity implements Serializable {
 
     //Transient because Hibernate cannot save the Workbook directly in the db
     @Transient
-    private XSSFWorkbook wbXSSF;
+    private transient XSSFWorkbook wbXSSF;
 
     //So we get the internal data and store it in a byte array.
     @Column(name="TEMPLATE", length = 2 * 1024 * 1024)

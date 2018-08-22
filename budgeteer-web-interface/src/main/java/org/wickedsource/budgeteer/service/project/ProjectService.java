@@ -27,38 +27,52 @@ import java.util.Optional;
 @Transactional
 public class ProjectService {
 
-    @Autowired
-    private ProjectRepository projectRepository;
+    private final ProjectRepository projectRepository;
+
+    private final UserRepository userRepository;
+
+    private final BudgetRepository budgetRepository;
+
+    private final PersonRepository personRepository;
+
+    private final ImportRepository importRepository;
+
+    private final PlanRecordRepository planRecordRepository;
+
+    private final WorkRecordRepository workRecordRepository;
+
+    private final ProjectBaseDataMapper mapper;
+
+    private final DailyRateRepository dailyRateRepository;
+
+    private final InvoiceRepository invoiceRepository;
+
+    private final ContractRepository contractRepository;
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private BudgetRepository budgetRepository;
-
-    @Autowired
-    private PersonRepository personRepository;
-
-    @Autowired
-    private ImportRepository importRepository;
-
-    @Autowired
-    private PlanRecordRepository planRecordRepository;
-
-    @Autowired
-    private WorkRecordRepository workRecordRepository;
-
-    @Autowired
-    private ProjectBaseDataMapper mapper;
-
-    @Autowired
-    private DailyRateRepository dailyRateRepository;
-
-    @Autowired
-    private InvoiceRepository invoiceRepository;
-
-    @Autowired
-    private ContractRepository contractRepository;
+    public ProjectService(ImportRepository importRepository,
+                          ProjectRepository projectRepository,
+                          UserRepository userRepository,
+                          BudgetRepository budgetRepository,
+                          PersonRepository personRepository,
+                          PlanRecordRepository planRecordRepository,
+                          WorkRecordRepository workRecordRepository,
+                          ProjectBaseDataMapper mapper,
+                          DailyRateRepository dailyRateRepository,
+                          InvoiceRepository invoiceRepository,
+                          ContractRepository contractRepository) {
+        this.importRepository = importRepository;
+        this.projectRepository = projectRepository;
+        this.userRepository = userRepository;
+        this.budgetRepository = budgetRepository;
+        this.personRepository = personRepository;
+        this.planRecordRepository = planRecordRepository;
+        this.workRecordRepository = workRecordRepository;
+        this.mapper = mapper;
+        this.dailyRateRepository = dailyRateRepository;
+        this.invoiceRepository = invoiceRepository;
+        this.contractRepository = contractRepository;
+    }
 
     /**
      * Creates a new empty project with the given name.

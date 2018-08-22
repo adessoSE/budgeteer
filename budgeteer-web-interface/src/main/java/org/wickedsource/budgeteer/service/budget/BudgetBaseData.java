@@ -10,7 +10,6 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BudgetBaseData implements Serializable {
-
     private long id;
     private String name;
 }

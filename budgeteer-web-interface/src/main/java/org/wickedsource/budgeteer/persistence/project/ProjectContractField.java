@@ -11,8 +11,8 @@ import java.io.Serializable;
  * (dynamic) Fields that could be used by a contract associated with a project
  */
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name="PROJECT_CONTRACT_FIELD", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"FIELD_NAME", "PROJECT_ID"})
@@ -30,7 +30,6 @@ public class ProjectContractField implements Serializable{
     @JoinColumn(name = "PROJECT_ID", nullable = false)
     private ProjectEntity project;
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -40,9 +39,7 @@ public class ProjectContractField implements Serializable{
 
         if (id != that.id) return false;
         if (!fieldName.equals(that.fieldName)) return false;
-        if (!(project.getId() == that.project.getId())) return false;
-
-        return true;
+        return project.getId() == that.project.getId();
     }
 
     @Override
@@ -61,5 +58,10 @@ public class ProjectContractField implements Serializable{
                 ", fieldName='" + fieldName + '\'' +
                 ", project=" + project.getId() + " - " + project.getName() +
                 '}';
+    }
+
+    public ProjectContractField(String fieldName, ProjectEntity project){
+        this.fieldName = fieldName;
+        this.project = project;
     }
 }

@@ -47,16 +47,16 @@ public class AggregatedRecordTable extends Panel {
                 item.add(new Label("endDate", model(from(item.getModel()).getAggregationPeriodEnd())));
                 item.add(new Label("hours", model(from(item.getModel()).getHours())));
 
-                item.add(new MoneyLabel( "budgetBurned_net",
+                item.add(new MoneyLabel( "budgetBurnedNet",
                         new TaxBudgetUnitMoneyModel(
-                                new BudgetUnitMoneyModel(model(from(item.getModel()).getBudgetBurned_net())),
-                                new BudgetUnitMoneyModel(model(from(item.getModel()).getBudgetBurned_gross()))
+                                new BudgetUnitMoneyModel(model(from(item.getModel()).getBudgetBurnedNet())),
+                                new BudgetUnitMoneyModel(model(from(item.getModel()).getBudgetBurnedGross()))
                         )));
 
-                item.add(new MoneyLabel( "budgetPlanned_net",
+                item.add(new MoneyLabel( "budgetPlannedNet",
                         new TaxBudgetUnitMoneyModel(
-                                new BudgetUnitMoneyModel(model(from(item.getModel()).getBudgetPlanned_net())),
-                                new BudgetUnitMoneyModel(model(from(item.getModel()).getBudgetPlanned_gross()))
+                                new BudgetUnitMoneyModel(model(from(item.getModel()).getBudgetPlannedNet())),
+                                new BudgetUnitMoneyModel(model(from(item.getModel()).getBudgetPlannedGross()))
                         )));
 
                 Money difference;
@@ -65,11 +65,10 @@ public class AggregatedRecordTable extends Panel {
                     difference = from(item.getModel()).getDifference();
                 }
                 else {
-                    difference = from(item.getModel()).getDifference_gross();
+                    difference = from(item.getModel()).getDifferenceGross();
                 }
 
                 Label differenceLabel = new MoneyLabel("difference", new BudgetUnitMoneyModel(model(difference))) {
-                //Label differenceLabel = new MoneyLabel("difference", new BudgetUnitMoneyModel(model(from(item.getModel()).getDifference()))) {
                     @Override
                     protected void onConfigure() {
                         IModel<Money> model = (IModel<Money>) getDefaultModel();

@@ -10,24 +10,24 @@ import org.wickedsource.budgeteer.persistence.record.WeeklyAggregatedRecordWithT
 import java.util.*;
 
 @Component
-public class RecordJoiner {
+class RecordJoiner {
 
     /**
      * Joins the given work records and the given plan records since it is not possible to join them in the database with JPA.
      */
-    public List<AggregatedRecord> joinWeekly(List<WeeklyAggregatedRecordBean> workRecords, List<WeeklyAggregatedRecordBean> planRecords) {
+    List<AggregatedRecord> joinWeekly(List<WeeklyAggregatedRecordBean> workRecords, List<WeeklyAggregatedRecordBean> planRecords) {
         RecordMap recordMap = new RecordMap();
         for (WeeklyAggregatedRecordBean bean : planRecords) {
             AggregatedRecord record = recordMap.getOrCreateRecord(bean);
-            record.setBudgetPlanned_net(MoneyUtil.createMoneyFromCents(bean.getValueInCents()));
+            record.setBudgetPlannedNet(MoneyUtil.createMoneyFromCents(bean.getValueInCents()));
         }
         for (WeeklyAggregatedRecordBean bean : workRecords) {
             AggregatedRecord record = recordMap.getOrCreateRecord(bean);
-            record.setBudgetBurned_net(MoneyUtil.createMoneyFromCents(bean.getValueInCents()));
+            record.setBudgetBurnedNet(MoneyUtil.createMoneyFromCents(bean.getValueInCents()));
             record.setHours(bean.getHours());
         }
-        List<AggregatedRecord> records = new ArrayList<AggregatedRecord>(recordMap.values());
-        Collections.sort(records, new AggregatedRecordComparator());
+        List<AggregatedRecord> records = new ArrayList<>(recordMap.values());
+        records.sort(new AggregatedRecordComparator());
         return records;
     }
 
@@ -41,19 +41,19 @@ public class RecordJoiner {
         for (WeeklyAggregatedRecordWithTaxBean bean : planRecords) {
             AggregatedRecord record = recordMap.getOrCreateRecordWithTax(bean);
 
-            record.setBudgetPlanned_net(MoneyUtil.createMoneyFromCents(bean.getValueInCents()));
-            record.setBudgetPlanned_gross(bean.getValueWithTaxes());
+            record.setBudgetPlannedNet(MoneyUtil.createMoneyFromCents(bean.getValueInCents()));
+            record.setBudgetPlannedGross(bean.getValueWithTaxes());
         }
         for (WeeklyAggregatedRecordWithTaxBean bean : workRecords) {
             AggregatedRecord record = recordMap.getOrCreateRecordWithTax(bean);
 
-            record.setBudgetBurned_net(MoneyUtil.createMoneyFromCents(bean.getValueInCents()));
-            record.setBudgetBurned_gross(bean.getValueWithTaxes());
+            record.setBudgetBurnedNet(MoneyUtil.createMoneyFromCents(bean.getValueInCents()));
+            record.setBudgetBurnedGross(bean.getValueWithTaxes());
             record.setHours(bean.getHours());
         }
 
-        List<AggregatedRecord> records = new ArrayList<AggregatedRecord>(recordMap.values());
-        Collections.sort(records, new AggregatedRecordComparator());
+        List<AggregatedRecord> records = new ArrayList<>(recordMap.values());
+        records.sort(new AggregatedRecordComparator());
 
         //Sum up records of the same week
         records = sumRecordsForEachPeriod(records);
@@ -88,10 +88,10 @@ public class RecordJoiner {
                     sum.setHours(current.getHours() + next.getHours());
                 }
 
-                sum.setBudgetPlanned_net(MoneyUtil.sumMoney(current.getBudgetPlanned_net(), next.getBudgetPlanned_net()));
-                sum.setBudgetPlanned_gross(MoneyUtil.sumMoney(current.getBudgetPlanned_gross(), next.getBudgetPlanned_gross()));
-                sum.setBudgetBurned_net(MoneyUtil.sumMoney(current.getBudgetBurned_net(), next.getBudgetBurned_net()));
-                sum.setBudgetBurned_gross(MoneyUtil.sumMoney(current.getBudgetBurned_gross(), next.getBudgetBurned_gross()));
+                sum.setBudgetPlannedNet(MoneyUtil.sumMoney(current.getBudgetPlannedNet(), next.getBudgetPlannedNet()));
+                sum.setBudgetPlannedGross(MoneyUtil.sumMoney(current.getBudgetPlannedGross(), next.getBudgetPlannedGross()));
+                sum.setBudgetBurnedNet(MoneyUtil.sumMoney(current.getBudgetBurnedNet(), next.getBudgetBurnedNet()));
+                sum.setBudgetBurnedGross(MoneyUtil.sumMoney(current.getBudgetBurnedGross(), next.getBudgetBurnedGross()));
 
                 // Replace the two old records by their sum
                 records.remove(current);
@@ -107,37 +107,37 @@ public class RecordJoiner {
         return records;
     }
 
-    public List<AggregatedRecord> joinMonthly(List<MonthlyAggregatedRecordBean> workRecords, List<MonthlyAggregatedRecordBean> planRecords) {
+    List<AggregatedRecord> joinMonthly(List<MonthlyAggregatedRecordBean> workRecords, List<MonthlyAggregatedRecordBean> planRecords) {
         RecordMap recordMap = new RecordMap();
         for (MonthlyAggregatedRecordBean bean : planRecords) {
             AggregatedRecord record = recordMap.getOrCreateRecord(bean);
-            record.setBudgetPlanned_net(MoneyUtil.createMoneyFromCents(bean.getValueInCents()));
+            record.setBudgetPlannedNet(MoneyUtil.createMoneyFromCents(bean.getValueInCents()));
         }
         for (MonthlyAggregatedRecordBean bean : workRecords) {
             AggregatedRecord record = recordMap.getOrCreateRecord(bean);
-            record.setBudgetBurned_net(MoneyUtil.createMoneyFromCents(bean.getValueInCents()));
+            record.setBudgetBurnedNet(MoneyUtil.createMoneyFromCents(bean.getValueInCents()));
             record.setHours(bean.getHours());
         }
-        List<AggregatedRecord> records = new ArrayList<AggregatedRecord>(recordMap.values());
-        Collections.sort(records, new AggregatedRecordComparator());
+        List<AggregatedRecord> records = new ArrayList<>(recordMap.values());
+        records.sort(new AggregatedRecordComparator());
         return records;
     }
 
-    public List<AggregatedRecord> joinMonthlyWithTax(List<MonthlyAggregatedRecordWithTaxBean> workRecords, List<MonthlyAggregatedRecordWithTaxBean> planRecords) {
+    List<AggregatedRecord> joinMonthlyWithTax(List<MonthlyAggregatedRecordWithTaxBean> workRecords, List<MonthlyAggregatedRecordWithTaxBean> planRecords) {
         RecordMap recordMap = new RecordMap();
         for (MonthlyAggregatedRecordWithTaxBean bean : planRecords) {
             AggregatedRecord record = recordMap.getOrCreateRecordWithTax(bean);
-            record.setBudgetPlanned_net(MoneyUtil.createMoneyFromCents(bean.getValueInCents()));
-            record.setBudgetPlanned_gross(bean.getValueWithTaxes());
+            record.setBudgetPlannedNet(MoneyUtil.createMoneyFromCents(bean.getValueInCents()));
+            record.setBudgetPlannedGross(bean.getValueWithTaxes());
         }
         for (MonthlyAggregatedRecordWithTaxBean bean : workRecords) {
             AggregatedRecord record = recordMap.getOrCreateRecordWithTax(bean);
-            record.setBudgetBurned_net(MoneyUtil.createMoneyFromCents(bean.getValueInCents()));
-            record.setBudgetBurned_gross(bean.getValueWithTaxes());
+            record.setBudgetBurnedNet(MoneyUtil.createMoneyFromCents(bean.getValueInCents()));
+            record.setBudgetBurnedGross(bean.getValueWithTaxes());
             record.setHours(bean.getHours());
         }
-        List<AggregatedRecord> records = new ArrayList<AggregatedRecord>(recordMap.values());
-        Collections.sort(records, new AggregatedRecordComparator());
+        List<AggregatedRecord> records = new ArrayList<>(recordMap.values());
+        records.sort(new AggregatedRecordComparator());
 
         //Sum up records of the same month
         records = sumRecordsForEachPeriod(records);
@@ -147,7 +147,7 @@ public class RecordJoiner {
 
     class RecordMap extends HashMap<String, AggregatedRecord> {
 
-        public AggregatedRecord getOrCreateRecord(WeeklyAggregatedRecordBean recordBean) {
+        AggregatedRecord getOrCreateRecord(WeeklyAggregatedRecordBean recordBean) {
             AggregatedRecord record = get(getKey(recordBean));
             if (record == null) {
                 Calendar c = Calendar.getInstance(Locale.GERMAN);
@@ -164,7 +164,7 @@ public class RecordJoiner {
             return record;
         }
 
-        public AggregatedRecord getOrCreateRecordWithTax(WeeklyAggregatedRecordWithTaxBean recordBean) {
+        AggregatedRecord getOrCreateRecordWithTax(WeeklyAggregatedRecordWithTaxBean recordBean) {
             AggregatedRecord record = get(getKey(recordBean));
             if (record == null) {
                 Calendar c = Calendar.getInstance(Locale.GERMAN);
@@ -181,7 +181,7 @@ public class RecordJoiner {
             return record;
         }
 
-        public AggregatedRecord getOrCreateRecord(MonthlyAggregatedRecordBean recordBean) {
+        AggregatedRecord getOrCreateRecord(MonthlyAggregatedRecordBean recordBean) {
             AggregatedRecord record = get(getKey(recordBean));
             if (record == null) {
                 Calendar c = Calendar.getInstance(Locale.GERMAN);
@@ -199,7 +199,7 @@ public class RecordJoiner {
             return record;
         }
 
-        public AggregatedRecord getOrCreateRecordWithTax(MonthlyAggregatedRecordWithTaxBean recordBean) {
+        AggregatedRecord getOrCreateRecordWithTax(MonthlyAggregatedRecordWithTaxBean recordBean) {
             AggregatedRecord record = get(getKey(recordBean));
             if (record == null) {
                 Calendar c = Calendar.getInstance(Locale.GERMAN);

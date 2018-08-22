@@ -18,7 +18,7 @@ public class DateRangeConverter implements IConverter<DateRange> {
 
     @Override
     public DateRange convertToObject(String value, Locale locale){
-        if(value == null || (value != null && value.isEmpty())){
+        if(value == null || value.isEmpty()){
             return new DateRange(null, null);
         }
         try {

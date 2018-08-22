@@ -19,25 +19,24 @@ import java.util.*;
 @Transactional
 public class StatisticsService {
 
-    private Random random = new Random();
+    private final WorkRecordRepository workRecordRepository;
+
+    private final PlanRecordRepository planRecordRepository;
+
+    private final DateUtil dateUtil;
+
+    private final ShareBeanToShareMapper shareBeanToShareMapper;
+
+    private final ContractRepository contractRepository;
 
     @Autowired
-    private WorkRecordRepository workRecordRepository;
-
-    @Autowired
-    private PlanRecordRepository planRecordRepository;
-
-    @Autowired
-    private DateUtil dateUtil;
-
-    @Autowired
-    private ShareBeanToShareMapper shareBeanToShareMapper;
-
-    @Autowired
-    private ContractRepository contractRepository;
-
-    @Autowired
-    private InvoiceRepository invoiceRepository;
+    public StatisticsService(WorkRecordRepository workRecordRepository, PlanRecordRepository planRecordRepository, DateUtil dateUtil, ShareBeanToShareMapper shareBeanToShareMapper, ContractRepository contractRepository) {
+        this.workRecordRepository = workRecordRepository;
+        this.planRecordRepository = planRecordRepository;
+        this.dateUtil = dateUtil;
+        this.shareBeanToShareMapper = shareBeanToShareMapper;
+        this.contractRepository = contractRepository;
+    }
 
 
     /**
@@ -94,7 +93,7 @@ public class StatisticsService {
 
     private List<Money> fillInMissingWeeks(int numberOfWeeks, List<WeeklyAggregatedRecordBean> weeklyBeans) {
         Date startDate = dateUtil.weeksAgo(numberOfWeeks);
-        List<Money> resultList = new ArrayList<Money>();
+        List<Money> resultList = new ArrayList<>();
 
         // adding values to result list and adding zero-values for weeks that are not included in the query result
         Calendar c = Calendar.getInstance();
@@ -102,7 +101,7 @@ public class StatisticsService {
         for (int i = 0; i < numberOfWeeks; i++) {
             WeeklyAggregatedRecordBean weekBean = getBeanForWeek(c.get(Calendar.YEAR), c.get(Calendar.WEEK_OF_YEAR), weeklyBeans);
             if (weekBean == null) {
-                resultList.add(MoneyUtil.createMoneyFromCents(0l));
+                resultList.add(MoneyUtil.createMoneyFromCents(0L));
             } else {
                 resultList.add(MoneyUtil.createMoneyFromCents(weekBean.getValueInCents()));
             }
@@ -114,7 +113,7 @@ public class StatisticsService {
 
     private List<Money> fillInMissingMonths(int numberOfMonths, List<MonthlyAggregatedRecordBean> monthlyBeans) {
         Date startDate = dateUtil.monthsAgo(numberOfMonths);
-        List<Money> resultList = new ArrayList<Money>();
+        List<Money> resultList = new ArrayList<>();
 
         // adding values to result list and adding zero-values for weeks that are not included in the query result
         Calendar c = Calendar.getInstance();
@@ -122,7 +121,7 @@ public class StatisticsService {
         for (int i = 0; i < numberOfMonths; i++) {
             MonthlyAggregatedRecordBean weekBean = getBeanForMonth(c.get(Calendar.YEAR), c.get(Calendar.MONTH), monthlyBeans);
             if (weekBean == null) {
-                resultList.add(MoneyUtil.createMoneyFromCents(0l));
+                resultList.add(MoneyUtil.createMoneyFromCents(0L));
             } else {
                 resultList.add(MoneyUtil.createMoneyFromCents(weekBean.getValueInCents()));
             }
@@ -142,7 +141,7 @@ public class StatisticsService {
     }
 
     private List<WeeklyAggregatedRecordWithTaxBean> getAllBeansForWeek(int year, int week, List<WeeklyAggregatedRecordWithTaxBean> beans) {
-        List<WeeklyAggregatedRecordWithTaxBean> result = new ArrayList<WeeklyAggregatedRecordWithTaxBean>();
+        List<WeeklyAggregatedRecordWithTaxBean> result = new ArrayList<>();
         for (WeeklyAggregatedRecordWithTaxBean bean : beans) {
             if (bean.getYear() == year && bean.getWeek() == week) {
                 result.add(bean);
@@ -152,7 +151,7 @@ public class StatisticsService {
     }
 
     private List<MonthlyAggregatedRecordWithTaxBean> getAllBeansForMonth(int year, int month, List<MonthlyAggregatedRecordWithTaxBean> beans) {
-        List<MonthlyAggregatedRecordWithTaxBean> result = new ArrayList<MonthlyAggregatedRecordWithTaxBean>();
+        List<MonthlyAggregatedRecordWithTaxBean> result = new ArrayList<>();
         for (MonthlyAggregatedRecordWithTaxBean bean : beans) {
             if (bean.getYear() == year && bean.getMonth() == month) {
                 result.add(bean);
@@ -180,7 +179,7 @@ public class StatisticsService {
     public List<Money> getAvgDailyRateForPreviousDays(long projectId, int numberOfDays) {
         Date startDate = dateUtil.daysAgo(numberOfDays);
         List<DailyAverageRateBean> rates = workRecordRepository.getAverageDailyRatesPerDay(projectId, startDate);
-        List<Money> resultList = new ArrayList<Money>();
+        List<Money> resultList = new ArrayList<>();
 
         // adding values to result list and adding zeros for days that are not in the query result
         Calendar c = Calendar.getInstance();
@@ -188,7 +187,7 @@ public class StatisticsService {
         for (int i = 0; i < numberOfDays; i++) {
             DailyAverageRateBean dayBean = getBeanForDay(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH), rates);
             if (dayBean == null) {
-                resultList.add(MoneyUtil.createMoneyFromCents(0l));
+                resultList.add(MoneyUtil.createMoneyFromCents(0L));
             } else {
                 resultList.add(dayBean.getRate());
             }
@@ -264,7 +263,7 @@ public class StatisticsService {
             for (int i = 0; i < numberOfWeeks; i++) {
                 WeeklyAggregatedRecordWithTitleBean bean = getBeanForWeekAndTitle(c.get(Calendar.YEAR), c.get(Calendar.WEEK_OF_YEAR), title, burnedStats);
                 if (bean == null) {
-                    titeledSeries.add(MoneyUtil.createMoneyFromCents(0l));
+                    titeledSeries.add(MoneyUtil.createMoneyFromCents(0L));
                 } else {
                     titeledSeries.add(MoneyUtil.createMoneyFromCents(bean.getValueInCents()));
                 }
@@ -283,30 +282,29 @@ public class StatisticsService {
             MoneySeries titledSeries = new MoneySeries();
             titledSeries.setName(title);
 
-            List<Money> resultList = new ArrayList<Money>();
-            List<Money> resultList_gros = new ArrayList<Money>();
+            List<Money> resultList = new ArrayList<>();
+            List<Money> resultListGross = new ArrayList<>();
 
             for (int i = 0; i < numberOfWeeks; i++) {
                 List<WeeklyAggregatedRecordWithTaxBean> beans = getAllBeansForWeekAndTitleWithTax(c.get(Calendar.YEAR), c.get(Calendar.WEEK_OF_YEAR), title, burnedStats);
 
-                sumMoneyAmountsOfWeekBeans(beans, resultList, resultList_gros);
+                sumMoneyAmountsOfWeekBeans(beans, resultList, resultListGross);
 
                 c.add(Calendar.WEEK_OF_YEAR, 1);
             }
             titledSeries.setValues(resultList);
-            titledSeries.setValues_gross(resultList_gros);
+            titledSeries.setValues_gross(resultListGross);
             targetAndActual.getActualSeries().add(titledSeries);
         }
     }
 
-    private MoneySeries calculateWeeklyTargetSeries(int numberOfWeeks, List<WeeklyAggregatedRecordWithTaxBean> weeklyBeans)
-    {
+    private MoneySeries calculateWeeklyTargetSeries(int numberOfWeeks, List<WeeklyAggregatedRecordWithTaxBean> weeklyBeans){
         MoneySeries targetSeries = new MoneySeries();
         targetSeries.setName("Target");
 
         Date startDate = dateUtil.weeksAgo(numberOfWeeks);
-        List<Money> resultList = new ArrayList<Money>();
-        List<Money> resultList_gros = new ArrayList<Money>();
+        List<Money> resultList = new ArrayList<>();
+        List<Money> resultListGross = new ArrayList<>();
 
         Calendar c = Calendar.getInstance();
         c.setTime(startDate);
@@ -315,20 +313,19 @@ public class StatisticsService {
         for (int i = 0; i < numberOfWeeks; i++) {
             List<WeeklyAggregatedRecordWithTaxBean> weekBeans = getAllBeansForWeek(c.get(Calendar.YEAR), c.get(Calendar.WEEK_OF_YEAR), weeklyBeans);
 
-            sumMoneyAmountsOfWeekBeans(weekBeans, resultList, resultList_gros);
+            sumMoneyAmountsOfWeekBeans(weekBeans, resultList, resultListGross);
 
             c.add(Calendar.WEEK_OF_YEAR, 1);
         }
         targetSeries.setValues(resultList);
-        targetSeries.setValues_gross(resultList_gros);
+        targetSeries.setValues_gross(resultListGross);
 
         return targetSeries;
     }
 
-    private void sumMoneyAmountsOfWeekBeans(List<WeeklyAggregatedRecordWithTaxBean> beans, List<Money> netValues, List<Money> grosValues)
-    {
-        Money netValue = MoneyUtil.createMoney(0l);
-        Money grosValue= MoneyUtil.createMoney(0l);
+    private void sumMoneyAmountsOfWeekBeans(List<WeeklyAggregatedRecordWithTaxBean> beans, List<Money> netValues, List<Money> grosValues) {
+        Money netValue = MoneyUtil.createMoney(0L);
+        Money grosValue= MoneyUtil.createMoney(0L);
 
         for(WeeklyAggregatedRecordWithTaxBean bean : beans)
         {
@@ -342,10 +339,9 @@ public class StatisticsService {
         grosValues.add(grosValue);
     }
 
-    private void sumMoneyAmountsOfMonthBeans(List<MonthlyAggregatedRecordWithTaxBean> beans, List<Money> netValues, List<Money> grosValues)
-    {
-        Money netValue = MoneyUtil.createMoney(0l);
-        Money grosValue= MoneyUtil.createMoney(0l);
+    private void sumMoneyAmountsOfMonthBeans(List<MonthlyAggregatedRecordWithTaxBean> beans, List<Money> netValues, List<Money> grosValues){
+        Money netValue = MoneyUtil.createMoney(0L);
+        Money grosValue= MoneyUtil.createMoney(0L);
 
         for(MonthlyAggregatedRecordWithTaxBean bean : beans)
         {
@@ -370,7 +366,7 @@ public class StatisticsService {
             for (int i = 0; i < numberOfMonths; i++) {
                 MonthlyAggregatedRecordWithTitleBean bean = getBeanForMonthAndTitle(c.get(Calendar.YEAR), c.get(Calendar.MONTH), title, burnedStats);
                 if (bean == null) {
-                    titledSeries.add(MoneyUtil.createMoneyFromCents(0l));
+                    titledSeries.add(MoneyUtil.createMoneyFromCents(0L));
                 } else {
                     titledSeries.add(MoneyUtil.createMoneyFromCents(bean.getValueInCents()));
                 }
@@ -391,23 +387,23 @@ public class StatisticsService {
             MoneySeries titledSeries = new MoneySeries();
             titledSeries.setName(title);
 
-            List<Money> resultList = new ArrayList<Money>();
-            List<Money> resultList_gros = new ArrayList<Money>();
+            List<Money> resultList = new ArrayList<>();
+            List<Money> resultListGross = new ArrayList<>();
 
             for (int i = 0; i < numberOfMonths; i++) {
                 List<MonthlyAggregatedRecordWithTaxBean> beans = getAllBeansForMonthAndTitleWithTax(c.get(Calendar.YEAR), c.get(Calendar.MONTH), title, burnedStats);
-                sumMoneyAmountsOfMonthBeans(beans, resultList, resultList_gros);
+                sumMoneyAmountsOfMonthBeans(beans, resultList, resultListGross);
                 c.add(Calendar.MONTH, 1);
             }
             titledSeries.setValues(resultList);
-            titledSeries.setValues_gross(resultList_gros);
+            titledSeries.setValues_gross(resultListGross);
             targetAndActual.getActualSeries().add(titledSeries);
         }
     }
 
     private List<MonthlyAggregatedRecordWithTitleBean> castToMonthlyRecordWithTitle(List<MonthlyAggregatedRecordWithTitleAndTaxBean> list)
     {
-        List<MonthlyAggregatedRecordWithTitleBean> newList = new ArrayList<MonthlyAggregatedRecordWithTitleBean>();
+        List<MonthlyAggregatedRecordWithTitleBean> newList = new ArrayList<>();
 
         for(MonthlyAggregatedRecordWithTitleAndTaxBean bean : list)
         {
@@ -419,7 +415,7 @@ public class StatisticsService {
     }
 
     private Set<String> getAllTitlesWeekly(List<WeeklyAggregatedRecordWithTitleBean> beans) {
-        Set<String> budgetNames = new HashSet<String>();
+        Set<String> budgetNames = new HashSet<>();
         for (WeeklyAggregatedRecordWithTitleBean bean : beans) {
             budgetNames.add(bean.getTitle());
         }
@@ -439,7 +435,7 @@ public class StatisticsService {
     }
 
     private Set<String> getAllTitlesMonthly(List<MonthlyAggregatedRecordWithTitleBean> beans) {
-        Set<String> budgetNames = new HashSet<String>();
+        Set<String> budgetNames = new HashSet<>();
         for (MonthlyAggregatedRecordWithTitleBean bean : beans) {
             budgetNames.add(bean.getTitle());
         }
@@ -517,8 +513,8 @@ public class StatisticsService {
      */
     public TargetAndActual getWeekStatsForBudgets(BudgetTagFilter budgetFilter, int numberOfWeeks) {
         Date startDate = dateUtil.weeksAgo(numberOfWeeks);
-        List<WeeklyAggregatedRecordWithTitleBean> burnedStats = new ArrayList<WeeklyAggregatedRecordWithTitleBean>();
-        List<WeeklyAggregatedRecordBean> plannedStats = new ArrayList<WeeklyAggregatedRecordBean>();
+        List<WeeklyAggregatedRecordWithTitleBean> burnedStats;
+        List<WeeklyAggregatedRecordBean> plannedStats;
         if (budgetFilter.getSelectedTags().isEmpty()) {
             burnedStats = workRecordRepository.aggregateByWeekAndPersonForBudgets(budgetFilter.getProjectId(), startDate);
             plannedStats = planRecordRepository.aggregateByWeekForBudgets(budgetFilter.getProjectId(), startDate);
@@ -548,8 +544,8 @@ public class StatisticsService {
      */
     public TargetAndActual getWeekStatsForBudgetsWithTax(BudgetTagFilter budgetFilter, int numberOfWeeks) {
         Date startDate = dateUtil.weeksAgo(numberOfWeeks);
-        List<WeeklyAggregatedRecordWithTitleAndTaxBean> burnedStats = new ArrayList<WeeklyAggregatedRecordWithTitleAndTaxBean>();
-        List<WeeklyAggregatedRecordWithTaxBean> plannedStats = new ArrayList<WeeklyAggregatedRecordWithTaxBean>();
+        List<WeeklyAggregatedRecordWithTitleAndTaxBean> burnedStats;
+        List<WeeklyAggregatedRecordWithTaxBean> plannedStats;
 
         if (budgetFilter.getSelectedTags().isEmpty()) {
             burnedStats = workRecordRepository.aggregateByWeekAndPersonForBudgetsWithTax(budgetFilter.getProjectId(), startDate);
@@ -571,8 +567,8 @@ public class StatisticsService {
      */
     public TargetAndActual getMonthStatsForBudgets(BudgetTagFilter budgetFilter, int numberOfMonths) {
         Date startDate = dateUtil.monthsAgo(numberOfMonths);
-        List<MonthlyAggregatedRecordWithTitleBean> burnedStats = new ArrayList<MonthlyAggregatedRecordWithTitleBean>();
-        List<MonthlyAggregatedRecordBean> plannedStats = new ArrayList<MonthlyAggregatedRecordBean>();
+        List<MonthlyAggregatedRecordWithTitleBean> burnedStats;
+        List<MonthlyAggregatedRecordBean> plannedStats;
         if(budgetFilter.getSelectedTags().isEmpty()){
             // aggregate all budgets
             burnedStats = workRecordRepository.aggregateByMonthAndPersonForBudgets(budgetFilter.getProjectId(), startDate);
@@ -604,8 +600,8 @@ public class StatisticsService {
      */
     public TargetAndActual getMonthStatsForBudgetsWithTax(BudgetTagFilter budgetFilter, int numberOfMonths) {
         Date startDate = dateUtil.monthsAgo(numberOfMonths);
-        List<MonthlyAggregatedRecordWithTitleAndTaxBean> burnedStats = new ArrayList<MonthlyAggregatedRecordWithTitleAndTaxBean>();
-        List<MonthlyAggregatedRecordWithTaxBean> plannedStats = new ArrayList<MonthlyAggregatedRecordWithTaxBean>();
+        List<MonthlyAggregatedRecordWithTitleAndTaxBean> burnedStats;
+        List<MonthlyAggregatedRecordWithTaxBean> plannedStats;
         if(budgetFilter.getSelectedTags().isEmpty()){
             // aggregate all budgets
             burnedStats = workRecordRepository.aggregateByMonthAndPersonForBudgetsWithTax(budgetFilter.getProjectId(), startDate);
@@ -637,8 +633,8 @@ public class StatisticsService {
         targetSeries.setName("Target");
 
         Date startDate = dateUtil.monthsAgo(numberOfMonths);
-        List<Money> resultList = new ArrayList<Money>();
-        List<Money> resultList_gros = new ArrayList<Money>();
+        List<Money> resultList = new ArrayList<>();
+        List<Money> resultListGross = new ArrayList<>();
 
         Calendar c = Calendar.getInstance();
         c.setTime(startDate);
@@ -648,13 +644,13 @@ public class StatisticsService {
         {
             List<MonthlyAggregatedRecordWithTaxBean> monthBeans = getAllBeansForMonth(c.get(Calendar.YEAR), c.get(Calendar.MONTH), monthlyBeans);
 
-            sumMoneyAmountsOfMonthBeans(monthBeans, resultList, resultList_gros);
+            sumMoneyAmountsOfMonthBeans(monthBeans, resultList, resultListGross);
 
             c.add(Calendar.MONTH, 1);
         }
 
         targetSeries.setValues(resultList);
-        targetSeries.setValues_gross(resultList_gros);
+        targetSeries.setValues_gross(resultListGross);
 
         return targetSeries;
     }
@@ -743,7 +739,7 @@ public class StatisticsService {
     }
 
     public List<ContractStatisticBean> getMonthlyAggregatedStatisticsForContract(long contractId, int numberOfMonths){
-        List<ContractStatisticBean> result = new LinkedList<ContractStatisticBean>();
+        List<ContractStatisticBean> result = new LinkedList<>();
         Date startDate = dateUtil.monthsAgo(numberOfMonths);
         Calendar cal = Calendar.getInstance();
         cal.setTime(startDate);
@@ -758,7 +754,7 @@ public class StatisticsService {
     }
 
     public List<ContractStatisticBean> getMonthlyStatisticsForContract(long contractId, Date startDate){
-        List<ContractStatisticBean> result = new LinkedList<ContractStatisticBean>();
+        List<ContractStatisticBean> result = new LinkedList<>();
         Calendar cal = Calendar.getInstance();
         cal.setTime(startDate);
         Calendar currentDate = Calendar.getInstance();

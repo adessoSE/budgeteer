@@ -7,13 +7,12 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.servlet.FilterRegistration;
 import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
 
 @Configuration
 public class WebInitializer implements ServletContextInitializer {
 
     @Override
-    public void onStartup(ServletContext sc) throws ServletException {
+    public void onStartup(ServletContext sc) {
         FilterRegistration filter = sc.addFilter("wicket-filter",
                 WicketFilter.class);
         filter.setInitParameter(WicketFilter.APP_FACT_PARAM,

@@ -12,20 +12,20 @@ public class AggregatedRecord {
     private Date aggregationPeriodStart;
     private Date aggregationPeriodEnd;
     private Double hours;
-    private Money budgetPlanned_net;
-    private Money budgetBurned_net;
-    private Money budgetPlanned_gross;
-    private Money budgetBurned_gross;
+    private Money budgetPlannedNet;
+    private Money budgetBurnedNet;
+    private Money budgetPlannedGross;
+    private Money budgetBurnedGross;
 
     public Money getDifference() {
-        Money first = budgetPlanned_net != null ? budgetPlanned_net : MoneyUtil.createMoney(0);
-        Money second = budgetBurned_net != null ? budgetBurned_net : MoneyUtil.createMoney(0);
+        Money first = budgetPlannedNet != null ? budgetPlannedNet : MoneyUtil.createMoney(0);
+        Money second = budgetBurnedNet != null ? budgetBurnedNet : MoneyUtil.createMoney(0);
         return first.minus(second);
     }
 
-    public Money getDifference_gross(){
-        Money first = budgetPlanned_gross != null ? budgetPlanned_gross : MoneyUtil.createMoney(0);
-        Money second = budgetBurned_gross != null ? budgetBurned_gross : MoneyUtil.createMoney(0);
+    public Money getDifferenceGross(){
+        Money first = budgetPlannedGross != null ? budgetPlannedGross : MoneyUtil.createMoney(0);
+        Money second = budgetBurnedGross != null ? budgetBurnedGross : MoneyUtil.createMoney(0);
         return first.minus(second);
     }
 }

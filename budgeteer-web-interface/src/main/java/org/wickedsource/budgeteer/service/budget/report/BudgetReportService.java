@@ -188,10 +188,10 @@ public class BudgetReportService {
 		data.setFrom(dateRange.getStartDate());
 		data.setUntil(dateRange.getEndDate());
 		data.setAttributes(attributes);
-		data.setSpent_net(spentMoneyInPeriod);
-		data.setSpent_gross(spentMoneyInPeriod * taxCoefficient);
-		data.setBudgetRemaining_net(totalMoney - spentMoney);
-		data.setBudgetRemaining_gross((totalMoney - spentMoney) * taxCoefficient);
+		data.setSpentNet(spentMoneyInPeriod);
+		data.setSpentGross(spentMoneyInPeriod * taxCoefficient);
+		data.setBudgetRemainingNet(totalMoney - spentMoney);
+		data.setBudgetRemainingGross((totalMoney - spentMoney) * taxCoefficient);
 		data.setHoursAggregated(totalHours);
 		data.setProgress(progress);
 		return data;

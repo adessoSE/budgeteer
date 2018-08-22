@@ -31,29 +31,38 @@ import java.util.*;
 @Transactional
 public class BudgetService {
 
-    @Autowired
-    private BudgetRepository budgetRepository;
+    private final BudgetRepository budgetRepository;
+
+    private final BudgetBaseDataMapper budgetBaseDataMapper;
+
+    private final WorkRecordRepository workRecordRepository;
+
+    private final PlanRecordRepository planRecordRepository;
+
+    private final DailyRateRepository rateRepository;
+
+    private final ProjectRepository projectRepository;
+
+    private final ContractRepository contractRepository;
+
+    private final ContractDataMapper contractDataMapper;
 
     @Autowired
-    private BudgetBaseDataMapper budgetBaseDataMapper;
-
-    @Autowired
-    private WorkRecordRepository workRecordRepository;
-
-    @Autowired
-    private PlanRecordRepository planRecordRepository;
-
-    @Autowired
-    private DailyRateRepository rateRepository;
-
-    @Autowired
-    private ProjectRepository projectRepository;
-
-    @Autowired
-    private ContractRepository contractRepository;
-
-    @Autowired
-    private ContractDataMapper contractDataMapper;
+    public BudgetService(BudgetRepository budgetRepository,
+                         BudgetBaseDataMapper budgetBaseDataMapper,
+                         WorkRecordRepository workRecordRepository,
+                         PlanRecordRepository planRecordRepository,
+                         DailyRateRepository rateRepository,
+                         ProjectRepository projectRepository, ContractRepository contractRepository, ContractDataMapper contractDataMapper) {
+        this.budgetRepository = budgetRepository;
+        this.budgetBaseDataMapper = budgetBaseDataMapper;
+        this.workRecordRepository = workRecordRepository;
+        this.planRecordRepository = planRecordRepository;
+        this.rateRepository = rateRepository;
+        this.projectRepository = projectRepository;
+        this.contractRepository = contractRepository;
+        this.contractDataMapper = contractDataMapper;
+    }
 
     /**
      * Loads all Budgets that the given user is qualified for and returns base data about them.
@@ -147,13 +156,13 @@ public class BudgetService {
         data.setTags(mapEntitiesToTags(entity.getTags()));
         // Money
         data.setSpent(toMoneyNullsafe(spentBudgetInCents));
-        data.setSpent_gross(data.getSpent().multipliedBy(taxCoefficient, RoundingMode.FLOOR));
+        data.setSpentGross(data.getSpent().multipliedBy(taxCoefficient, RoundingMode.FLOOR));
         data.setTotal(entity.getTotal());
-        data.setTotal_gross(data.getTotal().multipliedBy(taxCoefficient, RoundingMode.FLOOR));
+        data.setTotalGross(data.getTotal().multipliedBy(taxCoefficient, RoundingMode.FLOOR));
         data.setAvgDailyRate(toMoneyNullsafe(avgDailyRateInCents));
-        data.setAvgDailyRate_gross(data.getAvgDailyRate().multipliedBy(taxCoefficient, RoundingMode.FLOOR));
+        data.setAvgDailyRateGross(data.getAvgDailyRate().multipliedBy(taxCoefficient, RoundingMode.FLOOR));
         data.setUnplanned(entity.getTotal().minus(toMoneyNullsafe(plannedBudgetInCents)));
-        data.setUnplanned_gross(data.getUnplanned().multipliedBy(taxCoefficient, RoundingMode.FLOOR));
+        data.setUnplannedGross(data.getUnplanned().multipliedBy(taxCoefficient, RoundingMode.FLOOR));
         // Money end
         data.setContractName(entity.getContract() == null ? null : entity.getContract().getName() );
         data.setContractId(entity.getContract() == null ? 0 : entity.getContract().getId() );
@@ -227,7 +236,7 @@ public class BudgetService {
                     result.add(e);
                 }
             }else{
-                if(e.getRemaining_gross().isGreaterThan(() -> BigMoney.of(e.getRemaining_gross().getCurrencyUnit(), new BigDecimal(remainingFilter)))){
+                if(e.getRemainingGross().isGreaterThan(() -> BigMoney.of(e.getRemainingGross().getCurrencyUnit(), new BigDecimal(remainingFilter)))){
                     result.add(e);
                 }
             }
@@ -277,7 +286,7 @@ public class BudgetService {
                 throw new UnknownEntityException(BudgetEntity.class, data.getId());
             }
         } else {
-            ProjectEntity project = projectRepository.findContractFieldById(data.getProjectId());
+            ProjectEntity project = projectRepository.findOne(data.getProjectId());
             budget.setProject(project);
         }
         budget.setImportKey(data.getImportKey());

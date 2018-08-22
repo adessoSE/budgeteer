@@ -30,13 +30,12 @@ public class NotificationDropdown extends Panel {
     }
 
     private Label createNotificationCountLabel(String wicketId) {
-        Label label = new Label(wicketId, getModel().getNotificationCountModel()) {
+        return new Label(wicketId, getModel().getNotificationCountModel()) {
             @Override
             public boolean isVisible() {
                 return 0 != (Integer) getDefaultModelObject();
             }
         };
-        return label;
     }
 
     private Label createDropDownHeader(String wicketId) {
@@ -64,7 +63,7 @@ public class NotificationDropdown extends Panel {
         WebMarkupContainer menu = new WebMarkupContainer(wicketId) {
             @Override
             public boolean isVisible() {
-                return 0 != listview.getModelObject().size();
+                return !listview.getModelObject().isEmpty();
             }
         };
         menu.add(listview);

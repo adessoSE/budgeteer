@@ -24,14 +24,18 @@ import java.util.Set;
 public class InvoiceService {
     private static final SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
 
-    @Autowired
-    private InvoiceDataMapper mapper;
+    private final InvoiceDataMapper mapper;
+
+    private final InvoiceRepository invoiceRepository;
+
+    private final ContractRepository contractRepository;
 
     @Autowired
-    private InvoiceRepository invoiceRepository;
-
-    @Autowired
-    private ContractRepository contractRepository;
+    public InvoiceService(InvoiceDataMapper mapper, InvoiceRepository invoiceRepository, ContractRepository contractRepository) {
+        this.mapper = mapper;
+        this.invoiceRepository = invoiceRepository;
+        this.contractRepository = contractRepository;
+    }
 
     @PreAuthorize("canReadProject(#projectId)")
     public InvoiceOverviewTableModel getInvoiceOverviewByProject(long projectId){

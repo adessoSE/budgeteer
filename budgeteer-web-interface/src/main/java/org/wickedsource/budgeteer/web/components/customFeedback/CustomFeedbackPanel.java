@@ -20,7 +20,7 @@ public class CustomFeedbackPanel extends Panel implements IFeedback {
     private final class MessageListView extends ListView<FeedbackMessage> {
         private static final long serialVersionUID = 1L;
 
-        public MessageListView(final String id) {
+        MessageListView(final String id) {
             super(id);
             setDefaultModel(newFeedbackMessagesModel());
         }

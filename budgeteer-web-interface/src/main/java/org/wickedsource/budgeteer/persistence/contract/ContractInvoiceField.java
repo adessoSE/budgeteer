@@ -7,6 +7,10 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.io.Serializable;
 
+/**
+ * (dynamic) field that a invoice associated with a contract can have
+ *  necessary to make sure all invoices of the same contract have the same dynamic fields
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,10 +18,6 @@ import java.io.Serializable;
 @Table(name="CONTRACT_INVOICE_FIELD", uniqueConstraints = {
         @UniqueConstraint(name ="unique_field_name_per_contract", columnNames = {"FIELD_NAME", "CONTRACT_ID"})
 })
-/**
- * (dynamic) field that a invoice associated with a contract can have
- *  necessary to make sure all invoices of the same contract have the same dynamic fields
- */
 public class ContractInvoiceField implements Serializable{
     @Id
     @SequenceGenerator(name="SEQ_Contract_Invoice_field_ID", sequenceName="SEQ_Contract_Invoice_field_ID")
@@ -36,15 +36,12 @@ public class ContractInvoiceField implements Serializable{
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof ContractInvoiceField)) return false;
-        if(o == null) return false;
 
         ContractInvoiceField that = (ContractInvoiceField) o;
 
         if (id != that.id) return false;
         if (!fieldName.equals(that.fieldName)) return false;
-        if (!(contract.getId() == that.contract.getId())) return false;
-
-        return true;
+        return contract.getId() == that.contract.getId();
     }
 
     @Override

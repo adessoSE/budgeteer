@@ -15,7 +15,7 @@ public class UsersInProjectModel extends AbstractReadOnlyModel<List<User>> {
 
     private long projectId;
 
-    public UsersInProjectModel(long projectId) {
+    UsersInProjectModel(long projectId) {
         Injector.get().inject(this);
         this.projectId = projectId;
     }

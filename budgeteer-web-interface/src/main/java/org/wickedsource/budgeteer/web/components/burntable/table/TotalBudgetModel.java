@@ -12,7 +12,7 @@ public class TotalBudgetModel extends AbstractReadOnlyModel<Money> {
 
     private IModel<List<WorkRecord>> model;
 
-    public TotalBudgetModel(IModel<List<WorkRecord>> model) {
+    TotalBudgetModel(IModel<List<WorkRecord>> model) {
         this.model = model;
     }
 
@@ -23,10 +23,5 @@ public class TotalBudgetModel extends AbstractReadOnlyModel<Money> {
             sum = sum.plus(record.getBudgetBurned());
         }
         return sum;
-    }
-
-    @Override
-    public void detach() {
-
     }
 }

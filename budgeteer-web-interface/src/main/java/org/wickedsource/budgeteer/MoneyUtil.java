@@ -10,9 +10,9 @@ import java.util.List;
 
 public class MoneyUtil {
 
-    public static CurrencyUnit DEFAULT_CURRENCY = CurrencyUnit.EUR;
+    public static final CurrencyUnit DEFAULT_CURRENCY = CurrencyUnit.EUR;
 
-    public static Money ZERO = Money.of(DEFAULT_CURRENCY, 0d);
+    public static final Money ZERO = Money.of(DEFAULT_CURRENCY, 0d);
 
     public static Money createMoney(double value) {
         return Money.of(DEFAULT_CURRENCY, value, RoundingMode.HALF_UP);
@@ -23,7 +23,7 @@ public class MoneyUtil {
     }
 
     public static List<Double> toDouble(List<Money> moneyList) {
-        List<Double> doubleValues = new ArrayList<Double>();
+        List<Double> doubleValues = new ArrayList<>();
         for (Money moneyValue : moneyList) {
             doubleValues.add(moneyValue.getAmount().doubleValue());
         }
@@ -31,7 +31,7 @@ public class MoneyUtil {
     }
 
     public static List<Double> toDouble(List<Money> moneyList, Double unit) {
-        List<Double> doubleValues = new ArrayList<Double>();
+        List<Double> doubleValues = new ArrayList<>();
         for (Money moneyValue : moneyList) {
             doubleValues.add(toDouble(moneyValue, unit));
         }
@@ -39,7 +39,7 @@ public class MoneyUtil {
     }
 
     public static List<Double> toDouble(List<Money> moneyList, Double unit, Double taxrate) {
-        List<Double> doubleValues = new ArrayList<Double>();
+        List<Double> doubleValues = new ArrayList<>();
         for (Money moneyValue : moneyList) {
             doubleValues.add(toDouble(moneyValue, unit, taxrate));
         }
@@ -74,9 +74,7 @@ public class MoneyUtil {
         Money taxes = money.multipliedBy(taxInPercent, RoundingMode.FLOOR);
         taxes = taxes.dividedBy(100, RoundingMode.FLOOR);
 
-        Money amountWithTaxes = money.plus(taxes);
-
-        return amountWithTaxes;
+        return money.plus(taxes);
     }
 
     /**

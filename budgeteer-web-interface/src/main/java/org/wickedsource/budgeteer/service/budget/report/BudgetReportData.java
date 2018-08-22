@@ -12,11 +12,11 @@ class BudgetReportData {
 	private Date from;
 	private Date until;
 	private String name;
-	private double spent_net;
-	private double spent_gross;
+	private double spentNet;
+	private double spentGross;
 	private double hoursAggregated;
-	private double budgetRemaining_net;
-	private double budgetRemaining_gross;
+	private double budgetRemainingNet;
+	private double budgetRemainingGross;
 	private Double progress;
 	private List<? extends SheetTemplateSerializable> attributes;
 }

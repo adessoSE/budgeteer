@@ -16,7 +16,6 @@ public class Import {
     private Date startDate;
     private Date endDate;
 
-
     /**
      * Returns a date with only the date-information available. Time-information are truncated
      *

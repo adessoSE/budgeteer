@@ -5,6 +5,6 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class ContractReportSummary {
+class ContractReportSummary {
 	private String name;
 }

@@ -17,10 +17,8 @@ import org.wickedsource.budgeteer.web.components.money.MoneyTextField;
 public abstract class EditableMoneyField extends GenericPanel<Money> {
 
     private boolean isEditable;
-    private Label label;
 
     private final WebMarkupContainer container;
-    private TextField<Money> rateField;
     private Form<Money> form;
 
     public EditableMoneyField(final String id, final MarkupContainer table, final IModel<Money> model) {
@@ -31,7 +29,7 @@ public abstract class EditableMoneyField extends GenericPanel<Money> {
         this.isEditable = editable;
         container = new WebMarkupContainer("container");
         container.setOutputMarkupId(true);
-        label = new MoneyLabel("label", getModel()){
+        Label label = new MoneyLabel("label", getModel()) {
             @Override
             public boolean isVisible() {
                 return !isEditable;
@@ -46,7 +44,7 @@ public abstract class EditableMoneyField extends GenericPanel<Money> {
                 return isEditable;
             }
         };
-        rateField = new MoneyTextField("input", getModel());
+        TextField<Money> rateField = new MoneyTextField("input", getModel());
         rateField.setOutputMarkupId(true);
 
         AjaxButton save = new AjaxButton("save", form) {

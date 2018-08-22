@@ -12,6 +12,10 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ChartStyling {
+
+	private static final String FONT_FAMILY = "Lucida Sans Unicode";
+	private static final long FONT_SIZE = 1L;
+
 	public static List<RgbColor> getColors() {
 		return Arrays.asList(
 				new RgbColor(0, 192, 239),
@@ -26,11 +30,11 @@ public class ChartStyling {
 	}
 
 	public static String getFontFamily() {
-		return "Lucida Sans Unicode";
+		return FONT_FAMILY;
 	}
 	
 	public static Number getFontSize() {
-		return 11;
+		return FONT_SIZE;
 	}
 
 	public static Layout getLayout() {

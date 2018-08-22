@@ -16,8 +16,12 @@ import java.util.*;
 @Component
 public class ContractReportMonthlyDataMapper {
 
+    private final ContractRepository contractRepository;
+
     @Autowired
-    private ContractRepository contractRepository;
+    public ContractReportMonthlyDataMapper(ContractRepository contractRepository) {
+        this.contractRepository = contractRepository;
+    }
 
     public ContractReportData map(ContractEntity contract, Date endDate) {
         LocalDate end = endDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
@@ -29,30 +33,30 @@ public class ContractReportMonthlyDataMapper {
         report.setContract(contract.getName());
         report.setContractId(contract.getInternalNumber());
 
-        Map<String, DynamicAttributeField> contractAttributes = new HashMap<String, DynamicAttributeField>();
+        Map<String, DynamicAttributeField> contractAttributes = new HashMap<>();
         for(ContractFieldEntity fieldEntity : contract.getContractFields()){
             contractAttributes.put(fieldEntity.getField().getFieldName(), new DynamicAttributeField(fieldEntity.getField().getFieldName(), fieldEntity.getValue()));
         }
-        report.setAttributes(new ArrayList<DynamicAttributeField>(contractAttributes.values()));
+        report.setAttributes(new ArrayList<>(contractAttributes.values()));
         report.setId(contract.getId());
         report.setTaxRate(contract.getTaxRate() != null ? contract.getTaxRate().doubleValue() / 100 : 0);
         report.setFrom(Date.from(firstOfMonth.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
         report.setUntil(endDate);
-        report.setBudgetSpent_net(MoneyUtil.createMoneyFromCents(statistics.getSpentBudget()).getAmount().doubleValue());
-        report.setBudgetLeft_net(contract.getBudget().getAmount().doubleValue() - MoneyUtil.createMoneyFromCents(contractRepository.getSpentBudgetByContractIdUntilDate(contract.getId(),end.getMonthValue()-1,end.getYear()).longValue()).getAmount().doubleValue());
-        report.setBudgetTotal_net(contract.getBudget().getAmount().doubleValue());
+        report.setBudgetspentNet(MoneyUtil.createMoneyFromCents(statistics.getSpentBudget()).getAmount().doubleValue());
+        report.setBudgetLeftNet(contract.getBudget().getAmount().doubleValue() - MoneyUtil.createMoneyFromCents(contractRepository.getSpentBudgetByContractIdUntilDate(contract.getId(),end.getMonthValue()-1,end.getYear()).longValue()).getAmount().doubleValue());
+        report.setBudgetTotalNet(contract.getBudget().getAmount().doubleValue());
 
-        double taxCoefficient = 1.0 + report.getTaxRate().doubleValue();
-        report.setBudgetSpent_gross(report.getBudgetSpent_net() * taxCoefficient);
-        report.setBudgetLeft_gross(report.getBudgetLeft_net() * taxCoefficient);
-        report.setBudgetTotal_gross(report.getBudgetTotal_net() * taxCoefficient);
+        double taxCoefficient = 1.0 + report.getTaxRate();
+        report.setBudgetSpentGross(report.getBudgetspentNet() * taxCoefficient);
+        report.setBudgetLeftGross(report.getBudgetLeftNet() * taxCoefficient);
+        report.setBudgetTotalGross(report.getBudgetTotalNet() * taxCoefficient);
 
         report.setProgress(statistics.getProgress());
         return report;
     }
 
     public List<ContractReportData> map(List<ContractEntity> entityList, Date endDate){
-        List<ContractReportData> result = new LinkedList<ContractReportData>();
+        List<ContractReportData> result = new LinkedList<>();
         for(ContractEntity entity : entityList){
             result.add(map(entity,endDate));
         }

@@ -28,7 +28,7 @@ public class NotificationModel extends LoadableDetachableModel<List<Notification
         return service.getNotifications(projectId);
     }
 
-    public IModel<Integer> getNotificationCountModel() {
+    IModel<Integer> getNotificationCountModel() {
         return new LoadableDetachableModel<Integer>() {
             @Override
             protected Integer load() {
@@ -37,7 +37,7 @@ public class NotificationModel extends LoadableDetachableModel<List<Notification
         };
     }
 
-    public IModel<String> getHeaderModel() {
+    IModel<String> getHeaderModel() {
         return new AbstractReadOnlyModel<String>() {
 
             @Override
@@ -48,10 +48,6 @@ public class NotificationModel extends LoadableDetachableModel<List<Notification
                 } else {
                     return PropertyLoader.getProperty(NotificationDropdown.class, "header.whenFull");
                 }
-            }
-
-            @Override
-            public void detach() {
             }
         };
     }

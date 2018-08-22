@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.wickedsource.budgeteer.CSVUtils;
 import org.wickedsource.budgeteer.service.record.WorkRecord;
 
+import javax.validation.constraints.NotNull;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -60,7 +61,7 @@ public class ExportService implements ApplicationContextAware {
     }
 
     @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+    public void setApplicationContext(@NotNull ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
     }
 }

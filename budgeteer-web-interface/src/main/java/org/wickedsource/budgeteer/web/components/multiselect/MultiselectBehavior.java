@@ -40,7 +40,7 @@ public class MultiselectBehavior extends Behavior{
             script.append("{");
             int index = 1;
             for(Map.Entry<String, String> entry : options.entrySet()) {
-                script.append(entry.getKey() + ": " + entry.getValue());
+                script.append(entry.getKey()).append(": ").append(entry.getValue());
                 if(index < options.size()){
                     script.append(",");
                 }
@@ -59,7 +59,7 @@ public class MultiselectBehavior extends Behavior{
      * @return HashMap with the mentioned options set to typical values
      */
     public static HashMap<String, String> getRecommendedOptions(){
-        HashMap<String, String> options = new HashMap<String, String>();
+        HashMap<String, String> options = new HashMap<>();
         options.put("includeSelectAllOption","true");
         options.put("buttonWidth","'220px'");
         options.put("maxHeight","250");

@@ -72,7 +72,7 @@ public class DataTableBehavior extends Behavior{
             script.append("{");
             int index = 1;
             for(Map.Entry<String, String> entry : options.entrySet()) {
-                script.append(entry.getKey() + ": " + entry.getValue());
+                script.append(entry.getKey()).append(": ").append(entry.getValue());
                 if(index < options.size()){
                     script.append(",");
                 }

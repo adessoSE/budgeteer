@@ -30,23 +30,20 @@ import java.util.Optional;
 @Component
 public class BudgeteerMethodSecurityExpressionRoot extends SecurityExpressionRoot implements MethodSecurityExpressionOperations {
 
-    @Autowired
-    private BudgetRepository budgetRepository;
+    private final BudgetRepository budgetRepository;
 
-    @Autowired
-    private ContractRepository contractRepository;
+    private final ContractRepository contractRepository;
 
-    @Autowired
-    private InvoiceRepository invoiceRepository;
+    private final InvoiceRepository invoiceRepository;
 
-    @Autowired
-    private PersonRepository personRepository;
+    private final PersonRepository personRepository;
 
     private Object filterObject;
 
     private Object returnObject;
 
-    public BudgeteerMethodSecurityExpressionRoot() {
+    @Autowired
+    public BudgeteerMethodSecurityExpressionRoot(BudgetRepository budgetRepository, ContractRepository contractRepository, InvoiceRepository invoiceRepository, PersonRepository personRepository) {
         // supply a placeholder token that will not be used by this root
         // all authorization is performed
         super(new UsernamePasswordAuthenticationToken("user", "password"));
@@ -54,6 +51,10 @@ public class BudgeteerMethodSecurityExpressionRoot extends SecurityExpressionRoo
         // set default values
         this.setPermissionEvaluator(new DenyAllPermissionEvaluator());
         this.setTrustResolver(new AuthenticationTrustResolverImpl());
+        this.budgetRepository = budgetRepository;
+        this.contractRepository = contractRepository;
+        this.invoiceRepository = invoiceRepository;
+        this.personRepository = personRepository;
     }
 
     @Override

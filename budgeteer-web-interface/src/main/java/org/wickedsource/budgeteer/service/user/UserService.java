@@ -17,17 +17,21 @@ import java.util.Optional;
 @Transactional
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    private final ProjectRepository projectRepository;
+
+    private final PasswordHasher passwordHasher;
+
+    private final UserMapper mapper;
 
     @Autowired
-    private ProjectRepository projectRepository;
-
-    @Autowired
-    private PasswordHasher passwordHasher;
-
-    @Autowired
-    private UserMapper mapper;
+    public UserService(UserRepository userRepository, ProjectRepository projectRepository, PasswordHasher passwordHasher, UserMapper mapper) {
+        this.userRepository = userRepository;
+        this.projectRepository = projectRepository;
+        this.passwordHasher = passwordHasher;
+        this.mapper = mapper;
+    }
 
     /**
      * Returns a list of all users that currently have access to the given project.

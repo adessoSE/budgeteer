@@ -33,11 +33,11 @@ public class Breadcrumb implements Serializable {
         this.titleModel = titleModel;
     }
 
-    public Class<?> getTargetPage() {
+    Class<?> getTargetPage() {
         return targetPage;
     }
 
-    public IModel<String> getTitleModel() {
+    IModel<String> getTitleModel() {
         return this.titleModel;
     }
 

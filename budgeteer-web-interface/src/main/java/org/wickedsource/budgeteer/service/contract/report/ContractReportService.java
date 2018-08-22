@@ -23,18 +23,22 @@ import java.util.stream.Collectors;
 @Service
 public class ContractReportService {
 
-	@Autowired
-	private ContractRepository contractRepository;
+	private final ContractRepository contractRepository;
+
+	private final ContractReportDataMapper mapper;
+	
+	private final ContractReportMonthlyDataMapper monthlyMapper;
+
+	private final TemplateService templateService;
 
 	@Autowired
-	private ContractReportDataMapper mapper;
-	
-	@Autowired
-	private ContractReportMonthlyDataMapper monthlyMapper;
+	public ContractReportService(ContractRepository contractRepository, ContractReportDataMapper mapper, ContractReportMonthlyDataMapper monthlyMapper, TemplateService templateService) {
+		this.contractRepository = contractRepository;
+		this.mapper = mapper;
+		this.monthlyMapper = monthlyMapper;
+		this.templateService = templateService;
+	}
 
-	@Autowired
-	private TemplateService templateService;
-	
 	public File createReportFile(long templateId, long projectId,Date endDate) {
 		XSSFWorkbook wb = getSheetWorkbook(templateId);
 
@@ -71,9 +75,8 @@ public class ContractReportService {
 		contractReportList.forEach(
 				contract -> recipients.add(getAttribute("rechnungsempfaenger", contract.getAttributes())));
 
-		List<ContractReportSummary> summary = recipients.stream().map(description -> new ContractReportSummary(description))
+		return recipients.stream().map(description -> new ContractReportSummary(description))
 				.collect(Collectors.toList());
-		return summary;
 	}
 
 	private String getAttribute(String string, List<? extends SheetTemplateSerializable> list) {
@@ -112,29 +115,28 @@ public class ContractReportService {
 	}
 
 	private void setWarnings(List<ContractReportData> list, TemplateWriter<ContractReportData> tw) {
+		String fieldname = "progress";
 		list.forEach(contractData -> {
 			if (contractData.getProgress() != null &&
 					contractData.getProgress() >= 0.6 && contractData.getProgress() < 0.8) {
-				tw.addFlag(contractData, "progress", "warning1");
+				tw.addFlag(contractData, fieldname, "warning1");
 			} else if (contractData.getProgress() != null &&
 					contractData.getProgress() >= 0.8 && contractData.getProgress() < 1) {
-				tw.addFlag(contractData, "progress", "warning2");
-			} else if ((contractData.getProgress() == null && contractData.getBudgetSpent_net() > 0) ||
+				tw.addFlag(contractData, fieldname, "warning2");
+			} else if ((contractData.getProgress() == null && contractData.getBudgetspentNet() > 0) ||
 					(contractData.getProgress() != null && contractData.getProgress() >= 1)) {
-				tw.addFlag(contractData, "progress", "warning3");
+				tw.addFlag(contractData, fieldname, "warning3");
 			}
 		});
 	}
 
 	private List<ContractReportData> loadContractReportData(long projectId, Date endDate) {
-		List<ContractEntity> contracts = new LinkedList<>();
-		contracts.addAll(contractRepository.findByProjectId(projectId));
+		List<ContractEntity> contracts = new LinkedList<>(contractRepository.findByProjectId(projectId));
 		return mapper.map(contracts,endDate);
 	}
 
 	private List<ContractReportData> loadMonthlyContractReportData(long projectId, Date endDate) {
-		List<ContractEntity> contracts = new LinkedList<>();
-		contracts.addAll(contractRepository.findByProjectId(projectId));
+		List<ContractEntity> contracts = new LinkedList<>(contractRepository.findByProjectId(projectId));
 		return monthlyMapper.map(contracts,endDate);
 	}
 

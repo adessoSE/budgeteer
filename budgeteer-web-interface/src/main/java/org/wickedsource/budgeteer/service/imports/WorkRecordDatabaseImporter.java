@@ -44,7 +44,7 @@ public class WorkRecordDatabaseImporter extends RecordDatabaseImporter {
         super(projectId, importType);
     }
 
-    private List<List<String>> skippedRecords = new LinkedList<List<String>>();
+    private List<List<String>> skippedRecords = new LinkedList<>();
     private SimpleDateFormat format = new SimpleDateFormat();
 
     @PostConstruct
@@ -58,8 +58,8 @@ public class WorkRecordDatabaseImporter extends RecordDatabaseImporter {
         return skippedRecords;
     }
 
-    public void importRecords(List<ImportedWorkRecord> records) {
-        List<WorkRecordEntity> entitiesToImport = new ArrayList<WorkRecordEntity>();
+    void importRecords(List<ImportedWorkRecord> records) {
+        List<WorkRecordEntity> entitiesToImport = new ArrayList<>();
         for (ImportedWorkRecord record : records) {
 
             // trimming import keys
@@ -114,10 +114,10 @@ public class WorkRecordDatabaseImporter extends RecordDatabaseImporter {
      * @return a list of entries that were deleted during checking for duplicates.
      * See Issue #72
      */
-    public List<List<String>> findAndRemoveManuallyEditedEntries() {
-        List<List<String>> deletedRecordList = new LinkedList<List<String>>();
+    List<List<String>> findAndRemoveManuallyEditedEntries() {
+        List<List<String>> deletedRecordList = new LinkedList<>();
         deletedRecordList.add(new LinkedList<String>());
-        LinkedList<String> headline = new LinkedList<String>(); headline.add("Miscellaneous");
+        LinkedList<String> headline = new LinkedList<>(); headline.add("Miscellaneous");
         deletedRecordList.add(headline);
         //Find duplicate Records, where the dailyRate was edited manually
         List<WorkRecordEntity> manuallyEditedEntries = workRecordRepository.findManuallyEditedEntries(super.getProjectId(), getEarliestRecordDate(), getLatestRecordDate() );
@@ -142,7 +142,7 @@ public class WorkRecordDatabaseImporter extends RecordDatabaseImporter {
         }
         //If just an empty row and the headline was added, return a empty list
         if(deletedRecordList.size() <= 2)
-            return  new LinkedList<List<String>>();
+            return  new LinkedList<>();
         return deletedRecordList;
     }
 
@@ -151,7 +151,7 @@ public class WorkRecordDatabaseImporter extends RecordDatabaseImporter {
     }
 
     private List<String> getRecordAsString(WorkRecordEntity entity, String reason) {
-        LinkedList<String> result = new LinkedList<String>();
+        LinkedList<String> result = new LinkedList<>();
         result.add(entity.getPerson().getName());
         result.add(entity.getBudget().getName());
         result.add("" + entity.getMinutes());
@@ -172,7 +172,7 @@ public class WorkRecordDatabaseImporter extends RecordDatabaseImporter {
                 return rate.getRate();
             }
         }
-        return MoneyUtil.createMoneyFromCents(0l);
+        return MoneyUtil.createMoneyFromCents(0L);
     }
 
 

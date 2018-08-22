@@ -17,23 +17,32 @@ import java.util.List;
 @Transactional
 public class NotificationService {
 
-    @Autowired
-    private WorkRecordRepository workRecordRepository;
+    private final WorkRecordRepository workRecordRepository;
+
+    private final PlanRecordRepository planRecordRepository;
+
+    private final BudgetRepository budgetRepository;
+
+    private final MissingDailyRateNotificationMapper missingDailyRateMapper;
+
+    private final MissingBudgetTotalNotificationMapper missingBudgetTotalNotificationMapper;
+
+    private final MissingDailyRateForBudgetNotificationMapper missingDailyRateForBudgetNotificationMapper;
 
     @Autowired
-    private PlanRecordRepository planRecordRepository;
-
-    @Autowired
-    private BudgetRepository budgetRepository;
-
-    @Autowired
-    private MissingDailyRateNotificationMapper missingDailyRateMapper;
-
-    @Autowired
-    private MissingBudgetTotalNotificationMapper missingBudgetTotalNotificationMapper;
-
-    @Autowired
-    private MissingDailyRateForBudgetNotificationMapper missingDailyRateForBudgetNotificationMapper;
+    public NotificationService(WorkRecordRepository workRecordRepository,
+                               PlanRecordRepository planRecordRepository,
+                               BudgetRepository budgetRepository,
+                               MissingDailyRateNotificationMapper missingDailyRateMapper,
+                               MissingBudgetTotalNotificationMapper missingBudgetTotalNotificationMapper,
+                               MissingDailyRateForBudgetNotificationMapper missingDailyRateForBudgetNotificationMapper) {
+        this.workRecordRepository = workRecordRepository;
+        this.planRecordRepository = planRecordRepository;
+        this.budgetRepository = budgetRepository;
+        this.missingDailyRateMapper = missingDailyRateMapper;
+        this.missingBudgetTotalNotificationMapper = missingBudgetTotalNotificationMapper;
+        this.missingDailyRateForBudgetNotificationMapper = missingDailyRateForBudgetNotificationMapper;
+    }
 
     /**
      * Returns all notifications currently available for the given project
@@ -42,7 +51,7 @@ public class NotificationService {
      * @return list of notifications
      */
     public List<Notification> getNotifications(long projectId) {
-        List<Notification> notifications = new ArrayList<Notification>();
+        List<Notification> notifications = new ArrayList<>();
         if (workRecordRepository.countByProjectId(projectId) == 0) {
             notifications.add(new EmptyWorkRecordsNotification());
         }
@@ -73,7 +82,7 @@ public class NotificationService {
      * @return list of notifications concerning the given budget.
      */
     public List<Notification> getNotificationsForBudget(long budgetId) {
-        List<Notification> result = new LinkedList<Notification>();
+        List<Notification> result = new LinkedList<>();
 
         MissingBudgetTotalBean missingBudgetTotalForBudget = budgetRepository.getMissingBudgetTotalForBudget(budgetId);
         if (missingBudgetTotalForBudget != null) {

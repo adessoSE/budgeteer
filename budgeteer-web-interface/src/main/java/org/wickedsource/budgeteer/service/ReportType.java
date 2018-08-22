@@ -10,6 +10,7 @@ public enum ReportType {
         type = s;
     }
 
+    @Override
     public String toString() {
         return this.type;
     }

@@ -15,14 +15,14 @@ public class BudgetDetailData {
     private String note;
     private List<String> tags;
     private Money total;
-    private Money total_gross;
+    private Money totalGross;
     private Money spent;
-    private Money spent_gross;
+    private Money spentGross;
     private Date lastUpdated;
     private Money avgDailyRate;
-    private Money avgDailyRate_gross;
+    private Money avgDailyRateGross;
     private Money unplanned;
-    private Money unplanned_gross;
+    private Money unplannedGross;
     private String contractName;
     private long contractId;
 
@@ -31,8 +31,8 @@ public class BudgetDetailData {
         return this.total.minus(this.spent);
     }
 
-    public Money getRemaining_gross() {
-        return this.total_gross.minus(this.spent_gross);
+    public Money getRemainingGross() {
+        return this.totalGross.minus(this.spentGross);
     }
 
     public Double getProgress() {

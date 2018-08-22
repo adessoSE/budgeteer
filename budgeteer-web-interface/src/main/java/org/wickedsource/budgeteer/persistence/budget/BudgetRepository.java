@@ -55,7 +55,7 @@ public interface BudgetRepository extends CrudRepository<BudgetEntity, Long> {
      * Returns the TaxCoefficient defined by the contract of the budget. If the budget has no contract or
      * the contract no taxrate assigned, this method returns 1.0
      *
-     * @param budgetId
+     * @param budgetId The id of the budget
      * @return 1.0+taxRate/100
      */
     @Query("SELECT 1.0 + coalesce((SELECT contract.taxRate FROM ContractEntity contract WHERE contract = budget.contract),0) /100.0 FROM BudgetEntity budget WHERE budget.id = :budgetId")

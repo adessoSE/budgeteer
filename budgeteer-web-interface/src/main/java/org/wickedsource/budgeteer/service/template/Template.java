@@ -20,7 +20,7 @@ public class Template implements Serializable {
     private final String description;
     private final ReportType type;
     private boolean isDefault;
-    transient private final XSSFWorkbook wb;
+    private final transient XSSFWorkbook wb;
 
     /**
      *

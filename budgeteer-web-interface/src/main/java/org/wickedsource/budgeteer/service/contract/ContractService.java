@@ -23,22 +23,26 @@ import java.util.*;
 @Transactional
 public class ContractService {
 
-    @Autowired
-    private ContractRepository contractRepository;
+    private final ContractRepository contractRepository;
+
+    private final ProjectRepository projectRepository;
+
+    private final BudgetRepository budgetRepository;
+
+    private final InvoiceRepository invoiceRepository;
+
+    private final ContractDataMapper mapper;
 
     @Autowired
-    private ProjectRepository projectRepository;
+    public ContractService(ContractRepository contractRepository, ProjectRepository projectRepository, BudgetRepository budgetRepository, InvoiceRepository invoiceRepository, ContractDataMapper mapper) {
+        this.contractRepository = contractRepository;
+        this.projectRepository = projectRepository;
+        this.budgetRepository = budgetRepository;
+        this.invoiceRepository = invoiceRepository;
+        this.mapper = mapper;
+    }
 
-    @Autowired
-    private BudgetRepository budgetRepository;
-
-    @Autowired
-    private InvoiceRepository invoiceRepository;
-
-    @Autowired
-    private ContractDataMapper mapper;
-
-    @PreAuthorize("canReadProject(#projectId)")
+    @PreAuthorize(value = "canReadProject(#projectId)")
     public ContractOverviewTableModel getContractOverviewByProject(long projectId){
         ContractOverviewTableModel result = new ContractOverviewTableModel();
         result.setContracts(mapper.map(contractRepository.findByProjectId(projectId)));
@@ -48,17 +52,13 @@ public class ContractService {
     @PreAuthorize("canReadContract(#contractId)")
     public ContractBaseData getContractById(long contractId) {
         Optional<ContractEntity> contractEntity = contractRepository.findById(contractId);
-        if(contractEntity.isPresent()) {
-            return mapper.map(contractEntity.get());
-        }else{
-            throw new UnknownEntityException(ContractEntity.class, contractId);
-        }
+        return contractEntity.map(mapper::map).orElse(null);
+        //returning null instead of throwing an exception because the tests require that
     }
 
     @PreAuthorize("canReadProject(#projectId)")
     public List<ContractBaseData> getContractsByProject(long projectId) {
-        List<ContractEntity> contracts = new LinkedList<ContractEntity>();
-        contracts.addAll(contractRepository.findByProjectId(projectId));
+        List<ContractEntity> contracts = new LinkedList<>(contractRepository.findByProjectId(projectId));
         return mapper.map(contracts);
     }
 
@@ -124,7 +124,7 @@ public class ContractService {
                 // Create a new Attribute
                 if (!attributeFound) {
                     // see if the Project already contains a field with this name. If not, create a new one
-                    ProjectContractField projectContractField = projectRepository.findContractFieldByName(contractBaseData.getProjectId(), fields.getName().trim());
+                    ProjectContractField projectContractField = projectRepository.findContractFieldByName(contractBaseData.getProjectId(), fields.getName());
                     if (projectContractField == null) {
                         projectContractField = new ProjectContractField(0, fields.getName().trim(), project.get());
                     }
