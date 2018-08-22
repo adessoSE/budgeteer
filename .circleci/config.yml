@@ -16,7 +16,7 @@ jobs:
           command: ./gradlew --stacktrace --console=plain test
       - run:
           name: Save test results
-          command:
+          command: |
             mkdir -p ~/artifacts/junit/
             find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} ~/artifacts/junit/ \;
           when: always
