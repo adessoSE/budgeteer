@@ -1,6 +1,8 @@
 package org.wickedsource.budgeteer.persistence.record;
 
 import org.joda.money.Money;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.Date;
 import java.util.List;
@@ -101,7 +103,31 @@ public interface RecordRepository {
 
     Long countByProjectId(long projectId);
 
-    List<WeeklyAggregatedRecordBean> aggregateByWeekForBudgets(long projectId,Date start);
+    List<WeeklyAggregatedRecordBean> aggregateByWeekForBudgets(long projectId, Date start);
 
-    List<WeeklyAggregatedRecordWithTaxBean> aggregateByWeekForBudgetsWithTax(long projectId,Date start);
+    List<WeeklyAggregatedRecordWithTaxBean> aggregateByWeekForBudgetsWithTax(long projectId, Date start);
+
+    List<WeeklyAggregatedRecordWithTitleAndTaxBean> aggregateByWeekAndPersonForBudgetsWithTax(long projectId);
+
+    List<WeeklyAggregatedRecordWithTaxBean> aggregateByWeekForBudgetsWithTax(long projectId);
+
+    List<WeeklyAggregatedRecordWithTitleAndTaxBean> aggregateByWeekAndPersonForBudgetsWithTax(long projectId, List<String> tags);
+
+    List<WeeklyAggregatedRecordWithTaxBean> aggregateByWeekForBudgetsWithTax(long projectId, List<String> tags);
+
+    List<WeeklyAggregatedRecordWithTitleAndTaxBean> aggregateByWeekAndPersonForBudgetWithTax(long budgetId);
+
+    List<WeeklyAggregatedRecordWithTaxBean> aggregateByWeekForBudgetWithTax(long budgetId);
+
+    List<MonthlyAggregatedRecordWithTitleAndTaxBean> aggregateByMonthAndPersonForBudgetWithTax(long budgetId);
+
+    List<MonthlyAggregatedRecordWithTaxBean> aggregateByMonthForBudgetWithTax(long budgetId);
+
+    List<MonthlyAggregatedRecordWithTitleAndTaxBean> aggregateByMonthAndPersonForBudgetsWithTax(long projectId);
+
+    List<MonthlyAggregatedRecordWithTaxBean> aggregateByMonthForBudgetsWithTax(long projectId);
+
+    List<MonthlyAggregatedRecordWithTitleAndTaxBean> aggregateByMonthAndPersonForBudgetsWithTax(long projectId, List<String> tags);
+
+    List<MonthlyAggregatedRecordWithTaxBean> aggregateByMonthForBudgetsWithTax(@Param("projectId") long projectId, @Param("tags") List<String> tags);
 }
