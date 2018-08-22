@@ -1,6 +1,7 @@
 package org.wickedsource.budgeteer.service.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
 import org.wickedsource.budgeteer.persistence.project.ProjectRepository;
@@ -33,6 +34,7 @@ public class UserService {
      * @param projectId ID of the project whose users to load.
      * @return list of all users with access to the given project.
      */
+    @PreAuthorize("canReadProject(#projectId)")
     public List<User> getUsersInProject(long projectId) {
         return mapper.map(userRepository.findInProject(projectId));
     }
@@ -43,6 +45,7 @@ public class UserService {
      * @param projectId ID of the project
      * @return list of all users that currently DO NOT have access to the given project.
      */
+    @PreAuthorize("canReadProject(#projectId)")
     public List<User> getUsersNotInProject(long projectId) {
         return mapper.map(userRepository.findNotInProject(projectId));
     }
@@ -53,6 +56,7 @@ public class UserService {
      * @param projectId ID of the project for which to remove access
      * @param userId    ID of the user whose access to remove.
      */
+    @PreAuthorize("canReadProject(#projectId)")
     public void removeUserFromProject(long projectId, long userId) {
         ProjectEntity project = projectRepository.findOne(projectId);
         if (project == null) {
@@ -72,6 +76,7 @@ public class UserService {
      * @param projectId ID of the project.
      * @param userId    ID of the user.
      */
+    @PreAuthorize("canReadProject(#projectId)")
     public void addUserToProject(long projectId, long userId) {
         ProjectEntity project = projectRepository.findOne(projectId);
         if (project == null) {

@@ -8,9 +8,11 @@ import org.apache.wicket.markup.head.filter.JavaScriptFilteredIntoFooterHeaderRe
 import org.apache.wicket.markup.html.IHeaderResponseDecorator;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.request.IExceptionMapper;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
+import org.apache.wicket.util.IProvider;
 import org.reflections.Reflections;
 import org.reflections.scanners.TypeAnnotationsScanner;
 import org.reflections.util.ClasspathHelper;
@@ -106,6 +108,8 @@ public class BudgeteerApplication extends WebApplication implements ApplicationC
 
     private void initWickedCharts() {
         JavaScriptResourceRegistry.getInstance().setChartJsReference(BudgeteerReferences.getChartjsReference());
+        JavaScriptResourceRegistry.getInstance().setChartJsBundleReference(BudgeteerReferences.getChartjsReference());
+        JavaScriptResourceRegistry.getInstance().setMomentJsReference(BudgeteerReferences.getMomentJsReference());
         JavaScriptResourceRegistry.getInstance().setJQueryReference(BudgeteerReferences.getJQueryReference());
     }
 
@@ -117,6 +121,11 @@ public class BudgeteerApplication extends WebApplication implements ApplicationC
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) {
         this.context = applicationContext;
+    }
+
+    @Override
+    public IProvider<IExceptionMapper> getExceptionMapperProvider() {
+        return BudgeteerExceptionMapper::new;
     }
 
 }

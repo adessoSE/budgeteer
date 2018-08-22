@@ -3,6 +3,8 @@ package org.wickedsource.budgeteer.service.budget;
 import org.joda.money.BigMoney;
 import org.joda.money.Money;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.method.P;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.persistence.budget.BudgetEntity;
@@ -63,6 +65,7 @@ public class BudgetService {
      * @param projectId ID of the project
      * @return list of all budgets the user is qualified for
      */
+    @PreAuthorize("canReadProject(#projectId)")
     public List<BudgetBaseData> loadBudgetBaseDataForProject(long projectId) {
         List<BudgetEntity> budgets = budgetRepository.findByProjectIdOrderByNameAsc(projectId);
         return budgetBaseDataMapper.map(budgets);
@@ -74,14 +77,14 @@ public class BudgetService {
      * @param budgetId ID of the budget to load.
      * @return base data of the specified budget.
      */
+    @PreAuthorize("canReadBudget(#budgetId)")
     public BudgetBaseData loadBudgetBaseData(long budgetId) {
         BudgetEntity budget = budgetRepository.findOne(budgetId);
         return budgetBaseDataMapper.map(budget);
     }
 
-
-	private List<BudgetEntity> loadBudgetEntities(long projectId, BudgetTagFilter filter) {
-		List<BudgetEntity> budgets;
+    private List<BudgetEntity> loadBudgetEntities(long projectId, BudgetTagFilter filter) {
+        List<BudgetEntity> budgets;
         if (filter.getSelectedTags().isEmpty()) {
             budgets = budgetRepository.findByProjectIdOrderByNameAsc(projectId);
         } else {
@@ -96,6 +99,7 @@ public class BudgetService {
      * @param personId ID of the person for which the budget should be loaded.
      * @return base data of the specified budget.
      */
+    @PreAuthorize("canReadPerson(#personId)")
     public List<BudgetBaseData> loadBudgetBaseDataByPersonId(long personId) {
         List<BudgetEntity> budget = budgetRepository.findByPersonId(personId);
         return budgetBaseDataMapper.map(budget);
@@ -107,6 +111,7 @@ public class BudgetService {
      * @param projectId ID of the project
      * @return all tags assigned to any budget of the given user.
      */
+    @PreAuthorize("canReadProject(#projectId)")
     public List<String> loadBudgetTags(long projectId) {
         return budgetRepository.getAllTagsInProject(projectId);
     }
@@ -117,6 +122,7 @@ public class BudgetService {
      * @param budgetId ID ID of the budget to load.
      * @return detail data for the requested budget.
      */
+    @PreAuthorize("canReadBudget(#budgetId)")
     public BudgetDetailData loadBudgetDetailData(long budgetId) {
         BudgetEntity budget = budgetRepository.findOne(budgetId);
         return enrichBudgetEntity(budget);
@@ -186,6 +192,7 @@ public class BudgetService {
      * @param filter    the filter to apply when loading the budgets
      * @return list of budgets that match the filter.
      */
+    @PreAuthorize("canReadProject(#projectId)")
     public List<BudgetDetailData> loadBudgetsDetailData(long projectId, BudgetTagFilter filter) {
         List<BudgetEntity> budgets = loadBudgetEntities(projectId, filter);
         List<BudgetDetailData> dataList = new ArrayList<BudgetDetailData>();
@@ -230,6 +237,7 @@ public class BudgetService {
      * @param budgetId ID of the budget whose data to load.
      * @return data object containing the data that can be changed in the UI.
      */
+    @PreAuthorize("canReadBudget(#budgetId)")
     public EditBudgetData loadBudgetToEdit(long budgetId) {
         BudgetEntity budget = budgetRepository.findOne(budgetId);
         if (budget == null) {
@@ -240,6 +248,7 @@ public class BudgetService {
         data.setDescription(budget.getDescription());
         data.setTotal(budget.getTotal());
         data.setTitle(budget.getName());
+        data.setNote(budget.getNote());
         data.setTags(mapEntitiesToTags(budget.getTags()));
         data.setImportKey(budget.getImportKey());
         data.setContract(contractDataMapper.map(budget.getContract()));
@@ -265,6 +274,7 @@ public class BudgetService {
         budget.setDescription(data.getDescription());
         budget.setTotal(data.getTotal());
         budget.setName(data.getTitle());
+        budget.setNote(data.getNote());
         budget.getTags().clear();
         budget.getTags().addAll(mapTagsToEntities(data.getTags(), budget));
         if(data.getContract() == null) {
@@ -284,6 +294,7 @@ public class BudgetService {
      * @param projectId ID of the project whose budgets to load
      * @return a list containing all available budget units, one of which is currently active.
      */
+    @PreAuthorize("canReadProject(#projectId)")
     public List<Double> loadBudgetUnits(long projectId) {
         List<Double> units = new ArrayList<Double>();
         units.add(1d);
@@ -294,10 +305,12 @@ public class BudgetService {
         return units;
     }
 
+    @PreAuthorize("canReadBudget(#id)")
     public void deleteBudget(long id) {
         budgetRepository.delete(id);
     }
 
+    @PreAuthorize("canReadContract(#cId)")
     public List<BudgetDetailData> loadBudgetByContract(long cId){
         List<BudgetDetailData> result = new LinkedList<BudgetDetailData>();
         List<BudgetEntity> temp =budgetRepository.findByContractId(cId);
@@ -327,11 +340,13 @@ public class BudgetService {
         return result;
     }
 
+    @PreAuthorize("canReadPerson(#personId)")
     private List<BudgetBaseData> loadBudgetBaseDataForPerson(long personId) {
         List<BudgetEntity> budgets = budgetRepository.findByPersonId(personId);
         return budgetBaseDataMapper.map(budgets);
     }
 
+    @PreAuthorize("canReadProject(#projectId)")
     public boolean projectHasBudgets(long projectId) {
         List<BudgetEntity> budgets = budgetRepository.findByProjectIdOrderByNameAsc(projectId);
         return (budgets != null && !budgets.isEmpty());

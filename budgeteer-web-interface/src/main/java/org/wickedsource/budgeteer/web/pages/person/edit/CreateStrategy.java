@@ -4,7 +4,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.StringResourceModel;
 import org.wickedsource.budgeteer.web.components.notificationlist.EmptyNotificationsModel;
-import org.wickedsource.budgeteer.web.components.notificationlist.NotificationListPanel;
+import org.wickedsource.budgeteer.web.components.notificationlist.PersonNotificationListPanel;
 import org.wickedsource.budgeteer.web.pages.person.edit.personrateform.EditPersonForm;
 
 /**
@@ -30,7 +30,7 @@ public class CreateStrategy implements IEditPersonPageStrategy {
 
     @Override
     public Panel createNotificationList(String id, long personId) {
-        return new NotificationListPanel(id, new EmptyNotificationsModel());
+        return new PersonNotificationListPanel(id, new EmptyNotificationsModel());
     }
 
     @Override

@@ -1,19 +1,24 @@
 package org.wickedsource.budgeteer.web.components.burntable.table;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.event.IEvent;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.form.NumberTextField;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.IModel;
+import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.markup.repeater.RepeatingView;
+import org.apache.wicket.markup.repeater.data.DataView;
+import org.apache.wicket.markup.repeater.data.ListDataProvider;
+import org.apache.wicket.model.Model;
 import org.joda.money.Money;
 import org.wickedsource.budgeteer.service.record.RecordService;
 import org.wickedsource.budgeteer.service.record.WorkRecord;
 import org.wickedsource.budgeteer.service.record.WorkRecordFilter;
-import org.wickedsource.budgeteer.web.ClassAwareWrappingModel;
 import org.wickedsource.budgeteer.web.components.burntable.filter.FilteredRecordsModel;
 import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
 import org.wickedsource.budgeteer.web.components.dataTable.DataTableBehavior;
@@ -22,6 +27,7 @@ import org.wickedsource.budgeteer.web.components.money.BudgetUnitMoneyModel;
 import org.wickedsource.budgeteer.web.components.money.MoneyLabel;
 
 import javax.inject.Inject;
+import java.util.HashMap;
 import java.util.List;
 
 import static org.wicketstuff.lazymodel.LazyModel.from;
@@ -31,30 +37,192 @@ public class BurnTable extends Panel {
 
     private CustomFeedbackPanel feedbackPanel;
     private boolean dailyRateIsEditable;
-    private ListView<WorkRecord> rows;
+    private DataView <WorkRecord> rows;
+    private Model<Long> recordsPerPageModel = new Model<>(15L);
+    private WebMarkupContainer tableComponents = new WebMarkupContainer("tableComponents");
 
     @Inject
     private RecordService recordService;
 
-    public BurnTable(String id, FilteredRecordsModel model){
+    BurnTable(String id, FilteredRecordsModel model){
         this(id, model, false);
     }
 
     public BurnTable(String id, FilteredRecordsModel model, boolean dailyRateIsEditable) {
         super(id, model);
+        tableComponents.setOutputMarkupId(true);
         this.dailyRateIsEditable = dailyRateIsEditable;
-
         feedbackPanel = new CustomFeedbackPanel("feedback");
         feedbackPanel.setOutputMarkupId(true);
-        add(feedbackPanel);
-
+        tableComponents.add(feedbackPanel);
         WebMarkupContainer table = new WebMarkupContainer("table");
-        table.add(new DataTableBehavior(DataTableBehavior.getRecommendedOptions()));
-        rows = createList("recordList", model, table);
+        HashMap<String, String> options = DataTableBehavior.getRecommendedOptions();
+        options.put("orderClasses", "false");
+        options.put("paging", "false");
+        options.put("info", "false");
+        table.add(new DataTableBehavior(options));
+        rows = createList(model, table);
         table.add(rows);
+        tableComponents.add(table);
+        tableComponents.add(new MoneyLabel("total", new BudgetUnitMoneyModel(new TotalBudgetModel(model))));
+        createItemsPerPageInput();
+        createTableInfoLabel();
+        createPageNavigation();
+        add(tableComponents);
+    }
 
-        add(table);
-        add(new MoneyLabel("total", new BudgetUnitMoneyModel(new TotalBudgetModel(model))));
+    private void createTableInfoLabel() {
+        Label pageLabel = new Label("pageLabel", "Showing " + Long.toString(rows.getFirstItemOffset()+1) + " to "
+                + Long.toString(rows.getFirstItemOffset() + rows.getItemsPerPage()) + " entries from total " + getRows().getItemCount()){
+            @Override
+            protected void onBeforeRender() {
+                super.onBeforeRender();
+                if(rows.getCurrentPage() == rows.getPageCount()-1){
+                    this.setDefaultModelObject("Showing " + Long.toString(rows.getFirstItemOffset()+1) + " to "
+                            + Long.toString(rows.getFirstItemOffset() + (rows.getItemCount() % rows.getItemsPerPage())) + " entries from total " + getRows().getItemCount());
+                }else{
+                    this.setDefaultModelObject("Showing " + Long.toString(rows.getFirstItemOffset()+1) + " to "
+                            + Long.toString(rows.getFirstItemOffset() + rows.getItemsPerPage()) + " entries from total " + getRows().getItemCount());
+                }
+            }
+        };
+        pageLabel.setOutputMarkupId(true);
+        tableComponents.add(pageLabel);
+    }
+
+    private void createItemsPerPageInput() {
+        Form form = new Form("itemsPerPageForm") {
+            @Override
+            protected void onSubmit() {
+                getRows().setItemsPerPage(recordsPerPageModel.getObject());
+                updatePreviousAndNextButtons();
+            }
+        };
+        form.add(new NumberTextField<>("itemsPerPage", recordsPerPageModel).setMinimum(1L).setMaximum(rows.getItemCount()));
+        tableComponents.add(form);
+    }
+
+
+    private AjaxLink previousPageButton;
+    private AjaxLink nextPageButton;
+
+    private void updatePreviousAndNextButtons(){
+        if(rows.getCurrentPage() == rows.getPageCount()-1){
+            nextPageButton.add(new AttributeModifier("class", "disabled"));
+            nextPageButton.setEnabled(false);
+        }else {
+            nextPageButton.add(new AttributeModifier("class", "enabled"));
+            nextPageButton.setEnabled(true);
+        }
+        if(rows.getCurrentPage() == 0){
+            previousPageButton.add(new AttributeModifier("class", "disabled"));
+            previousPageButton.setEnabled(false);
+        }else {
+            previousPageButton.add(new AttributeModifier("class", "enabled"));
+            previousPageButton.setEnabled(true);
+        }
+    }
+
+    /**
+     * This mimics the exact paging functionality of DataTables.js.
+     * I could not use the standard DataTables paging, because that plugin has no
+     * idea the table even has more pages to it (as Wicket doesn't load eveything at once) -
+     * it just wants to have all the data at page creation time.
+     */
+    private void createPageNavigation(){
+        RepeatingView pageNavButtons = new RepeatingView("pageNavButtons"){
+            @Override
+            protected void onBeforeRender() {
+                super.onBeforeRender();
+                this.removeAll();
+
+                //If there are less than 5 Pages
+                if(rows.getPageCount() < 5){
+                    for(int i = 0; i < rows.getPageCount(); i++){
+                        AjaxLink link = createNumberedNavButton(newChildId(), i);
+                        if(rows.getCurrentPage() == i){
+                            link.add(new AttributeModifier("class", "active"));
+                        }
+                        add(link);
+                    }
+                }else { //If we are on the first 3 Pages
+                    if (rows.getCurrentPage() < 3) {
+                        for (int i = 0; i < 4; i++) {
+                            AjaxLink link = createNumberedNavButton(newChildId(), i);
+                            if(rows.getCurrentPage() == i){
+                                link.add(new AttributeModifier("class", "active"));
+                            }
+                            add(link);
+                        }
+                        add(createDottedNavButton(newChildId()));
+                        add(createNumberedNavButton(newChildId(), rows.getPageCount()-1));
+                    }
+                    else if (rows.getCurrentPage() > rows.getPageCount() - 4) { //If we are on the last 3 Pages
+                        add(createNumberedNavButton(newChildId(), 0));
+                        add(createDottedNavButton(newChildId()));
+                        for (long i = rows.getPageCount() - 4; i < rows.getPageCount(); i++) {
+                            AjaxLink link = createNumberedNavButton(newChildId(), i);
+                            if(rows.getCurrentPage() == i){
+                                link.add(new AttributeModifier("class", "active"));
+                            }
+                            add(link);
+                        }
+                    } else{ //If the selected page is anywhere in between.
+                        add(createNumberedNavButton(newChildId(), 0));
+                        add(createDottedNavButton(newChildId()));
+                        add(createNumberedNavButton(newChildId(), rows.getCurrentPage()-1));
+                        add(createNumberedNavButton(newChildId(), rows.getCurrentPage()).add(new AttributeModifier("class", "active")));
+                        add(createNumberedNavButton(newChildId(), rows.getCurrentPage()+1));
+                        add(createDottedNavButton(newChildId()));
+                        add(createNumberedNavButton(newChildId(), rows.getPageCount()-1));
+                    }
+                }
+                updatePreviousAndNextButtons();
+            }
+        };
+
+        previousPageButton = new AjaxLink<Void>("previousPage") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                if(rows.getCurrentPage() > 0){
+                    rows.setCurrentPage(rows.getCurrentPage()-1);
+                    updatePreviousAndNextButtons();
+                    target.add(tableComponents);
+                }
+            }
+        };
+        nextPageButton = new AjaxLink<Void>("nextPage") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                if(rows.getCurrentPage() < rows.getPageCount()){
+                    rows.setCurrentPage(rows.getCurrentPage()+1);
+                    updatePreviousAndNextButtons();
+                    target.add(tableComponents);
+                }
+            }
+        };
+
+        tableComponents.add(nextPageButton);
+        tableComponents.add(previousPageButton);
+        tableComponents.add(pageNavButtons);
+    }
+
+    private AjaxLink createNumberedNavButton(String id, long pageIndex){
+        return (AjaxLink)new AjaxLink<Void>(id) {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                rows.setCurrentPage(pageIndex);
+                target.add(tableComponents);
+            }
+        }.add(new Label("pageNavLabel", Long.toString(pageIndex+1)));
+    }
+
+    private Link createDottedNavButton(String id){
+        return (Link)new Link<Void>(id) {
+            @Override
+            public void onClick(){}
+        }.add(new Label("pageNavLabel", "...")).add(new AttributeModifier("class", "disabled"))
+                .setEnabled(false);
     }
 
     @Override
@@ -68,10 +236,16 @@ public class BurnTable extends Panel {
         }
     }
 
-    private ListView<WorkRecord> createList(String id, final IModel<List<WorkRecord>> model, final WebMarkupContainer table) {
-        return new ListView<WorkRecord>(id, model) {
+    private DataView <WorkRecord> createList(final FilteredRecordsModel model, final WebMarkupContainer table) {
+        return new DataView<WorkRecord>("recordList", new ListDataProvider<WorkRecord>(model.getObject()){
             @Override
-            protected void populateItem(final ListItem<WorkRecord> item) {
+            protected List<WorkRecord> getData() {
+                return model.getObject();
+            }
+        },recordsPerPageModel.getObject()) {
+
+            @Override
+            protected void populateItem(Item<WorkRecord> item) {
                 item.setOutputMarkupId(true);
                 item.add(new Label("budget", model(from(item.getModel()).getBudgetName())));
                 item.add(new Label("person", model(from(item.getModel()).getPersonName()) ));
@@ -98,7 +272,7 @@ public class BurnTable extends Panel {
                     };
                     item.add(editableMoneyField);
                 } else {
-                    item.add(new Label("dailyRate", model(from(item.getModel()).getDailyRate())));
+                    item.add(new MoneyLabel("dailyRate", model(from(item.getModel()).getDailyRate())));
                 }
                 item.add(new Label("edited"){
                     @Override
@@ -110,16 +284,10 @@ public class BurnTable extends Panel {
                 item.add(new Label("hours", model(from(item.getModel()).getHours())));
                 item.add(new MoneyLabel("burnedBudget", new BudgetUnitMoneyModel(model(from(item.getModel()).getBudgetBurned()))));
             }
-
-            @Override
-            protected ListItem<WorkRecord> newItem(int index, IModel<WorkRecord> itemModel) {
-                // wrap model to work with LazyModel
-                return super.newItem(index, new ClassAwareWrappingModel<WorkRecord>(itemModel, WorkRecord.class));
-            }
         };
     }
 
-    public ListView<WorkRecord> getRows() {
+    public DataView<WorkRecord> getRows() {
         return rows;
     }
 }

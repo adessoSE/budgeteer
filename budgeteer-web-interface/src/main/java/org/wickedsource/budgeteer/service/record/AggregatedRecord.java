@@ -12,7 +12,7 @@ import org.wickedsource.budgeteer.persistence.record.WeeklyAggregatedRecordWithT
 import org.wickedsource.budgeteer.service.DateRange;
 import org.wickedsource.budgeteer.service.DateUtil;
 
-import java.util.*;
+import java.util.Date;
 
 @Data
 @NoArgsConstructor

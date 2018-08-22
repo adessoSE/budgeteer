@@ -96,7 +96,6 @@ public abstract class BasePage extends WebPage {
         super.renderHead(response);
         response.render(JavaScriptReferenceHeaderItem.forReference(BudgeteerReferences.getJQueryReference()));
         response.render(JavaScriptReferenceHeaderItem.forReference(BudgeteerReferences.getAdminLteAppReference()));
-        response.render(JavaScriptReferenceHeaderItem.forUrl("//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"));
     }
 
     private Component createDashboardLink(String id) {

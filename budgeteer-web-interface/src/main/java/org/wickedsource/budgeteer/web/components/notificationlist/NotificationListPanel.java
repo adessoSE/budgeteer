@@ -27,6 +27,4 @@ public class NotificationListPanel extends Panel {
             }
         };
     }
-
-
 }

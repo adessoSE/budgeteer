@@ -35,10 +35,10 @@ sourceSets {
 
 processResources {
     from('src/main/java') {
-    	exclude '**/*.xlsx'
-	    filter ReplaceTokens, tokens: [
-	            "application.version": project.property("version")
-	    ]
+        exclude '**/*.xlsx'
+        filter ReplaceTokens, tokens: [
+                "application.version": project.property("version")
+        ]
     }
 }
 
@@ -53,14 +53,19 @@ dependencies {
     compile project(':budgeteer-resourceplan-importer')
     compile project(':budgeteer-report-exporter')
 
+    compile(group: 'org.springframework', name: 'spring-web', version: "${spring_version}")
+
     compile(
             [group: 'org.apache.wicket', name: 'wicket-spring', version: "${wicket_spring_version}"],
+            [group: 'org.apache.wicket', name: 'wicket-extensions', version: "${wicket_spring_version}"],
             [group: 'org.wicketstuff', name: 'wicketstuff-lazymodel', version: "${wicketstuff_lazymodel_version}"],
+            [group: 'org.wicketstuff', name: 'wicketstuff-tinymce4', version: "${wicketstuff_tinymce4_version}"],
             [group: 'de.adesso.wicked-charts', name: 'wicked-charts-wicket7', version: "${wicketcharts_version}"]
     )
 
     compile group: 'org.springframework', name: 'spring-webmvc', version: "${spring_version}"
     compile(
+            [group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: "${spring_boot_version}"],
             [group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: "${spring_boot_version}"],
             [group: 'org.springframework.boot', name: 'spring-boot-starter-logging', version: "${spring_boot_version}"],
             [group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: "${spring_boot_version}"],
@@ -104,6 +109,8 @@ dependencies {
     )
 
     testCompile "org.springframework.boot:spring-boot-starter-test"
+    testCompile group: 'org.springframework.security', name: 'spring-security-test', version: "${spring_security_test_version}"
+
     testCompile('org.junit.platform:junit-platform-launcher:1.0.3')
     testCompile('com.github.sbrannen:spring-test-junit5:1.0.3')
 

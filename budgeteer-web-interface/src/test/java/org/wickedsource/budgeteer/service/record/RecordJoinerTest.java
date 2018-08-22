@@ -4,7 +4,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.budgeteer.MoneyUtil;
-import org.wickedsource.budgeteer.persistence.record.*;
+import org.wickedsource.budgeteer.persistence.record.MonthlyAggregatedRecordBean;
+import org.wickedsource.budgeteer.persistence.record.MonthlyAggregatedRecordWithTaxBean;
+import org.wickedsource.budgeteer.persistence.record.WeeklyAggregatedRecordBean;
+import org.wickedsource.budgeteer.persistence.record.WeeklyAggregatedRecordWithTaxBean;
 import org.wickedsource.budgeteer.service.ServiceTestTemplate;
 import org.wickedsource.budgeteer.service.statistics.MonthlyStats;
 

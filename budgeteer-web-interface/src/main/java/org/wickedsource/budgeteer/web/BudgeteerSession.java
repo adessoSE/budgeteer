@@ -2,10 +2,17 @@ package org.wickedsource.budgeteer.web;
 
 import org.apache.wicket.protocol.http.WebSession;
 import org.apache.wicket.request.Request;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
+import org.wickedsource.budgeteer.service.security.BudgeteerAuthenticationToken;
 import org.wickedsource.budgeteer.service.user.User;
 import org.wickedsource.budgeteer.web.pages.templates.TemplateFilter;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 
 public class BudgeteerSession extends WebSession {
@@ -28,8 +35,12 @@ public class BudgeteerSession extends WebSession {
 
     private long projectId;
 
+    private transient HttpSession httpSession;
+
     public BudgeteerSession(Request request) {
         super(request);
+
+        this.httpSession = ((HttpServletRequest) request.getContainerRequest()).getSession();
     }
 
     public User getLoggedInUser() {
@@ -42,6 +53,8 @@ public class BudgeteerSession extends WebSession {
 
     public void login(User loggedInUser) {
         this.loggedInUser = loggedInUser;
+
+        this.setAuthInSecurityContext(new BudgeteerAuthenticationToken(loggedInUser.getName()));
     }
 
     public void logout() {
@@ -122,4 +135,20 @@ public class BudgeteerSession extends WebSession {
     public void setRemainingBudetFilterValue(Long budgetRemainingFilter) {
         this.remainingBudgetFilterValue = budgetRemainingFilter;
     }
+
+    /**
+     * Sets the given {@link Authentication} in the current {@link SecurityContext}
+     * and saves the context in the session.
+     *
+     * @param authToken
+     *          The {@link Authentication} to set in the {@link SecurityContext}.
+     */
+    private void setAuthInSecurityContext(Authentication authToken) {
+
+        // save the security context in the session to be able to get it later
+        SecurityContextHolder.getContext().setAuthentication(authToken);
+        httpSession.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
+                SecurityContextHolder.getContext());
+    }
+
 }

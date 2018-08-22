@@ -14,4 +14,7 @@
 
     <mockito:mock id="dateProvider" class="org.wickedsource.budgeteer.service.DateProvider"/>
 
+    <!-- add Expression Root mock here because it is required in nearly every service test -->
+    <mockito:mock id="expressionRoot" class="org.wickedsource.budgeteer.service.security.BudgeteerMethodSecurityExpressionRoot"/>
+
 </beans>

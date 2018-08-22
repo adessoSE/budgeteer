@@ -1,12 +1,12 @@
 package org.wickedsource.budgeteer.importer.aproda;
 
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.*;
 import org.wickedsource.budgeteer.imports.api.*;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.*;
 
@@ -45,15 +45,63 @@ public class AprodaWorkRecordsImporter implements WorkRecordsImporter {
     public ExampleFile getExampleFile() {
         ExampleFile file = new ExampleFile();
         file.setFileName("aproda_report.xlsx");
-        file.setInputStream(getClass().getResourceAsStream("/example_aproda_report.xlsx"));
         file.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+
+        try {
+            Date date = new Date();
+            Calendar calendar = Calendar.getInstance();
+            XSSFWorkbook workbook = new XSSFWorkbook(getClass().getResourceAsStream("/example_aproda_report.xlsx"));
+            XSSFSheet sheet = workbook.getSheetAt(2);
+            XSSFRow row;
+            XSSFCell cell;
+            int i = sheet.getLastRowNum();
+
+            XSSFCellStyle style = workbook.createCellStyle();
+            style.setBorderBottom(BorderStyle.THIN);
+            style.setBorderTop(BorderStyle.THIN);
+            style.setBorderRight(BorderStyle.THIN);
+            style.setBorderLeft(BorderStyle.THIN);
+            style.setDataFormat((short) 14);
+
+            calendar.setTime(date);
+
+            while (i != 0) {
+                row = sheet.getRow(i);
+
+                if (row.getCell(0).getStringCellValue().equals("Potter, Harry")) {
+                    if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+                        calendar.add(Calendar.DATE, -1);
+                    } else if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+                        calendar.add(Calendar.DATE, -2);
+                    }
+
+                    cell = row.createCell(1);
+                    cell.setCellValue(calendar.getTime());
+                    cell.setCellStyle(style);
+                    calendar.add(Calendar.DATE, -1);
+                }
+
+                i--;
+            }
+
+            File tmp = File.createTempFile("example_aproda_report", ".xlsx");
+            FileOutputStream fileOutputStream = new FileOutputStream(tmp);
+            workbook.write(fileOutputStream);
+            fileOutputStream.flush();
+            fileOutputStream.close();
+
+            file.setInputStream(new FileInputStream(tmp));
+        } catch (IOException e) {
+            e.printStackTrace();
+            file.setInputStream(getClass().getResourceAsStream("/example_aproda_report.xlsx"));
+        }
         return file;
     }
 
     @Override
     public List<List<String>> getSkippedRecords() {
         //if just an empty row at the beginning and the filename is in the List of skipped records, return an empty List
-        if(skippedRecords != null && skippedRecords.size() == 2){
+        if (skippedRecords != null && skippedRecords.size() == 2) {
             skippedRecords = new LinkedList<List<String>>();
         }
         return skippedRecords;
@@ -69,7 +117,7 @@ public class AprodaWorkRecordsImporter implements WorkRecordsImporter {
 
             List<ImportedWorkRecord> resultList = new ArrayList<ImportedWorkRecord>();
             Workbook workbook = new XSSFWorkbook(file.getInputStream());
-            if(!checkValidity(workbook)){
+            if (!checkValidity(workbook)) {
                 throw new InvalidFileFormatException("Invalid file", file.getFilename());
             }
             Sheet sheet = workbook.getSheetAt(SHEET_INDEX);
@@ -92,11 +140,11 @@ public class AprodaWorkRecordsImporter implements WorkRecordsImporter {
     }
 
     private boolean checkValidity(Workbook workbook) {
-        boolean isValid = workbook.getNumberOfSheets() >= SHEET_INDEX ;
-        if(isValid){
+        boolean isValid = workbook.getNumberOfSheets() >= SHEET_INDEX;
+        if (isValid) {
             Sheet sheet = workbook.getSheetAt(SHEET_INDEX);
-            if(sheet.getRow(2) == null){
-                isValid = false ;
+            if (sheet.getRow(2) == null) {
+                isValid = false;
             } else {
                 Row r = sheet.getRow(2);
                 try {
@@ -104,7 +152,7 @@ public class AprodaWorkRecordsImporter implements WorkRecordsImporter {
                             r.getCell(COLUMN_DATE).getStringCellValue().equals("Tag") &&
                             r.getCell(COLUMN_BUDGET).getStringCellValue().equals("Subgruppe") &&
                             r.getCell(COLUMN_HOURS).getStringCellValue().equals("Aufwand [h]");
-                }catch (Exception e){
+                } catch (Exception e) {
                     isValid = false;
                 }
             }
@@ -114,9 +162,9 @@ public class AprodaWorkRecordsImporter implements WorkRecordsImporter {
 
     private List<String> getRowAsStrings(Row row, int index) {
         List<String> result = new LinkedList<String>();
-        for(short i=row.getFirstCellNum(); i<row.getLastCellNum(); i++) {
+        for (short i = row.getFirstCellNum(); i < row.getLastCellNum(); i++) {
             Cell cell = row.getCell(i);
-            if(cell == null) {
+            if (cell == null) {
                 result.add("");
                 continue;
             }

@@ -1,5 +1,7 @@
 package org.wickedsource.budgeteer.web.pages.person.edit.personrateform;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.IObjectClassAwareModel;
 import org.apache.wicket.model.Model;
@@ -36,4 +38,8 @@ public class PersonRateModel implements IModel<PersonRate>, IObjectClassAwareMod
     public void detach() {
         wrappedModel.detach();
     }
+
+    @Getter
+    @Setter
+    private boolean isBeingEdited;
 }
