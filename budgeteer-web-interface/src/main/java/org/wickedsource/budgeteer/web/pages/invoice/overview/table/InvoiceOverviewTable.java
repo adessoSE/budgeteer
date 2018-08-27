@@ -10,6 +10,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
+import org.openxmlformats.schemas.drawingml.x2006.main.CTRegularTextRun;
 import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.service.contract.DynamicAttributeField;
 import org.wickedsource.budgeteer.service.invoice.InvoiceBaseData;
@@ -22,10 +23,12 @@ import org.wickedsource.budgeteer.web.pages.contract.details.ContractDetailsPage
 import org.wickedsource.budgeteer.web.pages.invoice.details.InvoiceDetailsPage;
 import org.wickedsource.budgeteer.web.pages.invoice.edit.EditInvoicePage;
 
+import java.math.BigDecimal;
+
 import static org.wicketstuff.lazymodel.LazyModel.from;
 import static org.wicketstuff.lazymodel.LazyModel.model;
 
-public class InvoiceOverviewTable extends Panel{
+public class InvoiceOverviewTable extends Panel {
     private final BreadcrumbsModel breadcrumbsModel;
 
     public InvoiceOverviewTable(String id, InvoiceOverviewTableModel invoiceOverviewTableModel, BreadcrumbsModel breadcrumbsModel) {
@@ -37,7 +40,7 @@ public class InvoiceOverviewTable extends Panel{
     private void addComponents(final InvoiceOverviewTableModel data) {
         WebMarkupContainer table = new WebMarkupContainer("table");
         table.add(new DataTableBehavior(DataTableBehavior.getRecommendedOptions()));
-        table.add(new ListView<String>("headerRow",  model(from(data).getHeadline()) ) {
+        table.add(new ListView<String>("headerRow", model(from(data).getHeadline())) {
             @Override
             protected void populateItem(ListItem<String> item) {
                 item.add(new Label("headerItem", item.getModelObject()));
@@ -47,10 +50,10 @@ public class InvoiceOverviewTable extends Panel{
             @Override
             protected void populateItem(final ListItem<InvoiceBaseData> item) {
                 final long invoiceId = item.getModelObject().getInvoiceId();
-                Link link = new Link("showInvoice"){
+                Link link = new Link("showInvoice") {
                     @Override
                     public void onClick() {
-                        WebPage page = new InvoiceDetailsPage(InvoiceDetailsPage.createParameters(invoiceId)){
+                        WebPage page = new InvoiceDetailsPage(InvoiceDetailsPage.createParameters(invoiceId)) {
 
                             @Override
                             protected BreadcrumbsModel getBreadcrumbsModel() {
@@ -65,10 +68,10 @@ public class InvoiceOverviewTable extends Panel{
 
                 link.add(new Label("invoiceName", model(from(item.getModelObject()).getInvoiceName())));
                 item.add(link);
-                Link contractLink = new Link("contractLink"){
+                Link contractLink = new Link("contractLink") {
                     @Override
                     public void onClick() {
-                        WebPage page = new ContractDetailsPage(ContractDetailsPage.createParameters(item.getModelObject().getContractId())){
+                        WebPage page = new ContractDetailsPage(ContractDetailsPage.createParameters(item.getModelObject().getContractId())) {
 
                             @Override
                             protected BreadcrumbsModel getBreadcrumbsModel() {
@@ -87,6 +90,9 @@ public class InvoiceOverviewTable extends Panel{
                 item.add(new Label("month_number", getMonthNumberAsString(item.getModelObject().getMonth())));
                 item.add(new Label("month", PropertyLoader.getProperty(BasePage.class, "monthRenderer.name." + item.getModelObject().getMonth())));
                 item.add(new Label("sum", Model.of(MoneyUtil.toDouble(item.getModelObject().getSum(), BudgeteerSession.get().getSelectedBudgetUnit()))));
+                item.add(new Label("sum_gross", Model.of(MoneyUtil.toDouble(item.getModelObject().getSum_gross(), BudgeteerSession.get().getSelectedBudgetUnit()))));
+                item.add(new Label("taxAmount", Model.of(MoneyUtil.toDouble(item.getModelObject().getTaxAmount(), BudgeteerSession.get().getSelectedBudgetUnit()))));
+                item.add(new Label("taxRate", getTaxRateAsString(item.getModelObject().getTaxRate())));
                 CheckBox paid = new CheckBox("paid", model(from(item.getModelObject()).isPaid()));
                 paid.setEnabled(false);
                 item.add(paid);
@@ -99,7 +105,7 @@ public class InvoiceOverviewTable extends Panel{
                 item.add(new BookmarkablePageLink<EditInvoicePage>("editLink", EditInvoicePage.class, EditInvoicePage.createEditInvoiceParameters(invoiceId)));
             }
         });
-        table.add(new ListView<String>("footerRow", model(from(data).getFooter()) ) {
+        table.add(new ListView<String>("footerRow", model(from(data).getFooter())) {
             @Override
             protected void populateItem(ListItem<String> item) {
                 item.add(new Label("footerItem", item.getModelObject()));
@@ -110,9 +116,19 @@ public class InvoiceOverviewTable extends Panel{
 
     private String getMonthNumberAsString(int month) {
         String r = "" + month;
-        if(r.length() < 2){
+        if (r.length() < 2) {
             r = "0" + r;
         }
         return r;
+    }
+
+    /***
+     * Add a percent sign to the tax rate and show only the needed decimal places
+     * @param taxRate tax rate of the invoice's contract
+     * @return a string of the tax rate with a percent sign
+     */
+    private String getTaxRateAsString(BigDecimal taxRate) {
+        // convert the taxRate to a double first to show only the needed decimal places
+        return taxRate.doubleValue() + " %";
     }
 }

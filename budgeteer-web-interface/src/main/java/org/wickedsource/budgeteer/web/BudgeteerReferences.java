@@ -40,6 +40,7 @@ public class BudgeteerReferences {
     public static ResourceReference getJQueryDataTableMomentSortJSReference() {
         return new UrlResourceReference(Url.parse("js/plugins/datatables/dataTable.sort.datetime-moment.js")).setContextRelative(true);
     }
+
     public static ResourceReference getJQueryDataTableDateRangeMomentSortJSReference() {
         return new UrlResourceReference(Url.parse("js/plugins/datatables/dataTable.sort.custom-moment.js")).setContextRelative(true);
     }
@@ -56,4 +57,7 @@ public class BudgeteerReferences {
         return new UrlResourceReference(Url.parse("js/chart.js/chartjs.2.7.2.min.js")).setContextRelative(true);
     }
 
+    public static ResourceReference getShowAndHideReference() {
+        return new UrlResourceReference(Url.parse("js/showAndHide.js")).setContextRelative(true);
+    }
 }

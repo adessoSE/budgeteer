@@ -8,6 +8,7 @@ import org.wickedsource.budgeteer.service.contract.DynamicAttributeField;
 import org.wickedsource.budgeteer.web.components.fileUpload.FileUploadModel;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -21,6 +22,9 @@ public class InvoiceBaseData implements Serializable {
     private String contractName;
     private String invoiceName;
     private Money sum;
+    private Money sum_gross;
+    private Money taxAmount;
+    private BigDecimal taxRate;
     private String internalNumber;
     private int year;
     private int month;
