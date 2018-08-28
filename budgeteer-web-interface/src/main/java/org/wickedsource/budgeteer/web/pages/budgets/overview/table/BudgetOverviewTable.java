@@ -118,16 +118,7 @@ public class BudgetOverviewTable extends Panel {
                 Link clink =  new Link("contractLink") {
                     @Override
                     public void onClick() {
-                        WebPage page = new ContractDetailsPage(ContractDetailsPage.createParameters(item.getModelObject().getContractId())){
-                            @Override
-                            protected BreadcrumbsModel getBreadcrumbsModel() {
-                                BreadcrumbsModel m = breadcrumbsModel;
-                                m.addBreadcrumb(ContractDetailsPage.class,
-                                        ContractDetailsPage.createParameters(item.getModelObject().getContractId()));
-                                return m;
-                            }
-                        };
-                        setResponsePage(page);
+                        setResponsePage(ContractDetailsPage.class, ContractDetailsPage.createParameters(item.getModelObject().getContractId()));
                     }
                 };
                 Label clinkTitle = new Label("contractTitle",model(from(item.getModel()).getContractName()));

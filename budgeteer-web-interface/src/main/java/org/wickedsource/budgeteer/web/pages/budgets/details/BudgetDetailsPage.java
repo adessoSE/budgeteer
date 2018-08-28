@@ -35,8 +35,6 @@ import org.wickedsource.budgeteer.web.pages.budgets.weekreport.single.SingleBudg
 import org.wickedsource.budgeteer.web.pages.contract.details.ContractDetailsPage;
 import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 
-import java.util.concurrent.Callable;
-
 @Mount("budgets/details/${id}")
 public class BudgetDetailsPage extends BasePage {
 
@@ -66,19 +64,13 @@ public class BudgetDetailsPage extends BasePage {
             @Override
             public void onSubmit() {
 
-                setResponsePage(new DeleteDialog(new Callable<Void>() {
-                    @Override
-                    public Void call(){
-                        budgetService.deleteBudget(getParameterId());
-                        setResponsePage(BudgetsOverviewPage.class);
-                        return null;
-                    }
-                }, new Callable<Void>() {
-                    @Override
-                    public Void call(){
-                        setResponsePage(new BudgetDetailsPage(getPageParameters()));
-                        return null;
-                    }
+                setResponsePage(new DeleteDialog(() -> {
+                    budgetService.deleteBudget(getParameterId());
+                    setResponsePage(BudgetsOverviewPage.class);
+                    return null;
+                }, () -> {
+                    setResponsePage(new BudgetDetailsPage(getPageParameters()));
+                    return null;
                 }));
             }
         };

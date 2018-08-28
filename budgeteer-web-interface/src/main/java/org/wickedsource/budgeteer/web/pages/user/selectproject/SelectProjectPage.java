@@ -97,9 +97,9 @@ public class SelectProjectPage extends DialogPageWithBacklink {
                 return projectService.getDefaultProjectForUser(BudgeteerSession.get().getLoggedInUser().getId());
             }
         };
-        final Form<ProjectBaseData> form = new Form<ProjectBaseData>("chooseProjectForm", defaultProjectModel);
+        final Form<ProjectBaseData> form = new Form<>("chooseProjectForm", defaultProjectModel);
 
-        DropDownChoice<ProjectBaseData> choice = new DropDownChoice<ProjectBaseData>("projectChoice", form.getModel(), new ProjectsForUserModel(BudgeteerSession.get().getLoggedInUser().getId()), new ProjectChoiceRenderer());
+        DropDownChoice<ProjectBaseData> choice = new DropDownChoice<>("projectChoice", form.getModel(), new ProjectsForUserModel(BudgeteerSession.get().getLoggedInUser().getId()), new ProjectChoiceRenderer());
         choice.setRequired(true);
         choice.add(new OnChangeAjaxBehavior() {
             @Override
@@ -129,8 +129,6 @@ public class SelectProjectPage extends DialogPageWithBacklink {
                 setResponsePage(DashboardPage.class);
             }
         };
-
-
         form.add(markProjectAsDefault);
         form.add(goButton);
         return form;
