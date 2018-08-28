@@ -24,8 +24,6 @@ import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 import org.wickedsource.budgeteer.web.pages.invoice.edit.EditInvoicePage;
 import org.wickedsource.budgeteer.web.pages.invoice.overview.InvoiceOverviewPage;
 
-import java.util.concurrent.Callable;
-
 @Mount("contracts/details/${id}")
 public class ContractDetailsPage extends BasePage {
 
@@ -91,22 +89,23 @@ public class ContractDetailsPage extends BasePage {
         Form deleteForm = new ConfirmationForm("deleteForm", this, "confirmation.delete") {
             @Override
             public void onSubmit() {
-                setResponsePage(new DeleteDialog(new Callable<Void>() {
+                setResponsePage(new DeleteDialog() {
                     @Override
-                    public Void call() {
+                    protected void onYes() {
                         contractService.deleteContract(getParameterId());
                         setResponsePage(ContractOverviewPage.class);
-                        return null;
                     }
-                }, new Callable<Void>(){
+
                     @Override
-                    public Void call(){
+                    protected void onNo() {
                         setResponsePage(ContractDetailsPage.class, getPageParameters());
-                        return null;
                     }
-                }));
 
-
+                    @Override
+                    protected String confirmationText() {
+                        return "Are you sure you want to delete this contract?";
+                    }
+                });
             }
         };
         deleteForm.add(new SubmitLink("deleteLink"));

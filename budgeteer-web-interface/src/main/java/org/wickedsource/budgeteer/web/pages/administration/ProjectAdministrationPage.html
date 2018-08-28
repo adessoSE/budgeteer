@@ -1,4 +1,4 @@
-<wicket:extend>
+<wicket:extend xmlns:wicket="http://www.w3.org/1999/xhtml">
     <div wicket:id="feedback"></div>
     <div class="row">
         <div class="col-md-12">
@@ -44,6 +44,8 @@
                         <tr wicket:id="userList">
                             <td wicket:id="username">Username</td>
                             <td>
+                                <select wicket:id="roleDropdown" class="btn btn-success btn-sm form-control">
+                                </select>
                                 <a wicket:id="deleteButton" class="btn btn-danger btn-sm">Remove from Project</a>
                             </td>
                         </tr>

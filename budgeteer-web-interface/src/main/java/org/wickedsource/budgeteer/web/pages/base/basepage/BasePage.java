@@ -31,7 +31,9 @@ import org.wickedsource.budgeteer.web.pages.user.selectproject.SelectProjectWith
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Map;
 
 @NeedsLogin
 @NeedsProject
@@ -60,7 +62,7 @@ public abstract class BasePage extends WebPage {
         add(notificationDropdown);
         add(new BudgetUnitChoice("budgetUnitDropdown", new BudgetUnitModel(projectId)));
 
-        BookmarkablePageLink pageLink = new BookmarkablePageLink<ProjectAdministrationPage>("administrationLink", ProjectAdministrationPage.class);
+        BookmarkablePageLink<ProjectAdministrationPage> pageLink = new BookmarkablePageLink<ProjectAdministrationPage>("administrationLink", ProjectAdministrationPage.class);
         add(pageLink);
         if (!currentUserIsAdmin()) {
             pageLink.setVisible(false);
@@ -71,15 +73,9 @@ public abstract class BasePage extends WebPage {
         add(new HeaderResponseContainer("JavaScriptContainer", "JavaScriptContainer"));
     }
 
-	private boolean currentUserIsAdmin() {
+	protected boolean currentUserIsAdmin() {
         HashSet<String> roles = loadRolesFromCurrentUser();
-        if (roles != null && roles.contains("admin")) {
-            return true;
-        } else if (roles == null) {
-            return true;
-        } else {
-            return false;
-        }
+        return roles != null && roles.contains("admin");
     }
 
     private HashSet<String> loadRolesFromCurrentUser() {
@@ -87,9 +83,16 @@ public abstract class BasePage extends WebPage {
             HttpServletRequest request = (HttpServletRequest) getRequestCycle().getRequest().getContainerRequest();
             AccessToken accessToken = ((KeycloakPrincipal) request.getUserPrincipal()).getKeycloakSecurityContext().getToken();
             return (HashSet<String>) accessToken.getRealmAccess().getRoles();
+        }else{
+            Map<Long, ArrayList<String>> roles = BudgeteerSession.get().getLoggedInUser().getRoles();
+            if(roles != null) {
+                return new HashSet<>(roles.get(BudgeteerSession.get().getProjectId()));
+            }else{
+                return new HashSet<>();
+            }
         }
-        return null;
     }
+
 
     @Override
     public void renderHead(IHeaderResponse response) {

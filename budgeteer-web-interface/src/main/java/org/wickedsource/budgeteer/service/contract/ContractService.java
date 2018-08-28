@@ -18,8 +18,8 @@ import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.*;
 
-@Service
 @Transactional
+@Service
 public class ContractService {
 
     @Autowired

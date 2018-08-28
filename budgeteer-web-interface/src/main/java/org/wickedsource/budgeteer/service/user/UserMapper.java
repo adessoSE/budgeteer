@@ -12,6 +12,7 @@ public class UserMapper extends AbstractMapper<UserEntity, User>{
         User user = new User();
         user.setId(entity.getId());
         user.setName(entity.getName());
+        user.setRoles(entity.getRoles());
         return user;
     }
 }
