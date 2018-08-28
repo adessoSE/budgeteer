@@ -1,0 +1,29 @@
+<dataset>
+
+    <PROJECT id="1" name="project1"/>
+
+    <BUDGET id="1" name="Budget 1" total="100000" import_key="budget1" project_id="1"/>
+    <BUDGET id="2" name="Budget 2" total="100000" import_key="budget2" project_id="1"/>
+    <BUDGET id="3" name="Budget 3" total="100000" import_key="budget3" project_id="1"/>
+
+    <BUDGET_TAG id="1" budget_id="1" tag="tag1"/>
+    <BUDGET_TAG id="2" budget_id="2" tag="tag1"/>
+    <BUDGET_TAG id="3" budget_id="2" tag="tag2"/>
+    <BUDGET_TAG id="4" budget_id="3" tag="tag2"/>
+
+    <PERSON id="1" name="person1" import_key="person1" project_id="1"/>
+    <PERSON id="2" name="person2" import_key="person2" project_id="1"/>
+
+    <IMPORT id="1" import_date="2015-01-01" start_date="2015-01-01" end_date="2015-01-01" import_type="Testimport" project_id="1"/>
+
+    <WORK_RECORD id="1" person_id="1" budget_id="2" record_date="2015-01-01" record_year="2015" record_month="0" record_week="1" record_day="1" minutes="480" daily_rate="10000" import_id="1"/>
+    <WORK_RECORD id="2" person_id="1" budget_id="2" record_date="2015-01-02" record_year="2015" record_month="0" record_week="1" record_day="2" minutes="480" daily_rate="20000" import_id="1"/>
+    <WORK_RECORD id="3" person_id="1" budget_id="1" record_date="2014-01-01" record_year="2014" record_month="0" record_week="1" record_day="1" minutes="480" daily_rate="10000" import_id="1"/>
+    <WORK_RECORD id="4" person_id="1" budget_id="3" record_date="2015-08-15" record_year="2015" record_month="7" record_week="33" record_day="15" minutes="960" daily_rate="0" import_id="1"/>
+
+    <PLAN_RECORD id="1" person_id="1" budget_id="2" record_date="2015-01-01" record_year="2015" record_month="0" record_week="1" record_day="1" minutes="480" daily_rate="10000" import_id="1"/>
+    <PLAN_RECORD id="2" person_id="1" budget_id="2" record_date="2015-01-02" record_year="2015" record_month="0" record_week="1" record_day="2" minutes="480" daily_rate="20000" import_id="1"/>
+    <PLAN_RECORD id="3" person_id="1" budget_id="1" record_date="2014-01-01" record_year="2014" record_month="0" record_week="1" record_day="1" minutes="480" daily_rate="10000" import_id="1"/>
+    <PLAN_RECORD id="4" person_id="1" budget_id="3" record_date="2015-08-15" record_year="2015" record_month="7" record_week="33" record_day="15" minutes="960" daily_rate="0" import_id="1"/>
+
+</dataset>

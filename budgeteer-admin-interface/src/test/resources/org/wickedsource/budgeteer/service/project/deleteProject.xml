@@ -1,0 +1,63 @@
+<dataset>
+
+    <!-- empty Project -->
+    <PROJECT id="1" name="project1"/>
+
+    <!-- project with project_contract_fields -->
+    <PROJECT id="2" name="project2"/>
+
+    <PROJECT_CONTRACT_FIELD id="1" FIELD_NAME="test0" PROJECT_ID="2" />
+    <PROJECT_CONTRACT_FIELD id="2" FIELD_NAME="test1" PROJECT_ID="2" />
+
+
+    <!-- Contract with two ContractFields -->
+    <PROJECT id="3" name="project3"/>
+
+    <PROJECT_CONTRACT_FIELD id="3" FIELD_NAME="test0" PROJECT_ID="3" />
+    <PROJECT_CONTRACT_FIELD id="4" FIELD_NAME="test1" PROJECT_ID="3" />
+
+    <CONTRACT id="3" CONTRACT_NAME="Test" PROJECT_ID="3" BUDGET="100" INTERNAL_NUMBER="Test" START_DATE="2015-01-01" CONTRACT_TYPE="1" />
+
+    <CONTRACT_FIELD CONTRACT_ID="3" id="1"  PROJECT_CONTRACT_FIELD="3" CONTRACT_FIELD_VALUE="test0" />
+    <CONTRACT_FIELD CONTRACT_ID="3" id="2"  PROJECT_CONTRACT_FIELD="4" CONTRACT_FIELD_VALUE="test1" />
+
+    <BUDGET id="1" name="Budget 1" total="100000" import_key="budget1" project_id="3" CONTRACT_ID="3"/>
+
+
+    <!-- Contract with CONTRACT_INVOICE_FIELD and Invoices -->
+    <PROJECT id="6" name="project6"/>
+
+    <CONTRACT id="6" CONTRACT_NAME="Test" PROJECT_ID="6" BUDGET="1" INTERNAL_NUMBER="Test" START_DATE="2015-01-01" CONTRACT_TYPE="0" />
+
+    <PROJECT_CONTRACT_FIELD id="7" FIELD_NAME="test0" PROJECT_ID="6" />
+    <PROJECT_CONTRACT_FIELD id="8" FIELD_NAME="test1" PROJECT_ID="6" />
+
+    <CONTRACT_INVOICE_FIELD id="1" FIELD_NAME="Test Contract Field" CONTRACT_ID="6" />
+    <CONTRACT_INVOICE_FIELD id="2" FIELD_NAME="Test Contract Field 2" CONTRACT_ID="6" />
+
+    <INVOICE id="1" CONTRACT_ID="6" NAME="Test Invoice" INVOICE_SUM="2014" INTERNAL_NUMBER="ABC"
+             YEAR="2014" MONTH="2" />
+
+    <INVOICE_FIELD id="1" INVOICE_ID="1" CONTRACT_INVOICE_FIELD_ID="1" INVOICE_FIELD_VALUE="Test" />
+    <INVOICE_FIELD id="2" INVOICE_ID="1" CONTRACT_INVOICE_FIELD_ID="2" INVOICE_FIELD_VALUE="Test" />
+
+    <INVOICE id="2" CONTRACT_ID="6" NAME="Test Invoice2" INVOICE_SUM="2014" INTERNAL_NUMBER="ABC"
+             YEAR="2014" MONTH="2" />
+
+    <BUDGET id="6" name="Budget 1" total="100000" import_key="budget1" project_id="6" CONTRACT_ID="6"/>
+    <BUDGET id="2" name="Budget 2" total="100000" import_key="budget2" project_id="6" CONTRACT_ID="6"/>
+    <BUDGET id="3" name="Budget 3" total="100000" import_key="budget3" project_id="6" CONTRACT_ID="6"/>
+
+    <PERSON id="1" name="person1" import_key="person1" project_id="6"/>
+    <PERSON id="2" name="person2" import_key="person2" project_id="6"/>
+    <PERSON id="3" name="person3" import_key="person3" project_id="6"/>
+
+    <IMPORT id="1" import_date="2015-01-01" start_date="2015-01-01" end_date="2015-01-01" import_type="Testimport" project_id="6"/>
+
+    <WORK_RECORD id="3" person_id="2" budget_id="3" record_date="2014-02-01" record_year="2014" record_month="2" record_week="1" record_day="1" minutes="480" daily_rate="200" import_id="1"/>
+
+    <WORK_RECORD id="1" person_id="1" budget_id="1" record_date="2015-02-01" record_year="2015" record_month="2" record_week="1" record_day="1" minutes="480" daily_rate="200" import_id="1"/>
+    <WORK_RECORD id="2" person_id="1" budget_id="3" record_date="2016-02-02" record_year="2016" record_month="2" record_week="1" record_day="2" minutes="480" daily_rate="200" import_id="1"/>
+
+
+</dataset>

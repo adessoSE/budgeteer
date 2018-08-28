@@ -1,0 +1,29 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mockito="http://www.mockito.org/spring/mockito"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.mockito.org/spring/mockito  http://www.mockito.org/spring/mockito.xsd">
+
+    <mockito:mock id="userRepository" class="org.wickedsource.budgeteer.persistence.user.UserRepository"/>
+
+    <mockito:mock id="projectRepository" class="org.wickedsource.budgeteer.persistence.project.ProjectRepository"/>
+
+    <mockito:mock id="budgetRepository" class="org.wickedsource.budgeteer.persistence.budget.BudgetRepository"/>
+
+    <mockito:mock id="workRecordRepository" class="org.wickedsource.budgeteer.persistence.record.WorkRecordRepository"/>
+
+    <mockito:mock id="planRecordRepository" class="org.wickedsource.budgeteer.persistence.record.PlanRecordRepository"/>
+
+    <mockito:mock id="dailyRateRepository" class="org.wickedsource.budgeteer.persistence.person.DailyRateRepository"/>
+
+    <mockito:mock id="importRepository" class="org.wickedsource.budgeteer.persistence.imports.ImportRepository"/>
+
+    <mockito:mock id="personRepository" class="org.wickedsource.budgeteer.persistence.person.PersonRepository"/>
+
+    <mockito:mock id="contractRepository" class="org.wickedsource.budgeteer.persistence.contract.ContractRepository"/>
+
+    <mockito:mock id="invoiceRepository" class="org.wickedsource.budgeteer.persistence.invoice.InvoiceRepository"/>
+
+    <mockito:mock id="templateRepository" class="org.wickedsource.budgeteer.persistence.template.TemplateRepository"/>
+
+</beans>

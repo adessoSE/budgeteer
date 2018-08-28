@@ -1,0 +1,111 @@
+/**
+ * a small box showcasing a statistic or something like that
+ */
+
+.showcase {
+    padding-left: 5px;
+    padding-right: 5px;
+    margin-bottom: 10px;
+    overflow: hidden;
+}
+
+.showcase h3 {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 0 0 10px 0;
+    white-space: nowrap;
+    padding: 0;
+}
+
+/**
+ * use if you need some pixels of room before an element
+ */
+.push-right {
+    margin-left: 20px;
+}
+
+/**
+ *  to be used with form-box to create a wider than normal form-box
+ */
+.wide {
+    width: 800px;
+}
+
+.wide .body > .form-group, .form-box .footer > .form-group {
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+.btn-no-padding {
+    padding: 1px 6px;
+}
+
+.navbar-nav > .notifications-menu > .dropdown-menu {
+    width: 450px;
+}
+
+.bg-dark-gray {
+    background-color: #909090 !important;
+}
+
+#dropzone {
+    background: palegreen;
+    width: 150px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    font-weight: bold;
+}
+
+#dropzone.in {
+    width: 600px;
+    height: 200px;
+    line-height: 200px;
+    font-size: larger;
+}
+
+#dropzone.hover {
+    background: lawngreen;
+}
+
+#dropzone.fade {
+    -webkit-transition: all 0.3s ease-out;
+    -moz-transition: all 0.3s ease-out;
+    -ms-transition: all 0.3s ease-out;
+    -o-transition: all 0.3s ease-out;
+    transition: all 0.3s ease-out;
+    opacity: 1;
+}
+
+.small-box h3 a {
+    color: white;
+}
+
+.pointer{
+    cursor: pointer;
+}
+
+.feedbackPanel{
+    margin-top: 10px;
+}
+
+/*small last column (column in which is the Edit-Button)*/
+table.smallLastColumn tr td:last-child {
+    width: 50px;
+}
+
+.table-bordered > tfoot > tr > td {
+    border-top-width: 2px;
+}
+
+.chartCanvas {
+    height: 450px;
+}
+	
+.personDetails {
+    height: 210px;
+}
+
+.budgetDetails {
+	height: 270px;
+}

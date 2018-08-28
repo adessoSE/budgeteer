@@ -10,6 +10,7 @@ import org.wickedsource.budgeteer.persistence.user.UserRepository;
 import org.wickedsource.budgeteer.service.UnknownEntityException;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -144,5 +145,22 @@ public class UserService {
         userEntity.setName(username);
         userEntity.setPassword("password"); // dummy password
         userRepository.save(userEntity);
+    }
+
+    public List<User> getAllUsers() {
+        List<UserEntity> result = new ArrayList<>();
+        for(UserEntity e : userRepository.findAll()){
+            result.add(e);
+        }
+        return mapper.map(result);
+    }
+
+    public void removeUser(long id) {
+        //Remove the user from all projects
+        for(ProjectEntity e : projectRepository.findAll()){
+            this.removeUserFromProject(e.getId(), id);
+        }
+
+        userRepository.delete(id);
     }
 }

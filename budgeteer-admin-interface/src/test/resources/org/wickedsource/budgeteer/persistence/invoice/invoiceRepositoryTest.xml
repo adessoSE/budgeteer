@@ -1,0 +1,9 @@
+<dataset>
+    <PROJECT id="3" name="project3"/>
+    <CONTRACT id="3" CONTRACT_NAME="Test" PROJECT_ID="3" BUDGET="100" INTERNAL_NUMBER="Test" START_DATE="2015-01-01" CONTRACT_TYPE="1" />
+    <CONTRACT_INVOICE_FIELD id="1" FIELD_NAME="Test Contract Field" CONTRACT_ID="3" />
+
+
+    <INVOICE id="3" CONTRACT_ID="3" NAME="Test Invoice"  INTERNAL_NUMBER="ABC" YEAR="2014" MONTH="2" INVOICE_SUM="200" DATE="2014-02-02"/>
+
+</dataset>

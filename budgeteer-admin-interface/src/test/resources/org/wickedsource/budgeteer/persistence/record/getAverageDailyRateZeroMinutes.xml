@@ -1,0 +1,17 @@
+<dataset>
+
+    <PROJECT id="1" name="project1"/>
+
+    <BUDGET id="1" name="Budget 1" total="100000" import_key="budget1" project_id="1"/>
+    <BUDGET_TAG budget_id="1" tag="Tag 1"/>
+    <BUDGET_TAG budget_id="1" tag="Tag 2"/>
+    <BUDGET_TAG budget_id="1" tag="Tag 3"/>
+
+    <PERSON id="1" name="person1" import_key="person1" project_id="1"/>
+
+    <IMPORT id="1" import_date="2015-01-01" start_date="2015-01-01" end_date="2015-01-01" import_type="Testimport" project_id="1"/>
+
+    <WORK_RECORD id="1" person_id="1" budget_id="1" record_date="2015-01-01" record_year="2015" record_week="1" record_month="0" record_day="1" minutes="480" daily_rate="50000" import_id="1"/>
+    <WORK_RECORD id="2" person_id="1" budget_id="1" record_date="2015-08-15" record_year="2015" record_week="33" record_month="7" record_day="15" minutes="-480" daily_rate="60000" import_id="1"/>
+
+</dataset>

@@ -29,7 +29,7 @@ public class UserEntity {
 
     @LazyCollection(LazyCollectionOption.FALSE)
     @ManyToMany(mappedBy = "authorizedUsers")
-    private List<ProjectEntity> authorizedProjects = new ArrayList<ProjectEntity>();
+    private List<ProjectEntity> authorizedProjects = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     private ProjectEntity defaultProject;
@@ -39,4 +39,5 @@ public class UserEntity {
         return "User( Id:" + id + ", name: " +name + ")";
     }
 
+    
 }
