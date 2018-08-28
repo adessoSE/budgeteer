@@ -20,4 +20,7 @@ public interface UserRepository extends CrudRepository<UserEntity, Long> {
     @Query("select u from UserEntity u join u.authorizedProjects p where p.id = :projectId")
     public List<UserEntity> findInProject(@Param("projectId") long projectId);
 
+    @Query("select u from UserEntity u where u.id = :id")
+    public UserEntity findById(@Param("id") long id);
+
 }

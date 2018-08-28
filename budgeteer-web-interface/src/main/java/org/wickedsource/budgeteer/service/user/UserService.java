@@ -8,9 +8,12 @@ import org.wickedsource.budgeteer.persistence.project.ProjectRepository;
 import org.wickedsource.budgeteer.persistence.user.UserEntity;
 import org.wickedsource.budgeteer.persistence.user.UserRepository;
 import org.wickedsource.budgeteer.service.UnknownEntityException;
+import org.wickedsource.budgeteer.web.components.user.UserRole;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -69,6 +72,7 @@ public class UserService {
         }
         user.getAuthorizedProjects().remove(project);
         project.getAuthorizedUsers().remove(user);
+        removeAllRolesFromUser(user.getId(), projectId);
     }
 
     /**
@@ -89,6 +93,7 @@ public class UserService {
         }
         user.getAuthorizedProjects().add(project);
         project.getAuthorizedUsers().add(user);
+        addRoleToUser(user.getId(), projectId, UserRole.USER);
     }
 
     /**
@@ -131,6 +136,7 @@ public class UserService {
             UserEntity user = new UserEntity();
             user.setName(username);
             user.setPassword(passwordHasher.hash(password));
+            user.setRoles(new HashMap<>());
             userRepository.save(user);
         } else {
             throw new UsernameAlreadyInUseException();
@@ -144,6 +150,7 @@ public class UserService {
         UserEntity userEntity = new UserEntity();
         userEntity.setName(username);
         userEntity.setPassword("password"); // dummy password
+        userEntity.setRoles(new HashMap<>());
         userRepository.save(userEntity);
     }
 
@@ -157,10 +164,40 @@ public class UserService {
 
     public void removeUser(long id) {
         //Remove the user from all projects
-        for(ProjectEntity e : projectRepository.findAll()){
+        for (ProjectEntity e : projectRepository.findAll()) {
             this.removeUserFromProject(e.getId(), id);
         }
 
         userRepository.delete(id);
+    }
+
+    public void addRoleToUser(Long userId, Long projectID, UserRole role) {
+        UserEntity user = userRepository.findById(userId);
+        if(user.getRoles().get(projectID) == null || user.getRoles().get(projectID).size() == 0){
+            user.getRoles().put(projectID, new ArrayList<>(Collections.singleton(role.toString())));
+        }else{
+            ArrayList<String> newRoles = user.getRoles().get(projectID);
+            if(!newRoles.contains(role.toString())) {
+                newRoles.add(role.toString());
+                user.getRoles().put(projectID, newRoles);
+            }
+        }
+        userRepository.save(user);
+    }
+
+    public void removeAllRolesFromUser(Long userId, Long projectID) {
+        UserEntity user = userRepository.findById(userId);
+        user.getRoles().remove(projectID);
+        userRepository.save(user);
+    }
+
+    private void removeRoleFromUser(long userId, long projectID, UserRole role) {
+        UserEntity user = userRepository.findById(userId);
+        if(user.getRoles().get(projectID) != null && user.getRoles().get(projectID).size() != 0){
+            ArrayList<String> newRoles = user.getRoles().get(projectID);
+            newRoles.remove(role.toString());
+            user.getRoles().put(projectID, newRoles);
+            userRepository.save(user);
+        }
     }
 }

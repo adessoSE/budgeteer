@@ -32,7 +32,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 import static org.wicketstuff.lazymodel.LazyModel.from;
 import static org.wicketstuff.lazymodel.LazyModel.model;
@@ -65,7 +64,7 @@ public class EditTemplateForm extends Form<TemplateFormInputDto> {
         add(fileUpload);
         add(createCancelButton("backlink2"));
         add(DeleteTemplateButton("deleteButton"));
-        add(DownloadFileButton("downloadFileButton"));
+        add(downloadFileButton("downloadFileButton"));
 
         add(new AjaxButton("save") {
             @Override
@@ -173,7 +172,7 @@ public class EditTemplateForm extends Form<TemplateFormInputDto> {
     /**
      * Creates a button to download the template that is being edited.
      */
-    private Link DownloadFileButton(String wicketId) {
+    private Link downloadFileButton(String wicketId) {
         return new Link<Void>(wicketId) {
             @Override
             public void onClick() {
@@ -211,20 +210,23 @@ public class EditTemplateForm extends Form<TemplateFormInputDto> {
         return new Link<Void>(wicketId) {
             @Override
             public void onClick() {
-                setResponsePage(new DeleteDialog(new Callable<Void>() {
+                setResponsePage(new DeleteDialog() {
                     @Override
-                    public Void call(){
+                    protected void onYes() {
                         service.deleteTemplate(templateID);
                         ((EditTemplatePage)EditTemplateForm.this.getPage()).goBack();
-                        return null;
                     }
-                }, new Callable<Void>() {
+
                     @Override
-                    public Void call(){
+                    protected void onNo() {
                         setResponsePage(new EditTemplatePage(TemplatesPage.class, getPage().getPageParameters(), templateID));
-                        return null;
                     }
-                }));
+
+                    @Override
+                    protected String confirmationText() {
+                        return "Are you sure you want to delete this template?";
+                    }
+                });
             }
         };
     }

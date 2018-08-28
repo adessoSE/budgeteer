@@ -7,6 +7,7 @@ import org.wickedsource.budgeteer.IntegrationTestTemplate;
 import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
 import org.wickedsource.budgeteer.persistence.project.ProjectRepository;
 
+import java.util.HashMap;
 import java.util.List;
 
 class UserRepositoryTest extends IntegrationTestTemplate {
@@ -22,6 +23,7 @@ class UserRepositoryTest extends IntegrationTestTemplate {
         UserEntity user = new UserEntity();
         user.setName("name");
         user.setPassword("password");
+        user.setRoles(new HashMap<>());
         this.userRepository.save(user);
 
         UserEntity result = this.userRepository.findByNameAndPassword("name", "password");
@@ -54,6 +56,7 @@ class UserRepositoryTest extends IntegrationTestTemplate {
         UserEntity user1 = new UserEntity();
         user1.setName("user1");
         user1.setPassword("password");
+        user1.setRoles(new HashMap<>());
         user1.getAuthorizedProjects().add(project);
         project.getAuthorizedUsers().add(user1);
         userRepository.save(user1);
@@ -61,6 +64,7 @@ class UserRepositoryTest extends IntegrationTestTemplate {
         UserEntity user2 = new UserEntity();
         user2.setName("user2");
         user2.setPassword("password");
+        user2.setRoles(new HashMap<>());
         userRepository.save(user2);
         return savedProject;
     }

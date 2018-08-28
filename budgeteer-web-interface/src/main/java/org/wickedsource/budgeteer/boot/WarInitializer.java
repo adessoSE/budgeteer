@@ -9,11 +9,10 @@ import org.springframework.boot.web.support.SpringBootServletInitializer;
  *
  * @author Stefan Kloe
  */
-public class WarInitializer extends SpringBootServletInitializer {
+public class   WarInitializer extends SpringBootServletInitializer {
 
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
         return application.sources(BudgeteerBooter.class);
     }
-
 }

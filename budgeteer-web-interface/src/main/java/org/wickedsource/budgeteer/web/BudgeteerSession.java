@@ -47,13 +47,17 @@ public class BudgeteerSession extends WebSession {
         return loggedInUser;
     }
 
+    public void setLoggedInUser(User updatedUser) {
+        loggedInUser = updatedUser;
+    }
+
+
     public boolean isLoggedIn() {
         return this.loggedInUser != null;
     }
 
     public void login(User loggedInUser) {
         this.loggedInUser = loggedInUser;
-
         this.setAuthInSecurityContext(new BudgeteerAuthenticationToken(loggedInUser.getName()));
     }
 

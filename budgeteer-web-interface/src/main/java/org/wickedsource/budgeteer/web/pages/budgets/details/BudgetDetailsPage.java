@@ -63,15 +63,23 @@ public class BudgetDetailsPage extends BasePage {
         Form deleteForm = new ConfirmationForm("deleteForm", this, "confirmation.delete") {
             @Override
             public void onSubmit() {
+                setResponsePage(new DeleteDialog() {
+                    @Override
+                    protected void onYes() {
+                        budgetService.deleteBudget(getParameterId());
+                        setResponsePage(BudgetsOverviewPage.class);
+                    }
 
-                setResponsePage(new DeleteDialog(() -> {
-                    budgetService.deleteBudget(getParameterId());
-                    setResponsePage(BudgetsOverviewPage.class);
-                    return null;
-                }, () -> {
-                    setResponsePage(new BudgetDetailsPage(getPageParameters()));
-                    return null;
-                }));
+                    @Override
+                    protected void onNo() {
+                        setResponsePage(new BudgetDetailsPage(getPageParameters()));
+                    }
+
+                    @Override
+                    protected String confirmationText() {
+                        return "Are you sure you want to delete this budget?";
+                    }
+                });
             }
         };
         deleteForm.add(new SubmitLink("deleteLink"));

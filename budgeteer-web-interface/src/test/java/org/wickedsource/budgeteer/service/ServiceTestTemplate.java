@@ -10,8 +10,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.wickedsource.budgeteer.service.security.BudgeteerMethodSecurityExpressionRoot;
 import org.wickedsource.budgeteer.service.security.BudgeteerAuthenticationToken;
+import org.wickedsource.budgeteer.service.security.BudgeteerMethodSecurityExpressionRoot;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(loader = SpringockitoContextLoader.class, locations = {"classpath:spring-service.xml", "classpath:spring-repository-mock.xml"})
