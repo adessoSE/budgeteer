@@ -37,6 +37,9 @@ public class InvoiceHighlightsPanel extends GenericPanel<InvoiceBaseData> {
         add(new Label("year", model(from(getModelObject()).getYear())));
         add(new Label("month", PropertyLoader.getProperty(BasePage.class, "monthRenderer.name." + getModelObject().getMonth())));
         add(new Label("sum", model(from(getModelObject()).getSum())));
+        add(new Label("sum_gross", model(from(getModelObject()).getSum_gross())));
+        add(new Label("taxAmount", model(from(getModelObject()).getTaxAmount())));
+        add(new Label("taxRate", getModelObject().getTaxRate().doubleValue()+" %"));
         add(new Label("paid", (getModelObject().isPaid() ? getString("invoice.paid.yes") : getString("invoice.paid.no"))));
 
         WebMarkupContainer linkContainer = new WebMarkupContainer("linkContainer"){
