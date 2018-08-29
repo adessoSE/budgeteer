@@ -26,7 +26,7 @@
     <!-- Contract without any ContractFields -->
     <PROJECT id="4" name="project4"/>
 
-    <CONTRACT id="4" CONTRACT_NAME="Test" PROJECT_ID="4" BUDGET="1" INTERNAL_NUMBER="Test" START_DATE="2015-01-01" CONTRACT_TYPE="0" />
+    <CONTRACT id="4" CONTRACT_NAME="Test" PROJECT_ID="4" BUDGET="1" INTERNAL_NUMBER="Test" START_DATE="2015-01-01" CONTRACT_TYPE="0" TAXRATE="10" />
 
     <BUDGET id="2" name="Budget 2" total="100000" import_key="budget2" project_id="4" CONTRACT_ID="4"/>
 
@@ -34,7 +34,7 @@
     <!-- Contract without any ContractFields but with a project containing ProjectContractFields -->
     <PROJECT id="5" name="project5"/>
 
-    <CONTRACT id="5" CONTRACT_NAME="Test" PROJECT_ID="5" BUDGET="1" INTERNAL_NUMBER="Test" START_DATE="2015-01-01" CONTRACT_TYPE="0" />
+    <CONTRACT id="5" CONTRACT_NAME="Test" PROJECT_ID="5" BUDGET="1" INTERNAL_NUMBER="Test" START_DATE="2015-01-01" CONTRACT_TYPE="0" TAXRATE="10"/>
 
     <PROJECT_CONTRACT_FIELD id="5" FIELD_NAME="test0" PROJECT_ID="5" />
     <PROJECT_CONTRACT_FIELD id="6" FIELD_NAME="test1" PROJECT_ID="5" />
