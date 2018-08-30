@@ -6,8 +6,11 @@ import de.adesso.budgeteer.web.pages.user.login.LoginPage;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -34,7 +37,7 @@ import java.util.List;
 import static org.wicketstuff.lazymodel.LazyModel.from;
 import static org.wicketstuff.lazymodel.LazyModel.model;
 
-@Mount("/administartion-console")
+@Mount("/administartion-menu")
 public class BudgeteerAdministrationOverview extends BasePage {
 
     @SpringBean
@@ -64,6 +67,7 @@ public class BudgeteerAdministrationOverview extends BasePage {
                 item.add(new Label("username", model(from(item.getModel()).getName())));
                 Component deleteUserButton = createDeleteUserButton(item);
                 Component makeAdminList = createRolesList(item);
+                Component setPasswordTextField = createPasswordTextField(item);
                 // a user may not delete herself/himself unless another admin is present
                 if (item.getModelObject().getId() == thisUser.getId()){
                     List<User> allUsers = userService.getAllUsers();
@@ -79,6 +83,7 @@ public class BudgeteerAdministrationOverview extends BasePage {
                 }
                 item.add(deleteUserButton);
                 item.add(makeAdminList);
+                item.add(setPasswordTextField);
             }
 
             @Override
@@ -86,6 +91,20 @@ public class BudgeteerAdministrationOverview extends BasePage {
                 return super.newItem(index, new ClassAwareWrappingModel<>(itemModel, User.class));
             }
         };
+    }
+
+    private Component createPasswordTextField(ListItem<User> item) {
+
+        PasswordTextField textField = new PasswordTextField("setPasswordTextBox", Model.of(""));
+        Form passwordResetField = new Form("passwordResetField"){
+            @Override
+            protected void onSubmit() {
+                userService.setUserPassword(item.getModelObject().getId(), textField.getModelObject());
+            }
+        };
+
+        Button submitButton = new Button("resetPasswordButton");
+        return passwordResetField.add(textField, submitButton);
     }
 
     private Component createDeleteUserButton(ListItem<User> item){

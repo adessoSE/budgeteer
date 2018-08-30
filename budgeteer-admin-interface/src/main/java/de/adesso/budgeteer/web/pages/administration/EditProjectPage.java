@@ -42,7 +42,7 @@ import java.util.List;
 import static org.wicketstuff.lazymodel.LazyModel.from;
 import static org.wicketstuff.lazymodel.LazyModel.model;
 
-@Mount("/administartion-console/edit-project/#{id}")
+@Mount("/administartion-menu/edit-project/#{id}")
 public class EditProjectPage extends BasePage {
 
     @SpringBean

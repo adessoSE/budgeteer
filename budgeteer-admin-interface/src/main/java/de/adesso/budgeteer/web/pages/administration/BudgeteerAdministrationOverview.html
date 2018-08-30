@@ -25,7 +25,11 @@
                         <tbody>
                         <tr wicket:id="userList">
                             <td wicket:id="username">Username</td>
-                            <td>
+                            <td class="row">
+                                <form class="btn" wicket:id="passwordResetField">
+                                    <input type="password" onblur="" wicket:id="setPasswordTextBox">
+                                    <button type="submit" wicket:id="resetPasswordButton" class="btn btn-danger btn-sm">Set new password.</button>
+                                </form>
                                 <a wicket:id="deleteUserButton" class="btn btn-danger btn-sm">Remove from database.</a>
                                 <select wicket:id="roleDropdown" class="btn btn-success btn-sm form-control">
                                 </select>
