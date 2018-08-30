@@ -1,8 +1,6 @@
 package de.adesso.budgeteer.web.pages.user.login;
 
-import de.adesso.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
 import de.adesso.budgeteer.web.pages.administration.BudgeteerAdministrationOverview;
-import de.adesso.budgeteer.web.pages.base.dialogpage.DialogPage;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.RequiredTextField;
@@ -12,6 +10,8 @@ import org.wickedsource.budgeteer.service.user.User;
 import org.wickedsource.budgeteer.service.user.UserService;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.Mount;
+import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
+import org.wickedsource.budgeteer.web.pages.base.dialogpage.DialogPage;
 import org.wickedsource.budgeteer.web.settings.BudgeteerSettings;
 
 import static org.wicketstuff.lazymodel.LazyModel.from;

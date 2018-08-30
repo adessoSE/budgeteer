@@ -22,6 +22,6 @@ public class UsersInProjectModel extends AbstractReadOnlyModel<List<User>> {
 
     @Override
     public List<User> getObject() {
-        return service.getAllUsers();
+        return service.getUsersInProject(projectId);
     }
 }

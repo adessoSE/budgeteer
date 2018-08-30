@@ -1,7 +1,6 @@
 package de.adesso.budgeteer.web.pages.base.basepage;
 
 import de.adesso.budgeteer.web.BudgeteerReferences;
-import de.adesso.budgeteer.web.components.security.NeedsLogin;
 import de.adesso.budgeteer.web.pages.administration.BudgeteerAdministrationOverview;
 import de.adesso.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
 import de.adesso.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsPanel;
@@ -18,6 +17,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.StringValue;
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.representations.AccessToken;
+import de.adesso.budgeteer.web.components.security.NeedsLogin;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.settings.BudgeteerSettings;
 

@@ -218,4 +218,12 @@ public class UserService {
             userRepository.save(entity);
         }
     }
+
+    public void setUserPassword(Long userId, String password){
+        if(userId != 0) {
+            UserEntity entity = userRepository.findById(userId);
+            entity.setPassword(passwordHasher.hash(password));
+            userRepository.save(entity);
+        }
+    }
 }

@@ -1,10 +1,9 @@
 package de.adesso.budgeteer.web.pages.administration;
 
-import de.adesso.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
 import de.adesso.budgeteer.web.pages.base.basepage.BasePage;
 import de.adesso.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
-import de.adesso.budgeteer.web.pages.base.delete.DeleteDialog;
 import de.adesso.budgeteer.web.pages.user.login.LoginPage;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.basic.Label;
@@ -23,7 +22,9 @@ import org.wickedsource.budgeteer.service.user.UserService;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.ClassAwareWrappingModel;
 import org.wickedsource.budgeteer.web.Mount;
+import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
 import org.wickedsource.budgeteer.web.components.multiselect.MultiselectBehavior;
+import org.wickedsource.budgeteer.web.pages.base.delete.DeleteDialog;
 import org.wickedsource.budgeteer.web.settings.BudgeteerSettings;
 
 import java.util.ArrayList;
@@ -45,98 +46,24 @@ public class BudgeteerAdministrationOverview extends BasePage {
     @SpringBean
     private BudgeteerSettings settings;
 
+    private User thisUser = BudgeteerSession.get().getLoggedInUser();
+
+
     public BudgeteerAdministrationOverview() {
         add(new CustomFeedbackPanel("feedback"));
-        add(createUserList("userList", new UsersInProjectModel(BudgeteerSession.get().getProjectId())));
+        add(createUserList("userList", new ListModel<>(userService.getAllUsers())));
         add(createProjectList("projectList", new ListModel<>(projectService.getAllProjects())));
     }
 
     private ListView<User> createUserList(String id, IModel<List<User>> model) {
-        User thisUser = BudgeteerSession.get().getLoggedInUser();
+
         return new ListView<User>(id, model) {
 
             @Override
             protected void populateItem(final ListItem<User> item) {
                 item.add(new Label("username", model(from(item.getModel()).getName())));
-                Link deleteUserButton = new Link("deleteUserButton") {
-                    @Override
-                    public void onClick() {
-                        setResponsePage(new org.wickedsource.budgeteer.web.pages.base.delete.DeleteDialog() {
-                            @Override
-                            protected void onYes() {
-                                if(thisUser.getId() == item.getModelObject().getId()){
-                                    userService.removeUser(item.getModelObject().getId());
-                                    BudgeteerSession.get().logout(); // Log the user out if he deletes himself
-                                }else{
-                                    userService.removeUser(item.getModelObject().getId());
-                                }
-                                setResponsePage(BudgeteerAdministrationOverview.class, getPageParameters());
-                            }
-
-                            @Override
-                            protected void onNo() {
-                                setResponsePage(BudgeteerAdministrationOverview.class, getPageParameters());
-                            }
-
-                            @Override
-                            protected String confirmationText() {
-                                return "Are you sure you want to remove this user from the project?";
-                            }
-                        });
-                    }
-                };
-
-                List<String> choices = new ArrayList<>();
-                choices.add("admin");
-                choices.add("user");
-                DropDownChoice<String> makeAdminList = new DropDownChoice<>(
-                        "roleDropdown", new Model<>(item.getModelObject().getGlobalRole()), choices);
-                HashMap<String, String> options = new HashMap<>();
-                options.clear();
-                options.put("buttonWidth","'120px'");
-                makeAdminList.add(new MultiselectBehavior(options));
-                makeAdminList.add(new AjaxFormComponentUpdatingBehavior("change") {
-                    @Override
-                    protected void onUpdate(AjaxRequestTarget target) {
-                        if(!makeAdminList.getModelObject().isEmpty()) {
-
-                            //Check if the user is losing admin privileges and ask if they are sure
-                            if(item.getModelObject().getId() == thisUser.getId() &&
-                                    !makeAdminList.getModelObject().contains("admin")
-                                    && item.getModelObject().getGlobalRole().equals("admin")){
-                                setResponsePage(
-                                        new org.wickedsource.budgeteer.web.pages.base.delete.DeleteDialog() {
-                                            @Override
-                                            protected void onYes() {
-                                                userService.setGlobalRoleForUser(item.getModelObject().getId(),makeAdminList.getModelObject());
-                                                if(item.getModelObject().getId() == thisUser.getId()){
-                                                    BudgeteerSession.get().setLoggedInUser(item.getModelObject());
-                                                }
-                                                setResponsePage(LoginPage.class);
-                                            }
-
-                                            @Override
-                                            protected void onNo() {
-                                                setResponsePage(BudgeteerAdministrationOverview.class);
-                                            }
-
-                                            @Override
-                                            protected String confirmationText() {
-                                                return "You will lose admin privileges and access to the administration menu if you proceed, are you sure?";
-                                            }
-                                        });
-                            }else {
-                                userService.setGlobalRoleForUser(item.getModelObject().getId(), makeAdminList.getModelObject());
-                            }
-                        }
-                        if(item.getModelObject().getId() == thisUser.getId()){
-                            BudgeteerSession.get().setLoggedInUser(item.getModelObject());
-                        }
-                        target.add(BudgeteerAdministrationOverview.this);
-                    }
-                });
-
-
+                Component deleteUserButton = createDeleteUserButton(item);
+                Component makeAdminList = createRolesList(item);
                 // a user may not delete herself/himself unless another admin is present
                 if (item.getModelObject().getId() == thisUser.getId()){
                     List<User> allUsers = userService.getAllUsers();
@@ -161,31 +88,134 @@ public class BudgeteerAdministrationOverview extends BasePage {
         };
     }
 
+    private Component createDeleteUserButton(ListItem<User> item){
+        return new Link("deleteUserButton") {
+            @Override
+            public void onClick() {
+                setResponsePage(new org.wickedsource.budgeteer.web.pages.base.delete.DeleteDialog() {
+                    @Override
+                    protected void onYes() {
+                        if(thisUser.getId() == item.getModelObject().getId()){
+                            userService.removeUser(item.getModelObject().getId());
+                            BudgeteerSession.get().logout(); // Log the user out if he deletes himself
+                        }else{
+                            userService.removeUser(item.getModelObject().getId());
+                        }
+                        setResponsePage(BudgeteerAdministrationOverview.class, getPageParameters());
+                    }
+
+                    @Override
+                    protected void onNo() {
+                        setResponsePage(BudgeteerAdministrationOverview.class, getPageParameters());
+                    }
+
+                    @Override
+                    protected String confirmationText() {
+                        return "Are you sure you want to remove this user from the project?";
+                    }
+                });
+            }
+        };
+    }
+
+    private Component createRolesList(ListItem<User> item) {
+        List<String> choices = new ArrayList<>();
+        choices.add("admin");
+        choices.add("user");
+        DropDownChoice<String> makeAdminList = new DropDownChoice<>(
+                "roleDropdown", new Model<>(item.getModelObject().getGlobalRole()), choices);
+        HashMap<String, String> options = new HashMap<>();
+        options.clear();
+        options.put("buttonWidth","'120px'");
+        makeAdminList.add(new MultiselectBehavior(options));
+        makeAdminList.add(new AjaxFormComponentUpdatingBehavior("change") {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                if(!makeAdminList.getModelObject().isEmpty()) {
+
+                    //Check if the user is losing admin privileges and ask if they are sure
+                    if(item.getModelObject().getId() == thisUser.getId() &&
+                            !makeAdminList.getModelObject().contains("admin")
+                            && item.getModelObject().getGlobalRole().equals("admin")){
+                        setResponsePage(
+                                new org.wickedsource.budgeteer.web.pages.base.delete.DeleteDialog() {
+                                    @Override
+                                    protected void onYes() {
+                                        userService.setGlobalRoleForUser(item.getModelObject().getId(),makeAdminList.getModelObject());
+                                        if(item.getModelObject().getId() == thisUser.getId()){
+                                            BudgeteerSession.get().setLoggedInUser(item.getModelObject());
+                                        }
+                                        setResponsePage(LoginPage.class);
+                                    }
+
+                                    @Override
+                                    protected void onNo() {
+                                        setResponsePage(BudgeteerAdministrationOverview.class);
+                                    }
+
+                                    @Override
+                                    protected String confirmationText() {
+                                        return "You will lose admin privileges and access to the administration menu if you proceed, are you sure?";
+                                    }
+                                });
+                    }else {
+                        userService.setGlobalRoleForUser(item.getModelObject().getId(), makeAdminList.getModelObject());
+                    }
+                }
+                if(item.getModelObject().getId() == thisUser.getId()){
+                    BudgeteerSession.get().setLoggedInUser(item.getModelObject());
+                }
+                target.add(BudgeteerAdministrationOverview.this);
+            }
+        });
+        return makeAdminList;
+    }
+
     private ListView<ProjectBaseData> createProjectList(String id, IModel<List<ProjectBaseData>> model) {
         return new ListView<ProjectBaseData>(id, model) {
             @Override
             protected void populateItem(final ListItem<ProjectBaseData> item) {
                 item.add(new Label("projectname", model(from(item.getModel()).getName())));
-                Link deleteProjectButton = new Link("deleteProjectButton") {
-                    @Override
-                    public void onClick() {
-
-                        setResponsePage(new DeleteDialog(() -> {
-                            projectService.deleteProject(item.getModelObject().getId());
-                            setResponsePage(BudgeteerAdministrationOverview.class, getPageParameters());
-                            return null;
-                        }, () -> {
-                            setResponsePage(BudgeteerAdministrationOverview.class, getPageParameters());
-                            return null;
-                        }));
-                    }
-                };
-                item.add(deleteProjectButton);
+                item.add(createDeleteProjectButton(item));
+                item.add(createProjectEditButton(item));
             }
-
             @Override
             protected ListItem<ProjectBaseData> newItem(int index, IModel<ProjectBaseData> itemModel) {
                 return super.newItem(index, new ClassAwareWrappingModel<>(itemModel, ProjectBaseData.class));
+            }
+        };
+    }
+
+    private Component createProjectEditButton(ListItem<ProjectBaseData> item){
+        return new Link("editProjectButton") {
+            @Override
+            public void onClick() {
+                setResponsePage(EditProjectPage.class, createParameters(item.getModelObject().getId()));
+            }
+        };
+    }
+
+    private Component createDeleteProjectButton(ListItem<ProjectBaseData> item){
+        return new Link("deleteProjectButton") {
+            @Override
+            public void onClick() {
+                setResponsePage(new DeleteDialog() {
+                    @Override
+                    protected void onYes() {
+                        projectService.deleteProject(item.getModelObject().getId());
+                        setResponsePage(BudgeteerAdministrationOverview.class, getPageParameters());
+                    }
+
+                    @Override
+                    protected void onNo() {
+                        setResponsePage(BudgeteerAdministrationOverview.class, getPageParameters());
+                    }
+
+                    @Override
+                    protected String confirmationText() {
+                        return "Are you sure you want to delete this project? This action is irreversible!";
+                    }
+                });
             }
         };
     }

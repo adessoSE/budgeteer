@@ -94,7 +94,7 @@ public class BudgeteerAdminConsoleApplication extends WebApplication implements 
     private void mountPages() {
         Reflections reflections = new Reflections(
                 new ConfigurationBuilder().setUrls(
-                        ClasspathHelper.forPackage("org.wickedsource.budgeteer")).setScanners(
+                        ClasspathHelper.forPackage("de.adesso.budgeteer")).setScanners(
                         new TypeAnnotationsScanner()));
         Set<Class<?>> pagesToMount = reflections.getTypesAnnotatedWith(Mount.class, true);
 
