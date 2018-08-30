@@ -8,9 +8,9 @@ import org.apache.wicket.injection.Injector;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
-import org.wickedsource.budgeteer.web.BudgeteerSettings;
 import org.wickedsource.budgeteer.web.pages.user.selectproject.SelectProjectPage;
 import org.wickedsource.budgeteer.web.pages.user.selectproject.SelectProjectWithKeycloakPage;
+import org.wickedsource.budgeteer.web.settings.BudgeteerSettings;
 
 /**
  * {@link IComponentInstantiationListener} and {@link IComponentOnBeforeRenderListener} implementation

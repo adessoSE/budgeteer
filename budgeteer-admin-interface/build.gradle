@@ -23,6 +23,10 @@ configurations {
     all*.exclude group: 'org.apache.wicket', module: 'wicket'
 }
 
+springBoot {
+    mainClass = "de.adesso.budgeteer.boot.BudgeteerAdminConsoleBooter"
+}
+
 sourceSets {
     main {
         java {

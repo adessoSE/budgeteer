@@ -14,8 +14,7 @@ public class WebInitializer implements ServletContextInitializer {
 
     @Override
     public void onStartup(ServletContext sc) throws ServletException {
-        FilterRegistration filter = sc.addFilter("wicket-filter",
-                WicketFilter.class);
+        FilterRegistration filter = sc.addFilter("wicket-filter", WicketFilter.class);
         filter.setInitParameter(WicketFilter.APP_FACT_PARAM,
                 SpringWebApplicationFactory.class.getName());
         filter.setInitParameter("applicationBean", "budgeteerApplication");

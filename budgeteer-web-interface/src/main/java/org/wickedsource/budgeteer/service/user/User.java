@@ -11,4 +11,5 @@ public class User implements Serializable {
     private long id;
     private String name;
     private Map<Long, ArrayList<String>> roles;
+    private String globalRole;
 }

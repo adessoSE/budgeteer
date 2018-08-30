@@ -129,8 +129,12 @@ public class BudgeteerMethodSecurityExpressionRoot extends SecurityExpressionRoo
      * @see BudgeteerSession#getProjectId()
      */
     public boolean canReadProject(Long projectId) {
-        long selectedProjectId = getCurrentProjectId();
-        return selectedProjectId == projectId;
+        if(BudgeteerSession.get().getLoggedInUser().getGlobalRole().equals("admin")){
+            return true;
+        }else {
+            long selectedProjectId = getCurrentProjectId();
+            return selectedProjectId == projectId;
+        }
     }
 
     /**

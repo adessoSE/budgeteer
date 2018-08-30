@@ -6,13 +6,14 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.wickedsource.budgeteer.service.user.User;
 import org.wickedsource.budgeteer.service.user.UserService;
+import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.components.security.NeedsLogin;
 
 /**
  * A configuration to set up spring boot security. Only used for authorization. Authentication
  * is performed via the {@link NeedsLogin} annotation and the {@link UserService}.
  *
- * @see org.wickedsource.budgeteer.web.BudgeteerSession#login(User)
+ * @see BudgeteerSession#login(User)
  * @see UserService#login(String, String)
  */
 @Configuration

@@ -25,6 +25,7 @@ import org.wickedsource.budgeteer.web.components.instantiation.BudgeteerRequires
 import org.wickedsource.budgeteer.web.components.security.BudgeteerAuthorizationStrategy;
 import org.wickedsource.budgeteer.web.components.security.BudgeteerUnauthorizedComponentInstantiationListener;
 import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
+import org.wickedsource.budgeteer.web.settings.BudgeteerSettings;
 
 import java.util.Set;
 

@@ -19,6 +19,7 @@ import org.wickedsource.budgeteer.service.DateRange;
 import org.wickedsource.budgeteer.web.pages.administration.Project;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -163,4 +164,9 @@ public class ProjectService {
     }
 
 
+    public List<ProjectBaseData> getAllProjects() {
+        List<ProjectEntity> projectEntities = new ArrayList<>();
+        projectRepository.findAll().forEach(projectEntities::add);
+        return mapper.map(projectEntities);
+    }
 }

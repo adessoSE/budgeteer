@@ -33,6 +33,9 @@ public class UserEntity {
     @CollectionType(type = "HashMap")
     private HashMap<Long, ArrayList<String>> roles = new HashMap<>();
 
+    @Column(nullable = false, length = 128)
+    private String globalRole = "user";
+
     @LazyCollection(LazyCollectionOption.FALSE)
     @ManyToMany(mappedBy = "authorizedUsers")
     private List<ProjectEntity> authorizedProjects = new ArrayList<>();

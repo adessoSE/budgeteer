@@ -13,6 +13,7 @@ public class UserMapper extends AbstractMapper<UserEntity, User>{
         user.setId(entity.getId());
         user.setName(entity.getName());
         user.setRoles(entity.getRoles());
+        user.setGlobalRole(entity.getGlobalRole());
         return user;
     }
 }

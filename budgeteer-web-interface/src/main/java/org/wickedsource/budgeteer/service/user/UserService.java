@@ -200,4 +200,22 @@ public class UserService {
             userRepository.save(user);
         }
     }
+
+    public List<User> getAllAdmins(){
+        List<User> result = new ArrayList<>();
+        for(UserEntity u : userRepository.findAll()){
+            if(u.getGlobalRole().equals("admin")){
+                result.add(mapper.map(u));
+            }
+        }
+        return result;
+    }
+
+    public void setGlobalRoleForUser(Long userId, String role){
+        if(userId != 0) {
+            UserEntity entity = userRepository.findById(userId);
+            entity.setGlobalRole(role);
+            userRepository.save(entity);
+        }
+    }
 }
