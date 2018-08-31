@@ -31,6 +31,9 @@ public class UserEntity {
     @Column(nullable = false, length = 255)
     private String mail;
 
+    @Column(nullable = false)
+    private boolean mailVerified = false;
+
     @LazyCollection(LazyCollectionOption.FALSE)
     @ManyToMany(mappedBy = "authorizedUsers")
     private List<ProjectEntity> authorizedProjects = new ArrayList<ProjectEntity>();
