@@ -7,6 +7,7 @@ import org.wickedsource.budgeteer.web.pages.budgets.details.BudgetDetailsPage;
 import org.wickedsource.budgeteer.web.pages.budgets.edit.EditBudgetPage;
 import org.wickedsource.budgeteer.web.pages.imports.fileimport.ImportFilesPage;
 import org.wickedsource.budgeteer.web.pages.person.edit.EditPersonPage;
+import org.wickedsource.budgeteer.web.pages.user.resettoken.ResetTokenPage;
 
 import java.io.Serializable;
 
@@ -27,6 +28,8 @@ public class NotificationLinkFactory implements Serializable {
             return new ImportFilesPage(backlinkPage, backlinkParameters);
         } else if (notification instanceof LimitReachedNotification) {
             return new BudgetDetailsPage(BudgetDetailsPage.createParameters(((LimitReachedNotification) notification).getBudgetId()));
+        } else if (notification instanceof MailNotVerifiedNotification) {
+            return new ResetTokenPage();
         } else {
             throw new IllegalArgumentException(String.format("Notifications of type %s are not supported!", notification.getClass()));
         }

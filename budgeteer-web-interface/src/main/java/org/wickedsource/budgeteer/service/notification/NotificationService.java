@@ -1,18 +1,18 @@
 package org.wickedsource.budgeteer.service.notification;
 
-import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.joda.money.Money;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.wickedsource.budgeteer.MoneyUtil;
-import org.wickedsource.budgeteer.persistence.budget.BudgetEntity;
 import org.wickedsource.budgeteer.persistence.budget.BudgetRepository;
 import org.wickedsource.budgeteer.persistence.budget.LimitReachedBean;
 import org.wickedsource.budgeteer.persistence.budget.MissingBudgetTotalBean;
 import org.wickedsource.budgeteer.persistence.record.MissingDailyRateForBudgetBean;
 import org.wickedsource.budgeteer.persistence.record.PlanRecordRepository;
 import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
-import org.wickedsource.budgeteer.service.budget.BudgetService;
+import org.wickedsource.budgeteer.persistence.user.UserEntity;
+import org.wickedsource.budgeteer.persistence.user.UserRepository;
+import org.wickedsource.budgeteer.web.BudgeteerSession;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
@@ -31,6 +31,9 @@ public class NotificationService {
 
     @Autowired
     private BudgetRepository budgetRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private MissingDailyRateNotificationMapper missingDailyRateMapper;
@@ -70,6 +73,11 @@ public class NotificationService {
             LimitReachedBean limitReached = budgetRepository.getLimitReachedForBudget(bean.getBudgetId(), budgetSpent);
             if (limitReached != null)
                 notifications.add(limitReachedNotificationMapper.map(limitReached));
+        }
+
+        UserEntity user = userRepository.findById(BudgeteerSession.get().getLoggedInUser().getId());
+        if (!user.isMailVerified()) {
+            notifications.add(new MailNotVerifiedNotification(user.getId(), user.getMail()));
         }
 
         return notifications;
