@@ -28,7 +28,7 @@ public class UserEntity {
     @Column(nullable = false, length = 512)
     private String password;
 
-    @Column(nullable = false, length = 255)
+    @Column(nullable = true, length = 255)
     private String mail;
 
     @Column(nullable = false)

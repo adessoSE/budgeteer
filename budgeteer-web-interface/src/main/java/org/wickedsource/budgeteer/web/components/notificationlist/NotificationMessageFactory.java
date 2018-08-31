@@ -33,6 +33,9 @@ public class NotificationMessageFactory implements Serializable {
         } else if (notification instanceof MailNotVerifiedNotification) {
             MailNotVerifiedNotification n = (MailNotVerifiedNotification) notification;
             return String.format(PropertyLoader.getProperty(NotificationMessageAnchor.class, "message.mailNotVerified"), n.getUserMail());
+        } else if (notification instanceof MissingMailNotification) {
+            MissingMailNotification n = (MissingMailNotification) notification;
+            return String.format(PropertyLoader.getProperty(NotificationMessageAnchor.class, "message.missingMail"));
         } else {
             throw new IllegalArgumentException(String.format("Notifications of type %s are not supported!", notification.getClass()));
         }

@@ -34,7 +34,11 @@ public class EditUserForm extends Form<EditUserData> {
         add(feedbackPanel);
 
         RequiredTextField<String> usernameRequiredTextField = new RequiredTextField<>("username", model(from(getModelObject().getName())));
-        EmailTextField mailTextField = new EmailTextField("mail", model(from(getModelObject().getMail())));
+        EmailTextField mailTextField;
+        if (getModelObject().getMail() == null)
+            mailTextField = new EmailTextField("mail");
+        else
+            mailTextField = new EmailTextField("mail", model(from(getModelObject().getMail())));
         PasswordTextField actualPasswordTextField = new PasswordTextField("actualPassword");
         PasswordTextField newPasswordTextField = new PasswordTextField("newPassword");
         PasswordTextField newPasswordConfirmationTextField = new PasswordTextField("newPasswordConfirmation");

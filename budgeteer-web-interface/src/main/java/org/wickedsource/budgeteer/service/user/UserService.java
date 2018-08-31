@@ -215,7 +215,9 @@ public class UserService {
 
         testEntity = userRepository.findOne(data.getId());
         if (testEntity != null)
-            if (!testEntity.getMail().equals(data.getMail()))
+            if (testEntity.getMail() == null)
+                userEntity.setMailVerified(false);
+            else if (!testEntity.getMail().equals(data.getMail()))
                 userEntity.setMailVerified(false);
 
         userEntity.setId(data.getId());

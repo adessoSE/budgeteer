@@ -76,7 +76,11 @@ public class NotificationService {
         }
 
         UserEntity user = userRepository.findById(BudgeteerSession.get().getLoggedInUser().getId());
-        if (!user.isMailVerified()) {
+        if (user.getMail() == null) {
+            notifications.add(new MissingMailNotification(user.getId()));
+        }
+
+        if (!user.isMailVerified() && user.getMail() != null) {
             notifications.add(new MailNotVerifiedNotification(user.getId(), user.getMail()));
         }
 
