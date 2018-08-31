@@ -1,15 +1,16 @@
 package org.wickedsource.budgeteer.service.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
 import org.wickedsource.budgeteer.persistence.project.ProjectRepository;
-import org.wickedsource.budgeteer.persistence.user.UserEntity;
-import org.wickedsource.budgeteer.persistence.user.UserRepository;
+import org.wickedsource.budgeteer.persistence.user.*;
 import org.wickedsource.budgeteer.service.UnknownEntityException;
 
 import javax.transaction.Transactional;
+import java.util.Calendar;
 import java.util.List;
 
 @Service
@@ -20,6 +21,12 @@ public class UserService {
     private UserRepository userRepository;
 
     @Autowired
+    private VerificationTokenRepository verificationTokenRepository;
+
+    @Autowired
+    private ForgotPasswordTokenRepository forgotPasswordTokenRepository;
+
+    @Autowired
     private ProjectRepository projectRepository;
 
     @Autowired
@@ -27,6 +34,9 @@ public class UserService {
 
     @Autowired
     private UserMapper mapper;
+
+    @Autowired
+    private ApplicationEventPublisher applicationEventPublisher;
 
     /**
      * Returns a list of all users that currently have access to the given project.
@@ -100,9 +110,10 @@ public class UserService {
      */
     public User login(String user, String password) throws InvalidLoginCredentialsException {
         UserEntity entity = userRepository.findByNameOrMailAndPassword(user, passwordHasher.hash(password));
-        if (entity == null) {
+
+        if (entity == null)
             throw new InvalidLoginCredentialsException();
-        }
+
         return mapper.map(entity);
     }
 
@@ -125,7 +136,7 @@ public class UserService {
      * @param username the users name
      * @param password the users password
      */
-    public void registerUser(String username, String mail, String password) throws UsernameAlreadyInUseException, MailAlreadyInUseException {
+    public UserEntity registerUser(String username, String mail, String password) throws UsernameAlreadyInUseException, MailAlreadyInUseException {
         if (userRepository.findByName(username) != null) {
             throw new UsernameAlreadyInUseException();
         } else if (userRepository.findByMail(mail) != null) {
@@ -136,6 +147,8 @@ public class UserService {
             user.setMail(mail);
             user.setPassword(passwordHasher.hash(password));
             userRepository.save(user);
+            applicationEventPublisher.publishEvent(new OnRegistrationCompleteEvent(user));
+            return user;
         }
     }
 
@@ -158,13 +171,15 @@ public class UserService {
             return false;
     }
 
-    public void resetPassword(String mail) throws MailNotFoundException {
+    public void resetPassword(String mail) throws MailNotFoundException, MailNotVerifiedException {
         UserEntity userEntity = userRepository.findByMail(mail);
 
         if (userEntity == null) {
             throw new MailNotFoundException();
+        } else if (!userEntity.isMailVerified()) {
+            throw new MailNotVerifiedException();
         } else {
-
+            applicationEventPublisher.publishEvent(new OnForgotPasswordEvent(userRepository.findByMail(mail)));
         }
     }
 
@@ -182,7 +197,7 @@ public class UserService {
         return editUserData;
     }
 
-    public long saveUser(EditUserData data, boolean changePassword) throws UsernameAlreadyInUseException, MailAlreadyInUseException {
+    public boolean saveUser(EditUserData data, boolean changePassword) throws UsernameAlreadyInUseException, MailAlreadyInUseException {
         assert data != null;
         UserEntity userEntity = new UserEntity();
 
@@ -196,8 +211,13 @@ public class UserService {
             if (testEntity.getId() != data.getId())
                 throw new MailAlreadyInUseException();
 
-
         userEntity = userRepository.findOne(data.getId());
+
+        testEntity = userRepository.findOne(data.getId());
+        if (testEntity != null)
+            if (!testEntity.getMail().equals(data.getMail()))
+                userEntity.setMailVerified(false);
+
         userEntity.setId(data.getId());
         userEntity.setName(data.getName());
         userEntity.setMail(data.getMail());
@@ -209,6 +229,105 @@ public class UserService {
 
         userRepository.save(userEntity);
 
-        return userEntity.getId();
+        return userEntity.isMailVerified();
+    }
+
+    public EditUserData createEditUserDataFromUser(UserEntity userEntity) {
+        EditUserData editUserData = new EditUserData();
+
+        editUserData.setId(userEntity.getId());
+        editUserData.setName(userEntity.getName());
+        editUserData.setMail(userEntity.getMail());
+        editUserData.setPassword(userEntity.getPassword());
+
+        return editUserData;
+    }
+
+    public void createVerificationTokenForUser(UserEntity userEntity, String token) {
+        VerificationToken verificationToken = new VerificationToken(userEntity, token);
+        verificationTokenRepository.save(verificationToken);
+    }
+
+    public void createNewVerificationTokenForUser(UserEntity userEntity) {
+        VerificationToken verificationToken = verificationTokenRepository.findByUser(userEntity);
+        if (verificationToken != null)
+            verificationTokenRepository.delete(verificationToken);
+        applicationEventPublisher.publishEvent(new OnRegistrationCompleteEvent(userEntity));
+    }
+
+    public int validateVerificationToken(String token) {
+        VerificationToken verificationToken = verificationTokenRepository.findByToken(token);
+
+        if (verificationToken == null)
+            return TokenStatus.INVALID.statusCode();
+
+        UserEntity userEntity = verificationToken.getUserEntity();
+        Calendar calendar = Calendar.getInstance();
+
+        if ((verificationToken.getExpiryDate().getTime() - calendar.getTime().getTime()) <= 0) {
+            return TokenStatus.EXPIRED.statusCode();
+        }
+
+        userEntity.setMailVerified(true);
+        userRepository.save(userEntity);
+        verificationTokenRepository.delete(verificationToken);
+        return TokenStatus.VALID.statusCode();
+    }
+
+    public UserEntity getUserByMail(String mail) throws MailNotFoundException {
+        UserEntity userEntity = userRepository.findByMail(mail);
+
+        if (userEntity == null)
+            throw new MailNotFoundException();
+        else
+            return userEntity;
+    }
+
+    public UserEntity getUserById(long id) throws UserIdNotFoundException {
+        UserEntity userEntity = userRepository.findById(id);
+
+        if (userEntity == null)
+            throw new UserIdNotFoundException();
+        else
+            return userEntity;
+    }
+
+    public void createForgotPasswordTokenForUser(UserEntity userEntity, String token) {
+        ForgotPasswordToken oldForgotPasswordToken = forgotPasswordTokenRepository.findByUser(userEntity);
+        if (oldForgotPasswordToken != null)
+            forgotPasswordTokenRepository.delete(oldForgotPasswordToken);
+
+        ForgotPasswordToken forgotPasswordToken = new ForgotPasswordToken(userEntity, token);
+        forgotPasswordTokenRepository.save(forgotPasswordToken);
+    }
+
+    public int validateForgotPasswordToken(String token) {
+        ForgotPasswordToken forgotPasswordToken = forgotPasswordTokenRepository.findByToken(token);
+
+        if (forgotPasswordToken == null)
+            return TokenStatus.INVALID.statusCode();
+
+        Calendar calendar = Calendar.getInstance();
+
+        if ((forgotPasswordToken.getExpiryDate().getTime() - calendar.getTime().getTime()) <= 0) {
+            return TokenStatus.EXPIRED.statusCode();
+        }
+
+        return TokenStatus.VALID.statusCode();
+    }
+
+    public UserEntity getUserByForgotPasswordToken(String forgotPasswordTokenString) {
+        ForgotPasswordToken forgotPasswordToken = forgotPasswordTokenRepository.findByToken(forgotPasswordTokenString);
+        if (forgotPasswordToken != null)
+            return forgotPasswordToken.getUserEntity();
+        else
+            return null;
+    }
+
+    public void deleteForgotPasswordToken(String token) {
+        ForgotPasswordToken forgotPasswordToken = forgotPasswordTokenRepository.findByToken(token);
+
+        if (forgotPasswordToken != null)
+            forgotPasswordTokenRepository.delete(forgotPasswordToken);
     }
 }
