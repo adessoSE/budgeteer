@@ -5,10 +5,7 @@ import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.wickedsource.budgeteer.service.user.EditUserData;
-import org.wickedsource.budgeteer.service.user.MailAlreadyInUseException;
-import org.wickedsource.budgeteer.service.user.UserService;
-import org.wickedsource.budgeteer.service.user.UsernameAlreadyInUseException;
+import org.wickedsource.budgeteer.service.user.*;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.ClassAwareWrappingModel;
 import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
@@ -103,12 +100,18 @@ public class EditUserForm extends Form<EditUserData> {
                     EditUserForm.this.getModelObject().setName(usernameRequiredTextField.getInput());
                     EditUserForm.this.getModelObject().setMail(mailTextField.getInput());
 
-                    userService.saveUser(EditUserForm.this.getModelObject(), changePassword);
-                    success(getString("message.success"));
+                    if (!userService.saveUser(EditUserForm.this.getModelObject(), changePassword)) {
+                        userService.createNewVerificationTokenForUser(userService.getUserById(EditUserForm.this.getModelObject().getId()));
+                        success(getString("message.successVerification"));
+                    } else {
+                        success(getString("message.success"));
+                    }
                 } catch (UsernameAlreadyInUseException e) {
                     error(getString("message.duplicateUserName"));
                 } catch (MailAlreadyInUseException e) {
                     error(getString("message.duplicateMail"));
+                } catch (UserIdNotFoundException e) {
+                    error(getString("message.error"));
                 }
             }
         };
