@@ -1,0 +1,35 @@
+<wicket:extend>
+
+    <div class="form-box" id="login-box">
+        <div class="header">Resend verification mail
+        </div>
+        <form wicket:id="resetTokenForm" method="post">
+            <div class="body bg-gray">
+                <div wicket:id="feedback"></div>
+                <div class="form-group">
+                    <label>You can send a new verification mail to your registered mail address. The old verification
+                        mail becomes invalid.</label>
+                </div>
+                <div class="form-group">
+                    <input wicket:id="mail" type="email" id="mail" placeholder="Mail" class="form-control"
+                           autofocus/>
+                </div>
+            </div>
+            <div class="footer">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <button wicket:id="backlink" id="cancel" type="button" class="btn bg-olive btn-block">Cancel
+                        </button>
+                    </div>
+                    <div class="col-lg-8">
+                        <button wicket:id="submitButton" id="submitButton" type="submit" class="btn bg-olive btn-block">
+                            Resend verification mail
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+    </div>
+
+</wicket:extend>
