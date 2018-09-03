@@ -132,11 +132,14 @@ public class UserService {
     /**
      * Registers a new user to the Budgeteer application.
      * If the chosen username is already in-use, an UsernameAlreadyInUseException is thrown.
+     * If the chosen mail address is already in-use, a MailAlreadyInUseException is thrown.
+     * An event is triggered to signal the application that a new user has been registered.
      *
      * @param username the users name
+     * @param mail     the users mail address
      * @param password the users password
      */
-    public UserEntity registerUser(String username, String mail, String password) throws UsernameAlreadyInUseException, MailAlreadyInUseException {
+    public void registerUser(String username, String mail, String password) throws UsernameAlreadyInUseException, MailAlreadyInUseException {
         if (userRepository.findByName(username) != null) {
             throw new UsernameAlreadyInUseException();
         } else if (userRepository.findByMail(mail) != null) {
@@ -148,7 +151,6 @@ public class UserService {
             user.setPassword(passwordHasher.hash(password));
             userRepository.save(user);
             applicationEventPublisher.publishEvent(new OnRegistrationCompleteEvent(user));
-            return user;
         }
     }
 
@@ -162,15 +164,25 @@ public class UserService {
         userRepository.save(userEntity);
     }
 
+    /**
+     * Checks a password for matching the registered password.
+     *
+     * @param id       the ID of the user
+     * @param password password to be checked
+     * @return true if the password matches the user, false if not
+     */
     public boolean checkPassword(long id, String password) {
         UserEntity entity = userRepository.findOne(id);
-
-        if (entity.getPassword().equals(passwordHasher.hash(password)))
-            return true;
-        else
-            return false;
+        return entity.getPassword().equals(passwordHasher.hash(password));
     }
 
+    /**
+     * Triggers an OnForgotPasswordEvent for the given user with the passed mail address.
+     *
+     * @param mail the users mail address
+     * @throws MailNotFoundException
+     * @throws MailNotVerifiedException
+     */
     public void resetPassword(String mail) throws MailNotFoundException, MailNotVerifiedException {
         UserEntity userEntity = userRepository.findByMail(mail);
 
@@ -179,10 +191,16 @@ public class UserService {
         } else if (!userEntity.isMailVerified()) {
             throw new MailNotVerifiedException();
         } else {
-            applicationEventPublisher.publishEvent(new OnForgotPasswordEvent(userRepository.findByMail(mail)));
+            applicationEventPublisher.publishEvent(new OnForgotPasswordEvent(userEntity));
         }
     }
 
+    /**
+     * Creates an EditUserData for a user to be able to edit him easy.
+     *
+     * @param id the ID of the user
+     * @return EditUserData for editing the user
+     */
     public EditUserData loadUserToEdit(long id) {
         UserEntity userEntity = userRepository.findOne(id);
 
@@ -197,6 +215,21 @@ public class UserService {
         return editUserData;
     }
 
+    /**
+     * Saves a user with the data passed.
+     * <p>
+     * If the name already exists, an UsernameAlreadyInUseException is thrown.
+     * If the mail address already exists, a MailAlreadyInUseException is thrown.
+     * <p>
+     * If the user changes his mail address, isMailVerified is set to false, because the user has to verify the new mail address again.
+     * If the user changes his password, the new password is hashed and then saved.
+     *
+     * @param data           the new data for the user
+     * @param changePassword specifies if the password should also be changed
+     * @return true if the mail address is verified, otherwise false
+     * @throws UsernameAlreadyInUseException
+     * @throws MailAlreadyInUseException
+     */
     public boolean saveUser(EditUserData data, boolean changePassword) throws UsernameAlreadyInUseException, MailAlreadyInUseException {
         assert data != null;
         UserEntity userEntity = new UserEntity();
@@ -234,22 +267,23 @@ public class UserService {
         return userEntity.isMailVerified();
     }
 
-    public EditUserData createEditUserDataFromUser(UserEntity userEntity) {
-        EditUserData editUserData = new EditUserData();
-
-        editUserData.setId(userEntity.getId());
-        editUserData.setName(userEntity.getName());
-        editUserData.setMail(userEntity.getMail());
-        editUserData.setPassword(userEntity.getPassword());
-
-        return editUserData;
-    }
-
+    /**
+     * Creates a token for a specific user.
+     *
+     * @param userEntity the specific user
+     * @param token      a token, which usually contains a random UUID
+     */
     public void createVerificationTokenForUser(UserEntity userEntity, String token) {
         VerificationToken verificationToken = new VerificationToken(userEntity, token);
         verificationTokenRepository.save(verificationToken);
     }
 
+    /**
+     * Triggers an OnRegistrationCompleteEvent if an user changes his mail address.
+     * An existing token is deleted to create a new one.
+     *
+     * @param userEntity the specific user
+     */
     public void createNewVerificationTokenForUser(UserEntity userEntity) {
         VerificationToken verificationToken = verificationTokenRepository.findByUser(userEntity);
         if (verificationToken != null)
@@ -257,6 +291,17 @@ public class UserService {
         applicationEventPublisher.publishEvent(new OnRegistrationCompleteEvent(userEntity));
     }
 
+    /**
+     * Looks for a token in the database that matches the passing token.
+     * <p>
+     * If none is available, INVALID (-1) is returned.
+     * If it is, EXPIRED (-2) is returned.
+     * If it is valid, the mail address of the corresponding user is validated and the token is deleted.
+     * Then VALID (0) is returned.
+     *
+     * @param token the token to look for
+     * @return returns a status code (INVALID, EXPIRED, VALID)
+     */
     public int validateVerificationToken(String token) {
         VerificationToken verificationToken = verificationTokenRepository.findByToken(token);
 
@@ -276,6 +321,14 @@ public class UserService {
         return TokenStatus.VALID.statusCode();
     }
 
+    /**
+     * Searches for a user using a mail address.
+     * If not found, a MailNotFoundException is thrown, otherwise the user is returned.
+     *
+     * @param mail the mail address to look for
+     * @return returns the user found with the mail address
+     * @throws MailNotFoundException
+     */
     public UserEntity getUserByMail(String mail) throws MailNotFoundException {
         UserEntity userEntity = userRepository.findByMail(mail);
 
@@ -285,6 +338,14 @@ public class UserService {
             return userEntity;
     }
 
+    /**
+     * Searches for a user using the ID.
+     * If one is found, the user is returned, otherwise a UserIdNotFoundException is thrown.
+     *
+     * @param id the ID to look for
+     * @return returns the user found with the ID
+     * @throws UserIdNotFoundException
+     */
     public UserEntity getUserById(long id) throws UserIdNotFoundException {
         UserEntity userEntity = userRepository.findById(id);
 
@@ -294,6 +355,13 @@ public class UserService {
             return userEntity;
     }
 
+    /**
+     * Deletes an existing token.
+     * A new token is then generated for the corresponding user.
+     *
+     * @param userEntity the specific user
+     * @param token      a token, which usually contains a random UUID
+     */
     public void createForgotPasswordTokenForUser(UserEntity userEntity, String token) {
         ForgotPasswordToken oldForgotPasswordToken = forgotPasswordTokenRepository.findByUser(userEntity);
         if (oldForgotPasswordToken != null)
@@ -303,6 +371,17 @@ public class UserService {
         forgotPasswordTokenRepository.save(forgotPasswordToken);
     }
 
+    /**
+     * Looks for a token in the database that matches the passing token.
+     * <p>
+     * If none is available, INVALID (-1) is returned.
+     * If it is expired, EXPIRED (-2) is returned.
+     * If it is valid, the mail address of the corresponding user is validated and the token is deleted.
+     * Then VALID (0) is returned.
+     *
+     * @param token the token to look for
+     * @return returns a status code (INVALID, EXPIRED, VALID)
+     */
     public int validateForgotPasswordToken(String token) {
         ForgotPasswordToken forgotPasswordToken = forgotPasswordTokenRepository.findByToken(token);
 
@@ -318,6 +397,13 @@ public class UserService {
         return TokenStatus.VALID.statusCode();
     }
 
+    /**
+     * Searches for a user using a ForgotPasswordToken.
+     * If one is found, the user is returned, otherwise null is returned.
+     *
+     * @param forgotPasswordTokenString the ForgotPasswordToken to look for
+     * @return returns the user found with the ForgotPasswordToken
+     */
     public UserEntity getUserByForgotPasswordToken(String forgotPasswordTokenString) {
         ForgotPasswordToken forgotPasswordToken = forgotPasswordTokenRepository.findByToken(forgotPasswordTokenString);
         if (forgotPasswordToken != null)
@@ -326,6 +412,11 @@ public class UserService {
             return null;
     }
 
+    /**
+     * Deletes the passed token if it exists.
+     *
+     * @param token the token to be deleted
+     */
     public void deleteForgotPasswordToken(String token) {
         ForgotPasswordToken forgotPasswordToken = forgotPasswordTokenRepository.findByToken(token);
 

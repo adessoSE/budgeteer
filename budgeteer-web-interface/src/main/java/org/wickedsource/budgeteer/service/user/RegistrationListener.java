@@ -22,6 +22,12 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
     @Autowired
     private JavaMailSender javaMailSender;
 
+    /**
+     * Sends a mail with a link to verify the mail address as soon as the user registers.
+     * A random token is generated via the UUID, see: https://www.baeldung.com/java-uuid
+     *
+     * @param event triggers the corresponding event
+     */
     @Override
     public void onApplicationEvent(OnRegistrationCompleteEvent event) {
         UserEntity userEntity = event.getUserEntity();
@@ -32,6 +38,14 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
         javaMailSender.send(mail);
     }
 
+    /**
+     * Creates a mail which will be sent to the given mail address after registration for the relevant user.
+     *
+     * @param event the corresponding event
+     * @param userEntity the user with the corresponding mail address
+     * @param token the generated token
+     * @return a SimpleMailMessage with relevant content for the new user
+     */
     private SimpleMailMessage constructMailMessage(OnRegistrationCompleteEvent event, UserEntity userEntity, String token) {
         String userMail = userEntity.getMail();
         String subject = "[Budgeteer] Verify your email address";

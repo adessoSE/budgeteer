@@ -38,6 +38,7 @@ public class LoginPage extends DialogPage {
     private BudgeteerSettings settings;
 
     public LoginPage(PageParameters pageParameters) {
+        // The token needed to verify the mail address is taken from the parameters and handled.
         String verificationToken = pageParameters.get("verificationtoken").toString();
 
         if (verificationToken != null) {

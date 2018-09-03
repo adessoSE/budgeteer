@@ -55,6 +55,13 @@ public class EditUserForm extends Form<EditUserData> {
         add(newPasswordTextField);
         add(newPasswordConfirmationTextField);
 
+        /*
+         * The checks of the input fields must be done manually,
+         * because setDefaultFormProcessing cannot be set to true,
+         * otherwise the following error will be thrown:
+         *
+         * Last cause: Attempt to set a model object on a component without a model! Either pass an IModel to the constructor or use #setDefaultModel(new SomeModel(object)). Component: form:actualPassword
+         */
         Button submitButton = new Button("submitButton") {
             @Override
             public void onSubmit() {
@@ -104,6 +111,7 @@ public class EditUserForm extends Form<EditUserData> {
                     EditUserForm.this.getModelObject().setName(usernameRequiredTextField.getInput());
                     EditUserForm.this.getModelObject().setMail(mailTextField.getInput());
 
+                    // If the user has changed his mail address, this will be displayed to him.
                     if (!userService.saveUser(EditUserForm.this.getModelObject(), changePassword)) {
                         userService.createNewVerificationTokenForUser(userService.getUserById(EditUserForm.this.getModelObject().getId()));
                         success(getString("message.successVerification"));

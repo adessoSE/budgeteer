@@ -31,6 +31,12 @@ public class ForgotPasswordToken {
         this.expiryDate = calculateExpiryDate(24 * 60);
     }
 
+    /**
+     * Calculates expiryTimeInMinutes on the current date.
+     *
+     * @param expiryTimeInMinutes after how many minutes the token should expire
+     * @return new date with current date + expiryTimeInMinutes
+     */
     private Date calculateExpiryDate(int expiryTimeInMinutes) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Timestamp(calendar.getTime().getTime()));

@@ -21,6 +21,12 @@ public class ForgotPasswordListener implements ApplicationListener<OnForgotPassw
     @Autowired
     private JavaMailSender javaMailSender;
 
+    /**
+     * Sends a mail with a link to reset the password as soon as a user requests a new one via the corresponding page.
+     * A random token is generated via the UUID, see: https://www.baeldung.com/java-uuid
+     *
+     * @param event triggers the corresponding event
+     */
     @Override
     public void onApplicationEvent(OnForgotPasswordEvent event) {
         UserEntity userEntity = event.getUserEntity();
@@ -31,6 +37,14 @@ public class ForgotPasswordListener implements ApplicationListener<OnForgotPassw
         javaMailSender.send(mail);
     }
 
+    /**
+     * Creates a mail with a link for the user to reset his password.
+     *
+     * @param event the corresponding event
+     * @param userEntity the user with the corresponding mail address
+     * @param token the generated token
+     * @return a SimpleMailMessage with a link to reset the password
+     */
     private SimpleMailMessage constructMailMessage(OnForgotPasswordEvent event, UserEntity userEntity, String token) {
         String userMail = userEntity.getMail();
         String subject = "[Budgeteer] Reset password";
