@@ -34,9 +34,13 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
 
     private SimpleMailMessage constructMailMessage(OnRegistrationCompleteEvent event, UserEntity userEntity, String token) {
         String userMail = userEntity.getMail();
-        String subject = "Registration confirmation";
+        String subject = "[Budgeteer] Verify your email address";
         String confirmationUrl = "http://localhost:8080" + "/login?verificationtoken=" + token;
-        String message = "Register please: " + confirmationUrl;
+        String message = "Hello " + userEntity.getName() + ",\n" +
+                "\n" +
+                "please verify your email address via this link, which is available for 24 hours.\n" +
+                "\n" +
+                confirmationUrl;
         SimpleMailMessage mail = new SimpleMailMessage();
         mail.setTo(userMail);
         mail.setSubject(subject);

@@ -33,9 +33,13 @@ public class ForgotPasswordListener implements ApplicationListener<OnForgotPassw
 
     private SimpleMailMessage constructMailMessage(OnForgotPasswordEvent event, UserEntity userEntity, String token) {
         String userMail = userEntity.getMail();
-        String subject = "Reset password";
+        String subject = "[Budgeteer] Reset password";
         String confirmationUrl = "http://localhost:8080" + "/resetpassword?resettoken=" + token;
-        String message = "Reset password: " + confirmationUrl;
+        String message = "Hello " + userEntity.getName() + ",\n" +
+                "\n" +
+                "via this link, which is available for 24 hours, you can reset your password and choose a new one.\n" +
+                "\n" +
+                confirmationUrl;
         SimpleMailMessage mail = new SimpleMailMessage();
         mail.setTo(userMail);
         mail.setSubject(subject);
