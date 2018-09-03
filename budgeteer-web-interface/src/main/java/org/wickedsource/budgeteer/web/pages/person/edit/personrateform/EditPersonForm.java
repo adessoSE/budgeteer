@@ -23,6 +23,7 @@ import org.wickedsource.budgeteer.service.notification.Notification;
 import org.wickedsource.budgeteer.service.person.PersonRate;
 import org.wickedsource.budgeteer.service.person.PersonService;
 import org.wickedsource.budgeteer.service.person.PersonWithRates;
+import org.wickedsource.budgeteer.service.person.RatesComparator;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
 import org.wickedsource.budgeteer.web.components.dataTable.DataTableBehavior;
@@ -89,6 +90,7 @@ public class EditPersonForm extends Form<PersonWithRates> {
             @Override
             protected void rateAdded(PersonRate rate) {
                 EditPersonForm.this.getModelObject().getRates().add(rate);
+                EditPersonForm.this.getModelObject().getRates().sort(new RatesComparator());
             }
 
             @Override
@@ -201,6 +203,8 @@ public class EditPersonForm extends Form<PersonWithRates> {
                         }
                     });
                 }
+
+                getModelObject().getRates().sort(new RatesComparator());
             }
 
             @Override

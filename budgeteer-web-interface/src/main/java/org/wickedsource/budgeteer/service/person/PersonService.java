@@ -15,7 +15,11 @@ import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+
+import static java.util.Collections.*;
 
 @Service
 @Transactional
@@ -85,6 +89,7 @@ public class PersonService {
 
             person.getRates().add(rate);
         }
+        person.getRates().sort(new RatesComparator());
 
         return person;
     }
@@ -137,7 +142,7 @@ public class PersonService {
         return personBaseDataMapper.map(personRepository.findBaseDataByBudgetId(budgetId));
     }
 
-    public List<MissingDailyRateForBudgetBean> getMissingDailyRatesForPerson(long personId){
+    public List<MissingDailyRateForBudgetBean> getMissingDailyRatesForPerson(long personId) {
         return workRecordRepository.getMissingDailyRatesForPerson(personId);
     }
 
