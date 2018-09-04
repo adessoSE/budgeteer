@@ -48,8 +48,8 @@ public class ResetPasswordPage extends DialogPage {
                             return;
                         } else {
                             UserEntity userEntity = userService.getUserByForgotPasswordToken(resetToken);
-                            userEntity.setPassword(getModelObject().getNewPassword());
                             EditUserData editUserData = userService.loadUserToEdit(userEntity.getId());
+                            editUserData.setPassword(getModelObject().getNewPassword());
 
                             try {
                                 userService.saveUser(editUserData, true);
