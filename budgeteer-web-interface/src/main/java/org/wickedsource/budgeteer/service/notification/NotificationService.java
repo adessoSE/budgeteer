@@ -120,11 +120,12 @@ public class NotificationService {
         }
 
         Double spentDouble = workRecordRepository.getSpentBudget(budgetId);
-        Money budgetSpent = MoneyUtil.createMoneyFromCents(Math.round(spentDouble));
-
-        LimitReachedBean limitReached = budgetRepository.getLimitReachedForBudget(budgetId, budgetSpent);
-        if (limitReached != null)
-            result.add(limitReachedNotificationMapper.map(limitReached));
+        if (spentDouble != null) {
+            Money budgetSpent = MoneyUtil.createMoneyFromCents(Math.round(spentDouble));
+            LimitReachedBean limitReached = budgetRepository.getLimitReachedForBudget(budgetId, budgetSpent);
+            if (limitReached != null)
+                result.add(limitReachedNotificationMapper.map(limitReached));
+        }
 
         return result;
     }
