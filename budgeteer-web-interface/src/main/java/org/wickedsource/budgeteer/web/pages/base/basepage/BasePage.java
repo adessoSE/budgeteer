@@ -67,8 +67,9 @@ public abstract class BasePage extends WebPage {
     private void addComponents() {
         BreadcrumbsPanel breadcrumbs = new BreadcrumbsPanel("breadcrumbsPanel", getBreadcrumbsModel());
         long projectId = ((BudgeteerSession) getSession()).getProjectId();
+        long userId = ((BudgeteerSession) getSession()).getLoggedInUser().getId();
         add(breadcrumbs);
-        notificationDropdown = new NotificationDropdown("notificationDropdown", new NotificationModel(projectId));
+        notificationDropdown = new NotificationDropdown("notificationDropdown", new NotificationModel(projectId, userId));
         notificationDropdown.setOutputMarkupId(true);
         add(notificationDropdown);
         add(new BudgetUnitChoice("budgetUnitDropdown", new BudgetUnitModel(projectId)));

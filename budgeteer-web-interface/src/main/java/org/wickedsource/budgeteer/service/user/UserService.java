@@ -150,7 +150,8 @@ public class UserService {
             user.setMail(mail);
             user.setPassword(passwordHasher.hash(password));
             userRepository.save(user);
-            applicationEventPublisher.publishEvent(new OnRegistrationCompleteEvent(user));
+            if (!mail.equals(""))
+                applicationEventPublisher.publishEvent(new OnRegistrationCompleteEvent(user));
         }
     }
 

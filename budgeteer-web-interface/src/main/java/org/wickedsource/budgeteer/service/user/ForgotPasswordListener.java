@@ -18,7 +18,7 @@ public class ForgotPasswordListener implements ApplicationListener<OnForgotPassw
     @Autowired
     private MessageSource messageSource;
 
-    @Autowired
+    @Autowired(required = false)
     private JavaMailSender javaMailSender;
 
     /**

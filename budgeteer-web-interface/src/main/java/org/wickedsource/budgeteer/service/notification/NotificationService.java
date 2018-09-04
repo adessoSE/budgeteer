@@ -53,7 +53,7 @@ public class NotificationService {
      * @param projectId ID of the project whose notifications to load
      * @return list of notifications
      */
-    public List<Notification> getNotifications(long projectId) {
+    public List<Notification> getNotifications(long projectId, long userId) {
         List<Notification> notifications = new ArrayList<Notification>();
         if (workRecordRepository.countByProjectId(projectId) == 0) {
             notifications.add(new EmptyWorkRecordsNotification());
@@ -75,13 +75,15 @@ public class NotificationService {
                 notifications.add(limitReachedNotificationMapper.map(limitReached));
         }
 
-        UserEntity user = userRepository.findById(BudgeteerSession.get().getLoggedInUser().getId());
-        if (user.getMail() == null) {
-            notifications.add(new MissingMailNotification(user.getId()));
-        }
+        UserEntity user = userRepository.findById(userId);
+        if (user != null) {
+            if (user.getMail() == null) {
+                notifications.add(new MissingMailNotification(user.getId()));
+            }
 
-        if (!user.isMailVerified() && user.getMail() != null) {
-            notifications.add(new MailNotVerifiedNotification(user.getId(), user.getMail()));
+            if (!user.isMailVerified() && user.getMail() != null) {
+                notifications.add(new MailNotVerifiedNotification(user.getId(), user.getMail()));
+            }
         }
 
         return notifications;

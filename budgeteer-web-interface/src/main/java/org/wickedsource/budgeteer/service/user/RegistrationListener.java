@@ -19,7 +19,7 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
     @Autowired
     private MessageSource messageSource;
 
-    @Autowired
+    @Autowired(required = false)
     private JavaMailSender javaMailSender;
 
     /**

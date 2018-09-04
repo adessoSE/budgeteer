@@ -3,6 +3,11 @@ package org.wickedsource.budgeteer.service.user;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
 import org.wickedsource.budgeteer.persistence.project.ProjectRepository;
 import org.wickedsource.budgeteer.persistence.user.UserEntity;
@@ -16,6 +21,8 @@ import java.util.List;
 
 import static org.mockito.Mockito.*;
 
+@TestPropertySource(locations="classpath:application.properties")
+@EnableAutoConfiguration
 class UserServiceTest extends ServiceTestTemplate{
 
     @Autowired
@@ -30,9 +37,10 @@ class UserServiceTest extends ServiceTestTemplate{
     @Autowired
     private PasswordHasher passwordHasher;
 
+
     @Test
     void testRegisterUser() throws Exception{
-        service.registerUser("User", "Password");
+        service.registerUser("User", "", "Password");
         verify(userRepository, times(1)).save(any(UserEntity.class));
     }
 
@@ -40,14 +48,14 @@ class UserServiceTest extends ServiceTestTemplate{
     void testDuplicateUsernameDuringRegistration() {
         Assertions.assertThrows(UsernameAlreadyInUseException.class, () -> {
             when(userRepository.findByName("User")).thenReturn(null, new UserEntity());
-            service.registerUser("User", "Password");
-            service.registerUser("User", "Password");
+            service.registerUser("User", "", "Password");
+            service.registerUser("User", "", "Password");
         });
     }
 
     @Test
     void testLoginSuccess() throws Exception {
-        when(userRepository.findByNameAndPassword("user", passwordHasher.hash("password"))).thenReturn(createUserEntity());
+        when(userRepository.findByNameOrMailAndPassword("user", passwordHasher.hash("password"))).thenReturn(createUserEntity());
         User user = service.login("user", "password");
         Assertions.assertNotNull(user);
     }
@@ -128,6 +136,8 @@ class UserServiceTest extends ServiceTestTemplate{
         UserEntity user = new UserEntity();
         user.setId(1L);
         user.setName("user");
+        user.setMail("user@budgeteer.local");
+        user.setMailVerified(true);
         user.setPassword(passwordHasher.hash("password"));
         user.setAuthorizedProjects(new ArrayList<ProjectEntity>());
         return user;
