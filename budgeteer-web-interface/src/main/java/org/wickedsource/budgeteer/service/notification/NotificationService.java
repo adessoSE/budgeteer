@@ -75,7 +75,7 @@ public class NotificationService {
                 notifications.add(limitReachedNotificationMapper.map(limitReached));
         }
 
-        UserEntity user = userRepository.findById(userId);
+        UserEntity user = userRepository.findOne(userId);
         if (user != null) {
             if (user.getMail() == null) {
                 notifications.add(new MissingMailNotification(user.getId()));

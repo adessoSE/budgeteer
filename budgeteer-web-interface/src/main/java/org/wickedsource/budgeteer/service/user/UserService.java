@@ -274,9 +274,10 @@ public class UserService {
      * @param userEntity the specific user
      * @param token      a token, which usually contains a random UUID
      */
-    public void createVerificationTokenForUser(UserEntity userEntity, String token) {
+    public VerificationToken createVerificationTokenForUser(UserEntity userEntity, String token) {
         VerificationToken verificationToken = new VerificationToken(userEntity, token);
         verificationTokenRepository.save(verificationToken);
+        return verificationToken;
     }
 
     /**
@@ -348,7 +349,7 @@ public class UserService {
      * @throws UserIdNotFoundException
      */
     public UserEntity getUserById(long id) throws UserIdNotFoundException {
-        UserEntity userEntity = userRepository.findById(id);
+        UserEntity userEntity = userRepository.findOne(id);
 
         if (userEntity == null)
             throw new UserIdNotFoundException();
@@ -363,13 +364,14 @@ public class UserService {
      * @param userEntity the specific user
      * @param token      a token, which usually contains a random UUID
      */
-    public void createForgotPasswordTokenForUser(UserEntity userEntity, String token) {
+    public ForgotPasswordToken createForgotPasswordTokenForUser(UserEntity userEntity, String token) {
         ForgotPasswordToken oldForgotPasswordToken = forgotPasswordTokenRepository.findByUser(userEntity);
         if (oldForgotPasswordToken != null)
             forgotPasswordTokenRepository.delete(oldForgotPasswordToken);
 
         ForgotPasswordToken forgotPasswordToken = new ForgotPasswordToken(userEntity, token);
         forgotPasswordTokenRepository.save(forgotPasswordToken);
+        return forgotPasswordToken;
     }
 
     /**
