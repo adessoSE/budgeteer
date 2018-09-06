@@ -65,11 +65,12 @@ public class NotificationService {
         List<LimitReachedBean> beansList = budgetRepository.getBudgetsForProject(projectId);
         for (LimitReachedBean bean : beansList) {
             Double spentDouble = workRecordRepository.getSpentBudget(bean.getBudgetId());
-            Money budgetSpent = MoneyUtil.createMoneyFromCents(Math.round(spentDouble));
-
-            LimitReachedBean limitReached = budgetRepository.getLimitReachedForBudget(bean.getBudgetId(), budgetSpent);
-            if (limitReached != null)
-                notifications.add(limitReachedNotificationMapper.map(limitReached));
+            if (spentDouble != null) {
+                Money budgetSpent = MoneyUtil.createMoneyFromCents(Math.round(spentDouble));
+                LimitReachedBean limitReached = budgetRepository.getLimitReachedForBudget(bean.getBudgetId(), budgetSpent);
+                if (limitReached != null)
+                    notifications.add(limitReachedNotificationMapper.map(limitReached));
+            }
         }
 
         return notifications;
@@ -106,11 +107,13 @@ public class NotificationService {
         }
 
         Double spentDouble = workRecordRepository.getSpentBudget(budgetId);
-        Money budgetSpent = MoneyUtil.createMoneyFromCents(Math.round(spentDouble));
+        if (spentDouble != null) {
+            Money budgetSpent = MoneyUtil.createMoneyFromCents(Math.round(spentDouble));
 
-        LimitReachedBean limitReached = budgetRepository.getLimitReachedForBudget(budgetId, budgetSpent);
-        if (limitReached != null)
-            result.add(limitReachedNotificationMapper.map(limitReached));
+            LimitReachedBean limitReached = budgetRepository.getLimitReachedForBudget(budgetId, budgetSpent);
+            if (limitReached != null)
+                result.add(limitReachedNotificationMapper.map(limitReached));
+        }
 
         return result;
     }
