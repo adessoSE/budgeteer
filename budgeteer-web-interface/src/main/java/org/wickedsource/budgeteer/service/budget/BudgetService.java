@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.TreeSet;
 
 
 @Service
@@ -87,7 +88,7 @@ public class BudgetService {
         if (filter.getSelectedTags().isEmpty()) {
             budgets = budgetRepository.findByProjectIdOrderByNameAsc(projectId);
         } else {
-            budgets = budgetRepository.findByAtLeastOneTag(projectId, filter.getSelectedTags());
+            budgets = new ArrayList<>(new TreeSet<>(budgetRepository.findByAtLeastOneTag(projectId, filter.getSelectedTags())));
         }
         return budgets;
     }
@@ -149,15 +150,16 @@ public class BudgetService {
         data.setAvgDailyRate_gross(data.getAvgDailyRate().multipliedBy(taxCoefficient, RoundingMode.FLOOR));
         data.setUnplanned(entity.getTotal().minus(toMoneyNullsafe(plannedBudgetInCents)));
         data.setUnplanned_gross(data.getUnplanned().multipliedBy(taxCoefficient, RoundingMode.FLOOR));
+        data.setLimit(entity.getLimit());
         // Money end
-        data.setContractName(entity.getContract() == null ? null : entity.getContract().getName() );
-        data.setContractId(entity.getContract() == null ? 0 : entity.getContract().getId() );
+        data.setContractName(entity.getContract() == null ? null : entity.getContract().getName());
+        data.setContractId(entity.getContract() == null ? 0 : entity.getContract().getId());
         return data;
     }
 
     private Money toMoneyNullsafe(Double cents) {
         if (cents == null) {
-            return MoneyUtil.createMoneyFromCents(0l);
+            return MoneyUtil.createMoneyFromCents(0L);
         } else {
             return MoneyUtil.createMoneyFromCents(Math.round(cents));
         }
@@ -205,24 +207,24 @@ public class BudgetService {
     /**
      * Loads all budgets the given user has access to that match the tag and remaining filter.
      *
-     * @param projectId ID of the project
-     * @param filter    the filter to apply when loading the budgets
+     * @param projectId       ID of the project
+     * @param filter          the filter to apply when loading the budgets
      * @param remainingFilter budgets with values above this will be included
      * @return list of budgets that match the filter.
      */
     public List<BudgetDetailData> loadBudgetsDetailData(long projectId, BudgetTagFilter filter, Long remainingFilter) {
         List<BudgetDetailData> temp = loadBudgetsDetailData(projectId, filter);
         List<BudgetDetailData> result = new ArrayList<>();
-        if(remainingFilter == 0){
+        if (remainingFilter == 0) {
             return temp;
         }
-        for(BudgetDetailData e : temp){
-            if(!BudgeteerSession.get().isTaxEnabled()){
-                if(e.getRemaining().isGreaterThan(() -> BigMoney.of(e.getRemaining().getCurrencyUnit(), new BigDecimal(remainingFilter)))){
+        for (BudgetDetailData e : temp) {
+            if (!BudgeteerSession.get().isTaxEnabled()) {
+                if (e.getRemaining().isGreaterThan(() -> BigMoney.of(e.getRemaining().getCurrencyUnit(), new BigDecimal(remainingFilter)))) {
                     result.add(e);
                 }
-            }else{
-                if(e.getRemaining_gross().isGreaterThan(() -> BigMoney.of(e.getRemaining_gross().getCurrencyUnit(), new BigDecimal(remainingFilter)))){
+            } else {
+                if (e.getRemaining_gross().isGreaterThan(() -> BigMoney.of(e.getRemaining_gross().getCurrencyUnit(), new BigDecimal(remainingFilter)))) {
                     result.add(e);
                 }
             }
@@ -246,6 +248,7 @@ public class BudgetService {
         data.setId(budget.getId());
         data.setDescription(budget.getDescription());
         data.setTotal(budget.getTotal());
+        data.setLimit(budget.getLimit());
         data.setTitle(budget.getName());
         data.setNote(budget.getNote());
         data.setTags(mapEntitiesToTags(budget.getTags()));
@@ -272,11 +275,12 @@ public class BudgetService {
         budget.setImportKey(data.getImportKey());
         budget.setDescription(data.getDescription());
         budget.setTotal(data.getTotal());
+        budget.setLimit(data.getLimit());
         budget.setName(data.getTitle());
         budget.setNote(data.getNote());
         budget.getTags().clear();
         budget.getTags().addAll(mapTagsToEntities(data.getTags(), budget));
-        if(data.getContract() == null) {
+        if (data.getContract() == null) {
             budget.setContract(null);
         } else {
             ContractEntity contractEntity = contractRepository.findOne(data.getContract().getContractId());
@@ -310,18 +314,18 @@ public class BudgetService {
     }
 
     @PreAuthorize("canReadContract(#cId)")
-    public List<BudgetDetailData> loadBudgetByContract(long cId){
+    public List<BudgetDetailData> loadBudgetByContract(long cId) {
         List<BudgetDetailData> result = new LinkedList<BudgetDetailData>();
-        List<BudgetEntity> temp =budgetRepository.findByContractId(cId);
-        if(temp != null){
-            for(BudgetEntity b : temp){
+        List<BudgetEntity> temp = budgetRepository.findByContractId(cId);
+        if (temp != null) {
+            for (BudgetEntity b : temp) {
                 result.add(enrichBudgetEntity(b));
             }
         }
         return result;
     }
 
-    public List<OptionGroup<BudgetBaseData>> getPossibleBudgetDataForPersonAndProject(long projectId, long personId){
+    public List<OptionGroup<BudgetBaseData>> getPossibleBudgetDataForPersonAndProject(long projectId, long personId) {
 
         List<BudgetBaseData> allBudgets = loadBudgetBaseDataForProject(BudgeteerSession.get().getProjectId());
         List<BudgetBaseData> personalBudgets = loadBudgetBaseDataForPerson(personId);
@@ -329,10 +333,10 @@ public class BudgetService {
         allBudgets.removeAll(personalBudgets);
 
         List<OptionGroup<BudgetBaseData>> result = new LinkedList();
-        if(!personalBudgets.isEmpty()) {
+        if (!personalBudgets.isEmpty()) {
             result.add(new OptionGroup<>("Used", personalBudgets));
         }
-        if(! allBudgets.isEmpty()){
+        if (!allBudgets.isEmpty()) {
             result.add(new OptionGroup<>("All", allBudgets));
         }
 
@@ -341,7 +345,7 @@ public class BudgetService {
 
     @PreAuthorize("canReadPerson(#personId)")
     private List<BudgetBaseData> loadBudgetBaseDataForPerson(long personId) {
-        List<BudgetEntity> budgets = budgetRepository.findByPersonId(personId);
+        List<BudgetEntity> budgets = new ArrayList<>(new TreeSet<>(budgetRepository.findByPersonId(personId)));
         return budgetBaseDataMapper.map(budgets);
     }
 

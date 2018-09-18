@@ -17,6 +17,7 @@ import org.wickedsource.budgeteer.service.budget.BudgetDetailData;
 import org.wickedsource.budgeteer.service.budget.BudgetService;
 import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.components.confirm.ConfirmationForm;
+import org.wickedsource.budgeteer.web.components.links.NetGrossLink;
 import org.wickedsource.budgeteer.web.pages.base.basepage.BasePage;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.Breadcrumb;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
@@ -82,16 +83,27 @@ public class BudgetDetailsPage extends BasePage {
                 });
             }
         };
+        if(this.model.getObject().getContractName() != null){
+            deleteForm.setEnabled(false);
+            deleteForm.add(new AttributeAppender("style", "cursor: not-allowed;", " "));
+            deleteForm.add(new AttributeModifier("title", getString("contract.still.exist")));
+        }
         deleteForm.add(new SubmitLink("deleteLink"));
         add(deleteForm);
     }
 
+    public static PageParameters createParameters(long budgetId) {
+        PageParameters parameters = new PageParameters();
+        parameters.add("id", budgetId);
+        return parameters;
+    }
+
     private void addContractLinks() {
-        BookmarkablePageLink<ContractDetailsPage> contractLinkName = new BookmarkablePageLink<ContractDetailsPage>("contractLink", ContractDetailsPage.class, ContractDetailsPage.createParameters(model.getObject().getContractId())){
+        BookmarkablePageLink<ContractDetailsPage> contractLinkName = new BookmarkablePageLink<ContractDetailsPage>("contractLink", ContractDetailsPage.class, ContractDetailsPage.createParameters(model.getObject().getContractId())) {
             @Override
             protected void onConfigure() {
                 super.onConfigure();
-                if( model.getObject().getContractId() == 0){
+                if (model.getObject().getContractId() == 0) {
                     setEnabled(false);
                     add(new AttributeAppender("style", "cursor: not-allowed;", " "));
                     add(new AttributeModifier("title", BudgetDetailsPage.this.getString("links.contract.label.no.contract")));
