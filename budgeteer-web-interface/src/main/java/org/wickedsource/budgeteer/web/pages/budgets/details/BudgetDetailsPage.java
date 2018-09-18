@@ -64,7 +64,6 @@ public class BudgetDetailsPage extends BasePage {
         Form deleteForm = new ConfirmationForm("deleteForm", this, "confirmation.delete") {
             @Override
             public void onSubmit() {
-
                 setResponsePage(new DeleteDialog(() -> {
                     budgetService.deleteBudget(getParameterId());
                     setResponsePage(BudgetsOverviewPage.class);
@@ -84,12 +83,18 @@ public class BudgetDetailsPage extends BasePage {
         add(deleteForm);
     }
 
+    public static PageParameters createParameters(long budgetId) {
+        PageParameters parameters = new PageParameters();
+        parameters.add("id", budgetId);
+        return parameters;
+    }
+
     private void addContractLinks() {
-        BookmarkablePageLink<ContractDetailsPage> contractLinkName = new BookmarkablePageLink<ContractDetailsPage>("contractLink", ContractDetailsPage.class, ContractDetailsPage.createParameters(model.getObject().getContractId())){
+        BookmarkablePageLink<ContractDetailsPage> contractLinkName = new BookmarkablePageLink<ContractDetailsPage>("contractLink", ContractDetailsPage.class, ContractDetailsPage.createParameters(model.getObject().getContractId())) {
             @Override
             protected void onConfigure() {
                 super.onConfigure();
-                if( model.getObject().getContractId() == 0){
+                if (model.getObject().getContractId() == 0) {
                     setEnabled(false);
                     add(new AttributeAppender("style", "cursor: not-allowed;", " "));
                     add(new AttributeModifier("title", BudgetDetailsPage.this.getString("links.contract.label.no.contract")));
