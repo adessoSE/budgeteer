@@ -6,9 +6,11 @@ import org.wickedsource.budgeteer.web.pages.base.basepage.BasePage;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
 import org.wickedsource.budgeteer.web.pages.budgets.overview.table.BudgetOverviewTable;
 import org.wickedsource.budgeteer.web.pages.budgets.overview.table.FilteredBudgetModelByContract;
+import org.wickedsource.budgeteer.web.pages.contract.details.ContractDetailsPage;
+import org.wickedsource.budgeteer.web.pages.contract.overview.ContractOverviewPage;
 import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 
-@Mount("budgetsForContract")
+@Mount("/contracts/details/budgets/${id}")
 public class BudgetForContractOverviewPage extends BasePage {
 
     public BudgetForContractOverviewPage(PageParameters pageParameters) {
@@ -19,7 +21,9 @@ public class BudgetForContractOverviewPage extends BasePage {
     @SuppressWarnings("unchecked")
     @Override
     protected BreadcrumbsModel getBreadcrumbsModel() {
-        return new BreadcrumbsModel(DashboardPage.class, BudgetForContractOverviewPage.class);
+        BreadcrumbsModel model =  new BreadcrumbsModel(DashboardPage.class, ContractOverviewPage.class);
+        model.addBreadcrumb(ContractDetailsPage.class, getPageParameters());
+        model.addBreadcrumb(BudgetForContractOverviewPage.class, getPageParameters());
+        return model;
     }
-
 }

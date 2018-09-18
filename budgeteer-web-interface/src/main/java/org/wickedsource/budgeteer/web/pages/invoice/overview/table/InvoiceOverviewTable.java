@@ -5,6 +5,7 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -21,6 +22,7 @@ import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.Breadcrumb
 import org.wickedsource.budgeteer.web.pages.contract.details.ContractDetailsPage;
 import org.wickedsource.budgeteer.web.pages.invoice.details.InvoiceDetailsPage;
 import org.wickedsource.budgeteer.web.pages.invoice.edit.EditInvoicePage;
+import org.wickedsource.budgeteer.web.pages.invoice.overview.InvoiceOverviewPage;
 
 import static org.wicketstuff.lazymodel.LazyModel.from;
 import static org.wicketstuff.lazymodel.LazyModel.model;
@@ -47,39 +49,13 @@ public class InvoiceOverviewTable extends Panel{
             @Override
             protected void populateItem(final ListItem<InvoiceBaseData> item) {
                 final long invoiceId = item.getModelObject().getInvoiceId();
-                Link link = new Link("showInvoice"){
-                    @Override
-                    public void onClick() {
-                        WebPage page = new InvoiceDetailsPage(InvoiceDetailsPage.createParameters(invoiceId)){
-
-                            @Override
-                            protected BreadcrumbsModel getBreadcrumbsModel() {
-                                BreadcrumbsModel m = breadcrumbsModel;
-                                m.addBreadcrumb(InvoiceDetailsPage.class, InvoiceDetailsPage.createParameters(invoiceId));
-                                return m;
-                            }
-                        };
-                        setResponsePage(page);
-                    }
-                };
-
+                ExternalLink contractLink;
+                contractLink = new ExternalLink("contractLink", "/contracts/details/" + item.getModelObject().getContractId());
+                ExternalLink link = new ExternalLink("showInvoice", "/invoices/details/" + item.getModelObject().getInvoiceId());
+                contractLink.setContextRelative(false);
+                link.setContextRelative(false);
                 link.add(new Label("invoiceName", model(from(item.getModelObject()).getInvoiceName())));
                 item.add(link);
-                Link contractLink = new Link("contractLink"){
-                    @Override
-                    public void onClick() {
-                        WebPage page = new ContractDetailsPage(ContractDetailsPage.createParameters(item.getModelObject().getContractId())){
-
-                            @Override
-                            protected BreadcrumbsModel getBreadcrumbsModel() {
-                                BreadcrumbsModel m = breadcrumbsModel;
-                                m.addBreadcrumb(ContractDetailsPage.class, ContractDetailsPage.createParameters(item.getModelObject().getContractId()));
-                                return m;
-                            }
-                        };
-                        setResponsePage(page);
-                    }
-                };
                 contractLink.add(new Label("contractName", model(from(item.getModelObject()).getContractName())));
                 item.add(contractLink);
                 item.add(new Label("internalNumber", model(from(item.getModelObject()).getInternalNumber())));
@@ -96,8 +72,13 @@ public class InvoiceOverviewTable extends Panel{
                         item.add(new Label("invoiceRowText", item.getModelObject().getValue()));
                     }
                 });
-                item.add(new BookmarkablePageLink<EditInvoicePage>("editLink", EditInvoicePage.class, EditInvoicePage.createEditInvoiceParameters(invoiceId)));
-            }
+                item.add(new Link("editLink"){
+                    @Override
+                    public void onClick() {
+                        setResponsePage(new EditInvoicePage(EditInvoicePage.createEditInvoiceParameters(invoiceId), this.getWebPage().getClass(), this.getPage().getPageParameters()));
+                    }
+                });
+            };
         });
         table.add(new ListView<String>("footerRow", model(from(data).getFooter()) ) {
             @Override
