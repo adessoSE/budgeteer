@@ -1,7 +1,6 @@
 package org.wickedsource.budgeteer.service.person;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.method.P;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.wickedsource.budgeteer.persistence.budget.BudgetRepository;
@@ -15,7 +14,9 @@ import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+
 import java.util.List;
+
 
 @Service
 @Transactional
@@ -137,7 +138,7 @@ public class PersonService {
         return personBaseDataMapper.map(personRepository.findBaseDataByBudgetId(budgetId));
     }
 
-    public List<MissingDailyRateForBudgetBean> getMissingDailyRatesForPerson(long personId){
+    public List<MissingDailyRateForBudgetBean> getMissingDailyRatesForPerson(long personId) {
         return workRecordRepository.getMissingDailyRatesForPerson(personId);
     }
 
