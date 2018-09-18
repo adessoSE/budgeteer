@@ -8,13 +8,16 @@ import org.wickedsource.budgeteer.service.invoice.InvoiceService;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.pages.base.basepage.BasePage;
+import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.Breadcrumb;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
+import org.wickedsource.budgeteer.web.pages.contract.details.ContractDetailsPage;
+import org.wickedsource.budgeteer.web.pages.contract.overview.ContractOverviewPage;
 import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 import org.wickedsource.budgeteer.web.pages.invoice.edit.EditInvoicePage;
 import org.wickedsource.budgeteer.web.pages.invoice.overview.table.InvoiceOverviewTable;
 
 
-@Mount({"invoices/${id}", "invoices/"})
+@Mount({"/invoices", "contracts/details/invoices/${id}"})
 public class InvoiceOverviewPage extends BasePage {
 
     @SpringBean
@@ -43,7 +46,7 @@ public class InvoiceOverviewPage extends BasePage {
 
             @Override
             public boolean isVisible() {
-                return getParameterId() != 0l;
+                return getParameterId() != 0L;
             }
         });
     }
@@ -51,6 +54,14 @@ public class InvoiceOverviewPage extends BasePage {
     @SuppressWarnings("unchecked")
     @Override
     protected BreadcrumbsModel getBreadcrumbsModel() {
-        return new BreadcrumbsModel(DashboardPage.class, InvoiceOverviewPage.class);
+        if(getParameterId() != 0L){
+            BreadcrumbsModel model = new BreadcrumbsModel(DashboardPage.class);
+            model.addBreadcrumb(ContractOverviewPage.class);
+            model.addBreadcrumb(ContractDetailsPage.class, getPageParameters());
+            model.addBreadcrumb(InvoiceOverviewPage.class, getPageParameters());
+            return model;
+        }else {
+            return new BreadcrumbsModel(DashboardPage.class, InvoiceOverviewPage.class);
+        }
     }
 }
