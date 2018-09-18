@@ -186,12 +186,10 @@ class BudgetServiceTest extends ServiceTestTemplate {
         given(budgetRepository.save(Mockito.any(BudgetEntity.class)))
                 .willThrow(new DataIntegrityViolationException("constraint violation"));
         when(budgetRepository.findOne(1L)).thenReturn(createBudgetEntity());
-        try {
-            budgetService.saveBudget(createBudgetEditEntity());
-            Assertions.fail("No Exception!");
-        } catch (DataIntegrityViolationException e) {
-            // yay
-        }
+
+        Assertions.assertThrows(DataIntegrityViolationException.class,
+                () -> budgetService.saveBudget(createBudgetEditEntity()),
+                "No Exception!");
     }
 
     private BudgetEntity createBudgetEntity() {
