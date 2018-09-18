@@ -43,7 +43,6 @@ public class InvoiceDetailsPage extends BasePage {
         add(deleteForm);
     }
 
-
     @Override
     protected BreadcrumbsModel getBreadcrumbsModel() {
         BreadcrumbsModel model = new BreadcrumbsModel(DashboardPage.class, ContractDetailsPage.class);
