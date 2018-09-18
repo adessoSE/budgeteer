@@ -3,6 +3,7 @@ package org.wickedsource.budgeteer.persistence.budget;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.joda.money.Money;
 import org.wickedsource.budgeteer.persistence.contract.ContractEntity;
 import org.wickedsource.budgeteer.persistence.person.DailyRateEntity;
@@ -11,6 +12,7 @@ import org.wickedsource.budgeteer.persistence.record.PlanRecordEntity;
 import org.wickedsource.budgeteer.persistence.record.WorkRecordEntity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +24,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class BudgetEntity {
+public class BudgetEntity implements Comparable<BudgetEntity> {
 
     @Id
     @SequenceGenerator(name="SEQ_BUDGET_ID", sequenceName="SEQ_BUDGET_ID")
@@ -102,5 +104,10 @@ public class BudgetEntity {
         result = 31 * result + (importKey != null ? importKey.hashCode() : 0);
         result = 31 * result + (contract != null ? contract.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public int compareTo(@NotNull BudgetEntity that) {
+        return new CompareToBuilder().append(this.name, that.name).append(this.id, that.id).toComparison();
     }
 }
