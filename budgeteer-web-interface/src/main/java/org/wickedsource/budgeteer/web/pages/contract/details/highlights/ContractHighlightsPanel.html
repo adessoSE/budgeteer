@@ -1,94 +1,98 @@
-<wicket:panel>
-    <div class="row">
-        <div class="box box-primary">
-            <div class="box-header" style="cursor: move;">
-                <h3 class="box-title"><wicket:message key="contract.basic.information.header" /></h3>
-                <div class="box-tools pull-right">
-                            <span class="btn btn-default btn-sm" data-widget="collapse">
-                                <i class="fa fa-minus"></i>
-                            </span>
-                </div>
-            </div>
-            <div class="box-body">
-                <div class="row">
-                    <div class="col-lg-6 col-xs-6">
-                        <div class="showcase bg-aqua">
-                            <div class="inner">
-                                <h3 wicket:id="name">NAME</h3>
-                            </div>
-                            <wicket:message key="contract.name" />
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-xs-6">
-                        <div class="showcase bg-aqua">
-                            <div class="inner">
-                                <h3 wicket:id="internalNumber">NAME</h3>
-                            </div>
-                            <wicket:message key="contract.internalNumber" />
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-xs-6">
-                        <div class="showcase bg-aqua">
-                            <div class="inner">
-                                <h3 wicket:id="startDate">NAME</h3>
-                            </div>
-                            <wicket:message key="contract.startDate" />
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-xs-6">
-                        <div class="showcase bg-aqua">
-                            <div class="inner">
-                                <h3 wicket:id="type">NAME</h3>
-                            </div>
-                            <wicket:message key="contract.type" />
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-xs-6">
-                        <div class="showcase bg-aqua">
-                            <div class="inner">
-                                <h3 wicket:id="budget">NAME</h3>
-                            </div>
-                            <wicket:message key="contract.budget" />
-                        </div>
+<wicket:panel xmlns:wicket="http://www.w3.org/1999/xhtml">
+    <div>
+        <div class="col-md-6">
+            <div class="box box-primary">
+                <div class="box-header" style="cursor: move;">
+                    <h3 class="box-title"><wicket:message key="contract.basic.information.header" /></h3>
+                    <div class="box-tools pull-right">
+                                <span class="btn btn-default btn-sm" data-widget="collapse">
+                                    <i class="fa fa-minus"></i>
+                                </span>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-lg-6 col-xs-6" wicket:id="fileContainer">
-                        <div class="showcase bg-aqua">
-                            <div class="inner">
-                                <h3><a wicket:id="file" ></a></h3>
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-lg-6 col-xs-6">
+                            <div class="showcase bg-aqua">
+                                <div class="inner">
+                                    <h3 wicket:id="name">NAME</h3>
+                                </div>
+                                <wicket:message key="contract.name" />
                             </div>
-                            <wicket:message key="contract.fileLink" />
+                        </div>
+                        <div class="col-lg-6 col-xs-6">
+                            <div class="showcase bg-aqua">
+                                <div class="inner">
+                                    <h3 wicket:id="internalNumber">NAME</h3>
+                                </div>
+                                <wicket:message key="contract.internalNumber" />
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-xs-6">
+                            <div class="showcase bg-aqua">
+                                <div class="inner">
+                                    <h3 wicket:id="startDate">NAME</h3>
+                                </div>
+                                <wicket:message key="contract.startDate" />
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-xs-6">
+                            <div class="showcase bg-aqua">
+                                <div class="inner">
+                                    <h3 wicket:id="type">NAME</h3>
+                                </div>
+                                <wicket:message key="contract.type" />
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-xs-6">
+                            <div class="showcase bg-aqua">
+                                <div class="inner">
+                                    <h3 wicket:id="budget">NAME</h3>
+                                </div>
+                                <wicket:message key="contract.budget" />
+                            </div>
                         </div>
                     </div>
-                    <div class="col-lg-6 col-xs-6" wicket:id="linkContainer">
-                        <div class="showcase bg-aqua">
-                            <div class="inner">
-                                <h3><a wicket:id="link" ></a></h3>
+                    <div class="row">
+                        <div class="col-lg-6 col-xs-6" wicket:id="fileContainer">
+                            <div class="showcase bg-aqua">
+                                <div class="inner">
+                                    <h3><a wicket:id="file" ></a></h3>
+                                </div>
+                                <wicket:message key="contract.fileLink" />
                             </div>
-                            <wicket:message key="contract.link" />
+                        </div>
+                        <div class="col-lg-6 col-xs-6" wicket:id="linkContainer">
+                            <div class="showcase bg-aqua">
+                                <div class="inner">
+                                    <h3><a wicket:id="link" ></a></h3>
+                                </div>
+                                <wicket:message key="contract.link" />
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="box box-primary">
-            <div class="box-header" style="cursor: move;">
-                <h3 class="box-title"><wicket:message key="contract.additional.information.header" /></h3>
-                <div class="box-tools pull-right">
-                            <span class="btn btn-default btn-sm" data-widget="collapse">
-                                <i class="fa fa-minus"></i>
-                            </span>
+        <div class="col-md-6">
+            <div class="box box-primary">
+                <div class="box-header" style="cursor: move;">
+                    <h3 class="box-title"><wicket:message key="contract.additional.information.header" /></h3>
+                    <div class="box-tools pull-right">
+                                <span class="btn btn-default btn-sm" data-widget="collapse">
+                                    <i class="fa fa-minus"></i>
+                                </span>
+                    </div>
                 </div>
-            </div>
-            <div class="box-body">
-                <div class="row">
-                    <div class="col-lg-6 col-xs-6" wicket:id="additionalInformation">
-                        <div class="showcase bg-aqua">
-                            <div class="inner">
-                                <h3 wicket:id="value">NAME</h3>
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-lg-6 col-xs-6" wicket:id="additionalInformation">
+                            <div class="showcase bg-aqua">
+                                <div class="inner">
+                                    <h3 wicket:id="value">NAME</h3>
+                                </div>
+                                <span wicket:id="key" />
                             </div>
-                            <span wicket:id="key" />
                         </div>
                     </div>
                 </div>

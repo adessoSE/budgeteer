@@ -1,5 +1,6 @@
 package org.wickedsource.budgeteer.web.pages.contract.details.contractDetailChart;
 
+import de.adesso.wickedcharts.chartjs.ChartConfiguration;
 import de.adesso.wickedcharts.wicket7.chartjs.Chart;
 
 import java.io.Serializable;
@@ -17,6 +18,8 @@ public class ContractDetailChart extends Chart implements Serializable {
     protected void onBeforeRender() {
         super.onBeforeRender();
         // resetting options to force re-rendering with new parameters
-        setChartConfiguration(new ContractDetailChartConfiguration(model));
+        ChartConfiguration chartConfiguration = new ContractDetailChartConfiguration(model);
+        chartConfiguration.getOptions().setMaintainAspectRatio(false);
+        setChartConfiguration(chartConfiguration);
     }
 }
