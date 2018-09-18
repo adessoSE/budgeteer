@@ -23,7 +23,7 @@ public interface BudgetRepository extends CrudRepository<BudgetEntity, Long> {
      * @param tags the tags to search for
      * @return all Budgets that match the search criteria
      */
-    @Query("select distinct b from BudgetEntity b join b.tags t where t.tag in (:tags) and b.project.id=:projectId order by b.name")
+    @Query("select b from BudgetEntity b join b.tags t where t.tag in (:tags) and b.project.id=:projectId order by b.name")
     List<BudgetEntity> findByAtLeastOneTag(@Param("projectId") long projectId, @Param("tags") List<String> tags);
 
     @Query("select new org.wickedsource.budgeteer.persistence.budget.MissingBudgetTotalBean(b.id, b.name) from BudgetEntity b where b.total = 0 and b.project.id=:projectId order by b.name")
@@ -55,14 +55,14 @@ public interface BudgetRepository extends CrudRepository<BudgetEntity, Long> {
     @Query("select b from BudgetEntity b where b.contract.id = :contractId")
     List<BudgetEntity> findByContractId(@Param("contractId") long cId);
 
-    @Query("select distinct wr.budget from WorkRecordEntity wr where wr.person.id = :personId")
+    @Query("select wr.budget from WorkRecordEntity wr where wr.person.id = :personId")
     List<BudgetEntity> findByPersonId(@Param("personId") long personId);
 
     /**
      * Returns the TaxCoefficient defined by the contract of the budget. If the budget has no contract or
      * the contract no taxrate assigned, this method returns 1.0
      *
-     * @param budgetId
+     * @param budgetId The primary key of the budget record at hand.
      * @return 1.0+taxRate/100
      */
     @Query("SELECT 1.0 + coalesce((SELECT contract.taxRate FROM ContractEntity contract WHERE contract = budget.contract),0) /100.0 FROM BudgetEntity budget WHERE budget.id = :budgetId")

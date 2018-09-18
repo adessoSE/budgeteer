@@ -12,6 +12,7 @@ public class BudgetDetailData {
     private long id;
     private String name;
     private String description;
+    private String note;
     private List<String> tags;
     private Money total;
     private Money total_gross;

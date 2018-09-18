@@ -3,6 +3,7 @@ package org.wickedsource.budgeteer.persistence.budget;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.joda.money.Money;
 import org.wickedsource.budgeteer.persistence.contract.ContractEntity;
 import org.wickedsource.budgeteer.persistence.person.DailyRateEntity;
@@ -11,6 +12,7 @@ import org.wickedsource.budgeteer.persistence.record.PlanRecordEntity;
 import org.wickedsource.budgeteer.persistence.record.WorkRecordEntity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +24,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class BudgetEntity {
+public class BudgetEntity implements Comparable<BudgetEntity> {
 
     @Id
     @SequenceGenerator(name = "SEQ_BUDGET_ID", sequenceName = "SEQ_BUDGET_ID")
@@ -33,6 +35,11 @@ public class BudgetEntity {
     private String name;
 
     private String description;
+
+    // Notes have a maximum size of 10KB
+    @Lob
+    @Column(length = 10 * 1024)
+    private String note;
 
     private Money total;
 
@@ -74,6 +81,7 @@ public class BudgetEntity {
         if (importKey != null ? !importKey.equals(that.importKey) : that.importKey != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (description != null ? !description.equals(that.description) : that.description != null) return false;
+        if (note != null ? !note.equals(that.note) : that.note != null) return false;
         if (planRecords != null ? !planRecords.equals(that.planRecords) : that.planRecords != null) return false;
         if (project != null ? !project.equals(that.project) : that.project != null) return false;
         if (tags != null ? !tags.equals(that.tags) : that.tags != null) return false;
@@ -89,6 +97,7 @@ public class BudgetEntity {
         int result = (int) (id ^ (id >>> 32));
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + (note != null ? note.hashCode() : 0);
         result = 31 * result + (total != null ? total.hashCode() : 0);
         result = 31 * result + (limit != null ? limit.hashCode() : 0);
         result = 31 * result + (project != null ? project.hashCode() : 0);
@@ -99,5 +108,10 @@ public class BudgetEntity {
         result = 31 * result + (importKey != null ? importKey.hashCode() : 0);
         result = 31 * result + (contract != null ? contract.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public int compareTo(@NotNull BudgetEntity that) {
+        return new CompareToBuilder().append(this.name, that.name).append(this.id, that.id).toComparison();
     }
 }

@@ -24,10 +24,6 @@ subprojects {
             name "Apache Snapshots"
             url "https://repository.apache.org/content/repositories/snapshots/"
         }
-		maven {
-			url 'https://oss.jfrog.org/artifactory/oss-snapshot-local'
-		} 
-        
     }
 
     dependencies {

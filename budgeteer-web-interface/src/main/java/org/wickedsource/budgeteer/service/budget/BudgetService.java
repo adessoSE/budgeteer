@@ -3,7 +3,6 @@ package org.wickedsource.budgeteer.service.budget;
 import org.joda.money.BigMoney;
 import org.joda.money.Money;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.method.P;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.wickedsource.budgeteer.MoneyUtil;
@@ -29,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.TreeSet;
 
 
 @Service
@@ -88,7 +88,7 @@ public class BudgetService {
         if (filter.getSelectedTags().isEmpty()) {
             budgets = budgetRepository.findByProjectIdOrderByNameAsc(projectId);
         } else {
-            budgets = budgetRepository.findByAtLeastOneTag(projectId, filter.getSelectedTags());
+            budgets = new ArrayList<>(new TreeSet<>(budgetRepository.findByAtLeastOneTag(projectId, filter.getSelectedTags())));
         }
         return budgets;
     }
@@ -159,7 +159,7 @@ public class BudgetService {
 
     private Money toMoneyNullsafe(Double cents) {
         if (cents == null) {
-            return MoneyUtil.createMoneyFromCents(0l);
+            return MoneyUtil.createMoneyFromCents(0L);
         } else {
             return MoneyUtil.createMoneyFromCents(Math.round(cents));
         }
@@ -250,6 +250,7 @@ public class BudgetService {
         data.setTotal(budget.getTotal());
         data.setLimit(budget.getLimit());
         data.setTitle(budget.getName());
+        data.setNote(budget.getNote());
         data.setTags(mapEntitiesToTags(budget.getTags()));
         data.setImportKey(budget.getImportKey());
         data.setContract(contractDataMapper.map(budget.getContract()));
@@ -276,6 +277,7 @@ public class BudgetService {
         budget.setTotal(data.getTotal());
         budget.setLimit(data.getLimit());
         budget.setName(data.getTitle());
+        budget.setNote(data.getNote());
         budget.getTags().clear();
         budget.getTags().addAll(mapTagsToEntities(data.getTags(), budget));
         if (data.getContract() == null) {
@@ -343,7 +345,7 @@ public class BudgetService {
 
     @PreAuthorize("canReadPerson(#personId)")
     private List<BudgetBaseData> loadBudgetBaseDataForPerson(long personId) {
-        List<BudgetEntity> budgets = budgetRepository.findByPersonId(personId);
+        List<BudgetEntity> budgets = new ArrayList<>(new TreeSet<>(budgetRepository.findByPersonId(personId)));
         return budgetBaseDataMapper.map(budgets);
     }
 

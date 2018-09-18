@@ -17,6 +17,7 @@ public class EditBudgetData implements Serializable {
     private long projectId;
     private String title;
     private String description;
+    private String note;
     private Money total;
     private Money limit;
     private String importKey;
