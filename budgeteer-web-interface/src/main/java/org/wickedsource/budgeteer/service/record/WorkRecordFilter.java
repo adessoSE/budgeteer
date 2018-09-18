@@ -32,6 +32,15 @@ public class WorkRecordFilter implements Serializable {
     @Setter
     private DateRange dateRange;
 
+    /***
+     * Clear the selected filter options.
+     */
+    public void clearFilter() {
+        personList = new LinkedList<>();
+        budgetList = new LinkedList<>();
+        dateRange = null;
+    }
+
     public WorkRecordFilter(long projectId) {
         this.projectId = projectId;
     }

@@ -109,7 +109,7 @@ public abstract class BasePage extends WebPage {
                 if (settings.isKeycloakActivated()) {
                     setResponsePage(new SelectProjectWithKeycloakPage());
                 } else {
-                    setResponsePage(new SelectProjectPage(this.getWebPage().getClass(), new PageParameters()));
+                    setResponsePage(new SelectProjectPage(this.getWebPage().getClass(), getPageParameters()));
                 }
             }
         };
@@ -158,7 +158,7 @@ public abstract class BasePage extends WebPage {
     public long getParameterId() {
         StringValue value = getPageParameters().get("id");
         if (value == null || value.isEmpty() || value.isNull()) {
-            return 0l;
+            return 0L;
         } else {
             return value.toLong();
         }

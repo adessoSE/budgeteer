@@ -1,10 +1,12 @@
 package org.wickedsource.budgeteer.web.components.burntable;
 
+import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.link.DownloadLink;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.wickedsource.budgeteer.service.exports.ExportService;
 import org.wickedsource.budgeteer.service.record.WorkRecordFilter;
 import org.wickedsource.budgeteer.web.components.burntable.filter.FilterPanel;
@@ -23,14 +25,14 @@ public class BurnTableWithFilter extends Panel {
 
     private BurnTable burnTable;
 
-    public BurnTableWithFilter(String id, WorkRecordFilter initialFilter) {
-        this(id, initialFilter, false);
+    public BurnTableWithFilter(String id, WorkRecordFilter initialFilter, Page page, PageParameters pageParameters) {
+        this(id, initialFilter, false, page, pageParameters);
     }
 
-    public BurnTableWithFilter(String id, WorkRecordFilter initialFilter, boolean dailyRateIsEditable) {
+    public BurnTableWithFilter(String id, WorkRecordFilter initialFilter, boolean dailyRateIsEditable, Page page, PageParameters pageParameters) {
         super(id);
 
-        filterPanel = new FilterPanel("filter", initialFilter);
+        filterPanel = new FilterPanel("filter", initialFilter, page, pageParameters);
         add(filterPanel);
 
         FilteredRecordsModel tableModel = new FilteredRecordsModel(initialFilter);

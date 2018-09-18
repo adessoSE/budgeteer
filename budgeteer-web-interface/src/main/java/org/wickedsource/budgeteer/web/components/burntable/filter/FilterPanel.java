@@ -1,11 +1,13 @@
 package org.wickedsource.budgeteer.web.components.burntable.filter;
 
+import org.apache.wicket.Page;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.ListMultipleChoice;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
 import org.wickedsource.budgeteer.service.budget.BudgetService;
@@ -15,6 +17,7 @@ import org.wickedsource.budgeteer.service.record.WorkRecordFilter;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.components.budget.BudgetBaseDataChoiceRenderer;
 import org.wickedsource.budgeteer.web.components.daterange.DateRangeInputField;
+import org.wickedsource.budgeteer.web.components.links.ResetFilterLink;
 import org.wickedsource.budgeteer.web.components.multiselect.MultiselectBehavior;
 import org.wickedsource.budgeteer.web.components.person.PersonBaseDataChoiceRenderer;
 import org.wicketstuff.lazymodel.LazyModel;
@@ -40,7 +43,7 @@ public class FilterPanel extends Panel {
     private BudgetService budgetService;
 
     @SuppressWarnings("unchecked")
-    public FilterPanel(String id, WorkRecordFilter filter) {
+    public FilterPanel(String id, WorkRecordFilter filter, Page page, PageParameters pageParameters) {
         super(id, model(from(filter)));
         IModel<WorkRecordFilter> model = (IModel<WorkRecordFilter>) getDefaultModel();
         Form<WorkRecordFilter> form = new Form<WorkRecordFilter>("filterForm", model) {
@@ -52,6 +55,7 @@ public class FilterPanel extends Panel {
         form.add(createPersonFilter("personFilterContainer", form));
         form.add(createBudgetFilter("budgetFilterContainer", form));
         form.add(createDaterangeFilter("daterangeFilterContainer", form));
+        form.add(new ResetFilterLink("resetButton", filter, page, pageParameters));
         add(form);
     }
 
@@ -65,7 +69,7 @@ public class FilterPanel extends Panel {
         container.setVisible(isPersonFilterEnabled());
         LazyModel<List<PersonBaseData>> chosenPersons = model(from(form.getModelObject().getPersonList()));
         List<PersonBaseData> possiblePersonsFromFilter = form.getModelObject().getPossiblePersons();
-        List<PersonBaseData> possiblePersons = possiblePersonsFromFilter.isEmpty() ?  personService.loadPeopleBaseData(BudgeteerSession.get().getProjectId()) : possiblePersonsFromFilter;
+        List<PersonBaseData> possiblePersons = possiblePersonsFromFilter.isEmpty() ? personService.loadPeopleBaseData(BudgeteerSession.get().getProjectId()) : possiblePersonsFromFilter;
         ListMultipleChoice<PersonBaseData> selectedPersons =
                 new ListMultipleChoice<PersonBaseData>("personSelect", chosenPersons,
                         possiblePersons, new PersonBaseDataChoiceRenderer());
@@ -73,7 +77,7 @@ public class FilterPanel extends Panel {
 
         selectedPersons.setRequired(false);
         HashMap<String, String> options = MultiselectBehavior.getRecommendedOptions();
-        options.put("buttonWidth","'250px'");
+        options.put("buttonWidth", "'250px'");
         options.remove("buttonClass");
         selectedPersons.add(new MultiselectBehavior(options));
         container.add(selectedPersons);
@@ -94,7 +98,7 @@ public class FilterPanel extends Panel {
         ListMultipleChoice<BudgetBaseData> selectedBudgets = new ListMultipleChoice<>("budgetSelect", chosenBudgets, possibleBudgets, new BudgetBaseDataChoiceRenderer());
 
         HashMap<String, String> options = MultiselectBehavior.getRecommendedOptions();
-        options.put("buttonWidth","'250px'");
+        options.put("buttonWidth", "'250px'");
         options.remove("buttonClass");
         selectedBudgets.add(new MultiselectBehavior(options));
         selectedBudgets.setRequired(false);
