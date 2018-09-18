@@ -17,6 +17,7 @@ import org.wickedsource.budgeteer.service.budget.BudgetDetailData;
 import org.wickedsource.budgeteer.service.budget.BudgetService;
 import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.components.confirm.ConfirmationForm;
+import org.wickedsource.budgeteer.web.components.links.NetGrossLink;
 import org.wickedsource.budgeteer.web.pages.base.basepage.BasePage;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.Breadcrumb;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
@@ -74,6 +75,11 @@ public class BudgetDetailsPage extends BasePage {
                 }));
             }
         };
+        if(this.model.getObject().getContractName() != null){
+            deleteForm.setEnabled(false);
+            deleteForm.add(new AttributeAppender("style", "cursor: not-allowed;", " "));
+            deleteForm.add(new AttributeModifier("title", getString("contract.still.exist")));
+        }
         deleteForm.add(new SubmitLink("deleteLink"));
         add(deleteForm);
     }
