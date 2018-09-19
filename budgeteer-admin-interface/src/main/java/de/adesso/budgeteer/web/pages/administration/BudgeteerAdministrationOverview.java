@@ -6,16 +6,17 @@ import de.adesso.budgeteer.web.pages.user.login.LoginPage;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
-import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.*;
+import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.service.project.ProjectBaseData;
@@ -50,7 +51,6 @@ public class BudgeteerAdministrationOverview extends BasePage {
     private BudgeteerSettings settings;
 
     private User thisUser = BudgeteerSession.get().getLoggedInUser();
-
 
     public BudgeteerAdministrationOverview() {
         add(new CustomFeedbackPanel("feedback"));
@@ -94,7 +94,6 @@ public class BudgeteerAdministrationOverview extends BasePage {
     }
 
     private Component createPasswordTextField(ListItem<User> item) {
-
         PasswordTextField textField = new PasswordTextField("setPasswordTextBox", Model.of(""));
         Form passwordResetField = new Form("passwordResetField"){
             @Override
@@ -102,7 +101,6 @@ public class BudgeteerAdministrationOverview extends BasePage {
                 userService.setUserPassword(item.getModelObject().getId(), textField.getModelObject());
             }
         };
-
         Button submitButton = new Button("resetPasswordButton");
         return passwordResetField.add(textField, submitButton);
     }
@@ -130,7 +128,12 @@ public class BudgeteerAdministrationOverview extends BasePage {
 
                     @Override
                     protected String confirmationText() {
-                        return "Are you sure you want to remove this user from the project?";
+                        if(thisUser.getId() == item.getModelObject().getId()){
+                            return new StringResourceModel("remove.self.confirmation", BudgeteerAdministrationOverview.this).getString();
+                        }
+                        else{
+                            return new StringResourceModel("remove.confirmation", BudgeteerAdministrationOverview.this).getString();
+                        }
                     }
                 });
             }
@@ -174,11 +177,12 @@ public class BudgeteerAdministrationOverview extends BasePage {
 
                                     @Override
                                     protected String confirmationText() {
-                                        return "You will lose admin privileges and access to the administration menu if you proceed, are you sure?";
+                                        return new StringResourceModel("lose.adminship", BudgeteerAdministrationOverview.this).getString();
                                     }
                                 });
                     }else {
                         userService.setGlobalRoleForUser(item.getModelObject().getId(), makeAdminList.getModelObject());
+                        setResponsePage(BudgeteerAdministrationOverview.class);
                     }
                 }
                 if(item.getModelObject().getId() == thisUser.getId()){
@@ -232,7 +236,7 @@ public class BudgeteerAdministrationOverview extends BasePage {
 
                     @Override
                     protected String confirmationText() {
-                        return "Are you sure you want to delete this project? This action is irreversible!";
+                        return new StringResourceModel("delete.project.confirmation", BudgeteerAdministrationOverview.this).getString();
                     }
                 });
             }

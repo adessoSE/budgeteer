@@ -1,6 +1,7 @@
 package de.adesso.budgeteer.web.pages.base.basepage;
 
 import de.adesso.budgeteer.web.BudgeteerReferences;
+import de.adesso.budgeteer.web.components.security.NeedsLogin;
 import de.adesso.budgeteer.web.pages.administration.BudgeteerAdministrationOverview;
 import de.adesso.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
 import de.adesso.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsPanel;
@@ -15,15 +16,11 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.StringValue;
-import org.keycloak.KeycloakPrincipal;
-import org.keycloak.representations.AccessToken;
-import de.adesso.budgeteer.web.components.security.NeedsLogin;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.settings.BudgeteerSettings;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashSet;
 
 @NeedsLogin
 public abstract class BasePage extends WebPage {
@@ -43,31 +40,10 @@ public abstract class BasePage extends WebPage {
     @SuppressWarnings("unchecked")
     private void addComponents() {
         BreadcrumbsPanel breadcrumbs = new BreadcrumbsPanel("breadcrumbsPanel", getBreadcrumbsModel());
-        long projectId = ((BudgeteerSession) getSession()).getProjectId();
         add(breadcrumbs);
         add(createLogoutLink("logoutLink"));
-        add(createDashboardLink("dashboardLink"));
+        add(createHomepageLink("dashboardLink"));
         add(new HeaderResponseContainer("JavaScriptContainer", "JavaScriptContainer"));
-    }
-
-	private boolean currentUserIsAdmin() {
-        HashSet<String> roles = loadRolesFromCurrentUser();
-        if (roles != null && roles.contains("admin")) {
-            return true;
-        } else if (roles == null) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    private HashSet<String> loadRolesFromCurrentUser() {
-        if (settings.isKeycloakActivated()) {
-            HttpServletRequest request = (HttpServletRequest) getRequestCycle().getRequest().getContainerRequest();
-            AccessToken accessToken = ((KeycloakPrincipal) request.getUserPrincipal()).getKeycloakSecurityContext().getToken();
-            return (HashSet<String>) accessToken.getRealmAccess().getRoles();
-        }
-        return null;
     }
 
     @Override
@@ -77,7 +53,7 @@ public abstract class BasePage extends WebPage {
         response.render(JavaScriptReferenceHeaderItem.forReference(BudgeteerReferences.getAdminLteAppReference()));
     }
 
-    private Component createDashboardLink(String id) {
+    private Component createHomepageLink(String id) {
 		return new BookmarkablePageLink<>(id, BudgeteerAdministrationOverview.class);
 	}
 

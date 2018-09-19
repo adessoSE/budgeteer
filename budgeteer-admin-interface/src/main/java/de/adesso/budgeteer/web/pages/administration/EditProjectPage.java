@@ -16,6 +16,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.service.DateRange;
@@ -42,7 +43,7 @@ import java.util.List;
 import static org.wicketstuff.lazymodel.LazyModel.from;
 import static org.wicketstuff.lazymodel.LazyModel.model;
 
-@Mount("/administartion-menu/edit-project/#{id}")
+@Mount("/administartion-menu/edit-project/${id}")
 public class EditProjectPage extends BasePage {
 
     @SpringBean
@@ -102,17 +103,17 @@ public class EditProjectPage extends BasePage {
                                 }else{
                                     userService.removeUserFromProject(projectID, item.getModelObject().getId());
                                 }
-                                setResponsePage(EditProjectPage.class, getPageParameters());
+                                setResponsePage(EditProjectPage.class, EditProjectPage.this.getPageParameters());
                             }
 
                             @Override
                             protected void onNo() {
-                                setResponsePage(EditProjectPage.class, getPageParameters());
+                                setResponsePage(EditProjectPage.class, EditProjectPage.this.getPageParameters());
                             }
 
                             @Override
                             protected String confirmationText() {
-                                return "Are you sure you want to remove this user from the project?";
+                                return new StringResourceModel("delete.user.from.project.confirmation", EditProjectPage.this).getString();
                             }
                         });
                     }
@@ -158,7 +159,7 @@ public class EditProjectPage extends BasePage {
 
                                             @Override
                                             protected String confirmationText() {
-                                                return "You will lose admin privileges and access to this web app if you proceed, are you sure?";
+                                                return new StringResourceModel("user.lose.adminship.project", EditProjectPage.this).getString();
                                             }
                                         });
                             }else {
