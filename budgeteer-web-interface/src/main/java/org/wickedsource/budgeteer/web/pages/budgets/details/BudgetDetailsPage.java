@@ -17,6 +17,7 @@ import org.wickedsource.budgeteer.service.budget.BudgetDetailData;
 import org.wickedsource.budgeteer.service.budget.BudgetService;
 import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.components.confirm.ConfirmationForm;
+import org.wickedsource.budgeteer.web.components.links.NetGrossLink;
 import org.wickedsource.budgeteer.web.pages.base.basepage.BasePage;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.Breadcrumb;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
@@ -34,8 +35,6 @@ import org.wickedsource.budgeteer.web.pages.budgets.overview.BudgetsOverviewPage
 import org.wickedsource.budgeteer.web.pages.budgets.weekreport.single.SingleBudgetWeekReportPage;
 import org.wickedsource.budgeteer.web.pages.contract.details.ContractDetailsPage;
 import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
-
-import java.util.concurrent.Callable;
 
 @Mount("budgets/details/${id}")
 public class BudgetDetailsPage extends BasePage {
@@ -65,33 +64,37 @@ public class BudgetDetailsPage extends BasePage {
         Form deleteForm = new ConfirmationForm("deleteForm", this, "confirmation.delete") {
             @Override
             public void onSubmit() {
-
-                setResponsePage(new DeleteDialog(new Callable<Void>() {
-                    @Override
-                    public Void call(){
-                        budgetService.deleteBudget(getParameterId());
-                        setResponsePage(BudgetsOverviewPage.class);
-                        return null;
-                    }
-                }, new Callable<Void>() {
-                    @Override
-                    public Void call(){
-                        setResponsePage(new BudgetDetailsPage(getPageParameters()));
-                        return null;
-                    }
+                setResponsePage(new DeleteDialog(() -> {
+                    budgetService.deleteBudget(getParameterId());
+                    setResponsePage(BudgetsOverviewPage.class);
+                    return null;
+                }, () -> {
+                    setResponsePage(new BudgetDetailsPage(getPageParameters()));
+                    return null;
                 }));
             }
         };
+        if(this.model.getObject().getContractName() != null){
+            deleteForm.setEnabled(false);
+            deleteForm.add(new AttributeAppender("style", "cursor: not-allowed;", " "));
+            deleteForm.add(new AttributeModifier("title", getString("contract.still.exist")));
+        }
         deleteForm.add(new SubmitLink("deleteLink"));
         add(deleteForm);
     }
 
+    public static PageParameters createParameters(long budgetId) {
+        PageParameters parameters = new PageParameters();
+        parameters.add("id", budgetId);
+        return parameters;
+    }
+
     private void addContractLinks() {
-        BookmarkablePageLink<ContractDetailsPage> contractLinkName = new BookmarkablePageLink<ContractDetailsPage>("contractLink", ContractDetailsPage.class, ContractDetailsPage.createParameters(model.getObject().getContractId())){
+        BookmarkablePageLink<ContractDetailsPage> contractLinkName = new BookmarkablePageLink<ContractDetailsPage>("contractLink", ContractDetailsPage.class, ContractDetailsPage.createParameters(model.getObject().getContractId())) {
             @Override
             protected void onConfigure() {
                 super.onConfigure();
-                if( model.getObject().getContractId() == 0){
+                if (model.getObject().getContractId() == 0) {
                     setEnabled(false);
                     add(new AttributeAppender("style", "cursor: not-allowed;", " "));
                     add(new AttributeModifier("title", BudgetDetailsPage.this.getString("links.contract.label.no.contract")));

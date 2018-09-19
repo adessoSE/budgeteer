@@ -23,9 +23,9 @@ public class BudgetDetailData {
     private Money avgDailyRate_gross;
     private Money unplanned;
     private Money unplanned_gross;
+    private Money limit;
     private String contractName;
     private long contractId;
-
 
     public Money getRemaining() {
         return this.total.minus(this.spent);

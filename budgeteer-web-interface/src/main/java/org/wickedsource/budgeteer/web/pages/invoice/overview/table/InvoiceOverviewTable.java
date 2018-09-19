@@ -5,6 +5,7 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -22,6 +23,7 @@ import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.Breadcrumb
 import org.wickedsource.budgeteer.web.pages.contract.details.ContractDetailsPage;
 import org.wickedsource.budgeteer.web.pages.invoice.details.InvoiceDetailsPage;
 import org.wickedsource.budgeteer.web.pages.invoice.edit.EditInvoicePage;
+import org.wickedsource.budgeteer.web.pages.invoice.overview.InvoiceOverviewPage;
 
 import java.math.BigDecimal;
 
@@ -66,6 +68,11 @@ public class InvoiceOverviewTable extends Panel {
                     }
                 };
 
+                ExternalLink contractLink;
+                contractLink = new ExternalLink("contractLink", "/contracts/details/" + item.getModelObject().getContractId());
+                ExternalLink link = new ExternalLink("showInvoice", "/invoices/details/" + item.getModelObject().getInvoiceId());
+                contractLink.setContextRelative(false);
+                link.setContextRelative(false);
                 link.add(new Label("invoiceName", model(from(item.getModelObject()).getInvoiceName())));
                 item.add(link);
                 Link contractLink = new Link("contractLink") {
@@ -102,8 +109,13 @@ public class InvoiceOverviewTable extends Panel {
                         item.add(new Label("invoiceRowText", item.getModelObject().getValue()));
                     }
                 });
-                item.add(new BookmarkablePageLink<EditInvoicePage>("editLink", EditInvoicePage.class, EditInvoicePage.createEditInvoiceParameters(invoiceId)));
-            }
+                item.add(new Link("editLink"){
+                    @Override
+                    public void onClick() {
+                        setResponsePage(new EditInvoicePage(EditInvoicePage.createEditInvoiceParameters(invoiceId), this.getWebPage().getClass(), this.getPage().getPageParameters()));
+                    }
+                });
+            };
         });
         table.add(new ListView<String>("footerRow", model(from(data).getFooter())) {
             @Override
