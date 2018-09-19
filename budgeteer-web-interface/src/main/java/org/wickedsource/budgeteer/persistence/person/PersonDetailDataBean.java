@@ -18,10 +18,13 @@ public class PersonDetailDataBean {
 
     private Long budgetBurnedInCents;
 
-    public PersonDetailDataBean(Long id, String name, Long averageDailyRateInCents, Date firstBookedDate, Date lastBookedDate, Double hoursBooked, Long budgetBurnedInCents) {
+    public PersonDetailDataBean(Long id, String name, Long valuedMinutes, Long valuedRate, Date firstBookedDate, Date lastBookedDate, Double hoursBooked, Long budgetBurnedInCents) {
         this.id = id;
         this.name = name;
-        this.averageDailyRateInCents = averageDailyRateInCents;
+        if (valuedRate == 0L)
+            this.averageDailyRateInCents = 0L;
+        else
+            this.averageDailyRateInCents = valuedMinutes / valuedRate;
         this.firstBookedDate = firstBookedDate;
         this.lastBookedDate = lastBookedDate;
         this.hoursBooked = hoursBooked;
