@@ -26,7 +26,7 @@ class PersonServiceTest extends ServiceTestTemplate {
     private PersonRepository personRepository;
 
     @Test
-    void testLoadPeopleBaseData() throws Exception {
+    void testLoadPeopleBaseData() {
         when(personRepository.findBaseDataByProjectId(1L)).thenReturn(Arrays.asList(createPersonBaseDataBean()));
         List<PersonBaseData> data = personService.loadPeopleBaseData(1L);
         Assertions.assertEquals(1, data.size());
@@ -38,7 +38,7 @@ class PersonServiceTest extends ServiceTestTemplate {
 
 
     @Test
-    void testLoadPersonDetailData() throws Exception {
+    void testLoadPersonDetailData() {
         when(personRepository.findDetailDataByPersonId(1L)).thenReturn(createPersonDetailDataBean());
         PersonDetailData data = personService.loadPersonDetailData(1L);
         Assertions.assertEquals("person1", data.getName());
@@ -51,7 +51,7 @@ class PersonServiceTest extends ServiceTestTemplate {
 
 
     @Test
-    void testLoadPersonBaseData() throws Exception {
+    void testLoadPersonBaseData() {
         when(personRepository.findBaseDataByPersonId(1L)).thenReturn(createPersonBaseDataBean());
         PersonBaseData bean = personService.loadPersonBaseData(1L);
         Assertions.assertEquals(Long.valueOf(1), bean.getId());
@@ -61,10 +61,10 @@ class PersonServiceTest extends ServiceTestTemplate {
     }
 
     private PersonBaseDataBean createPersonBaseDataBean() {
-        return new PersonBaseDataBean(1L, "person1", 10000L, fixedDate);
+        return new PersonBaseDataBean(1L, "person1", 500000000L, 50000L, fixedDate);
     }
 
     private PersonDetailDataBean createPersonDetailDataBean() {
-        return new PersonDetailDataBean(1L, "person1", 123456L, fixedDate, fixedDate, 5.0d, 654321L);
+        return new PersonDetailDataBean(1L, "person1", 6172800000L, 50000L, fixedDate, fixedDate, 5.0d, 654321L);
     }
 }
