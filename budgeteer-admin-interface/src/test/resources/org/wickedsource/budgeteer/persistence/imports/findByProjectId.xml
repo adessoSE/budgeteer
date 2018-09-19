@@ -1,8 +1,0 @@
-<dataset>
-
-    <PROJECT id="1" name="project1"/>
-
-    <IMPORT id="1" import_date="2015-01-01" start_date="2015-01-01" end_date="2015-01-01" import_type="Testimport" project_id="1"/>
-    <IMPORT id="2" import_date="2015-01-01" start_date="2015-01-01" end_date="2015-01-01" import_type="Testimport" project_id="1"/>
-
-</dataset>
