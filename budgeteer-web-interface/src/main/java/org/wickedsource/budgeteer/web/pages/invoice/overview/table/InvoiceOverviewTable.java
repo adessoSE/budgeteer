@@ -52,46 +52,20 @@ public class InvoiceOverviewTable extends Panel {
             @Override
             protected void populateItem(final ListItem<InvoiceBaseData> item) {
                 final long invoiceId = item.getModelObject().getInvoiceId();
-                Link link = new Link("showInvoice") {
-                    @Override
-                    public void onClick() {
-                        WebPage page = new InvoiceDetailsPage(InvoiceDetailsPage.createParameters(invoiceId)) {
-
-                            @Override
-                            protected BreadcrumbsModel getBreadcrumbsModel() {
-                                BreadcrumbsModel m = breadcrumbsModel;
-                                m.addBreadcrumb(InvoiceDetailsPage.class, InvoiceDetailsPage.createParameters(invoiceId));
-                                return m;
-                            }
-                        };
-                        setResponsePage(page);
-                    }
-                };
 
                 ExternalLink contractLink;
                 contractLink = new ExternalLink("contractLink", "/contracts/details/" + item.getModelObject().getContractId());
+
                 ExternalLink link = new ExternalLink("showInvoice", "/invoices/details/" + item.getModelObject().getInvoiceId());
+
                 contractLink.setContextRelative(false);
                 link.setContextRelative(false);
                 link.add(new Label("invoiceName", model(from(item.getModelObject()).getInvoiceName())));
-                item.add(link);
-                Link contractLink = new Link("contractLink") {
-                    @Override
-                    public void onClick() {
-                        WebPage page = new ContractDetailsPage(ContractDetailsPage.createParameters(item.getModelObject().getContractId())) {
 
-                            @Override
-                            protected BreadcrumbsModel getBreadcrumbsModel() {
-                                BreadcrumbsModel m = breadcrumbsModel;
-                                m.addBreadcrumb(ContractDetailsPage.class, ContractDetailsPage.createParameters(item.getModelObject().getContractId()));
-                                return m;
-                            }
-                        };
-                        setResponsePage(page);
-                    }
-                };
+                item.add(link);
                 contractLink.add(new Label("contractName", model(from(item.getModelObject()).getContractName())));
                 item.add(contractLink);
+
                 item.add(new Label("internalNumber", model(from(item.getModelObject()).getInternalNumber())));
                 item.add(new Label("year", model(from(item.getModelObject()).getYear())));
                 item.add(new Label("month_number", getMonthNumberAsString(item.getModelObject().getMonth())));
@@ -100,15 +74,18 @@ public class InvoiceOverviewTable extends Panel {
                 item.add(new Label("sum_gross", Model.of(MoneyUtil.toDouble(item.getModelObject().getSum_gross(), BudgeteerSession.get().getSelectedBudgetUnit()))));
                 item.add(new Label("taxAmount", Model.of(MoneyUtil.toDouble(item.getModelObject().getTaxAmount(), BudgeteerSession.get().getSelectedBudgetUnit()))));
                 item.add(new Label("taxRate", getTaxRateAsString(item.getModelObject().getTaxRate())));
+
                 CheckBox paid = new CheckBox("paid", model(from(item.getModelObject()).isPaid()));
                 paid.setEnabled(false);
                 item.add(paid);
+
                 item.add(new ListView<DynamicAttributeField>("invoiceRow", model(from(item.getModelObject()).getDynamicInvoiceFields())) {
                     @Override
                     protected void populateItem(ListItem<DynamicAttributeField> item) {
                         item.add(new Label("invoiceRowText", item.getModelObject().getValue()));
                     }
                 });
+
                 item.add(new Link("editLink"){
                     @Override
                     public void onClick() {

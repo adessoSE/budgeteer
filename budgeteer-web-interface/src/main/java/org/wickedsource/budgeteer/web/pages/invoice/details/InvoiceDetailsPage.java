@@ -1,5 +1,9 @@
 package org.wickedsource.budgeteer.web.pages.invoice.details;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.SubmitLink;
@@ -7,6 +11,7 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.service.invoice.InvoiceService;
+import org.wickedsource.budgeteer.web.BudgeteerReferences;
 import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.components.confirm.ConfirmationForm;
 import org.wickedsource.budgeteer.web.pages.base.basepage.BasePage;
@@ -16,15 +21,23 @@ import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 import org.wickedsource.budgeteer.web.pages.invoice.details.highlights.InvoiceHighlightsPanel;
 import org.wickedsource.budgeteer.web.pages.invoice.edit.EditInvoicePage;
 
+import javax.swing.plaf.TreeUI;
+
 @Mount("invoices/details/${id}")
 public class InvoiceDetailsPage extends BasePage {
 
     @SpringBean
     private InvoiceService invoiceService;
+    private boolean taxVisible;
+    private InvoiceHighlightsPanel highlights;
 
     public InvoiceDetailsPage(PageParameters parameters) {
         super(parameters);
-        add(new InvoiceHighlightsPanel("highlightsPanel", new InvoiceDetailModel(getParameterId())));
+        taxVisible = false;
+        highlights = new InvoiceHighlightsPanel("highlightsPanel", new InvoiceDetailModel(getParameterId()));
+        highlights.setOutputMarkupId(true);
+        add(highlights);
+
         add(new Link("editLink") {
             @Override
             public void onClick() {
@@ -32,6 +45,21 @@ public class InvoiceDetailsPage extends BasePage {
                 setResponsePage(page);
             }
         });
+
+        AjaxLink taxLink = new AjaxLink("taxLink") {
+            @Override
+            protected void onConfigure() {
+                highlights.setTaxInformationVisible(taxVisible);
+            }
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                taxVisible = !taxVisible;
+                target.add(highlights);
+            }
+        };
+        add(taxLink);
+
         Form deleteForm = new ConfirmationForm("deleteForm", this, "confirmation.delete") {
             @Override
             public void onSubmit() {
@@ -48,6 +76,14 @@ public class InvoiceDetailsPage extends BasePage {
         BreadcrumbsModel model = new BreadcrumbsModel(DashboardPage.class, ContractDetailsPage.class);
         model.addBreadcrumb(InvoiceDetailsPage.class, getPageParameters());
         return model;
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        response.render(JavaScriptReferenceHeaderItem.forReference(BudgeteerReferences.getJQueryReference()));
+        response.render(JavaScriptReferenceHeaderItem.forReference(BudgeteerReferences.getAdminLteAppReference()));
+        //response.render(JavaScriptReferenceHeaderItem.forReference(BudgeteerReferences.getShowAndHideBoxesReference()));
     }
 
 }

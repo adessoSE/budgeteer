@@ -24,6 +24,10 @@ import static org.wicketstuff.lazymodel.LazyModel.model;
 
 public class InvoiceHighlightsPanel extends GenericPanel<InvoiceBaseData> {
 
+    Label sumGrosslabel;
+    Label taxAmountLabel;
+    Label taxRateLabel;
+
     public InvoiceHighlightsPanel(String id, final IModel<InvoiceBaseData> model) {
         super(id, model);
     }
@@ -37,12 +41,17 @@ public class InvoiceHighlightsPanel extends GenericPanel<InvoiceBaseData> {
         add(new Label("year", model(from(getModelObject()).getYear())));
         add(new Label("month", PropertyLoader.getProperty(BasePage.class, "monthRenderer.name." + getModelObject().getMonth())));
         add(new Label("sum", model(from(getModelObject()).getSum())));
-        add(new Label("sum_gross", model(from(getModelObject()).getSum_gross())));
-        add(new Label("taxAmount", model(from(getModelObject()).getTaxAmount())));
-        add(new Label("taxRate", getModelObject().getTaxRate().doubleValue()+" %"));
+        sumGrosslabel = new Label("sum_gross", model(from(getModelObject()).getSum_gross()));
+        add(sumGrosslabel);
+        taxAmountLabel = new Label("taxAmount", model(from(getModelObject()).getTaxAmount()));
+        add(taxAmountLabel);
+        taxRateLabel = new Label("taxRate", getModelObject().getTaxRate().doubleValue() + " %");
+        add(taxRateLabel);
+        setTaxInformationVisible(false);
         add(new Label("paid", (getModelObject().isPaid() ? getString("invoice.paid.yes") : getString("invoice.paid.no"))));
 
-        WebMarkupContainer linkContainer = new WebMarkupContainer("linkContainer"){
+
+        WebMarkupContainer linkContainer = new WebMarkupContainer("linkContainer") {
             @Override
             public boolean isVisible() {
                 return getModelObject().getFileUploadModel().getLink() != null && !getModelObject().getFileUploadModel().getLink().isEmpty();
@@ -51,7 +60,7 @@ public class InvoiceHighlightsPanel extends GenericPanel<InvoiceBaseData> {
         linkContainer.add(new ExternalLink("link", Model.of(getModelObject().getFileUploadModel().getLink()), Model.of(getModelObject().getFileUploadModel().getLink())));
         add(linkContainer);
 
-        WebMarkupContainer fileContainer = new WebMarkupContainer("fileContainer"){
+        WebMarkupContainer fileContainer = new WebMarkupContainer("fileContainer") {
             @Override
             public boolean isVisible() {
                 return getModelObject().getFileUploadModel().getFileName() != null && !getModelObject().getFileUploadModel().getFileName().isEmpty();
@@ -84,5 +93,11 @@ public class InvoiceHighlightsPanel extends GenericPanel<InvoiceBaseData> {
                 item.add(new Label("key", model(from(item.getModelObject()).getName())));
             }
         });
+    }
+
+    public void setTaxInformationVisible(boolean visible) {
+        sumGrosslabel.setVisible(visible);
+        taxAmountLabel.setVisible(visible);
+        taxRateLabel.setVisible(visible);
     }
 }
