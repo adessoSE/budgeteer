@@ -37,7 +37,7 @@ public abstract class PersonEditPanel extends Panel {
     private DateRangeInputField dateRangeField;
     private Model<ArrayList<BudgetBaseData>> selectedBudgets;
 
-    PersonEditPanel(String id, PersonRateFormDto data, boolean isEditing){
+    PersonEditPanel(String id, PersonRateFormDto data, boolean isEditing) {
         super(id);
         this.isEditing = isEditing;
 
@@ -63,40 +63,40 @@ public abstract class PersonEditPanel extends Panel {
         add(form);
     }
 
-    public void setData(PersonRateFormDto dto){
+    public void setData(PersonRateFormDto dto) {
         selectedBudgets.setObject(new ArrayList<>(dto.getChosenBudgets()));
         rateField.setModelObject(dto.getRate());
         dateRangeField.setModelObject(dto.getDateRange());
     }
 
-    private WebMarkupContainer createSubmitButton(){
+    private WebMarkupContainer createSubmitButton() {
         Button submitButton = new Button("submitButton") {
 
             @Override
             public void onSubmit() {
                 boolean containsError = false;
-                if(rateField.getModelObject().isNegativeOrZero()){
+                if (rateField.getModelObject().isNegativeOrZero()) {
                     containsError = true;
                     PersonEditPanel.this.getParent().getParent().error(getString("rate.not.zero"));
                 }
-                if (selectedBudgets.getObject().isEmpty()){
+                if (selectedBudgets.getObject().isEmpty()) {
                     containsError = true;
                     PersonEditPanel.this.getParent().getParent().error(getString("select.budget"));
-                }else{
-                    for(BudgetBaseData budget : selectedBudgets.getObject()) {
+                } else {
+                    for (BudgetBaseData budget : selectedBudgets.getObject()) {
                         List<PersonRate> overlappingRate = getOverlappingRates(dateRangeField.getModelObject(), budget);
                         if (overlappingRate == null || overlappingRate.isEmpty()) {
-                            if(!containsError) {
+                            if (!containsError) {
                                 rateAdded(new PersonRate(rateField.getModelObject(), budget, dateRangeField.getModelObject()));
                             }
                         } else {
                             containsError = true;
                             PersonEditPanel.this.getParent().getParent().error(String.format(getString("personRateForm.overlappingRates"),
-                                        constructOverlappingRatesString(overlappingRate)));
+                                    constructOverlappingRatesString(overlappingRate)));
                         }
                     }
                 }
-                if(!containsError) {
+                if (!containsError) {
                     clearFormData();
                 }
             }
@@ -104,7 +104,7 @@ public abstract class PersonEditPanel extends Panel {
         return addIconToSubmitButton(submitButton);
     }
 
-    private String constructOverlappingRatesString(List<PersonRate> overlappingRate){
+    private String constructOverlappingRatesString(List<PersonRate> overlappingRate) {
         StringBuilder overlappingEntryNames = new StringBuilder();
         overlappingEntryNames.append(System.getProperty("line.separator"));
         for (int i = 0; i < overlappingRate.size(); i++) {
@@ -129,10 +129,10 @@ public abstract class PersonEditPanel extends Panel {
     private WebMarkupContainer addIconToSubmitButton(WebMarkupContainer submitButton) {
 
         Label submitIcon = new Label("submitIcon");
-        if(isEditing){
+        if (isEditing) {
             submitIcon.add(new AttributeModifier("class", "fa fa-check"));
             submitIcon.add(new AttributeModifier("title", "Add this rate"));
-        }else{
+        } else {
             submitIcon.add(new AttributeModifier("class", "fa fa-plus-circle"));
             submitIcon.add(new AttributeModifier("title", "Save this rate"));
         }
@@ -151,6 +151,7 @@ public abstract class PersonEditPanel extends Panel {
 
     /**
      * Returns a List<PersonRate> where the startDate or the endDate is in the given dateRange (alternatively a empty List)
+     *
      * @param dateRange the dateRange to be checked
      * @return a List of PersonRates (if there are no PersonRates that end or start in the dateRange, a empty List will be returned)
      */
@@ -158,17 +159,18 @@ public abstract class PersonEditPanel extends Panel {
 
     /**
      * This methods adds a dropdown menu for the available budgets.
+     *
      * @param possibleBudgets A list of grouped possible budgets
      */
-    private Select<ArrayList<BudgetBaseData>> createBudgetsDropdown(List<OptionGroup<BudgetBaseData>> possibleBudgets){
+    private Select<ArrayList<BudgetBaseData>> createBudgetsDropdown(List<OptionGroup<BudgetBaseData>> possibleBudgets) {
         Select<ArrayList<BudgetBaseData>> select = new Select<>("select", selectedBudgets);
         HashMap<String, String> multiselectOptions = MultiselectBehavior.getRecommendedOptions();
-        multiselectOptions.put("includeSelectAllOption","false");
+        multiselectOptions.put("includeSelectAllOption", "false");
         RepeatingView rv = new RepeatingView("repeatingView");
         rv.setOutputMarkupId(true);
         rv.setOutputMarkupPlaceholderTag(true);
         select.add(rv);
-        for(OptionGroup<BudgetBaseData> group : possibleBudgets){
+        for (OptionGroup<BudgetBaseData> group : possibleBudgets) {
             WebMarkupContainer overOptGroup = new WebMarkupContainer(rv.newChildId());
             rv.add(overOptGroup);
             WebMarkupContainer optGroup = new WebMarkupContainer("optGroup");

@@ -30,16 +30,32 @@
                     <p class="help-block"><wicket:message key="page.budget.key.hint">The unique key that identifies this budget when importing data.</wicket:message></p>
                 </div>
                 <div class="form-group">
-                    <label for="contractSelect"><wicket:message key="page.tags.key.contract">Contract</wicket:message></label>
+                    <label for="limitInput">
+                        <wicket:message key="page.budget.limit"></wicket:message>
+                    </label>
+                    <input wicket:id="limit" type="text" name="name" id="limitInput" class="form-control"/>
+                    <p class="help-block">
+                        <wicket:message key="page.budget.limit.hint"></wicket:message>
+                    </p>
+                </div>
+                <div class="form-group">
+                    <label for="contractSelect">
+                        <wicket:message key="page.tags.key.contract">Contract</wicket:message>
+                    </label>
                     <select id="contractSelect" wicket:id="contract" class="form-control"/>
-                    <p class="help-block"><wicket:message key="page.tags.key.hint">The Contract connected with this budget.</wicket:message></p>
+                    <p class="help-block">
+                        <wicket:message key="page.tags.key.hint">The Contract connected with this budget.
+                        </wicket:message>
+                    </p>
                 </div>
                 <div class="form-group">
                     <label for="tagsInput">Tags</label>
-                    <input wicket:id="tagsInput" type="text" name="name" id="tagsInput" class="form-control" wicket:message="placeholder:page.tags.placeholder" />
+                    <input wicket:id="tagsInput" type="text" name="name" id="tagsInput" class="form-control"
+                           wicket:message="placeholder:page.tags.placeholder"/>
                     <p class="help-block">
                         <wicket:message key="page.tags.hint">
-                            Tags allow grouping of budgets so you can monitor groups of budgets instead of only single budgets.
+                            Tags allow grouping of budgets so you can monitor groups of budgets instead of only single
+                            budgets.
                         </wicket:message>
                     </p>
                     <p class="help-block">
@@ -52,10 +68,14 @@
             <div class="footer">
                 <div class="row">
                     <div class="col-lg-3">
-                        <button wicket:id="cancelButton2" id="cancel" type="button" class="btn bg-olive btn-block">Cancel</button>
+                        <button wicket:id="cancelButton2" id="cancel" type="button" class="btn bg-olive btn-block">
+                            Cancel
+                        </button>
                     </div>
                     <div class="col-lg-9">
-                        <button type="submit" wicket:id="submitButtonLabel" id="submitButton" class="btn bg-olive btn-block" >Create Budget / Save Changes</button>
+                        <button type="submit" wicket:id="submitButtonLabel" id="submitButton"
+                                class="btn bg-olive btn-block">Create Budget / Save Changes
+                        </button>
                     </div>
                 </div>
             </div>

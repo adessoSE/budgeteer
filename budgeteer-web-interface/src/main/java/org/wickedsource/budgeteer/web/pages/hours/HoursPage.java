@@ -13,7 +13,7 @@ public class HoursPage extends BasePage {
 
     public HoursPage() {
         long projectId = BudgeteerSession.get().getProjectId();
-        BurnTableWithFilter table = new BurnTableWithFilter("burnTable", new WorkRecordFilter(projectId), true);
+        BurnTableWithFilter table = new BurnTableWithFilter("burnTable", new WorkRecordFilter(projectId), true, this, null);
         add(table);
     }
 
