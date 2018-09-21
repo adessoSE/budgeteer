@@ -156,7 +156,7 @@ public abstract class BasePage extends WebPage {
         return new Link(id) {
             @Override
             public void onClick() {
-                setResponsePage(new EditUserPage(this.getWebPage().getClass(), new PageParameters()));
+                setResponsePage(new EditUserPage(this.getWebPage().getClass(), new PageParameters().add("userId", BudgeteerSession.get().getLoggedInUser().getId())));
             }
         };
     }

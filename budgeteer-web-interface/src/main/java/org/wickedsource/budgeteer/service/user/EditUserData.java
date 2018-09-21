@@ -19,4 +19,13 @@ public class EditUserData implements Serializable {
     public EditUserData(long userId) {
         this.id = userId;
     }
+
+    public EditUserData(long id, String name, String mail, String password, String newPassword, String newPasswordConfirmation) {
+        this.id = id;
+        this.name = name;
+        this.mail = mail;
+        this.password = password;
+        this.newPassword = newPassword;
+        this.newPasswordConfirmation = newPasswordConfirmation;
+    }
 }

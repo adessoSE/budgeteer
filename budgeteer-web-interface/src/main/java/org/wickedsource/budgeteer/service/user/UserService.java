@@ -3,7 +3,6 @@ package org.wickedsource.budgeteer.service.user;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.core.env.Environment;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
@@ -41,7 +40,7 @@ public class UserService {
     private ApplicationEventPublisher applicationEventPublisher;
 
     @Value("${budgeteer.mail.activate}")
-    private boolean isMailActivated;
+    private String mailActivated;
 
     /**
      * Returns a list of all users that currently have access to the given project.
@@ -155,7 +154,7 @@ public class UserService {
             user.setMail(mail);
             user.setPassword(passwordHasher.hash(password));
             userRepository.save(user);
-            if (!mail.equals("") && isMailActivated)
+            if (!mail.equals("") && Boolean.valueOf(mailActivated))
                 applicationEventPublisher.publishEvent(new OnRegistrationCompleteEvent(user));
         }
     }
@@ -196,7 +195,7 @@ public class UserService {
             throw new MailNotFoundException();
         } else if (!userEntity.isMailVerified()) {
             throw new MailNotVerifiedException();
-        } else if (isMailActivated) {
+        } else if (Boolean.valueOf(mailActivated)) {
             applicationEventPublisher.publishEvent(new OnForgotPasswordEvent(userEntity));
         }
     }
@@ -295,7 +294,7 @@ public class UserService {
         VerificationToken verificationToken = verificationTokenRepository.findByUser(userEntity);
         if (verificationToken != null)
             verificationTokenRepository.delete(verificationToken);
-        if (isMailActivated)
+        if (Boolean.valueOf(mailActivated))
             applicationEventPublisher.publishEvent(new OnRegistrationCompleteEvent(userEntity));
     }
 

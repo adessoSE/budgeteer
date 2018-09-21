@@ -41,6 +41,20 @@ public class UserEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private ProjectEntity defaultProject;
 
+    public UserEntity() {
+
+    }
+
+    public UserEntity(long id, String name, String password, String mail, boolean mailVerified, List<ProjectEntity> authorizedProjects, ProjectEntity defaultProject) {
+        this.id = id;
+        this.name = name;
+        this.password = password;
+        this.mail = mail;
+        this.mailVerified = mailVerified;
+        this.authorizedProjects = authorizedProjects;
+        this.defaultProject = defaultProject;
+    }
+
     @Override
     public String toString() {
         return "User( Id:" + id + ", name: " + name + ")";
