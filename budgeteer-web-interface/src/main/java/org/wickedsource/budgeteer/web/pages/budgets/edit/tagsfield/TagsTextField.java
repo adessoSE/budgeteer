@@ -43,6 +43,7 @@ public class TagsTextField extends TextField<List<String>> {
         // activate tagsinput on this input field
         response.render(JavaScriptHeaderItem.forScript(String.format("window.onload = function () {\n" +
                 "     $('#%s').tagsinput({\n" +
+                "            maxChars: 15,\n" +
                 "            tagClass: function (item) {\n" +
                 "                return 'badge bg-light-blue';\n" +
                 "            }\n" +

@@ -58,7 +58,7 @@ public class EditContractPage extends DialogPageWithBacklink {
     private long getContractId() {
         StringValue value = getPageParameters().get("id");
         if (value == null || value.isEmpty() || value.isNull()) {
-            return 0l;
+            return 0L;
         } else {
             return value.toLong();
         }

@@ -77,16 +77,6 @@ public class EditTemplateForm extends Form<TemplateFormInputDto> {
                     if(model(from(templateFormInputDto)).getObject().getType() == null){
                         error(getString("message.error.no.type"));
                     }
-                    if(model(from(templateFormInputDto)).getObject().getName() != null && model(from(templateFormInputDto)).getObject().getName().length() > 128){
-                        error(getString("message.error.name.too.long"));
-                        target.add(feedback);
-                        return;
-                    }
-                    if(model(from(templateFormInputDto)).getObject().getDescription() != null && model(from(templateFormInputDto)).getObject().getDescription().length() > 512){
-                        error(getString("message.error.description.too.long"));
-                        target.add(feedback);
-                        return;
-                    }
                     if(fileUploads != null && fileUploads.size() > 0){
                         ImportFile file = new ImportFile(fileUploads.get(0).getClientFileName(), fileUploads.get(0).getInputStream());
                         if(model(from(templateFormInputDto)).getObject().getName() != null && model(from(templateFormInputDto)).getObject().getType() != null){

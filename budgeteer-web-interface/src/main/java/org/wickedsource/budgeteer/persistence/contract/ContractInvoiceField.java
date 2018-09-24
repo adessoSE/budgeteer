@@ -24,7 +24,7 @@ public class ContractInvoiceField implements Serializable{
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_Contract_Invoice_field_ID")
     private long id;
 
-    @Column(name="FIELD_NAME", nullable = false)
+    @Column(name="FIELD_NAME", nullable = false, length = 255)
     private String fieldName;
 
     @ManyToOne
