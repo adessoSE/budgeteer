@@ -53,6 +53,8 @@ dependencies {
     compile project(':budgeteer-resourceplan-importer')
     compile project(':budgeteer-report-exporter')
 
+    compile('org.liquibase:liquibase-core')
+
     compile(group: 'org.springframework', name: 'spring-web', version: "${spring_version}")
 
     compile(
