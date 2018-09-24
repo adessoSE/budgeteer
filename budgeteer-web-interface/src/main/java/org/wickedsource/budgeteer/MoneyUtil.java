@@ -23,7 +23,7 @@ public class MoneyUtil {
     }
 
     public static List<Double> toDouble(List<Money> moneyList) {
-        List<Double> doubleValues = new ArrayList<Double>();
+        List<Double> doubleValues = new ArrayList<>();
         for (Money moneyValue : moneyList) {
             doubleValues.add(moneyValue.getAmount().doubleValue());
         }
@@ -31,7 +31,7 @@ public class MoneyUtil {
     }
 
     public static List<Double> toDouble(List<Money> moneyList, Double unit) {
-        List<Double> doubleValues = new ArrayList<Double>();
+        List<Double> doubleValues = new ArrayList<>();
         for (Money moneyValue : moneyList) {
             doubleValues.add(toDouble(moneyValue, unit));
         }
@@ -39,7 +39,7 @@ public class MoneyUtil {
     }
 
     public static List<Double> toDouble(List<Money> moneyList, Double unit, Double taxrate) {
-        List<Double> doubleValues = new ArrayList<Double>();
+        List<Double> doubleValues = new ArrayList<>();
         for (Money moneyValue : moneyList) {
             doubleValues.add(toDouble(moneyValue, unit, taxrate));
         }
@@ -70,12 +70,14 @@ public class MoneyUtil {
      * @return the given amount with taxes added
      */
     public static Money getMoneyWithTaxes(Money money, BigDecimal taxInPercent) {
-        Money taxes = money.multipliedBy(taxInPercent, RoundingMode.FLOOR);
-        taxes = taxes.dividedBy(100, RoundingMode.FLOOR);
+        Money taxes = MoneyUtil.getTaxAmount(money, taxInPercent);
 
-        Money amountWithTaxes = money.plus(taxes);
+        return money.plus(taxes);
+    }
 
-        return amountWithTaxes;
+    public static Money getTaxAmount(Money money, BigDecimal taxInPercent) {
+        Money taxes = money.multipliedBy(taxInPercent, RoundingMode.HALF_UP);
+        return taxes.dividedBy(100, RoundingMode.HALF_UP);
     }
 
     /**
