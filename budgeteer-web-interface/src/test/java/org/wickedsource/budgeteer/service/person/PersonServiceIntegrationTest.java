@@ -16,12 +16,15 @@ import org.wickedsource.budgeteer.persistence.record.MissingDailyRateForBudgetBe
 import org.wickedsource.budgeteer.persistence.record.WorkRecordEntity;
 import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
 import org.wickedsource.budgeteer.service.DateRange;
+import org.wickedsource.budgeteer.service.DateUtil;
 import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 class PersonServiceIntegrationTest extends IntegrationTestTemplate {
 
@@ -82,7 +85,7 @@ class PersonServiceIntegrationTest extends IntegrationTestTemplate {
     @Test
     @DatabaseSetup("personWithRates.xml")
     @DatabaseTearDown(value = "personWithRates.xml", type = DatabaseOperation.DELETE_ALL)
-    void testRemoveRateFromPerson() throws Exception {
+    void testRemoveRateFromPerson() throws Exception{
         PersonWithRates person = service.loadPersonWithRates(1);
         Assertions.assertEquals(0, service.getMissingDailyRatesForPerson(person.getPersonId()).size());
 
@@ -92,14 +95,14 @@ class PersonServiceIntegrationTest extends IntegrationTestTemplate {
         Assertions.assertEquals(1, missingRates.size());
         Assertions.assertEquals("Budget 1", missingRates.get(0).getBudgetName());
         Assertions.assertEquals(1, missingRates.get(0).getPersonId());
-        Assertions.assertEquals(1420066800000L, missingRates.get(0).getStartDate().getTime());
-        Assertions.assertEquals(1439589600000L, missingRates.get(0).getEndDate().getTime());
+        Assertions.assertEquals("2015-01-01", missingRates.get(0).getStartDate().toString());
+        Assertions.assertEquals("2015-08-15", missingRates.get(0).getEndDate().toString());
     }
 
     @Test
     @DatabaseSetup("personWithRates.xml")
     @DatabaseTearDown(value = "personWithRates.xml", type = DatabaseOperation.DELETE_ALL)
-    void testEditPersonRate() throws Exception {
+    void testEditPersonRate() {
         //Load
         PersonWithRates person = service.loadPersonWithRates(2L);
         Assertions.assertEquals(2, person.getRates().size());
