@@ -55,7 +55,8 @@ public class InvoiceDetailsPage extends BasePage {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 taxVisible = !taxVisible;
-                target.add(highlights);
+                highlights.setTaxInformationVisible(taxVisible);
+                target.add(highlights.getSumGrossContainer(), highlights.getTaxAmountContainer(), highlights.getTaxRateContainer());
             }
         };
         add(taxLink);
@@ -78,6 +79,7 @@ public class InvoiceDetailsPage extends BasePage {
         return model;
     }
 
+    /*
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
@@ -85,5 +87,6 @@ public class InvoiceDetailsPage extends BasePage {
         response.render(JavaScriptReferenceHeaderItem.forReference(BudgeteerReferences.getAdminLteAppReference()));
         //response.render(JavaScriptReferenceHeaderItem.forReference(BudgeteerReferences.getShowAndHideBoxesReference()));
     }
+    */
 
 }

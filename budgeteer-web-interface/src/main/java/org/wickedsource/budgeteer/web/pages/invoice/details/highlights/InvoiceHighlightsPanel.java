@@ -1,5 +1,6 @@
 package org.wickedsource.budgeteer.web.pages.invoice.details.highlights;
 
+import lombok.Getter;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
@@ -16,6 +17,7 @@ import org.wickedsource.budgeteer.service.invoice.InvoiceBaseData;
 import org.wickedsource.budgeteer.web.PropertyLoader;
 import org.wickedsource.budgeteer.web.pages.base.basepage.BasePage;
 
+import java.awt.*;
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -24,9 +26,13 @@ import static org.wicketstuff.lazymodel.LazyModel.model;
 
 public class InvoiceHighlightsPanel extends GenericPanel<InvoiceBaseData> {
 
-    Label sumGrosslabel;
-    Label taxAmountLabel;
-    Label taxRateLabel;
+    @Getter
+    private WebMarkupContainer sumGrossContainer;
+    @Getter
+    private WebMarkupContainer taxRateContainer;
+    @Getter
+    private WebMarkupContainer taxAmountContainer;
+
 
     public InvoiceHighlightsPanel(String id, final IModel<InvoiceBaseData> model) {
         super(id, model);
@@ -41,13 +47,7 @@ public class InvoiceHighlightsPanel extends GenericPanel<InvoiceBaseData> {
         add(new Label("year", model(from(getModelObject()).getYear())));
         add(new Label("month", PropertyLoader.getProperty(BasePage.class, "monthRenderer.name." + getModelObject().getMonth())));
         add(new Label("sum", model(from(getModelObject()).getSum())));
-        sumGrosslabel = new Label("sum_gross", model(from(getModelObject()).getSum_gross()));
-        add(sumGrosslabel);
-        taxAmountLabel = new Label("taxAmount", model(from(getModelObject()).getTaxAmount()));
-        add(taxAmountLabel);
-        taxRateLabel = new Label("taxRate", getModelObject().getTaxRate().doubleValue() + " %");
-        add(taxRateLabel);
-        setTaxInformationVisible(false);
+        addContainers();
         add(new Label("paid", (getModelObject().isPaid() ? getString("invoice.paid.yes") : getString("invoice.paid.no"))));
 
 
@@ -95,9 +95,34 @@ public class InvoiceHighlightsPanel extends GenericPanel<InvoiceBaseData> {
         });
     }
 
+    private void addContainers() {
+        sumGrossContainer = new WebMarkupContainer("sumGrossContainer");
+        sumGrossContainer.setOutputMarkupPlaceholderTag(true);
+        add(sumGrossContainer);
+        WebMarkupContainer sumGrossBox = new WebMarkupContainer("sumGrossBox");
+        sumGrossBox.add(new Label("sum_gross", model(from(getModelObject()).getSum_gross())));
+        sumGrossContainer.add(sumGrossBox);
+
+        taxAmountContainer = new WebMarkupContainer("taxAmountContainer");
+        taxAmountContainer.setOutputMarkupPlaceholderTag(true);
+        add(taxAmountContainer);
+        WebMarkupContainer taxAmountBox = new WebMarkupContainer("taxAmountBox");
+        taxAmountBox.add(new Label("taxAmount", model(from(getModelObject()).getTaxAmount())));
+        taxAmountContainer.add(taxAmountBox);
+
+        taxRateContainer = new WebMarkupContainer("taxRateContainer");
+        taxRateContainer.setOutputMarkupPlaceholderTag(true);
+        add(taxRateContainer);
+        WebMarkupContainer taxRateBox = new WebMarkupContainer("taxRateBox");
+        taxRateBox.add(new Label("taxRate", getModelObject().getTaxRate().doubleValue() + " %"));
+        taxAmountContainer.add(taxRateBox);
+
+        //setTaxInformationVisible(false);
+    }
+
     public void setTaxInformationVisible(boolean visible) {
-        sumGrosslabel.setVisible(visible);
-        taxAmountLabel.setVisible(visible);
-        taxRateLabel.setVisible(visible);
+        sumGrossContainer.setVisible(visible);
+        taxAmountContainer.setVisible(visible);
+        taxRateContainer.setVisible(visible);
     }
 }
