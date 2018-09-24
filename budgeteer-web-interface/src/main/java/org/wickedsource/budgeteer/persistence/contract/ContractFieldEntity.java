@@ -20,7 +20,7 @@ public class ContractFieldEntity implements Serializable{
     @JoinColumn(name = "PROJECT_CONTRACT_FIELD")
     private ProjectContractField field;
 
-    @Column(name="CONTRACT_FIELD_VALUE")
+    @Column(name="CONTRACT_FIELD_VALUE", length = 255)
     private String value;
 
     @ManyToOne(fetch = FetchType.LAZY)

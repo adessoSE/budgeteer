@@ -20,7 +20,7 @@ public class InvoiceFieldEntity implements Serializable {
     @JoinColumn(name = "CONTRACT_INVOICE_FIELD_ID")
     private ContractInvoiceField field;
 
-    @Column(name="INVOICE_FIELD_VALUE")
+    @Column(name="INVOICE_FIELD_VALUE", length = 255)
     private String value;
 
 
