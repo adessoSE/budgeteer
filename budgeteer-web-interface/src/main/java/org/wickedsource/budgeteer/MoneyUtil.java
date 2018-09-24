@@ -88,12 +88,27 @@ public class MoneyUtil {
      * @return sum of the two amounts
      */
     public static Money sumMoney(Money firstValue, Money secondValue) {
+        Money money;
         if (firstValue == null) {
-            return secondValue;
+            money = secondValue;
         } else if (secondValue == null) {
-            return firstValue;
+            money = firstValue;
         } else {
-            return firstValue.plus(secondValue);
+            money = firstValue.plus(secondValue);
         }
+
+        return money;
+    }
+
+    public static long getCentsByHourFraction(long monthValueInCents, Double monthHours, Double weekHours) {
+        if (monthHours == 0 || weekHours == 0) {
+            return 0;
+        } else {
+            return Math.round(monthValueInCents * weekHours / monthHours);
+        }
+    }
+
+    public static long getCentsWithTaxes(long valueInCents, BigDecimal taxRate) {
+        return Math.round(valueInCents * (1 + taxRate.doubleValue() / 100));
     }
 }
