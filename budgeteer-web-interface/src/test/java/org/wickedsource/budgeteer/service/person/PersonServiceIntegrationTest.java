@@ -3,6 +3,8 @@ package org.wickedsource.budgeteer.service.person;
 import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
+import org.joda.money.CurrencyUnit;
+import org.joda.money.Money;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,7 @@ import org.wickedsource.budgeteer.IntegrationTestTemplate;
 import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.persistence.person.PersonEntity;
 import org.wickedsource.budgeteer.persistence.person.PersonRepository;
+import org.wickedsource.budgeteer.persistence.record.MissingDailyRateForBudgetBean;
 import org.wickedsource.budgeteer.persistence.record.WorkRecordEntity;
 import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
 import org.wickedsource.budgeteer.service.DateRange;
@@ -17,6 +20,8 @@ import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
 class PersonServiceIntegrationTest extends IntegrationTestTemplate {
 
@@ -74,4 +79,39 @@ class PersonServiceIntegrationTest extends IntegrationTestTemplate {
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(32100L), record.getDailyRate());
     }
 
+    @Test
+    @DatabaseSetup("personWithRates.xml")
+    @DatabaseTearDown(value = "personWithRates.xml", type = DatabaseOperation.DELETE_ALL)
+    void testRemoveRateFromPerson() throws Exception {
+        PersonWithRates person = service.loadPersonWithRates(1);
+        Assertions.assertEquals(0, service.getMissingDailyRatesForPerson(person.getPersonId()).size());
+
+        service.removeDailyRateFromPerson(person, person.getRates().get(0));
+
+        List<MissingDailyRateForBudgetBean> missingRates = service.getMissingDailyRatesForPerson(person.getPersonId());
+        Assertions.assertEquals(1, missingRates.size());
+        Assertions.assertEquals("Budget 1", missingRates.get(0).getBudgetName());
+        Assertions.assertEquals(1, missingRates.get(0).getPersonId());
+        Assertions.assertEquals(1420066800000L, missingRates.get(0).getStartDate().getTime());
+        Assertions.assertEquals(1439589600000L, missingRates.get(0).getEndDate().getTime());
+    }
+
+    @Test
+    @DatabaseSetup("personWithRates.xml")
+    @DatabaseTearDown(value = "personWithRates.xml", type = DatabaseOperation.DELETE_ALL)
+    void testEditPersonRate() throws Exception {
+        //Load
+        PersonWithRates person = service.loadPersonWithRates(2L);
+        Assertions.assertEquals(2, person.getRates().size());
+        Assertions.assertEquals(Money.of(CurrencyUnit.EUR, 600), person.getRates().get(0).getRate());
+
+        //Save
+        person.getRates().get(0).setRate(Money.of(CurrencyUnit.EUR, 100));
+        service.savePersonWithRates(person);
+
+        //Test
+        person = service.loadPersonWithRates(2L);
+        Assertions.assertEquals(2, person.getRates().size());
+        Assertions.assertEquals(Money.of(CurrencyUnit.EUR, 100), person.getRates().get(0).getRate());
+    }
 }

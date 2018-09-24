@@ -7,14 +7,21 @@ import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.MoneyUtil;
+import org.wickedsource.budgeteer.service.person.PersonBaseData;
 import org.wickedsource.budgeteer.service.person.PersonRate;
+import org.wickedsource.budgeteer.service.person.PersonService;
+import org.wickedsource.budgeteer.service.person.PersonWithRates;
 
 import java.util.List;
 
 public abstract class PersonInfoPanel extends Panel {
 
-    PersonInfoPanel(String id, PersonRate rate, List<PersonRate> rates) {
+    @SpringBean
+    private PersonService personService;
+
+    PersonInfoPanel(String id, PersonWithRates personWithRates, PersonRate rate, List<PersonRate> rates) {
         super(id);
         add(new Label("rate", Model.of(MoneyUtil.toDouble(rate.getRate()))));
         add(new Label("budget", rate.getBudget().getName()));
@@ -24,6 +31,7 @@ public abstract class PersonInfoPanel extends Panel {
             @Override
             public void onSubmit() {
                 rates.remove(rate);
+                personService.removeDailyRateFromPerson(personWithRates, rate);
             }
         };
         AjaxLink editButton = new AjaxLink("editButton") {
