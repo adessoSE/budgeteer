@@ -33,7 +33,6 @@ public class InvoiceHighlightsPanel extends GenericPanel<InvoiceBaseData> {
     @Getter
     private WebMarkupContainer taxAmountContainer;
 
-
     public InvoiceHighlightsPanel(String id, final IModel<InvoiceBaseData> model) {
         super(id, model);
     }
@@ -49,7 +48,6 @@ public class InvoiceHighlightsPanel extends GenericPanel<InvoiceBaseData> {
         add(new Label("sum", model(from(getModelObject()).getSum())));
         addContainers();
         add(new Label("paid", (getModelObject().isPaid() ? getString("invoice.paid.yes") : getString("invoice.paid.no"))));
-
 
         WebMarkupContainer linkContainer = new WebMarkupContainer("linkContainer") {
             @Override
@@ -69,7 +67,6 @@ public class InvoiceHighlightsPanel extends GenericPanel<InvoiceBaseData> {
         final byte[] file = getModelObject().getFileUploadModel().getFile();
         final String fileName = getModelObject().getFileUploadModel().getFileName();
         Link<Void> fileDownloadLink = new Link<Void>("file") {
-
             @Override
             public void onClick() {
                 AbstractResourceStreamWriter rstream = new AbstractResourceStreamWriter() {
@@ -115,9 +112,7 @@ public class InvoiceHighlightsPanel extends GenericPanel<InvoiceBaseData> {
         add(taxRateContainer);
         WebMarkupContainer taxRateBox = new WebMarkupContainer("taxRateBox");
         taxRateBox.add(new Label("taxRate", getModelObject().getTaxRate().doubleValue() + " %"));
-        taxAmountContainer.add(taxRateBox);
-
-        //setTaxInformationVisible(false);
+        taxRateContainer.add(taxRateBox);
     }
 
     public void setTaxInformationVisible(boolean visible) {

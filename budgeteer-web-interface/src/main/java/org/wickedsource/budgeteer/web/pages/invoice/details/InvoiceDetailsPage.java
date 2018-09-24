@@ -8,6 +8,9 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.service.invoice.InvoiceService;
@@ -22,6 +25,7 @@ import org.wickedsource.budgeteer.web.pages.invoice.details.highlights.InvoiceHi
 import org.wickedsource.budgeteer.web.pages.invoice.edit.EditInvoicePage;
 
 import javax.swing.plaf.TreeUI;
+import java.awt.*;
 
 @Mount("invoices/details/${id}")
 public class InvoiceDetailsPage extends BasePage {
@@ -46,6 +50,11 @@ public class InvoiceDetailsPage extends BasePage {
             }
         });
 
+        Label taxLinkTextLabel = new Label("taxLinkText", new ResourceModel("taxLinkTextShow"));
+        taxLinkTextLabel.setOutputMarkupId(true);
+        Label taxLinkDescriptionLabel = new Label("taxLinkDescription", new ResourceModel("taxLinkDescriptionShow"));
+        taxLinkDescriptionLabel.setOutputMarkupId(true);
+
         AjaxLink taxLink = new AjaxLink("taxLink") {
             @Override
             protected void onConfigure() {
@@ -55,10 +64,23 @@ public class InvoiceDetailsPage extends BasePage {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 taxVisible = !taxVisible;
+                // Change visibility
                 highlights.setTaxInformationVisible(taxVisible);
-                target.add(highlights.getSumGrossContainer(), highlights.getTaxAmountContainer(), highlights.getTaxRateContainer());
+
+                // Change link text
+                if (taxVisible) {
+                    taxLinkTextLabel.setDefaultModel(new ResourceModel("taxLinkTextHide"));
+                    taxLinkDescriptionLabel.setDefaultModel(new ResourceModel("taxLinkDescriptionHide"));
+                } else {
+                    taxLinkTextLabel.setDefaultModel(new ResourceModel("taxLinkTextShow"));
+                    taxLinkDescriptionLabel.setDefaultModel(new ResourceModel("taxLinkDescriptionShow"));
+                }
+
+                target.add(taxLinkDescriptionLabel, taxLinkTextLabel, highlights.getSumGrossContainer(), highlights.getTaxAmountContainer(), highlights.getTaxRateContainer());
             }
         };
+        taxLink.add(taxLinkTextLabel);
+        taxLink.add(taxLinkDescriptionLabel);
         add(taxLink);
 
         Form deleteForm = new ConfirmationForm("deleteForm", this, "confirmation.delete") {
@@ -78,15 +100,4 @@ public class InvoiceDetailsPage extends BasePage {
         model.addBreadcrumb(InvoiceDetailsPage.class, getPageParameters());
         return model;
     }
-
-    /*
-    @Override
-    public void renderHead(IHeaderResponse response) {
-        super.renderHead(response);
-        response.render(JavaScriptReferenceHeaderItem.forReference(BudgeteerReferences.getJQueryReference()));
-        response.render(JavaScriptReferenceHeaderItem.forReference(BudgeteerReferences.getAdminLteAppReference()));
-        //response.render(JavaScriptReferenceHeaderItem.forReference(BudgeteerReferences.getShowAndHideBoxesReference()));
-    }
-    */
-
 }
