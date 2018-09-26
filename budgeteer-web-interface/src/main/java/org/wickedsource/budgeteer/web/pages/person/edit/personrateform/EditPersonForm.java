@@ -156,7 +156,7 @@ public class EditPersonForm extends Form<PersonWithRates> {
             @Override
             protected void populateItem(final ListItem<PersonRate> item) {
                 item.setOutputMarkupId(true);
-                item.add(new PersonInfoPanel(infoOrEditPanel, item.getModelObject(), EditPersonForm.this.getModelObject().getRates()) {
+                item.add(new PersonInfoPanel(infoOrEditPanel, EditPersonForm.this.getModelObject() ,item.getModelObject(), EditPersonForm.this.getModelObject().getRates()) {
 
                     @Override
                     protected ListItem<PersonRate> getEditPanel() {

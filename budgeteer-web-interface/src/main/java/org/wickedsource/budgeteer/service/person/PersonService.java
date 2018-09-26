@@ -1,5 +1,7 @@
 package org.wickedsource.budgeteer.service.person;
 
+import org.joda.money.CurrencyUnit;
+import org.joda.money.Money;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -10,11 +12,13 @@ import org.wickedsource.budgeteer.persistence.person.PersonRepository;
 import org.wickedsource.budgeteer.persistence.record.MissingDailyRateForBudgetBean;
 import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
 import org.wickedsource.budgeteer.service.DateRange;
+import org.wickedsource.budgeteer.service.DateUtil;
 import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -100,8 +104,10 @@ public class PersonService {
         personEntity.setName(person.getName());
         personEntity.setImportKey(person.getImportKey());
 
-        List<DailyRateEntity> dailyRates = new ArrayList<DailyRateEntity>();
+        List<DailyRateEntity> dailyRates = new ArrayList<>();
+
         for (PersonRate rate : person.getRates()) {
+
             DailyRateEntity rateEntity = new DailyRateEntity();
             rateEntity.setRate(rate.getRate());
             rateEntity.setBudget(budgetRepository.findOne(rate.getBudget().getId()));
@@ -142,4 +148,8 @@ public class PersonService {
         return workRecordRepository.getMissingDailyRatesForPerson(personId);
     }
 
+    public void removeDailyRateFromPerson(PersonWithRates personWithRates, PersonRate rate) {
+        workRecordRepository.updateDailyRates(rate.getBudget().getId(), personWithRates.getPersonId(),
+                rate.getDateRange().getStartDate(), rate.getDateRange().getEndDate(), Money.zero(CurrencyUnit.EUR));
+    }
 }
