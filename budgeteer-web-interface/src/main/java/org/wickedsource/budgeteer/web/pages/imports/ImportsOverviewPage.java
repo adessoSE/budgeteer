@@ -59,14 +59,23 @@ public class ImportsOverviewPage extends BasePage {
                 item.add(new AjaxLink("deleteButton") {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        setResponsePage(new DeleteDialog(() -> {
-                            importService.deleteImport(impId);
-                            setResponsePage(ImportsOverviewPage.class);
-                            return null;
-                        }, () -> {
-                            setResponsePage(ImportsOverviewPage.class);
-                            return null;
-                        }));
+                        setResponsePage(new DeleteDialog() {
+                            @Override
+                            protected void onYes() {
+                                importService.deleteImport(impId);
+                                setResponsePage(ImportsOverviewPage.class);
+                            }
+
+                            @Override
+                            protected void onNo() {
+                                setResponsePage(ImportsOverviewPage.class);
+                            }
+
+                            @Override
+                            protected String confirmationText() {
+                                return null;
+                            }
+                        });
                     }
                 });
             }

@@ -13,7 +13,7 @@ public class DateRange implements Serializable {
 
     private Date endDate;
 
-    private static SimpleDateFormat formatter = new SimpleDateFormat();
+    private static SimpleDateFormat formatter = new SimpleDateFormat("dd.mm.yy");
 
     public DateRange(Date startDate, Date endDate) {
         this.startDate = startDate;

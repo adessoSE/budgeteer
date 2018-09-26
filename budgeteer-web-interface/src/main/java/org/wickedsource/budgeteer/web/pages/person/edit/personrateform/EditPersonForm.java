@@ -117,8 +117,13 @@ public class EditPersonForm extends Form<PersonWithRates> {
                 if (!nameTextField.getInput().isEmpty() && !importKeyTextField.getInput().isEmpty()) {
                     EditPersonForm.this.getModelObject().setName(nameTextField.getInput());
                     EditPersonForm.this.getModelObject().setImportKey(importKeyTextField.getInput());
-                    peopleService.savePersonWithRates(EditPersonForm.this.getModelObject());
-                    this.success(getString("form.success"));
+                    try {
+                        peopleService.savePersonWithRates(EditPersonForm.this.getModelObject());
+                        this.success(getString("form.success"));
+                    }catch (UnsupportedOperationException e){
+                        this.error(e.getMessage());
+                        EditPersonForm.this.setModelObject(peopleService.loadPersonWithRates(EditPersonForm.this.getModelObject().getPersonId()));
+                    }
                 }
             }
         };

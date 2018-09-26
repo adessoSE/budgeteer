@@ -7,12 +7,16 @@ import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.service.person.PersonBaseData;
 import org.wickedsource.budgeteer.service.person.PersonRate;
 import org.wickedsource.budgeteer.service.person.PersonService;
 import org.wickedsource.budgeteer.service.person.PersonWithRates;
+import org.wickedsource.budgeteer.web.pages.base.delete.DeleteDialog;
+import org.wickedsource.budgeteer.web.pages.person.edit.EditPersonPage;
+import org.wickedsource.budgeteer.web.pages.person.overview.PeopleOverviewPage;
 
 import java.util.List;
 
@@ -30,8 +34,27 @@ public abstract class PersonInfoPanel extends Panel {
         Button deleteButton = new Button("deleteButton") {
             @Override
             public void onSubmit() {
-                rates.remove(rate);
-                personService.removeDailyRateFromPerson(personWithRates, rate);
+                setResponsePage(new DeleteDialog() {
+                    @Override
+                    protected void onYes() {
+                        rates.remove(rate);
+                        personService.removeDailyRateFromPerson(personWithRates, rate);
+                        personService.savePersonWithRates(personWithRates);
+                        setResponsePage(new EditPersonPage(PersonInfoPanel.this.getPage().getPageParameters(),
+                                PeopleOverviewPage.class, new PageParameters()));
+                    }
+
+                    @Override
+                    protected void onNo() {
+                        setResponsePage(new EditPersonPage(PersonInfoPanel.this.getPage().getPageParameters(),
+                                PeopleOverviewPage.class, new PageParameters()));
+                    }
+
+                    @Override
+                    protected String confirmationText() {
+                        return "Are you sure you want to delete this rate?";
+                    }
+                });
             }
         };
         AjaxLink editButton = new AjaxLink("editButton") {
