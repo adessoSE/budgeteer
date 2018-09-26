@@ -2,19 +2,15 @@ package org.wickedsource.budgeteer.web.pages.invoice.details;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
 import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.service.invoice.InvoiceService;
-import org.wickedsource.budgeteer.web.BudgeteerReferences;
 import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.components.confirm.ConfirmationForm;
 import org.wickedsource.budgeteer.web.pages.base.basepage.BasePage;
@@ -23,9 +19,6 @@ import org.wickedsource.budgeteer.web.pages.contract.details.ContractDetailsPage
 import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 import org.wickedsource.budgeteer.web.pages.invoice.details.highlights.InvoiceHighlightsPanel;
 import org.wickedsource.budgeteer.web.pages.invoice.edit.EditInvoicePage;
-
-import javax.swing.plaf.TreeUI;
-import java.awt.*;
 
 @Mount("invoices/details/${id}")
 public class InvoiceDetailsPage extends BasePage {

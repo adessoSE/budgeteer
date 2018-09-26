@@ -1,17 +1,13 @@
 package org.wickedsource.budgeteer.web.pages.invoice.overview;
 
-import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.service.invoice.InvoiceService;
-import org.wickedsource.budgeteer.web.BudgeteerReferences;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.pages.base.basepage.BasePage;
-import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.Breadcrumb;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
 import org.wickedsource.budgeteer.web.pages.contract.details.ContractDetailsPage;
 import org.wickedsource.budgeteer.web.pages.contract.overview.ContractOverviewPage;

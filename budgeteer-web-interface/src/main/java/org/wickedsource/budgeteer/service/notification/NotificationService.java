@@ -1,18 +1,15 @@
 package org.wickedsource.budgeteer.service.notification;
 
-import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.joda.money.Money;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.wickedsource.budgeteer.MoneyUtil;
-import org.wickedsource.budgeteer.persistence.budget.BudgetEntity;
 import org.wickedsource.budgeteer.persistence.budget.BudgetRepository;
 import org.wickedsource.budgeteer.persistence.budget.LimitReachedBean;
 import org.wickedsource.budgeteer.persistence.budget.MissingBudgetTotalBean;
 import org.wickedsource.budgeteer.persistence.record.MissingDailyRateForBudgetBean;
 import org.wickedsource.budgeteer.persistence.record.PlanRecordRepository;
 import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
-import org.wickedsource.budgeteer.service.budget.BudgetService;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
