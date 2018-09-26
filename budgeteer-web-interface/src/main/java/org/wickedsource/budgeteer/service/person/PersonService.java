@@ -126,29 +126,33 @@ public class PersonService {
 
 
         }
+        personEntity.getDailyRates().clear();
+        personEntity.getDailyRates().addAll(dailyRates);
+        personRepository.save(personEntity);
+    }
 
-        //Check with manually edited entries
-        for(DailyRateEntity rate : dailyRates) {
-            for (WorkRecordEntity e : workRecordRepository.findManuallyEditedEntries(BudgeteerSession.get().getProjectId(),
-                    rate.getDateStart(), rate.getDateEnd())) {
+    public List<String> getOverlapWithManualyEditedRecords(PersonWithRates person, long projectId){
+        List<String> warnings = new ArrayList<>();
+        //Check with manually edited entries and warn the user
+        for(PersonRate rate : person.getRates()) {
+            for (WorkRecordEntity e : workRecordRepository.findManuallyEditedEntries(projectId,
+                    rate.getDateRange().getStartDate(), rate.getDateRange().getEndDate())) {
 
                 //Warn about the editing of a rate only if a work record in this range has been edited manually and the amount is different
-                if (DateUtil.isDateInDateRange(e.getDate(), new DateRange(rate.getDateStart(), rate.getDateEnd()))
+                if (DateUtil.isDateInDateRange(e.getDate(), rate.getDateRange())
                         && e.getBudget().getName().equals(rate.getBudget().getName())
+                        && e.getPerson().getName().equals(person.getName())
                         && !e.getDailyRate().isEqual(() -> rate.getRate().toBigMoney())) {
 
-                    throw new UnsupportedOperationException("A work record in the range "
-                            + rate.getDateStart().toString() + " - " + rate.getDateEnd().toString()
+                    warnings.add("A work record in the range "
+                            + rate.getDateRange().toString()
                             + " (Exact Date and Amount: " + e.getDate() + ", " + e.getDailyRate().toString() +
                             ") for budget \"" + rate.getBudget().getName() +
                             "\" has already been edited manually and will not be overwritten.");
                 }
             }
         }
-
-        personEntity.getDailyRates().clear();
-        personEntity.getDailyRates().addAll(dailyRates);
-        personRepository.save(personEntity);
+        return warnings;
     }
 
     /**

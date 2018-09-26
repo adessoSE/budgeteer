@@ -117,12 +117,12 @@ public class EditPersonForm extends Form<PersonWithRates> {
                 if (!nameTextField.getInput().isEmpty() && !importKeyTextField.getInput().isEmpty()) {
                     EditPersonForm.this.getModelObject().setName(nameTextField.getInput());
                     EditPersonForm.this.getModelObject().setImportKey(importKeyTextField.getInput());
-                    try {
-                        peopleService.savePersonWithRates(EditPersonForm.this.getModelObject());
-                        this.success(getString("form.success"));
-                    }catch (UnsupportedOperationException e){
-                        this.info(e.getMessage());
-                        EditPersonForm.this.setModelObject(peopleService.loadPersonWithRates(EditPersonForm.this.getModelObject().getPersonId()));
+                     peopleService.savePersonWithRates(EditPersonForm.this.getModelObject());
+                    List<String> warnings = peopleService.getOverlapWithManualyEditedRecords(EditPersonForm.this.getModelObject(),
+                            BudgeteerSession.get().getProjectId());
+                    this.success(getString("form.success"));
+                    for(String e : warnings){
+                        this.info(e);
                     }
                 }
             }
