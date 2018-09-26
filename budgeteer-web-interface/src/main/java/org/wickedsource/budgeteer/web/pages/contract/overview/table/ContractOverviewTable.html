@@ -4,6 +4,7 @@
     <table class="table table-hover smallLastColumn" wicket:id="table">
         <thead>
         <tr>
+            <th></th>
             <th>
                 <wicket:message key="overview.table.contract.name">Contract name</wicket:message>
             </th>
@@ -31,6 +32,11 @@
         </thead>
         <tbody>
         <tr wicket:id="contractRows">
+            <td>
+                <span class="btn btn-default btn-sm dragBtn" ondragstart="dragStart(event)" onclick="down(event)" draggable="true">
+                        <i class="glyphicons glyphicons-hand-up"></i>
+                    </span>
+            </td>
             <td><a wicket:id="editContract"><span wicket:id="contractName"></span></a></td>
             <td><span wicket:id="internalNumber"></span></td>
             <td><span wicket:id="startDate"></span></td>

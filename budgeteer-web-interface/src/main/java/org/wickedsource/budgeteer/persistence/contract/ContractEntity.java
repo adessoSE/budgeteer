@@ -40,6 +40,9 @@ public class ContractEntity implements Serializable {
     @JoinColumn(name="CONTRACT_ID")
     private List<ContractFieldEntity> contractFields = new LinkedList<>();
 
+    @Column(name="SORTING_INDEX")
+    private Integer sortingIndex;
+
     @Column(name="BUDGET")
     private Money budget;
 
@@ -58,7 +61,7 @@ public class ContractEntity implements Serializable {
     private ContractType type;
 
     @OneToMany(mappedBy="contract")
-    private List<BudgetEntity> budgets = new LinkedList<BudgetEntity>();
+    private List<BudgetEntity> budgets = new LinkedList<>();
 
     @Column(name = "LINK")
     private String link;

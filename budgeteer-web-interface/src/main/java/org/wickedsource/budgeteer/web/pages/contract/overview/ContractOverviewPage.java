@@ -3,6 +3,8 @@ package org.wickedsource.budgeteer.web.pages.contract.overview;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
@@ -11,6 +13,7 @@ import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.service.contract.ContractService;
+import org.wickedsource.budgeteer.web.BudgeteerReferences;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.components.tax.TaxSwitchLabelModel;
@@ -88,5 +91,13 @@ public class ContractOverviewPage extends BasePage{
     @Override
     protected BreadcrumbsModel getBreadcrumbsModel() {
         return new BreadcrumbsModel(DashboardPage.class, ContractOverviewPage.class);
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        response.render(JavaScriptReferenceHeaderItem.forReference(BudgeteerReferences.getJQueryReference()));
+        response.render(JavaScriptReferenceHeaderItem.forReference(BudgeteerReferences.getAdminLteAppReference()));
+        response.render(JavaScriptReferenceHeaderItem.forReference(BudgeteerReferences.getManualTableSortingReference()));
     }
 }
