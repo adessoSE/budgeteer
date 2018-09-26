@@ -81,6 +81,7 @@ public class FilterPanel extends Panel {
         HashMap<String, String> options = MultiselectBehavior.getRecommendedOptions();
         options.put("buttonWidth", "'120px'");
         options.remove("buttonClass");
+        options.put("enableCaseInsensitiveFiltering", "false");
         options.put("enableFiltering","false");
 
         columnSelect.add(new MultiselectBehavior(options));
