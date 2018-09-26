@@ -19,6 +19,7 @@ import org.wickedsource.budgeteer.service.DateUtil;
 import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
 import org.wickedsource.budgeteer.service.record.WorkRecord;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
+import org.wickedsource.budgeteer.web.pages.person.edit.personrateform.EditPersonForm;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
@@ -119,20 +120,30 @@ public class PersonService {
             rateEntity.setPerson(personEntity);
             rateEntity.setDateStart(rate.getDateRange().getStartDate());
             rateEntity.setDateEnd(rate.getDateRange().getEndDate());
-            for(WorkRecordEntity e : workRecordRepository.findManuallyEditedEntries(BudgeteerSession.get().getProjectId(),
-                    rate.getDateRange().getStartDate(), rate.getDateRange().getEndDate())){
-                if(DateUtil.isDateInDateRange(e.getDate(), rate.getDateRange())
-                        && e.getBudget().getName().equals(rate.getBudget().getName())
-                        && !e.getDailyRate().isEqual(() -> rate.getRate().toBigMoney())){
-                    throw new UnsupportedOperationException("A work record in the range "
-                            + rate.getDateRange().toString() +
-                            " (Exact Date and Amount: " + e.getDate() + ", " + e.getDailyRate().toString() + ") for budget \"" + rate.getBudget().getName() +
-                            "\" has already been edited manually. Cannot edit this rate!");
-                }
-            }
             dailyRates.add(rateEntity);
             workRecordRepository.updateDailyRates(rate.getBudget().getId(), person.getPersonId(),
                     rate.getDateRange().getStartDate(), rate.getDateRange().getEndDate(), rate.getRate());
+
+
+        }
+
+        //Check with manually edited entries
+        for(DailyRateEntity rate : dailyRates) {
+            for (WorkRecordEntity e : workRecordRepository.findManuallyEditedEntries(BudgeteerSession.get().getProjectId(),
+                    rate.getDateStart(), rate.getDateEnd())) {
+
+                //Warn about the editing of a rate only if a work record in this range has been edited manually and the amount is different
+                if (DateUtil.isDateInDateRange(e.getDate(), new DateRange(rate.getDateStart(), rate.getDateEnd()))
+                        && e.getBudget().getName().equals(rate.getBudget().getName())
+                        && !e.getDailyRate().isEqual(() -> rate.getRate().toBigMoney())) {
+
+                    throw new UnsupportedOperationException("A work record in the range "
+                            + rate.getDateStart().toString() + " - " + rate.getDateEnd().toString()
+                            + " (Exact Date and Amount: " + e.getDate() + ", " + e.getDailyRate().toString() +
+                            ") for budget \"" + rate.getBudget().getName() +
+                            "\" has already been edited manually and will not be overwritten.");
+                }
+            }
         }
 
         personEntity.getDailyRates().clear();

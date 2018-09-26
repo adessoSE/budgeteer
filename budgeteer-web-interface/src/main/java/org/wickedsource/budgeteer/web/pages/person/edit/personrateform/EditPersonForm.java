@@ -121,7 +121,7 @@ public class EditPersonForm extends Form<PersonWithRates> {
                         peopleService.savePersonWithRates(EditPersonForm.this.getModelObject());
                         this.success(getString("form.success"));
                     }catch (UnsupportedOperationException e){
-                        this.error(e.getMessage());
+                        this.info(e.getMessage());
                         EditPersonForm.this.setModelObject(peopleService.loadPersonWithRates(EditPersonForm.this.getModelObject().getPersonId()));
                     }
                 }
