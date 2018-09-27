@@ -8,9 +8,8 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.persistence.user.UserEntity;
-import org.wickedsource.budgeteer.service.user.MailNotFoundException;
-import org.wickedsource.budgeteer.service.user.UserService;
-import org.wickedsource.budgeteer.service.user.TokenStatus;
+import org.wickedsource.budgeteer.service.user.*;
+import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
 import org.wickedsource.budgeteer.web.pages.base.dialogpage.DialogPage;
@@ -26,17 +25,23 @@ public class ResetTokenPage extends DialogPage {
     private UserService service;
 
     public ResetTokenPage() {
-        addComponents();
+        addComponents(new PageParameters());
     }
 
     public ResetTokenPage(PageParameters pageParameters) {
         handleStatusCode(pageParameters);
-        addComponents();
+        addComponents(pageParameters);
     }
 
-    private void addComponents() {
+    private void addComponents(PageParameters backlinkParameters) {
         Injector.get().inject(this);
-        Form<ResetTokenData> form = new Form<ResetTokenData>("resetTokenForm", model(from(new ResetTokenData()))) {
+        ResetTokenData resetTokenData = new ResetTokenData();
+        try {
+            resetTokenData.setMail(service.getUserById(Long.parseLong(backlinkParameters.get("userId").toString())).getMail());
+        } catch (UserIdNotFoundException e) {
+            e.printStackTrace();
+        }
+        Form<ResetTokenData> form = new Form<ResetTokenData>("resetTokenForm", model(from(resetTokenData))) {
             @Override
             protected void onSubmit() {
                 try {
@@ -61,12 +66,14 @@ public class ResetTokenPage extends DialogPage {
     }
 
     private void handleStatusCode(PageParameters pageParameters) {
-        int result = pageParameters.get("valid").toInt();
+        if (pageParameters.get("valid") != null) {
+            int result = pageParameters.get("valid").toInt();
 
-        if (result == TokenStatus.INVALID.statusCode()) {
-            error(getString("message.tokenInvalid"));
-        } else if (result == TokenStatus.EXPIRED.statusCode()) {
-            error(getString("message.tokenExpired"));
+            if (result == TokenStatus.INVALID.statusCode()) {
+                error(getString("message.tokenInvalid"));
+            } else if (result == TokenStatus.EXPIRED.statusCode()) {
+                error(getString("message.tokenExpired"));
+            }
         }
     }
 }

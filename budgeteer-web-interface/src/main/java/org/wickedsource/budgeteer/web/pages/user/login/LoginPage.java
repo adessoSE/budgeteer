@@ -37,9 +37,14 @@ public class LoginPage extends DialogPage {
     @SpringBean
     private BudgeteerSettings settings;
 
+    public LoginPage() {
+        build();
+    }
+
     public LoginPage(PageParameters pageParameters) {
         // The token needed to verify the mail address is taken from the parameters and handled.
         String verificationToken = pageParameters.get("verificationtoken").toString();
+        String verificationSent = pageParameters.get("verificationsent").toString();
 
         if (verificationToken != null) {
             int result = userService.validateVerificationToken(verificationToken);
@@ -51,8 +56,14 @@ public class LoginPage extends DialogPage {
             } else if (result == TokenStatus.EXPIRED.statusCode()) {
                 setResponsePage(ResetTokenPage.class, new PageParameters().add("valid", TokenStatus.EXPIRED.statusCode()));
             }
+        } else if (verificationSent.equals("true")) {
+            success(getString("message.mailSent"));
         }
 
+        build();
+    }
+
+    private void build() {
         if (settings.isKeycloakActivated()) { // Skip Login Page if Keycloak is activated
             HttpServletRequest request = (HttpServletRequest) getRequestCycle().getRequest().getContainerRequest();
             AccessToken accessToken = ((KeycloakPrincipal) request.getUserPrincipal()).getKeycloakSecurityContext().getToken();

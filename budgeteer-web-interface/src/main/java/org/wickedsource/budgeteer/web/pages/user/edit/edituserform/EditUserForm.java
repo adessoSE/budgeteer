@@ -39,19 +39,19 @@ public class EditUserForm extends Form<EditUserData> {
             mailTextField = new EmailTextField("mail");
         else
             mailTextField = new EmailTextField("mail", model(from(getModelObject().getMail())));
-        PasswordTextField actualPasswordTextField = new PasswordTextField("actualPassword");
+        PasswordTextField currentPasswordTextField = new PasswordTextField("currentPassword");
         PasswordTextField newPasswordTextField = new PasswordTextField("newPassword");
         PasswordTextField newPasswordConfirmationTextField = new PasswordTextField("newPasswordConfirmation");
 
         usernameRequiredTextField.setRequired(true);
         mailTextField.setRequired(true);
-        actualPasswordTextField.setRequired(false);
+        currentPasswordTextField.setRequired(false);
         newPasswordTextField.setRequired(false);
         newPasswordConfirmationTextField.setRequired(false);
 
         add(usernameRequiredTextField);
         add(mailTextField);
-        add(actualPasswordTextField);
+        add(currentPasswordTextField);
         add(newPasswordTextField);
         add(newPasswordConfirmationTextField);
 
@@ -77,12 +77,12 @@ public class EditUserForm extends Form<EditUserData> {
                     return;
                 }
 
-                if (actualPasswordTextField.getInput().isEmpty() && (!newPasswordTextField.getInput().isEmpty() || !newPasswordConfirmationTextField.getInput().isEmpty())) {
-                    error(getString("form.actualPassword.Required"));
+                if (currentPasswordTextField.getInput().isEmpty() && (!newPasswordTextField.getInput().isEmpty() || !newPasswordConfirmationTextField.getInput().isEmpty())) {
+                    error(getString("form.currentPassword.Required"));
                     return;
                 }
 
-                if (!actualPasswordTextField.getInput().isEmpty()) {
+                if (!currentPasswordTextField.getInput().isEmpty()) {
                     if (newPasswordTextField.getInput().isEmpty()) {
                         error(getString("form.newPassword.Required"));
                         return;
@@ -93,7 +93,7 @@ public class EditUserForm extends Form<EditUserData> {
                         return;
                     }
 
-                    if (!userService.checkPassword(EditUserForm.this.getModelObject().getId(), actualPasswordTextField.getInput())) {
+                    if (!userService.checkPassword(EditUserForm.this.getModelObject().getId(), currentPasswordTextField.getInput())) {
                         error(getString("message.wrongPassword"));
                         return;
                     }

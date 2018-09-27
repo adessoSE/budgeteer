@@ -31,7 +31,7 @@ public class UserEntity {
     @Column(nullable = true, length = 255)
     private String mail;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private boolean mailVerified = false;
 
     @LazyCollection(LazyCollectionOption.FALSE)

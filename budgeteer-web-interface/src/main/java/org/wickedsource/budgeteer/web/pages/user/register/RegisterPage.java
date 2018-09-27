@@ -6,6 +6,7 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.service.user.MailAlreadyInUseException;
 import org.wickedsource.budgeteer.service.user.UserService;
@@ -35,7 +36,7 @@ public class RegisterPage extends DialogPage {
                 }
                 try {
                     service.registerUser(getModelObject().getUsername(), getModelObject().getMail(), getModelObject().getPassword());
-                    setResponsePage(LoginPage.class);
+                    setResponsePage(LoginPage.class, new PageParameters().add("verificationsent", "true"));
                 } catch (UsernameAlreadyInUseException e) {
                     this.error(getString("message.duplicateUserName"));
                 } catch (MailAlreadyInUseException e) {

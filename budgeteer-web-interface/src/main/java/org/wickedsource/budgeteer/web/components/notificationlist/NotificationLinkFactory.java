@@ -3,6 +3,7 @@ package org.wickedsource.budgeteer.web.components.notificationlist;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.wickedsource.budgeteer.service.notification.*;
+import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.pages.budgets.details.BudgetDetailsPage;
 import org.wickedsource.budgeteer.web.pages.budgets.edit.EditBudgetPage;
 import org.wickedsource.budgeteer.web.pages.imports.fileimport.ImportFilesPage;
@@ -30,7 +31,7 @@ public class NotificationLinkFactory implements Serializable {
         } else if (notification instanceof LimitReachedNotification) {
             return new BudgetDetailsPage(BudgetDetailsPage.createParameters(((LimitReachedNotification) notification).getBudgetId()));
         } else if (notification instanceof MailNotVerifiedNotification) {
-            return new ResetTokenPage();
+            return new ResetTokenPage(new PageParameters().add("userId", BudgeteerSession.get().getLoggedInUser().getId()));
         } else if (notification instanceof MissingMailNotification) {
             return new EditUserPage(backlinkPage, backlinkParameters);
         } else {
