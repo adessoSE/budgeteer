@@ -5,6 +5,7 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 import org.joda.money.CurrencyUnit;
 import org.joda.money.Money;
+import org.joda.time.DateTime;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -122,8 +123,14 @@ class PersonServiceIntegrationTest extends IntegrationTestTemplate {
 
         List<String> warnings = service.getOverlapWithManuallyEditedRecords(person, 1);
         Assertions.assertEquals(1, warnings.size());
-        Assertions.assertEquals("A work record in the range 01.01.15 00:00 - 16.08.15 00:00 " +
-                "(Exact Date and Amount: 2015-01-01, EUR 100.00) for budget \"Budget 1\" has " +
+
+        DateTime startDate = new DateTime(2015, 1, 1, 0, 0);
+        DateTime endDate = new DateTime(2015, 8, 16, 0, 0);
+        SimpleDateFormat dateFormat = new SimpleDateFormat();
+
+        Assertions.assertEquals("A work record in the range " +
+                dateFormat.format(startDate.toDate()) +" - " + dateFormat.format(endDate.toDate()) +
+                " (Exact Date and Amount: 2015-01-01, EUR 100.00) for budget \"Budget 1\" has " +
                 "already been edited manually and will not be overwritten.", warnings.get(0));
     }
 }
