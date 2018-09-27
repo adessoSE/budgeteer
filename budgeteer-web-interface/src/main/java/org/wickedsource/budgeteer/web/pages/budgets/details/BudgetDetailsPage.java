@@ -73,13 +73,12 @@ public class BudgetDetailsPage extends BasePage {
 
                     @Override
                     protected void onNo() {
-                        setResponsePage(new BudgetDetailsPage(getPageParameters()));
-
+                        setResponsePage(new BudgetDetailsPage(BudgetDetailsPage.this.getPageParameters()));
                     }
 
                     @Override
                     protected String confirmationText() {
-                        return "Are you sure you want to delete this budget?";
+                        return BudgetDetailsPage.this.getString("confirmation.delete");
                     }
                 });
             }

@@ -52,7 +52,7 @@ public abstract class PersonInfoPanel extends Panel {
 
                     @Override
                     protected String confirmationText() {
-                        return "Are you sure you want to delete this rate?";
+                        return PersonInfoPanel.this.getString("delete.rate.confirmation");
                     }
                 });
             }

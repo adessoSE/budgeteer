@@ -215,7 +215,7 @@ public class EditTemplateForm extends Form<TemplateFormInputDto> {
 
                     @Override
                     protected String confirmationText() {
-                        return "Are you sure you want to delete this template?";
+                        return EditTemplateForm.this.getString("delete.template.confirmation");
                     }
                 });
             }

@@ -118,7 +118,7 @@ public class EditPersonForm extends Form<PersonWithRates> {
                     EditPersonForm.this.getModelObject().setName(nameTextField.getInput());
                     EditPersonForm.this.getModelObject().setImportKey(importKeyTextField.getInput());
                      peopleService.savePersonWithRates(EditPersonForm.this.getModelObject());
-                    List<String> warnings = peopleService.getOverlapWithManualyEditedRecords(EditPersonForm.this.getModelObject(),
+                    List<String> warnings = peopleService.getOverlapWithManuallyEditedRecords(EditPersonForm.this.getModelObject(),
                             BudgeteerSession.get().getProjectId());
                     this.success(getString("form.success"));
                     for(String e : warnings){

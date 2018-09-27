@@ -61,7 +61,7 @@ public class PersonDetailsPage extends BasePage {
 
                     @Override
                     protected String confirmationText() {
-                        return "Are you sure you want to delete this person?";
+                        return PersonDetailsPage.this.getString("confirmation.delete");
                     }
                 });
             }

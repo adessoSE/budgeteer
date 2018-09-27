@@ -131,7 +131,7 @@ public class PersonService {
         personRepository.save(personEntity);
     }
 
-    public List<String> getOverlapWithManualyEditedRecords(PersonWithRates person, long projectId){
+    public List<String> getOverlapWithManuallyEditedRecords(PersonWithRates person, long projectId){
         List<String> warnings = new ArrayList<>();
         //Check with manually edited entries and warn the user
         for(PersonRate rate : person.getRates()) {

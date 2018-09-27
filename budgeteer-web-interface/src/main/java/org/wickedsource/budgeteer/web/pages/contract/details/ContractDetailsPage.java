@@ -75,16 +75,14 @@ public class ContractDetailsPage extends BasePage {
 
                     @Override
                     protected void onNo() {
-                        setResponsePage(ContractDetailsPage.class, getPageParameters());
+                        setResponsePage(ContractDetailsPage.class, ContractDetailsPage.this.getPageParameters());
                     }
 
                     @Override
                     protected String confirmationText() {
-                        return "Are you sure you want to delete this contract?";
+                        return ContractDetailsPage.this.getString("confirmation.delete");
                     }
                 });
-
-
             }
         };
         deleteForm.add(new SubmitLink("deleteLink"));

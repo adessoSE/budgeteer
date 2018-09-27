@@ -156,7 +156,7 @@ public class BudgetOverviewTable extends Panel {
 
                             @Override
                             protected String confirmationText() {
-                                return "Are you sure you want to delete this budget?";
+                                return BudgetOverviewTable.this.getString("delete.budget.confirmation");
                             }
                         });
                     }

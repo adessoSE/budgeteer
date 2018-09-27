@@ -12,7 +12,7 @@ public abstract class DeleteDialog extends DialogPage{
         add(createConfirmationText());
     }
 
-    protected Label createConfirmationText(){
+    private Label createConfirmationText(){
         return new Label("confirmationText", confirmationText());
     }
 

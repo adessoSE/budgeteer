@@ -73,7 +73,7 @@ public class ImportsOverviewPage extends BasePage {
 
                             @Override
                             protected String confirmationText() {
-                                return null;
+                                return ImportsOverviewPage.this.getString("delete.import.confirmation");
                             }
                         });
                     }
