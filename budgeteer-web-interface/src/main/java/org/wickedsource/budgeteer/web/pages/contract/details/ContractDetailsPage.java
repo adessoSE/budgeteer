@@ -66,16 +66,23 @@ public class ContractDetailsPage extends BasePage {
         Form deleteForm = new ConfirmationForm("deleteForm", this, "confirmation.delete") {
             @Override
             public void onSubmit() {
-                setResponsePage(new DeleteDialog(() -> {
-                    contractService.deleteContract(getParameterId());
-                    setResponsePage(ContractOverviewPage.class);
-                    return null;
-                }, () -> {
-                    setResponsePage(ContractDetailsPage.class, getPageParameters());
-                    return null;
-                }));
+                setResponsePage(new DeleteDialog() {
+                    @Override
+                    protected void onYes() {
+                        contractService.deleteContract(getParameterId());
+                        setResponsePage(ContractOverviewPage.class);
+                    }
 
+                    @Override
+                    protected void onNo() {
+                        setResponsePage(ContractDetailsPage.class, ContractDetailsPage.this.getPageParameters());
+                    }
 
+                    @Override
+                    protected String confirmationText() {
+                        return ContractDetailsPage.this.getString("confirmation.delete");
+                    }
+                });
             }
         };
         deleteForm.add(new SubmitLink("deleteLink"));

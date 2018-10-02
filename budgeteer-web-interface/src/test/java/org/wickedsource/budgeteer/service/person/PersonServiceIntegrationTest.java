@@ -5,6 +5,7 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 import org.joda.money.CurrencyUnit;
 import org.joda.money.Money;
+import org.joda.time.DateTime;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,15 +17,11 @@ import org.wickedsource.budgeteer.persistence.record.MissingDailyRateForBudgetBe
 import org.wickedsource.budgeteer.persistence.record.WorkRecordEntity;
 import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
 import org.wickedsource.budgeteer.service.DateRange;
-import org.wickedsource.budgeteer.service.DateUtil;
 import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 class PersonServiceIntegrationTest extends IntegrationTestTemplate {
 
@@ -116,5 +113,24 @@ class PersonServiceIntegrationTest extends IntegrationTestTemplate {
         person = service.loadPersonWithRates(2L);
         Assertions.assertEquals(2, person.getRates().size());
         Assertions.assertEquals(Money.of(CurrencyUnit.EUR, 100), person.getRates().get(0).getRate());
+    }
+
+    @Test
+    @DatabaseSetup("personWithRates.xml")
+    @DatabaseTearDown(value = "personWithRates.xml", type = DatabaseOperation.DELETE_ALL)
+    void testWarnAboutManuallyEditedRates() {
+        PersonWithRates person = service.loadPersonWithRates(1);
+
+        List<String> warnings = service.getOverlapWithManuallyEditedRecords(person, 1);
+        Assertions.assertEquals(1, warnings.size());
+
+        DateTime startDate = new DateTime(2015, 1, 1, 0, 0);
+        DateTime endDate = new DateTime(2015, 8, 16, 0, 0);
+        SimpleDateFormat dateFormat = new SimpleDateFormat();
+
+        Assertions.assertEquals("A work record in the range " +
+                dateFormat.format(startDate.toDate()) +" - " + dateFormat.format(endDate.toDate()) +
+                " (Exact Date and Amount: 2015-01-01, EUR 100.00) for budget \"Budget 1\" has " +
+                "already been edited manually and will not be overwritten.", warnings.get(0));
     }
 }

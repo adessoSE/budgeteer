@@ -50,7 +50,7 @@ public class PeopleOverviewTable extends Panel {
                 Link editPersonLink = new Link("editPage") {
                     @Override
                     public void onClick() {
-                        WebPage page = new EditPersonPage(EditPersonPage.createParameters(modelObject.getId()), PeopleOverviewPage.class, null);
+                        WebPage page = new EditPersonPage(EditPersonPage.createParameters(modelObject.getId()), PeopleOverviewPage.class, new PageParameters());
                         setResponsePage(page);
                     }
                 };

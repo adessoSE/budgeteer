@@ -139,9 +139,23 @@ public class BudgetOverviewTable extends Panel {
                 Link deleteBudgetButton = new Link("deleteBudget") {
                     @Override
                     public void onClick() {
-                        setResponsePage(new DeleteDialog(() -> {budgetService.deleteBudget(item.getModelObject().getId());
-                            setResponsePage(BudgetsOverviewPage.class);return null;
-                        }, () -> {setResponsePage(BudgetsOverviewPage.class);return null;}));
+                        setResponsePage(new DeleteDialog() {
+                            @Override
+                            protected void onYes() {
+                                budgetService.deleteBudget(item.getModelObject().getId());
+                                setResponsePage(BudgetsOverviewPage.class);
+                            }
+
+                            @Override
+                            protected void onNo() {
+                                setResponsePage(BudgetsOverviewPage.class);
+                            }
+
+                            @Override
+                            protected String confirmationText() {
+                                return BudgetOverviewTable.this.getString("delete.budget.confirmation");
+                            }
+                        });
                     }
                 };
                 //Creating a separate tooltip is necessary because disabling the button also causes tooltips to disappear.
