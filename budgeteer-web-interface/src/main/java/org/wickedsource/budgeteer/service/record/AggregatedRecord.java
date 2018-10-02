@@ -3,14 +3,7 @@ package org.wickedsource.budgeteer.service.record;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.joda.money.Money;
-import org.joda.time.DateTime;
-import org.joda.time.Days;
 import org.wickedsource.budgeteer.MoneyUtil;
-import org.wickedsource.budgeteer.persistence.record.MonthlyAggregatedRecordBean;
-import org.wickedsource.budgeteer.persistence.record.MonthlyAggregatedRecordWithTaxBean;
-import org.wickedsource.budgeteer.persistence.record.WeeklyAggregatedRecordWithTitleAndTaxBean;
-import org.wickedsource.budgeteer.service.DateRange;
-import org.wickedsource.budgeteer.service.DateUtil;
 
 import java.util.Calendar;
 import java.util.Date;

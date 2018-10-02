@@ -4,10 +4,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.web.context.SecurityContextPersistenceFilter;
 import org.wickedsource.budgeteer.service.user.User;
-import org.wickedsource.budgeteer.web.components.security.NeedsLogin;
 import org.wickedsource.budgeteer.service.user.UserService;
+import org.wickedsource.budgeteer.web.components.security.NeedsLogin;
 
 /**
  * A configuration to set up spring boot security. Only used for authorization. Authentication

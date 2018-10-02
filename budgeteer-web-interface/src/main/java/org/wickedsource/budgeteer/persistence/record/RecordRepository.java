@@ -1,7 +1,6 @@
 package org.wickedsource.budgeteer.persistence.record;
 
 import org.joda.money.Money;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.Date;

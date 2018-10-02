@@ -17,8 +17,6 @@ import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
-
-import java.util.Date;
 import java.util.List;
 
 

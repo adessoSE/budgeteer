@@ -4,8 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.joda.money.Money;
 
-import java.math.BigDecimal;
-
 public class WeeklyAggregatedRecordWithTitleAndTaxBean extends WeeklyAggregatedRecordWithTaxBean {
     @Getter
     @Setter
