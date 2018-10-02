@@ -2,13 +2,10 @@ package org.wickedsource.budgeteer.service.statistics;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.openxmlformats.schemas.drawingml.x2006.main.CTRegularTextRun;
 import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.persistence.record.*;
-import org.wickedsource.budgeteer.service.DateUtil;
 import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
 
-import java.util.Date;
 import java.util.List;
 
 @Data

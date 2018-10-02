@@ -1,7 +1,6 @@
 package org.wickedsource.budgeteer.web.pages.budgets.overview.table;
 
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.Component;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.event.IEvent;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -22,7 +21,6 @@ import org.wickedsource.budgeteer.service.contract.ContractService;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.ClassAwareWrappingModel;
 import org.wickedsource.budgeteer.web.components.dataTable.DataTableBehavior;
-import org.wickedsource.budgeteer.web.components.links.NetGrossLink;
 import org.wickedsource.budgeteer.web.components.money.BudgetUnitMoneyModel;
 import org.wickedsource.budgeteer.web.components.money.MoneyLabel;
 import org.wickedsource.budgeteer.web.components.tax.TaxBudgetUnitMoneyModel;
@@ -36,7 +34,6 @@ import org.wickedsource.budgeteer.web.pages.budgets.overview.table.progressbar.P
 import org.wickedsource.budgeteer.web.pages.contract.details.ContractDetailsPage;
 
 import java.util.List;
-import java.util.concurrent.Callable;
 
 import static org.wicketstuff.lazymodel.LazyModel.from;
 import static org.wicketstuff.lazymodel.LazyModel.model;

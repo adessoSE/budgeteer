@@ -9,6 +9,8 @@ import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
 import org.wickedsource.budgeteer.service.statistics.MonthlyStats;
 
 import javax.transaction.Transactional;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -193,7 +195,31 @@ public class RecordService {
      */
     public List<WorkRecord> getFilteredRecords(WorkRecordFilter filter) {
         Predicate query = WorkRecordQueries.findByFilter(filter);
-        return recordMapper.map(ListUtil.toArrayList(workRecordRepository.findAll(query)));
+        List<WorkRecord> workRecords =  recordMapper.map(ListUtil.toArrayList(workRecordRepository.findAll(query)));
+        switch (filter.getColumnToSort().getObject()) {
+            case BUDGET:
+                workRecords.sort(Comparator.comparing(WorkRecord::getBudgetName));
+                break;
+            case NAME:
+                workRecords.sort(Comparator.comparing(WorkRecord::getPersonName));
+                break;
+            case DAILY_RATE:
+                workRecords.sort(Comparator.comparing(WorkRecord::getDailyRate));
+                break;
+            case DATE:
+                workRecords.sort(Comparator.comparing(WorkRecord::getDate));
+                break;
+            case HOURS:
+                workRecords.sort(Comparator.comparing(WorkRecord::getHours));
+                break;
+            case BUDGET_BURNED:
+                workRecords.sort(Comparator.comparing(WorkRecord::getBudgetBurned));
+                break;
+        }
+        if(filter.getSortType().getObject().equals("Descending")){
+            Collections.reverse(workRecords);
+        }
+        return workRecords;
     }
 
     public void saveDailyRateForWorkRecord(WorkRecord record) {

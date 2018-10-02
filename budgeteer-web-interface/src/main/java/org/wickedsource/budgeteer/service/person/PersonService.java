@@ -23,8 +23,6 @@ import org.wickedsource.budgeteer.web.pages.person.edit.personrateform.EditPerso
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
-
-import java.util.Date;
 import java.util.List;
 
 

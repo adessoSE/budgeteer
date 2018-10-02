@@ -2,9 +2,11 @@ package org.wickedsource.budgeteer.service.record;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.wicket.model.Model;
 import org.wickedsource.budgeteer.service.DateRange;
 import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
 import org.wickedsource.budgeteer.service.person.PersonBaseData;
+import org.wickedsource.budgeteer.web.components.burntable.filter.BurnTableSortColumn;
 
 import java.io.Serializable;
 import java.util.LinkedList;
@@ -27,6 +29,12 @@ public class WorkRecordFilter implements Serializable {
 
     @Getter
     private List<BudgetBaseData> possibleBudgets = new LinkedList<>();
+
+    @Getter
+    private Model<BurnTableSortColumn> columnToSort = new Model<>(BurnTableSortColumn.BUDGET);
+
+    @Getter
+    private Model<String> sortType = new Model<>("Ascending");
 
     @Getter
     @Setter

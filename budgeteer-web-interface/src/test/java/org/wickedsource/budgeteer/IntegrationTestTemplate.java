@@ -1,7 +1,6 @@
 package org.wickedsource.budgeteer;
 
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
-import org.junit.BeforeClass;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.security.core.context.SecurityContextHolder;
