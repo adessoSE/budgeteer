@@ -33,7 +33,7 @@ public class NotificationLinkFactory implements Serializable {
         } else if (notification instanceof MailNotVerifiedNotification) {
             return new ResetTokenPage(new PageParameters().add("userId", BudgeteerSession.get().getLoggedInUser().getId()));
         } else if (notification instanceof MissingMailNotification) {
-            return new EditUserPage(backlinkPage, backlinkParameters);
+            return new EditUserPage(backlinkPage, backlinkParameters.add("userId", BudgeteerSession.get().getLoggedInUser().getId()));
         } else {
             throw new IllegalArgumentException(String.format("Notifications of type %s are not supported!", notification.getClass()));
         }

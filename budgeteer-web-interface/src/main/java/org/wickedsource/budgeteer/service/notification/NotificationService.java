@@ -81,7 +81,7 @@ public class NotificationService {
                 notifications.add(new MissingMailNotification(user.getId()));
             }
 
-            if (!user.isMailVerified() && user.getMail() != null) {
+            if (!user.getMailVerified() && user.getMail() != null) {
                 notifications.add(new MailNotVerifiedNotification(user.getId(), user.getMail()));
             }
         }

@@ -118,6 +118,9 @@ public class UserService {
         if (entity == null)
             throw new InvalidLoginCredentialsException();
 
+        if (entity.getMailVerified() == null)
+            entity.setMailVerified(false);
+
         return mapper.map(entity);
     }
 
@@ -193,7 +196,7 @@ public class UserService {
 
         if (userEntity == null) {
             throw new MailNotFoundException();
-        } else if (!userEntity.isMailVerified()) {
+        } else if (!userEntity.getMailVerified()) {
             throw new MailNotVerifiedException();
         } else if (Boolean.valueOf(mailActivated)) {
             applicationEventPublisher.publishEvent(new OnForgotPasswordEvent(userEntity));
@@ -226,7 +229,7 @@ public class UserService {
      * If the name already exists, an UsernameAlreadyInUseException is thrown.
      * If the mail address already exists, a MailAlreadyInUseException is thrown.
      * <p>
-     * If the user changes his mail address, isMailVerified is set to false, because the user has to verify the new mail address again.
+     * If the user changes his mail address, getMailVerified is set to false, because the user has to verify the new mail address again.
      * If the user changes his password, the new password is hashed and then saved.
      *
      * @param data           the new data for the user
@@ -269,7 +272,7 @@ public class UserService {
 
         userRepository.save(userEntity);
 
-        return userEntity.isMailVerified();
+        return userEntity.getMailVerified();
     }
 
     /**

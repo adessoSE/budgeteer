@@ -32,7 +32,7 @@ public class UserEntity {
     private String mail;
 
     @Column(nullable = true)
-    private boolean mailVerified = false;
+    private Boolean mailVerified = false;
 
     @LazyCollection(LazyCollectionOption.FALSE)
     @ManyToMany(mappedBy = "authorizedUsers")

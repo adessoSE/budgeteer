@@ -47,7 +47,7 @@ public class ResetTokenPage extends DialogPage {
                 try {
                     UserEntity userEntity = service.getUserByMail(getModelObject().getMail());
 
-                    if (!userEntity.isMailVerified()) {
+                    if (!userEntity.getMailVerified()) {
                         service.createNewVerificationTokenForUser(userEntity);
                         success(getString("message.mailSent"));
                     } else {
@@ -66,7 +66,7 @@ public class ResetTokenPage extends DialogPage {
     }
 
     private void handleStatusCode(PageParameters pageParameters) {
-        if (pageParameters.get("valid") != null) {
+        if (!pageParameters.get("valid").isNull() && !pageParameters.get("valid").isEmpty()) {
             int result = pageParameters.get("valid").toInt();
 
             if (result == TokenStatus.INVALID.statusCode()) {
