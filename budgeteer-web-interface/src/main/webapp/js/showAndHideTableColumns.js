@@ -1,12 +1,7 @@
 var shown = false;
 $(document).ready(function(){
-    var table;
-    if($.fn.dataTable.isDataTable( '.table' )) {
-        table = $(".table").DataTable();
-    }
-    else {
-        table = $(".table").DataTable();
-    }
+    var table= $(".table").DataTable();
+
     var column = table.column('.to-toggle');
     column.visible(false);
 

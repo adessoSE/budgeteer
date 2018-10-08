@@ -56,8 +56,4 @@ public class BudgeteerReferences {
     public static ResourceReference getChartjsReference() {
         return new UrlResourceReference(Url.parse("js/chart.js/chartjs.2.7.2.min.js")).setContextRelative(true);
     }
-
-    public static ResourceReference getManualTableSortingReference() {
-        return new UrlResourceReference(Url.parse("js/manualTableSorting.js")).setContextRelative(true);
-    }
 }

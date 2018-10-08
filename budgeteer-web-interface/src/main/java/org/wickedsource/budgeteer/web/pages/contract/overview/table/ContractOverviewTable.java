@@ -1,8 +1,14 @@
 package org.wickedsource.budgeteer.web.pages.contract.overview.table;
 
+import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.EnumLabel;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.HiddenField;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -11,13 +17,14 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
+import org.apache.wicket.request.IRequestParameters;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.string.StringValue;
+import org.aspectj.lang.reflect.InterTypeMethodDeclaration;
 import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.persistence.contract.ContractEntity;
-import org.wickedsource.budgeteer.service.contract.ContractBaseData;
-import org.wickedsource.budgeteer.service.contract.ContractService;
-import org.wickedsource.budgeteer.service.contract.ContractTotalData;
-import org.wickedsource.budgeteer.service.contract.DynamicAttributeField;
+import org.wickedsource.budgeteer.service.contract.*;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.components.dataTable.DataTableBehavior;
 import org.wickedsource.budgeteer.web.components.datelabel.DateLabel;
@@ -29,6 +36,8 @@ import org.wickedsource.budgeteer.web.pages.contract.details.ContractDetailsPage
 import org.wickedsource.budgeteer.web.pages.contract.edit.EditContractPage;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import static org.wicketstuff.lazymodel.LazyModel.from;
 import static org.wicketstuff.lazymodel.LazyModel.model;
@@ -42,6 +51,40 @@ public class ContractOverviewTable extends Panel {
         super(id);
         ContractOverviewTableModel data = contractService.getContractOverviewByProject(BudgeteerSession.get().getProjectId());
         WebMarkupContainer table = new WebMarkupContainer("table");
+        table.setOutputMarkupId(true);
+
+        // AJAX handler for post requests from JavaScript
+        final AbstractDefaultAjaxBehavior behave = new AbstractDefaultAjaxBehavior() {
+            @Override
+            protected void respond(AjaxRequestTarget target) {
+                IRequestParameters params = RequestCycle.get().getRequest().getQueryParameters();
+                // Update sorting indices
+                Set<String> parameterNames = params.getParameterNames();
+                StringValue value = params.getParameterValue(parameterNames.toArray()[1].toString());
+                String[] parts = value.toString().split(",");
+
+                List<ContractBaseData> contracts = data.getContracts();
+
+                for (int i = 0; i < parts.length; i++) {
+                    long id = Long.parseLong((parts[i]));
+                    Optional<ContractBaseData> item = contracts.stream().filter(a -> a.getContractId() == id).findFirst();
+                    if (item.isPresent()) {
+                        ContractBaseData contractBaseData = item.get();
+                        contractBaseData.setSortingIndex(i);
+                        contractService.save(contractBaseData);
+                    }
+                }
+            }
+
+            @Override
+            public void renderHead(Component component, IHeaderResponse response) {
+                super.renderHead(component, response);
+                String componentMarkupId = component.getMarkupId();
+                String callbackUrl = getCallbackUrl().toString();
+                response.render(JavaScriptHeaderItem.forScript("var componentMarkupId='" + componentMarkupId + "'; var callbackUrl='" + callbackUrl + "';", "values"));
+            }
+        };
+        add(behave);
 
         createNetGrossLabels(table);
 
@@ -61,13 +104,16 @@ public class ContractOverviewTable extends Panel {
                 if (BudgeteerSession.get().isTaxEnabled()) {
                     taxCoefficient = 1.0 + item.getModelObject().getTaxRate() / 100.0;
                 }
-                BookmarkablePageLink<EditContractPage> link = new BookmarkablePageLink<EditContractPage>("editContract",
+
+                item.add(new HiddenField("contractID", Model.of(contractId)));
+
+                BookmarkablePageLink<EditContractPage> link = new BookmarkablePageLink<>("editContract",
                         ContractDetailsPage.class, EditContractPage.createParameters(contractId));
                 link.add(new Label("contractName", model(from(item.getModelObject()).getContractName())));
                 item.add(link);
                 item.add(new Label("internalNumber", model(from(item.getModelObject()).getInternalNumber())));
                 item.add(new DateLabel("startDate", model(from(item.getModelObject()).getStartDate())));
-                item.add(new EnumLabel<ContractEntity.ContractType>("type", model(from(item.getModelObject()).getType())));
+                item.add(new EnumLabel<>("type", model(from(item.getModelObject()).getType())));
                 item.add(new ListView<DynamicAttributeField>("contractRow", model(from(item.getModelObject()).getContractAttributes())) {
                     @Override
                     protected void populateItem(ListItem<DynamicAttributeField> item) {

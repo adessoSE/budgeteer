@@ -6,7 +6,7 @@
         <tr>
             <th></th>
             <th>
-                <wicket:message key="overview.table.contract.name">Contract name</wicket:message>
+                <wicket:message key="overview.table.contract.name" style="width:90px;">Contract name</wicket:message>
             </th>
             <th>
                 <wicket:message key="overview.table.contract.internalNumber">Internal-number</wicket:message>
@@ -31,11 +31,20 @@
         </tr>
         </thead>
         <tbody>
-        <tr wicket:id="contractRows">
-            <td>
-                <span class="btn btn-default btn-sm dragBtn" ondragstart="dragStart(event)" onclick="down(event)" draggable="true">
-                        <i class="glyphicons glyphicons-hand-up"></i>
-                    </span>
+        <tr wicket:id="contractRows" ondrop="drop(event)" ondragover="allowDrop(event)">
+            <td style="width:90px;">
+                <span class="btn btn-default btn-sm dragBtn" ondragstart="dragStart(event)" draggable="true">
+                    <i class="fa fa-ellipsis-v"></i>
+                </span>
+                <span class="btn btn-default btn-sm" ondragstart="dragStart(event)" onclick="up(event)"
+                      draggable="true">
+                    <i class="fa fa-sort-up"></i>
+                </span>
+                <span class="btn btn-default btn-sm" ondragstart="dragStart(event)" onclick="down(event)"
+                      draggable="true">
+                    <i class="fa fa-sort-down"></i>
+                </span>
+                <input type="hidden" wicket:id="contractID">
             </td>
             <td><a wicket:id="editContract"><span wicket:id="contractName"></span></a></td>
             <td><span wicket:id="internalNumber"></span></td>
