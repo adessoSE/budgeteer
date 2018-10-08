@@ -4,7 +4,6 @@ package org.wickedsource.budgeteer.persistence.record;
 import lombok.Getter;
 import lombok.Setter;
 import org.joda.money.Money;
-import org.wickedsource.budgeteer.MoneyUtil;
 
 import java.math.BigDecimal;
 

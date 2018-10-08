@@ -1,6 +1,5 @@
 package org.wickedsource.budgeteer.service;
 
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -49,7 +48,7 @@ public class DateUtil {
      * @param dateRange
      * @return true if the date d is in the given dateRange
      */
-    private static boolean isDateInDateRange(Date d, DateRange dateRange) {
+    public static boolean isDateInDateRange(Date d, DateRange dateRange) {
         return d.compareTo(dateRange.getStartDate()) >= 0 && d.compareTo(dateRange.getEndDate()) <= 0;
     }
 

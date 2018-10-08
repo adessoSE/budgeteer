@@ -47,20 +47,23 @@ public class PersonDetailsPage extends BasePage {
             @Override
             public void onSubmit() {
 
-                setResponsePage(new DeleteDialog(new Callable<Void>() {
+                setResponsePage(new DeleteDialog() {
                     @Override
-                    public Void call() {
+                    protected void onYes() {
                         personService.deletePerson(getParameterId());
                         setResponsePage(PeopleOverviewPage.class);
-                        return null;
                     }
-                }, new Callable<Void>() {
+
                     @Override
-                    public Void call(){
+                    protected void onNo() {
                         setResponsePage(PersonDetailsPage.class, getPageParameters());
-                        return  null;
                     }
-                }));
+
+                    @Override
+                    protected String confirmationText() {
+                        return PersonDetailsPage.this.getString("confirmation.delete");
+                    }
+                });
             }
         };
         deleteForm.add(new SubmitLink("deletePersonLink"));

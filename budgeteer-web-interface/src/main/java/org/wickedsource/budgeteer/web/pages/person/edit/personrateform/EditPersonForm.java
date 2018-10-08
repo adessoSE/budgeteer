@@ -117,8 +117,13 @@ public class EditPersonForm extends Form<PersonWithRates> {
                 if (!nameTextField.getInput().isEmpty() && !importKeyTextField.getInput().isEmpty()) {
                     EditPersonForm.this.getModelObject().setName(nameTextField.getInput());
                     EditPersonForm.this.getModelObject().setImportKey(importKeyTextField.getInput());
-                    peopleService.savePersonWithRates(EditPersonForm.this.getModelObject());
+                     peopleService.savePersonWithRates(EditPersonForm.this.getModelObject());
+                    List<String> warnings = peopleService.getOverlapWithManuallyEditedRecords(EditPersonForm.this.getModelObject(),
+                            BudgeteerSession.get().getProjectId());
                     this.success(getString("form.success"));
+                    for(String e : warnings){
+                        this.info(e);
+                    }
                 }
             }
         };
@@ -156,7 +161,7 @@ public class EditPersonForm extends Form<PersonWithRates> {
             @Override
             protected void populateItem(final ListItem<PersonRate> item) {
                 item.setOutputMarkupId(true);
-                item.add(new PersonInfoPanel(infoOrEditPanel, item.getModelObject(), EditPersonForm.this.getModelObject().getRates()) {
+                item.add(new PersonInfoPanel(infoOrEditPanel, EditPersonForm.this.getModelObject() ,item.getModelObject(), EditPersonForm.this.getModelObject().getRates()) {
 
                     @Override
                     protected ListItem<PersonRate> getEditPanel() {

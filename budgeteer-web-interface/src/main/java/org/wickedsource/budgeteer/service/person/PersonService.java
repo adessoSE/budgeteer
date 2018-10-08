@@ -1,5 +1,9 @@
 package org.wickedsource.budgeteer.service.person;
 
+import org.joda.money.BigMoney;
+import org.joda.money.BigMoneyProvider;
+import org.joda.money.CurrencyUnit;
+import org.joda.money.Money;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -8,13 +12,17 @@ import org.wickedsource.budgeteer.persistence.person.DailyRateEntity;
 import org.wickedsource.budgeteer.persistence.person.PersonEntity;
 import org.wickedsource.budgeteer.persistence.person.PersonRepository;
 import org.wickedsource.budgeteer.persistence.record.MissingDailyRateForBudgetBean;
+import org.wickedsource.budgeteer.persistence.record.WorkRecordEntity;
 import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
 import org.wickedsource.budgeteer.service.DateRange;
+import org.wickedsource.budgeteer.service.DateUtil;
 import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
+import org.wickedsource.budgeteer.service.record.WorkRecord;
+import org.wickedsource.budgeteer.web.BudgeteerSession;
+import org.wickedsource.budgeteer.web.pages.person.edit.personrateform.EditPersonForm;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
-
 import java.util.List;
 
 
@@ -100,8 +108,10 @@ public class PersonService {
         personEntity.setName(person.getName());
         personEntity.setImportKey(person.getImportKey());
 
-        List<DailyRateEntity> dailyRates = new ArrayList<DailyRateEntity>();
+        List<DailyRateEntity> dailyRates = new ArrayList<>();
+
         for (PersonRate rate : person.getRates()) {
+
             DailyRateEntity rateEntity = new DailyRateEntity();
             rateEntity.setRate(rate.getRate());
             rateEntity.setBudget(budgetRepository.findOne(rate.getBudget().getId()));
@@ -109,12 +119,38 @@ public class PersonService {
             rateEntity.setDateStart(rate.getDateRange().getStartDate());
             rateEntity.setDateEnd(rate.getDateRange().getEndDate());
             dailyRates.add(rateEntity);
-            workRecordRepository.updateDailyRates(rate.getBudget().getId(), person.getPersonId(), rate.getDateRange().getStartDate(), rate.getDateRange().getEndDate(), rate.getRate());
-        }
+            workRecordRepository.updateDailyRates(rate.getBudget().getId(), person.getPersonId(),
+                    rate.getDateRange().getStartDate(), rate.getDateRange().getEndDate(), rate.getRate());
 
+
+        }
         personEntity.getDailyRates().clear();
         personEntity.getDailyRates().addAll(dailyRates);
         personRepository.save(personEntity);
+    }
+
+    public List<String> getOverlapWithManuallyEditedRecords(PersonWithRates person, long projectId){
+        List<String> warnings = new ArrayList<>();
+        //Check with manually edited entries and warn the user
+        for(PersonRate rate : person.getRates()) {
+            for (WorkRecordEntity e : workRecordRepository.findManuallyEditedEntries(projectId,
+                    rate.getDateRange().getStartDate(), rate.getDateRange().getEndDate())) {
+
+                //Warn about the editing of a rate only if a work record in this range has been edited manually and the amount is different
+                if (DateUtil.isDateInDateRange(e.getDate(), rate.getDateRange())
+                        && e.getBudget().getName().equals(rate.getBudget().getName())
+                        && e.getPerson().getName().equals(person.getName())
+                        && !e.getDailyRate().isEqual(() -> rate.getRate().toBigMoney())) {
+
+                    warnings.add("A work record in the range "
+                            + rate.getDateRange().toString()
+                            + " (Exact Date and Amount: " + e.getDate() + ", " + e.getDailyRate().toString() +
+                            ") for budget \"" + rate.getBudget().getName() +
+                            "\" has already been edited manually and will not be overwritten.");
+                }
+            }
+        }
+        return warnings;
     }
 
     /**
@@ -142,4 +178,8 @@ public class PersonService {
         return workRecordRepository.getMissingDailyRatesForPerson(personId);
     }
 
+    public void removeDailyRateFromPerson(PersonWithRates personWithRates, PersonRate rate) {
+        workRecordRepository.updateDailyRates(rate.getBudget().getId(), personWithRates.getPersonId(),
+                rate.getDateRange().getStartDate(), rate.getDateRange().getEndDate(), Money.zero(CurrencyUnit.EUR));
+    }
 }

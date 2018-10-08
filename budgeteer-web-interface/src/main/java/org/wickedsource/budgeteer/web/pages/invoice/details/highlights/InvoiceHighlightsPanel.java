@@ -17,7 +17,6 @@ import org.wickedsource.budgeteer.service.invoice.InvoiceBaseData;
 import org.wickedsource.budgeteer.web.PropertyLoader;
 import org.wickedsource.budgeteer.web.pages.base.basepage.BasePage;
 
-import java.awt.*;
 import java.io.IOException;
 import java.io.OutputStream;
 

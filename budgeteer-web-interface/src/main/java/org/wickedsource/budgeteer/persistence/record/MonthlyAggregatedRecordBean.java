@@ -6,7 +6,6 @@ import org.joda.money.Money;
 import org.wickedsource.budgeteer.MoneyUtil;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.math.RoundingMode;
 
 @Data
