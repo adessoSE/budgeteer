@@ -5,6 +5,7 @@ $(document).ready(function(){
     table = $(".table").DataTable();
 });
 
+// Get all row indices of the table
 function getAllIndices(){
     var indices = [];
     table.rows().eq(0).each( function ( index ) {
@@ -13,23 +14,19 @@ function getAllIndices(){
     return indices;
 }
 
+// Get the row index of the element which triggered the event
 function getRowIndex(event){
     var source = event.target || event.srcElement;
     var thisRow = $(source).closest('tr');
-    var thisIndex = table.row(thisRow).index();
     return table.row(thisRow).index();
 }
 
-function getCurrentIndex(event){
-    var source = event.target || event.srcElement;
-    var thisRow = $(source).closest('tr');
-    return table.row(thisRow).index();
-}
-
+// Event handler for the down button: Swap row with next row
 function down(event){
     var page = table.page();
+    // Order by the first column, else row swapping doesn't work
     table.order([0, 'desc']);
-    var thisIndex = getCurrentIndex(event);
+    var thisIndex = getRowIndex(event);
     var allIndices = getAllIndices();
     var arrayIndex = allIndices.indexOf(thisIndex);
     var nextIndex = allIndices[arrayIndex+1];
@@ -37,10 +34,12 @@ function down(event){
     table.page(page);
 }
 
+// Event handler for the up button: Swap row with previous row
 function up(event){
     var page = table.page();
+    // Order by the first column, else row swapping doesn't work
     table.order([0, 'desc']);
-    var thisIndex = getCurrentIndex(event);
+    var thisIndex = getRowIndex(event);
     var allIndices = getAllIndices();
     var arrayIndex = allIndices.indexOf(thisIndex);
     var previousIndex = allIndices[arrayIndex-1];
@@ -48,6 +47,7 @@ function up(event){
     table.page(page);
 }
 
+// Swap the rows of the two indices
 function swapRows(firstIndex, secondIndex) {
     var firstRowData = table.row(firstIndex).data();
     var secondRowData = table.row(secondIndex).data();
@@ -58,15 +58,17 @@ function swapRows(firstIndex, secondIndex) {
     }
 }
 
+// Event handler for dragging: save the dragged row
 function dragStart(event){
     var source = event.target || event.srcElement;
     draggedRow = $(source).parents("tr");
 }
 
+// Event handler for dropping: Swap rows
 function drop(event){
     event.stopPropagation();
     event.preventDefault();
-    var currentIndex = getCurrentIndex(event);
+    var currentIndex = getRowIndex(event);
     var oldIndex = table.row(draggedRow).index();
     swapRows(currentIndex, oldIndex);
 }
@@ -75,7 +77,7 @@ function allowDrop(ev) {
     ev.preventDefault();
 }
 
-
+// Get the sorting and send it via AJAX
 function saveSorting(){
     var rows = table.rows();
     var contractIDs = [];
