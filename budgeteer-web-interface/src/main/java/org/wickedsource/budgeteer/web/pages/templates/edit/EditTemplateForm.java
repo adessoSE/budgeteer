@@ -32,7 +32,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 import static org.wicketstuff.lazymodel.LazyModel.from;
 import static org.wicketstuff.lazymodel.LazyModel.model;
