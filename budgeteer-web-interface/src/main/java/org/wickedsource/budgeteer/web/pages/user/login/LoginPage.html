@@ -5,12 +5,15 @@
         </div>
         <form wicket:id="loginForm" method="post">
             <div class="body bg-gray">
-                <div wicket:id="feedback"></div>
-                <div class="form-group">
-                    <input wicket:id="username" maxlength="255" type="text" id="username" placeholder="Username" class="form-control" autofocus/>
+                <div wicket:id="feedback">
                 </div>
                 <div class="form-group">
-                    <input wicket:id="password" maxlength="512" type="password" id="password" placeholder="Password" class="form-control"/>
+                    <input wicket:id="username"  maxlength="255" type="text" id="username" placeholder="Username / Mail"
+                           class="form-control" autofocus/>
+                </div>
+                <div class="form-group">
+                    <input wicket:id="password" maxlength="512" type="password" id="password" placeholder="Password"
+                           class="form-control"/>
                 </div>
             </div>
             <div class="footer">
@@ -19,6 +22,9 @@
                 </div>
                 <p class="margin text-center">
                     <a wicket:id="registerLink" class="text-center">Create an account</a>
+                </p>
+                <p class="margin text-center">
+                    <a wicket:id="forgotPasswordLink" class="text-center">Forgot password</a>
                 </p>
             </div>
         </form>
