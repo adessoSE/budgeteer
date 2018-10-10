@@ -11,24 +11,24 @@
             <div class="body bg-gray">
                 <div wicket:id="feedback"></div>
                 <div class="form-group">
-                    <input wicket:id="username" type="text" id="username" placeholder="Username" class="form-control"
+                    <input wicket:id="username" maxlength="255" type="text" id="username" placeholder="Username" class="form-control"
                            autofocus/>
                 </div>
                 <div class="form-group">
-                    <input wicket:id="mail" type="email" id="mail" placeholder="Mail"
+                    <input wicket:id="mail" maxlength="255" type="email" id="mail" placeholder="Mail"
                            class="form-control"/>
                 </div>
                 <div class="form-group">
-                    <input wicket:id="currentPassword" type="password" id="currentPassword"
+                    <input wicket:id="currentPassword" maxlength="512" type="password" id="currentPassword"
                            placeholder="Current password"
                            class="form-control"/>
                 </div>
                 <div class="form-group">
-                    <input wicket:id="newPassword" type="password" id="newPassword" placeholder="New password"
+                    <input wicket:id="newPassword" maxlength="512" type="password" id="newPassword" placeholder="New password"
                            class="form-control"/>
                 </div>
                 <div class="form-group">
-                    <input wicket:id="newPasswordConfirmation" type="password" id="newPasswordConfirmation"
+                    <input wicket:id="newPasswordConfirmation" maxlength="512" type="password" id="newPasswordConfirmation"
                            placeholder="Retype new password" class="form-control"/>
                 </div>
             </div>

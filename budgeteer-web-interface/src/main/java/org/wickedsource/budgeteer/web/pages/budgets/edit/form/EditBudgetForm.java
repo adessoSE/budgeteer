@@ -77,15 +77,15 @@ public class EditBudgetForm extends Form<EditBudgetData> {
             }
         });
         add(new CustomFeedbackPanel("feedback"));
-        add(new RequiredTextField<String>("name", model(from(getModel()).getTitle())));
-        add(new TextField<String>("description", model(from(getModel()).getDescription())));
-        add(new RequiredTextField<String>("importKey", model(from(getModel()).getImportKey())));
+        add(new RequiredTextField<>("name", model(from(getModel()).getTitle())));
+        add(new TextField<>("description", model(from(getModel()).getDescription())));
+        add(new RequiredTextField<>("importKey", model(from(getModel()).getImportKey())));
         MoneyTextField totalField = new MoneyTextField("total", model(from(getModel()).getTotal()));
         totalField.setRequired(true);
         add(totalField);
         MoneyTextField limitField = new MoneyTextField("limit", model(from(getModel()).getLimit()));
         add(limitField);
-        DropDownChoice<ContractBaseData> contractDropDown = new DropDownChoice<ContractBaseData>("contract", model(from(getModel()).getContract()),
+        DropDownChoice<ContractBaseData> contractDropDown = new DropDownChoice<>("contract", model(from(getModel()).getContract()),
                 contractService.getContractsByProject(BudgeteerSession.get().getProjectId()),
                 new AbstractChoiceRenderer<ContractBaseData>() {
                     @Override

@@ -1,8 +1,8 @@
 package org.wickedsource.budgeteer.service.security;
 
 import org.springframework.security.authentication.AbstractAuthenticationToken;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.wickedsource.budgeteer.service.user.User;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 

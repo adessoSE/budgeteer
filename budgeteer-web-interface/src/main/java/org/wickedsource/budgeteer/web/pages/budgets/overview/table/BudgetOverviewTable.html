@@ -18,6 +18,7 @@
                 <span wicket:id="unplannedLabel">Unplanned</span>
             </th>
             <th>Progress</th>
+            <th width="50px"></th>
             <th></th>
         </tr>
         </thead>
@@ -33,7 +34,13 @@
             <td>
                 <div wicket:id="progressBar"></div>
             </td>
-            <td><button class="btn btn-default btn-sm fa fa-edit" wicket:id="editPage"> </button></td>
+            <td width="50px">
+                <span wicket:id="deleteBudgetTooltip">
+                    <button class="btn btn-default btn-sm fa fa-trash" wicket:id="deleteBudget">
+                    </button>
+                </span>
+            </td>
+            <td><button title="Edit this budget" class="btn btn-default btn-sm fa fa-edit" wicket:id="editPage"> </button></td>
         </tr>
         <tfoot>
             <tr>
@@ -47,6 +54,7 @@
                 <td>
                     <div wicket:id="totalProgressBar"></div>
                 </td>
+                <td width="50px"> </td>
                 <td> </td>
             </tr>
         </tfoot>

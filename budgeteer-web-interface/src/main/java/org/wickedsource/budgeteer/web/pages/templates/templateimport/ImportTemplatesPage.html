@@ -25,7 +25,7 @@
                         <div class="input-group-btn">
                             <button wicket:id="setAsDefault" style="top: 0"></button>
                         </div>
-                        <input wicket:id="name" type="text" class="form-control" placeholder="">
+                        <input wicket:id="name" maxlength="128" type="text" class="form-control" placeholder="">
                     </div>
                     <p class="help-block"><wicket:message key="page.template.name.hint">The name of the template.</wicket:message></p>
                 </div>
@@ -35,7 +35,7 @@
                     <div class="input-group">
                         <span class="bg-olive input-group-addon"><i class="bg-olive glyphicon glyphicon-pencil"></i>
                         </span>
-                        <input wicket:id="description" type="text" class="form-control" placeholder="">
+                        <input wicket:id="description" maxlength="512" type="text" class="form-control" placeholder="">
                     </div>
                     <p class="help-block"><wicket:message key="page.template.description.hint">A description of the purpose of the template.</wicket:message></p>
                 </div>

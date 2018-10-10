@@ -114,6 +114,8 @@ class BudgetServiceTest extends ServiceTestTemplate {
         Assertions.assertEquals(budget.getId(), data.getId());
         Assertions.assertEquals(budget.getNote(), data.getNote());
         Assertions.assertEquals(budget.getLimit(), data.getLimit());
+        Assertions.assertEquals(budget.getLimit(), data.getLimit());
+        Assertions.assertEquals(budget.getNote(), data.getNote());
     }
 
     @Test
@@ -186,12 +188,10 @@ class BudgetServiceTest extends ServiceTestTemplate {
         given(budgetRepository.save(Mockito.any(BudgetEntity.class)))
                 .willThrow(new DataIntegrityViolationException("constraint violation"));
         when(budgetRepository.findOne(1L)).thenReturn(createBudgetEntity());
-        try {
-            budgetService.saveBudget(createBudgetEditEntity());
-            Assertions.fail("No Exception!");
-        } catch (DataIntegrityViolationException e) {
-            // yay
-        }
+
+        Assertions.assertThrows(DataIntegrityViolationException.class,
+                () -> budgetService.saveBudget(createBudgetEditEntity()),
+                "No Exception!");
     }
 
     private BudgetEntity createBudgetEntity() {

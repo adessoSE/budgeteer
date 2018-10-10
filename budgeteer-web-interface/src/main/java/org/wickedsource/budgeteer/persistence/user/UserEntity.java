@@ -22,7 +22,7 @@ public class UserEntity {
     @GeneratedValue
     private long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 255)
     private String name;
 
     @Column(nullable = false, length = 512)
@@ -36,7 +36,7 @@ public class UserEntity {
 
     @LazyCollection(LazyCollectionOption.FALSE)
     @ManyToMany(mappedBy = "authorizedUsers")
-    private List<ProjectEntity> authorizedProjects = new ArrayList<ProjectEntity>();
+    private List<ProjectEntity> authorizedProjects = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     private ProjectEntity defaultProject;

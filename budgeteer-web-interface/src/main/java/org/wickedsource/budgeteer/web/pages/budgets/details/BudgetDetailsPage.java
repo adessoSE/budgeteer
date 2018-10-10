@@ -35,8 +35,6 @@ import org.wickedsource.budgeteer.web.pages.budgets.weekreport.single.SingleBudg
 import org.wickedsource.budgeteer.web.pages.contract.details.ContractDetailsPage;
 import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 
-import java.util.concurrent.Callable;
-
 @Mount("budgets/details/${id}")
 public class BudgetDetailsPage extends BasePage {
 
@@ -65,23 +63,30 @@ public class BudgetDetailsPage extends BasePage {
         Form deleteForm = new ConfirmationForm("deleteForm", this, "confirmation.delete") {
             @Override
             public void onSubmit() {
-
-                setResponsePage(new DeleteDialog(new Callable<Void>() {
+                setResponsePage(new DeleteDialog() {
                     @Override
-                    public Void call() {
+                    protected void onYes() {
                         budgetService.deleteBudget(getParameterId());
                         setResponsePage(BudgetsOverviewPage.class);
-                        return null;
                     }
-                }, new Callable<Void>() {
+
                     @Override
-                    public Void call() {
-                        setResponsePage(new BudgetDetailsPage(getPageParameters()));
-                        return null;
+                    protected void onNo() {
+                        setResponsePage(new BudgetDetailsPage(BudgetDetailsPage.this.getPageParameters()));
                     }
-                }));
+
+                    @Override
+                    protected String confirmationText() {
+                        return BudgetDetailsPage.this.getString("confirmation.delete");
+                    }
+                });
             }
         };
+        if(this.model.getObject().getContractName() != null){
+            deleteForm.setEnabled(false);
+            deleteForm.add(new AttributeAppender("style", "cursor: not-allowed;", " "));
+            deleteForm.add(new AttributeModifier("title", getString("contract.still.exist")));
+        }
         deleteForm.add(new SubmitLink("deleteLink"));
         add(deleteForm);
     }

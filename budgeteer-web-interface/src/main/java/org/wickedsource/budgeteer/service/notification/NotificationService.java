@@ -12,8 +12,6 @@ import org.wickedsource.budgeteer.persistence.record.PlanRecordRepository;
 import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
 import org.wickedsource.budgeteer.persistence.user.UserEntity;
 import org.wickedsource.budgeteer.persistence.user.UserRepository;
-import org.wickedsource.budgeteer.web.BudgeteerSession;
-
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -68,11 +66,12 @@ public class NotificationService {
         List<LimitReachedBean> beansList = budgetRepository.getBudgetsForProject(projectId);
         for (LimitReachedBean bean : beansList) {
             Double spentDouble = workRecordRepository.getSpentBudget(bean.getBudgetId());
-            Money budgetSpent = MoneyUtil.createMoneyFromCents(Math.round(spentDouble));
-
-            LimitReachedBean limitReached = budgetRepository.getLimitReachedForBudget(bean.getBudgetId(), budgetSpent);
-            if (limitReached != null)
-                notifications.add(limitReachedNotificationMapper.map(limitReached));
+            if (spentDouble != null) {
+                Money budgetSpent = MoneyUtil.createMoneyFromCents(Math.round(spentDouble));
+                LimitReachedBean limitReached = budgetRepository.getLimitReachedForBudget(bean.getBudgetId(), budgetSpent);
+                if (limitReached != null)
+                    notifications.add(limitReachedNotificationMapper.map(limitReached));
+            }
         }
 
         UserEntity user = userRepository.findOne(userId);

@@ -12,15 +12,16 @@ import org.wickedsource.budgeteer.web.BudgeteerSession;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DataTableBehavior extends Behavior{
+public class DataTableBehavior extends Behavior {
     private HashMap<String, String> options;
 
 
     /**
      * Implements the JQuery-DataTable
+     *
      * @param options @see <a href="http://www.datatables.net/reference/option/">Options</a>
      */
-    public DataTableBehavior(HashMap<String, String> options){
+    public DataTableBehavior(HashMap<String, String> options) {
         this.options = options;
     }
 
@@ -67,13 +68,13 @@ public class DataTableBehavior extends Behavior{
     }
 
     public String getScript(Component component) {
-        StringBuilder script = new StringBuilder("$('#"+component.getMarkupId()+"').dataTable(");
-        if(options != null && ! options.isEmpty()){
+        StringBuilder script = new StringBuilder("$('#" + component.getMarkupId() + "').dataTable(");
+        if (options != null && !options.isEmpty()) {
             script.append("{");
             int index = 1;
-            for(Map.Entry<String, String> entry : options.entrySet()) {
+            for (Map.Entry<String, String> entry : options.entrySet()) {
                 script.append(entry.getKey() + ": " + entry.getValue());
-                if(index < options.size()){
+                if (index < options.size()) {
                     script.append(",");
                 }
                 index++;
@@ -86,15 +87,16 @@ public class DataTableBehavior extends Behavior{
 
     /**
      * Returns a HashMap with the mostly used options set. E.g. Pagination oder sortable columns are enabled.
+     *
      * @return a map containing the recommended options.
      */
-    public static HashMap<String, String> getRecommendedOptions(){
+    public static HashMap<String, String> getRecommendedOptions() {
         HashMap<String, String> result = new HashMap<>();
         result.put("paging", "true");
         result.put("lengthChange", "false");
         result.put("ordering", "true");
         result.put("info", "true");
-        if(BudgeteerSession.get().getLocale().getLanguage().equals("de")) {
+        if (BudgeteerSession.get().getLocale().getLanguage().equals("de")) {
             result.put("language", String.format("{decimal: \"%s\", thousands: \"%s\"}", ",", "."));
         }
         return result;

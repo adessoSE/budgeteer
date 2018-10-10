@@ -33,10 +33,8 @@ public class BudgetsWeeklyAggregatedRecordsModel extends LoadableDetachableModel
     protected List<AggregatedRecord> load() {
         if (budgetId != 0) {
             return service.getWeeklyAggregationForBudgetWithTax(budgetId);
-            //return service.getWeeklyAggregationForBudget(budgetId);
         } else if (filterModel != null && filterModel.getObject() != null) {
             return service.getWeeklyAggregationForBudgetsWithTaxes(filterModel.getObject());
-            //return service.getWeeklyAggregationForBudgets(filterModel.getObject());
         } else {
             throw new IllegalStateException("Neither budgetId nor filter specified. Specify at least one of these attributes in the constructor!");
         }

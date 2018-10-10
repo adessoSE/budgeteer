@@ -86,20 +86,23 @@ public class ProjectAdministrationPage extends BasePage {
                     @Override
                     public void onClick() {
 
-                        setResponsePage(new DeleteDialog(new Callable<Void>() {
+                        setResponsePage(new DeleteDialog() {
                             @Override
-                            public Void call() {
+                            protected void onYes() {
                                 userService.removeUserFromProject(BudgeteerSession.get().getProjectId(), item.getModelObject().getId());
                                 setResponsePage(ProjectAdministrationPage.class, getPageParameters());
-                                return null;
                             }
-                        }, new Callable<Void>() {
+
                             @Override
-                            public Void call() {
+                            protected void onNo() {
                                 setResponsePage(ProjectAdministrationPage.class, getPageParameters());
-                                return null;
                             }
-                        }));
+
+                            @Override
+                            protected String confirmationText() {
+                                return ProjectAdministrationPage.this.getString("delete.person.confirmation");
+                            }
+                        });
                     }
                 };
                 // a user may not delete herself/himself
@@ -133,9 +136,9 @@ public class ProjectAdministrationPage extends BasePage {
         return new Link(id) {
             @Override
             public void onClick() {
-                setResponsePage(new DeleteDialog(new Callable<Void>() {
+                setResponsePage(new DeleteDialog() {
                     @Override
-                    public Void call() {
+                    protected void onYes() {
                         projectService.deleteProject(BudgeteerSession.get().getProjectId());
                         BudgeteerSession.get().setProjectSelected(false);
 
@@ -144,15 +147,18 @@ public class ProjectAdministrationPage extends BasePage {
                         } else {
                             setResponsePage(new SelectProjectPage(LoginPage.class, new PageParameters()));
                         }
-                        return null;
                     }
-                }, new Callable<Void>() {
+
                     @Override
-                    public Void call() {
+                    protected void onNo() {
                         setResponsePage(ProjectAdministrationPage.class, getPageParameters());
-                        return null;
                     }
-                }));
+
+                    @Override
+                    protected String confirmationText() {
+                        return ProjectAdministrationPage.this.getString("delete.project.confirmation");
+                    }
+                });
             }
         };
     }

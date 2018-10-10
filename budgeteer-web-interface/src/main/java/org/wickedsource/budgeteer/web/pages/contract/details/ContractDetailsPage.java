@@ -3,6 +3,7 @@ package org.wickedsource.budgeteer.web.pages.contract.details;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.SubmitLink;
+import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -22,9 +23,6 @@ import org.wickedsource.budgeteer.web.pages.contract.edit.EditContractPage;
 import org.wickedsource.budgeteer.web.pages.contract.overview.ContractOverviewPage;
 import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 import org.wickedsource.budgeteer.web.pages.invoice.edit.EditInvoicePage;
-import org.wickedsource.budgeteer.web.pages.invoice.overview.InvoiceOverviewPage;
-
-import java.util.concurrent.Callable;
 
 @Mount("contracts/details/${id}")
 public class ContractDetailsPage extends BasePage {
@@ -58,55 +56,33 @@ public class ContractDetailsPage extends BasePage {
                 setResponsePage(page);
             }
         });
-        add(new Link("showInvoiceLink"){
-            @Override
-            public void onClick() {
-                WebPage page = new InvoiceOverviewPage(InvoiceOverviewPage.createParameters(getParameterId())){
-
-                    @Override
-                    protected BreadcrumbsModel getBreadcrumbsModel() {
-                        BreadcrumbsModel m = ContractDetailsPage.this.getBreadcrumbsModel();
-                        m.addBreadcrumb(InvoiceOverviewPage.class, getPageParameters());
-                        return m;
-                    }
-                };
-                setResponsePage(page);
-            }
-        });
+        add(new ExternalLink("showInvoiceLink", "invoices/" + contractModel.getObject().getContractId()));
         add(new Link("showContractLink"){
             @Override
             public void onClick() {
-                WebPage page = new BudgetForContractOverviewPage(BudgetForContractOverviewPage.createParameters(getParameterId())){
-
-                    @Override
-                    protected BreadcrumbsModel getBreadcrumbsModel() {
-                        BreadcrumbsModel m = ContractDetailsPage.this.getBreadcrumbsModel();
-                        m.addBreadcrumb(BudgetForContractOverviewPage.class, BudgetForContractOverviewPage.createParameters(getParameterId()));
-                        return m;
-                    }
-                };
-                setResponsePage(page);
+                setResponsePage(BudgetForContractOverviewPage.class, createParameters(getParameterId()));
             }
         });
         Form deleteForm = new ConfirmationForm("deleteForm", this, "confirmation.delete") {
             @Override
             public void onSubmit() {
-                setResponsePage(new DeleteDialog(new Callable<Void>() {
+                setResponsePage(new DeleteDialog() {
                     @Override
-                    public Void call() {
+                    protected void onYes() {
                         contractService.deleteContract(getParameterId());
                         setResponsePage(ContractOverviewPage.class);
-                        return null;
                     }
-                }, new Callable<Void>(){
+
                     @Override
-                    public Void call(){
-                        setResponsePage(ContractDetailsPage.class, getPageParameters());
-                        return null;
+                    protected void onNo() {
+                        setResponsePage(ContractDetailsPage.class, ContractDetailsPage.this.getPageParameters());
                     }
-                }));
 
-
+                    @Override
+                    protected String confirmationText() {
+                        return ContractDetailsPage.this.getString("confirmation.delete");
+                    }
+                });
             }
         };
         deleteForm.add(new SubmitLink("deleteLink"));

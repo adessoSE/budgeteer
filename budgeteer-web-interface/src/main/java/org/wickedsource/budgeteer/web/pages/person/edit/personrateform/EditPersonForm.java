@@ -76,7 +76,7 @@ public class EditPersonForm extends Form<PersonWithRates> {
         options.put("info", Boolean.toString(false));
         options.put("paging", Boolean.toString(false));
         options.put("searching", Boolean.toString(false));
-        options.put("order", "[]");
+        options.put("order", " [[ 1, \"asc\" ]]");
         table.add(new DataTableBehavior(options));
         nameTextField = new TextField<>("name", model(from(getModelObject()).getName()));
         importKeyTextField = new TextField<>("importKey", model(from(getModelObject()).getImportKey()));
@@ -94,8 +94,8 @@ public class EditPersonForm extends Form<PersonWithRates> {
             @Override
             protected List<PersonRate> getOverlappingRates(DateRange dateRange, BudgetBaseData budget) {
                 List<PersonRate> result = new LinkedList<>();
-                for(PersonRate p : EditPersonForm.this.getModelObject().getRates()){
-                    if(p.getBudget().equals(budget) && DateUtil.isDateRangeOverlapping(p.getDateRange(), dateRange)){
+                for (PersonRate p : EditPersonForm.this.getModelObject().getRates()) {
+                    if (p.getBudget().equals(budget) && DateUtil.isDateRangeOverlapping(p.getDateRange(), dateRange)) {
                         result.add(p);
                     }
                 }
@@ -105,20 +105,25 @@ public class EditPersonForm extends Form<PersonWithRates> {
 
         table.add(personEditPanel);
 
-        Button submitButton = new Button("submitButton"){
+        Button submitButton = new Button("submitButton") {
             @Override
             public void onSubmit() {
-                if(importKeyTextField.getInput() == null || importKeyTextField.getInput().isEmpty()){
+                if (importKeyTextField.getInput() == null || importKeyTextField.getInput().isEmpty()) {
                     this.error(getString("form.missing.import.key"));
                 }
-                if(nameTextField.getInput() == null || nameTextField.getInput().isEmpty()){
+                if (nameTextField.getInput() == null || nameTextField.getInput().isEmpty()) {
                     this.error(getString("form.missing.name"));
                 }
-                if(!nameTextField.getInput().isEmpty() && !importKeyTextField.getInput().isEmpty()) {
+                if (!nameTextField.getInput().isEmpty() && !importKeyTextField.getInput().isEmpty()) {
                     EditPersonForm.this.getModelObject().setName(nameTextField.getInput());
                     EditPersonForm.this.getModelObject().setImportKey(importKeyTextField.getInput());
-                    peopleService.savePersonWithRates(EditPersonForm.this.getModelObject());
+                     peopleService.savePersonWithRates(EditPersonForm.this.getModelObject());
+                    List<String> warnings = peopleService.getOverlapWithManuallyEditedRecords(EditPersonForm.this.getModelObject(),
+                            BudgeteerSession.get().getProjectId());
                     this.success(getString("form.success"));
+                    for(String e : warnings){
+                        this.info(e);
+                    }
                 }
             }
         };
@@ -130,16 +135,16 @@ public class EditPersonForm extends Form<PersonWithRates> {
 
     @Override
     public void onEvent(IEvent<?> event) {
-        if(event.getPayload() instanceof Notification){
-            MissingDailyRateForBudgetNotification notification = (MissingDailyRateForBudgetNotification)event.getPayload();
+        if (event.getPayload() instanceof Notification) {
+            MissingDailyRateForBudgetNotification notification = (MissingDailyRateForBudgetNotification) event.getPayload();
             DateRange dateRange = new DateRange(notification.getStartDate(), notification.getEndDate());
             String budgetName = notification.getBudgetName();
             BudgetBaseData budgetData;
-            for(OptionGroup<BudgetBaseData> e : budgetService.getPossibleBudgetDataForPersonAndProject(BudgeteerSession.get().getProjectId(), getModelObject().getPersonId())){
-                for(BudgetBaseData budget : e.getOptions()){
-                    if(budget.getName().equals(budgetName)){
+            for (OptionGroup<BudgetBaseData> e : budgetService.getPossibleBudgetDataForPersonAndProject(BudgeteerSession.get().getProjectId(), getModelObject().getPersonId())) {
+                for (BudgetBaseData budget : e.getOptions()) {
+                    if (budget.getName().equals(budgetName)) {
                         budgetData = budget;
-                        ((PersonEditPanel)this.get("ratesTable").get("newRatePanel")).setData(new PersonRateFormDto(this.getModelObject().getPersonId(),
+                        ((PersonEditPanel) this.get("ratesTable").get("newRatePanel")).setData(new PersonRateFormDto(this.getModelObject().getPersonId(),
                                 Collections.singletonList(budgetData), Money.zero(CurrencyUnit.EUR), dateRange));
                     }
                 }
@@ -156,23 +161,23 @@ public class EditPersonForm extends Form<PersonWithRates> {
             @Override
             protected void populateItem(final ListItem<PersonRate> item) {
                 item.setOutputMarkupId(true);
-                item.add(new PersonInfoPanel(infoOrEditPanel, item.getModelObject(), EditPersonForm.this.getModelObject().getRates()) {
+                item.add(new PersonInfoPanel(infoOrEditPanel, EditPersonForm.this.getModelObject() ,item.getModelObject(), EditPersonForm.this.getModelObject().getRates()) {
 
-                        @Override
-                        protected ListItem<PersonRate> getEditPanel() {
+                    @Override
+                    protected ListItem<PersonRate> getEditPanel() {
 
-                            PersonRateFormDto dto = new PersonRateFormDto(EditPersonForm.this.getModelObject().getPersonId(),
-                                    Collections.singletonList(item.getModelObject().getBudget()),
-                                    item.getModelObject().getRate(),
-                                    item.getModelObject().getDateRange());
-                            PersonEditPanel editPanel = createPanelToEditExistingPerson(infoOrEditPanel, dto, item.getModelObject());
-                            editPanel.setOutputMarkupId(true);
-                            item.remove(infoOrEditPanel);
-                            item.add(editPanel);
-                            return item;
-                        }
-                    }.setOutputMarkupId(true));
-                }
+                        PersonRateFormDto dto = new PersonRateFormDto(EditPersonForm.this.getModelObject().getPersonId(),
+                                Collections.singletonList(item.getModelObject().getBudget()),
+                                item.getModelObject().getRate(),
+                                item.getModelObject().getDateRange());
+                        PersonEditPanel editPanel = createPanelToEditExistingPerson(infoOrEditPanel, dto, item.getModelObject());
+                        editPanel.setOutputMarkupId(true);
+                        item.remove(infoOrEditPanel);
+                        item.add(editPanel);
+                        return item;
+                    }
+                }.setOutputMarkupId(true));
+            }
 
             @Override
             protected ListItem<PersonRate> newItem(int index, IModel<PersonRate> itemModel) {
@@ -182,7 +187,7 @@ public class EditPersonForm extends Form<PersonWithRates> {
         };
     }
 
-    private PersonEditPanel createPanelToEditExistingPerson(String id, PersonRateFormDto dto, PersonRate previousRate){
+    private PersonEditPanel createPanelToEditExistingPerson(String id, PersonRateFormDto dto, PersonRate previousRate) {
         return new PersonEditPanel(id, dto, true) {
 
             boolean newRateIsAdded = false;

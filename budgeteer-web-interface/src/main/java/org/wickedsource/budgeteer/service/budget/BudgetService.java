@@ -3,7 +3,6 @@ package org.wickedsource.budgeteer.service.budget;
 import org.joda.money.BigMoney;
 import org.joda.money.Money;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.method.P;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.wickedsource.budgeteer.MoneyUtil;
@@ -25,10 +24,7 @@ import org.wickedsource.budgeteer.web.components.listMultipleChoiceWithGroups.Op
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 
 @Service
@@ -88,7 +84,7 @@ public class BudgetService {
         if (filter.getSelectedTags().isEmpty()) {
             budgets = budgetRepository.findByProjectIdOrderByNameAsc(projectId);
         } else {
-            budgets = budgetRepository.findByAtLeastOneTag(projectId, filter.getSelectedTags());
+            budgets = new ArrayList<>(new TreeSet<>(budgetRepository.findByAtLeastOneTag(projectId, filter.getSelectedTags())));
         }
         return budgets;
     }
@@ -159,7 +155,7 @@ public class BudgetService {
 
     private Money toMoneyNullsafe(Double cents) {
         if (cents == null) {
-            return MoneyUtil.createMoneyFromCents(0l);
+            return MoneyUtil.createMoneyFromCents(0L);
         } else {
             return MoneyUtil.createMoneyFromCents(Math.round(cents));
         }
@@ -345,7 +341,7 @@ public class BudgetService {
 
     @PreAuthorize("canReadPerson(#personId)")
     private List<BudgetBaseData> loadBudgetBaseDataForPerson(long personId) {
-        List<BudgetEntity> budgets = budgetRepository.findByPersonId(personId);
+        List<BudgetEntity> budgets = new ArrayList<>(new TreeSet<>(budgetRepository.findByPersonId(personId)));
         return budgetBaseDataMapper.map(budgets);
     }
 
