@@ -20,19 +20,20 @@ import java.util.Properties;
 public class IntegrationTestConfiguration {
 
     @Bean
-    public DataSource dataSource() {
-        return new EmbeddedDatabaseBuilder().setType(EmbeddedDatabaseType.HSQL).build();
-    }
-
-    @Bean
     public static PropertySourcesPlaceholderConfigurer properties() throws Exception {
         final PropertySourcesPlaceholderConfigurer pspc = new PropertySourcesPlaceholderConfigurer();
         Properties properties = new Properties();
 
+        properties.setProperty("budgeteer.mail.activate", "false");
         properties.setProperty("adapter.keycloak.activated", "false");
 
         pspc.setProperties(properties);
         return pspc;
+    }
+
+    @Bean
+    public DataSource dataSource() {
+        return new EmbeddedDatabaseBuilder().setType(EmbeddedDatabaseType.HSQL).build();
     }
 
     @Bean

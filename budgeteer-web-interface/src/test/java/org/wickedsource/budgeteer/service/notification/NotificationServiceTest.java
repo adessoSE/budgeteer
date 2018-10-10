@@ -9,6 +9,7 @@ import org.wickedsource.budgeteer.persistence.record.MissingDailyRateBean;
 import org.wickedsource.budgeteer.persistence.record.MissingDailyRateForBudgetBean;
 import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
 import org.wickedsource.budgeteer.service.ServiceTestTemplate;
+import org.wickedsource.budgeteer.web.BudgeteerSession;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -35,8 +36,7 @@ class NotificationServiceTest extends ServiceTestTemplate {
         when(workRecordRepository.getMissingDailyRatesForProject(1L)).thenReturn(Arrays.asList(createMissingDailyRate()));
         when(workRecordRepository.countByProjectId(anyLong())).thenReturn(0L, 0L);
         when(budgetRepository.getMissingBudgetTotalsForProject(1L)).thenReturn(Arrays.asList(createMissingBudgetTotal()));
-
-        List<Notification> notifications = service.getNotifications(1L);
+        List<Notification> notifications = service.getNotifications(1L, 1L);
         Assertions.assertEquals(4, notifications.size());
     }
 
