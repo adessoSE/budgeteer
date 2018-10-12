@@ -10,6 +10,8 @@
         <appender-ref ref="STDOUT" />
     </root>
 
+    <logger name="org.hibernate.orm.deprecation" level="OFF"/>
+
     <!-- activate the following lines to enable HQL-logging -->
     <!--<logger name="org.hibernate.SQL" level="DEBUG"/>-->
     <!--<logger name="org.hibernate.type" level="TRACE"/>-->
