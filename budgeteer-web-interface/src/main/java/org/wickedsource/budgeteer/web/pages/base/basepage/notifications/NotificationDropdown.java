@@ -1,5 +1,6 @@
 package org.wickedsource.budgeteer.web.pages.base.basepage.notifications;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
@@ -56,6 +57,21 @@ public class NotificationDropdown extends Panel {
                 };
                 item.add(link);
 
+                Label iconLabel = new Label("iconLabel", "");
+
+                switch (notificationMessageFactory.getNotificationTypeForNotification(item.getModelObject()).toString()) {
+                    case "warning":
+                        iconLabel.add(new AttributeModifier("class", "fa fa-warning warning"));
+                        break;
+                    case "info":
+                        iconLabel.add(new AttributeModifier("class", "fa fa-info info"));
+                        break;
+                    default:
+                        iconLabel.add(new AttributeModifier("class", "fa fa-warning warning"));
+                        break;
+                }
+
+                link.add(iconLabel);
                 Label messageLabel = new Label("notificationMessage", notificationMessageFactory.getMessageForNotification(item.getModelObject()));
                 link.add(messageLabel);
             }

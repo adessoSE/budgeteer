@@ -1,4 +1,4 @@
-<wicket:extend>
+<wicket:extend xmlns:wicket="http://www.w3.org/1999/xhtml">
     <div class="row">
         <div class="col-md-12">
             <div class="box box-primary">
@@ -21,11 +21,27 @@
                     <i class="fa fa-cog"></i>
                     <h3 class="box-title">Options</h3>
                     <div class="box-tools pull-right">
-                        <button class="btn btn-default btn-sm" data-widget="collapse"><i class="fa fa-minus" /></button>
+                        <button class="btn btn-default btn-sm" data-widget="collapse"><i class="fa fa-minus"></i></button>
                     </div>
                 </div>
                 <div class="box-body">
                     <div class="row">
+
+                        <div class="col-lg-4 col-xs-6">
+                            <div class="small-box bg-aqua toggle-tax-info" style="cursor: pointer;">
+                                <div class="inner" >
+                                    <h3><a>Show Tax Information</a></h3>
+                                    <br/>
+                                    <br/>
+                                </div>
+                                <div class="icon">  <i class="fa fa-book"></i> </div>
+                                <a class="small-box-footer">
+                                    Show gross sum, tax amount and tax rate of the invoices
+                                    <i  class="fa fa-arrow-circle-right" />
+                                </a>
+                            </div>
+                        </div>
+
                         <div class="col-lg-4 col-xs-6">
                             <div class="small-box bg-green" wicket:id="createInvoiceLink" style="cursor: pointer;">
                                 <div class="inner" >
@@ -40,6 +56,8 @@
                                 </a>
                             </div>
                         </div>
+
+
                     </div>
 
                 </div>

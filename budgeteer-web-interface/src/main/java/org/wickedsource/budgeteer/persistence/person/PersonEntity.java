@@ -16,23 +16,23 @@ public class PersonEntity {
     @GeneratedValue
     private long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 255)
     private String name;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 255)
     private String importKey;
 
     @ManyToOne(optional = false)
     private ProjectEntity project;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "person", orphanRemoval = true, cascade = CascadeType.ALL)
-    private List<DailyRateEntity> dailyRates = new ArrayList<DailyRateEntity>();
+    private List<DailyRateEntity> dailyRates = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "person", orphanRemoval = true, cascade = CascadeType.ALL)
-    private List<WorkRecordEntity> workRecords = new ArrayList<WorkRecordEntity>();
+    private List<WorkRecordEntity> workRecords = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "person", orphanRemoval = true, cascade = CascadeType.ALL)
-    private List<PlanRecordEntity> planRecords= new ArrayList<PlanRecordEntity>();
+    private List<PlanRecordEntity> planRecords= new ArrayList<>();
 
     public long getId() {
         return id;

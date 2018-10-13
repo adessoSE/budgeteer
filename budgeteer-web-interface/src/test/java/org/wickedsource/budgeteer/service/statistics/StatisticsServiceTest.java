@@ -12,6 +12,7 @@ import org.wickedsource.budgeteer.service.DateUtil;
 import org.wickedsource.budgeteer.service.ServiceTestTemplate;
 import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
 
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -100,6 +101,21 @@ class StatisticsServiceTest extends ServiceTestTemplate {
         beans.add(new WeeklyAggregatedRecordBean(2015, 2, 15d, 200000));
         beans.add(new WeeklyAggregatedRecordBean(2015, 4, 15d, 400000));
         beans.add(new WeeklyAggregatedRecordBean(2015, 5, 15d, 500000));
+        return beans;
+    }
+
+    private List<WeeklyAggregatedRecordWithTaxBean> createLast5WeeksWithTax() {
+        List<WeeklyAggregatedRecordWithTaxBean> beans = new ArrayList<>();
+        beans.add(new WeeklyAggregatedRecordWithTaxBean(2015, 1, 1, 900, MoneyUtil.createMoneyFromCents(10000), BigDecimal.valueOf(10)));
+        beans.add(new WeeklyAggregatedRecordWithTaxBean(2015, 1, 2, 910, MoneyUtil.createMoneyFromCents(10000), BigDecimal.valueOf(10)));
+        beans.add(new WeeklyAggregatedRecordWithTaxBean(2015, 1, 4, 920, MoneyUtil.createMoneyFromCents(10000), BigDecimal.valueOf(10)));
+        beans.add(new WeeklyAggregatedRecordWithTaxBean(2015, 2, 4, 930, MoneyUtil.createMoneyFromCents(10000), BigDecimal.valueOf(10)));
+        beans.add(new WeeklyAggregatedRecordWithTaxBean(2015, 2, 5, 940, MoneyUtil.createMoneyFromCents(10000), BigDecimal.valueOf(10)));
+
+        beans.add(new WeeklyAggregatedRecordWithTaxBean(2015, 1, 1, 910, MoneyUtil.createMoneyFromCents(10000), BigDecimal.valueOf(20)));
+        beans.add(new WeeklyAggregatedRecordWithTaxBean(2015, 1, 2, 920, MoneyUtil.createMoneyFromCents(10000), BigDecimal.valueOf(20)));
+        beans.add(new WeeklyAggregatedRecordWithTaxBean(2015, 1, 4, 930, MoneyUtil.createMoneyFromCents(10000), BigDecimal.valueOf(20)));
+        beans.add(new WeeklyAggregatedRecordWithTaxBean(2015, 2, 5, 940, MoneyUtil.createMoneyFromCents(10000), BigDecimal.valueOf(20)));
         return beans;
     }
 
@@ -249,6 +265,70 @@ class StatisticsServiceTest extends ServiceTestTemplate {
     }
 
     @Test
+    void testGetWeekStatsForBudgetWithTax() throws Exception {
+        when(dateProvider.currentDate()).thenReturn(format.parse("29.01.2015"));
+        List<WeeklyAggregatedRecordWithTitleAndTaxBean> burnedStats = ListJoiner.joinWorkBeanHours(createLast5WeeksForPersonWithTax());
+        List<WeeklyAggregatedRecordWithTaxBean> planStats = ListJoiner.joinPlanBeanHours(createLast5WeeksWithTax());
+        MonthlyStats monthlyStats = createMonthlyStatsForPeople();
+        monthlyStats.sumPlanStats();
+        monthlyStats.calculateCentValuesByMonthlyFraction(planStats, burnedStats);
+        TargetAndActual targetAndActual = service.calculateWeeklyTargetAndActual(5, planStats, burnedStats);
+
+        List<Money> targetSeries_net = targetAndActual.getTargetSeries().getValues();
+        Assertions.assertEquals(5, targetSeries_net.size());
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(37500), targetSeries_net.get(0));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(38125), targetSeries_net.get(1));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0L), targetSeries_net.get(2));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(58125), targetSeries_net.get(3));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(38750), targetSeries_net.get(4));
+
+        List<Money> targetSeries_gross = targetAndActual.getTargetSeries().getValues_gross();
+
+        Assertions.assertEquals(5, targetSeries_net.size());
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(43125), targetSeries_gross.get(0));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(43875), targetSeries_gross.get(1));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0L), targetSeries_gross.get(2));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(65875), targetSeries_gross.get(3));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(44563), targetSeries_gross.get(4));
+
+        Assertions.assertEquals(2, targetAndActual.getActualSeries().size());
+
+        targetAndActual.getActualSeries().sort(moneySeriesComparator);
+
+        MoneySeries actualSeries1 = targetAndActual.getActualSeries().get(0);
+        Assertions.assertEquals("Person 1", actualSeries1.getName());
+        Assertions.assertEquals(5, actualSeries1.getValues().size());
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(18750), actualSeries1.getValues().get(0));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(20000), actualSeries1.getValues().get(1));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0L), actualSeries1.getValues().get(2));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(57500), actualSeries1.getValues().get(3));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(19375), actualSeries1.getValues().get(4));
+
+        Assertions.assertEquals(5, actualSeries1.getValues_gross().size());
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(20625), actualSeries1.getValues_gross().get(0));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(22000), actualSeries1.getValues_gross().get(1));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0L), actualSeries1.getValues_gross().get(2));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(67125), actualSeries1.getValues_gross().get(3));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(21313), actualSeries1.getValues_gross().get(4));
+
+        MoneySeries actualSeries2 = targetAndActual.getActualSeries().get(1);
+        Assertions.assertEquals("Person 2", actualSeries2.getName());
+        Assertions.assertEquals(5, actualSeries2.getValues().size());
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(38125), actualSeries2.getValues().get(0));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(19375), actualSeries2.getValues().get(1));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0L), actualSeries2.getValues().get(2));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(19375), actualSeries2.getValues().get(3));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0), actualSeries2.getValues().get(4));
+
+        Assertions.assertEquals(5, actualSeries2.getValues_gross().size());
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(43813), actualSeries2.getValues_gross().get(0));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(21313), actualSeries2.getValues_gross().get(1));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0L), actualSeries2.getValues_gross().get(2));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(21313), actualSeries2.getValues_gross().get(3));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0), actualSeries2.getValues_gross().get(4));
+    }
+
+    @Test
     void testGetWeekStatsForBudgets() throws Exception {
         when(dateProvider.currentDate()).thenReturn(format.parse("29.01.2015"));
         when(workRecordRepository.aggregateByWeekAndPersonForBudgets(anyLong(), anyList(), any(Date.class))).thenReturn(createLast5WeeksForBudget());
@@ -285,6 +365,108 @@ class StatisticsServiceTest extends ServiceTestTemplate {
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(500000L), actualSeries2.getValues().get(4));
     }
 
+    @Test
+    void testGetWeekStatsForBudgetsWithTax() throws Exception {
+        when(dateProvider.currentDate()).thenReturn(format.parse("29.01.2015"));
+        List<WeeklyAggregatedRecordWithTitleAndTaxBean> burnedStats = ListJoiner.joinWorkBeanHours(createLast5WeeksForBudgetWithTax());
+        List<WeeklyAggregatedRecordWithTaxBean> planStats = ListJoiner.joinPlanBeanHours(createLast5WeeksWithTax());
+        MonthlyStats monthlyStats = createMonthlyStatsForBudgets();
+        monthlyStats.sumPlanStats();
+        monthlyStats.calculateCentValuesByMonthlyFraction(planStats, burnedStats);
+        TargetAndActual targetAndActual = service.calculateWeeklyTargetAndActual(5, planStats, burnedStats);
+
+        List<Money> targetSeries_net = targetAndActual.getTargetSeries().getValues();
+        Assertions.assertEquals(5, targetSeries_net.size());
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(37500), targetSeries_net.get(0));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(38125), targetSeries_net.get(1));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0L), targetSeries_net.get(2));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(58125), targetSeries_net.get(3));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(38750), targetSeries_net.get(4));
+
+        List<Money> targetSeries_gross = targetAndActual.getTargetSeries().getValues_gross();
+
+        Assertions.assertEquals(5, targetSeries_net.size());
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(43125), targetSeries_gross.get(0));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(43875), targetSeries_gross.get(1));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0L), targetSeries_gross.get(2));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(65875), targetSeries_gross.get(3));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(44563), targetSeries_gross.get(4));
+
+        Assertions.assertEquals(2, targetAndActual.getActualSeries().size());
+
+        targetAndActual.getActualSeries().sort(moneySeriesComparator);
+
+        MoneySeries actualSeries1 = targetAndActual.getActualSeries().get(0);
+        Assertions.assertEquals("Budget 1", actualSeries1.getName());
+        Assertions.assertEquals(5, actualSeries1.getValues().size());
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(18750), actualSeries1.getValues().get(0));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(20000), actualSeries1.getValues().get(1));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0L), actualSeries1.getValues().get(2));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(57500), actualSeries1.getValues().get(3));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(19375), actualSeries1.getValues().get(4));
+
+        Assertions.assertEquals(5, actualSeries1.getValues_gross().size());
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(20625), actualSeries1.getValues_gross().get(0));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(22000), actualSeries1.getValues_gross().get(1));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0L), actualSeries1.getValues_gross().get(2));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(67125), actualSeries1.getValues_gross().get(3));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(21313), actualSeries1.getValues_gross().get(4));
+
+        MoneySeries actualSeries2 = targetAndActual.getActualSeries().get(1);
+        Assertions.assertEquals("Budget 2", actualSeries2.getName());
+        Assertions.assertEquals(5, actualSeries2.getValues().size());
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(38125), actualSeries2.getValues().get(0));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(19375), actualSeries2.getValues().get(1));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0L), actualSeries2.getValues().get(2));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(19375), actualSeries2.getValues().get(3));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0), actualSeries2.getValues().get(4));
+
+        Assertions.assertEquals(5, actualSeries2.getValues_gross().size());
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(43813), actualSeries2.getValues_gross().get(0));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(21313), actualSeries2.getValues_gross().get(1));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0L), actualSeries2.getValues_gross().get(2));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(21313), actualSeries2.getValues_gross().get(3));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0), actualSeries2.getValues_gross().get(4));
+    }
+
+    private MonthlyStats createMonthlyStatsForBudgets() {
+        List<MonthlyAggregatedRecordWithTaxBean> planStats = new ArrayList<>();
+        planStats.add(new MonthlyAggregatedRecordWithTaxBean(2015, 1, 2730, MoneyUtil.createMoneyFromCents(10000), BigDecimal.valueOf(10)));
+        planStats.add(new MonthlyAggregatedRecordWithTaxBean(2015, 1, 2760, MoneyUtil.createMoneyFromCents(10000), BigDecimal.valueOf(20)));
+        planStats.add(new MonthlyAggregatedRecordWithTaxBean(2015, 2, 1870, MoneyUtil.createMoneyFromCents(10000), BigDecimal.valueOf(10)));
+        planStats.add(new MonthlyAggregatedRecordWithTaxBean(2015, 2, 940, MoneyUtil.createMoneyFromCents(10000), BigDecimal.valueOf(20)));
+
+        List<MonthlyAggregatedRecordWithTitleAndTaxBean> workStats = new ArrayList<>();
+        workStats.add(new MonthlyAggregatedRecordWithTitleAndTaxBean(2015, 1, 2770, MoneyUtil.createMoneyFromCents(10000), "Budget 1", BigDecimal.valueOf(10)));
+        workStats.add(new MonthlyAggregatedRecordWithTitleAndTaxBean(2015, 1, 930, MoneyUtil.createMoneyFromCents(10000), "Budget 1", BigDecimal.valueOf(20)));
+        workStats.add(new MonthlyAggregatedRecordWithTitleAndTaxBean(2015, 1, 1850, MoneyUtil.createMoneyFromCents(10000), "Budget 2", BigDecimal.valueOf(10)));
+        workStats.add(new MonthlyAggregatedRecordWithTitleAndTaxBean(2015, 1, 910, MoneyUtil.createMoneyFromCents(10000), "Budget 2", BigDecimal.valueOf(10)));
+        workStats.add(new MonthlyAggregatedRecordWithTitleAndTaxBean(2015, 2, 920, MoneyUtil.createMoneyFromCents(10000), "Budget 1", BigDecimal.valueOf(10)));
+        workStats.add(new MonthlyAggregatedRecordWithTitleAndTaxBean(2015, 2, 940, MoneyUtil.createMoneyFromCents(10000), "Budget 1", BigDecimal.valueOf(20)));
+        workStats.add(new MonthlyAggregatedRecordWithTitleAndTaxBean(2015, 2, 940, MoneyUtil.createMoneyFromCents(10000), "Budget 2", BigDecimal.valueOf(10)));
+
+        return new MonthlyStats(planStats, workStats);
+    }
+
+    private MonthlyStats createMonthlyStatsForPeople() {
+        List<MonthlyAggregatedRecordWithTaxBean> planStats = new ArrayList<>();
+        planStats.add(new MonthlyAggregatedRecordWithTaxBean(2015, 1, 2730, MoneyUtil.createMoneyFromCents(10000), BigDecimal.valueOf(10)));
+        planStats.add(new MonthlyAggregatedRecordWithTaxBean(2015, 1, 2760, MoneyUtil.createMoneyFromCents(10000), BigDecimal.valueOf(20)));
+        planStats.add(new MonthlyAggregatedRecordWithTaxBean(2015, 2, 1870, MoneyUtil.createMoneyFromCents(10000), BigDecimal.valueOf(10)));
+        planStats.add(new MonthlyAggregatedRecordWithTaxBean(2015, 2, 940, MoneyUtil.createMoneyFromCents(10000), BigDecimal.valueOf(20)));
+
+        List<MonthlyAggregatedRecordWithTitleAndTaxBean> workStats = new ArrayList<>();
+        workStats.add(new MonthlyAggregatedRecordWithTitleAndTaxBean(2015, 1, 2770, MoneyUtil.createMoneyFromCents(10000), "Person 1", BigDecimal.valueOf(10)));
+        workStats.add(new MonthlyAggregatedRecordWithTitleAndTaxBean(2015, 1, 930, MoneyUtil.createMoneyFromCents(10000), "Person 1", BigDecimal.valueOf(20)));
+        workStats.add(new MonthlyAggregatedRecordWithTitleAndTaxBean(2015, 1, 1850, MoneyUtil.createMoneyFromCents(10000), "Person 2", BigDecimal.valueOf(10)));
+        workStats.add(new MonthlyAggregatedRecordWithTitleAndTaxBean(2015, 1, 910, MoneyUtil.createMoneyFromCents(10000), "Person 2", BigDecimal.valueOf(10)));
+        workStats.add(new MonthlyAggregatedRecordWithTitleAndTaxBean(2015, 2, 920, MoneyUtil.createMoneyFromCents(10000), "Person 1", BigDecimal.valueOf(10)));
+        workStats.add(new MonthlyAggregatedRecordWithTitleAndTaxBean(2015, 2, 940, MoneyUtil.createMoneyFromCents(10000), "Person 1", BigDecimal.valueOf(20)));
+        workStats.add(new MonthlyAggregatedRecordWithTitleAndTaxBean(2015, 2, 940, MoneyUtil.createMoneyFromCents(10000), "Person 2", BigDecimal.valueOf(10)));
+
+        return new MonthlyStats(planStats, workStats);
+    }
+
     private List<WeeklyAggregatedRecordWithTitleBean> createLast5WeeksForBudget() {
         List<WeeklyAggregatedRecordWithTitleBean> beans = new ArrayList<>();
         beans.add(new WeeklyAggregatedRecordWithTitleBean(2015, 1, 15d, 100000, "Budget 1"));
@@ -295,6 +477,22 @@ class StatisticsServiceTest extends ServiceTestTemplate {
         beans.add(new WeeklyAggregatedRecordWithTitleBean(2015, 1, 15d, 100000, "Budget 2"));
         beans.add(new WeeklyAggregatedRecordWithTitleBean(2015, 2, 15d, 200000, "Budget 2"));
         beans.add(new WeeklyAggregatedRecordWithTitleBean(2015, 5, 15d, 500000, "Budget 2"));
+        return beans;
+    }
+
+    private List<WeeklyAggregatedRecordWithTitleAndTaxBean> createLast5WeeksForBudgetWithTax() {
+        List<WeeklyAggregatedRecordWithTitleAndTaxBean> beans = new ArrayList<>();
+        beans.add(new WeeklyAggregatedRecordWithTitleAndTaxBean(2015, 1, 1, 900, MoneyUtil.createMoneyFromCents(10000), BigDecimal.valueOf(10), "Budget 1"));
+        beans.add(new WeeklyAggregatedRecordWithTitleAndTaxBean(2015, 1, 2, 960, MoneyUtil.createMoneyFromCents(10000), BigDecimal.valueOf(10), "Budget 1"));
+        beans.add(new WeeklyAggregatedRecordWithTitleAndTaxBean(2015, 1, 4, 910, MoneyUtil.createMoneyFromCents(10000), BigDecimal.valueOf(10), "Budget 1"));
+        beans.add(new WeeklyAggregatedRecordWithTitleAndTaxBean(2015, 2, 5, 920, MoneyUtil.createMoneyFromCents(10000), BigDecimal.valueOf(10), "Budget 1"));
+        beans.add(new WeeklyAggregatedRecordWithTitleAndTaxBean(2015, 1, 4, 930, MoneyUtil.createMoneyFromCents(10000), BigDecimal.valueOf(20), "Budget 1"));
+        beans.add(new WeeklyAggregatedRecordWithTitleAndTaxBean(2015, 2, 4, 940, MoneyUtil.createMoneyFromCents(10000), BigDecimal.valueOf(20), "Budget 1"));
+
+        beans.add(new WeeklyAggregatedRecordWithTitleAndTaxBean(2015, 1, 1, 910, MoneyUtil.createMoneyFromCents(10000), BigDecimal.valueOf(20), "Budget 2"));
+        beans.add(new WeeklyAggregatedRecordWithTitleAndTaxBean(2015, 1, 1, 920, MoneyUtil.createMoneyFromCents(10000), BigDecimal.valueOf(10), "Budget 2"));
+        beans.add(new WeeklyAggregatedRecordWithTitleAndTaxBean(2015, 1, 2, 930, MoneyUtil.createMoneyFromCents(10000), BigDecimal.valueOf(10), "Budget 2"));
+        beans.add(new WeeklyAggregatedRecordWithTitleAndTaxBean(2015, 2, 4, 940, MoneyUtil.createMoneyFromCents(10000), BigDecimal.valueOf(10), "Budget 2"));
         return beans;
     }
 
@@ -321,6 +519,22 @@ class StatisticsServiceTest extends ServiceTestTemplate {
         beans.add(new WeeklyAggregatedRecordWithTitleBean(2015, 1, 15d, 100000, "Person 2"));
         beans.add(new WeeklyAggregatedRecordWithTitleBean(2015, 2, 15d, 200000, "Person 2"));
         beans.add(new WeeklyAggregatedRecordWithTitleBean(2015, 5, 15d, 500000, "Person 2"));
+        return beans;
+    }
+
+    private List<WeeklyAggregatedRecordWithTitleAndTaxBean> createLast5WeeksForPersonWithTax() {
+        List<WeeklyAggregatedRecordWithTitleAndTaxBean> beans = new ArrayList<>();
+        beans.add(new WeeklyAggregatedRecordWithTitleAndTaxBean(2015, 1, 1, 900, MoneyUtil.createMoneyFromCents(10000), BigDecimal.valueOf(10), "Person 1"));
+        beans.add(new WeeklyAggregatedRecordWithTitleAndTaxBean(2015, 1, 2, 960, MoneyUtil.createMoneyFromCents(10000), BigDecimal.valueOf(10), "Person 1"));
+        beans.add(new WeeklyAggregatedRecordWithTitleAndTaxBean(2015, 1, 4, 910, MoneyUtil.createMoneyFromCents(10000), BigDecimal.valueOf(10), "Person 1"));
+        beans.add(new WeeklyAggregatedRecordWithTitleAndTaxBean(2015, 2, 5, 920, MoneyUtil.createMoneyFromCents(10000), BigDecimal.valueOf(10), "Person 1"));
+        beans.add(new WeeklyAggregatedRecordWithTitleAndTaxBean(2015, 1, 4, 930, MoneyUtil.createMoneyFromCents(10000), BigDecimal.valueOf(20), "Person 1"));
+        beans.add(new WeeklyAggregatedRecordWithTitleAndTaxBean(2015, 2, 4, 940, MoneyUtil.createMoneyFromCents(10000), BigDecimal.valueOf(20), "Person 1"));
+
+        beans.add(new WeeklyAggregatedRecordWithTitleAndTaxBean(2015, 1, 1, 910, MoneyUtil.createMoneyFromCents(10000), BigDecimal.valueOf(20), "Person 2"));
+        beans.add(new WeeklyAggregatedRecordWithTitleAndTaxBean(2015, 1, 1, 920, MoneyUtil.createMoneyFromCents(10000), BigDecimal.valueOf(10), "Person 2"));
+        beans.add(new WeeklyAggregatedRecordWithTitleAndTaxBean(2015, 1, 2, 930, MoneyUtil.createMoneyFromCents(10000), BigDecimal.valueOf(10), "Person 2"));
+        beans.add(new WeeklyAggregatedRecordWithTitleAndTaxBean(2015, 2, 4, 940, MoneyUtil.createMoneyFromCents(10000), BigDecimal.valueOf(10), "Person 2"));
         return beans;
     }
 
@@ -435,7 +649,6 @@ class StatisticsServiceTest extends ServiceTestTemplate {
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(500000L), actualSeries2.getValues().get(4));
     }
 
-
     @Test
     void testFillMissingMonths() throws ParseException {
         SimpleDateFormat format1 = new SimpleDateFormat("dd.MM.yyyy");
@@ -456,7 +669,5 @@ class StatisticsServiceTest extends ServiceTestTemplate {
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(200000), testList.get(2));
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0), testList.get(3));
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(400000), testList.get(4));
-
     }
-
 }

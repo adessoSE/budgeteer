@@ -19,10 +19,10 @@ public class EditBudgetData implements Serializable {
     private String description;
     private String note;
     private Money total;
+    private Money limit;
     private String importKey;
     private List<String> tags;
     private ContractBaseData contract;
-
 
     public EditBudgetData(long projectId) {
         this.projectId = projectId;

@@ -30,7 +30,7 @@ public class PersonHoursPage extends BasePage {
         filter.getPersonList().add(new PersonBaseData(getParameterId()));
         filter.getPossibleBudgets().addAll(budgetService.loadBudgetBaseDataByPersonId(getParameterId()));
 
-        BurnTableWithFilter table = new BurnTableWithFilter("burnTable", filter);
+        BurnTableWithFilter table = new BurnTableWithFilter("burnTable", filter, this, parameters);
         table.setPersonFilterEnabled(false);
         add(table);
     }

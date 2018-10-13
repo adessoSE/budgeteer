@@ -47,7 +47,7 @@ public class EditBudgetForm extends Form<EditBudgetData> {
 
     private boolean isEditing;
 
-    public EditBudgetForm(String id){
+    public EditBudgetForm(String id) {
         super(id, new ClassAwareWrappingModel<>(Model.of(new EditBudgetData(BudgeteerSession.get().getProjectId())), EditBudgetData.class));
         addComponents();
         this.isEditing = false;
@@ -58,7 +58,7 @@ public class EditBudgetForm extends Form<EditBudgetData> {
         this.isEditing = true;
         Injector.get().inject(this);
         addComponents();
-        if(isEditingNewBudget){
+        if (isEditingNewBudget) {
             this.success("Budget successfully created.");
         }
     }
@@ -71,19 +71,21 @@ public class EditBudgetForm extends Form<EditBudgetData> {
             @SuppressWarnings("unchecked")
             @Override
             protected void onEvent(AjaxRequestTarget target) {
-                if(getModelObject().getTags().size() > 0) {
+                if (getModelObject().getTags().size() > 0) {
                     BudgeteerSession.get().getBudgetFilter().getSelectedTags().remove(getModelObject().getTags().remove(0));
                 }
             }
         });
         add(new CustomFeedbackPanel("feedback"));
-        add(new RequiredTextField<String>("name", model(from(getModel()).getTitle())));
-        add(new TextField<String>("description", model(from(getModel()).getDescription())));
-        add(new RequiredTextField<String>("importKey", model(from(getModel()).getImportKey())));
+        add(new RequiredTextField<>("name", model(from(getModel()).getTitle())));
+        add(new TextField<>("description", model(from(getModel()).getDescription())));
+        add(new RequiredTextField<>("importKey", model(from(getModel()).getImportKey())));
         MoneyTextField totalField = new MoneyTextField("total", model(from(getModel()).getTotal()));
         totalField.setRequired(true);
         add(totalField);
-        DropDownChoice<ContractBaseData> contractDropDown = new DropDownChoice<ContractBaseData>("contract", model(from(getModel()).getContract()),
+        MoneyTextField limitField = new MoneyTextField("limit", model(from(getModel()).getLimit()));
+        add(limitField);
+        DropDownChoice<ContractBaseData> contractDropDown = new DropDownChoice<>("contract", model(from(getModel()).getContract()),
                 contractService.getContractsByProject(BudgeteerSession.get().getProjectId()),
                 new AbstractChoiceRenderer<ContractBaseData>() {
                     @Override
@@ -98,9 +100,9 @@ public class EditBudgetForm extends Form<EditBudgetData> {
 
         //Label for the submit button
         Label submitButtonLabel;
-        if(isEditing) {
+        if (isEditing) {
             submitButtonLabel = new Label("submitButtonLabel", new ResourceModel("button.save.editmode"));
-        }else{
+        } else {
             submitButtonLabel = new Label("submitButtonLabel", new ResourceModel("button.save.createmode"));
         }
         add(submitButtonLabel);
@@ -133,14 +135,14 @@ public class EditBudgetForm extends Form<EditBudgetData> {
     @Override
     protected void onSubmit() {
         try {
-            if(!isEditing) {
+            if (!isEditing) {
                 //This prevents the user from creating a completely new budget when trying to
                 //edit a newly created budget from the same form
                 isEditing = true;
                 long newID = service.saveBudget(getModelObject());
                 setResponsePage(new EditBudgetPage(EditBudgetPage.createParameters(
-                        newID) ,BudgetsOverviewPage.class, new PageParameters(), true));
-            }else{
+                        newID), BudgetsOverviewPage.class, new PageParameters(), true));
+            } else {
                 this.success(getString("feedback.success"));
                 service.saveBudget(getModelObject());
             }

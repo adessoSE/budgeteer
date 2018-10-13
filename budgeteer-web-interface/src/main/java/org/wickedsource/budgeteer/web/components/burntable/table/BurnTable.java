@@ -58,6 +58,7 @@ public class BurnTable extends Panel {
         WebMarkupContainer table = new WebMarkupContainer("table");
         HashMap<String, String> options = DataTableBehavior.getRecommendedOptions();
         options.put("orderClasses", "false");
+        options.put("ordering", "false");
         options.put("paging", "false");
         options.put("info", "false");
         table.add(new DataTableBehavior(options));
@@ -77,7 +78,11 @@ public class BurnTable extends Panel {
             @Override
             protected void onBeforeRender() {
                 super.onBeforeRender();
-                if(rows.getCurrentPage() == rows.getPageCount()-1){
+                if(rows.getPageCount() == 1L){
+                    this.setDefaultModelObject("Showing " + Long.toString(rows.getFirstItemOffset()+1) + " to "
+                            + rows.getItemCount() + " entries from total " + getRows().getItemCount());
+                }
+                else if(rows.getCurrentPage() == rows.getPageCount()-1){
                     this.setDefaultModelObject("Showing " + Long.toString(rows.getFirstItemOffset()+1) + " to "
                             + Long.toString(rows.getFirstItemOffset() + (rows.getItemCount() % rows.getItemsPerPage())) + " entries from total " + getRows().getItemCount());
                 }else{

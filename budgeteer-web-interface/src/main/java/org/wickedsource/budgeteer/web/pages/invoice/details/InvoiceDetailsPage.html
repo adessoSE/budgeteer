@@ -1,11 +1,11 @@
-<wicket:extend>
+<wicket:extend xmlns:wicket="http://www.w3.org/1999/xhtml">
     <div class="row">
         <div class="col-md-12" wicket:id="highlightsPanel">
 
         </div>
     </div>
 
-    <div class="row">
+    <div>
         <div class="col-md-12">
             <div class="box box-primary">
                 <div class="box-header" style="cursor: move;">
@@ -24,15 +24,15 @@
                         <div class="col-lg-4 col-xs-6">
                             <!-- small box -->
                             <div class="small-box bg-green" wicket:id="editLink" style="cursor: pointer;">
-                                <div class="inner" >
-                                    <h3><a >Edit Invoice</a></h3>
+                                <div class="inner">
+                                    <h3><a>Edit Invoice</a></h3>
                                     <br/>
                                     <br/>
                                 </div>
-                                <div class="icon">  <i class="ion ion-edit"></i> </div>
+                                <div class="icon"><i class="ion ion-edit"></i></div>
                                 <a class="small-box-footer">
                                     Edit the data of this invoice
-                                    <i  class="fa fa-arrow-circle-right" />
+                                    <i class="fa fa-arrow-circle-right"/>
                                 </a>
                             </div>
                         </div>
@@ -40,19 +40,34 @@
                             <div class="col-lg-4 col-xs-6">
                                 <!-- small box -->
                                 <div class="small-box  bg-red" wicket:id="deleteLink" style="cursor: pointer;">
-                                    <div class="inner" >
+                                    <div class="inner">
                                         <h3>Delete Invoice</h3>
                                         <br/>
                                         <br/>
                                     </div>
-                                    <div class="icon">  <i class="ion ion-close"></i> </div>
+                                    <div class="icon"><i class="ion ion-close"></i></div>
                                     <a class="small-box-footer">
                                         Delete this invoice
-                                        <i  class="fa fa-arrow-circle-right" />
+                                        <i class="fa fa-arrow-circle-right"/>
                                     </a>
                                 </div>
                             </div>
                         </form>
+                        <div class="col-lg-4 col-xs-6">
+                            <div class="small-box bg-aqua toggle-tax-info-boxes" wicket:id="taxLink"
+                                 style="cursor: pointer;">
+                                <div class="inner">
+                                    <h3><a><span wicket:id="taxLinkText"></span></a></h3>
+                                    <br/>
+                                    <br/>
+                                </div>
+                                <div class="icon"><i class="fa fa-book"></i></div>
+                                <a class="small-box-footer">
+                                    <span wicket:id="taxLinkDescription"></span>
+                                    <i class="fa fa-arrow-circle-right"/>
+                                </a>
+                            </div>
+                        </div>
                     </div>
                     <!-- ./col -->
                 </div>

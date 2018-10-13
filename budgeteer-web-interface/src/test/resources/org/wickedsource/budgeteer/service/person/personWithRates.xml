@@ -7,18 +7,19 @@
     <PERSON id="1" name="person1" import_key="person1" project_id="1"/>
     <PERSON id="2" name="person2" import_key="person2" project_id="1"/>
 
-    <DAILY_RATE id="1" date_start="2015-01-01" date_end="2015-12-31" person_id="1" budget_id="1" rate="50000"/>
+    <DAILY_RATE id="1" date_start="2015-01-01" date_end="2015-08-16" person_id="1" budget_id="1" rate="50000"/>
     <DAILY_RATE id="2" date_start="2015-01-01" date_end="2015-12-31" person_id="2" budget_id="1" rate="60000"/>
     <DAILY_RATE id="3" date_start="2016-01-01" date_end="2016-12-31" person_id="2" budget_id="1" rate="50000"/>
 
-    <IMPORT id="1" import_date="2015-01-01" start_date="2015-01-01" end_date="2015-01-01" import_type="Testimport" project_id="1"/>
+    <IMPORT id="1" import_date="2015-01-01" start_date="2015-01-01" end_date="2015-12-31" import_type="Testimport" project_id="1"/>
 
     <WORK_RECORD id="1" person_id="1" budget_id="1" record_date="2015-01-01" record_year="2015" record_week="1" record_month="0" record_day="1" minutes="480"
-                 daily_rate="0" import_id="1" edited_manually="false"/>
+                 daily_rate="20000" import_id="1" edited_manually="false"/>
     <WORK_RECORD id="2" person_id="1" budget_id="1" record_date="2014-01-01" record_year="2014" record_week="1" record_month="0" record_day="1" minutes="480" daily_rate="10000" import_id="1" edited_manually="false"/>
-    <WORK_RECORD id="3" person_id="1" budget_id="1" record_date="2015-08-15" record_year="2015" record_week="33" record_month="7" record_day="15" minutes="960" daily_rate="0" import_id="1" edited_manually="false"/>
+    <WORK_RECORD id="3" person_id="1" budget_id="1" record_date="2015-08-15" record_year="2015" record_week="33" record_month="7" record_day="15" minutes="960" daily_rate="20000" import_id="1" edited_manually="false"/>
     <WORK_RECORD id="4" person_id="2" budget_id="1" record_date="2015-01-01" record_year="2015" record_week="1" record_month="0" record_day="1" minutes="480" daily_rate="0" import_id="1" edited_manually="false"/>
     <WORK_RECORD id="5" person_id="2" budget_id="1" record_date="2015-08-15" record_year="2015" record_week="33" record_month="7" record_day="15" minutes="960" daily_rate="0" import_id="1" edited_manually="false"/>
     <WORK_RECORD id="6" person_id="2" budget_id="1" record_date="2016-08-15" record_year="2016" record_week="33" record_month="7" record_day="15" minutes="960" daily_rate="10000" import_id="1" edited_manually="true"/>
+    <WORK_RECORD id="7" person_id="1" budget_id="1" record_date="2015-01-01" record_year="2015" record_week="33" record_month="01" record_day="01" minutes="960" daily_rate="10000" import_id="1" edited_manually="true"/>
 
 </dataset>

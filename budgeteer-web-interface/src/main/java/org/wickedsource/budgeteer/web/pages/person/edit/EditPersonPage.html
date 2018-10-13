@@ -18,14 +18,14 @@
 
                 <div class="form-group">
                     <label for="titleInput"><wicket:message key="page.person.name">Name</wicket:message></label>
-                    <input wicket:id="name" type="text" name="name" id="titleInput" class="form-control"/>
+                    <input wicket:id="name" maxlength="255" type="text" name="name" id="titleInput" class="form-control"/>
 
                     <p class="help-block"><wicket:message key="page.person.name.hint">The full name of the person as it should be displayed in the dashboard</wicket:message></p>
                 </div>
 
                 <div class="form-group">
                     <label for="importKeyInput"><wicket:message key="page.person.importKey.title">Import Key</wicket:message></label>
-                    <input wicket:id="importKey" type="text" name="name" id="importKeyInput" class="form-control"/>
+                    <input wicket:id="importKey" maxlength="255" type="text" name="name" id="importKeyInput" class="form-control"/>
 
                     <p class="help-block"><wicket:message key="page.person.importKey.hint">The unique key that identifies this person when importing data.</wicket:message></p>
                 </div>

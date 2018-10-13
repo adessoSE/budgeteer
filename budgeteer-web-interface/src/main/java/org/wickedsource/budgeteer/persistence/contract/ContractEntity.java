@@ -29,7 +29,7 @@ public class ContractEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_CONTRACT_ID")
     private long id;
 
-    @Column(name="CONTRACT_NAME", nullable = false)
+    @Column(name="CONTRACT_NAME", nullable = false, length = 255)
     private String name;
 
     @ManyToOne(optional = false)
@@ -38,7 +38,7 @@ public class ContractEntity implements Serializable {
 
     @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
     @JoinColumn(name="CONTRACT_ID")
-    private List<ContractFieldEntity> contractFields = new LinkedList<ContractFieldEntity>();
+    private List<ContractFieldEntity> contractFields = new LinkedList<>();
 
     @Column(name="BUDGET")
     private Money budget;
@@ -46,7 +46,7 @@ public class ContractEntity implements Serializable {
     @Column(name = "TAXRATE", precision = 10, scale = 4)
     private BigDecimal taxRate;
 
-    @Column(name="INTERNAL_NUMBER")
+    @Column(name="INTERNAL_NUMBER", length = 255)
     private String internalNumber;
 
     @Column(name="START_DATE")

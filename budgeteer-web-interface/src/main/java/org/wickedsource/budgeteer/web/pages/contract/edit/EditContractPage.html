@@ -1,4 +1,4 @@
-<wicket:extend xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+<wicket:extend xmlns:wicket="http://www.w3.org/1999/xhtml">
     <div class="form-box wide" id="login-box">
         <div class="header"><span wicket:id="pageTitle"></span>
             <div class="box-tools pull-right">
@@ -20,11 +20,11 @@
                     <div class="box-body">
                         <div class="form-group">
                             <label for="contractName"><wicket:message key="page.contract.title">Contract title</wicket:message></label>
-                            <input wicket:id="contractName"type="text" name="name" id="contractName" class="form-control"/>
+                            <input wicket:id="contractName" type="text" maxlength="255" name="name" id="contractName" class="form-control"/>
                         </div>
                         <div class="form-group">
                             <label for="internalNumber"><wicket:message key="page.contract.internalNumber">Internal-number</wicket:message></label>
-                            <input wicket:id="internalNumber"type="text" name="name" id="internalNumber" class="form-control"/>
+                            <input wicket:id="internalNumber"type="text" maxlength="255" name="name" id="internalNumber" class="form-control"/>
                         </div>
                         <div class="form-group">
                             <label for="year"><wicket:message key="page.contract.startDate"></wicket:message></label>
@@ -36,11 +36,11 @@
                         </div>
                         <div class="form-group">
                             <label for="budget"><wicket:message key="page.contract.budget">Budget</wicket:message></label>
-                            <input wicket:id="budget" style="width: 100%;" type="text" class="form-control" id="budget"/>
+                            <input wicket:id="budget" style="width: 100%;" type="text" maxlength="15" class="form-control" id="budget"/>
                         </div>
                         <div class="form-group">
                             <label for="taxrate"><wicket:message key="page.contract.taxrate">Taxrate in percent</wicket:message></label>
-                            <input wicket:id="taxrate" style="width: 100%;" type="number" class="form-control" id="budget"/>
+                            <input wicket:id="taxrate" style="width: 100%;" type="number" max class="form-control" id="tax"/>
                         </div>
                         <wicket:panel wicket:id="fileUpload"></wicket:panel>
                     </div>
@@ -58,7 +58,7 @@
                         <div wicket:id="attributeTable" style="width: 100%;">
                             <div class="form-group" wicket:id="contractAttributes">
                                 <label wicket:id="attributeTitle" />
-                                <input wicket:id="attributeValue" type="text" class="form-control"/>
+                                <input wicket:id="attributeValue" type="text" maxlength="255" class="form-control"/>
                             </div>
                         </div>
                     </div>
@@ -76,7 +76,7 @@
                         <span for="attribute_name">
                             <wicket:message key="page.contract.new.attribute.name.of.attribute">Edit Contract Details</wicket:message>
                         </span>
-                        <input  id="attribute_name" wicket:id="nameOfNewAttribute" type="text"/>
+                        <input  id="attribute_name" wicket:id="nameOfNewAttribute" type="text" maxlength="255"/>
                         <Button wicket:id="addAttribute"><i class="fa fa-fw fa-plus"></i></Button>
                     </div>
                 </div>

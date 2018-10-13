@@ -1,9 +1,9 @@
-<wicket:panel>
+<wicket:panel xmlns:wicket="http://www.w3.org/1999/xhtml">
     <form wicket:id="filterForm">
         <div class="col-xs-6">
             <div class="col-xs-6" wicket:id="personFilterContainer">
                 <div class="form-group">
-                    <label>Name Filter</label><br />
+                    <label>Name Filter</label><br/>
                     <select wicket:id="personSelect" class="form-control">
                         <option>Tom Hombergs</option>
                         <option>Martha Pfahl</option>
@@ -21,11 +21,21 @@
                 </div>
             </div>
         </div>
+        <div class="col-xs-6" wicket:id="sortingFilterContainer">
+            <div class="btn-group btn-group-merge form-group">
+                <label>Sort by</label> <br/>
+                <select wicket:id="columnSelect" class="form-control">
+                    <option>Budget</option>
+                </select>
+                <select wicket:id="sortTypeSelect" class="form-control">
+                    <option>Ascending</option>
+                </select>
+            </div>
+        </div>
         <div class="col-xs-6">
-            <div class="col-xs-8" wicket:id="daterangeFilterContainer">
+            <div class="col-xs-6" wicket:id="daterangeFilterContainer">
                 <div class="form-group">
                     <label>Date Range Filter</label>
-
                     <div class="input-group">
                         <div class="input-group-addon">
                             <i class="fa fa-calendar"></i>
@@ -34,9 +44,13 @@
                     </div>
                 </div>
             </div>
-
-            <div class="col-xs-4">
+            <div class="col-xs-3">
                 <button class="btn btn-default btn-block" type="submit" style="margin-top:25px">Apply Filter</button>
+            </div>
+            <div class="col-xs-3">
+                <button wicket:id="resetButton" class="btn btn-default btn-block" style="margin-top:25px">Reset
+                    Filters
+                </button>
             </div>
         </div>
     </form>

@@ -1,5 +1,7 @@
 package org.wickedsource.budgeteer.web.pages.budgets.overview.table;
 
+import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.event.IEvent;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
@@ -13,6 +15,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.service.budget.BudgetDetailData;
+import org.wickedsource.budgeteer.service.budget.BudgetService;
 import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
 import org.wickedsource.budgeteer.service.contract.ContractService;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
@@ -23,6 +26,7 @@ import org.wickedsource.budgeteer.web.components.money.MoneyLabel;
 import org.wickedsource.budgeteer.web.components.tax.TaxBudgetUnitMoneyModel;
 import org.wickedsource.budgeteer.web.components.tax.TaxLabelModel;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
+import org.wickedsource.budgeteer.web.pages.base.delete.DeleteDialog;
 import org.wickedsource.budgeteer.web.pages.budgets.details.BudgetDetailsPage;
 import org.wickedsource.budgeteer.web.pages.budgets.edit.EditBudgetPage;
 import org.wickedsource.budgeteer.web.pages.budgets.overview.BudgetsOverviewPage;
@@ -36,11 +40,14 @@ import static org.wicketstuff.lazymodel.LazyModel.model;
 
 public class BudgetOverviewTable extends Panel {
 
+    private final BreadcrumbsModel breadcrumbsModel;
+  
     @SpringBean
     private ContractService contractService;
 
-    private final BreadcrumbsModel breadcrumbsModel;
-
+    @SpringBean
+    private BudgetService budgetService;
+  
     public BudgetOverviewTable(String id, IModel<List<BudgetDetailData>> model, BreadcrumbsModel breadcrumbsModel) {
         super(id, model);
         this.breadcrumbsModel = breadcrumbsModel;
@@ -92,11 +99,11 @@ public class BudgetOverviewTable extends Panel {
             BudgetTagFilter filter = (BudgetTagFilter) event.getPayload();
             FilteredBudgetModel model = (FilteredBudgetModel) getDefaultModel();
             model.setFilter(model(from(filter)));
-        }else if(payload instanceof String){
+        } else if (payload instanceof String) {
             Long remainingFilter;
             try {
-                remainingFilter = Long.parseLong((String)event.getPayload());
-            }catch (NumberFormatException e){
+                remainingFilter = Long.parseLong((String) event.getPayload());
+            } catch (NumberFormatException e) {
                 return;
             }
             FilteredBudgetModel model = (FilteredBudgetModel) getDefaultModel();
@@ -115,29 +122,55 @@ public class BudgetOverviewTable extends Panel {
                 link.add(linkTitle);
                 item.add(link);
                 item.add(new Label("lastUpdated", model(from(item.getModel()).getLastUpdated())));
-                Link clink =  new Link("contractLink") {
+                Link clink = new Link("contractLink") {
                     @Override
                     public void onClick() {
-                        WebPage page = new ContractDetailsPage(ContractDetailsPage.createParameters(item.getModelObject().getContractId())){
-                            @Override
-                            protected BreadcrumbsModel getBreadcrumbsModel() {
-                                BreadcrumbsModel m = breadcrumbsModel;
-                                m.addBreadcrumb(ContractDetailsPage.class,
-                                        ContractDetailsPage.createParameters(item.getModelObject().getContractId()));
-                                return m;
-                            }
-                        };
-                        setResponsePage(page);
+                        setResponsePage(ContractDetailsPage.class, ContractDetailsPage.createParameters(item.getModelObject().getContractId()));
                     }
                 };
-                Label clinkTitle = new Label("contractTitle",model(from(item.getModel()).getContractName()));
+                Label clinkTitle = new Label("contractTitle", model(from(item.getModel()).getContractName()));
                 clink.add(clinkTitle);
                 item.add(clink);
 
                 createBudgetListEntry(item);
 
                 item.add(new ProgressBar("progressBar", model(from(item.getModel()).getProgressInPercent())));
-                Link editPersonLink = new Link("editPage") {
+
+                Link deleteBudgetButton = new Link("deleteBudget") {
+                    @Override
+                    public void onClick() {
+                        setResponsePage(new DeleteDialog() {
+                            @Override
+                            protected void onYes() {
+                                budgetService.deleteBudget(item.getModelObject().getId());
+                                setResponsePage(BudgetsOverviewPage.class);
+                            }
+
+                            @Override
+                            protected void onNo() {
+                                setResponsePage(BudgetsOverviewPage.class);
+                            }
+
+                            @Override
+                            protected String confirmationText() {
+                                return BudgetOverviewTable.this.getString("delete.budget.confirmation");
+                            }
+                        });
+                    }
+                };
+                //Creating a separate tooltip is necessary because disabling the button also causes tooltips to disappear.
+                WebMarkupContainer deleteBudgetTooltip = new WebMarkupContainer("deleteBudgetTooltip");
+                if(item.getModelObject().getContractName() != null){
+                    deleteBudgetTooltip.add(new AttributeAppender("style", "cursor: not-allowed;", " "));
+                    deleteBudgetTooltip.add(new AttributeModifier("title", getString("contract.still.exist")));
+                    deleteBudgetButton.setEnabled(false);
+                }else{
+                    deleteBudgetTooltip.add(new AttributeModifier("title", getString("delete.budget")));
+                }
+                deleteBudgetTooltip.add(deleteBudgetButton);
+                item.add(deleteBudgetTooltip);
+
+                Link editBudgetLink = new Link("editPage") {
                     @Override
                     public void onClick() {
                         WebPage page = new EditBudgetPage(EditBudgetPage.createParameters(
@@ -145,13 +178,13 @@ public class BudgetOverviewTable extends Panel {
                         setResponsePage(page);
                     }
                 };
-                item.add(editPersonLink);
+                item.add(editBudgetLink);
             }
 
             @Override
             protected ListItem<BudgetDetailData> newItem(int index, IModel<BudgetDetailData> itemModel) {
                 return super.newItem(index,
-                        new ClassAwareWrappingModel<BudgetDetailData>(itemModel, BudgetDetailData.class));
+                        new ClassAwareWrappingModel<>(itemModel, BudgetDetailData.class));
             }
         };
     }
@@ -162,11 +195,16 @@ public class BudgetOverviewTable extends Panel {
                         new BudgetUnitMoneyModel(model(from(item.getModel()).getTotal())),
                         new BudgetUnitMoneyModel(model(from(item.getModel()).getTotal_gross()))
                 )));
-        item.add(new MoneyLabel("spent",
+
+        MoneyLabel spentMoneyLabel = new MoneyLabel("spent",
                 new TaxBudgetUnitMoneyModel(
                         new BudgetUnitMoneyModel(model(from(item.getModel()).getSpent())),
                         new BudgetUnitMoneyModel(model(from(item.getModel()).getSpent_gross()))
-                )));
+                ));
+        if (item.getModelObject().getSpent().compareTo(item.getModelObject().getLimit()) >= 0 && !item.getModelObject().getLimit().isZero())
+            spentMoneyLabel.add(new AttributeModifier("style", "color: red"));
+        item.add(spentMoneyLabel);
+
         item.add(new MoneyLabel("remaining",
                 new TaxBudgetUnitMoneyModel(
                         new BudgetUnitMoneyModel(model(from(item.getModel()).getRemaining())),
@@ -178,6 +216,7 @@ public class BudgetOverviewTable extends Panel {
                         new BudgetUnitMoneyModel(model(from(item.getModel()).getUnplanned_gross()))
                 )));
     }
+
 
     private void createNetGrossOverviewLabels(WebMarkupContainer table) {
         table.add(new Label("totalLabel", new TaxLabelModel(

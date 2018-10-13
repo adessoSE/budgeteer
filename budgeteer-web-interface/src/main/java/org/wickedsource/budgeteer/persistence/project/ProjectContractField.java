@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.io.Serializable;
 
+/**
+ * (dynamic) Fields that could be used by a contract associated with a project
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,16 +17,13 @@ import java.io.Serializable;
 @Table(name="PROJECT_CONTRACT_FIELD", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"FIELD_NAME", "PROJECT_ID"})
 })
-/**
- * (dynamic) Fields that could be used by a contract associated with a project
- */
 public class ProjectContractField implements Serializable{
     @Id
     @SequenceGenerator(name="SEQ_Project_contract_field_ID", sequenceName="SEQ_Project_contract_field_ID")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_Project_contract_field_ID")
     private long id;
 
-    @Column(name="FIELD_NAME", nullable = false)
+    @Column(name="FIELD_NAME", nullable = false, length = 255)
     private String fieldName;
 
     @ManyToOne

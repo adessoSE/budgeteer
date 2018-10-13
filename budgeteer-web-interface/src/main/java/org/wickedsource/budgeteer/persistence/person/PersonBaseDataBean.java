@@ -13,10 +13,13 @@ public class PersonBaseDataBean implements Serializable {
 
     private Date lastBookedDate;
 
-    public PersonBaseDataBean(Long id, String name, Long averageDailyRateInCents, Date lastBookedDate) {
+    public PersonBaseDataBean(Long id, String name, Long valuedMinutes, Long valuedRate, Date lastBookedDate) {
         this.id = id;
         this.name = name;
-        this.averageDailyRateInCents = averageDailyRateInCents;
+        if (valuedRate == null || valuedRate == 0L)
+            this.averageDailyRateInCents = 0L;
+        else
+            this.averageDailyRateInCents = valuedMinutes / valuedRate;
         this.lastBookedDate = lastBookedDate;
     }
 

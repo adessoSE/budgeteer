@@ -14,7 +14,7 @@ import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
 import java.util.Date;
 import java.util.List;
 
-public interface WorkRecordRepository extends CrudRepository<WorkRecordEntity, Long>, QueryDslPredicateExecutor<WorkRecordEntity>,  RecordRepository , JpaSpecificationExecutor {
+public interface WorkRecordRepository extends CrudRepository<WorkRecordEntity, Long>, QueryDslPredicateExecutor<WorkRecordEntity>, RecordRepository, JpaSpecificationExecutor {
 
     /**
      * Aggregates the monetary value of all work records in the given budget.
@@ -36,28 +36,28 @@ public interface WorkRecordRepository extends CrudRepository<WorkRecordEntity, L
 
     @Query("select sum(record.minutes * record.dailyRate) / 60 / 8 from WorkRecordEntity record where record.budget.id = :budgetId and record.date <= :untilDate")
     Double getSpentBudgetUntilDate(@Param("budgetId") long budgetId, @Param("untilDate") Date untilDate);
-    
+
     @Query("select sum(record.minutes * record.dailyRate) / 60 / 8 from WorkRecordEntity record where record.budget.id = :budgetId and :fromDate <= record.date and record.date <= :untilDate")
     Double getSpentBudgetInTimeRange(@Param("budgetId") long budgetId, @Param("fromDate") Date fromDate, @Param("untilDate") Date untilDate);
-    
+
     @Query("select max(record.date) from WorkRecordEntity record where record.budget.id=:budgetId")
     Date getLatestWorkRecordDate(@Param("budgetId") long budgetId);
 
     @Query("select min(record.date) from WorkRecordEntity record where record.budget.id=:budgetId")
     Date getFirstWorkRecordDate(@Param("budgetId") long budgetId);
-    
+
     @Query("select min(record.date) from WorkRecordEntity record where record.budget.id in (:budgetIds)")
     Date getFirstWorkRecordDateByBudgetIds(@Param("budgetIds") List<Long> budgetIds);
-    
+
     @Query("select cast(sum(record.minutes) AS double) / 60.0 from WorkRecordEntity record where record.budget.id=:budgetId")
     Double getTotalHoursByBudgetId(@Param("budgetId") long budgetId);
-    
+
     @Query("select cast(sum(record.minutes) AS double) / 60.0 from WorkRecordEntity record where record.budget.id=:budgetId and record.date <= :untilDate")
     Double getTotalHoursByBudgetIdAndUntilDate(@Param("budgetId") long budgetId, @Param("untilDate") Date until);
-    
+
     @Query("select case when (count(*) = 0) then 0.0 else (cast(sum(record.minutes) AS double) / 60.0) end from WorkRecordEntity record where record.budget.id=:budgetId and :fromDate <= record.date and record.date <= :untilDate")
-	Double getTotalHoursInTimeRange(@Param("budgetId") long budgetId, @Param("fromDate") Date fromDate, @Param("untilDate") Date untilDate);
-    
+    Double getTotalHoursInTimeRange(@Param("budgetId") long budgetId, @Param("fromDate") Date fromDate, @Param("untilDate") Date untilDate);
+
     @Override
     @Modifying
     @Query("delete from WorkRecordEntity r where r.importRecord.id = :importId")
@@ -99,7 +99,7 @@ public interface WorkRecordRepository extends CrudRepository<WorkRecordEntity, L
     List<WeeklyAggregatedRecordBean> aggregateByWeekAndBudget(@Param("budgetId") long budgetId);
 
     @Override
-    @Query("select new org.wickedsource.budgeteer.persistence.record.WeeklyAggregatedRecordWithTaxBean(r.year, r.week, sum(r.minutes) / 60.0, sum(r.minutes * r.dailyRate) / 60 / 8, r.budget.contract.taxRate) from WorkRecordEntity r where r.budget.id=:budgetId group by r.year, r.week, r.budget.contract.taxRate order by r.year, r.week")
+    @Query("select new org.wickedsource.budgeteer.persistence.record.WeeklyAggregatedRecordWithTaxBean(r.year, r.month, r.week, sum(r.minutes), r.dailyRate, r.budget.contract.taxRate) from WorkRecordEntity r where r.budget.id=:budgetId group by r.year, r.month, r.week, r.dailyRate, r.budget.contract.taxRate order by r.year, r.month, r.week")
     List<WeeklyAggregatedRecordWithTaxBean> aggregateByWeekAndBudgetWithTax(@Param("budgetId") long budgetId);
 
     @Override
@@ -107,7 +107,7 @@ public interface WorkRecordRepository extends CrudRepository<WorkRecordEntity, L
     List<MonthlyAggregatedRecordBean> aggregateByMonthAndBudget(@Param("budgetId") long budgetId);
 
     @Override
-    @Query("select new org.wickedsource.budgeteer.persistence.record.MonthlyAggregatedRecordWithTaxBean(r.year, r.month, sum(r.minutes) / 60.0, sum(r.minutes * r.dailyRate) / 60 / 8, r.budget.contract.taxRate ) from WorkRecordEntity r where r.budget.id=:budgetId group by r.year, r.month, r.budget.contract.taxRate order by r.year, r.month")
+    @Query("select new org.wickedsource.budgeteer.persistence.record.MonthlyAggregatedRecordWithTaxBean(r.year, r.month, sum(r.minutes), r.dailyRate, r.budget.contract.taxRate ) from WorkRecordEntity r where r.budget.id=:budgetId group by r.year, r.month, r.dailyRate, r.budget.contract.taxRate order by r.year, r.month")
     List<MonthlyAggregatedRecordWithTaxBean> aggregateByMonthAndBudgetWithTax(@Param("budgetId") long budgetId);
 
     @Override
@@ -115,15 +115,16 @@ public interface WorkRecordRepository extends CrudRepository<WorkRecordEntity, L
     List<WeeklyAggregatedRecordBean> aggregateByWeekAndBudgetTags(@Param("projectId") long projectId, @Param("tags") List<String> tags);
 
     @Override
-    @Query("select new org.wickedsource.budgeteer.persistence.record.WeeklyAggregatedRecordWithTaxBean(r.year, r.week, sum(r.minutes) / 60.0, sum(r.minutes * r.dailyRate) / 60 / 8, r.budget.contract.taxRate) from WorkRecordEntity r join r.budget b join b.tags t where b.project.id=:projectId and t.tag in (:tags) group by r.year, r.week, r.budget.contract.taxRate order by r.year, r.week")
+    @Query("select new org.wickedsource.budgeteer.persistence.record.WeeklyAggregatedRecordWithTaxBean(r.year, r.month, r.week, sum(r.minutes), r.dailyRate, r.budget.contract.taxRate) from WorkRecordEntity r join r.budget b join b.tags t where b.project.id=:projectId and t.tag in (:tags) group by r.year, r.month, r.week, r.dailyRate, r.budget.contract.taxRate order by r.year, r.month, r.week")
     List<WeeklyAggregatedRecordWithTaxBean> aggregateByWeekAndBudgetTagsWithTax(@Param("projectId") long projectId, @Param("tags") List<String> tags);
+
 
     @Override
     @Query("select new org.wickedsource.budgeteer.persistence.record.MonthlyAggregatedRecordBean(r.year, r.month, sum(r.minutes) / 60.0, sum(r.minutes * r.dailyRate) / 60 / 8 ) from WorkRecordEntity r join r.budget b join b.tags t where b.project.id=:projectId and t.tag in (:tags) group by r.year, r.month order by r.year, r.month")
     List<MonthlyAggregatedRecordBean> aggregateByMonthAndBudgetTags(@Param("projectId") long projectId, @Param("tags") List<String> tags);
 
     @Override
-    @Query("select new org.wickedsource.budgeteer.persistence.record.MonthlyAggregatedRecordWithTaxBean(r.year, r.month, sum(r.minutes) / 60.0, sum(r.minutes * r.dailyRate) / 60 / 8, r.budget.contract.taxRate) from WorkRecordEntity r join r.budget b join b.tags t where b.project.id=:projectId and t.tag in (:tags) group by r.year, r.month, r.budget.contract.taxRate order by r.year, r.month")
+    @Query("select new org.wickedsource.budgeteer.persistence.record.MonthlyAggregatedRecordWithTaxBean(r.year, r.month, sum(r.minutes), r.dailyRate, r.budget.contract.taxRate) from WorkRecordEntity r join r.budget b join b.tags t where b.project.id=:projectId and t.tag in (:tags) group by r.year, r.month, r.dailyRate, r.budget.contract.taxRate order by r.year, r.month")
     List<MonthlyAggregatedRecordWithTaxBean> aggregateByMonthAndBudgetTagsWithTax(@Param("projectId") long projectId, @Param("tags") List<String> tags);
 
     @Override
@@ -151,8 +152,12 @@ public interface WorkRecordRepository extends CrudRepository<WorkRecordEntity, L
     List<WeeklyAggregatedRecordWithTitleBean> aggregateByWeekAndPersonForBudget(@Param("budgetId") long budgetId, @Param("startDate") Date startDate);
 
     @Override
-    @Query("select new org.wickedsource.budgeteer.persistence.record.WeeklyAggregatedRecordWithTitleAndTaxBean(r.year, r.week, sum(r.minutes) / 60.0, sum(r.minutes * r.dailyRate) / 60 / 8, r.budget.contract.taxRate, p.name ) from WorkRecordEntity r join r.person p where r.budget.id=:budgetId and r.date >= :startDate group by r.year, r.week, r.budget.contract.taxRate, p.name order by p.name, r.year, r.week")
+    @Query("select new org.wickedsource.budgeteer.persistence.record.WeeklyAggregatedRecordWithTitleAndTaxBean(r.year, r.month, r.week, sum(r.minutes), r.dailyRate, r.budget.contract.taxRate, p.name ) from WorkRecordEntity r join r.person p where r.budget.id=:budgetId and r.date >= :startDate group by r.year, r.month, r.week, r.dailyRate, r.budget.contract.taxRate, p.name order by p.name, r.year, r.week")
     List<WeeklyAggregatedRecordWithTitleAndTaxBean> aggregateByWeekAndPersonForBudgetWithTax(@Param("budgetId") long budgetId, @Param("startDate") Date startDate);
+
+    @Override
+    @Query("select new org.wickedsource.budgeteer.persistence.record.WeeklyAggregatedRecordWithTitleAndTaxBean(r.year, r.month, r.week, sum(r.minutes), r.dailyRate, r.budget.contract.taxRate, p.name ) from WorkRecordEntity r join r.person p where r.budget.id=:budgetId group by r.year, r.month, r.week, r.dailyRate, r.budget.contract.taxRate, p.name order by p.name, r.year, r.week")
+    List<WeeklyAggregatedRecordWithTitleAndTaxBean> aggregateByWeekAndPersonForBudgetWithTax(@Param("budgetId") long budgetId);
 
     @Override
     @Query("select new org.wickedsource.budgeteer.persistence.record.WeeklyAggregatedRecordBean(r.year, r.week, sum(r.minutes) / 60.0, sum(r.minutes * r.dailyRate) / 60 / 8 ) from WorkRecordEntity r where r.budget.id=:budgetId and r.date >= :startDate group by r.year, r.week order by r.year, r.week")
@@ -171,7 +176,7 @@ public interface WorkRecordRepository extends CrudRepository<WorkRecordEntity, L
     List<WeeklyAggregatedRecordBean> aggregateByWeek(@Param("projectId") long projectId);
 
     @Override
-    @Query("select new org.wickedsource.budgeteer.persistence.record.WeeklyAggregatedRecordWithTaxBean(r.year, r.week, sum(r.minutes) / 60.0, sum(r.minutes * r.dailyRate) / 60 / 8, r.budget.contract.taxRate ) from WorkRecordEntity r where r.budget.project.id=:projectId group by r.year, r.week, r.budget.contract.taxRate order by r.year, r.week, r.budget.contract.taxRate")
+    @Query("select new org.wickedsource.budgeteer.persistence.record.WeeklyAggregatedRecordWithTaxBean(r.year, r.month, r.week, sum(r.minutes), r.dailyRate, r.budget.contract.taxRate ) from WorkRecordEntity r where r.budget.project.id=:projectId group by r.year, r.month, r.week, r.dailyRate, r.budget.contract.taxRate order by r.year, r.month, r.week, r.budget.contract.taxRate")
     List<WeeklyAggregatedRecordWithTaxBean> aggregateByWeekWithTax(@Param("projectId") long projectId);
 
     @Override
@@ -183,12 +188,20 @@ public interface WorkRecordRepository extends CrudRepository<WorkRecordEntity, L
     List<WeeklyAggregatedRecordWithTitleBean> aggregateByWeekAndPersonForBudgets(@Param("projectId") long projectId, @Param("startDate") Date startDate);
 
     @Override
-    @Query("select new org.wickedsource.budgeteer.persistence.record.WeeklyAggregatedRecordWithTitleAndTaxBean(r.year, r.week, sum(r.minutes) / 60.0, sum(r.minutes * r.dailyRate) / 60 / 8, r.budget.contract.taxRate, p.name ) from WorkRecordEntity r join r.person p join r.budget b join b.tags t where b.project.id=:projectId and t.tag in (:tags) and r.date >= :startDate group by r.year, r.week, r.budget.contract.taxRate, p.name order by p.name, r.year, r.week")
+    @Query("select new org.wickedsource.budgeteer.persistence.record.WeeklyAggregatedRecordWithTitleAndTaxBean(r.year, r.month, r.week, sum(r.minutes), r.dailyRate, r.budget.contract.taxRate, p.name ) from WorkRecordEntity r join r.person p join r.budget b join b.tags t where b.project.id=:projectId and t.tag in (:tags) and r.date >= :startDate group by r.year, r.month, r.week, r.dailyRate, r.budget.contract.taxRate, p.name order by p.name, r.year, r.week")
     List<WeeklyAggregatedRecordWithTitleAndTaxBean> aggregateByWeekAndPersonForBudgetsWithTax(@Param("projectId") long projectId, @Param("tags") List<String> tags, @Param("startDate") Date startDate);
 
     @Override
-    @Query("select new org.wickedsource.budgeteer.persistence.record.WeeklyAggregatedRecordWithTitleAndTaxBean(r.year, r.week, sum(r.minutes) / 60.0, sum(r.minutes * r.dailyRate) / 60 / 8, r.budget.contract.taxRate, p.name ) from WorkRecordEntity r join r.person p join r.budget b where b.project.id=:projectId and r.date >= :startDate group by r.year, r.week, r.budget.contract.taxRate, p.name order by p.name, r.year, r.week")
+    @Query("select new org.wickedsource.budgeteer.persistence.record.WeeklyAggregatedRecordWithTitleAndTaxBean(r.year, r.month, r.week, sum(r.minutes), r.dailyRate, r.budget.contract.taxRate, p.name ) from WorkRecordEntity r join r.person p join r.budget b join b.tags t where b.project.id=:projectId and t.tag in (:tags) group by r.year, r.month, r.week, r.dailyRate, r.budget.contract.taxRate, p.name order by p.name, r.year, r.week")
+    List<WeeklyAggregatedRecordWithTitleAndTaxBean> aggregateByWeekAndPersonForBudgetsWithTax(@Param("projectId") long projectId, @Param("tags") List<String> tags);
+
+    @Override
+    @Query("select new org.wickedsource.budgeteer.persistence.record.WeeklyAggregatedRecordWithTitleAndTaxBean(r.year, r.month, r.week, sum(r.minutes), r.dailyRate, r.budget.contract.taxRate, p.name ) from WorkRecordEntity r join r.person p join r.budget b where b.project.id=:projectId and r.date >= :startDate group by r.year, r.month, r.week, r.dailyRate, r.budget.contract.taxRate, p.name order by p.name, r.year, r.week")
     List<WeeklyAggregatedRecordWithTitleAndTaxBean> aggregateByWeekAndPersonForBudgetsWithTax(@Param("projectId") long projectId, @Param("startDate") Date startDate);
+
+    @Override
+    @Query("select new org.wickedsource.budgeteer.persistence.record.WeeklyAggregatedRecordWithTitleAndTaxBean(r.year, r.month, r.week, sum(r.minutes), r.dailyRate, r.budget.contract.taxRate, p.name ) from WorkRecordEntity r join r.person p join r.budget b where b.project.id=:projectId group by r.year, r.month, r.week, r.dailyRate, r.budget.contract.taxRate, p.name order by p.name, r.year, r.week")
+    List<WeeklyAggregatedRecordWithTitleAndTaxBean> aggregateByWeekAndPersonForBudgetsWithTax(@Param("projectId") long projectId);
 
     @Override
     @Query("select new org.wickedsource.budgeteer.persistence.record.WeeklyAggregatedRecordBean(r.year, r.week, sum(r.minutes) / 60.0, sum(r.minutes * r.dailyRate) / 60 / 8 ) from WorkRecordEntity r join r.budget b join b.tags t where b.project.id=:projectId and t.tag in (:tags) and r.date >= :startDate group by r.year, r.week order by r.year, r.week")
@@ -223,8 +236,12 @@ public interface WorkRecordRepository extends CrudRepository<WorkRecordEntity, L
     List<MonthlyAggregatedRecordWithTitleBean> aggregateByMonthAndPersonForBudget(@Param("budgetId") long budgetId, @Param("startDate") Date startDate);
 
     @Override
-    @Query("select new org.wickedsource.budgeteer.persistence.record.MonthlyAggregatedRecordWithTitleAndTaxBean(r.year, r.month, sum(r.minutes) / 60.0, sum(r.minutes * r.dailyRate) / 60 / 8, p.name, r.budget.contract.taxRate ) from WorkRecordEntity r join r.person p where r.budget.id=:budgetId and r.date >= :startDate group by r.year, r.month, p.name, r.budget.contract.taxRate order by p.name, r.year, r.month")
+    @Query("select new org.wickedsource.budgeteer.persistence.record.MonthlyAggregatedRecordWithTitleAndTaxBean(r.year, r.month, sum(r.minutes), r.dailyRate, p.name, r.budget.contract.taxRate ) from WorkRecordEntity r join r.person p where r.budget.id=:budgetId and r.date >= :startDate group by r.year, r.month, r.dailyRate, p.name, r.budget.contract.taxRate order by p.name, r.year, r.month")
     List<MonthlyAggregatedRecordWithTitleAndTaxBean> aggregateByMonthAndPersonForBudgetWithTax(@Param("budgetId") long budgetId, @Param("startDate") Date startDate);
+
+    @Override
+    @Query("select new org.wickedsource.budgeteer.persistence.record.MonthlyAggregatedRecordWithTitleAndTaxBean(r.year, r.month, sum(r.minutes), r.dailyRate, p.name, r.budget.contract.taxRate ) from WorkRecordEntity r join r.person p where r.budget.id=:budgetId group by r.year, r.month, r.dailyRate, p.name, r.budget.contract.taxRate order by p.name, r.year, r.month")
+    List<MonthlyAggregatedRecordWithTitleAndTaxBean> aggregateByMonthAndPersonForBudgetWithTax(@Param("budgetId") long budgetId);
 
     @Override
     @Query("select new org.wickedsource.budgeteer.persistence.record.MonthlyAggregatedRecordBean(r.year, r.month, sum(r.minutes) / 60.0, sum(r.minutes * r.dailyRate) / 60 / 8 ) from WorkRecordEntity r join r.budget b join b.tags t where b.project.id=:projectId and t.tag in (:tags) and r.date >= :startDate group by r.year, r.month order by r.year, r.month")
@@ -247,7 +264,7 @@ public interface WorkRecordRepository extends CrudRepository<WorkRecordEntity, L
     List<MonthlyAggregatedRecordBean> aggregateByMonth(@Param("projectId") long projectId);
 
     @Override
-    @Query("select new org.wickedsource.budgeteer.persistence.record.MonthlyAggregatedRecordWithTaxBean(r.year, r.month, sum(r.minutes) / 60.0, sum(r.minutes * r.dailyRate) / 60 / 8, r.budget.contract.taxRate) from WorkRecordEntity r join r.budget b where b.project.id=:projectId group by r.year, r.month, r.budget.contract.taxRate order by r.year, r.month")
+    @Query("select new org.wickedsource.budgeteer.persistence.record.MonthlyAggregatedRecordWithTaxBean(r.year, r.month, sum(r.minutes), r.dailyRate, r.budget.contract.taxRate) from WorkRecordEntity r join r.budget b where b.project.id=:projectId group by r.year, r.month, r.dailyRate, r.budget.contract.taxRate order by r.year, r.month")
     List<MonthlyAggregatedRecordWithTaxBean> aggregateByMonthWithTax(@Param("projectId") long projectId);
 
     @Override
@@ -259,12 +276,20 @@ public interface WorkRecordRepository extends CrudRepository<WorkRecordEntity, L
     List<MonthlyAggregatedRecordWithTitleBean> aggregateByMonthAndPersonForBudgets(@Param("projectId") long projectId, @Param("startDate") Date startDate);
 
     @Override
-    @Query("select new org.wickedsource.budgeteer.persistence.record.MonthlyAggregatedRecordWithTitleAndTaxBean(r.year, r.month, sum(r.minutes) / 60.0, sum(r.minutes * r.dailyRate) / 60 / 8, p.name, r.budget.contract.taxRate ) from WorkRecordEntity r join r.person p join r.budget b join b.tags t where b.project.id=:projectId and t.tag in (:tags) and r.date >= :startDate group by r.year, r.month, p.name, r.budget.contract.taxRate order by p.name, r.year, r.month")
+    @Query("select new org.wickedsource.budgeteer.persistence.record.MonthlyAggregatedRecordWithTitleAndTaxBean(r.year, r.month, sum(r.minutes), r.dailyRate, p.name, r.budget.contract.taxRate ) from WorkRecordEntity r join r.person p join r.budget b join b.tags t where b.project.id=:projectId and t.tag in (:tags) and r.date >= :startDate group by r.year, r.month, p.name, r.dailyRate, r.budget.contract.taxRate order by p.name, r.year, r.month")
     List<MonthlyAggregatedRecordWithTitleAndTaxBean> aggregateByMonthAndPersonForBudgetsWithTax(@Param("projectId") long projectId, @Param("tags") List<String> tags, @Param("startDate") Date startDate);
 
     @Override
-    @Query("select new org.wickedsource.budgeteer.persistence.record.MonthlyAggregatedRecordWithTitleAndTaxBean(r.year, r.month, sum(r.minutes) / 60.0, sum(r.minutes * r.dailyRate) / 60 / 8, p.name, r.budget.contract.taxRate ) from WorkRecordEntity r join r.person p join r.budget b where b.project.id=:projectId and r.date >= :startDate group by r.year, r.month, p.name, r.budget.contract.taxRate order by p.name, r.year, r.month")
+    @Query("select new org.wickedsource.budgeteer.persistence.record.MonthlyAggregatedRecordWithTitleAndTaxBean(r.year, r.month, sum(r.minutes), r.dailyRate, p.name, r.budget.contract.taxRate ) from WorkRecordEntity r join r.person p join r.budget b join b.tags t where b.project.id=:projectId and t.tag in (:tags) group by r.year, r.month, p.name, r.dailyRate, r.budget.contract.taxRate order by p.name, r.year, r.month")
+    List<MonthlyAggregatedRecordWithTitleAndTaxBean> aggregateByMonthAndPersonForBudgetsWithTax(@Param("projectId") long projectId, @Param("tags") List<String> tags);
+
+    @Override
+    @Query("select new org.wickedsource.budgeteer.persistence.record.MonthlyAggregatedRecordWithTitleAndTaxBean(r.year, r.month, sum(r.minutes), r.dailyRate, p.name, r.budget.contract.taxRate ) from WorkRecordEntity r join r.person p join r.budget b where b.project.id=:projectId and r.date >= :startDate group by r.year, r.month, p.name, r.dailyRate, r.budget.contract.taxRate order by p.name, r.year, r.month")
     List<MonthlyAggregatedRecordWithTitleAndTaxBean> aggregateByMonthAndPersonForBudgetsWithTax(@Param("projectId") long projectId, @Param("startDate") Date startDate);
+
+    @Override
+    @Query("select new org.wickedsource.budgeteer.persistence.record.MonthlyAggregatedRecordWithTitleAndTaxBean(r.year, r.month, sum(r.minutes), r.dailyRate, p.name, r.budget.contract.taxRate ) from WorkRecordEntity r join r.person p join r.budget b where b.project.id=:projectId group by r.year, r.month, p.name, r.dailyRate, r.budget.contract.taxRate order by p.name, r.year, r.month")
+    List<MonthlyAggregatedRecordWithTitleAndTaxBean> aggregateByMonthAndPersonForBudgetsWithTax(@Param("projectId") long projectId);
 
     @Override
     @Query("select count (wre.id) from WorkRecordEntity wre where wre.budget.project.id = :projectId")
@@ -277,13 +302,33 @@ public interface WorkRecordRepository extends CrudRepository<WorkRecordEntity, L
     List<WorkRecordEntity> findDuplicateEntries(@Param("budget") BudgetEntity budget, @Param("person") PersonEntity person, @Param("recordDate") Date recordDate, @Param("workedMinutes") int workedMinutes);
 
     @Query("select wr from WorkRecordEntity wr where wr.budget.project = :project AND wr.date >= :start and wr.date <= :end")
-    List<WorkRecordEntity> findByProjectAndDateRange(@Param("project")ProjectEntity project, @Param("start") Date start, @Param("end") Date end);
+    List<WorkRecordEntity> findByProjectAndDateRange(@Param("project") ProjectEntity project, @Param("start") Date start, @Param("end") Date end);
 
     @Override
     @Query("select wr from WorkRecordEntity wr where wr.budget.project.id = :projectId")
     List<WorkRecordEntity> findByProjectId(@Param("projectId") long projectId);
 
-    
-    
-    
+    @Override
+    @Query("select new org.wickedsource.budgeteer.persistence.record.WeeklyAggregatedRecordWithTaxBean(r.year, r.month, r.week, sum(r.minutes), r.dailyRate, r.budget.contract.taxRate ) from WorkRecordEntity r join r.budget b where b.project.id=:projectId group by r.year, r.month, r.week, r.dailyRate, r.budget.contract.taxRate order by r.year, r.month, r.week")
+    List<WeeklyAggregatedRecordWithTaxBean> aggregateByWeekForBudgetsWithTax(@Param("projectId") long projectId);
+
+    @Override
+    @Query("select new org.wickedsource.budgeteer.persistence.record.WeeklyAggregatedRecordWithTaxBean(r.year, r.month, r.week, sum(r.minutes), r.dailyRate, r.budget.contract.taxRate ) from WorkRecordEntity r join r.budget b join b.tags t where b.project.id=:projectId and t.tag in (:tags) group by r.year, r.month, r.week, r.dailyRate, r.budget.contract.taxRate order by r.year, r.month, r.week")
+    List<WeeklyAggregatedRecordWithTaxBean> aggregateByWeekForBudgetsWithTax(@Param("projectId") long projectId, @Param("tags") List<String> tags);
+
+    @Override
+    @Query("select new org.wickedsource.budgeteer.persistence.record.WeeklyAggregatedRecordWithTaxBean(r.year, r.month, r.week, sum(r.minutes), r.dailyRate, r.budget.contract.taxRate ) from WorkRecordEntity r where r.budget.id=:budgetId group by r.year, r.month, r.week, r.dailyRate, r.budget.contract.taxRate order by r.year, r.week")
+    List<WeeklyAggregatedRecordWithTaxBean> aggregateByWeekForBudgetWithTax(@Param("budgetId") long budgetId);
+
+    @Override
+    @Query("select new org.wickedsource.budgeteer.persistence.record.MonthlyAggregatedRecordWithTaxBean(r.year, r.month, sum(r.minutes), r.dailyRate, r.budget.contract.taxRate ) from WorkRecordEntity r where r.budget.id=:budgetId group by r.year, r.month, r.dailyRate, r.budget.contract.taxRate order by r.year, r.month")
+    List<MonthlyAggregatedRecordWithTaxBean> aggregateByMonthForBudgetWithTax(@Param("budgetId") long budgetId);
+
+    @Override
+    @Query("select new org.wickedsource.budgeteer.persistence.record.MonthlyAggregatedRecordWithTaxBean(r.year, r.month, sum(r.minutes), r.dailyRate, r.budget.contract.taxRate ) from WorkRecordEntity r join r.budget b where b.project.id=:projectId group by r.year, r.month, r.dailyRate, r.budget.contract.taxRate order by r.year, r.month")
+    List<MonthlyAggregatedRecordWithTaxBean> aggregateByMonthForBudgetsWithTax(@Param("projectId") long projectId);
+
+    @Override
+    @Query("select new org.wickedsource.budgeteer.persistence.record.MonthlyAggregatedRecordWithTaxBean(r.year, r.month, sum(r.minutes), r.dailyRate, r.budget.contract.taxRate ) from WorkRecordEntity r join r.budget b join b.tags t where b.project.id=:projectId and t.tag in (:tags) group by r.year, r.month, r.dailyRate, r.budget.contract.taxRate order by r.year, r.month")
+    List<MonthlyAggregatedRecordWithTaxBean> aggregateByMonthForBudgetsWithTax(@Param("projectId") long projectId, @Param("tags") List<String> tags);
 }

@@ -2,7 +2,7 @@ package org.wickedsource.budgeteer.web.pages.budgets.overview.filter;
 
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.form.NumberTextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
@@ -20,7 +20,7 @@ public class BudgetRemainingFilterPanel extends Panel {
         add(form);
     }
 
-    private TextField<Long> createTextInputField(String id, IModel<Long> value){
-        return new TextField<>(id, value);
+    private NumberTextField<Long> createTextInputField(String id, IModel<Long> value){
+        return new NumberTextField<>(id, value);
     }
 }
