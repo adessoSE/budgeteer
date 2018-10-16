@@ -1,0 +1,40 @@
+<wicket:extend xmlns:wicket="http://www.w3.org/1999/xhtml">
+    <div class="form-box wide" id="login-box">
+        <div class="header"><span>Add Manual Record</span>
+            <div class="box-tools pull-right">
+                <button wicket:id="cancelButton1" class="btn bg-olive btn-sm"><i class="fa fa-times"></i></button>
+            </div>
+        </div>
+        <form wicket:id="form" method="post">
+            <div class="body bg-gray">
+                <div wicket:id="notificationList"></div>
+                <div wicket:id="feedback"></div>
+                <div class="form-group">
+                    <label for="descriptionInput"><wicket:message key="page.record.description">Record Descripion</wicket:message></label>
+                    <input wicket:id="description"type="text" maxlength="255" name="name" id="descriptionInput" class="form-control"/>
+                    <p class="help-block"><wicket:message key="page.record.description.hint">A description of the purpose of this record.</wicket:message></p>
+                </div>
+                <div class="form-group">
+                    <label for="totalInput"><wicket:message key="page.record.amount">Net Record Amount</wicket:message></label>
+                    <input wicket:id="total" type="text" maxlength="14" name="name" id="totalInput" class="form-control"/>
+                    <p class="help-block"><wicket:message key="page.record.amount.hint">The total money spent for this record</wicket:message></p>
+                </div>
+            </div>
+            <div class="footer">
+                <div class="row">
+                    <div class="col-lg-3">
+                        <button wicket:id="cancelButton2" id="cancel" type="button" class="btn bg-olive btn-block">
+                            Cancel
+                        </button>
+                    </div>
+                    <div class="col-lg-9">
+                        <button type="submit" id="submitButton"
+                                class="btn bg-olive btn-block">Create Record
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script src="js/enterAndEscape.js"></script>
+</wicket:extend>

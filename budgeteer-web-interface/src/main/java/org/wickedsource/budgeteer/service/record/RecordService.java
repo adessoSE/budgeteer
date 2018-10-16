@@ -4,13 +4,16 @@ import com.querydsl.core.types.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.wickedsource.budgeteer.ListUtil;
+import org.wickedsource.budgeteer.persistence.budget.BudgetRepository;
 import org.wickedsource.budgeteer.persistence.record.*;
+import org.wickedsource.budgeteer.persistence.record.AddManualRecordData;
 import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
 import org.wickedsource.budgeteer.service.statistics.MonthlyStats;
 
 import javax.transaction.Transactional;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -22,6 +25,9 @@ public class RecordService {
 
     @Autowired
     private PlanRecordRepository planRecordRepository;
+
+    @Autowired
+    private BudgetRepository budgetRepository;
 
     @Autowired
     private RecordJoiner recordJoiner;
@@ -227,5 +233,19 @@ public class RecordService {
         entity.setDailyRate(record.getDailyRate());
         entity.setEditedManually(record.isEditedManually());
         workRecordRepository.save(entity);
+    }
+
+
+    public void saveManualRecord(AddManualRecordData data)
+    {
+        // ToDo
+        assert data != null;
+        ManualWorkRecordEntity record = new ManualWorkRecordEntity();
+        record.setDescription(data.getDescription());
+        record.setMoneyAmount(data.getMoneyAmount());
+        record.setDate(new Date());
+        //record.setBudget(budgetRepository.findOne(data.getBudgetId()));
+
+        workRecordRepository.save(record);
     }
 }
