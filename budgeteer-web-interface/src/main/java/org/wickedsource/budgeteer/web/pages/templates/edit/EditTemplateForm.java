@@ -201,20 +201,23 @@ public class EditTemplateForm extends Form<TemplateFormInputDto> {
         return new Link<Void>(wicketId) {
             @Override
             public void onClick() {
-                setResponsePage(new DeleteDialog(new Callable<Void>() {
+                setResponsePage(new DeleteDialog() {
                     @Override
-                    public Void call(){
+                    protected void onYes() {
                         service.deleteTemplate(templateID);
                         ((EditTemplatePage)EditTemplateForm.this.getPage()).goBack();
-                        return null;
                     }
-                }, new Callable<Void>() {
+
                     @Override
-                    public Void call(){
+                    protected void onNo() {
                         setResponsePage(new EditTemplatePage(TemplatesPage.class, getPage().getPageParameters(), templateID));
-                        return null;
                     }
-                }));
+
+                    @Override
+                    protected String confirmationText() {
+                        return EditTemplateForm.this.getString("delete.template.confirmation");
+                    }
+                });
             }
         };
     }

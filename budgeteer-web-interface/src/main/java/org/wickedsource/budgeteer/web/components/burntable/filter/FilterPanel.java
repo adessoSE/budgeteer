@@ -3,6 +3,7 @@ package org.wickedsource.budgeteer.web.components.burntable.filter;
 import org.apache.wicket.Page;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.ListMultipleChoice;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -22,6 +23,7 @@ import org.wickedsource.budgeteer.web.components.multiselect.MultiselectBehavior
 import org.wickedsource.budgeteer.web.components.person.PersonBaseDataChoiceRenderer;
 import org.wicketstuff.lazymodel.LazyModel;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -35,6 +37,9 @@ public class FilterPanel extends Panel {
     private boolean budgetFilterEnabled = true;
 
     private boolean daterangeFilterEnabled = true;
+
+    private boolean sortingFilterEnabled = true;
+
 
     @SpringBean
     private PersonService personService;
@@ -55,8 +60,40 @@ public class FilterPanel extends Panel {
         form.add(createPersonFilter("personFilterContainer", form));
         form.add(createBudgetFilter("budgetFilterContainer", form));
         form.add(createDaterangeFilter("daterangeFilterContainer", form));
+        form.add(createSortingFilter("sortingFilterContainer", form));
         form.add(new ResetFilterLink("resetButton", filter, page, pageParameters));
         add(form);
+    }
+
+    private WebMarkupContainer createSortingFilter(String id, Form<WorkRecordFilter> form) {
+        WebMarkupContainer container = new WebMarkupContainer(id) {
+            @Override
+            public boolean isVisible() {
+                return isSortingFilterEnabled();
+            }
+        };
+        container.setVisible(isSortingFilterEnabled());
+        DropDownChoice<BurnTableSortColumn> columnSelect = new DropDownChoice<>("columnSelect", form.getModelObject().getColumnToSort(), Arrays.asList(BurnTableSortColumn.values()));
+
+        List<String> possibleSortTypes = Arrays.asList("Ascending", "Descending");
+        DropDownChoice<String> sortTypeSelect = new DropDownChoice<>("sortTypeSelect", form.getModelObject().getSortType(), possibleSortTypes);
+
+        HashMap<String, String> options = MultiselectBehavior.getRecommendedOptions();
+        options.put("buttonWidth", "'120px'");
+        options.remove("buttonClass");
+        options.put("enableCaseInsensitiveFiltering", "false");
+        options.put("enableFiltering","false");
+
+        columnSelect.add(new MultiselectBehavior(options));
+        columnSelect.setRequired(false);
+
+        sortTypeSelect.add(new MultiselectBehavior(options));
+        sortTypeSelect.setRequired(false);
+
+        container.add(columnSelect);
+        container.add(sortTypeSelect);
+
+        return container;
     }
 
     private WebMarkupContainer createPersonFilter(String id, Form<WorkRecordFilter> form) {
@@ -71,7 +108,7 @@ public class FilterPanel extends Panel {
         List<PersonBaseData> possiblePersonsFromFilter = form.getModelObject().getPossiblePersons();
         List<PersonBaseData> possiblePersons = possiblePersonsFromFilter.isEmpty() ? personService.loadPeopleBaseData(BudgeteerSession.get().getProjectId()) : possiblePersonsFromFilter;
         ListMultipleChoice<PersonBaseData> selectedPersons =
-                new ListMultipleChoice<PersonBaseData>("personSelect", chosenPersons,
+                new ListMultipleChoice<>("personSelect", chosenPersons,
                         possiblePersons, new PersonBaseDataChoiceRenderer());
 
 
@@ -117,6 +154,10 @@ public class FilterPanel extends Panel {
         field.setRequired(false);
         container.add(field);
         return container;
+    }
+
+    private boolean isSortingFilterEnabled() {
+        return sortingFilterEnabled;
     }
 
     public boolean isPersonFilterEnabled() {

@@ -112,6 +112,8 @@ class BudgetServiceTest extends ServiceTestTemplate {
         Assertions.assertEquals(budget.getImportKey(), data.getImportKey());
         Assertions.assertEquals(budget.getName(), data.getTitle());
         Assertions.assertEquals(budget.getId(), data.getId());
+        Assertions.assertEquals(budget.getNote(), data.getNote());
+        Assertions.assertEquals(budget.getLimit(), data.getLimit());
         Assertions.assertEquals(budget.getLimit(), data.getLimit());
         Assertions.assertEquals(budget.getNote(), data.getNote());
     }

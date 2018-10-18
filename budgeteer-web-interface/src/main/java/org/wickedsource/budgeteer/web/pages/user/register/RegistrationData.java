@@ -6,6 +6,8 @@ public class RegistrationData implements Serializable {
 
     private String username;
 
+    private String mail;
+
     private String password;
 
     private String passwordConfirmation;
@@ -16,6 +18,14 @@ public class RegistrationData implements Serializable {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getMail() {
+        return mail;
+    }
+
+    public void setMail(String mail) {
+        this.mail = mail;
     }
 
     public String getPassword() {

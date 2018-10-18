@@ -17,7 +17,6 @@ import org.wickedsource.budgeteer.service.budget.BudgetDetailData;
 import org.wickedsource.budgeteer.service.budget.BudgetService;
 import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.components.confirm.ConfirmationForm;
-import org.wickedsource.budgeteer.web.components.links.NetGrossLink;
 import org.wickedsource.budgeteer.web.pages.base.basepage.BasePage;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.Breadcrumb;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
@@ -64,14 +63,23 @@ public class BudgetDetailsPage extends BasePage {
         Form deleteForm = new ConfirmationForm("deleteForm", this, "confirmation.delete") {
             @Override
             public void onSubmit() {
-                setResponsePage(new DeleteDialog(() -> {
-                    budgetService.deleteBudget(getParameterId());
-                    setResponsePage(BudgetsOverviewPage.class);
-                    return null;
-                }, () -> {
-                    setResponsePage(new BudgetDetailsPage(getPageParameters()));
-                    return null;
-                }));
+                setResponsePage(new DeleteDialog() {
+                    @Override
+                    protected void onYes() {
+                        budgetService.deleteBudget(getParameterId());
+                        setResponsePage(BudgetsOverviewPage.class);
+                    }
+
+                    @Override
+                    protected void onNo() {
+                        setResponsePage(new BudgetDetailsPage(BudgetDetailsPage.this.getPageParameters()));
+                    }
+
+                    @Override
+                    protected String confirmationText() {
+                        return BudgetDetailsPage.this.getString("confirmation.delete");
+                    }
+                });
             }
         };
         if(this.model.getObject().getContractName() != null){
