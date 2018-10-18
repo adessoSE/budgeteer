@@ -53,8 +53,6 @@ dependencies {
     compile project(':budgeteer-resourceplan-importer')
     compile project(':budgeteer-report-exporter')
 
-    compile('org.liquibase:liquibase-core')
-
     compile(group: 'org.springframework', name: 'spring-web', version: "${spring_version}")
 
     compile(
@@ -87,6 +85,8 @@ dependencies {
     providedCompile group: 'org.joda', name: 'joda-convert', version: "${joda_convert_version}"
     compile group: 'org.joda', name: 'joda-money', version: "${joda_money_version}"
     compile group: 'de.jollyday', name: 'jollyday', version: "${jollyday_version}"
+
+    compile "org.flywaydb:flyway-core"
 
     compile(
             [group: 'com.querydsl', name: 'querydsl-apt', version: "${query_dsl_version}"],
