@@ -56,7 +56,8 @@ public class ContractService {
 
     @PreAuthorize("canReadContract(#contractId)")
     public ContractBaseData getContractById(long contractId) {
-        return mapper.map(contractRepository.findOne(contractId));
+        ContractBaseData data = mapper.map(contractRepository.findOne(contractId));
+        return data;
     }
 
     @PreAuthorize("canReadProject(#projectId)")

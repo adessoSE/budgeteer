@@ -5,6 +5,7 @@ import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 import org.apache.commons.lang3.time.DateUtils;
+import org.apache.wicket.util.tester.WicketTester;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +20,17 @@ import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.ServiceIntegrationTestTemplate;
 import org.wickedsource.budgeteer.persistence.contract.ContractEntity;
 import org.wickedsource.budgeteer.persistence.contract.ContractRepository;
+import org.wickedsource.budgeteer.persistence.contract.ContractSortingRepository;
 import org.wickedsource.budgeteer.persistence.project.ProjectRepository;
+import org.wickedsource.budgeteer.service.user.User;
+import org.wickedsource.budgeteer.web.BudgeteerApplication;
+import org.wickedsource.budgeteer.web.BudgeteerSession;
 
 import java.util.*;
 
 import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {IntegrationTestConfiguration.class})
@@ -35,7 +42,6 @@ import static org.junit.Assert.*;
 })
 class ContractServiceTest extends ServiceIntegrationTestTemplate {
 
-
     @Autowired
     private ContractService service;
 
@@ -44,6 +50,9 @@ class ContractServiceTest extends ServiceIntegrationTestTemplate {
 
     @Autowired
     private ContractRepository contractRepository;
+
+    @Autowired
+    private ContractSortingRepository contractSortingRepository;
 
     /**
      * Save a new Contract associated with a Project that does not have any ProjectContractFields
@@ -59,6 +68,7 @@ class ContractServiceTest extends ServiceIntegrationTestTemplate {
         testObject.setContractName("Test Contract");
         testObject.setContractAttributes(getListOfContractFields());
         testObject.getContractAttributes().add(new DynamicAttributeField("test4", "test4"));
+        testObject.setSortingIndex(0);
 
         long newContractId = service.save(testObject);
 
@@ -85,6 +95,7 @@ class ContractServiceTest extends ServiceIntegrationTestTemplate {
         testObject.setContractName("Test Contract");
         testObject.setContractAttributes(getListOfContractFields());
         testObject.getContractAttributes().add(new DynamicAttributeField("test4", "test4"));
+        testObject.setSortingIndex(0);
 
         long newContractId = service.save(testObject);
 
@@ -113,6 +124,7 @@ class ContractServiceTest extends ServiceIntegrationTestTemplate {
         testObject.setType(ContractEntity.ContractType.T_UND_M);
         testObject.setContractAttributes(getListOfContractFields());
         testObject.getContractAttributes().add(new DynamicAttributeField("test5", "test5"));
+        testObject.setSortingIndex(0);
 
         long newContractId = service.save(testObject);
 
@@ -233,7 +245,7 @@ class ContractServiceTest extends ServiceIntegrationTestTemplate {
     }
 
     private List<DynamicAttributeField> getListOfContractFields() {
-        List<DynamicAttributeField> result = new LinkedList<DynamicAttributeField>();
+        List<DynamicAttributeField> result = new LinkedList<>();
         DynamicAttributeField data = new DynamicAttributeField();
         for(int i = 0; i < 5; i++) {
             data = new DynamicAttributeField();

@@ -14,6 +14,7 @@ import org.wickedsource.budgeteer.service.AbstractMapper;
 import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
 import org.wickedsource.budgeteer.service.invoice.InvoiceBaseData;
 import org.wickedsource.budgeteer.service.invoice.InvoiceDataMapper;
+import org.wickedsource.budgeteer.service.user.User;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.components.fileUpload.FileUploadModel;
 
@@ -41,7 +42,10 @@ public class ContractDataMapper extends AbstractMapper<ContractEntity, ContractB
         ContractBaseData result = new ContractBaseData();
         result.setContractName(entity.getName());
         result.setContractId(entity.getId());
-        Integer sortingIndex = contractSortingRepository.getSortingIndex(entity.getId(), BudgeteerSession.get().getLoggedInUser().getId());
+        BudgeteerSession session =BudgeteerSession.get();
+        User user = session.getLoggedInUser();
+        long userID = user.getId();
+        Integer sortingIndex = contractSortingRepository.getSortingIndex(entity.getId(), userID);
         if (sortingIndex == null) {
             // Create a new ContractSortingEntity if the contract has none for this user
             ContractSortingEntity sortingEntity = new ContractSortingEntity();
@@ -49,6 +53,7 @@ public class ContractDataMapper extends AbstractMapper<ContractEntity, ContractB
             sortingEntity.setContract(entity);
             sortingEntity.setUser(userRepository.findByName(BudgeteerSession.get().getLoggedInUser().getName()));
             contractSortingRepository.save(sortingEntity);
+            sortingIndex = 0;
         }
         result.setSortingIndex(sortingIndex);
         result.setBudget(entity.getBudget());
