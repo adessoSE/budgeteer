@@ -8,10 +8,12 @@ import org.wickedsource.budgeteer.persistence.budget.BudgetRepository;
 import org.wickedsource.budgeteer.persistence.contract.ContractEntity;
 import org.wickedsource.budgeteer.persistence.contract.ContractFieldEntity;
 import org.wickedsource.budgeteer.persistence.contract.ContractRepository;
+import org.wickedsource.budgeteer.persistence.contract.ContractSortingRepository;
 import org.wickedsource.budgeteer.persistence.invoice.InvoiceRepository;
 import org.wickedsource.budgeteer.persistence.project.ProjectContractField;
 import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
 import org.wickedsource.budgeteer.persistence.project.ProjectRepository;
+import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.pages.contract.overview.table.ContractOverviewTableModel;
 
 import javax.transaction.Transactional;
@@ -24,6 +26,9 @@ public class ContractService {
 
     @Autowired
     private ContractRepository contractRepository;
+
+    @Autowired
+    private ContractSortingRepository contractSortingRepository;
 
     @Autowired
     private ProjectRepository projectRepository;
@@ -42,7 +47,7 @@ public class ContractService {
         ContractOverviewTableModel result = new ContractOverviewTableModel();
         result.setContracts(mapper.map(contractRepository.findByProjectId(projectId)));
 
-        // Save the contracts to make sure there is no null-value in the sorting indices
+        // Save the contracts to make sure everyone has a unique sorting index
         for (ContractBaseData contractBaseData : result.getContracts()) {
             save(contractBaseData);
         }
@@ -90,7 +95,8 @@ public class ContractService {
         contractEntity.setLink(contractBaseData.getFileModel().getLink());
         contractEntity.setFileName(contractBaseData.getFileModel().getFileName());
         contractEntity.setFile(contractBaseData.getFileModel().getFile());
-        contractEntity.setSortingIndex(contractBaseData.getSortingIndex());
+        contractSortingRepository.setSortingIndex(contractBaseData.getContractId(), BudgeteerSession.get().getLoggedInUser().getId(), contractBaseData.getSortingIndex());
+
         if (contractBaseData.getTaxRate() < 0) {
             throw new IllegalArgumentException("Taxrate must be positive.");
         } else {

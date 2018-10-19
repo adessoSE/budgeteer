@@ -4,9 +4,9 @@
     <table class="table table-hover smallLastColumn" wicket:id="table">
         <thead>
         <tr>
-            <th></th>
+            <th id="btnsHeadCell"></th>
             <th>
-                <wicket:message key="overview.table.contract.name" style="width:90px;">Contract name</wicket:message>
+                <wicket:message key="overview.table.contract.name">Contract name</wicket:message>
             </th>
             <th>
                 <wicket:message key="overview.table.contract.internalNumber">Internal-number</wicket:message>
@@ -32,16 +32,17 @@
         </thead>
         <tbody>
         <tr wicket:id="contractRows" ondrop="drop(event)" ondragover="allowDrop(event)">
-            <td style="width:90px;">
-                <span class="btn btn-default btn-sm dragBtn" ondragstart="dragStart(event)" draggable="true">
-                    <i class="fa fa-ellipsis-v"></i>
+            <td style="width:100px;">
+                <span class="btn btn-default btn-sm dragBtn" ondragstart="dragStart(event)" onmouseenter="hover(event, true)"
+                      onmouseleave="hover(event, false)"  draggable="true" data-toggle="tooltip" title="Drag this row for sorting">
+                    <i class="fa fa-hand-o-up" aria-hidden="true"></i>
                 </span>
-                <span class="btn btn-default btn-sm" ondragstart="dragStart(event)" onclick="up(event)"
-                      draggable="true">
+                <span class="btn btn-default btn-sm" onclick="up(event)" onmouseenter="hover(event, true)" onmouseleave="hover(event, false)"
+                      data-toggle="tooltip" title="Swap this row with the previous row">
                     <i class="fa fa-sort-up"></i>
                 </span>
-                <span class="btn btn-default btn-sm" ondragstart="dragStart(event)" onclick="down(event)"
-                      draggable="true">
+                <span class="btn btn-default btn-sm" onclick="down(event)" onmouseenter="hover(event, true)" onmouseleave="hover(event, false)"
+                      data-toggle="tooltip" title="Swap this row with the next row">
                     <i class="fa fa-sort-down"></i>
                 </span>
                 <input type="hidden" wicket:id="contractID">
@@ -68,6 +69,7 @@
         </tr>
         <tr>
             <td><strong>Total</strong></td>
+            <td></td>
             <td></td>
             <td></td>
             <td></td>

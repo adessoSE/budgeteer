@@ -6,15 +6,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.persistence.budget.BudgetEntity;
-import org.wickedsource.budgeteer.persistence.contract.ContractEntity;
-import org.wickedsource.budgeteer.persistence.contract.ContractFieldEntity;
-import org.wickedsource.budgeteer.persistence.contract.ContractRepository;
+import org.wickedsource.budgeteer.persistence.contract.*;
 import org.wickedsource.budgeteer.persistence.invoice.InvoiceEntity;
 import org.wickedsource.budgeteer.persistence.project.ProjectContractField;
+import org.wickedsource.budgeteer.persistence.user.UserRepository;
 import org.wickedsource.budgeteer.service.AbstractMapper;
 import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
 import org.wickedsource.budgeteer.service.invoice.InvoiceBaseData;
 import org.wickedsource.budgeteer.service.invoice.InvoiceDataMapper;
+import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.components.fileUpload.FileUploadModel;
 
 import java.util.*;
@@ -28,6 +28,12 @@ public class ContractDataMapper extends AbstractMapper<ContractEntity, ContractB
     @Autowired
     private ContractRepository contractRepository;
 
+    @Autowired
+    private ContractSortingRepository contractSortingRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
     @Override
     public ContractBaseData map(ContractEntity entity) {
         if (entity == null)
@@ -35,7 +41,16 @@ public class ContractDataMapper extends AbstractMapper<ContractEntity, ContractB
         ContractBaseData result = new ContractBaseData();
         result.setContractName(entity.getName());
         result.setContractId(entity.getId());
-        result.setSortingIndex(entity.getSortingIndex());
+        Integer sortingIndex = contractSortingRepository.getSortingIndex(entity.getId(), BudgeteerSession.get().getLoggedInUser().getId());
+        if (sortingIndex == null) {
+            // Create a new ContractSortingEntity if the contract has none for this user
+            ContractSortingEntity sortingEntity = new ContractSortingEntity();
+            sortingEntity.setSortingIndex(0);
+            sortingEntity.setContract(entity);
+            sortingEntity.setUser(userRepository.findByName(BudgeteerSession.get().getLoggedInUser().getName()));
+            contractSortingRepository.save(sortingEntity);
+        }
+        result.setSortingIndex(sortingIndex);
         result.setBudget(entity.getBudget());
         result.setBudgetLeft(toMoneyNullsafe(contractRepository.getBudgetLeftByContractId(entity.getId())));
         result.setBudgetSpent(toMoneyNullsafe(contractRepository.getSpentBudgetByContractId(entity.getId())));
@@ -77,7 +92,7 @@ public class ContractDataMapper extends AbstractMapper<ContractEntity, ContractB
         // Sort by sorting index
         result.sort(new ContractComparator());
 
-        // Update sorting indices to prevent nulls
+        // Give every contract a unique sequential sorting index
         for (int i = 0; i < result.size(); i++) {
             result.get(i).setSortingIndex(i);
         }

@@ -3,7 +3,26 @@ var draggedRow;
 
 $(document).ready(function(){
     table = $(".table").DataTable();
+    // Remove arrows in the header cell of the sorting buttons
+    $("#btnsHeadCell").removeClass('sorting_asc');
+
+    $("tr").click(function(){
+        // Remove arrows in the header cell of the sorting buttons
+        $("#btnsHeadCell").removeClass('sorting');
+        saveSorting();
+    });
 });
+
+function hover(event, show){
+    var source = event.target || event.srcElement;
+
+    if(show){
+        $(source).tooltip('show');
+    }
+    else{
+        $(source).tooltip('hide');
+    }
+}
 
 // Get all row indices of the table
 function getAllIndices(){
@@ -25,26 +44,28 @@ function getRowIndex(event){
 function down(event){
     var page = table.page();
     // Order by the first column, else row swapping doesn't work
-    table.order([0, 'desc']);
+    table.order([0, 'asc']);
     var thisIndex = getRowIndex(event);
     var allIndices = getAllIndices();
     var arrayIndex = allIndices.indexOf(thisIndex);
     var nextIndex = allIndices[arrayIndex+1];
     swapRows(thisIndex, nextIndex);
     table.page(page);
+    saveSorting();
 }
 
 // Event handler for the up button: Swap row with previous row
 function up(event){
     var page = table.page();
     // Order by the first column, else row swapping doesn't work
-    table.order([0, 'desc']);
+    table.order([0, 'asc']);
     var thisIndex = getRowIndex(event);
     var allIndices = getAllIndices();
     var arrayIndex = allIndices.indexOf(thisIndex);
     var previousIndex = allIndices[arrayIndex-1];
     swapRows(thisIndex, previousIndex);
     table.page(page);
+    saveSorting();
 }
 
 // Swap the rows of the two indices
@@ -60,6 +81,8 @@ function swapRows(firstIndex, secondIndex) {
 
 // Event handler for dragging: save the dragged row
 function dragStart(event){
+    // Order by the first column, else row swapping doesn't work
+    table.order([0, 'asc']);
     var source = event.target || event.srcElement;
     draggedRow = $(source).parents("tr");
 }
@@ -71,6 +94,7 @@ function drop(event){
     var currentIndex = getRowIndex(event);
     var oldIndex = table.row(draggedRow).index();
     swapRows(currentIndex, oldIndex);
+    saveSorting();
 }
 
 function allowDrop(ev) {
@@ -89,6 +113,9 @@ function saveSorting(){
     });
 
     postAJAX(contractIDs);
+
+    // Remove arrows in the header cell of the sorting buttons
+    $("#btnsHeadCell").removeClass('sorting_asc sorting');
 }
 
 function postAJAX(tableData){
