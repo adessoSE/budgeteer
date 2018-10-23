@@ -17,11 +17,11 @@ public class ContractSortingEntity {
     @Column(name = "SORTING_INDEX")
     private Integer sortingIndex;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CONTRACT_ID")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(nullable = false, name = "CONTRACT_ID")
     private ContractEntity contract;
 
-    @OneToOne(targetEntity = UserEntity.class, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(nullable = false, name = "user_id")
     private UserEntity user;
 }

@@ -11,6 +11,8 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 import org.wickedsource.budgeteer.service.security.BudgeteerAuthenticationToken;
+import org.wickedsource.budgeteer.service.user.User;
+import org.wickedsource.budgeteer.web.BudgeteerSession;
 
 import javax.transaction.Transactional;
 

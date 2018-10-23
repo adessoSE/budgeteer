@@ -9,6 +9,7 @@ import org.wickedsource.budgeteer.persistence.budget.BudgetEntity;
 import org.wickedsource.budgeteer.persistence.contract.*;
 import org.wickedsource.budgeteer.persistence.invoice.InvoiceEntity;
 import org.wickedsource.budgeteer.persistence.project.ProjectContractField;
+import org.wickedsource.budgeteer.persistence.user.UserEntity;
 import org.wickedsource.budgeteer.persistence.user.UserRepository;
 import org.wickedsource.budgeteer.service.AbstractMapper;
 import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
@@ -42,10 +43,7 @@ public class ContractDataMapper extends AbstractMapper<ContractEntity, ContractB
         ContractBaseData result = new ContractBaseData();
         result.setContractName(entity.getName());
         result.setContractId(entity.getId());
-        BudgeteerSession session =BudgeteerSession.get();
-        User user = session.getLoggedInUser();
-        long userID = user.getId();
-        Integer sortingIndex = contractSortingRepository.getSortingIndex(entity.getId(), userID);
+        Integer sortingIndex = contractSortingRepository.getSortingIndex(entity.getId(), BudgeteerSession.get().getLoggedInUser().getId());
         if (sortingIndex == null) {
             // Create a new ContractSortingEntity if the contract has none for this user
             ContractSortingEntity sortingEntity = new ContractSortingEntity();

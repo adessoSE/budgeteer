@@ -15,24 +15,9 @@ import org.wickedsource.budgeteer.web.BudgeteerSession;
  */
 public class ServiceIntegrationTestTemplate {
 
-    @Autowired
-    BudgeteerApplication application;
-
-    WicketTester tester;
-
     @BeforeEach
     public void setAuthentication() {
         // set a placeholder authentication
         SecurityContextHolder.getContext().setAuthentication(new BudgeteerAuthenticationToken("user"));
-
-        if(tester == null)
-        {
-            WicketTester tester = new WicketTester(application);
-
-            User user = new User();
-            user.setId(1L);
-            BudgeteerSession.get().login(user);
-            BudgeteerSession.get().setProjectSelected(true);
-        }
     }
 }

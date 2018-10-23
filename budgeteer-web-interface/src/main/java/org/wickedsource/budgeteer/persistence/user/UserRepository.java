@@ -20,6 +20,9 @@ public interface UserRepository extends CrudRepository<UserEntity, Long> {
     @Query("select u from UserEntity u where u.mail = :mail")
     public UserEntity findByMail(@Param("mail") String mail);
 
+    @Query("select u from UserEntity u where u.id = :id")
+    public UserEntity findById(@Param("id") long id);
+
     @Query("select u from UserEntity u where u.id not in (select u2.id from UserEntity u2 join u2.authorizedProjects p where p.id = :projectId)")
     public List<UserEntity> findNotInProject(@Param("projectId") long projectId);
 
