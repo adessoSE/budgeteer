@@ -4,6 +4,7 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.extensions.ajax.markup.html.form.upload.UploadProgressBar;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -16,8 +17,12 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.Url;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.request.resource.CssResourceReference;
+import org.apache.wicket.request.resource.ResourceReference;
+import org.apache.wicket.request.resource.UrlResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.io.IOUtils;
 import org.apache.wicket.util.resource.AbstractResourceStreamWriter;
@@ -26,6 +31,7 @@ import org.wickedsource.budgeteer.importer.aproda.AprodaWorkRecordsImporter;
 import org.wickedsource.budgeteer.importer.ubw.UBWWorkRecordsImporter;
 import org.wickedsource.budgeteer.imports.api.*;
 import org.wickedsource.budgeteer.service.imports.ImportService;
+import org.wickedsource.budgeteer.web.BudgeteerApplication;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.ClassAwareWrappingModel;
 import org.wickedsource.budgeteer.web.Mount;
@@ -47,7 +53,7 @@ public class ImportFilesPage extends DialogPageWithBacklink {
 
     private Importer importer = new AprodaWorkRecordsImporter();
 
-    private List<FileUpload> fileUploads = new ArrayList<FileUpload>();
+    private List<FileUpload> fileUploads = new ArrayList<>();
 
     private CustomFeedbackPanel feedback;
 
@@ -57,7 +63,7 @@ public class ImportFilesPage extends DialogPageWithBacklink {
         super(backlinkPage, backlinkParameters);
         add(createBacklink("backlink1"));
 
-        final Form<ImportFormBean> form = new Form<ImportFormBean>("importForm", new ClassAwareWrappingModel<ImportFormBean>(new Model<ImportFormBean>(new ImportFormBean()), ImportFormBean.class)) {
+        final Form<ImportFormBean> form = new Form<ImportFormBean>("importForm", new ClassAwareWrappingModel<>(new Model<>(new ImportFormBean()), ImportFormBean.class)) {
             @Override
             protected void onSubmit() {
                 try {
@@ -87,6 +93,8 @@ public class ImportFilesPage extends DialogPageWithBacklink {
 
 
         };
+
+
         WebMarkupContainer importFeedback = new WebMarkupContainer("importFeedback"){
             @Override
             public boolean isVisible() {
@@ -110,7 +118,7 @@ public class ImportFilesPage extends DialogPageWithBacklink {
         form.add(feedback);
 
         ImportersListModel importersListModel = new ImportersListModel();
-        DropDownChoice<Importer> importerChoice = new DropDownChoice<Importer>("importerChoice", new PropertyModel<Importer>(this, "importer"), importersListModel, new ImporterChoiceRenderer());
+        DropDownChoice<Importer> importerChoice = new DropDownChoice<>("importerChoice", new PropertyModel<>(this, "importer"), importersListModel, new ImporterChoiceRenderer());
 
         // Set the UBWWorkRecordsImporter as Default if available
         for (Importer importer : importersListModel.getObject()) {
@@ -128,7 +136,7 @@ public class ImportFilesPage extends DialogPageWithBacklink {
         importerChoice.setRequired(true);
         form.add(importerChoice);
 
-        FileUploadField fileUpload = new FileUploadField("fileUpload", new PropertyModel<List<FileUpload>>(this, "fileUploads"));
+        FileUploadField fileUpload = new FileUploadField("fileUpload", new PropertyModel<>(this, "fileUploads"));
         fileUpload.setRequired(true);
         fileUpload.add(new AttributeModifier("accept", new AcceptedFileExtensionsModel(importer)));
         fileUpload.add(new AjaxEventBehavior("change") {
@@ -138,6 +146,15 @@ public class ImportFilesPage extends DialogPageWithBacklink {
             }
         });
         form.add(fileUpload);
+
+        UploadProgressBar uploadProgressBar = new UploadProgressBar("progressBar", form, fileUpload){
+            @Override
+            protected ResourceReference getCss() {
+                return new UrlResourceReference(Url.parse("css/budgeteer/uploadProgressBar.css")).setContextRelative(true);
+            }
+        };
+        uploadProgressBar.setOutputMarkupId(true);
+        form.add(uploadProgressBar);
 
         form.add(createBacklink("backlink2"));
         form.add(createExampleFileButton("exampleFileButton"));
