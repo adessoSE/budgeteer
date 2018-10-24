@@ -176,7 +176,7 @@ subprojects {
                 artifact javadocJar {
                     classifier "javadoc"
                 }
-                groupId 'de.adesso.budgeteer'
+                groupId 'org.wickedsource.budgeteer'
                 artifactId project.name
                 version project.version
                 pom.withXml {
