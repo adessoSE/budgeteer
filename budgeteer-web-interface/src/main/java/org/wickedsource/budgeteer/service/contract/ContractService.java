@@ -37,18 +37,6 @@ public class ContractService {
     @Autowired
     private ContractDataMapper mapper;
 
-/*    @PreAuthorize("canReadProject(#projectId)")
-    public ContractOverviewTableModel getContractOverviewByProject(long projectId) {
-        ContractOverviewTableModel result = new ContractOverviewTableModel();
-        result.setContracts(mapper.map(contractRepository.findByProjectId(projectId)));
-
-        // Save the contracts to make sure everyone has a unique sorting index
-        for (ContractBaseData contractBaseData : result.getContracts()) {
-            save(contractBaseData);
-        }
-        return result;
-    }*/
-
     @PreAuthorize("canReadContract(#contractId)")
     public ContractBaseData getContractById(long contractId) {
         ContractBaseData data = mapper.map(contractRepository.findOne(contractId));
