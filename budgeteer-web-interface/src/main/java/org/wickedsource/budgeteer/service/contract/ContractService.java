@@ -13,8 +13,6 @@ import org.wickedsource.budgeteer.persistence.invoice.InvoiceRepository;
 import org.wickedsource.budgeteer.persistence.project.ProjectContractField;
 import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
 import org.wickedsource.budgeteer.persistence.project.ProjectRepository;
-import org.wickedsource.budgeteer.web.BudgeteerSession;
-import org.wickedsource.budgeteer.web.pages.contract.overview.table.ContractOverviewTableModel;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
@@ -28,9 +26,6 @@ public class ContractService {
     private ContractRepository contractRepository;
 
     @Autowired
-    private ContractSortingRepository contractSortingRepository;
-
-    @Autowired
     private ProjectRepository projectRepository;
 
     @Autowired
@@ -42,7 +37,7 @@ public class ContractService {
     @Autowired
     private ContractDataMapper mapper;
 
-    @PreAuthorize("canReadProject(#projectId)")
+/*    @PreAuthorize("canReadProject(#projectId)")
     public ContractOverviewTableModel getContractOverviewByProject(long projectId) {
         ContractOverviewTableModel result = new ContractOverviewTableModel();
         result.setContracts(mapper.map(contractRepository.findByProjectId(projectId)));
@@ -52,7 +47,7 @@ public class ContractService {
             save(contractBaseData);
         }
         return result;
-    }
+    }*/
 
     @PreAuthorize("canReadContract(#contractId)")
     public ContractBaseData getContractById(long contractId) {
@@ -96,7 +91,6 @@ public class ContractService {
         contractEntity.setLink(contractBaseData.getFileModel().getLink());
         contractEntity.setFileName(contractBaseData.getFileModel().getFileName());
         contractEntity.setFile(contractBaseData.getFileModel().getFile());
-        contractSortingRepository.setSortingIndex(contractBaseData.getContractId(), BudgeteerSession.get().getLoggedInUser().getId(), contractBaseData.getSortingIndex());
 
         if (contractBaseData.getTaxRate() < 0) {
             throw new IllegalArgumentException("Taxrate must be positive.");

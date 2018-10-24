@@ -58,16 +58,6 @@ class ContractServiceTest extends ServiceIntegrationTestTemplate {
     @Autowired
     private UserRepository userRepository;
 
-    private void setUser() {
-            WicketTester tester = new WicketTester(new BudgeteerApplication());
-            User user = new User();
-            user.setId(1L);
-            user.setName("username");
-            BudgeteerSession session = BudgeteerSession.get();
-            session.login(user);
-            session.setProjectSelected(true);
-    }
-
     /**
      * Save a new Contract associated with a Project that does not have any ProjectContractFields
      */
@@ -75,7 +65,6 @@ class ContractServiceTest extends ServiceIntegrationTestTemplate {
     @DatabaseSetup("contractTest.xml")
     @DatabaseTearDown(value = "contractTest.xml", type = DatabaseOperation.DELETE_ALL)
     void testSaveNewContract() {
-        setUser();
         ContractBaseData testObject = new ContractBaseData();
         testObject.setBudget(MoneyUtil.createMoney(12));
         testObject.setContractId(0);
@@ -104,7 +93,6 @@ class ContractServiceTest extends ServiceIntegrationTestTemplate {
     @DatabaseSetup("contractTest.xml")
     @DatabaseTearDown(value = "contractTest.xml", type = DatabaseOperation.DELETE_ALL)
     void testSaveNewContract2() {
-        setUser();
         ContractBaseData testObject = new ContractBaseData();
         testObject.setContractId(0);
         testObject.setProjectId(2);
@@ -131,7 +119,6 @@ class ContractServiceTest extends ServiceIntegrationTestTemplate {
     @DatabaseSetup("contractTest.xml")
     @DatabaseTearDown(value = "contractTest.xml", type = DatabaseOperation.DELETE_ALL)
     void testUpdateContract() {
-        setUser();
         ContractBaseData testObject = service.getContractById(4);
 
         testObject.setBudget(MoneyUtil.createMoney(12));
@@ -175,7 +162,6 @@ class ContractServiceTest extends ServiceIntegrationTestTemplate {
     @DatabaseSetup("contractTest.xml")
     @DatabaseTearDown(value = "contractTest.xml", type = DatabaseOperation.DELETE_ALL)
     void testUpdateContract1() {
-        setUser();
         ContractBaseData testObject = service.getContractById(5);
 
         testObject.setBudget(MoneyUtil.createMoney(12));
@@ -230,7 +216,6 @@ class ContractServiceTest extends ServiceIntegrationTestTemplate {
     @DatabaseSetup("contractTest.xml")
     @DatabaseTearDown(value = "contractTest.xml", type = DatabaseOperation.DELETE_ALL)
     void testGetContractById() {
-        setUser();
         ContractBaseData testObject = service.getContractById(3);
 
         assertEquals(3, testObject.getContractId());
@@ -258,7 +243,6 @@ class ContractServiceTest extends ServiceIntegrationTestTemplate {
     @DatabaseSetup("contractTest.xml")
     @DatabaseTearDown(value = "contractTest.xml", type = DatabaseOperation.DELETE_ALL)
     void testGetContractByIdWithInvoices() {
-        setUser();
         ContractBaseData testObject = service.getContractById(6);
         assertEquals(2, testObject.getBelongingInvoices().size());
     }
@@ -279,7 +263,6 @@ class ContractServiceTest extends ServiceIntegrationTestTemplate {
     @DatabaseSetup("contractDeletionTest.xml")
     @DatabaseTearDown(value = "contractDeletionTest.xml", type = DatabaseOperation.DELETE_ALL)
     void testDeleteContract() {
-        setUser();
         assertNotNull(service.getContractById(3));
         assertEquals(contractRepository.findContractFieldsByContractId(3L).size(), 2);
         assertEquals(contractRepository.findContractFieldsByContractId(4L).size(), 1);

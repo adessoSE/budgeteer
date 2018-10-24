@@ -21,9 +21,7 @@ import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.StringValue;
-import org.aspectj.lang.reflect.InterTypeMethodDeclaration;
 import org.wickedsource.budgeteer.MoneyUtil;
-import org.wickedsource.budgeteer.persistence.contract.ContractEntity;
 import org.wickedsource.budgeteer.service.contract.*;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.components.dataTable.DataTableBehavior;
@@ -45,11 +43,11 @@ import static org.wicketstuff.lazymodel.LazyModel.model;
 public class ContractOverviewTable extends Panel {
 
     @SpringBean
-    private ContractService contractService;
+    private ContractSortingService contractSortingService;
 
     public ContractOverviewTable(String id) {
         super(id);
-        ContractOverviewTableModel data = contractService.getContractOverviewByProject(BudgeteerSession.get().getProjectId());
+        ContractOverviewTableModel data = new ContractOverviewTableModel();
         WebMarkupContainer table = new WebMarkupContainer("table");
         table.setOutputMarkupId(true);
 
@@ -63,7 +61,7 @@ public class ContractOverviewTable extends Panel {
                 StringValue value = params.getParameterValue(parameterNames.toArray()[1].toString());
                 String[] parts = value.toString().split(",");
 
-                List<ContractBaseData> contracts = data.getContracts();
+                List<ContractBaseData> contracts = data.load();
 
                 for (int i = 0; i < parts.length; i++) {
                     long id = Long.parseLong((parts[i]));
@@ -71,7 +69,7 @@ public class ContractOverviewTable extends Panel {
                     if (item.isPresent()) {
                         ContractBaseData contractBaseData = item.get();
                         contractBaseData.setSortingIndex(i);
-                        contractService.save(contractBaseData);
+                        contractSortingService.saveSortingIndex(contractBaseData, BudgeteerSession.get().getLoggedInUser().getId());
                     }
                 }
             }
@@ -89,13 +87,13 @@ public class ContractOverviewTable extends Panel {
         createNetGrossLabels(table);
 
         table.add(new DataTableBehavior(DataTableBehavior.getRecommendedOptions()));
-        table.add(new ListView<String>("headerRow", model(from(data).getHeadline())) {
+        table.add(new ListView<String>("headerRow", model(from(data.getHeadline()))) {
             @Override
             protected void populateItem(ListItem<String> item) {
                 item.add(new Label("headerItem", item.getModelObject()));
             }
         });
-        table.add(new ListView<ContractBaseData>("contractRows", model(from(data).getContracts())) {
+        table.add(new ListView<ContractBaseData>("contractRows", data) {
             @Override
             protected void populateItem(ListItem<ContractBaseData> item) {
                 long contractId = item.getModelObject().getContractId();
@@ -131,14 +129,14 @@ public class ContractOverviewTable extends Panel {
             }
         });
 
-        table.add(new ListView<String>("footerRow", model(from(data).getFooter())) {
+        table.add(new ListView<String>("footerRow", model(from(data.getFooter()))) {
             @Override
             protected void populateItem(ListItem<String> item) {
                 item.add(new Label("footerItem", item.getModelObject()));
             }
         });
 
-        addTableSummaryLabels(table, model(from(data.getContracts())));
+        addTableSummaryLabels(table, data);
         add(table);
     }
 
