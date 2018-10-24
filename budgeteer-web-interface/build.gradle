@@ -270,7 +270,7 @@ artifactory {
         defaults {
             publications('mavenPublication')
             publishArtifacts = true
-            publishPom = true
+            publishPom = false
             properties = [
                     'build.number': buildNumber,
                     'build.name'  : project.name
