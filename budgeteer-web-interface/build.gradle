@@ -6,8 +6,6 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
-        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:latest.release"
         classpath group: 'org.springframework.boot', name: 'spring-boot-gradle-plugin', version: "${spring_boot_version}"
         classpath group: 'org.springframework', name: 'springloaded', version: "${springloaded_version}"
     }
@@ -15,9 +13,7 @@ buildscript {
 
 apply plugin: 'war'
 apply plugin: 'org.springframework.boot'
-apply plugin: "com.jfrog.artifactory"
-apply plugin: 'com.jfrog.bintray'
-apply plugin: 'maven-publish'
+
 
 
 configurations {
