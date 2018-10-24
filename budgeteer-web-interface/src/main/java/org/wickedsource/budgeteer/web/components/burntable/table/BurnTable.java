@@ -3,6 +3,7 @@ package org.wickedsource.budgeteer.web.components.burntable.table;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.event.IEvent;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -28,6 +29,7 @@ import org.wickedsource.budgeteer.web.components.money.MoneyLabel;
 
 import javax.inject.Inject;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import static org.wicketstuff.lazymodel.LazyModel.from;
@@ -37,7 +39,7 @@ public class BurnTable extends Panel {
 
     private CustomFeedbackPanel feedbackPanel;
     private boolean dailyRateIsEditable;
-    private DataView <WorkRecord> rows;
+    private DataView<WorkRecord> rows;
     private Model<Long> recordsPerPageModel = new Model<>(15L);
     private WebMarkupContainer tableComponents = new WebMarkupContainer("tableComponents");
 
@@ -261,7 +263,17 @@ public class BurnTable extends Panel {
                             item.getModelObject().setEditedManually(true);
                             item.getModelObject().setDailyRate(form.getModelObject());
                             recordService.saveDailyRateForWorkRecord(item.getModelObject());
-                            target.add(item);
+                            target.add(tableComponents);
+                            long elementIndex = 0;
+                            int i = 0;
+                            Iterator<? extends  WorkRecord> iterator = rows.getDataProvider().iterator(0, rows.getItemCount());
+                            while (iterator.hasNext()){
+                                if(iterator.next().getId() == item.getModelObject().getId()){
+                                    elementIndex = i;
+                                }
+                                i++;
+                            }
+                            rows.setCurrentPage(elementIndex/rows.getItemsPerPage());
                         }
 
                         @Override
