@@ -44,6 +44,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @Mount("import/importFiles")
 public class ImportFilesPage extends DialogPageWithBacklink {
@@ -68,7 +69,7 @@ public class ImportFilesPage extends DialogPageWithBacklink {
             protected void onSubmit() {
                 try {
                     skippedImports = null;
-                    List<ImportFile> files = new ArrayList<ImportFile>();
+                    List<ImportFile> files = new ArrayList<>();
                     for (FileUpload file : fileUploads) {
                         if (file.getContentType().equals("application/x-zip-compressed")) {
                             ImportFileUnzipper unzipper = new ImportFileUnzipper(file.getInputStream());
@@ -90,8 +91,6 @@ public class ImportFilesPage extends DialogPageWithBacklink {
                     error(String.format(getString("message.invalidFileException"), e.getFileName()));
                 }
             }
-
-
         };
 
 
@@ -152,10 +151,13 @@ public class ImportFilesPage extends DialogPageWithBacklink {
             protected ResourceReference getCss() {
                 return new UrlResourceReference(Url.parse("css/budgeteer/uploadProgressBar.css")).setContextRelative(true);
             }
-        };
-        uploadProgressBar.setOutputMarkupId(true);
-        form.add(uploadProgressBar);
 
+            @Override
+            public Locale getLocale() {
+                return Locale.US;
+            }
+        };
+        form.add(uploadProgressBar);
         form.add(createBacklink("backlink2"));
         form.add(createExampleFileButton("exampleFileButton"));
     }
