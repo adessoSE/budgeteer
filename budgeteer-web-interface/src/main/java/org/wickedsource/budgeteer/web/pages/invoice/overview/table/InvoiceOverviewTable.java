@@ -1,5 +1,9 @@
 package org.wickedsource.budgeteer.web.pages.invoice.overview.table;
 
+import org.apache.wicket.Component;
+import org.apache.wicket.behavior.Behavior;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
@@ -92,6 +96,37 @@ public class InvoiceOverviewTable extends Panel {
             @Override
             protected void populateItem(ListItem<String> item) {
                 item.add(new Label("footerItem", item.getModelObject()));
+            }
+        });
+        table.setOutputMarkupId(true);
+        table.setMarkupId("table1");
+        table.add(new Behavior() {
+            @Override
+            public void renderHead(Component component, IHeaderResponse response) {
+                super.renderHead(component, response);
+                response.render(OnDomReadyHeaderItem.forScript("var shown = false;\n" +
+                        "var table = $('#table1').DataTable({\n" +
+                        "        retrieve: true\n" +
+                        "    });\n" +
+                        "\n" +
+                        "var column = table.column('.to-toggle');\n" +
+                        "column.visible(false);\n" +
+                        "\n" +
+                        "$('.toggle-tax-info').on('click', function(e){\n" +
+                        "    var text;\n" +
+                        "    e.preventDefault();\n" +
+                        "    var column = table.column('.to-toggle');\n" +
+                        "    column.visible(!column.visible());\n" +
+                        "    if(!shown){\n" +
+                        "        text = \"Hide \";\n" +
+                        "    }\n" +
+                        "    else{\n" +
+                        "        text = \"Show \";\n" +
+                        "    }\n" +
+                        "    shown = !shown;\n" +
+                        "    $('.toggle-tax-info h3 a').text(text + \"Tax Information\");\n" +
+                        "    $('.toggle-tax-info .small-box-footer').text(text + \"gross sum, tax amount and tax rate of the invoices\");\n" +
+                        "});"));
             }
         });
         add(table);
