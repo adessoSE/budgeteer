@@ -32,7 +32,7 @@ jobs:
       - run:
           name: Deploy snapshot to artifactory
           command: |
-            if [ "${CIRCLE_BRANCH}" == "test_deploy" ]; \
+            if [ "${CIRCLE_BRANCH}" == "master_disabled" ]; \
             then ./gradlew clean build bootRepackage artifactoryPublish -x test -Dsnapshot=true -Dbintray.user=$BINTRAY_USER \
             -Dbintray.key=$BINTRAY_KEY; \
             fi \
