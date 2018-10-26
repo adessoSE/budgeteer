@@ -1,5 +1,7 @@
 var table;
 var draggedRow;
+var handleBtn;
+var target = false;
 
 $(document).ready(function(){
     table = $(".table").DataTable();
@@ -12,6 +14,37 @@ $(document).ready(function(){
         saveSorting();
     });
 });
+
+function mouseDownRow(event){
+    target = event.target;
+    handleBtn = $(event).closest('.dragBtn');
+}
+
+function drag(event){
+    if($(target).hasClass('dragBtn') || $(target).hasClass('fa-hand-o-up'))    {
+        event.dataTransfer.setData('text/plain', 'handleBtn');
+        // Order by the first column, else row swapping doesn't work
+        table.order([0, 'asc']);
+        draggedRow = $(event.target);
+    }
+    else{
+        event.preventDefault();
+    }
+}
+
+// Event handler for dropping: Swap rows
+function drop(event){
+    event.stopPropagation();
+    event.preventDefault();
+    var currentIndex = getRowIndex(event);
+    var oldIndex = table.row(draggedRow).index();
+    swapRows(currentIndex, oldIndex);
+    saveSorting();
+}
+
+function allowDrop(ev) {
+    ev.preventDefault();
+}
 
 function hover(event, show){
     var source = event.target || event.srcElement;
@@ -50,7 +83,7 @@ function down(event){
     var arrayIndex = allIndices.indexOf(thisIndex);
     var nextIndex = allIndices[arrayIndex+1];
     swapRows(thisIndex, nextIndex);
-    table.page(page);
+    table.page(page).draw(false );
     saveSorting();
 }
 
@@ -64,7 +97,7 @@ function up(event){
     var arrayIndex = allIndices.indexOf(thisIndex);
     var previousIndex = allIndices[arrayIndex-1];
     swapRows(thisIndex, previousIndex);
-    table.page(page);
+    table.page(page).draw( false );
     saveSorting();
 }
 
@@ -74,31 +107,9 @@ function swapRows(firstIndex, secondIndex) {
     var secondRowData = table.row(secondIndex).data();
 
     if(typeof secondRowData !== 'undefined'){
-        table.row(firstIndex).data(secondRowData).draw();
-        table.row(secondIndex).data(firstRowData).draw();
+        table.row(firstIndex).data(secondRowData).draw(false);
+        table.row(secondIndex).data(firstRowData).draw(false);
     }
-}
-
-// Event handler for dragging: save the dragged row
-function dragStart(event){
-    // Order by the first column, else row swapping doesn't work
-    table.order([0, 'asc']);
-    var source = event.target || event.srcElement;
-    draggedRow = $(source).parents("tr");
-}
-
-// Event handler for dropping: Swap rows
-function drop(event){
-    event.stopPropagation();
-    event.preventDefault();
-    var currentIndex = getRowIndex(event);
-    var oldIndex = table.row(draggedRow).index();
-    swapRows(currentIndex, oldIndex);
-    saveSorting();
-}
-
-function allowDrop(ev) {
-    ev.preventDefault();
 }
 
 // Get the sorting and send it via AJAX

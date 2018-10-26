@@ -31,10 +31,10 @@
         </tr>
         </thead>
         <tbody>
-        <tr wicket:id="contractRows" ondrop="drop(event)" ondragover="allowDrop(event)">
+        <tr wicket:id="contractRows" ondrop="drop(event)" ondragover="allowDrop(event)" draggable="true" onmousedown="mouseDownRow(event)" ondragstart="drag(event)">
             <td style="width:100px;">
-                <span class="btn btn-default btn-sm dragBtn" ondragstart="dragStart(event)" onmouseenter="hover(event, true)"
-                      onmouseleave="hover(event, false)"  draggable="true" data-toggle="tooltip" title="Drag this row for sorting">
+                <span class="btn btn-default btn-sm dragBtn"  onmouseenter="hover(event, true)"
+                      onmouseleave="hover(event, false)"  data-toggle="tooltip" title="Drag this row for sorting" style="cursor:move;">
                     <i class="fa fa-hand-o-up" aria-hidden="true"></i>
                 </span>
                 <span class="btn btn-default btn-sm" onclick="up(event)" onmouseenter="hover(event, true)" onmouseleave="hover(event, false)"
