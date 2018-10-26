@@ -32,14 +32,14 @@ jobs:
       - run:
           name: Deploy snapshot to artifactory
           command: |
-            if [ "${CIRCLE_BRANCH}" == "master" ]; \
+            if [ "${CIRCLE_BRANCH}" == "test_deploy" ]; \
             then ./gradlew clean build bootRepackage artifactoryPublish -x test -Dsnapshot=true -Dbintray.user=$BINTRAY_USER \
             -Dbintray.key=$BINTRAY_KEY; \
             fi \
       - run:
           name: Deploy to bintray
           command: |
-            if [ "${CIRCLE_BRANCH}" == "test_deploy" ]; \
+            if [ "${CIRCLE_BRANCH}" == "release" ]; \
             then ./gradlew clean build bootRepackage bintrayUpload -x test -Dbintray.user=$BINTRAY_USER \
             -Dbintray.key=$BINTRAY_KEY; \
             fi \
