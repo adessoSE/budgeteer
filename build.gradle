@@ -10,10 +10,21 @@ file('gradle.d').listFiles().sort().each {
 }
 
 allprojects {
-    version = getBuildVersion('1.0.9.BETA')
+    version = getBuildVersion('1.1.0.BETA')
+}
+
+buildscript {
+    repositories {
+        mavenLocal()
+        jcenter()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
 }
 
 subprojects {
+
     apply plugin: 'java'
     apply plugin: 'jacoco'
 
@@ -52,3 +63,4 @@ subprojects {
         useJUnitPlatform()
     }
 }
+
