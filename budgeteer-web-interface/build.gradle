@@ -177,6 +177,12 @@ bootRun {
             '-Dspring.jpa.hibernate.ddl-auto=update'
 }
 
+test {
+    systemProperties = [
+            'flyway.enabled': 'false'
+    ]
+}
+
 idea {
     module {
         scopes.PROVIDED.plus += [configurations.providedCompile]
