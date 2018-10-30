@@ -41,5 +41,5 @@ jobs:
           command: |
             if [ "${CIRCLE_BRANCH}" == "release" ]; \
             then ./gradlew clean build bootRepackage bintrayUpload -x test -Dbintray.user=$BINTRAY_USER \
-            -Dbintray.key=$BINTRAY_KEY; \
+            -Dbintray.key=$BINTRAY_KEY; -DbuildNumber=""\
             fi \
