@@ -18,14 +18,17 @@ public class NotificationModel extends LoadableDetachableModel<List<Notification
 
     private long projectId;
 
-    public NotificationModel(long projectId) {
+    private long userId;
+
+    public NotificationModel(long projectId, long userId) {
         Injector.get().inject(this);
         this.projectId = projectId;
+        this.userId = userId;
     }
 
     @Override
     protected List<Notification> load() {
-        return service.getNotifications(projectId);
+        return service.getNotifications(projectId, userId);
     }
 
     public IModel<Integer> getNotificationCountModel() {

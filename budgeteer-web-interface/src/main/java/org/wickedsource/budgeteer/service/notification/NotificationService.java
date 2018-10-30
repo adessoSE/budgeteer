@@ -10,7 +10,8 @@ import org.wickedsource.budgeteer.persistence.budget.MissingBudgetTotalBean;
 import org.wickedsource.budgeteer.persistence.record.MissingDailyRateForBudgetBean;
 import org.wickedsource.budgeteer.persistence.record.PlanRecordRepository;
 import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
-
+import org.wickedsource.budgeteer.persistence.user.UserEntity;
+import org.wickedsource.budgeteer.persistence.user.UserRepository;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -30,6 +31,9 @@ public class NotificationService {
     private BudgetRepository budgetRepository;
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     private MissingDailyRateNotificationMapper missingDailyRateMapper;
 
     @Autowired
@@ -47,7 +51,7 @@ public class NotificationService {
      * @param projectId ID of the project whose notifications to load
      * @return list of notifications
      */
-    public List<Notification> getNotifications(long projectId) {
+    public List<Notification> getNotifications(long projectId, long userId) {
         List<Notification> notifications = new ArrayList<Notification>();
         if (workRecordRepository.countByProjectId(projectId) == 0) {
             notifications.add(new EmptyWorkRecordsNotification());
@@ -67,6 +71,17 @@ public class NotificationService {
                 LimitReachedBean limitReached = budgetRepository.getLimitReachedForBudget(bean.getBudgetId(), budgetSpent);
                 if (limitReached != null)
                     notifications.add(limitReachedNotificationMapper.map(limitReached));
+            }
+        }
+
+        UserEntity user = userRepository.findOne(userId);
+        if (user != null) {
+            if (user.getMail() == null) {
+                notifications.add(new MissingMailNotification(user.getId()));
+            }
+
+            if (!user.getMailVerified() && user.getMail() != null) {
+                notifications.add(new MailNotVerifiedNotification(user.getId(), user.getMail()));
             }
         }
 
@@ -106,7 +121,6 @@ public class NotificationService {
         Double spentDouble = workRecordRepository.getSpentBudget(budgetId);
         if (spentDouble != null) {
             Money budgetSpent = MoneyUtil.createMoneyFromCents(Math.round(spentDouble));
-
             LimitReachedBean limitReached = budgetRepository.getLimitReachedForBudget(budgetId, budgetSpent);
             if (limitReached != null)
                 result.add(limitReachedNotificationMapper.map(limitReached));

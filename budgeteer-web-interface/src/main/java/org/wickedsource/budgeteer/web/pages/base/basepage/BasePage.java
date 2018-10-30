@@ -25,6 +25,7 @@ import org.wickedsource.budgeteer.web.pages.base.basepage.budgetunitchoice.Budge
 import org.wickedsource.budgeteer.web.pages.base.basepage.notifications.NotificationDropdown;
 import org.wickedsource.budgeteer.web.pages.base.basepage.notifications.NotificationModel;
 import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
+import org.wickedsource.budgeteer.web.pages.user.edit.EditUserPage;
 import org.wickedsource.budgeteer.web.pages.user.login.LoginPage;
 import org.wickedsource.budgeteer.web.pages.user.selectproject.SelectProjectPage;
 import org.wickedsource.budgeteer.web.pages.user.selectproject.SelectProjectWithKeycloakPage;
@@ -50,12 +51,25 @@ public abstract class BasePage extends WebPage {
         addComponents();
     }
 
+    /**
+     * Creates a valid PageParameters object to pass into the constructor of this page class.
+     *
+     * @param objectId id of the budget whose details to display.
+     * @return a valid PageParameters object.
+     */
+    public static PageParameters createParameters(long objectId) {
+        PageParameters parameters = new PageParameters();
+        parameters.add("id", objectId);
+        return parameters;
+    }
+
     @SuppressWarnings("unchecked")
     private void addComponents() {
         BreadcrumbsPanel breadcrumbs = new BreadcrumbsPanel("breadcrumbsPanel", getBreadcrumbsModel());
         long projectId = ((BudgeteerSession) getSession()).getProjectId();
+        long userId = ((BudgeteerSession) getSession()).getLoggedInUser().getId();
         add(breadcrumbs);
-        notificationDropdown = new NotificationDropdown("notificationDropdown", new NotificationModel(projectId));
+        notificationDropdown = new NotificationDropdown("notificationDropdown", new NotificationModel(projectId, userId));
         notificationDropdown.setOutputMarkupId(true);
         add(notificationDropdown);
         add(new BudgetUnitChoice("budgetUnitDropdown", new BudgetUnitModel(projectId)));
@@ -66,12 +80,13 @@ public abstract class BasePage extends WebPage {
             pageLink.setVisible(false);
         }
         add(createProjectChangeLink("changeProjectLink"));
+        add(createMyProfileLink("myProfileLink"));
         add(createLogoutLink("logoutLink"));
         add(createDashboardLink("dashboardLink"));
         add(new HeaderResponseContainer("JavaScriptContainer", "JavaScriptContainer"));
     }
 
-	private boolean currentUserIsAdmin() {
+    private boolean currentUserIsAdmin() {
         HashSet<String> roles = loadRolesFromCurrentUser();
         if (roles != null && roles.contains("admin")) {
             return true;
@@ -99,8 +114,8 @@ public abstract class BasePage extends WebPage {
     }
 
     private Component createDashboardLink(String id) {
-		return new BookmarkablePageLink<>(id, DashboardPage.class);
-	}
+        return new BookmarkablePageLink<>(id, DashboardPage.class);
+    }
 
     private Link createProjectChangeLink(String id) {
         return new Link(id) {
@@ -137,23 +152,19 @@ public abstract class BasePage extends WebPage {
         };
     }
 
+    private Link createMyProfileLink(String id) {
+        return new Link(id) {
+            @Override
+            public void onClick() {
+                setResponsePage(new EditUserPage(this.getWebPage().getClass(), new PageParameters().add("userId", BudgeteerSession.get().getLoggedInUser().getId())));
+            }
+        };
+    }
+
     /**
      * Expects a BreadcrumbsModel to be returned that contains all pages that should be displayed in the breadcrumbs.
      */
     protected abstract BreadcrumbsModel getBreadcrumbsModel();
-
-
-    /**
-     * Creates a valid PageParameters object to pass into the constructor of this page class.
-     *
-     * @param objectId id of the budget whose details to display.
-     * @return a valid PageParameters object.
-     */
-    public static PageParameters createParameters(long objectId) {
-        PageParameters parameters = new PageParameters();
-        parameters.add("id", objectId);
-        return parameters;
-    }
 
     public long getParameterId() {
         StringValue value = getPageParameters().get("id");
