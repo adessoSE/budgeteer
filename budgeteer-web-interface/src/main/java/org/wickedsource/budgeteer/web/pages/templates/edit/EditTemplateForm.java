@@ -19,11 +19,13 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.resource.AbstractResourceStreamWriter;
 import org.wickedsource.budgeteer.imports.api.ImportFile;
 import org.wickedsource.budgeteer.service.ReportType;
+import org.wickedsource.budgeteer.service.template.Template;
 import org.wickedsource.budgeteer.service.template.TemplateService;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
 import org.wickedsource.budgeteer.web.pages.base.AbstractChoiceRenderer;
 import org.wickedsource.budgeteer.web.pages.base.delete.DeleteDialog;
+import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 import org.wickedsource.budgeteer.web.pages.templates.TemplatesPage;
 import org.wickedsource.budgeteer.web.pages.templates.templateimport.TemplateFormInputDto;
 
@@ -101,10 +103,15 @@ public class EditTemplateForm extends Form<TemplateFormInputDto> {
             }
         });
 
-        templateFormInputDto.setName(service.getById(templateID).getName());
-        templateFormInputDto.setDescription(service.getById(templateID).getDescription());
-        templateFormInputDto.setType(service.getById(templateID).getType());
-        templateFormInputDto.setDefault(service.getById(templateID).isDefault());
+        Template template = service.getById(templateID);
+        if(template == null){
+            setResponsePage(DashboardPage.class);
+            return;
+        }
+        templateFormInputDto.setName(template.getName());
+        templateFormInputDto.setDescription(template.getDescription());
+        templateFormInputDto.setType(template.getType());
+        templateFormInputDto.setDefault(template.isDefault());
 
         AjaxLink checkBox = new AjaxLink("setAsDefault") {
             @Override
@@ -167,14 +174,15 @@ public class EditTemplateForm extends Form<TemplateFormInputDto> {
         return new Link<Void>(wicketId) {
             @Override
             public void onClick() {
-                XSSFWorkbook wb = service.getById(templateID).getWb();
+                Template template = service.getById(templateID);
+                XSSFWorkbook wb = template.getWb();
                 AbstractResourceStreamWriter streamWriter = new AbstractResourceStreamWriter() {
                     @Override
                     public void write(OutputStream output) throws IOException {
                         wb.write(output);
                     }
                 };
-                ResourceStreamRequestHandler handler = new ResourceStreamRequestHandler(streamWriter, service.getById(templateID).getName() + ".xlsx");
+                ResourceStreamRequestHandler handler = new ResourceStreamRequestHandler(streamWriter, template.getName() + ".xlsx");
                 getRequestCycle().scheduleRequestHandlerAfterCurrent(handler);
                 HttpServletResponse response = (HttpServletResponse) getRequestCycle().getResponse().getContainerResponse();
                 response.setContentType(null);

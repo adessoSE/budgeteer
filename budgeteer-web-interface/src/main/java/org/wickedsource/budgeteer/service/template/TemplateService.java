@@ -84,12 +84,12 @@ public class TemplateService {
      * @return A new Template object.
      */
     public Template getById(long templateID){
-        for(TemplateEntity E : templateRepository.findAll()){
-            if(E.getId() == templateID){
-                return new Template(E.getId(), E.getName(), E.getDescription(), E.getType(), E.getWb(), E.isDefault(), E.getProjectId());
-            }
+        TemplateEntity templateEntity = templateRepository.findOne(templateID);
+        if(templateEntity == null){
+            return null;
+        } else {
+            return templateEntity.getTemplate();
         }
-        return null;
     }
 
     /**
