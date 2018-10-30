@@ -210,7 +210,7 @@ public class EditTemplateForm extends Form<TemplateFormInputDto> {
 
                     @Override
                     protected void onNo() {
-                        setResponsePage(new EditTemplatePage(TemplatesPage.class, getPage().getPageParameters(), templateID));
+                        setResponsePage(new EditTemplatePage(TemplatesPage.class, getPage().getPageParameters(), TemplatesPage.createParameters(templateID)));
                     }
 
                     @Override

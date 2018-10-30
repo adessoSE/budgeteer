@@ -2,6 +2,7 @@ package org.wickedsource.budgeteer.web.pages.budgets.edit.form;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.tester.FormTester;
+import org.apache.wicket.util.tester.WicketTester;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -11,6 +12,8 @@ import org.wickedsource.budgeteer.service.budget.EditBudgetData;
 import org.wickedsource.budgeteer.web.AbstractWebTestTemplate;
 import org.wickedsource.budgeteer.web.pages.budgets.edit.EditBudgetPage;
 import org.wickedsource.budgeteer.web.pages.budgets.overview.BudgetsOverviewPage;
+import org.wickedsource.budgeteer.web.pages.person.edit.EditPersonPage;
+import org.wickedsource.budgeteer.web.pages.person.overview.PeopleOverviewPage;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -32,6 +35,14 @@ public class EditBudgetPageTest extends AbstractWebTestTemplate {
     @Test
     void renders() {
         getTester().assertRenderedPage(EditBudgetPage.class);
+    }
+
+    @Test
+    void testRedirectOnId0() {
+        WicketTester tester = getTester();
+        tester.startPage(EditBudgetPage.class, new PageParameters());
+        tester.assertRenderedPage(EditBudgetPage.class);
+        tester.assertLabel("form:submitButtonLabel", "Create Budget");
     }
 
     @Test

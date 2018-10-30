@@ -12,11 +12,12 @@ import org.wickedsource.budgeteer.service.budget.EditBudgetData;
 import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.pages.base.dialogpage.DialogPageWithBacklink;
 import org.wickedsource.budgeteer.web.pages.budgets.edit.form.EditBudgetForm;
+import org.wickedsource.budgeteer.web.pages.budgets.overview.BudgetsOverviewPage;
 
 import static org.wicketstuff.lazymodel.LazyModel.from;
 import static org.wicketstuff.lazymodel.LazyModel.model;
 
-@Mount({"budgets/edit/${id}", "budgets/edit"})
+@Mount({"budgets/edit/#{id}"})
 public class EditBudgetPage extends DialogPageWithBacklink {
 
     @SpringBean
@@ -45,6 +46,25 @@ public class EditBudgetPage extends DialogPageWithBacklink {
         EditBudgetData budgetData = service.loadBudgetToEdit(getBudgetId());
         Form<EditBudgetData> form = new EditBudgetForm("form", model(from(budgetData)), isEditingNewBudget);
         addComponents(form);
+    }
+
+    /**
+     * This constructor is used when you click on a link or try to access the EditBudgetPage manually
+     * (e.g. when you type the path "/budgets/edit" in the search bar)
+     * @param parameters
+     */
+    public EditBudgetPage(PageParameters parameters) {
+        super(parameters, BudgetsOverviewPage.class, new PageParameters());
+        if(getBudgetId() == 0){
+            isEditing = false;
+            Form<EditBudgetData> form = new EditBudgetForm("form");
+            addComponents(form);
+        }else{
+            isEditing = true;
+            EditBudgetData budgetData = service.loadBudgetToEdit(getBudgetId());
+            Form<EditBudgetData> form = new EditBudgetForm("form", model(from(budgetData)), false);
+            addComponents(form);
+        }
     }
 
     private void addComponents(Form<EditBudgetData> form) {

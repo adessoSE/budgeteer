@@ -8,7 +8,7 @@ import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 import org.wickedsource.budgeteer.web.pages.person.overview.table.PeopleModel;
 import org.wickedsource.budgeteer.web.pages.person.overview.table.PeopleOverviewTable;
 
-@Mount("people")
+@Mount({"people", "people/edit"})
 public class PeopleOverviewPage extends BasePage {
 
     public PeopleOverviewPage() {
