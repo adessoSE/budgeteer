@@ -30,8 +30,8 @@ public class AddManualRecordForm extends Form<AddManualRecordData> {
     @SpringBean
     private ContractService contractService;
 
-    public AddManualRecordForm(String id,PageParameters backlinkParameters) {
-        super(id, new ClassAwareWrappingModel<>(Model.of(new AddManualRecordData(BudgeteerSession.get().getProjectId())), AddManualRecordData.class));
+    public AddManualRecordForm(String id, long budgetId, PageParameters backlinkParameters) {
+        super(id, new ClassAwareWrappingModel<>(Model.of(new AddManualRecordData(BudgeteerSession.get().getProjectId(), budgetId)), AddManualRecordData.class));
         this.backlinkParameters = backlinkParameters;
         addComponents();
     }
@@ -58,7 +58,7 @@ public class AddManualRecordForm extends Form<AddManualRecordData> {
     protected void onSubmit() {
         try {
             // ToDo
-            service.saveManualRecord(getModelObject());
+           service.saveManualRecord(getModelObject());
             setResponsePage(new BudgetDetailsPage(backlinkParameters));
 
         } catch (DataIntegrityViolationException e) {

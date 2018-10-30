@@ -126,7 +126,7 @@ public class BudgetDetailsPage extends BasePage {
         return new Link(id) {
             @Override
             public void onClick() {
-                WebPage page = new EditBudgetPage(BasePage.createParameters(getParameterId()), BudgetDetailsPage.class, getPageParameters(), false);
+                WebPage page = new EditBudgetPage(BasePage.createParameters(getParameterId()),BudgetDetailsPage.class, getPageParameters(), false);
                 setResponsePage(page);
             }
         };
@@ -136,7 +136,7 @@ public class BudgetDetailsPage extends BasePage {
         return new Link(id) {
             @Override
             public void onClick() {
-                WebPage page = new AddManualRecordsPage(BasePage.createParameters(getParameterId()), BudgetDetailsPage.class, getPageParameters());
+                WebPage page = new AddManualRecordsPage(BasePage.createParameters(getParameterId()),  BudgetDetailsPage.class,  model.getObject().getId(), getPageParameters());
                 setResponsePage(page);
             }
         };

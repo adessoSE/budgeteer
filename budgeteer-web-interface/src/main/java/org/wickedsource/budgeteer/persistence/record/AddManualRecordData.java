@@ -16,7 +16,8 @@ public class AddManualRecordData implements Serializable {
     private Money MoneyAmount;
 
 
-    public AddManualRecordData(long projectId) {
+    public AddManualRecordData(long projectId, long budgetId) {
         this.projectId = projectId;
+        this.budgetId = budgetId;
     }
 }

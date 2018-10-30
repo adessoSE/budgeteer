@@ -15,15 +15,15 @@ public class AddManualRecordsPage extends DialogPageWithBacklink {
     @SpringBean
     private BudgetService service;
 
-    public AddManualRecordsPage(PageParameters parameters, Class<? extends WebPage> backlinkPage, PageParameters backlinkParameters) {
+    public AddManualRecordsPage(PageParameters parameters, Class<? extends WebPage> backlinkPage, long budgetId, PageParameters backlinkParameters) {
         super(parameters, backlinkPage, backlinkParameters);
-        Form<AddManualRecordData> form = new AddManualRecordForm("form", backlinkParameters);
+        Form<AddManualRecordData> form = new AddManualRecordForm("form", budgetId, backlinkParameters);
         addComponents(form);
     }
 
-    public AddManualRecordsPage(Class<? extends WebPage> backlinkPage, PageParameters backlinkParameters) {
+    public AddManualRecordsPage(Class<? extends WebPage> backlinkPage, long budgetId, PageParameters backlinkParameters) {
         super(backlinkPage, backlinkParameters);
-        Form<AddManualRecordData> form = new AddManualRecordForm("form",  backlinkParameters);
+        Form<AddManualRecordData> form = new AddManualRecordForm("form", budgetId, backlinkParameters);
         addComponents(form);
     }
 

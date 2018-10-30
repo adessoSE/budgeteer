@@ -4,7 +4,10 @@ import com.querydsl.core.types.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.wickedsource.budgeteer.ListUtil;
+import org.wickedsource.budgeteer.MoneyUtil;
+import org.wickedsource.budgeteer.persistence.budget.BudgetEntity;
 import org.wickedsource.budgeteer.persistence.budget.BudgetRepository;
+import org.wickedsource.budgeteer.persistence.imports.ImportEntity;
 import org.wickedsource.budgeteer.persistence.record.*;
 import org.wickedsource.budgeteer.persistence.record.AddManualRecordData;
 import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
@@ -26,6 +29,7 @@ public class RecordService {
     @Autowired
     private PlanRecordRepository planRecordRepository;
 
+
     @Autowired
     private BudgetRepository budgetRepository;
 
@@ -34,6 +38,9 @@ public class RecordService {
 
     @Autowired
     private WorkRecordMapper recordMapper;
+
+    @Autowired
+    private ManualWorkRecordRepository manualWorkRecordRepository;
 
     /**
      * Loads the actual budget burned by the given person and the budget planned for this person aggregated by week.
@@ -240,12 +247,15 @@ public class RecordService {
     {
         // ToDo
         assert data != null;
+
         ManualWorkRecordEntity record = new ManualWorkRecordEntity();
         record.setDescription(data.getDescription());
         record.setMoneyAmount(data.getMoneyAmount());
         record.setDate(new Date());
-        //record.setBudget(budgetRepository.findOne(data.getBudgetId()));
+        BudgetEntity budgetEntity = budgetRepository.findOne(data.getBudgetId());
+        record.setBudget(budgetEntity);
 
-        workRecordRepository.save(record);
+        manualWorkRecordRepository.save(record);
     }
+
 }
