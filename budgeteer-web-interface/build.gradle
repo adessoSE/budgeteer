@@ -226,7 +226,7 @@ sourceCompatibility = 1.8
 ext {
     bintrayUser = System.getProperty("bintray.user")
     bintrayKey = System.getProperty("bintray.key")
-    buildNumber = ""
+    buildNumber = System.getProperty("build.number")
 }
 
 def pomConfig = {
@@ -263,6 +263,7 @@ artifactory {
             publications('mavenPublication')
             publishArtifacts = true
             properties = [
+                    'build.number': buildNumber,
                     'build.name'  : project.name
             ]
         }
@@ -270,6 +271,7 @@ artifactory {
     resolve {
         repoKey = 'jcenter'
     }
+    clientConfig.info.setBuildNumber(buildNumber)
     clientConfig.info.setBuildName(project.name)
 }
 
@@ -285,6 +287,7 @@ bintray {
         licenses = ['MIT']
         vcsUrl = 'https://github.com/adessoag/budgeteer'
         version {
+            desc = "build ${buildNumber}"
             name = project.version
             released = new Date()
         }
