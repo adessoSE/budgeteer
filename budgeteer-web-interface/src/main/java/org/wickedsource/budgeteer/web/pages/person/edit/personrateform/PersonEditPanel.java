@@ -166,7 +166,8 @@ public abstract class PersonEditPanel extends Panel {
     private Select<ArrayList<BudgetBaseData>> createBudgetsDropdown(List<OptionGroup<BudgetBaseData>> possibleBudgets) {
         Select<ArrayList<BudgetBaseData>> select = new Select<>("select", selectedBudgets);
         HashMap<String, String> multiselectOptions = MultiselectBehavior.getRecommendedOptions();
-       // multiselectOptions.put("includeSelectAllOption", "false");
+        multiselectOptions.put("includeSelectAllOption", "false");
+        multiselectOptions.put("numberDisplayed","6");
         RepeatingView rv = new RepeatingView("repeatingView");
         rv.setOutputMarkupId(true);
         rv.setOutputMarkupPlaceholderTag(true);

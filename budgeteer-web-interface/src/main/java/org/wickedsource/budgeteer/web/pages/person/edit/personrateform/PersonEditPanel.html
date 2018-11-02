@@ -5,6 +5,12 @@
             <tr>
                 <td><input wicket:id="rateField" maxlength="10" type="text"/><span> &#x80;</span></td>
                 <td>
+                    <style>
+                        .multiselect {
+                            white-space: normal !important;
+                            max-width: 200px;
+                        }
+                    </style>
                     <select wicket:id="select" multiple="multiple">
                         <wicket:container wicket:id="repeatingView">
                             <optgroup wicket:id="optGroup">
