@@ -59,9 +59,9 @@ public class MultiselectBehavior extends Behavior{
      * @return HashMap with the mentioned options set to typical values
      */
     public static HashMap<String, String> getRecommendedOptions(){
-        HashMap<String, String> options = new HashMap<String, String>();
+        HashMap<String, String> options = new HashMap<>();
         options.put("includeSelectAllOption","true");
-        options.put("buttonWidth","'220px'");
+        options.put("buttonWidth","220");
         options.put("maxHeight","250");
         options.put("numberDisplayed","2");
         options.put("buttonClass","'btn btn-default btn-sm'");
