@@ -31,7 +31,7 @@ public class ImportFileUnzipper {
      * @throws IOException in case of an error while unzipping.
      */
     public List<ImportFile> readImportFiles() throws IOException {
-        List<ImportFile> importFiles = new ArrayList<ImportFile>();
+        List<ImportFile> importFiles = new ArrayList<>();
         ZipInputStream zipStream = new ZipInputStream(zipInputStream);
         ZipEntry entry = zipStream.getNextEntry();
         while (entry != null) {
