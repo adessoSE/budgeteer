@@ -10,6 +10,7 @@ import org.wickedsource.budgeteer.service.invoice.InvoiceService;
 import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.pages.base.dialogpage.DialogPageWithBacklink;
 import org.wickedsource.budgeteer.web.pages.invoice.edit.form.EditInvoiceForm;
+import org.wickedsource.budgeteer.web.pages.invoice.overview.InvoiceOverviewPage;
 
 import static org.wicketstuff.lazymodel.LazyModel.from;
 import static org.wicketstuff.lazymodel.LazyModel.model;
@@ -32,12 +33,27 @@ public class EditInvoicePage extends DialogPageWithBacklink {
         addComponents(form);
     }
 
+    /**
+     * This constructor is used when you click on a link or try to access the EditInvoicePage manually
+     * (e.g. when you type the path "/invoices/edit" in the search bar)
+     * @param parameters
+     */
+    public EditInvoicePage(PageParameters parameters) {
+        super(parameters, InvoiceOverviewPage.class, new PageParameters());
+        if(getInvoiceId() == 0) {
+            setResponsePage(InvoiceOverviewPage.class);
+            return;
+        }
+        InvoiceBaseData invoiceBaseData = service.getInvoiceById(getInvoiceId());
+        EditInvoiceForm form = new EditInvoiceForm("form", model(from(invoiceBaseData)));
+        addComponents(form);
+    }
+
     private void addComponents(Form<InvoiceBaseData> form) {
         add(createBacklink("cancelButton1"));
         form.add(createBacklink("cancelButton2"));
         add(form);
     }
-
 
     private long getInvoiceId() {
         return getIdByName("invoiceId");
