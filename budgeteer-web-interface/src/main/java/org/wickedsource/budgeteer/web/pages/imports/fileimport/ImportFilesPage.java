@@ -37,6 +37,8 @@ import org.wickedsource.budgeteer.web.ClassAwareWrappingModel;
 import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
 import org.wickedsource.budgeteer.web.pages.base.dialogpage.DialogPageWithBacklink;
+import org.wickedsource.budgeteer.web.pages.imports.ImportsOverviewPage;
+import org.wickedsource.budgeteer.web.pages.person.overview.PeopleOverviewPage;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
@@ -60,11 +62,18 @@ public class ImportFilesPage extends DialogPageWithBacklink {
 
     private List<List<String>> skippedImports;
 
+    public ImportFilesPage(PageParameters backlinkParameters) {
+        this(ImportsOverviewPage.class, new PageParameters());
+    }
+
     public ImportFilesPage(Class<? extends WebPage> backlinkPage, PageParameters backlinkParameters) {
         super(backlinkPage, backlinkParameters);
         add(createBacklink("backlink1"));
+        createForm();
+    }
 
         final Form<ImportFormBean> form = new Form<ImportFormBean>("importForm", new ClassAwareWrappingModel<>(new Model<>(new ImportFormBean()), ImportFormBean.class)) {
+
             @Override
             protected void onSubmit() {
                 try {
@@ -160,31 +169,6 @@ public class ImportFilesPage extends DialogPageWithBacklink {
         form.add(uploadProgressBar);
         form.add(createBacklink("backlink2"));
         form.add(createExampleFileButton("exampleFileButton"));
-    }
-
-    /**
-     * Creates a button to download an example import file.
-     */
-    private Link createExampleFileButton(String wicketId) {
-        return new Link<Void>(wicketId) {
-            @Override
-            public void onClick() {
-                final ExampleFile downloadFile = importer.getExampleFile();
-                AbstractResourceStreamWriter streamWriter = new AbstractResourceStreamWriter() {
-                    @Override
-                    public void write(OutputStream output) throws IOException {
-                        ByteArrayOutputStream out = new ByteArrayOutputStream();
-                        IOUtils.copy(downloadFile.getInputStream(), out);
-                        output.write(out.toByteArray());
-                    }
-                };
-
-                ResourceStreamRequestHandler handler = new ResourceStreamRequestHandler(streamWriter, downloadFile.getFileName());
-                getRequestCycle().scheduleRequestHandlerAfterCurrent(handler);
-                HttpServletResponse response = (HttpServletResponse) getRequestCycle().getResponse().getContainerResponse();
-                response.setContentType(downloadFile.getContentType());
-            }
-        };
     }
 
 }

@@ -31,7 +31,6 @@ import org.wickedsource.budgeteer.web.pages.user.selectproject.SelectProjectPage
 import org.wickedsource.budgeteer.web.pages.user.selectproject.SelectProjectWithKeycloakPage;
 
 import java.util.List;
-import java.util.concurrent.Callable;
 
 import static org.wicketstuff.lazymodel.LazyModel.from;
 import static org.wicketstuff.lazymodel.LazyModel.model;
@@ -113,7 +112,7 @@ public class ProjectAdministrationPage extends BasePage {
 
             @Override
             protected ListItem<User> newItem(int index, IModel<User> itemModel) {
-                return super.newItem(index, new ClassAwareWrappingModel<User>(itemModel, User.class));
+                return super.newItem(index, new ClassAwareWrappingModel<>(itemModel, User.class));
             }
         };
     }
@@ -126,7 +125,7 @@ public class ProjectAdministrationPage extends BasePage {
             }
         };
 
-        DropDownChoice<User> userChoice = new DropDownChoice<User>("userChoice", form.getModel(), new UsersNotInProjectModel(BudgeteerSession.get().getProjectId()), new UserChoiceRenderer());
+        DropDownChoice<User> userChoice = new DropDownChoice<>("userChoice", form.getModel(), new UsersNotInProjectModel(BudgeteerSession.get().getProjectId()), new UserChoiceRenderer());
         userChoice.setRequired(true);
         form.add(userChoice);
         return form;

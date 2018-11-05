@@ -1,6 +1,7 @@
 package org.wickedsource.budgeteer.web.pages.person.edit.personrateform;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.markup.html.form.select.IOptionRenderer;
 import org.apache.wicket.extensions.markup.html.form.select.Select;
 import org.apache.wicket.extensions.markup.html.form.select.SelectOptions;
@@ -58,7 +59,7 @@ public abstract class PersonEditPanel extends Panel {
         form.setOutputMarkupId(true);
         form.add(dateRangeField);
         form.add(rateField);
-        form.add(createBudgetsDropdown(possibleBudgets));
+        form.add(createBudgetsDropdown(possibleBudgets).setOutputMarkupId(true));
         form.add(createSubmitButton());
         add(form);
     }
@@ -166,6 +167,7 @@ public abstract class PersonEditPanel extends Panel {
         Select<ArrayList<BudgetBaseData>> select = new Select<>("select", selectedBudgets);
         HashMap<String, String> multiselectOptions = MultiselectBehavior.getRecommendedOptions();
         multiselectOptions.put("includeSelectAllOption", "false");
+        multiselectOptions.put("numberDisplayed","6");
         RepeatingView rv = new RepeatingView("repeatingView");
         rv.setOutputMarkupId(true);
         rv.setOutputMarkupPlaceholderTag(true);

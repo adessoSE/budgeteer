@@ -29,3 +29,17 @@ jobs:
           path: ~/artifacts/junit
       - store_artifacts:
           path: ~/artifacts
+      - run:
+          name: Deploy snapshot to artifactory
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master_disabled" ]; \
+            then ./gradlew clean build bootRepackage artifactoryPublish -x test -Dsnapshot=true -Dbintray.user=$BINTRAY_USER \
+            -Dbintray.key=$BINTRAY_KEY; \
+            fi \
+      - run:
+          name: Deploy to bintray
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "release" ]; \
+            then ./gradlew clean build bootRepackage bintrayUpload -x test -Dbintray.user=$BINTRAY_USER \
+            -Dbintray.key=$BINTRAY_KEY; \
+            fi \
