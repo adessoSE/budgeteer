@@ -72,6 +72,7 @@ public class ImportFilesPage extends DialogPageWithBacklink {
         createForm();
     }
 
+    private void createForm(){
         final Form<ImportFormBean> form = new Form<ImportFormBean>("importForm", new ClassAwareWrappingModel<>(new Model<>(new ImportFormBean()), ImportFormBean.class)) {
 
             @Override
@@ -171,4 +172,28 @@ public class ImportFilesPage extends DialogPageWithBacklink {
         form.add(createExampleFileButton("exampleFileButton"));
     }
 
+    /**
+     * Creates a button to download an example import file.
+     */
+    private Link createExampleFileButton(String wicketId) {
+        return new Link<Void>(wicketId) {
+            @Override
+            public void onClick() {
+                final ExampleFile downloadFile = importer.getExampleFile();
+                AbstractResourceStreamWriter streamWriter = new AbstractResourceStreamWriter() {
+                    @Override
+                    public void write(OutputStream output) throws IOException {
+                        ByteArrayOutputStream out = new ByteArrayOutputStream();
+                        IOUtils.copy(downloadFile.getInputStream(), out);
+                        output.write(out.toByteArray());
+                    }
+                };
+
+                ResourceStreamRequestHandler handler = new ResourceStreamRequestHandler(streamWriter, downloadFile.getFileName());
+                getRequestCycle().scheduleRequestHandlerAfterCurrent(handler);
+                HttpServletResponse response = (HttpServletResponse) getRequestCycle().getResponse().getContainerResponse();
+                response.setContentType(downloadFile.getContentType());
+            }
+        };
+    }
 }
