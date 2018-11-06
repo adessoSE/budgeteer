@@ -47,7 +47,7 @@ public class ImportFilesPage extends DialogPageWithBacklink {
 
     private Importer importer = new AprodaWorkRecordsImporter();
 
-    private List<FileUpload> fileUploads = new ArrayList<FileUpload>();
+    private List<FileUpload> fileUploads = new ArrayList<>();
 
     private CustomFeedbackPanel feedback;
 
@@ -57,12 +57,12 @@ public class ImportFilesPage extends DialogPageWithBacklink {
         super(backlinkPage, backlinkParameters);
         add(createBacklink("backlink1"));
 
-        final Form<ImportFormBean> form = new Form<ImportFormBean>("importForm", new ClassAwareWrappingModel<ImportFormBean>(new Model<ImportFormBean>(new ImportFormBean()), ImportFormBean.class)) {
+        final Form<ImportFormBean> form = new Form<ImportFormBean>("importForm", new ClassAwareWrappingModel<>(new Model<>(new ImportFormBean()), ImportFormBean.class)) {
             @Override
             protected void onSubmit() {
                 try {
                     skippedImports = null;
-                    List<ImportFile> files = new ArrayList<ImportFile>();
+                    List<ImportFile> files = new ArrayList<>();
                     for (FileUpload file : fileUploads) {
                         if (file.getContentType().equals("application/x-zip-compressed")) {
                             ImportFileUnzipper unzipper = new ImportFileUnzipper(file.getInputStream());
@@ -110,7 +110,7 @@ public class ImportFilesPage extends DialogPageWithBacklink {
         form.add(feedback);
 
         ImportersListModel importersListModel = new ImportersListModel();
-        DropDownChoice<Importer> importerChoice = new DropDownChoice<Importer>("importerChoice", new PropertyModel<Importer>(this, "importer"), importersListModel, new ImporterChoiceRenderer());
+        DropDownChoice<Importer> importerChoice = new DropDownChoice<>("importerChoice", new PropertyModel<>(this, "importer"), importersListModel, new ImporterChoiceRenderer());
 
         // Set the UBWWorkRecordsImporter as Default if available
         for (Importer importer : importersListModel.getObject()) {
@@ -128,7 +128,7 @@ public class ImportFilesPage extends DialogPageWithBacklink {
         importerChoice.setRequired(true);
         form.add(importerChoice);
 
-        FileUploadField fileUpload = new FileUploadField("fileUpload", new PropertyModel<List<FileUpload>>(this, "fileUploads"));
+        FileUploadField fileUpload = new FileUploadField("fileUpload", new PropertyModel<>(this, "fileUploads"));
         fileUpload.setRequired(true);
         fileUpload.add(new AttributeModifier("accept", new AcceptedFileExtensionsModel(importer)));
         fileUpload.add(new AjaxEventBehavior("change") {

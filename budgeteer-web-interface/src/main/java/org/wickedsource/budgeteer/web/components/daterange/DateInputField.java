@@ -24,7 +24,7 @@ public class DateInputField extends TextField<java.util.Date> {
      */
     public DateInputField(String id, IModel<Date> model,  DROP_LOCATION drop_location) {
         super(id, model);
-        HashMap<String, String> options = new HashMap<String, String>();
+        HashMap<String, String> options = new HashMap<>();
         options.put("format","'DD.MM.YYYY'");
         if(model.getObject() != null){
             options.put("startDate", "'"+format.format(model.getObject())+"'");

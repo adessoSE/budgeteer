@@ -10,12 +10,12 @@ import java.util.List;
 
 @Data
 public class ContractOverviewTableModel implements Serializable{
-    private List<ContractBaseData> contracts = new LinkedList<ContractBaseData>();
-    private List<String> footer = new LinkedList<String>();
+    private List<ContractBaseData> contracts = new LinkedList<>();
+    private List<String> footer = new LinkedList<>();
     private boolean taxRateEnabled;
 
     public List<String> getHeadline() {
-        List<String> result = new LinkedList<String>();
+        List<String> result = new LinkedList<>();
         if(contracts.size() > 0){
             for(DynamicAttributeField attribute : contracts.get(0).getContractAttributes()){
                 result.add(attribute.getName());

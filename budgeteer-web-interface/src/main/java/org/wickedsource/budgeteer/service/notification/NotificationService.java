@@ -52,7 +52,7 @@ public class NotificationService {
      * @return list of notifications
      */
     public List<Notification> getNotifications(long projectId, long userId) {
-        List<Notification> notifications = new ArrayList<Notification>();
+        List<Notification> notifications = new ArrayList<>();
         if (workRecordRepository.countByProjectId(projectId) == 0) {
             notifications.add(new EmptyWorkRecordsNotification());
         }
@@ -106,7 +106,7 @@ public class NotificationService {
      * @return list of notifications concerning the given budget.
      */
     public List<Notification> getNotificationsForBudget(long budgetId) {
-        List<Notification> result = new LinkedList<Notification>();
+        List<Notification> result = new LinkedList<>();
 
         MissingBudgetTotalBean missingBudgetTotalForBudget = budgetRepository.getMissingBudgetTotalForBudget(budgetId);
         if (missingBudgetTotalForBudget != null) {

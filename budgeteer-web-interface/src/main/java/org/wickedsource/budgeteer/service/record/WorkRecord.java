@@ -19,4 +19,3 @@ public class WorkRecord implements Serializable {
     private boolean editedManually;
 
 }
-

@@ -13,7 +13,6 @@ import org.wickedsource.budgeteer.persistence.invoice.InvoiceEntity;
 import org.wickedsource.budgeteer.persistence.project.ProjectContractField;
 import org.wickedsource.budgeteer.service.AbstractMapper;
 import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
-import org.wickedsource.budgeteer.service.invoice.InvoiceBaseData;
 import org.wickedsource.budgeteer.service.invoice.InvoiceDataMapper;
 import org.wickedsource.budgeteer.web.components.fileUpload.FileUploadModel;
 
@@ -45,21 +44,21 @@ public class ContractDataMapper extends AbstractMapper<ContractEntity, ContractB
         result.setFileModel(new FileUploadModel(entity.getFileName(), entity.getFile(), entity.getLink()));
         result.setTaxRate(entity.getTaxRate() == null ? 0.0 : entity.getTaxRate().doubleValue());
 
-        Map<String, DynamicAttributeField> contractAttributes = new HashMap<String, DynamicAttributeField>();
+        Map<String, DynamicAttributeField> contractAttributes = new HashMap<>();
         for(ProjectContractField projectContractField:  entity.getProject().getContractFields()){
             contractAttributes.put(projectContractField.getFieldName(), new DynamicAttributeField(projectContractField.getFieldName(), ""));
         }
         for(ContractFieldEntity fieldEntity : entity.getContractFields()){
             contractAttributes.put(fieldEntity.getField().getFieldName(), new DynamicAttributeField(fieldEntity.getField().getFieldName(), fieldEntity.getValue()));
         }
-        result.setContractAttributes(new ArrayList<DynamicAttributeField>(contractAttributes.values()));
+        result.setContractAttributes(new ArrayList<>(contractAttributes.values()));
 
-        result.setBelongingBudgets(new LinkedList<BudgetBaseData>());
+        result.setBelongingBudgets(new LinkedList<>());
         for(BudgetEntity budgetEntity : entity.getBudgets()){
             result.getBelongingBudgets().add(new BudgetBaseData(budgetEntity.getId(), budgetEntity.getName()));
         }
 
-        result.setBelongingInvoices(new LinkedList<InvoiceBaseData>());
+        result.setBelongingInvoices(new LinkedList<>());
         for(InvoiceEntity invoiceEntity: entity.getInvoices()){
             result.getBelongingInvoices().add(invoiceDataMapper.map(invoiceEntity));
         }
@@ -68,7 +67,7 @@ public class ContractDataMapper extends AbstractMapper<ContractEntity, ContractB
     }
 
     public List<ContractBaseData> map(List<ContractEntity> entityList){
-        List<ContractBaseData> result = new LinkedList<ContractBaseData>();
+        List<ContractBaseData> result = new LinkedList<>();
         for(ContractEntity entity : entityList){
             result.add(map(entity));
         }

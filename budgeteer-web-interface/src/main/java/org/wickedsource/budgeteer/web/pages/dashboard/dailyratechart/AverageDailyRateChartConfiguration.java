@@ -59,7 +59,7 @@ public class AverageDailyRateChartConfiguration extends ChartConfiguration imple
     
     private List<Label> getLabels(int numberOfDays, String dateFormat) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(dateFormat,Locale.ENGLISH);
-    	ArrayList<Label> list = new ArrayList<Label>(numberOfDays);
+    	ArrayList<Label> list = new ArrayList<>(numberOfDays);
     	LocalDateTime nowDate = LocalDateTime.now();
     	for(int i = 0; i < numberOfDays; i++) {
     		list.add(new TextLabel(nowDate.minus(i, ChronoUnit.DAYS).format(formatter)));

@@ -36,6 +36,6 @@ public class ContractBaseData implements Serializable{
 
     public ContractBaseData(long projectId){
         this.projectId = projectId;
-        contractAttributes = new LinkedList<DynamicAttributeField>();
+        contractAttributes = new LinkedList<>();
     }
 }

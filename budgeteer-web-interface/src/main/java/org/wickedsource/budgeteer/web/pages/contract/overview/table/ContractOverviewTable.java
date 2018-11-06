@@ -13,7 +13,6 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.MoneyUtil;
-import org.wickedsource.budgeteer.persistence.contract.ContractEntity;
 import org.wickedsource.budgeteer.service.contract.ContractBaseData;
 import org.wickedsource.budgeteer.service.contract.ContractService;
 import org.wickedsource.budgeteer.service.contract.ContractTotalData;
@@ -61,13 +60,13 @@ public class ContractOverviewTable extends Panel {
                 if (BudgeteerSession.get().isTaxEnabled()) {
                     taxCoefficient = 1.0 + item.getModelObject().getTaxRate() / 100.0;
                 }
-                BookmarkablePageLink<EditContractPage> link = new BookmarkablePageLink<EditContractPage>("editContract",
+                BookmarkablePageLink<EditContractPage> link = new BookmarkablePageLink<>("editContract",
                         ContractDetailsPage.class, EditContractPage.createParameters(contractId));
                 link.add(new Label("contractName", model(from(item.getModelObject()).getContractName())));
                 item.add(link);
                 item.add(new Label("internalNumber", model(from(item.getModelObject()).getInternalNumber())));
                 item.add(new DateLabel("startDate", model(from(item.getModelObject()).getStartDate())));
-                item.add(new EnumLabel<ContractEntity.ContractType>("type", model(from(item.getModelObject()).getType())));
+                item.add(new EnumLabel<>("type", model(from(item.getModelObject()).getType())));
                 item.add(new ListView<DynamicAttributeField>("contractRow", model(from(item.getModelObject()).getContractAttributes())) {
                     @Override
                     protected void populateItem(ListItem<DynamicAttributeField> item) {

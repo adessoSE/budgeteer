@@ -58,7 +58,7 @@ public class ContractEntity implements Serializable {
     private ContractType type;
 
     @OneToMany(mappedBy="contract")
-    private List<BudgetEntity> budgets = new LinkedList<BudgetEntity>();
+    private List<BudgetEntity> budgets = new LinkedList<>();
 
     @Column(name = "LINK")
     private String link;

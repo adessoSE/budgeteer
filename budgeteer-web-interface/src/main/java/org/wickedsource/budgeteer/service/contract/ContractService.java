@@ -51,7 +51,7 @@ public class ContractService {
 
     @PreAuthorize("canReadProject(#projectId)")
     public List<ContractBaseData> getContractsByProject(long projectId) {
-        List<ContractEntity> contracts = new LinkedList<ContractEntity>();
+        List<ContractEntity> contracts = new LinkedList<>();
         contracts.addAll(contractRepository.findByProjectId(projectId));
         return mapper.map(contracts);
     }
@@ -139,7 +139,7 @@ public class ContractService {
 
     @PreAuthorize("canReadContract(#contractId)")
     public List<Date> getMonthList(long contractId) {
-        List<Date> months = new ArrayList<Date>();
+        List<Date> months = new ArrayList<>();
         ContractEntity contract = contractRepository.findById(contractId);
         Calendar cal = Calendar.getInstance();
         cal.setTime(contract.getStartDate());
@@ -162,7 +162,7 @@ public class ContractService {
             }
         }
 
-        List<Date> months = new ArrayList<Date>();
+        List<Date> months = new ArrayList<>();
         Calendar cal = Calendar.getInstance();
         cal.setTime(startDate);
         Calendar currentDate = Calendar.getInstance();

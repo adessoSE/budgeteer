@@ -29,7 +29,7 @@ public class TemplateFilterPanel extends Panel {
     public TemplateFilterPanel(String id, TemplateFilter filter) {
         super(id, model(from(filter)));
         IModel<TemplateFilter> model = (IModel<TemplateFilter>) getDefaultModel();
-        Form<TemplateFilter> form = new Form<TemplateFilter>("filterForm", model);
+        Form<TemplateFilter> form = new Form<>("filterForm", model);
         form.add(createTypeFilter("typesFilterContainer", form));
         add(form);
     }

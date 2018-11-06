@@ -34,7 +34,7 @@ public class TotalContractDetailsModel extends LoadableDetachableModel<ContractT
     public int getContractAttributeSize()
 
     {
-        List<DynamicAttributeField> fields = new ArrayList<DynamicAttributeField>();
+        List<DynamicAttributeField> fields = new ArrayList<>();
         if (wrappedModel.getObject().size() > 0) {
             ContractTotalData data = wrappedModel.getObject().get(0);
             fields = data.getContractAttributes();

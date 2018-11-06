@@ -18,7 +18,7 @@ public class CustomFileUpload extends GenericPanel<FileUploadModel> {
     public CustomFileUpload(String id, IModel<FileUploadModel> model) {
         super(id, model);
 
-        add(new TextField<String>("link", model(from(getModelObject()).getLink())));
+        add(new TextField<>("link", model(from(getModelObject()).getLink())));
 
         final Label fileName = new Label("fileName", model(from(getModelObject()).getFileName()));
         add(fileName);

@@ -30,7 +30,7 @@ public class ContractHighlightsPanel extends Panel {
         add(new Label("name", model(from(model.getObject()).getContractName())));
         add(new Label("internalNumber", model(from(model.getObject()).getInternalNumber())));
         add(new DateLabel("startDate", model(from(model.getObject()).getStartDate())));
-        add(new EnumLabel<ContractEntity.ContractType>("type", model(from(model.getObject()).getType())));
+        add(new EnumLabel<>("type", model(from(model.getObject()).getType())));
         add(new Label("budget", model(from(model.getObject()).getBudget())));
 
 
