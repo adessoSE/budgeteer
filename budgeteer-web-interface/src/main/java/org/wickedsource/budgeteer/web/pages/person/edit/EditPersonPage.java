@@ -6,30 +6,35 @@ import org.apache.wicket.util.string.StringValue;
 import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.pages.base.dialogpage.DialogPageWithBacklink;
 import org.wickedsource.budgeteer.web.pages.person.edit.personrateform.EditPersonForm;
+import org.wickedsource.budgeteer.web.pages.person.overview.PeopleOverviewPage;
 
-@Mount({"people/edit/${id}", "people/edit"})
+@Mount({"people/edit/${id}"})
 public class EditPersonPage extends DialogPageWithBacklink {
 
     private IEditPersonPageStrategy strategy;
 
     /**
-     * Use this constructor to create a page with a form to edit an existing user.
+     * Use this constructor to create a page with a form to edit an existing person.
      *
-     * @param parameters page parameters containing the id of the user to edit.
+     * @param parameters page parameters containing the id of the person to edit.
      */
     public EditPersonPage(PageParameters parameters, Class<? extends WebPage> backlinkPage, PageParameters backlinkParameters) {
         super(parameters, backlinkPage, backlinkParameters);
+        if(getPersonId() == 0L){
+            setResponsePage(backlinkPage, backlinkParameters);
+            return;
+        }
         strategy = new UpdateStrategy(this);
         addComponents();
     }
 
     /**
-     * Use this constructor to create a page with a form to create a new user.
+     * This constructor is used when you click on a link or try to access the EditPersonPage manually
+     * (e.g. when you type the path "/people/edit" in the search bar)
+     * @param parameters
      */
-    public EditPersonPage(Class<? extends WebPage> backlinkPage, PageParameters backlinkParameters) {
-        super(backlinkPage, backlinkParameters);
-        strategy = new CreateStrategy(this);
-        addComponents();
+    public EditPersonPage(PageParameters parameters) {
+        this(createParameters(0), PeopleOverviewPage.class, new PageParameters());
     }
 
     private void addComponents() {

@@ -45,7 +45,6 @@ public class EditContractForm extends Form<ContractBaseData> {
         this(id, null, "button.save.createmode");
     }
 
-
     public EditContractForm(String id, IModel<ContractBaseData> model) {
         this(id, model, "button.save.editmode");
     }
@@ -67,11 +66,11 @@ public class EditContractForm extends Form<ContractBaseData> {
         feedbackPanel.setOutputMarkupId(true);
         add(feedbackPanel);
 
-        TextField<String> nameTextfield = new TextField<String>("contractName", model(from(getModelObject()).getContractName()));
+        TextField<String> nameTextfield = new TextField<>("contractName", model(from(getModelObject()).getContractName()));
         nameTextfield.setRequired(true);
         add(nameTextfield);
 
-        TextField<String> internalNumberTextfield = new TextField<String>("internalNumber", model(from(getModelObject()).getInternalNumber()));
+        TextField<String> internalNumberTextfield = new TextField<>("internalNumber", model(from(getModelObject()).getInternalNumber()));
         internalNumberTextfield.setRequired(true);
         add(internalNumberTextfield);
 
