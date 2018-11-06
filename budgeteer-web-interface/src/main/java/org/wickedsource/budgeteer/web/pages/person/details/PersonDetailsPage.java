@@ -82,7 +82,7 @@ public class PersonDetailsPage extends BasePage {
     @SuppressWarnings("unchecked")
     protected BreadcrumbsModel getBreadcrumbsModel() {
         BreadcrumbsModel model = new BreadcrumbsModel(DashboardPage.class, PeopleOverviewPage.class);
-        model.addBreadcrumb(new Breadcrumb(PersonDetailsPage.class, getPageParameters(), new PersonNameModel(getParameterId())));
+        model.addBreadcrumb(PersonDetailsPage.class, getPageParameters());
         return model;
     }
 

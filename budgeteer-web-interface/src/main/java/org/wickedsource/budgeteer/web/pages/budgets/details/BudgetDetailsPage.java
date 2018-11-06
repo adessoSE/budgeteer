@@ -133,7 +133,7 @@ public class BudgetDetailsPage extends BasePage {
     @Override
     protected BreadcrumbsModel getBreadcrumbsModel() {
         BreadcrumbsModel model = new BreadcrumbsModel(DashboardPage.class, BudgetsOverviewPage.class);
-        model.addBreadcrumb(new Breadcrumb(BudgetDetailsPage.class, getPageParameters(), new BudgetNameModel(getParameterId())));
+        model.addBreadcrumb(BudgetDetailsPage.class, getPageParameters());
         return model;
     }
 
