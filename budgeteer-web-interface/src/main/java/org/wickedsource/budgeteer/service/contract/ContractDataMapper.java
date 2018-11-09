@@ -11,7 +11,7 @@ import org.wickedsource.budgeteer.persistence.contract.ContractFieldEntity;
 import org.wickedsource.budgeteer.persistence.contract.ContractRepository;
 import org.wickedsource.budgeteer.persistence.invoice.InvoiceEntity;
 import org.wickedsource.budgeteer.persistence.project.ProjectContractField;
-import org.wickedsource.budgeteer.persistence.manualRecord.ManualWorkRecordRepository;
+import org.wickedsource.budgeteer.persistence.manualRecord.ManualRecordRepository;
 import org.wickedsource.budgeteer.service.AbstractMapper;
 import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
 import org.wickedsource.budgeteer.service.invoice.InvoiceDataMapper;
@@ -29,7 +29,7 @@ public class ContractDataMapper extends AbstractMapper<ContractEntity, ContractB
     private ContractRepository contractRepository;
 
     @Autowired
-    private ManualWorkRecordRepository manualWorkRecordRepository;
+    private ManualRecordRepository manualRecordRepository;
 
     @Override
     public ContractBaseData map(ContractEntity entity) {
@@ -40,7 +40,7 @@ public class ContractDataMapper extends AbstractMapper<ContractEntity, ContractB
         result.setContractId(entity.getId());
         result.setBudget(entity.getBudget());
         result.setBudgetLeft(toMoneyNullsafe(contractRepository.getBudgetLeftByContractId(entity.getId())));
-        result.setBudgetSpent(toMoneyNullsafe(contractRepository.getSpentBudgetByContractId(entity.getId()) + manualWorkRecordRepository.getManualRecordSumForContract(entity.getId())));
+        result.setBudgetSpent(toMoneyNullsafe(contractRepository.getSpentBudgetByContractId(entity.getId()) + manualRecordRepository.getManualRecordSumForContract(entity.getId())));
         result.setInternalNumber(entity.getInternalNumber());
         result.setProjectId(entity.getProject().getId());
         result.setType(entity.getType());

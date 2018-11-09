@@ -11,6 +11,9 @@ import org.wickedsource.budgeteer.persistence.manualRecord.ManualRecord;
 import org.wickedsource.budgeteer.service.budget.BudgetService;
 import org.wickedsource.budgeteer.service.contract.ContractService;
 import org.wickedsource.budgeteer.web.components.dataTable.DataTableBehavior;
+import org.wickedsource.budgeteer.web.components.money.BudgetUnitMoneyModel;
+import org.wickedsource.budgeteer.web.components.money.MoneyLabel;
+import org.wickedsource.budgeteer.web.components.tax.TaxBudgetUnitMoneyModel;
 
 
 import java.util.List;
@@ -39,7 +42,7 @@ public class ManualRecordOverviewTable extends Panel {
             @Override
             protected void populateItem(final ListItem<ManualRecord> item) {
                 item.add(new Label("description", model(from(item.getModelObject()).getDescription())));
-                item.add(new Label("amount", model(from(item.getModelObject()).getMoneyAmount())));
+                item.add(new MoneyLabel("amount", model(from(item.getModelObject()).getMoneyAmount())));
                 item.add(new Label("date", model(from(item.getModelObject()).getDate())));
             }
         };

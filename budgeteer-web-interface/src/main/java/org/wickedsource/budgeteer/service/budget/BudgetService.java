@@ -14,7 +14,7 @@ import org.wickedsource.budgeteer.persistence.contract.ContractRepository;
 import org.wickedsource.budgeteer.persistence.person.DailyRateRepository;
 import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
 import org.wickedsource.budgeteer.persistence.project.ProjectRepository;
-import org.wickedsource.budgeteer.persistence.manualRecord.ManualWorkRecordRepository;
+import org.wickedsource.budgeteer.persistence.manualRecord.ManualRecordRepository;
 import org.wickedsource.budgeteer.persistence.record.PlanRecordRepository;
 import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
 import org.wickedsource.budgeteer.service.UnknownEntityException;
@@ -57,7 +57,7 @@ public class BudgetService {
     private ContractDataMapper contractDataMapper;
 
     @Autowired
-    private ManualWorkRecordRepository manualWorkRecordRepository;
+    private ManualRecordRepository manualRecordRepository;
 
     /**
      * Loads all Budgets that the given user is qualified for and returns base data about them.
@@ -130,7 +130,7 @@ public class BudgetService {
 
     private BudgetDetailData enrichBudgetEntity(BudgetEntity entity) {
         Date lastUpdated = workRecordRepository.getLatestWorkRecordDate(entity.getId());
-        Double spentBudgetInCents = workRecordRepository.getSpentBudget(entity.getId()) + manualWorkRecordRepository.getManualRecordSumForBudget(entity.getId());
+        Double spentBudgetInCents = workRecordRepository.getSpentBudget(entity.getId()) + manualRecordRepository.getManualRecordSumForBudget(entity.getId());
         Double plannedBudgetInCents = planRecordRepository.getPlannedBudget(entity.getId());
         Double avgDailyRateInCents = workRecordRepository.getAverageDailyRate(entity.getId());
         Double taxCoefficient = budgetRepository.getTaxCoefficientByBudget(entity.getId());

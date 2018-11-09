@@ -30,4 +30,6 @@
 
     <mockito:mock id="forgotPasswordTokenRepository" class="org.wickedsource.budgeteer.persistence.user.ForgotPasswordTokenRepository"/>
 
+    <mockito:mock id="manualRecordRepository" class="org.wickedsource.budgeteer.persistence.manualRecord.ManualRecordRepository"/>
+
 </beans>

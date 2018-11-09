@@ -17,8 +17,6 @@ public class ManualRecordModel extends LoadableDetachableModel<List<ManualRecord
     @Setter
     private long budgetId;
 
-
-
     public ManualRecordModel(long budgetId, ManualRecordService service){
         this.budgetId = budgetId;
         this.service = service;

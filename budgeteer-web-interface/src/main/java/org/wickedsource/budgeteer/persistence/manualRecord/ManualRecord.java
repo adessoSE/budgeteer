@@ -21,7 +21,7 @@ public class ManualRecord implements Serializable {
         this.budgetId = budgetId;
     }
 
-    public ManualRecord(ManualWorkRecordEntity entity)
+    public ManualRecord(ManualRecordEntity entity)
     {
         id = entity.getId();
         budgetId = entity.getBudget().getId();

@@ -8,7 +8,7 @@ import org.wickedsource.budgeteer.persistence.contract.ContractRepository;
 import org.wickedsource.budgeteer.persistence.contract.ContractStatisticBean;
 import org.wickedsource.budgeteer.persistence.invoice.InvoiceRepository;
 import org.wickedsource.budgeteer.persistence.record.*;
-import org.wickedsource.budgeteer.persistence.manualRecord.ManualWorkRecordRepository;
+import org.wickedsource.budgeteer.persistence.manualRecord.ManualRecordRepository;
 import org.wickedsource.budgeteer.service.DateUtil;
 import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
 import org.wickedsource.budgeteer.web.pages.contract.details.contractDetailChart.ContractDetailBudgetChart;
@@ -26,7 +26,7 @@ public class StatisticsService {
     private WorkRecordRepository workRecordRepository;
 
     @Autowired
-    private ManualWorkRecordRepository manualWorkRecordRepository;
+    private ManualRecordRepository manualRecordRepository;
 
     @Autowired
     private PlanRecordRepository planRecordRepository;
@@ -54,7 +54,7 @@ public class StatisticsService {
         Date startDate = dateUtil.weeksAgo(numberOfWeeks);
         List<WeeklyAggregatedRecordBean> weeklyBeans = workRecordRepository.aggregateByWeekForProject(projectId, startDate);
         // Get Manual records
-        List<WeeklyAggregatedRecordBean> manualBeans = manualWorkRecordRepository.aggregateByWeekForProject(projectId, startDate);
+        List<WeeklyAggregatedRecordBean> manualBeans = manualRecordRepository.aggregateByWeekForProject(projectId, startDate);
 
         // Add the manual records' money amounts to a weekly bean of the same week
         for (WeeklyAggregatedRecordBean manual : manualBeans) {
@@ -554,8 +554,8 @@ public class StatisticsService {
      */
     public TargetAndActual getWeekStatsForBudgets(BudgetTagFilter budgetFilter, int numberOfWeeks) {
         Date startDate = dateUtil.weeksAgo(numberOfWeeks);
-        List<WeeklyAggregatedRecordWithTitleBean> burnedStats = new ArrayList<>();
-        List<WeeklyAggregatedRecordBean> plannedStats = new ArrayList<>();
+        List<WeeklyAggregatedRecordWithTitleBean> burnedStats;
+        List<WeeklyAggregatedRecordBean> plannedStats;
         if (budgetFilter.getSelectedTags().isEmpty()) {
             burnedStats = workRecordRepository.aggregateByWeekAndPersonForBudgets(budgetFilter.getProjectId(), startDate);
             plannedStats = planRecordRepository.aggregateByWeekForBudgets(budgetFilter.getProjectId(), startDate);
@@ -585,18 +585,18 @@ public class StatisticsService {
      */
     public TargetAndActual getWeekStatsForBudgetsWithTax(BudgetTagFilter budgetFilter, int numberOfWeeks) {
         Date startDate = dateUtil.weeksAgo(numberOfWeeks);
-        List<WeeklyAggregatedRecordWithTitleAndTaxBean> burnedStats = new ArrayList<>();
-        List<WeeklyAggregatedRecordWithTaxBean> plannedStats = new ArrayList<>();
-        List<WeeklyAggregatedRecordWithTitleAndTaxBean> manualBurnedStats = new ArrayList<>();
+        List<WeeklyAggregatedRecordWithTitleAndTaxBean> burnedStats;
+        List<WeeklyAggregatedRecordWithTaxBean> plannedStats;
+        List<WeeklyAggregatedRecordWithTitleAndTaxBean> manualBurnedStats;
 
         if (budgetFilter.getSelectedTags().isEmpty()) {
             burnedStats = workRecordRepository.aggregateByWeekAndPersonForBudgetsWithTax(budgetFilter.getProjectId(), startDate);
             plannedStats = planRecordRepository.aggregateByWeekForBudgetsWithTax(budgetFilter.getProjectId(), startDate);
-            manualBurnedStats = manualWorkRecordRepository.aggregateByWeekForBudgetsWithTax(budgetFilter.getProjectId(), startDate);
+            manualBurnedStats = manualRecordRepository.aggregateByWeekForBudgetsWithTax(budgetFilter.getProjectId(), startDate);
         } else {
             burnedStats = workRecordRepository.aggregateByWeekAndPersonForBudgetsWithTax(budgetFilter.getProjectId(), budgetFilter.getSelectedTags(), startDate);
             plannedStats = planRecordRepository.aggregateByWeekForBudgetsWithTax(budgetFilter.getProjectId(), budgetFilter.getSelectedTags(), startDate);
-            manualBurnedStats = manualWorkRecordRepository.aggregateByWeekForBudgetsWithTax(budgetFilter.getProjectId(), budgetFilter.getSelectedTags(), startDate);
+            manualBurnedStats = manualRecordRepository.aggregateByWeekForBudgetsWithTax(budgetFilter.getProjectId(), budgetFilter.getSelectedTags(), startDate);
         }
 
         // Calculate the money amount of the weekly records as fractions of monthly records
@@ -619,8 +619,8 @@ public class StatisticsService {
      */
     public TargetAndActual getMonthStatsForBudgets(BudgetTagFilter budgetFilter, int numberOfMonths) {
         Date startDate = dateUtil.monthsAgo(numberOfMonths);
-        List<MonthlyAggregatedRecordWithTitleBean> burnedStats = new ArrayList<>();
-        List<MonthlyAggregatedRecordBean> plannedStats = new ArrayList<>();
+        List<MonthlyAggregatedRecordWithTitleBean> burnedStats;
+        List<MonthlyAggregatedRecordBean> plannedStats;
         if (budgetFilter.getSelectedTags().isEmpty()) {
             // aggregate all budgets
             burnedStats = workRecordRepository.aggregateByMonthAndPersonForBudgets(budgetFilter.getProjectId(), startDate);
@@ -652,20 +652,20 @@ public class StatisticsService {
      */
     public TargetAndActual getMonthStatsForBudgetsWithTax(BudgetTagFilter budgetFilter, int numberOfMonths) {
         Date startDate = dateUtil.monthsAgo(numberOfMonths);
-        List<MonthlyAggregatedRecordWithTitleAndTaxBean> burnedStats = new ArrayList<>();
-        List<MonthlyAggregatedRecordWithTaxBean> plannedStats = new ArrayList<>();
-        List<MonthlyAggregatedRecordWithTitleAndTaxBean> manualBurnedStats = new ArrayList<>();
+        List<MonthlyAggregatedRecordWithTitleAndTaxBean> burnedStats;
+        List<MonthlyAggregatedRecordWithTaxBean> plannedStats;
+        List<MonthlyAggregatedRecordWithTitleAndTaxBean> manualBurnedStats;
 
         if (budgetFilter.getSelectedTags().isEmpty()) {
             // aggregate all budgets
             burnedStats = workRecordRepository.aggregateByMonthAndPersonForBudgetsWithTax(budgetFilter.getProjectId(), startDate);
             plannedStats = planRecordRepository.aggregateByMonthForBudgetsWithTax(budgetFilter.getProjectId(), startDate);
-            manualBurnedStats = manualWorkRecordRepository.aggregateByMonthForBudgetsWithTax(budgetFilter.getProjectId(), startDate);
+            manualBurnedStats = manualRecordRepository.aggregateByMonthForBudgetsWithTax(budgetFilter.getProjectId(), startDate);
         } else {
             // aggregate only budgets with the selected tags
             burnedStats = workRecordRepository.aggregateByMonthAndPersonForBudgetsWithTax(budgetFilter.getProjectId(), budgetFilter.getSelectedTags(), startDate);
             plannedStats = planRecordRepository.aggregateByMonthForBudgetsWithTax(budgetFilter.getProjectId(), budgetFilter.getSelectedTags(), startDate);
-            manualBurnedStats = manualWorkRecordRepository.aggregateByMonthForBudgetsWithTax(budgetFilter.getProjectId(), budgetFilter.getSelectedTags(), startDate);
+            manualBurnedStats = manualRecordRepository.aggregateByMonthForBudgetsWithTax(budgetFilter.getProjectId(), budgetFilter.getSelectedTags(), startDate);
         }
 
         burnedStats.addAll(manualBurnedStats);
@@ -745,7 +745,7 @@ public class StatisticsService {
         Date startDate = dateUtil.weeksAgo(numberOfWeeks);
         List<WeeklyAggregatedRecordWithTitleAndTaxBean> burnedStats = workRecordRepository.aggregateByWeekAndPersonForBudgetWithTax(budgetId, startDate);
         List<WeeklyAggregatedRecordWithTaxBean> plannedStats = planRecordRepository.aggregateByWeekForBudgetWithTax(budgetId, startDate);
-        List<WeeklyAggregatedRecordWithTitleAndTaxBean> manualBurnedStats = manualWorkRecordRepository.aggregateByWeekForBudgetWithTax(budgetId, startDate);
+        List<WeeklyAggregatedRecordWithTitleAndTaxBean> manualBurnedStats = manualRecordRepository.aggregateByWeekForBudgetWithTax(budgetId, startDate);
 
         burnedStats.addAll(manualBurnedStats);
 
@@ -798,7 +798,7 @@ public class StatisticsService {
         Date startDate = dateUtil.monthsAgo(numberOfMonths);
         List<MonthlyAggregatedRecordWithTitleAndTaxBean> burnedStats = workRecordRepository.aggregateByMonthAndPersonForBudgetWithTax(budgetId, startDate); //changed
         List<MonthlyAggregatedRecordWithTaxBean> plannedStats = planRecordRepository.aggregateByMonthForBudgetWithTax(budgetId, startDate); //changed
-        List<MonthlyAggregatedRecordWithTitleAndTaxBean> manualBurnedStats = manualWorkRecordRepository.aggregateByMonthForBudgetWithTax(budgetId, startDate);
+        List<MonthlyAggregatedRecordWithTitleAndTaxBean> manualBurnedStats = manualRecordRepository.aggregateByMonthForBudgetWithTax(budgetId, startDate);
 
         burnedStats.addAll(manualBurnedStats);
 
@@ -814,7 +814,7 @@ public class StatisticsService {
         currentDate.setTime(new Date());
         while (cal.before(currentDate)) {
             ContractStatisticBean bean = contractRepository.getContractStatisticAggregatedByMonthAndYear(contractId, cal.get(Calendar.MONTH), cal.get(Calendar.YEAR));
-            long manual = Math.round(manualWorkRecordRepository.getManualRecordSumForContractUntilMonthAndYear(contractId, cal.get(Calendar.MONTH), cal.get(Calendar.YEAR)));
+            long manual = Math.round(manualRecordRepository.getManualRecordSumForContractUntilMonthAndYear(contractId, cal.get(Calendar.MONTH), cal.get(Calendar.YEAR)));
             bean.setSpentBudget(bean.getSpentBudget()+ manual);
             result.add(bean);
             cal.add(Calendar.MONTH, 1);
@@ -830,7 +830,7 @@ public class StatisticsService {
         currentDate.setTime(new Date());
         while (cal.before(currentDate)) {
             ContractStatisticBean bean = contractRepository.getContractStatisticByMonthAndYear(contractId, cal.get(Calendar.MONTH), cal.get(Calendar.YEAR));
-            long manual = Math.round(manualWorkRecordRepository.getManualRecordSumForContractByMonthAndYear(contractId, cal.get(Calendar.MONTH), cal.get(Calendar.YEAR)));
+            long manual = Math.round(manualRecordRepository.getManualRecordSumForContractByMonthAndYear(contractId, cal.get(Calendar.MONTH), cal.get(Calendar.YEAR)));
             bean.setSpentBudget(bean.getSpentBudget()+manual);
             result.add(bean);
             cal.add(Calendar.MONTH, 1);

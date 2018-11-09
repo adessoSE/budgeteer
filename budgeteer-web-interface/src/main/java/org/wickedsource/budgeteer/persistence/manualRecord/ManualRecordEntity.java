@@ -16,7 +16,7 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ManualWorkRecordEntity {
+public class ManualRecordEntity {
     @Id
     @GeneratedValue
     private long id;
@@ -60,9 +60,9 @@ public class ManualWorkRecordEntity {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ManualWorkRecordEntity)) return false;
+        if (!(o instanceof ManualRecordEntity)) return false;
 
-        ManualWorkRecordEntity that = (ManualWorkRecordEntity) o;
+        ManualRecordEntity that = (ManualRecordEntity) o;
 
         if (day != that.day) return false;
         if (id != that.id) return false;
