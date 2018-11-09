@@ -37,7 +37,7 @@ public class AddManualRecordForm extends Form<ManualRecord> {
         totalField.setRequired(true);
         add(totalField);
 
-        add(new NotificationListPanel("notificationList", new ManualRecordNotificationsModel(getModel().getObject().getId())));
+      //  add(new NotificationListPanel("notificationList", new ManualRecordNotificationsModel(getModel().getObject().getId())));
     }
 
     @Override

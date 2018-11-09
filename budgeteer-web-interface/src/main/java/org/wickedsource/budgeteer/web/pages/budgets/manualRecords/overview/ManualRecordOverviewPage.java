@@ -18,7 +18,7 @@ import org.wickedsource.budgeteer.web.pages.budgets.manualRecords.overview.table
 import org.wickedsource.budgeteer.web.pages.budgets.overview.BudgetsOverviewPage;
 import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 
-@Mount({"budgets/details/manuals/${id}","budgets/details/manuals"})
+@Mount({"budgets/details/manuals/${id}", "budgets/details/manuals"})
 public class ManualRecordOverviewPage extends BasePage {
 
     @SpringBean
@@ -40,7 +40,7 @@ public class ManualRecordOverviewPage extends BasePage {
         return new Link(id) {
             @Override
             public void onClick() {
-                WebPage page = new AddManualRecordPage(ManualRecordOverviewPage.class,  getPageParameters());
+                WebPage page = new AddManualRecordPage(ManualRecordOverviewPage.class, getPageParameters());
                 setResponsePage(page);
             }
         };
@@ -51,7 +51,7 @@ public class ManualRecordOverviewPage extends BasePage {
     protected BreadcrumbsModel getBreadcrumbsModel() {
         BreadcrumbsModel model = new BreadcrumbsModel(DashboardPage.class, BudgetsOverviewPage.class);
         model.addBreadcrumb(new Breadcrumb(BudgetDetailsPage.class, getPageParameters(), new BudgetNameModel(getParameterId())));
-         model.addBreadcrumb(new Breadcrumb(ManualRecordOverviewPage.class, getPageParameters(), new BudgetNameModel(getParameterId())));
+        model.addBreadcrumb(new Breadcrumb(ManualRecordOverviewPage.class, getPageParameters(), "Manual Records"));
 
         return model;
     }

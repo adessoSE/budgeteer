@@ -1,6 +1,7 @@
 package org.wickedsource.budgeteer.service.manualRecord;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.persistence.budget.BudgetEntity;
 import org.wickedsource.budgeteer.persistence.budget.BudgetRepository;
@@ -10,10 +11,13 @@ import org.wickedsource.budgeteer.persistence.manualRecord.ManualWorkRecordRepos
 import org.wickedsource.budgeteer.persistence.record.MonthlyAggregatedRecordWithTaxBean;
 import org.wickedsource.budgeteer.persistence.record.WeeklyAggregatedRecordWithTitleAndTaxBean;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@Service
+@Transactional
 public class ManualRecordService {
     @Autowired
     private ManualWorkRecordRepository manualWorkRecordRepository;
