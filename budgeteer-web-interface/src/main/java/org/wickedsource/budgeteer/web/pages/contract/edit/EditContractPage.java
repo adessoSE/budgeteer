@@ -16,14 +16,29 @@ import org.wickedsource.budgeteer.web.pages.contract.overview.ContractOverviewPa
 import static org.wicketstuff.lazymodel.LazyModel.from;
 import static org.wicketstuff.lazymodel.LazyModel.model;
 
-@Mount({"contracts/edit/${id}", "contracts/edit"})
+@Mount({"contracts/edit/#{id}"})
 public class EditContractPage extends DialogPageWithBacklink {
 
     @SpringBean
     private ContractService service;
 
+    /**
+     * This constructor is used when you click on a link or try to access the EditContractPage manually
+     * (e.g. when you type the path "/contracts/edit" in the search bar)
+     * @param parameters
+     */
     public EditContractPage(PageParameters parameters){
-        this(parameters, ContractOverviewPage.class, parameters);
+        super(parameters, ContractOverviewPage.class, new PageParameters());
+        if (getContractId() == 0) {
+            Form<ContractBaseData> form = new EditContractForm("form");
+            addComponents(form);
+            add(new Label("pageTitle", "Create Contract"));
+        } else {
+            ContractBaseData contractBaseData = service.getContractById(getContractId());
+            EditContractForm form = new EditContractForm("form", model(from(contractBaseData)));
+            addComponents(form);
+            add(new Label("pageTitle", "Edit Contract"));
+        }
     }
     /**
      * Use this constructor to create a page with a form to create a new contract.
@@ -53,7 +68,6 @@ public class EditContractPage extends DialogPageWithBacklink {
         form.add(createBacklink("cancelButton2"));
         add(form);
     }
-
 
     private long getContractId() {
         StringValue value = getPageParameters().get("id");
