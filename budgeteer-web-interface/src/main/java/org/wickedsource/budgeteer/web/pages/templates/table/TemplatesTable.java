@@ -60,7 +60,7 @@ public class TemplatesTable extends Panel {
                 item.add(new Link("editPage") {
                     @Override
                     public void onClick() {
-                        WebPage page = new EditTemplatePage(TemplatesPage.class, getPage().getPageParameters(), item.getModelObject().getId());
+                        WebPage page = new EditTemplatePage(TemplatesPage.class, getPage().getPageParameters(), TemplatesPage.createParameters(item.getModelObject().getId()));
                         setResponsePage(page);
                     }
                 });}

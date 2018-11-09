@@ -1,7 +1,5 @@
 package org.wickedsource.budgeteer.service.person;
 
-import org.joda.money.BigMoney;
-import org.joda.money.BigMoneyProvider;
 import org.joda.money.CurrencyUnit;
 import org.joda.money.Money;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +15,6 @@ import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
 import org.wickedsource.budgeteer.service.DateRange;
 import org.wickedsource.budgeteer.service.DateUtil;
 import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
-import org.wickedsource.budgeteer.service.record.WorkRecord;
-import org.wickedsource.budgeteer.web.BudgeteerSession;
-import org.wickedsource.budgeteer.web.pages.person.edit.personrateform.EditPersonForm;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
