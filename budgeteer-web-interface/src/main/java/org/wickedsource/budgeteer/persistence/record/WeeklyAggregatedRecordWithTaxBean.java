@@ -3,6 +3,7 @@ package org.wickedsource.budgeteer.persistence.record;
 import lombok.Getter;
 import lombok.Setter;
 import org.joda.money.Money;
+import sun.nio.cs.ext.TIS_620;
 
 import java.math.BigDecimal;
 
@@ -11,6 +12,11 @@ public class WeeklyAggregatedRecordWithTaxBean extends WeeklyAggregatedRecordBea
     @Getter
     @Setter
     private BigDecimal taxRate;
+
+    public WeeklyAggregatedRecordWithTaxBean(int year, int month, int week, long valueInCents, BigDecimal taxRate){
+        super(year,month, week, valueInCents);
+        this.taxRate = taxRate;
+    }
 
     public WeeklyAggregatedRecordWithTaxBean(int year, int week, Double hours, long valueInCents, BigDecimal taxRate) {
         super(year, week, hours, valueInCents);

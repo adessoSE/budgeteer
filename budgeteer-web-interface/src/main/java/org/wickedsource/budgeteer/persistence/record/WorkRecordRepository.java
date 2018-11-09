@@ -22,7 +22,7 @@ public interface WorkRecordRepository extends CrudRepository<WorkRecordEntity, L
      * @param budgetId ID of the budget whose spending to aggregate.
      * @return aggregated monetary value of the spent budget in cents.
      */
-    @Query("select sum(record.minutes * record.dailyRate) / 60 / 8 from WorkRecordEntity record where record.budget.id = :budgetId")
+    @Query("select coalesce(sum(record.minutes * record.dailyRate) / 60 / 8,0) from WorkRecordEntity record where record.budget.id = :budgetId")
     Double getSpentBudget(@Param("budgetId") long budgetId);
 
     /**

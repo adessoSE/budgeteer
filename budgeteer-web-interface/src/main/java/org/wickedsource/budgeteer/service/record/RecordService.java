@@ -4,20 +4,15 @@ import com.querydsl.core.types.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.wickedsource.budgeteer.ListUtil;
-import org.wickedsource.budgeteer.MoneyUtil;
-import org.wickedsource.budgeteer.persistence.budget.BudgetEntity;
 import org.wickedsource.budgeteer.persistence.budget.BudgetRepository;
-import org.wickedsource.budgeteer.persistence.imports.ImportEntity;
 import org.wickedsource.budgeteer.persistence.record.*;
-import org.wickedsource.budgeteer.persistence.record.AddManualRecordData;
+import org.wickedsource.budgeteer.persistence.manualRecord.ManualWorkRecordRepository;
 import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
+import org.wickedsource.budgeteer.service.manualRecord.ManualRecordService;
 import org.wickedsource.budgeteer.service.statistics.MonthlyStats;
 
 import javax.transaction.Transactional;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 @Transactional
@@ -29,6 +24,8 @@ public class RecordService {
     @Autowired
     private PlanRecordRepository planRecordRepository;
 
+    @Autowired
+    private ManualRecordService manualRecordService;
 
     @Autowired
     private BudgetRepository budgetRepository;
@@ -88,6 +85,8 @@ public class RecordService {
         List<WeeklyAggregatedRecordWithTitleAndTaxBean> workRecords = workRecordRepository.aggregateByWeekAndPersonForBudgetWithTax(budgetId);
         List<WeeklyAggregatedRecordWithTaxBean> planRecords = planRecordRepository.aggregateByWeekForBudgetWithTax(budgetId);
 
+        manualRecordService.addManualRecordsByWeekAndPersonForBudgetWithTax(workRecords, budgetId);
+
         MonthlyStats monthlyStats = new MonthlyStats(budgetId, workRecordRepository, planRecordRepository);
 
         return recordJoiner.joinWeeklyByMonthFraction(workRecords, planRecords, monthlyStats);
@@ -114,6 +113,7 @@ public class RecordService {
     public List<AggregatedRecord> getMonthlyAggregationForBudgetWithTax(long budgetId) {
         List<MonthlyAggregatedRecordWithTaxBean> planRecords = planRecordRepository.aggregateByMonthAndBudgetWithTax(budgetId);
         List<MonthlyAggregatedRecordWithTaxBean> workRecords = workRecordRepository.aggregateByMonthAndBudgetWithTax(budgetId);
+        manualRecordService.addManualRecordsByMonthAndBudgetWithTax(workRecords, budgetId);
         return recordJoiner.joinMonthlyWithTax(workRecords, planRecords);
     }
 
@@ -152,9 +152,11 @@ public class RecordService {
         if (budgetFilter.getSelectedTags().isEmpty()) {
             workRecords = workRecordRepository.aggregateByWeekAndPersonForBudgetsWithTax(budgetFilter.getProjectId());
             planRecords = planRecordRepository.aggregateByWeekForBudgetsWithTax(budgetFilter.getProjectId());
+            manualRecordService.addManualRecordsByWeekForBudgetsWithTax(workRecords, budgetFilter.getProjectId());
         } else {
             workRecords = workRecordRepository.aggregateByWeekAndPersonForBudgetsWithTax(budgetFilter.getProjectId(), budgetFilter.getSelectedTags());
             planRecords = planRecordRepository.aggregateByWeekForBudgetsWithTax(budgetFilter.getProjectId(), budgetFilter.getSelectedTags());
+            manualRecordService.addManualRecordsByWeekForBudgetsWithTax(workRecords, budgetFilter.getProjectId(), budgetFilter.getSelectedTags());
         }
 
         MonthlyStats monthlyStats = new MonthlyStats(budgetFilter, workRecordRepository, planRecordRepository);
@@ -189,13 +191,17 @@ public class RecordService {
     public List<AggregatedRecord> getMonthlyAggregationForBudgetsWithTax(BudgetTagFilter budgetFilter) {
         List<MonthlyAggregatedRecordWithTaxBean> planRecords;
         List<MonthlyAggregatedRecordWithTaxBean> workRecords;
+
         if (budgetFilter.getSelectedTags().isEmpty()) {
             workRecords = workRecordRepository.aggregateByMonthWithTax(budgetFilter.getProjectId());
             planRecords = planRecordRepository.aggregateByMonthWithTax(budgetFilter.getProjectId());
+            manualRecordService.addManualRecordsByMonthAndBudgetTagsWithTax(workRecords, budgetFilter.getProjectId());
         } else {
             workRecords = workRecordRepository.aggregateByMonthAndBudgetTagsWithTax(budgetFilter.getProjectId(), budgetFilter.getSelectedTags());
             planRecords = planRecordRepository.aggregateByMonthAndBudgetTagsWithTax(budgetFilter.getProjectId(), budgetFilter.getSelectedTags());
+            manualRecordService.addManualRecordsByMonthAndBudgetTagsWithTax(workRecords, budgetFilter.getProjectId(), budgetFilter.getSelectedTags());
         }
+
         return recordJoiner.joinMonthlyWithTax(workRecords, planRecords);
     }
 
@@ -208,7 +214,7 @@ public class RecordService {
      */
     public List<WorkRecord> getFilteredRecords(WorkRecordFilter filter) {
         Predicate query = WorkRecordQueries.findByFilter(filter);
-        List<WorkRecord> workRecords =  recordMapper.map(ListUtil.toArrayList(workRecordRepository.findAll(query)));
+        List<WorkRecord> workRecords = recordMapper.map(ListUtil.toArrayList(workRecordRepository.findAll(query)));
         switch (filter.getColumnToSort().getObject()) {
             case BUDGET:
                 workRecords.sort(Comparator.comparing(WorkRecord::getBudgetName));
@@ -229,7 +235,7 @@ public class RecordService {
                 workRecords.sort(Comparator.comparing(WorkRecord::getBudgetBurned));
                 break;
         }
-        if(filter.getSortType().getObject().equals("Descending")){
+        if (filter.getSortType().getObject().equals("Descending")) {
             Collections.reverse(workRecords);
         }
         return workRecords;
@@ -241,21 +247,4 @@ public class RecordService {
         entity.setEditedManually(record.isEditedManually());
         workRecordRepository.save(entity);
     }
-
-
-    public void saveManualRecord(AddManualRecordData data)
-    {
-        // ToDo
-        assert data != null;
-
-        ManualWorkRecordEntity record = new ManualWorkRecordEntity();
-        record.setDescription(data.getDescription());
-        record.setMoneyAmount(data.getMoneyAmount());
-        record.setDate(new Date());
-        BudgetEntity budgetEntity = budgetRepository.findOne(data.getBudgetId());
-        record.setBudget(budgetEntity);
-
-        manualWorkRecordRepository.save(record);
-    }
-
 }

@@ -28,7 +28,7 @@ import org.wickedsource.budgeteer.web.pages.budgets.details.highlights.BudgetHig
 import org.wickedsource.budgeteer.web.pages.budgets.details.highlights.BudgetHighlightsPanel;
 import org.wickedsource.budgeteer.web.pages.budgets.edit.EditBudgetPage;
 import org.wickedsource.budgeteer.web.pages.budgets.hours.BudgetHoursPage;
-import org.wickedsource.budgeteer.web.pages.budgets.manualRecords.AddManualRecordsPage;
+import org.wickedsource.budgeteer.web.pages.budgets.manualRecords.overview.ManualRecordOverviewPage;
 import org.wickedsource.budgeteer.web.pages.budgets.monthreport.single.SingleBudgetMonthReportPage;
 import org.wickedsource.budgeteer.web.pages.budgets.notes.BudgetNotesPage;
 import org.wickedsource.budgeteer.web.pages.budgets.overview.BudgetsOverviewPage;
@@ -136,7 +136,7 @@ public class BudgetDetailsPage extends BasePage {
         return new Link(id) {
             @Override
             public void onClick() {
-                WebPage page = new AddManualRecordsPage(BasePage.createParameters(getParameterId()),  BudgetDetailsPage.class,  model.getObject().getId(), getPageParameters());
+                WebPage page = new ManualRecordOverviewPage(getPageParameters());
                 setResponsePage(page);
             }
         };

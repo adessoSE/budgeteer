@@ -1,9 +1,9 @@
-package org.wickedsource.budgeteer.persistence.record;
+package org.wickedsource.budgeteer.persistence.manualRecord;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.joda.money.Money;
 import org.wickedsource.budgeteer.persistence.budget.BudgetEntity;
 
 import javax.persistence.*;
@@ -15,6 +15,7 @@ import java.util.Date;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class ManualWorkRecordEntity {
     @Id
     @GeneratedValue
@@ -24,7 +25,7 @@ public class ManualWorkRecordEntity {
     private String description;
 
     @Column(nullable = false)
-    private Money moneyAmount;
+    private int cents;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "BUDGET_ID")

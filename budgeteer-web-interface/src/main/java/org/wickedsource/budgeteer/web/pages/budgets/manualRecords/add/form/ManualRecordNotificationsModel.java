@@ -1,4 +1,4 @@
-package org.wickedsource.budgeteer.web.pages.budgets.manualRecords.form;
+package org.wickedsource.budgeteer.web.pages.budgets.manualRecords.add.form;
 
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.model.LoadableDetachableModel;

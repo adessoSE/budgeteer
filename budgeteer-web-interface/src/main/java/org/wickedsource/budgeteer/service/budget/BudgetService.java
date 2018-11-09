@@ -14,6 +14,7 @@ import org.wickedsource.budgeteer.persistence.contract.ContractRepository;
 import org.wickedsource.budgeteer.persistence.person.DailyRateRepository;
 import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
 import org.wickedsource.budgeteer.persistence.project.ProjectRepository;
+import org.wickedsource.budgeteer.persistence.manualRecord.ManualWorkRecordRepository;
 import org.wickedsource.budgeteer.persistence.record.PlanRecordRepository;
 import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
 import org.wickedsource.budgeteer.service.UnknownEntityException;
@@ -54,6 +55,9 @@ public class BudgetService {
 
     @Autowired
     private ContractDataMapper contractDataMapper;
+
+    @Autowired
+    private ManualWorkRecordRepository manualWorkRecordRepository;
 
     /**
      * Loads all Budgets that the given user is qualified for and returns base data about them.
@@ -126,7 +130,7 @@ public class BudgetService {
 
     private BudgetDetailData enrichBudgetEntity(BudgetEntity entity) {
         Date lastUpdated = workRecordRepository.getLatestWorkRecordDate(entity.getId());
-        Double spentBudgetInCents = workRecordRepository.getSpentBudget(entity.getId());
+        Double spentBudgetInCents = workRecordRepository.getSpentBudget(entity.getId()) + manualWorkRecordRepository.getManualRecordSumForBudget(entity.getId());
         Double plannedBudgetInCents = planRecordRepository.getPlannedBudget(entity.getId());
         Double avgDailyRateInCents = workRecordRepository.getAverageDailyRate(entity.getId());
         Double taxCoefficient = budgetRepository.getTaxCoefficientByBudget(entity.getId());
@@ -137,7 +141,7 @@ public class BudgetService {
         data.setName(entity.getName());
         data.setDescription(entity.getDescription());
         data.setTags(mapEntitiesToTags(entity.getTags()));
-        // Money
+
         data.setSpent(toMoneyNullsafe(spentBudgetInCents));
         data.setSpent_gross(data.getSpent().multipliedBy(taxCoefficient, RoundingMode.FLOOR));
         data.setTotal(entity.getTotal());
@@ -147,7 +151,7 @@ public class BudgetService {
         data.setUnplanned(entity.getTotal().minus(toMoneyNullsafe(plannedBudgetInCents)));
         data.setUnplanned_gross(data.getUnplanned().multipliedBy(taxCoefficient, RoundingMode.FLOOR));
         data.setLimit(entity.getLimit());
-        // Money end
+
         data.setContractName(entity.getContract() == null ? null : entity.getContract().getName());
         data.setContractId(entity.getContract() == null ? 0 : entity.getContract().getId());
         return data;
@@ -162,7 +166,7 @@ public class BudgetService {
     }
 
     private List<String> mapEntitiesToTags(List<BudgetTagEntity> tagEntities) {
-        List<String> tags = new ArrayList<String>();
+        List<String> tags = new ArrayList<>();
         for (BudgetTagEntity entity : tagEntities) {
             tags.add(entity.getTag());
         }
@@ -170,7 +174,7 @@ public class BudgetService {
     }
 
     private List<BudgetTagEntity> mapTagsToEntities(List<String> tags, BudgetEntity budget) {
-        List<BudgetTagEntity> entities = new ArrayList<BudgetTagEntity>();
+        List<BudgetTagEntity> entities = new ArrayList<>();
         if (tags != null) {
             for (String tag : tags) {
                 BudgetTagEntity entity = new BudgetTagEntity();
@@ -192,7 +196,7 @@ public class BudgetService {
     @PreAuthorize("canReadProject(#projectId)")
     public List<BudgetDetailData> loadBudgetsDetailData(long projectId, BudgetTagFilter filter) {
         List<BudgetEntity> budgets = loadBudgetEntities(projectId, filter);
-        List<BudgetDetailData> dataList = new ArrayList<BudgetDetailData>();
+        List<BudgetDetailData> dataList = new ArrayList<>();
         for (BudgetEntity entity : budgets) {
             // TODO: 4 additional database queries per loop! These can yet be optimized to 4 queries total!
             dataList.add(enrichBudgetEntity(entity));
@@ -295,7 +299,7 @@ public class BudgetService {
      */
     @PreAuthorize("canReadProject(#projectId)")
     public List<Double> loadBudgetUnits(long projectId) {
-        List<Double> units = new ArrayList<Double>();
+        List<Double> units = new ArrayList<>();
         units.add(1d);
         List<Money> rates = rateRepository.getDistinctRatesInCents(projectId);
         for (Money rate : rates) {
@@ -311,7 +315,7 @@ public class BudgetService {
 
     @PreAuthorize("canReadContract(#cId)")
     public List<BudgetDetailData> loadBudgetByContract(long cId) {
-        List<BudgetDetailData> result = new LinkedList<BudgetDetailData>();
+        List<BudgetDetailData> result = new LinkedList<>();
         List<BudgetEntity> temp = budgetRepository.findByContractId(cId);
         if (temp != null) {
             for (BudgetEntity b : temp) {
