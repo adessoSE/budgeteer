@@ -11,11 +11,9 @@ import org.wickedsource.budgeteer.service.person.PersonService;
 import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.components.confirm.ConfirmationForm;
 import org.wickedsource.budgeteer.web.pages.base.basepage.BasePage;
-import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.Breadcrumb;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
 import org.wickedsource.budgeteer.web.pages.base.delete.DeleteDialog;
 import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
-import org.wickedsource.budgeteer.web.pages.person.PersonNameModel;
 import org.wickedsource.budgeteer.web.pages.person.details.chart.BudgetDistributionChart;
 import org.wickedsource.budgeteer.web.pages.person.details.chart.BudgetDistributionChartModel;
 import org.wickedsource.budgeteer.web.pages.person.details.highlights.PersonHighlightsModel;
@@ -82,7 +80,7 @@ public class PersonDetailsPage extends BasePage {
     @SuppressWarnings("unchecked")
     protected BreadcrumbsModel getBreadcrumbsModel() {
         BreadcrumbsModel model = new BreadcrumbsModel(DashboardPage.class, PeopleOverviewPage.class);
-        model.addBreadcrumb(new Breadcrumb(PersonDetailsPage.class, getPageParameters(), new PersonNameModel(getParameterId())));
+        model.addBreadcrumb(PersonDetailsPage.class, getPageParameters());
         return model;
     }
 

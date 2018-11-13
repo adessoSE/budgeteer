@@ -13,11 +13,11 @@ public class MoneyLabel extends Label {
     private boolean prependCurrencySymbol;
 
     public MoneyLabel(String id, IModel<Money> model) {
-        super(id, new NullsafeModel<Money>(model, MoneyUtil.ZERO));
+        super(id, new NullsafeModel<>(model, MoneyUtil.ZERO));
     }
 
     public MoneyLabel(String id, IModel<Money> model, boolean prependCurrencySymbol) {
-        super(id, new NullsafeModel<Money>(model, MoneyUtil.ZERO));
+        super(id, new NullsafeModel<>(model, MoneyUtil.ZERO));
         this.prependCurrencySymbol = prependCurrencySymbol;
     }
 

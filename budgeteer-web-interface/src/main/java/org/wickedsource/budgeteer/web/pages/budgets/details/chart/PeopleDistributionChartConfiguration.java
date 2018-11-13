@@ -32,7 +32,7 @@ public class PeopleDistributionChartConfiguration extends ChartConfiguration imp
 		List<RgbColor> defaultColors = ChartStyling.getColors();
 		
 		// Add needed colors by rotating
-    	List<RgbColor> chartColors = new ArrayList<RgbColor>(labels.size());
+    	List<RgbColor> chartColors = new ArrayList<>(labels.size());
 		
 		for(int i = 0; i < labels.size() ; i++) {
 			chartColors.add(defaultColors.get(i%defaultColors.size()));

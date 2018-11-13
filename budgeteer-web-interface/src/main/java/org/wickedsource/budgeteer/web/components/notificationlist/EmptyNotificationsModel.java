@@ -9,7 +9,7 @@ import java.util.List;
 public class EmptyNotificationsModel implements IModel<List<Notification>> {
     @Override
     public List<Notification> getObject() {
-        return new ArrayList<Notification>();
+        return new ArrayList<>();
     }
 
     @Override

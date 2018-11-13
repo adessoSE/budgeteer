@@ -19,7 +19,9 @@ import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.ServiceIntegrationTestTemplate;
 import org.wickedsource.budgeteer.persistence.contract.ContractEntity;
 import org.wickedsource.budgeteer.persistence.contract.ContractRepository;
+import org.wickedsource.budgeteer.persistence.contract.ContractSortingRepository;
 import org.wickedsource.budgeteer.persistence.project.ProjectRepository;
+import org.wickedsource.budgeteer.persistence.user.UserRepository;
 
 import java.util.*;
 
@@ -35,7 +37,6 @@ import static org.junit.Assert.*;
 })
 class ContractServiceTest extends ServiceIntegrationTestTemplate {
 
-
     @Autowired
     private ContractService service;
 
@@ -45,13 +46,19 @@ class ContractServiceTest extends ServiceIntegrationTestTemplate {
     @Autowired
     private ContractRepository contractRepository;
 
+    @Autowired
+    private ContractSortingRepository contractSortingRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
     /**
      * Save a new Contract associated with a Project that does not have any ProjectContractFields
      */
     @Test
     @DatabaseSetup("contractTest.xml")
     @DatabaseTearDown(value = "contractTest.xml", type = DatabaseOperation.DELETE_ALL)
-    void testSaveNewContract(){
+    void testSaveNewContract() {
         ContractBaseData testObject = new ContractBaseData();
         testObject.setBudget(MoneyUtil.createMoney(12));
         testObject.setContractId(0);
@@ -59,6 +66,7 @@ class ContractServiceTest extends ServiceIntegrationTestTemplate {
         testObject.setContractName("Test Contract");
         testObject.setContractAttributes(getListOfContractFields());
         testObject.getContractAttributes().add(new DynamicAttributeField("test4", "test4"));
+        testObject.setSortingIndex(0);
 
         long newContractId = service.save(testObject);
 
@@ -78,13 +86,14 @@ class ContractServiceTest extends ServiceIntegrationTestTemplate {
     @Test
     @DatabaseSetup("contractTest.xml")
     @DatabaseTearDown(value = "contractTest.xml", type = DatabaseOperation.DELETE_ALL)
-    void testSaveNewContract2(){
+    void testSaveNewContract2() {
         ContractBaseData testObject = new ContractBaseData();
         testObject.setContractId(0);
         testObject.setProjectId(2);
         testObject.setContractName("Test Contract");
         testObject.setContractAttributes(getListOfContractFields());
         testObject.getContractAttributes().add(new DynamicAttributeField("test4", "test4"));
+        testObject.setSortingIndex(0);
 
         long newContractId = service.save(testObject);
 
@@ -103,7 +112,7 @@ class ContractServiceTest extends ServiceIntegrationTestTemplate {
     @Test
     @DatabaseSetup("contractTest.xml")
     @DatabaseTearDown(value = "contractTest.xml", type = DatabaseOperation.DELETE_ALL)
-    void testUpdateContract(){
+    void testUpdateContract() {
         ContractBaseData testObject = service.getContractById(4);
 
         testObject.setBudget(MoneyUtil.createMoney(12));
@@ -128,8 +137,8 @@ class ContractServiceTest extends ServiceIntegrationTestTemplate {
         assertEquals(6, savedContract.getContractAttributes().size());
         for (int i = 0; i < 6; i++) {
             boolean found = false;
-            for(DynamicAttributeField field : savedContract.getContractAttributes()){
-                if(field.getName().equals(field.getValue()) && field.getValue().equals("test" + i)){
+            for (DynamicAttributeField field : savedContract.getContractAttributes()) {
+                if (field.getName().equals(field.getValue()) && field.getValue().equals("test" + i)) {
                     found = true;
                     break;
                 }
@@ -146,7 +155,7 @@ class ContractServiceTest extends ServiceIntegrationTestTemplate {
     @Test
     @DatabaseSetup("contractTest.xml")
     @DatabaseTearDown(value = "contractTest.xml", type = DatabaseOperation.DELETE_ALL)
-    void testUpdateContract1(){
+    void testUpdateContract1() {
         ContractBaseData testObject = service.getContractById(5);
 
         testObject.setBudget(MoneyUtil.createMoney(12));
@@ -172,8 +181,8 @@ class ContractServiceTest extends ServiceIntegrationTestTemplate {
         assertEquals(7, savedContract.getContractAttributes().size());
         for (int i = 0; i < 7; i++) {
             boolean found = false;
-            for(DynamicAttributeField field : savedContract.getContractAttributes()){
-                if(field.getName().equals(field.getValue()) && field.getValue().equals("test" + i)){
+            for (DynamicAttributeField field : savedContract.getContractAttributes()) {
+                if (field.getName().equals(field.getValue()) && field.getValue().equals("test" + i)) {
                     found = true;
                     break;
                 }
@@ -233,9 +242,9 @@ class ContractServiceTest extends ServiceIntegrationTestTemplate {
     }
 
     private List<DynamicAttributeField> getListOfContractFields() {
-        List<DynamicAttributeField> result = new LinkedList<DynamicAttributeField>();
+        List<DynamicAttributeField> result = new LinkedList<>();
         DynamicAttributeField data = new DynamicAttributeField();
-        for(int i = 0; i < 5; i++) {
+        for (int i = 0; i < 5; i++) {
             data = new DynamicAttributeField();
             data.setName("test" + i);
             data.setValue("test" + i);
@@ -256,8 +265,4 @@ class ContractServiceTest extends ServiceIntegrationTestTemplate {
         assertEquals(contractRepository.findContractFieldsByContractId(4L).size(), 1);
         assertNull(service.getContractById(3));
     }
-
-
-
-
 }

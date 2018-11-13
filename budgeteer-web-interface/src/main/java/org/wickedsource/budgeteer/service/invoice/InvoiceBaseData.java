@@ -38,7 +38,7 @@ public class InvoiceBaseData implements Serializable {
     public InvoiceBaseData(long contractId, String contractName){
         this.contractId = contractId;
         this.contractName = contractName;
-        dynamicInvoiceFields = new LinkedList<DynamicAttributeField>();
+        dynamicInvoiceFields = new LinkedList<>();
     }
 
     public boolean isPaid(){

@@ -240,7 +240,7 @@ class InvoiceServiceTest extends ServiceIntegrationTestTemplate {
     @Test
     @DatabaseSetup("invoiceTest.xml")
     @DatabaseTearDown(value = "invoiceTest.xml", type = DatabaseOperation.DELETE_ALL)
-    // Invoice with two InvoiceFields
+        // Invoice with two InvoiceFields
     void testFindInvoiceFieldByName() {
         Assertions.assertNotNull(contractRepository.findInvoiceFieldByName(3, "Test Contract Field"));
         Assertions.assertNotNull(contractRepository.findInvoiceFieldByName(3, "Test Contract Field 2"));
@@ -249,7 +249,7 @@ class InvoiceServiceTest extends ServiceIntegrationTestTemplate {
     @Test
     @DatabaseSetup("invoiceTest.xml")
     @DatabaseTearDown(value = "invoiceTest.xml", type = DatabaseOperation.DELETE_ALL)
-    // Invoice with two InvoiceFields
+        // Invoice with two InvoiceFields
     void testDeleteInvoice() {
         service.deleteInvoice(3);
 
@@ -265,7 +265,7 @@ class InvoiceServiceTest extends ServiceIntegrationTestTemplate {
     @Test
     @DatabaseSetup("invoiceTest.xml")
     @DatabaseTearDown(value = "invoiceTest.xml", type = DatabaseOperation.DELETE_ALL)
-    // Invoice without any InvoiceFields
+        // Invoice without any InvoiceFields
     void testDeleteInvoiceWithoutFields() {
         service.deleteInvoice(4);
         Assertions.assertNull(invoiceRepository.findOne(4L));
@@ -274,7 +274,7 @@ class InvoiceServiceTest extends ServiceIntegrationTestTemplate {
     @Test
     @DatabaseSetup("invoiceTest.xml")
     @DatabaseTearDown(value = "invoiceTest.xml", type = DatabaseOperation.DELETE_ALL)
-    // Invoice without any InvoiceFields but with a contract containing ContractInvoiceFields
+        // Invoice without any InvoiceFields but with a contract containing ContractInvoiceFields
     void testDeleteInvoiceWithContractInvoiceFields() {
         service.deleteInvoice(5);
         Assertions.assertNotNull(contractRepository.findInvoiceFieldByName(5, "Test Contract Field"));
