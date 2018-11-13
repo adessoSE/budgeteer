@@ -11,10 +11,6 @@ import org.wickedsource.budgeteer.persistence.user.*;
 import org.wickedsource.budgeteer.service.ServiceTestTemplate;
 import org.wickedsource.budgeteer.service.UnknownEntityException;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
 import java.util.*;
 
 import static org.mockito.Mockito.*;

@@ -1,6 +1,6 @@
 <dataset>
 
-    <BUDGETEER_USER id="1" name="username" password="1234" GLOBAL_ROLE="user"/>
+    <BUDGETEER_USER id="1" name="username" password="1234" GLOBAL_ROLE="0"/>
 
     <!-- Project without ProjectContractFields -->
     <PROJECT id="1" name="project1"/>
