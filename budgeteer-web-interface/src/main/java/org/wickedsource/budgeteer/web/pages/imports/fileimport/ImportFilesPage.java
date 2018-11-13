@@ -32,7 +32,6 @@ import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
 import org.wickedsource.budgeteer.web.pages.base.dialogpage.DialogPageWithBacklink;
 import org.wickedsource.budgeteer.web.pages.imports.ImportsOverviewPage;
-import org.wickedsource.budgeteer.web.pages.person.overview.PeopleOverviewPage;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
@@ -90,7 +89,7 @@ public class ImportFilesPage extends DialogPageWithBacklink {
         };
     }
 
-    public void createForm() {
+    private void createForm() {
         final Form<ImportFormBean> form = new Form<ImportFormBean>("importForm", new ClassAwareWrappingModel<ImportFormBean>(new Model<ImportFormBean>(new ImportFormBean()), ImportFormBean.class)) {
             @Override
             protected void onSubmit() {
@@ -162,7 +161,7 @@ public class ImportFilesPage extends DialogPageWithBacklink {
         importerChoice.setRequired(true);
         form.add(importerChoice);
 
-        FileUploadField fileUpload = new FileUploadField("fileUpload", new PropertyModel<List<FileUpload>>(this, "fileUploads"));
+        FileUploadField fileUpload = new FileUploadField("fileUpload", new PropertyModel<>(this, "fileUploads"));
         fileUpload.setRequired(true);
         fileUpload.add(new AttributeModifier("accept", new AcceptedFileExtensionsModel(importer)));
         fileUpload.add(new AjaxEventBehavior("change") {

@@ -12,10 +12,7 @@ import org.wickedsource.budgeteer.IntegrationTestTemplate;
 import org.wickedsource.budgeteer.persistence.contract.ContractEntity;
 import org.wickedsource.budgeteer.persistence.contract.ContractRepository;
 import org.wickedsource.budgeteer.persistence.contract.ContractSortingRepository;
-import org.wickedsource.budgeteer.service.user.User;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
-
-import static org.mockito.Mockito.when;
 
 class ContractDataMapperTest extends IntegrationTestTemplate {
 

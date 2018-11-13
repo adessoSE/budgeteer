@@ -1,6 +1,5 @@
 package org.wickedsource.budgeteer.web.pages.dashboard;
 
-
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.wickedsource.budgeteer.web.BudgeteerSession;

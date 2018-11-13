@@ -22,7 +22,10 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.StringValue;
 import org.wickedsource.budgeteer.MoneyUtil;
-import org.wickedsource.budgeteer.service.contract.*;
+import org.wickedsource.budgeteer.service.contract.ContractBaseData;
+import org.wickedsource.budgeteer.service.contract.ContractSortingService;
+import org.wickedsource.budgeteer.service.contract.ContractTotalData;
+import org.wickedsource.budgeteer.service.contract.DynamicAttributeField;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.components.dataTable.DataTableBehavior;
 import org.wickedsource.budgeteer.web.components.datelabel.DateLabel;
@@ -103,7 +106,7 @@ public class ContractOverviewTable extends Panel {
                     taxCoefficient = 1.0 + item.getModelObject().getTaxRate() / 100.0;
                 }
 
-                item.add(new HiddenField("contractID", Model.of(contractId)));
+                item.add(new HiddenField<>("contractID", Model.of(contractId)));
 
                 BookmarkablePageLink<EditContractPage> link = new BookmarkablePageLink<>("editContract",
                         ContractDetailsPage.class, EditContractPage.createParameters(contractId));

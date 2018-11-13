@@ -109,7 +109,7 @@ public abstract class RecordDatabaseImporter {
      * repeated access to the database.
      */
     private Map<String, PersonEntity> getPersonCache(long projectId) {
-        Map<String, PersonEntity> map = new HashMap<String, PersonEntity>();
+        Map<String, PersonEntity> map = new HashMap<>();
         List<PersonEntity> persons = personRepository.findByProjectIdOrderByNameAsc(projectId);
         for (PersonEntity person : persons) {
             map.put(person.getImportKey(), person);
@@ -122,7 +122,7 @@ public abstract class RecordDatabaseImporter {
      * repeated access to the database.
      */
     private Map<String, BudgetEntity> getBudgetCache(long projectId) {
-        Map<String, BudgetEntity> map = new HashMap<String, BudgetEntity>();
+        Map<String, BudgetEntity> map = new HashMap<>();
         List<BudgetEntity> budgets = budgetRepository.findByProjectIdOrderByNameAsc(projectId);
         for (BudgetEntity budget : budgets) {
             map.put(budget.getImportKey(), budget);

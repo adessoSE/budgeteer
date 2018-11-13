@@ -83,7 +83,7 @@ public class DateUtil {
         GregorianCalendar cal = new GregorianCalendar();
         cal.setTime(new Date());
         int currentYear = cal.get(Calendar.YEAR);
-        List<Integer> result = new LinkedList<Integer>();
+        List<Integer> result = new LinkedList<>();
         for (int i = 0; i < range * 2; i++) {
             result.add(currentYear - range + i);
         }

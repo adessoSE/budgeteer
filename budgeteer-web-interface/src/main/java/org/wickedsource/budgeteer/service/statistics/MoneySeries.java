@@ -11,8 +11,8 @@ import java.util.List;
 public class MoneySeries {
 
     private String name;
-    private List<Money> values = new ArrayList<Money>();
-    private List<Money> values_gross = new ArrayList<Money>();
+    private List<Money> values = new ArrayList<>();
+    private List<Money> values_gross = new ArrayList<>();
 
     public void add(Money value) {
         values.add(value);

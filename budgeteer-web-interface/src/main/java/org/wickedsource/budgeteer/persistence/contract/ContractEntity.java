@@ -56,7 +56,7 @@ public class ContractEntity implements Serializable {
     @Column(name = "CONTRACT_TYPE")
     @Enumerated(EnumType.ORDINAL)
     private ContractType type;
-
+    
     @OneToMany(mappedBy = "contract")
     private List<BudgetEntity> budgets = new LinkedList<>();
 
