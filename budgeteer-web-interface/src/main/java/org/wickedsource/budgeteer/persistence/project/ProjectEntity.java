@@ -22,7 +22,7 @@ public class ProjectEntity implements Serializable {
     @GeneratedValue
     private long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 255)
     private String name;
 
     @ManyToMany(fetch = FetchType.EAGER)

@@ -109,3 +109,19 @@ table.smallLastColumn tr td:last-child {
 .budgetDetails {
 	height: 320px;
 }
+
+.marquee {
+    color: white;
+    white-space: nowrap;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+.marquee h3 {
+    display: inline-block;
+    text-align: left;
+    animation: marquee 18s linear infinite;
+}
+@keyframes marquee {
+    18%   { transform: translate(0, 0); }
+    100% { transform: translate(-100%, 0); }
+}

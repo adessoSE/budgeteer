@@ -19,11 +19,13 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.resource.AbstractResourceStreamWriter;
 import org.wickedsource.budgeteer.imports.api.ImportFile;
 import org.wickedsource.budgeteer.service.ReportType;
+import org.wickedsource.budgeteer.service.template.Template;
 import org.wickedsource.budgeteer.service.template.TemplateService;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
 import org.wickedsource.budgeteer.web.pages.base.AbstractChoiceRenderer;
 import org.wickedsource.budgeteer.web.pages.base.delete.DeleteDialog;
+import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 import org.wickedsource.budgeteer.web.pages.templates.TemplatesPage;
 import org.wickedsource.budgeteer.web.pages.templates.templateimport.TemplateFormInputDto;
 
@@ -76,16 +78,6 @@ public class EditTemplateForm extends Form<TemplateFormInputDto> {
                     if(model(from(templateFormInputDto)).getObject().getType() == null){
                         error(getString("message.error.no.type"));
                     }
-                    if(model(from(templateFormInputDto)).getObject().getName() != null && model(from(templateFormInputDto)).getObject().getName().length() > 128){
-                        error(getString("message.error.name.too.long"));
-                        target.add(feedback);
-                        return;
-                    }
-                    if(model(from(templateFormInputDto)).getObject().getDescription() != null && model(from(templateFormInputDto)).getObject().getDescription().length() > 512){
-                        error(getString("message.error.description.too.long"));
-                        target.add(feedback);
-                        return;
-                    }
                     if(fileUploads != null && fileUploads.size() > 0){
                         ImportFile file = new ImportFile(fileUploads.get(0).getClientFileName(), fileUploads.get(0).getInputStream());
                         if(model(from(templateFormInputDto)).getObject().getName() != null && model(from(templateFormInputDto)).getObject().getType() != null){
@@ -110,10 +102,15 @@ public class EditTemplateForm extends Form<TemplateFormInputDto> {
             }
         });
 
-        templateFormInputDto.setName(service.getById(templateID).getName());
-        templateFormInputDto.setDescription(service.getById(templateID).getDescription());
-        templateFormInputDto.setType(service.getById(templateID).getType());
-        templateFormInputDto.setDefault(service.getById(templateID).isDefault());
+        Template template = service.getById(templateID);
+        if(template == null){
+            setResponsePage(DashboardPage.class);
+            return;
+        }
+        templateFormInputDto.setName(template.getName());
+        templateFormInputDto.setDescription(template.getDescription());
+        templateFormInputDto.setType(template.getType());
+        templateFormInputDto.setDefault(template.isDefault());
 
         AjaxLink checkBox = new AjaxLink("setAsDefault") {
             @Override
@@ -176,14 +173,15 @@ public class EditTemplateForm extends Form<TemplateFormInputDto> {
         return new Link<Void>(wicketId) {
             @Override
             public void onClick() {
-                XSSFWorkbook wb = service.getById(templateID).getWb();
+                Template template = service.getById(templateID);
+                XSSFWorkbook wb = template.getWb();
                 AbstractResourceStreamWriter streamWriter = new AbstractResourceStreamWriter() {
                     @Override
                     public void write(OutputStream output) throws IOException {
                         wb.write(output);
                     }
                 };
-                ResourceStreamRequestHandler handler = new ResourceStreamRequestHandler(streamWriter, service.getById(templateID).getName() + ".xlsx");
+                ResourceStreamRequestHandler handler = new ResourceStreamRequestHandler(streamWriter, template.getName() + ".xlsx");
                 getRequestCycle().scheduleRequestHandlerAfterCurrent(handler);
                 HttpServletResponse response = (HttpServletResponse) getRequestCycle().getResponse().getContainerResponse();
                 response.setContentType(null);
@@ -219,12 +217,12 @@ public class EditTemplateForm extends Form<TemplateFormInputDto> {
 
                     @Override
                     protected void onNo() {
-                        setResponsePage(new EditTemplatePage(TemplatesPage.class, getPage().getPageParameters(), templateID));
+                        setResponsePage(new EditTemplatePage(TemplatesPage.class, getPage().getPageParameters(), TemplatesPage.createParameters(templateID)));
                     }
 
                     @Override
                     protected String confirmationText() {
-                        return "Are you sure you want to delete this template?";
+                        return EditTemplateForm.this.getString("delete.template.confirmation");
                     }
                 });
             }

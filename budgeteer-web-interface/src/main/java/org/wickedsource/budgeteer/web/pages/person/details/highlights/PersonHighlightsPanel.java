@@ -4,6 +4,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.IModel;
 import org.wickedsource.budgeteer.service.person.PersonDetailData;
+import org.wickedsource.budgeteer.web.components.MarqueeLabel;
 import org.wickedsource.budgeteer.web.components.datelabel.DateLabel;
 import org.wickedsource.budgeteer.web.components.money.MoneyLabel;
 import org.wickedsource.budgeteer.web.components.nullmodel.NullsafeModel;
@@ -20,7 +21,7 @@ public class PersonHighlightsPanel extends GenericPanel<PersonDetailData> {
     @Override
     protected void onInitialize() {
         super.onInitialize();
-        add(new Label("name", nullsafeModel(model(from(getModel()).getName()))));
+        add(new MarqueeLabel("name", nullsafeModel(model(from(getModel()).getName()))));
         add(new MoneyLabel("avgDailyRate", model(from(getModel()).getAverageDailyRate()), true));
         add(new DateLabel("firstBookedDate", model(from(getModel()).getFirstBookedDate())));
         add(new DateLabel("lastBookedDate", model(from(getModel()).getLastBookedDate())));

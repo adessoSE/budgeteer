@@ -28,6 +28,7 @@ import org.wickedsource.budgeteer.web.components.money.MoneyLabel;
 
 import javax.inject.Inject;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import static org.wicketstuff.lazymodel.LazyModel.from;
@@ -37,7 +38,7 @@ public class BurnTable extends Panel {
 
     private CustomFeedbackPanel feedbackPanel;
     private boolean dailyRateIsEditable;
-    private DataView <WorkRecord> rows;
+    private DataView<WorkRecord> rows;
     private Model<Long> recordsPerPageModel = new Model<>(15L);
     private WebMarkupContainer tableComponents = new WebMarkupContainer("tableComponents");
 
@@ -58,6 +59,7 @@ public class BurnTable extends Panel {
         WebMarkupContainer table = new WebMarkupContainer("table");
         HashMap<String, String> options = DataTableBehavior.getRecommendedOptions();
         options.put("orderClasses", "false");
+        options.put("ordering", "false");
         options.put("paging", "false");
         options.put("info", "false");
         table.add(new DataTableBehavior(options));
@@ -77,7 +79,11 @@ public class BurnTable extends Panel {
             @Override
             protected void onBeforeRender() {
                 super.onBeforeRender();
-                if(rows.getCurrentPage() == rows.getPageCount()-1){
+                if(rows.getPageCount() == 1L){
+                    this.setDefaultModelObject("Showing " + Long.toString(rows.getFirstItemOffset()+1) + " to "
+                            + rows.getItemCount() + " entries from total " + getRows().getItemCount());
+                }
+                else if(rows.getCurrentPage() == rows.getPageCount()-1){
                     this.setDefaultModelObject("Showing " + Long.toString(rows.getFirstItemOffset()+1) + " to "
                             + Long.toString(rows.getFirstItemOffset() + (rows.getItemCount() % rows.getItemsPerPage())) + " entries from total " + getRows().getItemCount());
                 }else{
@@ -256,7 +262,17 @@ public class BurnTable extends Panel {
                             item.getModelObject().setEditedManually(true);
                             item.getModelObject().setDailyRate(form.getModelObject());
                             recordService.saveDailyRateForWorkRecord(item.getModelObject());
-                            target.add(item);
+                            target.add(tableComponents);
+                            long elementIndex = 0;
+                            int i = 0;
+                            Iterator<? extends  WorkRecord> iterator = rows.getDataProvider().iterator(0, rows.getItemCount());
+                            while (iterator.hasNext()){
+                                if(iterator.next().getId() == item.getModelObject().getId()){
+                                    elementIndex = i;
+                                }
+                                i++;
+                            }
+                            rows.setCurrentPage(elementIndex/rows.getItemsPerPage());
                         }
 
                         @Override

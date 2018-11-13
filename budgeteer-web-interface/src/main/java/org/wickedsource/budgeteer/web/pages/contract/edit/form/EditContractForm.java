@@ -45,7 +45,6 @@ public class EditContractForm extends Form<ContractBaseData> {
         this(id, null, "button.save.createmode");
     }
 
-
     public EditContractForm(String id, IModel<ContractBaseData> model) {
         this(id, model, "button.save.editmode");
     }
@@ -67,11 +66,11 @@ public class EditContractForm extends Form<ContractBaseData> {
         feedbackPanel.setOutputMarkupId(true);
         add(feedbackPanel);
 
-        TextField<String> nameTextfield = new TextField<String>("contractName", model(from(getModelObject()).getContractName()));
+        TextField<String> nameTextfield = new TextField<>("contractName", model(from(getModelObject()).getContractName()));
         nameTextfield.setRequired(true);
         add(nameTextfield);
 
-        TextField<String> internalNumberTextfield = new TextField<String>("internalNumber", model(from(getModelObject()).getInternalNumber()));
+        TextField<String> internalNumberTextfield = new TextField<>("internalNumber", model(from(getModelObject()).getInternalNumber()));
         internalNumberTextfield.setRequired(true);
         add(internalNumberTextfield);
 
@@ -89,9 +88,9 @@ public class EditContractForm extends Form<ContractBaseData> {
         startDateInputField.setRequired(true);
         add(startDateInputField);
 
-        add(new DropDownChoice<ContractEntity.ContractType>("type",
+        add(new DropDownChoice<>("type",
                 model(from(getModelObject()).getType()), Arrays.asList(ContractEntity.ContractType.values()),
-                new EnumChoiceRenderer<ContractEntity.ContractType>(this)));
+                new EnumChoiceRenderer<>(this)));
 
         final CustomFileUpload fileUpload = new CustomFileUpload("fileUpload", model(from(getModelObject()).getFileModel()));
         add(fileUpload);
@@ -103,11 +102,11 @@ public class EditContractForm extends Form<ContractBaseData> {
             @Override
             protected void populateItem(ListItem<DynamicAttributeField> item) {
                 item.add(new Label("attributeTitle", item.getModelObject().getName()));
-                item.add(new TextField<String>("attributeValue", model(from(item.getModelObject()).getValue())));
+                item.add(new TextField<>("attributeValue", model(from(item.getModelObject()).getValue())));
             }
         });
         add(table);
-        newAttributeField = new TextField<String>("nameOfNewAttribute", Model.of(" "));
+        newAttributeField = new TextField<>("nameOfNewAttribute", Model.of(" "));
         newAttributeField.setOutputMarkupId(true);
         add(newAttributeField);
         Button addAttribute = new AjaxButton("addAttribute") {

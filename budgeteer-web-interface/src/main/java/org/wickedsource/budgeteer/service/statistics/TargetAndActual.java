@@ -8,6 +8,6 @@ import java.util.List;
 @Data
 public class TargetAndActual {
 
-    private List<MoneySeries> actualSeries = new ArrayList<MoneySeries>();
+    private List<MoneySeries> actualSeries = new ArrayList<>();
     private MoneySeries targetSeries;
 }

@@ -5,7 +5,9 @@ buildscript {
         jcenter()
     }
 
-    dependencies {
+    dependencies{
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
+        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.6.2"
         classpath group: 'org.springframework.boot', name: 'spring-boot-gradle-plugin', version: "${spring_boot_version}"
         classpath group: 'org.springframework', name: 'springloaded', version: "${springloaded_version}"
     }
@@ -13,6 +15,10 @@ buildscript {
 
 apply plugin: 'war'
 apply plugin: 'org.springframework.boot'
+apply plugin: "com.jfrog.artifactory"
+apply plugin: 'com.jfrog.bintray'
+apply plugin: 'maven-publish'
+
 
 configurations {
     querydslapt
@@ -69,6 +75,7 @@ dependencies {
             [group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: "${spring_boot_version}"],
             [group: 'org.springframework.boot', name: 'spring-boot-starter-logging', version: "${spring_boot_version}"],
             [group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: "${spring_boot_version}"],
+            [group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: "${spring_boot_version}"],
     )
     providedCompile(group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat', version: "${spring_boot_version}")
 
@@ -85,12 +92,14 @@ dependencies {
     compile group: 'org.joda', name: 'joda-money', version: "${joda_money_version}"
     compile group: 'de.jollyday', name: 'jollyday', version: "${jollyday_version}"
 
+    compile "org.flywaydb:flyway-core"
+
     compile(
             [group: 'com.querydsl', name: 'querydsl-apt', version: "${query_dsl_version}"],
             [group: 'com.querydsl', name: 'querydsl-jpa', version: "${query_dsl_version}"]
     )
 
-    compile (
+    compile(
             [group: 'org.keycloak', name: 'keycloak-spring-boot-adapter', version: "${keycloak_spring_boot_version}"],
             [group: 'org.keycloak', name: 'keycloak-tomcat8-adapter', version: "${keycloak_spring_boot_version}"]
     )
@@ -152,6 +161,12 @@ clean {
     delete sourceSets.generated.java.srcDirs
 }
 
+test {
+    systemProperties = [
+            'flyway.enabled': 'false'
+    ]
+}
+
 bootRun {
     // default application configuration for running application via bootRun in development mode
     // (in production, these properties are defined in application.properties)
@@ -199,5 +214,99 @@ idea {
                 </facet>
             </component>'''
         it.asNode().append(new XmlParser().parseText(springFacet))
+    }
+}
+
+//Bintray/Artifactory Configuration
+
+// run gradle with "-Dsnapshot=true" to automatically append "-SNAPSHOT" to the version
+version = project.version + (Boolean.valueOf(System.getProperty("snapshot")) ? "-SNAPSHOT" : "")
+sourceCompatibility = 1.8
+
+ext {
+    bintrayUser = System.getProperty("bintray.user")
+    bintrayKey = System.getProperty("bintray.key")
+}
+
+def pomConfig = {
+    licenses {
+        license {
+            name "MIT"
+            url "https://opensource.org/licenses/MIT"
+            distribution "repo"
+        }
+    }
+    developers {
+        developer {
+            id "thombergs"
+            name "Tom Hombergs"
+            email "tom.hombergs@gmail.com"
+        }
+    }
+
+    scm {
+        url "https://github.com/adessoag/budgeteer"
+    }
+}
+
+artifactory {
+    contextUrl = 'http://oss.jfrog.org'
+    publish {
+        dependsOn assemble
+        repository {
+            repoKey = 'oss-snapshot-local'
+            username = bintrayUser
+            password = bintrayKey
+        }
+        defaults {
+            publications('mavenPublication')
+            publishArtifacts = true
+            properties = [
+                    'build.name'  : project.name
+            ]
+        }
+    }
+    resolve {
+        repoKey = 'jcenter'
+    }
+    clientConfig.info.setBuildName(project.name)
+}
+
+bintray {
+    user = bintrayUser
+    key = bintrayKey
+    publications = ['mavenPublication']
+
+    pkg {
+        repo = 'budgeteer'
+        name = 'budgeteer'
+        userOrg = 'adesso'
+        licenses = ['MIT']
+        vcsUrl = 'https://github.com/adessoag/budgeteer'
+        version {
+            name = project.version
+            released = new Date()
+        }
+    }
+    publish = true
+}
+
+publishing {
+    publications {
+        mavenPublication(MavenPublication) {
+            artifact(file("$libsDir/${project.name}-${project.version}" + '.war')) {
+                classifier 'exec'
+            }
+            groupId 'de.adesso.budgeteer'
+            artifactId project.name
+            version project.version
+            pom.withXml {
+                def root = asNode()
+                root.appendNode('description', 'Budgeteer')
+                root.appendNode('name', project.name)
+                root.appendNode('url', 'https://github.com/adessoag/budgeteer')
+                root.children().last() + pomConfig
+            }
+        }
     }
 }

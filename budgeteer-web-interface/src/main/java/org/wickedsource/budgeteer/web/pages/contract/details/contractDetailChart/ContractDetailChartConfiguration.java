@@ -1,6 +1,5 @@
 package org.wickedsource.budgeteer.web.pages.contract.details.contractDetailChart;
 
-
 import de.adesso.wickedcharts.chartjs.ChartConfiguration;
 import de.adesso.wickedcharts.chartjs.chartoptions.*;
 import de.adesso.wickedcharts.chartjs.chartoptions.label.TextLabel;
@@ -21,7 +20,7 @@ public class ContractDetailChartConfiguration extends ChartConfiguration impleme
     	
     	setOptions(ChartStyling.getOptions());
     	
-    	setOptionalJavascript(new ArrayList<String>());
+    	setOptionalJavascript(new ArrayList<>());
 		addOptionalJavascript(ChartStyling.readFile("dataLabellingPlugin.js"));
     	
     	getOptions().setTooltips(new Tooltips()

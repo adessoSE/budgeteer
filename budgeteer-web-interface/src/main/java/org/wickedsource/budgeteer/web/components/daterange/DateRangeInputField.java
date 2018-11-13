@@ -27,7 +27,7 @@ public class DateRangeInputField extends TextField<DateRange> {
      */
     public DateRangeInputField(String id, IModel<DateRange> model, DateRange defaultRange, DROP_LOCATION drop_location) {
         super(id, model);
-        HashMap<String, String> options = new HashMap<String, String>();
+        HashMap<String, String> options = new HashMap<>();
         if(defaultRange != null && (defaultRange.getStartDate() != null || defaultRange.getEndDate() != null)){
             DateFormat format = new SimpleDateFormat("dd.MM.yyyy");
             options.put("format","'dd.MM.YYYY'");

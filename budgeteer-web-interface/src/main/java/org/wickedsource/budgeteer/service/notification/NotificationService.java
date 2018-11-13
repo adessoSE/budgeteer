@@ -1,18 +1,17 @@
 package org.wickedsource.budgeteer.service.notification;
 
-import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.joda.money.Money;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.wickedsource.budgeteer.MoneyUtil;
-import org.wickedsource.budgeteer.persistence.budget.BudgetEntity;
 import org.wickedsource.budgeteer.persistence.budget.BudgetRepository;
 import org.wickedsource.budgeteer.persistence.budget.LimitReachedBean;
 import org.wickedsource.budgeteer.persistence.budget.MissingBudgetTotalBean;
 import org.wickedsource.budgeteer.persistence.record.MissingDailyRateForBudgetBean;
 import org.wickedsource.budgeteer.persistence.record.PlanRecordRepository;
 import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
-import org.wickedsource.budgeteer.service.budget.BudgetService;
+import org.wickedsource.budgeteer.persistence.user.UserEntity;
+import org.wickedsource.budgeteer.persistence.user.UserRepository;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
@@ -33,6 +32,9 @@ public class NotificationService {
     private BudgetRepository budgetRepository;
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     private MissingDailyRateNotificationMapper missingDailyRateMapper;
 
     @Autowired
@@ -50,8 +52,8 @@ public class NotificationService {
      * @param projectId ID of the project whose notifications to load
      * @return list of notifications
      */
-    public List<Notification> getNotifications(long projectId) {
-        List<Notification> notifications = new ArrayList<Notification>();
+    public List<Notification> getNotifications(long projectId, long userId) {
+        List<Notification> notifications = new ArrayList<>();
         if (workRecordRepository.countByProjectId(projectId) == 0) {
             notifications.add(new EmptyWorkRecordsNotification());
         }
@@ -70,6 +72,17 @@ public class NotificationService {
                 LimitReachedBean limitReached = budgetRepository.getLimitReachedForBudget(bean.getBudgetId(), budgetSpent);
                 if (limitReached != null)
                     notifications.add(limitReachedNotificationMapper.map(limitReached));
+            }
+        }
+
+        UserEntity user = userRepository.findOne(userId);
+        if (user != null) {
+            if (user.getMail() == null) {
+                notifications.add(new MissingMailNotification(user.getId()));
+            }
+
+            if (!user.getMailVerified() && user.getMail() != null) {
+                notifications.add(new MailNotVerifiedNotification(user.getId(), user.getMail()));
             }
         }
 
@@ -94,7 +107,7 @@ public class NotificationService {
      * @return list of notifications concerning the given budget.
      */
     public List<Notification> getNotificationsForBudget(long budgetId) {
-        List<Notification> result = new LinkedList<Notification>();
+        List<Notification> result = new LinkedList<>();
 
         MissingBudgetTotalBean missingBudgetTotalForBudget = budgetRepository.getMissingBudgetTotalForBudget(budgetId);
         if (missingBudgetTotalForBudget != null) {
@@ -109,7 +122,6 @@ public class NotificationService {
         Double spentDouble = workRecordRepository.getSpentBudget(budgetId);
         if (spentDouble != null) {
             Money budgetSpent = MoneyUtil.createMoneyFromCents(Math.round(spentDouble));
-
             LimitReachedBean limitReached = budgetRepository.getLimitReachedForBudget(budgetId, budgetSpent);
             if (limitReached != null)
                 result.add(limitReachedNotificationMapper.map(limitReached));

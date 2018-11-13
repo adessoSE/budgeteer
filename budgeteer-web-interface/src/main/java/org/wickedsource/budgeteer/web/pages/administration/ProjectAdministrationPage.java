@@ -94,14 +94,10 @@ public class ProjectAdministrationPage extends BasePage {
                     @Override
                     public void onClick() {
                         setResponsePage(new DeleteDialog() {
+
                             @Override
                             protected void onYes() {
-                                if(thisUser.getId() == item.getModelObject().getId()){
-                                    userService.removeUserFromProject(projectID, item.getModelObject().getId());
-                                    BudgeteerSession.get().logout(); // Log the user out if he deletes himself
-                                }else{
-                                    userService.removeUserFromProject(projectID, item.getModelObject().getId());
-                                }
+                                userService.removeUserFromProject(BudgeteerSession.get().getProjectId(), item.getModelObject().getId());
                                 setResponsePage(ProjectAdministrationPage.class, getPageParameters());
                             }
 
@@ -112,7 +108,7 @@ public class ProjectAdministrationPage extends BasePage {
 
                             @Override
                             protected String confirmationText() {
-                                return "Are you sure you want to remove this user from the project?";
+                                return ProjectAdministrationPage.this.getString("delete.person.confirmation");
                             }
                         });
                     }
@@ -239,7 +235,7 @@ public class ProjectAdministrationPage extends BasePage {
 
                     @Override
                     protected String confirmationText() {
-                        return "Deleting the project is irreversible, are you sure?";
+                        return ProjectAdministrationPage.this.getString("delete.project.confirmation");
                     }
                 });
             }

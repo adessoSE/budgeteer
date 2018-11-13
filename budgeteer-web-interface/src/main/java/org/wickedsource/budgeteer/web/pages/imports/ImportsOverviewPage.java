@@ -16,6 +16,7 @@ import org.wickedsource.budgeteer.web.ClassAwareWrappingModel;
 import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.pages.base.basepage.BasePage;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
+import org.wickedsource.budgeteer.web.pages.base.delete.DeleteDialog;
 import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 import org.wickedsource.budgeteer.web.pages.imports.fileimport.ImportFilesPage;
 
@@ -57,14 +58,29 @@ public class ImportsOverviewPage extends BasePage {
                 item.add(new AjaxLink("deleteButton") {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        importService.deleteImport(impId);
-                        target.add(notificationDropdown, importListContainer);
+                        setResponsePage(new DeleteDialog() {
+                            @Override
+                            protected void onYes() {
+                                importService.deleteImport(impId);
+                                setResponsePage(ImportsOverviewPage.class);
+                            }
+
+                            @Override
+                            protected void onNo() {
+                                setResponsePage(ImportsOverviewPage.class);
+                            }
+
+                            @Override
+                            protected String confirmationText() {
+                                return ImportsOverviewPage.this.getString("delete.import.confirmation");
+                            }
+                        });
                     }
                 });
             }
             @Override
             protected ListItem<Import> newItem(int index, IModel<Import> itemModel) {
-                return super.newItem(index, new ClassAwareWrappingModel<Import>(itemModel, Import.class));
+                return super.newItem(index, new ClassAwareWrappingModel<>(itemModel, Import.class));
             }
         };
     }

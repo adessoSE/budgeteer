@@ -16,7 +16,7 @@ public class PersonBaseDataBean implements Serializable {
     public PersonBaseDataBean(Long id, String name, Long valuedMinutes, Long valuedRate, Date lastBookedDate) {
         this.id = id;
         this.name = name;
-        if (valuedRate == 0L)
+        if (valuedRate == null || valuedRate == 0L)
             this.averageDailyRateInCents = 0L;
         else
             this.averageDailyRateInCents = valuedMinutes / valuedRate;

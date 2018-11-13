@@ -31,9 +31,10 @@ public class BudgetEntity implements Comparable<BudgetEntity> {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_BUDGET_ID")
     private long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 255)
     private String name;
 
+    @Column(length = 255)
     private String description;
 
     // Notes have a maximum size of 10KB
@@ -50,18 +51,18 @@ public class BudgetEntity implements Comparable<BudgetEntity> {
     private ProjectEntity project;
 
     @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "budget")
-    private List<BudgetTagEntity> tags = new ArrayList<BudgetTagEntity>();
+    private List<BudgetTagEntity> tags = new ArrayList<>();
 
     @OneToMany(mappedBy = "budget", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    private List<WorkRecordEntity> workRecords = new ArrayList<WorkRecordEntity>();
+    private List<WorkRecordEntity> workRecords = new ArrayList<>();
 
     @OneToMany(mappedBy = "budget", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    private List<PlanRecordEntity> planRecords = new ArrayList<PlanRecordEntity>();
+    private List<PlanRecordEntity> planRecords = new ArrayList<>();
 
     @OneToMany(mappedBy = "budget", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    private List<DailyRateEntity> dailyRates = new ArrayList<DailyRateEntity>();
+    private List<DailyRateEntity> dailyRates = new ArrayList<>();
 
-    @Column(nullable = false, name = "IMPORT_KEY")
+    @Column(nullable = false, name = "IMPORT_KEY", length = 255)
     private String importKey;
 
     @ManyToOne

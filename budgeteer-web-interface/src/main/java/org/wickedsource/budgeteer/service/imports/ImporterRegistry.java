@@ -13,7 +13,7 @@ public class ImporterRegistry {
 
     public synchronized Set<WorkRecordsImporter> getWorkingRecordsImporters() {
         ServiceLoader<WorkRecordsImporter> loader = ServiceLoader.load(WorkRecordsImporter.class);
-        Set<WorkRecordsImporter> importers = new HashSet<WorkRecordsImporter>();
+        Set<WorkRecordsImporter> importers = new HashSet<>();
         for (WorkRecordsImporter importer : loader) {
             importers.add(importer);
         }
@@ -22,7 +22,7 @@ public class ImporterRegistry {
 
     public synchronized Set<PlanRecordsImporter> getPlanRecordsImporters() {
         ServiceLoader<PlanRecordsImporter> loader = ServiceLoader.load(PlanRecordsImporter.class);
-        Set<PlanRecordsImporter> importers = new HashSet<PlanRecordsImporter>();
+        Set<PlanRecordsImporter> importers = new HashSet<>();
         for (PlanRecordsImporter importer : loader) {
             importers.add(importer);
         }

@@ -41,25 +41,26 @@ public class DateUtil {
         return c.getTime();
     }
 
-     /**
+    /**
      * Returns whether the date is between the start and end of the dateRange
-     * @param d date to be checked
+     *
+     * @param d         date to be checked
      * @param dateRange
      * @return true if the date d is in the given dateRange
      */
-     private static boolean isDateInDateRange(Date d, DateRange dateRange){
+    public static boolean isDateInDateRange(Date d, DateRange dateRange) {
         return d.compareTo(dateRange.getStartDate()) >= 0 && d.compareTo(dateRange.getEndDate()) <= 0;
     }
 
     /**
      * Checks whether the two DateRanges are overlapping (ore one contains the other)
      */
-    public static boolean isDateRangeOverlapping(DateRange d1, DateRange d2){
+    public static boolean isDateRangeOverlapping(DateRange d1, DateRange d2) {
         return ((isDateInDateRange(d1.getStartDate(), d2) || isDateInDateRange(d1.getEndDate(), d2)) ||
                 (isDateInDateRange(d2.getStartDate(), d1) && isDateInDateRange(d2.getEndDate(), d1)));
     }
 
-    public static Date getBeginOfYear(){
+    public static Date getBeginOfYear() {
         Calendar cal = new GregorianCalendar();
         cal.setTime(new Date());
         cal.set(Calendar.DAY_OF_MONTH, 1);
@@ -67,7 +68,7 @@ public class DateUtil {
         return cal.getTime();
     }
 
-    public static Date getEndOfYear(){
+    public static Date getEndOfYear() {
         Calendar cal = new GregorianCalendar();
         cal.setTime(new Date());
         cal.set(Calendar.DAY_OF_MONTH, 31);
@@ -78,12 +79,12 @@ public class DateUtil {
     /**
      * Returns a list of the current year +- range
      */
-    public static List<Integer> getCurrentYears(int range){
+    public static List<Integer> getCurrentYears(int range) {
         GregorianCalendar cal = new GregorianCalendar();
         cal.setTime(new Date());
         int currentYear = cal.get(Calendar.YEAR);
-        List<Integer> result = new LinkedList<Integer>();
-        for(int i = 0; i < range * 2;  i++){
+        List<Integer> result = new LinkedList<>();
+        for (int i = 0; i < range * 2; i++) {
             result.add(currentYear - range + i);
         }
         return result;

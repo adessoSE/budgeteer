@@ -9,6 +9,7 @@ import org.wickedsource.budgeteer.persistence.invoice.InvoiceEntity;
 import org.wickedsource.budgeteer.persistence.invoice.InvoiceFieldEntity;
 import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -48,8 +49,6 @@ class InvoiceDataMapperTest {
         assertEquals("", secondInvoice.getDynamicInvoiceFields().get(1).getValue());
         assertEquals("contractInvoiceField3 Name", secondInvoice.getDynamicInvoiceFields().get(2).getName());
         assertEquals("contractInvoiceField3 Value", secondInvoice.getDynamicInvoiceFields().get(2).getValue());
-
-
     }
 
 
@@ -73,6 +72,10 @@ class InvoiceDataMapperTest {
         assertEquals("contractInvoiceField1 Value", mappedElement.getDynamicInvoiceFields().get(0).getValue());
         assertEquals("contractInvoiceField2 Name", mappedElement.getDynamicInvoiceFields().get(1).getName());
         assertEquals("contractInvoiceField2 Value", mappedElement.getDynamicInvoiceFields().get(1).getValue());
+
+        assertEquals(MoneyUtil.createMoneyFromCents(20000), mappedElement.getSum());
+        assertEquals(MoneyUtil.createMoneyFromCents(22000), mappedElement.getSum_gross());
+        assertEquals(MoneyUtil.createMoneyFromCents(2000), mappedElement.getTaxAmount());
     }
 
 
@@ -89,6 +92,7 @@ class InvoiceDataMapperTest {
         contract1.setProject(project1);
         contract1.setName("Contract 1");
         contract1.setInvoiceFields(new HashSet<ContractInvoiceField>());
+        contract1.setTaxRate(new BigDecimal(10));
 
         /*
          * Add zwo ContractInvoiceFields to the contract
@@ -151,6 +155,7 @@ class InvoiceDataMapperTest {
         contract2.setProject(project1);
         contract2.setName("Contract 2");
         contract2.setInvoiceFields(new HashSet<ContractInvoiceField>());
+        contract2.setTaxRate(BigDecimal.valueOf(20));
 
         ContractInvoiceField contractInvoiceField1 = new ContractInvoiceField();
         contractInvoiceField1.setId(3);

@@ -60,6 +60,8 @@ public class BudgeteerApplication extends WebApplication implements ApplicationC
         final BudgeteerRequiresProjectListener listener = new BudgeteerRequiresProjectListener();
         getComponentInstantiationListeners().add(listener);
         getComponentPreOnBeforeRenderListeners().add(listener);
+
+        getApplicationSettings().setUploadProgressUpdatesEnabled(true);
     }
 
     /** * Decorates an original IHeaderResponse and renders all javascript items * (JavaScriptHeaderItem), to a specific container in the page. */

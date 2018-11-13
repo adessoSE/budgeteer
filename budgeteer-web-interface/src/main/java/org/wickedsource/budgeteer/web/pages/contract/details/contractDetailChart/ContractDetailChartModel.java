@@ -1,6 +1,5 @@
 package org.wickedsource.budgeteer.web.pages.contract.details.contractDetailChart;
 
-
 import lombok.Getter;
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.model.LoadableDetachableModel;

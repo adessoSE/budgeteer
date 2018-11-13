@@ -55,7 +55,7 @@ public class ImportTemplatesPage extends DialogPageWithBacklink {
     private static final AttributeModifier starUnchecked = new AttributeModifier("class", "btn bg-olive glyphicon glyphicon-star-empty");
 
 
-    private List<FileUpload> fileUploads = new ArrayList<FileUpload>();
+    private List<FileUpload> fileUploads = new ArrayList<>();
 
     ReportType exampleTemplateType = ReportType.BUDGET_REPORT;
 
@@ -69,7 +69,7 @@ public class ImportTemplatesPage extends DialogPageWithBacklink {
         IModel formModel = model(from(templateFormInputDto));
 
         this.setDefaultModel(formModel);
-        final Form<TemplateFormInputDto> form = new Form<TemplateFormInputDto>("importForm", new ClassAwareWrappingModel<>(new Model<>(new TemplateFormInputDto(BudgeteerSession.get().getProjectId())), TemplateFormInputDto.class));
+        final Form<TemplateFormInputDto> form = new Form<>("importForm", new ClassAwareWrappingModel<>(new Model<>(new TemplateFormInputDto(BudgeteerSession.get().getProjectId())), TemplateFormInputDto.class));
         form.setMultiPart(true);
 
         add(form);
@@ -92,16 +92,6 @@ public class ImportTemplatesPage extends DialogPageWithBacklink {
                     }
                     if(model(from(templateFormInputDto)).getObject().getType() == null){
                         error(getString("message.error.no.type"));
-                    }
-                    if(model(from(templateFormInputDto)).getObject().getName() != null && model(from(templateFormInputDto)).getObject().getName().length() > 128){
-                        error(getString("message.error.name.too.long"));
-                        target.add(feedback);
-                        return;
-                    }
-                    if(model(from(templateFormInputDto)).getObject().getDescription() != null && model(from(templateFormInputDto)).getObject().getDescription().length() > 512){
-                        error(getString("message.error.description.too.long"));
-                        target.add(feedback);
-                        return;
                     }
                     ImportFile file = new ImportFile(fileUploads.get(0).getClientFileName(), fileUploads.get(0).getInputStream());
                     if(model(from(templateFormInputDto)).getObject().getName() != null && model(from(templateFormInputDto)).getObject().getType() != null){

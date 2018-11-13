@@ -24,11 +24,7 @@ import org.wickedsource.budgeteer.web.components.listMultipleChoiceWithGroups.Op
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.TreeSet;
+import java.util.*;
 
 
 @Service
@@ -166,7 +162,7 @@ public class BudgetService {
     }
 
     private List<String> mapEntitiesToTags(List<BudgetTagEntity> tagEntities) {
-        List<String> tags = new ArrayList<String>();
+        List<String> tags = new ArrayList<>();
         for (BudgetTagEntity entity : tagEntities) {
             tags.add(entity.getTag());
         }
@@ -174,7 +170,7 @@ public class BudgetService {
     }
 
     private List<BudgetTagEntity> mapTagsToEntities(List<String> tags, BudgetEntity budget) {
-        List<BudgetTagEntity> entities = new ArrayList<BudgetTagEntity>();
+        List<BudgetTagEntity> entities = new ArrayList<>();
         if (tags != null) {
             for (String tag : tags) {
                 BudgetTagEntity entity = new BudgetTagEntity();
@@ -196,7 +192,7 @@ public class BudgetService {
     @PreAuthorize("canReadProject(#projectId)")
     public List<BudgetDetailData> loadBudgetsDetailData(long projectId, BudgetTagFilter filter) {
         List<BudgetEntity> budgets = loadBudgetEntities(projectId, filter);
-        List<BudgetDetailData> dataList = new ArrayList<BudgetDetailData>();
+        List<BudgetDetailData> dataList = new ArrayList<>();
         for (BudgetEntity entity : budgets) {
             // TODO: 4 additional database queries per loop! These can yet be optimized to 4 queries total!
             dataList.add(enrichBudgetEntity(entity));
@@ -315,7 +311,7 @@ public class BudgetService {
 
     @PreAuthorize("canReadContract(#cId)")
     public List<BudgetDetailData> loadBudgetByContract(long cId) {
-        List<BudgetDetailData> result = new LinkedList<BudgetDetailData>();
+        List<BudgetDetailData> result = new LinkedList<>();
         List<BudgetEntity> temp = budgetRepository.findByContractId(cId);
         if (temp != null) {
             for (BudgetEntity b : temp) {

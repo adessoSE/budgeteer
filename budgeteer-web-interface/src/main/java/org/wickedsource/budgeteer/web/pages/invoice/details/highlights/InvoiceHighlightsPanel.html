@@ -3,7 +3,9 @@
         <div class="col-md-12">
             <div class="box box-primary">
                 <div class="box-header" style="cursor: move;">
-                    <h3 class="box-title"><wicket:message key="invoice.basic.information.header" /></h3>
+                    <h3 class="box-title">
+                        <wicket:message key="invoice.basic.information.header"/>
+                    </h3>
                     <div class="box-tools pull-right">
                                 <span class="btn btn-default btn-sm" data-widget="collapse">
                                     <i class="fa fa-minus"></i>
@@ -14,18 +16,14 @@
                     <div class="row">
                         <div class="col-lg-6 col-xs-6">
                             <div class="showcase bg-aqua">
-                                <div class="inner">
-                                    <h3 wicket:id="name">NAME</h3>
-                                </div>
-                                <wicket:message key="invoice.name" />
+                                <div wicket:id="name"></div>
+                                <wicket:message key="invoice.name"/>
                             </div>
                         </div>
                         <div class="col-lg-6 col-xs-6">
                             <div class="showcase bg-aqua">
-                                <div class="inner">
-                                    <h3 wicket:id="contractName">Contract name</h3>
-                                </div>
-                                <wicket:message key="invoice.contract.name" />
+                                <div wicket:id="contractName"></div>
+                                <wicket:message key="invoice.contract.name"/>
                             </div>
                         </div>
                         <div class="col-lg-6 col-xs-6">
@@ -33,7 +31,7 @@
                                 <div class="inner">
                                     <h3 wicket:id="internalNumber">internalNumber</h3>
                                 </div>
-                                <wicket:message key="invoice.internalNumber" />
+                                <wicket:message key="invoice.internalNumber"/>
                             </div>
                         </div>
                         <div class="col-lg-6 col-xs-6">
@@ -41,7 +39,7 @@
                                 <div class="inner">
                                     <h3 wicket:id="year">year</h3>
                                 </div>
-                                <wicket:message key="invoice.year" />
+                                <wicket:message key="invoice.year"/>
                             </div>
                         </div>
                         <div class="col-lg-6 col-xs-6">
@@ -49,7 +47,7 @@
                                 <div class="inner">
                                     <h3 wicket:id="month">month</h3>
                                 </div>
-                                <wicket:message key="invoice.month" />
+                                <wicket:message key="invoice.month"/>
                             </div>
                         </div>
                         <div class="col-lg-6 col-xs-6">
@@ -57,7 +55,31 @@
                                 <div class="inner">
                                     <h3 wicket:id="sum">sum</h3>
                                 </div>
-                                <wicket:message key="invoice.sum" />
+                                <wicket:message key="invoice.sum"/>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-xs-6 to-toggle-box" wicket:id="sumGrossContainer">
+                            <div class="showcase bg-aqua" wicket:id="sumGrossBox">
+                                <div class="inner">
+                                    <h3 wicket:id="sum_gross">gross sum</h3>
+                                </div>
+                                <wicket:message key="invoice.sum_gross"/>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-xs-6 to-toggle-box" wicket:id="taxAmountContainer">
+                            <div class="showcase bg-aqua" wicket:id="taxAmountBox">
+                                <div class="inner">
+                                    <h3 wicket:id="taxAmount">tax amount</h3>
+                                </div>
+                                <wicket:message key="invoice.taxAmount"/>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-xs-6 to-toggle-box" wicket:id="taxRateContainer">
+                            <div class="showcase bg-aqua" wicket:id="taxRateBox">
+                                <div class="inner">
+                                    <h3 wicket:id="taxRate">tax amount</h3>
+                                </div>
+                                <wicket:message key="invoice.taxRate"/>
                             </div>
                         </div>
                         <div class="col-lg-6 col-xs-6">
@@ -65,25 +87,25 @@
                                 <div class="inner">
                                     <h3 wicket:id="paid">paid</h3>
                                 </div>
-                                <wicket:message key="invoice.paid" />
+                                <wicket:message key="invoice.paid"/>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-lg-6 col-xs-6" wicket:id="fileContainer">
-                                <div class="showcase bg-aqua">
-                                    <div class="inner">
-                                        <h3><a wicket:id="file" ></a></h3>
-                                    </div>
-                                    <wicket:message key="invoice.fileLink" />
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-xs-6" wicket:id="fileContainer">
+                            <div class="showcase bg-aqua">
+                                <div class="inner">
+                                    <h3><a wicket:id="file"></a></h3>
                                 </div>
+                                <wicket:message key="invoice.fileLink"/>
                             </div>
-                            <div class="col-lg-6 col-xs-6" wicket:id="linkContainer">
-                                <div class="showcase bg-aqua">
-                                    <div class="inner">
-                                        <h3><a wicket:id="link" ></a></h3>
-                                    </div>
-                                    <wicket:message key="invoice.link" />
+                        </div>
+                        <div class="col-lg-6 col-xs-6" wicket:id="linkContainer">
+                            <div class="showcase bg-aqua">
+                                <div class="inner">
+                                    <h3><a wicket:id="link"></a></h3>
                                 </div>
+                                <wicket:message key="invoice.link"/>
                             </div>
                         </div>
                     </div>
@@ -91,11 +113,13 @@
             </div>
             <div class="box box-primary">
                 <div class="box-header" style="cursor: move;">
-                    <h3 class="box-title"><wicket:message key="invoice.additional.information.header" /></h3>
+                    <h3 class="box-title">
+                        <wicket:message key="invoice.additional.information.header"/>
+                    </h3>
                     <div class="box-tools pull-right">
-                                <span class="btn btn-default btn-sm" data-widget="collapse">
-                                    <i class="fa fa-minus"></i>
-                                </span>
+                            <span class="btn btn-default btn-sm" data-widget="collapse">
+                                <i class="fa fa-minus"></i>
+                            </span>
                     </div>
                 </div>
                 <div class="box-body">
@@ -105,7 +129,7 @@
                                 <div class="inner">
                                     <h3 wicket:id="value">NAME</h3>
                                 </div>
-                                <span wicket:id="key" />
+                                <span wicket:id="key"/>
                             </div>
                         </div>
                     </div>

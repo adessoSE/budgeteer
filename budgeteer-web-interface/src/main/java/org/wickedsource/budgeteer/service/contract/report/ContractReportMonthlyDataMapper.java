@@ -29,11 +29,11 @@ public class ContractReportMonthlyDataMapper {
         report.setContract(contract.getName());
         report.setContractId(contract.getInternalNumber());
 
-        Map<String, DynamicAttributeField> contractAttributes = new HashMap<String, DynamicAttributeField>();
+        Map<String, DynamicAttributeField> contractAttributes = new HashMap<>();
         for(ContractFieldEntity fieldEntity : contract.getContractFields()){
             contractAttributes.put(fieldEntity.getField().getFieldName(), new DynamicAttributeField(fieldEntity.getField().getFieldName(), fieldEntity.getValue()));
         }
-        report.setAttributes(new ArrayList<DynamicAttributeField>(contractAttributes.values()));
+        report.setAttributes(new ArrayList<>(contractAttributes.values()));
         report.setId(contract.getId());
         report.setTaxRate(contract.getTaxRate() != null ? contract.getTaxRate().doubleValue() / 100 : 0);
         report.setFrom(Date.from(firstOfMonth.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
@@ -52,7 +52,7 @@ public class ContractReportMonthlyDataMapper {
     }
 
     public List<ContractReportData> map(List<ContractEntity> entityList, Date endDate){
-        List<ContractReportData> result = new LinkedList<ContractReportData>();
+        List<ContractReportData> result = new LinkedList<>();
         for(ContractEntity entity : entityList){
             result.add(map(entity,endDate));
         }

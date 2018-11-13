@@ -13,7 +13,7 @@
           type="text/css"/>
     <link integrity="sha384-bitaRJt6aam1M6CoAJmRsrop9dyXRMZQpEMpvCLibGw2JE157NWsjMGwTueMwzah"
           crossorigin="anonymous"
-          href='//fonts.googleapis.com/css?family=Jockey+One' rel='stylesheet' type='text/css'>
+          href='//fonts.googleapis.com/css?family=Jockey+One' rel='stylesheet' type="text/css"/>
     <!-- Ionicons -->
     <link integrity="sha384-u0sD9rgKhA/yB78NKjscm5Zqy7pbiT2ZSPn5466QjHY3le2ExOkvtEI0p/cxh0k2"
           crossorigin="anonymous"
@@ -68,6 +68,13 @@
                 </li>
 
                 <li>
+                    <a wicket:id="myProfileLink" href="#">
+                        <i class="fa fa-user"></i>
+                        <span><b>My Profile</b></span>
+                    </a>
+                </li>
+
+                <li>
                     <a wicket:id="logoutLink" href="#">
                         <i class="fa fa-power-off"></i>
                         <span><b>Sign Out</b></span>
@@ -111,5 +118,6 @@ Version: @application.version@
         crossorigin="anonymous"
         src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js">
 </script>
+<script type="text/javascript" src="../js/manualTableSorting.js"></script>
 </body>
 </html>

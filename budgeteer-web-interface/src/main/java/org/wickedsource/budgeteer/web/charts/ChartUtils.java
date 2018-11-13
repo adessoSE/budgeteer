@@ -21,7 +21,7 @@ public class ChartUtils {
      * @return list of week labels.
      */
     public static List<String> getWeekLabels(int numberOfWeeks, String weekLabelFormat) {
-        List<String> labels = new ArrayList<String>();
+        List<String> labels = new ArrayList<>();
         Calendar c = Calendar.getInstance();
         int currentWeek = c.get(Calendar.WEEK_OF_YEAR);
         for (int i = 0; i < numberOfWeeks; i++) {
@@ -42,7 +42,7 @@ public class ChartUtils {
      * @return list of month labels.
      */
     public static List<String> getMonthLabels(int numberOfMonths) {
-        List<String> labels = new ArrayList<String>();
+        List<String> labels = new ArrayList<>();
         Calendar c = Calendar.getInstance();
         for (int i = 0; i < numberOfMonths; i++) {
             labels.add(monthFormat.format(c.getTime()));

@@ -26,4 +26,10 @@
 
     <mockito:mock id="templateRepository" class="org.wickedsource.budgeteer.persistence.template.TemplateRepository"/>
 
+    <mockito:mock id="verificationTokenRepository" class="org.wickedsource.budgeteer.persistence.user.VerificationTokenRepository"/>
+
+    <mockito:mock id="forgotPasswordTokenRepository" class="org.wickedsource.budgeteer.persistence.user.ForgotPasswordTokenRepository"/>
+
+    <mockito:mock id="contractSortingRepository" class="org.wickedsource.budgeteer.persistence.contract.ContractSortingRepository"/>
+
 </beans>
