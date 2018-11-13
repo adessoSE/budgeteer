@@ -7,9 +7,12 @@ import org.assertj.core.api.Assertions;
 import org.assertj.core.data.Percentage;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.wickedsource.budgeteer.IntegrationTestTemplate;
 import org.wickedsource.budgeteer.persistence.contract.ContractEntity;
 import org.wickedsource.budgeteer.persistence.contract.ContractRepository;
+import org.wickedsource.budgeteer.persistence.contract.ContractSortingRepository;
+import org.wickedsource.budgeteer.web.BudgeteerSession;
 
 class ContractDataMapperTest extends IntegrationTestTemplate {
 
@@ -17,7 +20,13 @@ class ContractDataMapperTest extends IntegrationTestTemplate {
     private ContractRepository contractRepository;
 
     @Autowired
+    private ContractSortingRepository contractSortingRepository;
+
+    @Autowired
     private ContractDataMapper testSubject;
+
+    @MockBean
+    BudgeteerSession budgeteerSession;
 
     @Test
     @DatabaseSetup("contractMapperTest.xml")
@@ -36,5 +45,4 @@ class ContractDataMapperTest extends IntegrationTestTemplate {
         ContractBaseData contractBaseData = testSubject.map(contractEntity);
         Assertions.assertThat(contractBaseData.getTaxRate()).isCloseTo(100, Percentage.withPercentage(10e-8));
     }
-
 }

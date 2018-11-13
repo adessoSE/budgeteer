@@ -12,7 +12,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.util.resource.AbstractResourceStreamWriter;
-import org.wickedsource.budgeteer.persistence.contract.ContractEntity;
 import org.wickedsource.budgeteer.service.contract.ContractBaseData;
 import org.wickedsource.budgeteer.service.contract.DynamicAttributeField;
 import org.wickedsource.budgeteer.web.components.MarqueeLabel;

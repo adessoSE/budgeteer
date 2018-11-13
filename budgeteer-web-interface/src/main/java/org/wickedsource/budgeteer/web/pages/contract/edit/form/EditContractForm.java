@@ -45,7 +45,6 @@ public class EditContractForm extends Form<ContractBaseData> {
         this(id, null, "button.save.createmode");
     }
 
-
     public EditContractForm(String id, IModel<ContractBaseData> model) {
         this(id, model, "button.save.editmode");
     }

@@ -12,6 +12,7 @@ import org.wickedsource.budgeteer.persistence.record.PlanRecordRepository;
 import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
 import org.wickedsource.budgeteer.persistence.user.UserEntity;
 import org.wickedsource.budgeteer.persistence.user.UserRepository;
+
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.LinkedList;

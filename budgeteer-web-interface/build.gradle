@@ -161,6 +161,12 @@ clean {
     delete sourceSets.generated.java.srcDirs
 }
 
+test {
+    systemProperties = [
+            'flyway.enabled': 'false'
+    ]
+}
+
 bootRun {
     // default application configuration for running application via bootRun in development mode
     // (in production, these properties are defined in application.properties)
