@@ -2,8 +2,7 @@ package de.adesso.budgeteer.web.pages.administration;
 
 import de.adesso.budgeteer.web.pages.base.basepage.BasePage;
 import de.adesso.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
-import de.adesso.budgeteer.web.pages.user.login.LoginPage;
-import org.apache.wicket.Page;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.basic.Label;
@@ -21,6 +20,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.service.DateRange;
 import org.wickedsource.budgeteer.service.DateUtil;
+import org.wickedsource.budgeteer.service.project.ProjectBaseData;
 import org.wickedsource.budgeteer.service.project.ProjectService;
 import org.wickedsource.budgeteer.service.user.User;
 import org.wickedsource.budgeteer.service.user.UserService;
@@ -61,6 +61,7 @@ public class EditProjectPage extends BasePage {
         add(createUserList("userList", new UsersInProjectModel(getParameterId())));
         add(createAddUserForm("addUserForm"));
         add(createEditProjectForm("projectChangeForm"));
+        add(createBackButton());
     }
 
     private Form<Project> createEditProjectForm(String formId) {
@@ -99,7 +100,6 @@ public class EditProjectPage extends BasePage {
                             protected void onYes() {
                                 if(thisUser.getId() == item.getModelObject().getId()){
                                     userService.removeUserFromProject(projectID, item.getModelObject().getId());
-                                    BudgeteerSession.get().logout(); // Log the user out if he deletes himself
                                 }else{
                                     userService.removeUserFromProject(projectID, item.getModelObject().getId());
                                 }
@@ -149,7 +149,7 @@ public class EditProjectPage extends BasePage {
                                                 if(item.getModelObject().getId() == thisUser.getId()){
                                                     BudgeteerSession.get().setLoggedInUser(item.getModelObject());
                                                 }
-                                                setResponsePage(LoginPage.class);
+                                                setResponsePage(EditProjectPage.class, createParameters(projectID));
                                             }
 
                                             @Override
@@ -220,6 +220,15 @@ public class EditProjectPage extends BasePage {
     @Override
     protected BreadcrumbsModel getBreadcrumbsModel() {
         return new BreadcrumbsModel(BudgeteerAdministrationOverview.class, EditProjectPage.class);
+    }
+
+    private Component createBackButton(){
+        return new Link("backButton") {
+            @Override
+            public void onClick() {
+                setResponsePage(BudgeteerAdministrationOverview.class);
+            }
+        };
     }
 
 }

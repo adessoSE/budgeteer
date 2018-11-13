@@ -28,11 +28,16 @@
                             <td class="row">
                                 <form class="btn" wicket:id="passwordResetField">
                                     <input type="password" onblur="" wicket:id="setPasswordTextBox">
-                                    <button type="submit" wicket:id="resetPasswordButton" class="btn btn-danger btn-sm">Set new password.</button>
+                                    <button type="submit" wicket:id="resetPasswordButton" class="btn btn-danger btn-sm">Set new password</button>
                                 </form>
-                                <a wicket:id="deleteUserButton" class="btn btn-danger btn-sm">Remove from database.</a>
-                                <select wicket:id="roleDropdown" class="btn btn-success btn-sm form-control">
-                                </select>
+                                <form class="btn" wicket:id="emailResetField">
+                                    <input type="email" wicket:id="setEmailTextBox">
+                                    <button type="submit" wicket:id="resetEmailButton" class="btn btn-danger btn-sm">Set new email</button>
+                                </form>
+                                <label wicket:id="rolesDropdownLabel"></label>
+                                <select wicket:id="roleDropdown" class="btn btn-success btn-sm form-control"></select>
+                                <a wicket:id="deleteUserButton" class="btn btn-danger btn-sm">Remove from database</a>
+
                             </td>
                         </tr>
                         </tbody>
@@ -64,8 +69,8 @@
                         <tr wicket:id="projectList">
                             <td wicket:id="projectname">Project Name</td>
                             <td class="row">
-                                <a wicket:id="deleteProjectButton" class="btn btn-danger btn-sm">Remove from database.</a>
-                                <a wicket:id="editProjectButton" class="btn btn-success btn-sm">Edit this project.</a>
+                                <a wicket:id="deleteProjectButton" class="btn btn-danger btn-sm">Remove from database</a>
+                                <a wicket:id="editProjectButton" class="btn btn-success btn-sm">Edit this project</a>
                             </td>
                         </tr>
                         </tbody>

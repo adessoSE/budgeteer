@@ -233,7 +233,7 @@ public class UserService {
         return result;
     }
 
-    public void setGlobalRoleForUser(Long userId, String role){
+    public void setGlobalRoleForUser(Long userId, UserRole role){
         if(userId != 0) {
             UserEntity entity = userRepository.findById(userId);
             entity.setGlobalRole(role);
@@ -510,5 +510,18 @@ public class UserService {
 
         if (forgotPasswordToken != null)
             forgotPasswordTokenRepository.delete(forgotPasswordToken);
+    }
+
+    public void setUserEmail(long id, String email) throws MailAlreadyInUseException{
+        if (userRepository.findByMail(email) != null) {
+            throw new MailAlreadyInUseException();
+        } else {
+            UserEntity user = userRepository.findById(id);
+            user.setMail(email);
+            userRepository.save(user);
+            if (!email.equals("") && Boolean.valueOf(mailActivated)) {
+                applicationEventPublisher.publishEvent(new OnRegistrationCompleteEvent(user));
+            }
+        }
     }
 }

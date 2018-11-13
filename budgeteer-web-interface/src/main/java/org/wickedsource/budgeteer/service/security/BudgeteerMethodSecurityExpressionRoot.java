@@ -16,6 +16,7 @@ import org.wickedsource.budgeteer.persistence.invoice.InvoiceRepository;
 import org.wickedsource.budgeteer.persistence.person.PersonEntity;
 import org.wickedsource.budgeteer.persistence.person.PersonRepository;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
+import org.wickedsource.budgeteer.web.components.user.UserRole;
 
 /**
  * A custom {@link SecurityExpressionRoot} that implements the {@link MethodSecurityExpressionOperations} interface
@@ -129,7 +130,7 @@ public class BudgeteerMethodSecurityExpressionRoot extends SecurityExpressionRoo
      * @see BudgeteerSession#getProjectId()
      */
     public boolean canReadProject(Long projectId) {
-        if(BudgeteerSession.get().getLoggedInUser().getGlobalRole().equals("admin")){
+        if(BudgeteerSession.get().getLoggedInUser().getGlobalRole().equals(UserRole.ADMIN)){
             return true;
         }else {
             long selectedProjectId = getCurrentProjectId();

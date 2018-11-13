@@ -11,6 +11,7 @@ import org.wickedsource.budgeteer.service.user.UserService;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
+import org.wickedsource.budgeteer.web.components.user.UserRole;
 import org.wickedsource.budgeteer.web.pages.base.dialogpage.DialogPage;
 import org.wickedsource.budgeteer.web.settings.BudgeteerSettings;
 
@@ -36,7 +37,7 @@ public class LoginPage extends DialogPage {
                         BudgeteerSession.get().login(user);
                         setResponsePage(BudgeteerAdministrationOverview.class);
                     }else if(userService.getAllAdmins().isEmpty()){ //The first user to log into this tool gets the admin role
-                        userService.setGlobalRoleForUser(user.getId(), "admin");
+                        userService.setGlobalRoleForUser(user.getId(), UserRole.ADMIN);
                         BudgeteerSession.get().login(user);
                         setResponsePage(BudgeteerAdministrationOverview.class);
                     } else{

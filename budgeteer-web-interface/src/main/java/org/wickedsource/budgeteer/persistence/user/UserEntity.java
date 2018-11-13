@@ -5,6 +5,7 @@ import org.hibernate.annotations.CollectionType;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
+import org.wickedsource.budgeteer.web.components.user.UserRole;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -34,8 +35,8 @@ public class UserEntity {
     @CollectionType(type = "HashMap")
     private HashMap<Long, ArrayList<String>> roles = new HashMap<>();
 
-    @Column(nullable = false, length = 128)
-    private String globalRole = "user";
+    @Column(nullable = false)
+    private UserRole globalRole = UserRole.USER;
 
     @Column(nullable = true, length = 255)
     private String mail;

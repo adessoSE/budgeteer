@@ -7,10 +7,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Button;
-import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.PasswordTextField;
+import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -21,6 +18,7 @@ import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.service.project.ProjectBaseData;
 import org.wickedsource.budgeteer.service.project.ProjectService;
+import org.wickedsource.budgeteer.service.user.MailAlreadyInUseException;
 import org.wickedsource.budgeteer.service.user.User;
 import org.wickedsource.budgeteer.service.user.UserService;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
@@ -28,6 +26,7 @@ import org.wickedsource.budgeteer.web.ClassAwareWrappingModel;
 import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
 import org.wickedsource.budgeteer.web.components.multiselect.MultiselectBehavior;
+import org.wickedsource.budgeteer.web.components.user.UserRole;
 import org.wickedsource.budgeteer.web.pages.base.delete.DeleteDialog;
 import org.wickedsource.budgeteer.web.settings.BudgeteerSettings;
 
@@ -52,8 +51,10 @@ public class BudgeteerAdministrationOverview extends BasePage {
 
     private User thisUser = BudgeteerSession.get().getLoggedInUser();
 
+    private CustomFeedbackPanel feedbackPanel = new CustomFeedbackPanel("feedback");
+
     public BudgeteerAdministrationOverview() {
-        add(new CustomFeedbackPanel("feedback"));
+        add(feedbackPanel);
         add(createUserList("userList", new ListModel<>(userService.getAllUsers())));
         add(createProjectList("projectList", new ListModel<>(projectService.getAllProjects())));
     }
@@ -68,15 +69,18 @@ public class BudgeteerAdministrationOverview extends BasePage {
                 Component deleteUserButton = createDeleteUserButton(item);
                 Component makeAdminList = createRolesList(item);
                 Component setPasswordTextField = createPasswordTextField(item);
+                Label rolesDropdownLabel = new Label("rolesDropdownLabel", "Select the global role for this user: ");
                 // a user may not delete herself/himself unless another admin is present
                 if (item.getModelObject().getId() == thisUser.getId()){
                     List<User> allUsers = userService.getAllUsers();
                     deleteUserButton.setVisible(false);
                     makeAdminList.setVisible(false);
+                    rolesDropdownLabel.setVisible(false);
                     for(User e : allUsers){
-                        if(e.getId() != thisUser.getId() && e.getGlobalRole().equals("admin")){
+                        if(e.getId() != thisUser.getId() && e.getGlobalRole().equals(UserRole.ADMIN)){
                             deleteUserButton.setVisible(true);
                             makeAdminList.setVisible(true);
+                            rolesDropdownLabel.setVisible(true);
                             break;
                         }
                     }
@@ -84,6 +88,8 @@ public class BudgeteerAdministrationOverview extends BasePage {
                 item.add(deleteUserButton);
                 item.add(makeAdminList);
                 item.add(setPasswordTextField);
+                item.add(createEmailTextField(item));
+                item.add(rolesDropdownLabel);
             }
 
             @Override
@@ -99,10 +105,29 @@ public class BudgeteerAdministrationOverview extends BasePage {
             @Override
             protected void onSubmit() {
                 userService.setUserPassword(item.getModelObject().getId(), textField.getModelObject());
+                feedbackPanel.success("Password successfully changed!");
             }
         };
         Button submitButton = new Button("resetPasswordButton");
         return passwordResetField.add(textField, submitButton);
+    }
+
+    private Component createEmailTextField(ListItem<User> item) {
+        EmailTextField textField = new EmailTextField("setEmailTextBox", Model.of(item.getModelObject().getMail()));
+        Form emailResetField = new Form("emailResetField"){
+            @Override
+            protected void onSubmit() {
+                try {
+                    userService.setUserEmail(item.getModelObject().getId(), textField.getModelObject());
+                    item.getModelObject().setMail(textField.getModelObject());
+                    feedbackPanel.success("Email successfully changed!");
+                }catch (MailAlreadyInUseException e){
+                    feedbackPanel.error("Another user with this email already exists!");
+                }
+            }
+        };
+        Button submitButton = new Button("resetEmailButton");
+        return emailResetField.add(textField, submitButton);
     }
 
     private Component createDeleteUserButton(ListItem<User> item){
@@ -141,10 +166,10 @@ public class BudgeteerAdministrationOverview extends BasePage {
     }
 
     private Component createRolesList(ListItem<User> item) {
-        List<String> choices = new ArrayList<>();
-        choices.add("admin");
-        choices.add("user");
-        DropDownChoice<String> makeAdminList = new DropDownChoice<>(
+        List<UserRole> choices = new ArrayList<>();
+        choices.add(UserRole.ADMIN);
+        choices.add(UserRole.USER);
+        DropDownChoice<UserRole> makeAdminList = new DropDownChoice<>(
                 "roleDropdown", new Model<>(item.getModelObject().getGlobalRole()), choices);
         HashMap<String, String> options = new HashMap<>();
         options.clear();
@@ -153,17 +178,17 @@ public class BudgeteerAdministrationOverview extends BasePage {
         makeAdminList.add(new AjaxFormComponentUpdatingBehavior("change") {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
-                if(!makeAdminList.getModelObject().isEmpty()) {
+                if(!makeAdminList.getModelObject().toString().isEmpty()) {
 
                     //Check if the user is losing admin privileges and ask if they are sure
                     if(item.getModelObject().getId() == thisUser.getId() &&
-                            !makeAdminList.getModelObject().contains("admin")
-                            && item.getModelObject().getGlobalRole().equals("admin")){
+                            !makeAdminList.getModelObject().equals(UserRole.ADMIN)
+                            && item.getModelObject().getGlobalRole().equals(UserRole.ADMIN)){
                         setResponsePage(
                                 new org.wickedsource.budgeteer.web.pages.base.delete.DeleteDialog() {
                                     @Override
                                     protected void onYes() {
-                                        userService.setGlobalRoleForUser(item.getModelObject().getId(),makeAdminList.getModelObject());
+                                        userService.setGlobalRoleForUser(item.getModelObject().getId(), makeAdminList.getModelObject());
                                         if(item.getModelObject().getId() == thisUser.getId()){
                                             BudgeteerSession.get().setLoggedInUser(item.getModelObject());
                                         }
@@ -183,6 +208,7 @@ public class BudgeteerAdministrationOverview extends BasePage {
                     }else {
                         userService.setGlobalRoleForUser(item.getModelObject().getId(), makeAdminList.getModelObject());
                         setResponsePage(BudgeteerAdministrationOverview.class);
+                        return;
                     }
                 }
                 if(item.getModelObject().getId() == thisUser.getId()){
