@@ -69,7 +69,7 @@ public class BudgeteerAdministrationOverview extends BasePage {
                 Component deleteUserButton = createDeleteUserButton(item);
                 Component makeAdminList = createRolesList(item);
                 Component setPasswordTextField = createPasswordTextField(item);
-                Label rolesDropdownLabel = new Label("rolesDropdownLabel", "Select the global role for this user: ");
+                Label rolesDropdownLabel = new Label("rolesDropdownLabel");
                 // a user may not delete herself/himself unless another admin is present
                 if (item.getModelObject().getId() == thisUser.getId()){
                     List<User> allUsers = userService.getAllUsers();
@@ -105,7 +105,7 @@ public class BudgeteerAdministrationOverview extends BasePage {
             @Override
             protected void onSubmit() {
                 userService.setUserPassword(item.getModelObject().getId(), textField.getModelObject());
-                feedbackPanel.success("Password successfully changed!");
+                feedbackPanel.success(getString("password.success"));
             }
         };
         Button submitButton = new Button("resetPasswordButton");
@@ -120,9 +120,9 @@ public class BudgeteerAdministrationOverview extends BasePage {
                 try {
                     userService.setUserEmail(item.getModelObject().getId(), textField.getModelObject());
                     item.getModelObject().setMail(textField.getModelObject());
-                    feedbackPanel.success("Email successfully changed!");
+                    feedbackPanel.success(getString("email.success"));
                 }catch (MailAlreadyInUseException e){
-                    feedbackPanel.error("Another user with this email already exists!");
+                    feedbackPanel.error(getString("email.error"));
                 }
             }
         };
@@ -130,7 +130,7 @@ public class BudgeteerAdministrationOverview extends BasePage {
         return emailResetField.add(textField, submitButton);
     }
 
-    private Component createDeleteUserButton(ListItem<User> item){
+    private Link createDeleteUserButton(ListItem<User> item){
         return new Link("deleteUserButton") {
             @Override
             public void onClick() {

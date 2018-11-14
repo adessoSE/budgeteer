@@ -196,11 +196,11 @@ public class UserService {
     public void addRoleToUser(Long userId, Long projectID, UserRole role) {
         UserEntity user = userRepository.findById(userId);
         if(user.getRoles().get(projectID) == null || user.getRoles().get(projectID).size() == 0){
-            user.getRoles().put(projectID, new ArrayList<>(Collections.singleton(role.toString())));
+            user.getRoles().put(projectID, new ArrayList<>(Collections.singleton(role)));
         }else{
-            ArrayList<String> newRoles = user.getRoles().get(projectID);
-            if(!newRoles.contains(role.toString())) {
-                newRoles.add(role.toString());
+            ArrayList<UserRole> newRoles = user.getRoles().get(projectID);
+            if(!newRoles.contains(role)) {
+                newRoles.add(role);
                 user.getRoles().put(projectID, newRoles);
             }
         }
@@ -216,8 +216,8 @@ public class UserService {
     private void removeRoleFromUser(long userId, long projectID, UserRole role) {
         UserEntity user = userRepository.findById(userId);
         if(user.getRoles().get(projectID) != null && user.getRoles().get(projectID).size() != 0){
-            ArrayList<String> newRoles = user.getRoles().get(projectID);
-            newRoles.remove(role.toString());
+            ArrayList<UserRole> newRoles = user.getRoles().get(projectID);
+            newRoles.remove(role);
             user.getRoles().put(projectID, newRoles);
             userRepository.save(user);
         }

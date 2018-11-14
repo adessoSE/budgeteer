@@ -41,7 +41,7 @@ public class LoginPage extends DialogPage {
                         BudgeteerSession.get().login(user);
                         setResponsePage(BudgeteerAdministrationOverview.class);
                     } else{
-                        error("You are not authorized to access the administration menu!");
+                        error(getString("loginForm.unauthorized"));
                     }
                 } catch (InvalidLoginCredentialsException e) {
                     error(getString("message.invalidLogin"));
@@ -51,7 +51,7 @@ public class LoginPage extends DialogPage {
         add(form);
 
         form.add(new CustomFeedbackPanel("feedback"));
-        form.add(new RequiredTextField<String>("username", model(from(form.getModel()).getUsername())));
+        form.add(new RequiredTextField<>("username", model(from(form.getModel()).getUsername())));
         form.add(new PasswordTextField("password", model(from(form.getModel()).getPassword())));
     }
 }

@@ -33,7 +33,7 @@ public class UserEntity {
 
     @Column(nullable = true, length = 1024)
     @CollectionType(type = "HashMap")
-    private HashMap<Long, ArrayList<String>> roles = new HashMap<>();
+    private HashMap<Long, ArrayList<UserRole>> roles = new HashMap<>();
 
     @Column(nullable = false)
     private UserRole globalRole = UserRole.USER;

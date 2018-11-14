@@ -11,7 +11,7 @@ import java.util.Map;
 public class User implements Serializable {
     private long id;
     private String name;
-    private Map<Long, ArrayList<String>> roles;
+    private Map<Long, ArrayList<UserRole>> roles;
     private UserRole globalRole;
     private String mail;
 }

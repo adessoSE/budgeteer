@@ -16,6 +16,7 @@ import org.wickedsource.budgeteer.web.BudgeteerReferences;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.components.instantiation.NeedsProject;
 import org.wickedsource.budgeteer.web.components.security.NeedsLogin;
+import org.wickedsource.budgeteer.web.components.user.UserRole;
 import org.wickedsource.budgeteer.web.pages.administration.ProjectAdministrationPage;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsPanel;
@@ -35,6 +36,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 @NeedsLogin
 @NeedsProject
@@ -89,17 +91,22 @@ public abstract class BasePage extends WebPage {
     }
 
     protected boolean currentUserIsAdmin() {
-        HashSet<String> roles = loadRolesFromCurrentUser();
-        return roles != null && roles.contains("admin");
+        HashSet<UserRole> roles = loadRolesFromCurrentUser();
+        return roles != null && roles.contains(UserRole.ADMIN);
     }
 
-    private HashSet<String> loadRolesFromCurrentUser() {
+    private HashSet<UserRole> loadRolesFromCurrentUser() {
         if (settings.isKeycloakActivated()) {
             HttpServletRequest request = (HttpServletRequest) getRequestCycle().getRequest().getContainerRequest();
             AccessToken accessToken = ((KeycloakPrincipal) request.getUserPrincipal()).getKeycloakSecurityContext().getToken();
-            return (HashSet<String>) accessToken.getRealmAccess().getRoles();
+            Set<String> realmRoles = accessToken.getRealmAccess().getRoles();
+            HashSet<UserRole> roles= new HashSet<>();
+            for(String s : realmRoles){
+                roles.add(UserRole.valueOf(s));
+            }
+            return roles;
         }else{
-            Map<Long, ArrayList<String>> roles = BudgeteerSession.get().getLoggedInUser().getRoles();
+            Map<Long, ArrayList<UserRole>> roles = BudgeteerSession.get().getLoggedInUser().getRoles();
             if(roles != null) {
                 return new HashSet<>(roles.get(BudgeteerSession.get().getProjectId()));
             }else{
