@@ -23,7 +23,7 @@ import java.io.Serializable;
 public class TemplateEntity implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue
     private long id;
 
     @Column(name="PROJECT_ID")

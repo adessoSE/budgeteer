@@ -20,13 +20,13 @@ import java.util.Properties;
 public class IntegrationTestConfiguration {
 
     @Bean
-    public static PropertySourcesPlaceholderConfigurer properties() throws Exception {
+    public static PropertySourcesPlaceholderConfigurer properties() {
         final PropertySourcesPlaceholderConfigurer pspc = new PropertySourcesPlaceholderConfigurer();
         Properties properties = new Properties();
 
         properties.setProperty("budgeteer.mail.activate", "false");
         properties.setProperty("adapter.keycloak.activated", "false");
-
+        properties.setProperty("flyway.enabled", "false");
         pspc.setProperties(properties);
         return pspc;
     }
