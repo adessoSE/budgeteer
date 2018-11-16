@@ -31,18 +31,18 @@ public class ResourcePlanImporter implements PlanRecordsImporter {
 
     private static int FIRST_ENTRY_ROW = 1;
 
-    private List<List<String>> skippedRecords = new LinkedList<List<String>>();
+    private List<List<String>> skippedRecords = new LinkedList<>();
     private SimpleDateFormat format = new SimpleDateFormat();
 
     @Override
     public List<ImportedPlanRecord> importFile(ImportFile file, CurrencyUnit currencyUnit) throws ImportException, InvalidFileFormatException {
-        skippedRecords.add(new LinkedList<String>());
-        LinkedList<String> filenameList = new LinkedList<String>();
+        skippedRecords.add(new LinkedList<>());
+        LinkedList<String> filenameList = new LinkedList<>();
         filenameList.add(file.getFilename());
         skippedRecords.add(filenameList);
 
         try {
-            List<ImportedPlanRecord> resultList = new ArrayList<ImportedPlanRecord>();
+            List<ImportedPlanRecord> resultList = new ArrayList<>();
             Workbook workbook = new XSSFWorkbook(file.getInputStream());
             if (!isValid(workbook)) {
                 throw new InvalidFileFormatException("Invalid file", file.getFilename());
@@ -82,7 +82,7 @@ public class ResourcePlanImporter implements PlanRecordsImporter {
     }
 
     private List<DateColumn> getDateColumns(Sheet sheet) {
-        List<DateColumn> columns = new ArrayList<DateColumn>();
+        List<DateColumn> columns = new ArrayList<>();
         int i = FIRST_ENTRY_COLUMN;
         Cell dateCell = sheet.getRow(0).getCell(i);
         while (dateCell != null && dateCell.getDateCellValue() != null) {
@@ -95,7 +95,7 @@ public class ResourcePlanImporter implements PlanRecordsImporter {
     }
 
     private List<ImportedPlanRecord> parseRow(Row row, List<DateColumn> dateColumns, CurrencyUnit currencyUnit, List<List<String>> skippedRecords) throws ImportException {
-        List<ImportedPlanRecord> recordsList = new ArrayList<ImportedPlanRecord>();
+        List<ImportedPlanRecord> recordsList = new ArrayList<>();
 
         for (DateColumn dateColumn : dateColumns) {
 
@@ -118,7 +118,7 @@ public class ResourcePlanImporter implements PlanRecordsImporter {
                     record.setDate(dateColumn.getDate());
                     recordsList.add(record);
                 } else {
-                    List<String> skippedRow = new LinkedList<String>();
+                    List<String> skippedRow = new LinkedList<>();
                     skippedRow.add(row.getCell(COLUMN_PERSON).getStringCellValue());
                     skippedRow.add(row.getCell(COLUMN_BUDGET).getStringCellValue());
                     skippedRow.add(row.getCell(COLUMN_DAILY_RATE).toString());
@@ -142,7 +142,7 @@ public class ResourcePlanImporter implements PlanRecordsImporter {
 
     @Override
     public List<String> getSupportedFileExtensions() {
-        return Arrays.asList(".xslx");
+        return Collections.singletonList(".xslx");
     }
 
     @Override
@@ -206,7 +206,7 @@ public class ResourcePlanImporter implements PlanRecordsImporter {
     public List<List<String>> getSkippedRecords() {
         //if just an empty row at the beginning and the filename is in the List of skipped records, return an empty List
         if (skippedRecords != null && skippedRecords.size() == 2) {
-            skippedRecords = new LinkedList<List<String>>();
+            skippedRecords = new LinkedList<>();
         }
         return skippedRecords;
     }

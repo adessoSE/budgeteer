@@ -30,10 +30,10 @@ public class CustomFeedbackPanel extends Panel implements IFeedback {
             final FeedbackMessage message = listItem.getModelObject();
             message.markRendered();
             WebMarkupContainer messageContainer = new WebMarkupContainer("messageContainer");
-            messageContainer.add(new AttributeAppender("class",new Model<String>(getFeedbackContainerClass(message.getLevel())), " "));
+            messageContainer.add(new AttributeAppender("class",new Model<>(getFeedbackContainerClass(message.getLevel())), " "));
 
             Label messageIcon = new Label("messageIcon","");
-            messageIcon.add(new AttributeAppender("class", new Model<String>(getFeedbackIconClass(message.getLevel()))," "));
+            messageIcon.add(new AttributeAppender("class", new Model<>(getFeedbackIconClass(message.getLevel()))," "));
             messageContainer.add(messageIcon);
 
             MultiLineLabel text = new MultiLineLabel("messageText", message.getMessage().toString());

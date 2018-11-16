@@ -43,7 +43,7 @@ public class TargetAndActualChartConfiguration extends ChartConfiguration implem
 		List<RgbColor> colorList = ChartStyling.getColors();
 
 		if (model.getObject() != null) {
-			datasets = new ArrayList<Dataset>(model.getObject().getActualSeries().size());
+			datasets = new ArrayList<>(model.getObject().getActualSeries().size());
 			for (int i = 0; i < model.getObject().getActualSeries().size(); i++) {
 				MoneySeries series = model.getObject().getActualSeries().get(i);
 				Dataset newDataset = new Dataset().setLabel(series.getName())

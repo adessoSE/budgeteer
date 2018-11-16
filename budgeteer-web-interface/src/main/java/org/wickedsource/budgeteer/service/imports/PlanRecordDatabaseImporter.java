@@ -49,7 +49,7 @@ public class PlanRecordDatabaseImporter extends RecordDatabaseImporter {
     }
 
     public void importRecords(List<ImportedPlanRecord> records, String filename) {
-        skippedRecords = new LinkedList<List<String>>();
+        skippedRecords = new LinkedList<>();
         Map<RecordKey, List<ImportedPlanRecord>> groupedRecords = groupRecords(records);
 
         //Because of Issue #70 all PlanRecords that are after the earliest of the imported ones, should be deleted
@@ -86,12 +86,12 @@ public class PlanRecordDatabaseImporter extends RecordDatabaseImporter {
     }
 
     private Map<RecordKey, List<ImportedPlanRecord>> groupRecords(List<ImportedPlanRecord> records) {
-        Map<RecordKey, List<ImportedPlanRecord>> result = new HashMap<RecordKey, List<ImportedPlanRecord>>();
+        Map<RecordKey, List<ImportedPlanRecord>> result = new HashMap<>();
         for (ImportedPlanRecord record : records) {
             RecordKey key = new RecordKey(record.getPersonName(), record.getBudgetName(), record.getDailyRate());
             List<ImportedPlanRecord> keyList = result.get(key);
             if (keyList == null) {
-                keyList = new ArrayList<ImportedPlanRecord>();
+                keyList = new ArrayList<>();
                 result.put(key, keyList);
             }
             keyList.add(record);
@@ -103,7 +103,7 @@ public class PlanRecordDatabaseImporter extends RecordDatabaseImporter {
      * Imports a list of records with the same person, budget and daily rate.
      */
     private List<List<String>> importRecordGroup(RecordKey groupKey, List<ImportedPlanRecord> records, String filename) {
-        List<List<String>> skippedRecords = new LinkedList<List<String>>();
+        List<List<String>> skippedRecords = new LinkedList<>();
         Date earliestDate = new Date(Long.MAX_VALUE);
         Date latestDate = new Date(0);
 
@@ -111,7 +111,7 @@ public class PlanRecordDatabaseImporter extends RecordDatabaseImporter {
         PersonEntity person = getPerson(groupKey.getPersonName());
         ProjectEntity project = budget.getProject();
 
-        List<PlanRecordEntity> entitiesToImport = new ArrayList<PlanRecordEntity>();
+        List<PlanRecordEntity> entitiesToImport = new ArrayList<>();
         for (ImportedPlanRecord record : records) {
             PlanRecordEntity recordEntity = new PlanRecordEntity();
             recordEntity.setDate(record.getDate());
@@ -155,7 +155,7 @@ public class PlanRecordDatabaseImporter extends RecordDatabaseImporter {
     }
 
     private List<String> getRecordAsString(PlanRecordEntity recordEntity,String filename, String reason) {
-        List<String> result = new LinkedList<String>();
+        List<String> result = new LinkedList<>();
         result.add(filename);
         result.add(recordEntity.getDate() != null ? formatter.format(recordEntity.getDate()) : "");
         result.add(recordEntity.getPerson().getName());

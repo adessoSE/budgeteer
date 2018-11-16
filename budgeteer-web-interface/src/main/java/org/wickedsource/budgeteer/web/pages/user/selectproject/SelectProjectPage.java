@@ -72,7 +72,7 @@ public class SelectProjectPage extends DialogPageWithBacklink {
     }
 
     private Form<String> createNewProjectForm(String id) {
-        Form<String> form = new Form<String>(id, new Model<String>("")) {
+        Form<String> form = new Form<String>(id, new Model<>("")) {
             @Override
             protected void onSubmit() {
                 try {
@@ -85,7 +85,7 @@ public class SelectProjectPage extends DialogPageWithBacklink {
 
             }
         };
-        form.add(new RequiredTextField<String>("projectName", form.getModel()));
+        form.add(new RequiredTextField<>("projectName", form.getModel()));
         return form;
     }
 

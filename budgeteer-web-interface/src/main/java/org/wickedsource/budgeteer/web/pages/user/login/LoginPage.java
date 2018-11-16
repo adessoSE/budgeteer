@@ -87,7 +87,7 @@ public class LoginPage extends DialogPage {
             add(form);
 
             form.add(new CustomFeedbackPanel("feedback"));
-            form.add(new RequiredTextField<String>("username", model(from(form.getModel()).getUsername())));
+            form.add(new RequiredTextField<>("username", model(from(form.getModel()).getUsername())));
             form.add(new PasswordTextField("password", model(from(form.getModel()).getPassword())));
             form.add(new BookmarkablePageLink<RegisterPage>("registerLink", RegisterPage.class));
             form.add(new BookmarkablePageLink<ForgotPasswordPage>("forgotPasswordLink", ForgotPasswordPage.class));

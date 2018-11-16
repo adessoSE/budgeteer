@@ -46,7 +46,7 @@ public class ImportService implements ApplicationContextAware {
      */
     public List<Import> loadImports(long projectId) {
         List<ImportEntity> imports = importRepository.findByProjectId(projectId);
-        List<Import> resultList = new ArrayList<Import>();
+        List<Import> resultList = new ArrayList<>();
         for (ImportEntity entity : imports) {
             Import i = new Import();
             i.setId(entity.getId());
@@ -77,7 +77,7 @@ public class ImportService implements ApplicationContextAware {
      * @return all currently registered file importers.
      */
     public List<? extends Importer> getAvailableImporters() {
-        List<Importer> importers = new ArrayList<Importer>();
+        List<Importer> importers = new ArrayList<>();
         importers.addAll(importerRegistry.getWorkingRecordsImporters());
         importers.addAll(importerRegistry.getPlanRecordsImporters());
         return importers;
@@ -91,7 +91,7 @@ public class ImportService implements ApplicationContextAware {
      */
     @Transactional(rollbackOn = ImportException.class)
     public void doImport(long projectId, Importer importer, List<ImportFile> importFiles) throws ImportException, InvalidFileFormatException {
-        skippedRecords = new LinkedList<List<String>>();
+        skippedRecords = new LinkedList<>();
         if (importer instanceof WorkRecordsImporter) {
             WorkRecordsImporter workRecordsImporter = (WorkRecordsImporter) importer;
             WorkRecordDatabaseImporter dbImporter = applicationContext.getBean(WorkRecordDatabaseImporter.class, projectId, workRecordsImporter.getDisplayName());

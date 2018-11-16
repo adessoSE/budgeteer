@@ -17,7 +17,7 @@ public class NullsafeModel<T extends Serializable> implements IModel<T> {
     }
 
     public NullsafeModel(T value, T nullValue){
-        this.wrappedModel = new Model<T>(value);
+        this.wrappedModel = new Model<>(value);
         this.nullValue = nullValue;
     }
 

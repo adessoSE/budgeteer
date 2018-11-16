@@ -24,18 +24,18 @@ public class UBWWorkRecordsImporter implements WorkRecordsImporter {
 
     private static final int COLUMN_HOURS = 10;
 
-    private List<List<String>> skippedRecords = new LinkedList<List<String>>();
+    private List<List<String>> skippedRecords = new LinkedList<>();
 
     @Override
     public List<ImportedWorkRecord> importFile(ImportFile file) throws ImportException, InvalidFileFormatException {
         try {
-            skippedRecords.add(new LinkedList<String>());
+            skippedRecords.add(new LinkedList<>());
             //Adds the name of the imported file at the beginning of the list of skipped data sets..
-            List<String> fileName = new LinkedList<String>();
+            List<String> fileName = new LinkedList<>();
             fileName.add(file.getFilename());
             skippedRecords.add(fileName);
 
-            List<ImportedWorkRecord> resultList = new ArrayList<ImportedWorkRecord>();
+            List<ImportedWorkRecord> resultList = new ArrayList<>();
             Workbook workbook = new XSSFWorkbook(file.getInputStream());
             if (!checkValidity(workbook)) {
                 throw new InvalidFileFormatException("Invalid file", file.getFilename());
@@ -82,7 +82,7 @@ public class UBWWorkRecordsImporter implements WorkRecordsImporter {
 
     @Override
     public List<String> getSupportedFileExtensions() {
-        return Arrays.asList(".xlsx");
+        return Collections.singletonList(".xlsx");
     }
 
     @Override
@@ -158,7 +158,7 @@ public class UBWWorkRecordsImporter implements WorkRecordsImporter {
     public List<List<String>> getSkippedRecords() {
         //if just an empty row at the beginning and the filename is in the List of skipped records, return an empty List
         if (skippedRecords != null && skippedRecords.size() == 2) {
-            skippedRecords = new LinkedList<List<String>>();
+            skippedRecords = new LinkedList<>();
         }
         return skippedRecords;
     }
@@ -188,7 +188,7 @@ public class UBWWorkRecordsImporter implements WorkRecordsImporter {
     }
 
     private List<String> getRowAsStrings(Row row, int index) {
-        List<String> result = new LinkedList<String>();
+        List<String> result = new LinkedList<>();
         for (short i = row.getFirstCellNum(); i < row.getLastCellNum(); i++) {
             Cell cell = row.getCell(i);
             if (cell == null) {

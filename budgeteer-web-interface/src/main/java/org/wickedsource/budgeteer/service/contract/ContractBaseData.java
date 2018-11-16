@@ -17,14 +17,15 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ContractBaseData implements Serializable{
+public class ContractBaseData implements Serializable {
     private long contractId;
     private long projectId;
     private String contractName;
+    private Integer sortingIndex;
     private Money budget;
     private Money budgetSpent;
     private Money budgetLeft;
-    private double taxRate; 
+    private double taxRate;
     private String internalNumber;
     private Date startDate;
     private ContractEntity.ContractType type;
@@ -34,8 +35,8 @@ public class ContractBaseData implements Serializable{
 
     private List<BudgetBaseData> belongingBudgets;
 
-    public ContractBaseData(long projectId){
+    public ContractBaseData(long projectId) {
         this.projectId = projectId;
-        contractAttributes = new LinkedList<DynamicAttributeField>();
+        contractAttributes = new LinkedList<>();
     }
 }

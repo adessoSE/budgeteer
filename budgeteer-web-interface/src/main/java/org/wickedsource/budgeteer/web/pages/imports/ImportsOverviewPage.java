@@ -80,7 +80,7 @@ public class ImportsOverviewPage extends BasePage {
             }
             @Override
             protected ListItem<Import> newItem(int index, IModel<Import> itemModel) {
-                return super.newItem(index, new ClassAwareWrappingModel<Import>(itemModel, Import.class));
+                return super.newItem(index, new ClassAwareWrappingModel<>(itemModel, Import.class));
             }
         };
     }
