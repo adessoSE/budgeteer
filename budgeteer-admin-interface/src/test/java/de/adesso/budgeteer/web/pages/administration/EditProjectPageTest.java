@@ -24,7 +24,7 @@ public class EditProjectPageTest extends AbstractWebTestTemplate {
         user1.setId(1L);
         user1.setMail("maxim@adesso.de");
         user1.setGlobalRole(UserRole.ADMIN);
-        HashMap<Long, ArrayList<UserRole>> user1projectRoles = new HashMap<>();
+        Map<Long, List<UserRole>> user1projectRoles = new HashMap<>();
         user1projectRoles.put(1L, new ArrayList<>(Collections.singletonList(UserRole.ADMIN)));
         user1.setRoles(user1projectRoles);
 
@@ -50,7 +50,7 @@ public class EditProjectPageTest extends AbstractWebTestTemplate {
         user1.setId(1L);
         user1.setMail("maxim@adesso.de");
         user1.setGlobalRole(UserRole.ADMIN);
-        HashMap<Long, ArrayList<UserRole>> user1projectRoles = new HashMap<>();
+        Map<Long, List<UserRole>> user1projectRoles = new HashMap<>();
         user1projectRoles.put(1L, new ArrayList<>(Collections.singletonList(UserRole.ADMIN)));
         user1.setRoles(user1projectRoles);
 
@@ -59,7 +59,7 @@ public class EditProjectPageTest extends AbstractWebTestTemplate {
         user2.setId(2L);
         user2.setMail("kilian@adesso.de");
         user2.setGlobalRole(UserRole.USER);
-        HashMap<Long, ArrayList<UserRole>> user2projectRoles = new HashMap<>();
+        Map<Long, List<UserRole>> user2projectRoles = new HashMap<>();
         user2projectRoles.put(1L, new ArrayList<>(Collections.singletonList(UserRole.USER)));
         user2.setRoles(user2projectRoles);
 
@@ -93,7 +93,7 @@ public class EditProjectPageTest extends AbstractWebTestTemplate {
         user1.setId(1L);
         user1.setMail("maxim@adesso.de");
         user1.setGlobalRole(UserRole.ADMIN);
-        HashMap<Long, ArrayList<UserRole>> user1projectRoles = new HashMap<>();
+        Map<Long, List<UserRole>> user1projectRoles = new HashMap<>();
         user1projectRoles.put(1L, new ArrayList<>(Collections.singletonList(UserRole.ADMIN)));
         user1.setRoles(user1projectRoles);
 
@@ -102,7 +102,7 @@ public class EditProjectPageTest extends AbstractWebTestTemplate {
         user2.setId(2L);
         user2.setMail("kilian@adesso.de");
         user2.setGlobalRole(UserRole.USER);
-        HashMap<Long, ArrayList<UserRole>> user2projectRoles = new HashMap<>();
+        Map<Long, List<UserRole>> user2projectRoles = new HashMap<>();
         user2projectRoles.put(1L, new ArrayList<>(Collections.singletonList(UserRole.ADMIN)));
         user2.setRoles(user2projectRoles);
 

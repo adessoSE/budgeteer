@@ -104,7 +104,7 @@ public abstract class AbstractWebTestTemplate {
             user.setName("User " + i);
             user.setMail("mail@mail.de");
             user.setGlobalRole(UserRole.USER);
-            HashMap<Long, ArrayList<UserRole>> userprojectRoles = new HashMap<>();
+            Map<Long, List<UserRole>> userprojectRoles = new HashMap<>();
             userprojectRoles.put(1L, new ArrayList<>(Collections.singletonList(UserRole.ADMIN)));
             user.setRoles(userprojectRoles);
             users.add(user);
