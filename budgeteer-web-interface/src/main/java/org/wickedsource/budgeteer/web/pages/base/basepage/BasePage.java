@@ -33,10 +33,7 @@ import org.wickedsource.budgeteer.web.settings.BudgeteerSettings;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @NeedsLogin
 @NeedsProject
@@ -106,12 +103,7 @@ public abstract class BasePage extends WebPage {
             }
             return roles;
         }else{
-            Map<Long, ArrayList<UserRole>> roles = BudgeteerSession.get().getLoggedInUser().getRoles();
-            if(roles != null) {
-                return new HashSet<>(roles.get(BudgeteerSession.get().getProjectId()));
-            }else{
-                return new HashSet<>();
-            }
+            return new HashSet<>(BudgeteerSession.get().getLoggedInUser().getRoles(BudgeteerSession.get().getProjectId()));
         }
     }
 

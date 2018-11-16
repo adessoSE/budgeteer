@@ -117,7 +117,7 @@ public class ProjectAdministrationPage extends BasePage {
 
                 List<UserRole> choices = Arrays.asList(UserRole.values());
                 ListMultipleChoice<UserRole> makeAdminList = new ListMultipleChoice<>("roleDropdown", new Model<>(
-                        new ArrayList<>(item.getModelObject().getRoles().get(projectID))), choices);
+                        new ArrayList<>(item.getModelObject().getRoles(projectID))), choices);
                 HashMap<String, String> options = new HashMap<>();
                 options.clear();
                 options.put("buttonWidth","'120px'");
@@ -130,7 +130,7 @@ public class ProjectAdministrationPage extends BasePage {
                             //Check if the user is losing admin privileges and ask if they are sure
                             if(item.getModelObject().getId() == thisUser.getId() &&
                                     !makeAdminList.getModelObject().contains(UserRole.ADMIN)
-                                    && item.getModelObject().getRoles().get(projectID).contains(UserRole.ADMIN)){
+                                    && item.getModelObject().getRoles(projectID).contains(UserRole.ADMIN)){
                                 setResponsePage(
                                         new DeleteDialog() {
                                             @Override
@@ -176,7 +176,7 @@ public class ProjectAdministrationPage extends BasePage {
                     deleteButton.setVisible(false);
                     makeAdminList.setVisible(false);
                     for(User e : usersInProjects){
-                        if(e.getId() != thisUser.getId() && e.getRoles().get(projectID).contains(UserRole.ADMIN)){
+                        if(e.getId() != thisUser.getId() && e.getRoles(projectID).contains(UserRole.ADMIN)){
                             deleteButton.setVisible(true);
                             makeAdminList.setVisible(true);
                             break;

@@ -8,9 +8,7 @@ import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
 import org.wickedsource.budgeteer.web.components.user.UserRole;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name = "BUDGETEER_USER",
@@ -32,8 +30,7 @@ public class UserEntity {
     private String password;
 
     @Column(nullable = true, length = 1024)
-    @CollectionType(type = "HashMap")
-    private HashMap<Long, ArrayList<UserRole>> roles = new HashMap<>();
+    private HashMap<Long, List<UserRole>> roles;
 
     @Column(nullable = false)
     private UserRole globalRole = UserRole.USER;
