@@ -2,14 +2,10 @@ package org.wickedsource.budgeteer.service.manualRecord;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.persistence.budget.BudgetEntity;
 import org.wickedsource.budgeteer.persistence.budget.BudgetRepository;
-import org.wickedsource.budgeteer.persistence.manualRecord.ManualRecord;
 import org.wickedsource.budgeteer.persistence.manualRecord.ManualRecordEntity;
 import org.wickedsource.budgeteer.persistence.manualRecord.ManualRecordRepository;
-import org.wickedsource.budgeteer.persistence.record.MonthlyAggregatedRecordWithTaxBean;
-import org.wickedsource.budgeteer.persistence.record.WeeklyAggregatedRecordWithTitleAndTaxBean;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
@@ -26,7 +22,6 @@ public class ManualRecordService {
     private BudgetRepository budgetRepository;
 
     public List<ManualRecord> getManualRecords(long budgetId) {
-
         List<ManualRecordEntity> entities = manualRecordRepository.getManualRecordByBudgetId(budgetId);
         List<ManualRecord> result = new ArrayList<>();
 
@@ -38,16 +33,33 @@ public class ManualRecordService {
         return result;
     }
 
-    public void saveManualRecord(ManualRecord data) {
+    public ManualRecord loadManualRecord(long manualRecordId) {
+        return new ManualRecord(manualRecordRepository.findOne(manualRecordId));
+    }
+
+    public long saveManualRecord(ManualRecord data) {
         assert data != null;
 
         ManualRecordEntity record = new ManualRecordEntity();
+        record.setId(data.getId());
         record.setDescription(data.getDescription());
-        record.setCents((int) (MoneyUtil.toDouble(data.getMoneyAmount()) * 100));
-        record.setDate(new Date());
+        record.setMoneyAmount(data.getMoneyAmount());
+        record.setCreationDate(new Date());
+
+        if (data.getBillingDate() == null) {
+            data.setBillingDate(new Date());
+        }
+
+        record.setBillingDate(data.getBillingDate());
         BudgetEntity budgetEntity = budgetRepository.findOne(data.getBudgetId());
         record.setBudget(budgetEntity);
 
         manualRecordRepository.save(record);
+
+        return record.getId();
+    }
+
+    public void deleteRecord(long id) {
+        manualRecordRepository.delete(id);
     }
 }

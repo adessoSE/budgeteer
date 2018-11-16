@@ -1,9 +1,9 @@
-package org.wickedsource.budgeteer.persistence.manualRecord;
+package org.wickedsource.budgeteer.service.manualRecord;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.joda.money.Money;
-import org.wickedsource.budgeteer.MoneyUtil;
+import org.wickedsource.budgeteer.persistence.manualRecord.ManualRecordEntity;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -15,7 +15,8 @@ public class ManualRecord implements Serializable {
     private long budgetId;
     private String description;
     private Money moneyAmount;
-    private Date date;
+    private Date creationDate;
+    private Date billingDate;
 
     public ManualRecord(long budgetId) {
         this.budgetId = budgetId;
@@ -26,7 +27,8 @@ public class ManualRecord implements Serializable {
         id = entity.getId();
         budgetId = entity.getBudget().getId();
         description = entity.getDescription();
-        moneyAmount = MoneyUtil.createMoneyFromCents(entity.getCents());
-        date = entity.getDate();
+        moneyAmount = entity.getMoneyAmount();
+        creationDate = entity.getCreationDate();
+        billingDate = entity.getBillingDate();
     }
 }

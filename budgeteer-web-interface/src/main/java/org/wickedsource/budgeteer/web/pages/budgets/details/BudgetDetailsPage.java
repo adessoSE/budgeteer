@@ -84,7 +84,7 @@ public class BudgetDetailsPage extends BasePage {
                 });
             }
         };
-        if(this.model.getObject().getContractName() != null){
+        if (this.model.getObject().getContractName() != null) {
             deleteForm.setEnabled(false);
             deleteForm.add(new AttributeAppender("style", "cursor: not-allowed;", " "));
             deleteForm.add(new AttributeModifier("title", getString("contract.still.exist")));
@@ -126,7 +126,7 @@ public class BudgetDetailsPage extends BasePage {
         return new Link(id) {
             @Override
             public void onClick() {
-                WebPage page = new EditBudgetPage(BasePage.createParameters(getParameterId()),BudgetDetailsPage.class, getPageParameters(), false);
+                WebPage page = new EditBudgetPage(BasePage.createParameters(getParameterId()), BudgetDetailsPage.class, getPageParameters(), false);
                 setResponsePage(page);
             }
         };

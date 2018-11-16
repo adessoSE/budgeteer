@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.joda.money.Money;
 import org.wickedsource.budgeteer.persistence.budget.BudgetEntity;
 
 import javax.persistence.*;
@@ -25,15 +26,19 @@ public class ManualRecordEntity {
     private String description;
 
     @Column(nullable = false)
-    private int cents;
+    private Money moneyAmount;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "BUDGET_ID")
     private BudgetEntity budget;
 
     @Temporal(TemporalType.DATE)
-    @Column(name="RECORD_DATE", nullable = false)
-    private Date date;
+    @Column(name="CREATION_DATE", nullable = false)
+    private Date creationDate;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name="BILLING_DATE", nullable = false)
+    private Date billingDate;
 
     @Column(name="RECORD_YEAR", nullable = false)
     private int year;
@@ -47,10 +52,10 @@ public class ManualRecordEntity {
     @Column(name="RECORD_WEEK", nullable = false)
     private int week;
 
-    public void setDate(Date date) {
+    public void setBillingDate(Date date) {
         Calendar c = Calendar.getInstance();
         c.setTime(date);
-        this.date = date;
+        this.billingDate = date;
         this.year = c.get(Calendar.YEAR);
         this.month = c.get(Calendar.MONTH);
         this.day = c.get(Calendar.DAY_OF_MONTH);
@@ -70,7 +75,7 @@ public class ManualRecordEntity {
         if (week != that.week) return false;
         if (year != that.year) return false;
         if (budget != null ? !budget.equals(that.budget) : that.budget != null) return false;
-        if (date != null ? !date.equals(that.date) : that.date != null) return false;
+        if (creationDate != null ? !creationDate.equals(that.creationDate) : that.creationDate != null) return false;
 
         return true;
     }
@@ -79,7 +84,7 @@ public class ManualRecordEntity {
     public int hashCode() {
         int result = (int) (id ^ (id >>> 32));
         result = 31 * result + (budget != null ? budget.hashCode() : 0);
-        result = 31 * result + (date != null ? date.hashCode() : 0);
+        result = 31 * result + (creationDate != null ? creationDate.hashCode() : 0);
         result = 31 * result + year;
         result = 31 * result + month;
         result = 31 * result + day;

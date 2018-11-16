@@ -6,7 +6,6 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.persistence.manualRecord.ManualRecordModel;
 import org.wickedsource.budgeteer.service.manualRecord.ManualRecordService;
-import org.wickedsource.budgeteer.service.record.RecordService;
 import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.pages.base.basepage.BasePage;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.Breadcrumb;
@@ -22,9 +21,6 @@ import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 public class ManualRecordOverviewPage extends BasePage {
 
     @SpringBean
-    private RecordService recordService;
-
-    @SpringBean
     private ManualRecordService manualRecordService;
 
     private ManualRecordModel model;
@@ -32,7 +28,7 @@ public class ManualRecordOverviewPage extends BasePage {
     public ManualRecordOverviewPage(PageParameters parameters) {
         super(parameters);
         model = new ManualRecordModel(getPageParameters().get("id").toLong(), manualRecordService);
-        add(new ManualRecordOverviewTable("recordTable", model));
+        add(new ManualRecordOverviewTable("recordTable", model, parameters));
         add(createManualRecordLink("addRecordLink"));
     }
 

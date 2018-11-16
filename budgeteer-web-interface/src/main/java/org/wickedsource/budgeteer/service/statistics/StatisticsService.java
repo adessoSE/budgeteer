@@ -814,8 +814,6 @@ public class StatisticsService {
         currentDate.setTime(new Date());
         while (cal.before(currentDate)) {
             ContractStatisticBean bean = contractRepository.getContractStatisticAggregatedByMonthAndYear(contractId, cal.get(Calendar.MONTH), cal.get(Calendar.YEAR));
-            long manual = Math.round(manualRecordRepository.getManualRecordSumForContractUntilMonthAndYear(contractId, cal.get(Calendar.MONTH), cal.get(Calendar.YEAR)));
-            bean.setSpentBudget(bean.getSpentBudget()+ manual);
             result.add(bean);
             cal.add(Calendar.MONTH, 1);
         }
@@ -830,8 +828,6 @@ public class StatisticsService {
         currentDate.setTime(new Date());
         while (cal.before(currentDate)) {
             ContractStatisticBean bean = contractRepository.getContractStatisticByMonthAndYear(contractId, cal.get(Calendar.MONTH), cal.get(Calendar.YEAR));
-            long manual = Math.round(manualRecordRepository.getManualRecordSumForContractByMonthAndYear(contractId, cal.get(Calendar.MONTH), cal.get(Calendar.YEAR)));
-            bean.setSpentBudget(bean.getSpentBudget()+manual);
             result.add(bean);
             cal.add(Calendar.MONTH, 1);
         }

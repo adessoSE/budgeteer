@@ -40,7 +40,7 @@ public class ContractDataMapper extends AbstractMapper<ContractEntity, ContractB
         result.setContractId(entity.getId());
         result.setBudget(entity.getBudget());
         result.setBudgetLeft(toMoneyNullsafe(contractRepository.getBudgetLeftByContractId(entity.getId())));
-        result.setBudgetSpent(toMoneyNullsafe(contractRepository.getSpentBudgetByContractId(entity.getId()) + manualRecordRepository.getManualRecordSumForContract(entity.getId())));
+        result.setBudgetSpent(toMoneyNullsafe(contractRepository.getSpentBudgetByContractId(entity.getId())));
         result.setInternalNumber(entity.getInternalNumber());
         result.setProjectId(entity.getProject().getId());
         result.setType(entity.getType());

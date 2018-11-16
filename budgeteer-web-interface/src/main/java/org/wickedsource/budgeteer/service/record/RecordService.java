@@ -8,7 +8,6 @@ import org.wickedsource.budgeteer.persistence.budget.BudgetRepository;
 import org.wickedsource.budgeteer.persistence.record.*;
 import org.wickedsource.budgeteer.persistence.manualRecord.ManualRecordRepository;
 import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
-import org.wickedsource.budgeteer.service.manualRecord.ManualRecordService;
 import org.wickedsource.budgeteer.service.statistics.MonthlyStats;
 
 import javax.transaction.Transactional;
@@ -153,7 +152,6 @@ public class RecordService {
             workRecords = workRecordRepository.aggregateByWeekAndPersonForBudgetsWithTax(budgetFilter.getProjectId());
             planRecords = planRecordRepository.aggregateByWeekForBudgetsWithTax(budgetFilter.getProjectId());
             manualWorkRecords = manualRecordRepository.aggregateByWeekForBudgetsWithTax(budgetFilter.getProjectId());
-
         } else {
             workRecords = workRecordRepository.aggregateByWeekAndPersonForBudgetsWithTax(budgetFilter.getProjectId(), budgetFilter.getSelectedTags());
             planRecords = planRecordRepository.aggregateByWeekForBudgetsWithTax(budgetFilter.getProjectId(), budgetFilter.getSelectedTags());
