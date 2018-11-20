@@ -40,7 +40,7 @@ public class InvoiceDataMapper extends AbstractMapper<InvoiceEntity, InvoiceBase
         result.setSum_gross(MoneyUtil.getMoneyWithTaxes(result.getSum(), taxRate));
         result.setTaxAmount(MoneyUtil.getTaxAmount(result.getSum(), taxRate));
 
-        HashMap<String, DynamicAttributeField> dynamicAttributeFieldMap = new HashMap<String, DynamicAttributeField>();
+        HashMap<String, DynamicAttributeField> dynamicAttributeFieldMap = new HashMap<>();
         if (attributeFieldMap != null) {
             Iterator it = attributeFieldMap.entrySet().iterator();
             while (it.hasNext()) {
@@ -57,7 +57,7 @@ public class InvoiceDataMapper extends AbstractMapper<InvoiceEntity, InvoiceBase
         for (InvoiceFieldEntity fieldEntity : entity.getDynamicFields()) {
             dynamicAttributeFieldMap.put(fieldEntity.getField().getFieldName(), new DynamicAttributeField(fieldEntity.getField().getFieldName(), fieldEntity.getValue()));
         }
-        result.setDynamicInvoiceFields(new ArrayList<DynamicAttributeField>(dynamicAttributeFieldMap.values()));
+        result.setDynamicInvoiceFields(new ArrayList<>(dynamicAttributeFieldMap.values()));
 
         return result;
     }
@@ -70,8 +70,8 @@ public class InvoiceDataMapper extends AbstractMapper<InvoiceEntity, InvoiceBase
      * @return
      */
     public List<InvoiceBaseData> map(List<InvoiceEntity> entityList, boolean differentProjects) {
-        List<InvoiceBaseData> result = new LinkedList<InvoiceBaseData>();
-        HashMap<String, DynamicAttributeField> attributeFieldMap = new HashMap<String, DynamicAttributeField>();
+        List<InvoiceBaseData> result = new LinkedList<>();
+        HashMap<String, DynamicAttributeField> attributeFieldMap = new HashMap<>();
         if (differentProjects) {
             for (InvoiceEntity entity : entityList) {
                 for (ContractInvoiceField contractInvoiceField : entity.getContract().getInvoiceFields()) {

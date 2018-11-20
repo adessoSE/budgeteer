@@ -9,7 +9,6 @@ import org.wickedsource.budgeteer.persistence.record.MissingDailyRateBean;
 import org.wickedsource.budgeteer.persistence.record.MissingDailyRateForBudgetBean;
 import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
 import org.wickedsource.budgeteer.service.ServiceTestTemplate;
-import org.wickedsource.budgeteer.web.BudgeteerSession;
 
 import java.util.Arrays;
 import java.util.Date;

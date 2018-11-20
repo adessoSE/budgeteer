@@ -51,16 +51,16 @@ public class BudgetEntity implements Comparable<BudgetEntity> {
     private ProjectEntity project;
 
     @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "budget")
-    private List<BudgetTagEntity> tags = new ArrayList<BudgetTagEntity>();
+    private List<BudgetTagEntity> tags = new ArrayList<>();
 
     @OneToMany(mappedBy = "budget", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    private List<WorkRecordEntity> workRecords = new ArrayList<WorkRecordEntity>();
+    private List<WorkRecordEntity> workRecords = new ArrayList<>();
 
     @OneToMany(mappedBy = "budget", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    private List<PlanRecordEntity> planRecords = new ArrayList<PlanRecordEntity>();
+    private List<PlanRecordEntity> planRecords = new ArrayList<>();
 
     @OneToMany(mappedBy = "budget", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    private List<DailyRateEntity> dailyRates = new ArrayList<DailyRateEntity>();
+    private List<DailyRateEntity> dailyRates = new ArrayList<>();
 
     @Column(nullable = false, name = "IMPORT_KEY", length = 255)
     private String importKey;

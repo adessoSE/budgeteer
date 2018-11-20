@@ -24,7 +24,7 @@ public class RecordJoiner {
             record.setBudgetBurned_net(MoneyUtil.createMoneyFromCents(bean.getValueInCents()));
             record.setHours(bean.getHours());
         }
-        List<AggregatedRecord> records = new ArrayList<AggregatedRecord>(recordMap.values());
+        List<AggregatedRecord> records = new ArrayList<>(recordMap.values());
         Collections.sort(records, new AggregatedRecordComparator());
         return records;
     }
@@ -107,7 +107,7 @@ public class RecordJoiner {
             record.setBudgetBurned_net(MoneyUtil.createMoneyFromCents(bean.getValueInCents()));
             record.setHours(bean.getHours());
         }
-        List<AggregatedRecord> records = new ArrayList<AggregatedRecord>(recordMap.values());
+        List<AggregatedRecord> records = new ArrayList<>(recordMap.values());
         Collections.sort(records, new AggregatedRecordComparator());
         return records;
     }

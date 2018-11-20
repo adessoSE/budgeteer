@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 public class BudgetTagFilter implements Serializable {
 
-    private List<String> selectedTags = new ArrayList<String>();
+    private List<String> selectedTags = new ArrayList<>();
 
     private long projectId;
 

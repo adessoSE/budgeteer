@@ -9,8 +9,6 @@ import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.pages.base.dialogpage.DialogPageWithBacklink;
 import org.wickedsource.budgeteer.web.pages.templates.TemplatesPage;
-import org.wickedsource.budgeteer.web.pages.templates.table.TemplateListModel;
-import org.wickedsource.budgeteer.web.pages.templates.table.TemplatesTable;
 import org.wickedsource.budgeteer.web.pages.templates.templateimport.TemplateFormInputDto;
 
 import static org.wicketstuff.lazymodel.LazyModel.from;

@@ -44,9 +44,11 @@ public class ContractService {
         return result;
     }
 
+
     @PreAuthorize("canReadContract(#contractId)")
     public ContractBaseData getContractById(long contractId) {
-        return mapper.map(contractRepository.findOne(contractId));
+        ContractBaseData data = mapper.map(contractRepository.findOne(contractId));
+        return data;
     }
 
     @PreAuthorize("canReadProject(#projectId)")
@@ -85,6 +87,7 @@ public class ContractService {
         contractEntity.setLink(contractBaseData.getFileModel().getLink());
         contractEntity.setFileName(contractBaseData.getFileModel().getFileName());
         contractEntity.setFile(contractBaseData.getFileModel().getFile());
+
         if (contractBaseData.getTaxRate() < 0) {
             throw new IllegalArgumentException("Taxrate must be positive.");
         } else {

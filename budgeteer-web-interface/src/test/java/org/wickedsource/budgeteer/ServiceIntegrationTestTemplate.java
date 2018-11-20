@@ -15,5 +15,4 @@ public class ServiceIntegrationTestTemplate {
         // set a placeholder authentication
         SecurityContextHolder.getContext().setAuthentication(new BudgeteerAuthenticationToken("user"));
     }
-
 }

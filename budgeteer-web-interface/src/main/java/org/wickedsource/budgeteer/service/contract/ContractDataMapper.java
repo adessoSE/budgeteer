@@ -33,11 +33,13 @@ public class ContractDataMapper extends AbstractMapper<ContractEntity, ContractB
 
     @Override
     public ContractBaseData map(ContractEntity entity) {
-        if (entity == null)
+        if (entity == null) {
             return null;
+        }
         ContractBaseData result = new ContractBaseData();
         result.setContractName(entity.getName());
         result.setContractId(entity.getId());
+        result.setSortingIndex(0);
         result.setBudget(entity.getBudget());
         result.setBudgetLeft(toMoneyNullsafe(contractRepository.getBudgetLeftByContractId(entity.getId())));
         result.setBudgetSpent(toMoneyNullsafe(contractRepository.getSpentBudgetByContractId(entity.getId())));

@@ -23,7 +23,7 @@ import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 
 
 @Mount("contracts")
-public class ContractOverviewPage extends BasePage{
+public class ContractOverviewPage extends BasePage {
 
     @SpringBean
     private ContractService contractService;
@@ -44,11 +44,9 @@ public class ContractOverviewPage extends BasePage{
             }
         });
 
-
         add(createReportLink("createReportLink"));
         add(createNetGrossLink("netGrossLink"));
     }
-
 
     private Link createNetGrossLink(String string) {
         Link link = new Link(string) {
@@ -82,7 +80,7 @@ public class ContractOverviewPage extends BasePage{
             link.add(new AttributeModifier("title", ContractOverviewPage.this.getString("links.contract.label.no.contract")));
         }
         return link;
-	}
+    }
 
     @SuppressWarnings("unchecked")
     @Override

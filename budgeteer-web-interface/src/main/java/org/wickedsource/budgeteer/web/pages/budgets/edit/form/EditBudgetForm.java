@@ -127,7 +127,7 @@ public class EditBudgetForm extends Form<EditBudgetData> {
 
             @Override
             protected ListItem<String> newItem(int index, IModel<String> itemModel) {
-                return super.newItem(index, new ClassAwareWrappingModel<String>(itemModel, String.class));
+                return super.newItem(index, new ClassAwareWrappingModel<>(itemModel, String.class));
             }
         };
     }

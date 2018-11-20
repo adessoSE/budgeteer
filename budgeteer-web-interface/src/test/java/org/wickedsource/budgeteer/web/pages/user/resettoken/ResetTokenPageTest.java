@@ -6,12 +6,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.budgeteer.persistence.user.UserEntity;
-import org.wickedsource.budgeteer.service.user.EditUserData;
 import org.wickedsource.budgeteer.service.user.UserIdNotFoundException;
 import org.wickedsource.budgeteer.service.user.UserService;
 import org.wickedsource.budgeteer.web.AbstractWebTestTemplate;
 
-import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
 
 public class ResetTokenPageTest extends AbstractWebTestTemplate {

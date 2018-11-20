@@ -8,7 +8,7 @@ import java.util.List;
 
 @Data
 public class ContractDetailBudgetChart {
-    private List<Money> remainingTotalBudget = new LinkedList<Money>();
-    private List<Money> burnedMoneyAllBudgets = new LinkedList<Money>();
-    private List<Money> burnedMoneyInvoice = new LinkedList<Money>();
+    private List<Money> remainingTotalBudget = new LinkedList<>();
+    private List<Money> burnedMoneyAllBudgets = new LinkedList<>();
+    private List<Money> burnedMoneyInvoice = new LinkedList<>();
 }

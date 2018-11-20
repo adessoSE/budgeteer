@@ -85,7 +85,7 @@ public class AggregatedRecordTable extends Panel {
 
             @Override
             protected ListItem<AggregatedRecord> newItem(int index, IModel<AggregatedRecord> itemModel) {
-                return super.newItem(index, new ClassAwareWrappingModel<AggregatedRecord>(itemModel, AggregatedRecord.class));
+                return super.newItem(index, new ClassAwareWrappingModel<>(itemModel, AggregatedRecord.class));
             }
         };
     }

@@ -66,7 +66,7 @@ dependencies {
             [group: 'org.apache.wicket', name: 'wicket-extensions', version: "${wicket_spring_version}"],
             [group: 'org.wicketstuff', name: 'wicketstuff-lazymodel', version: "${wicketstuff_lazymodel_version}"],
             [group: 'org.wicketstuff', name: 'wicketstuff-tinymce4', version: "${wicketstuff_tinymce4_version}"],
-            [group: 'de.adesso.wicked-charts', name: 'wicked-charts-wicket7', version: "${wicketcharts_version}"]
+            [group: 'de.adesso.wicked-charts', name: 'wicked-charts-wicket7', version: "${wickedcharts_version}"]
     )
 
     compile group: 'org.springframework', name: 'spring-webmvc', version: "${spring_version}"
@@ -171,10 +171,18 @@ bootRun {
             //'-Dspring.datasource.url=jdbc:hsqldb:file:../../database/budgeteer;shutdown=true;hsqldb.write_delay=false;',
             '-Dspring.datasource.url=jdbc:hsqldb:mem:budgeteer',
             //'-Dspring.datasource.url=jdbc:hsqldb:hsql://localhost/budgeteer',
-            //'-Dspring.datasource.driverClassName=org.hsqldb.jdbcDriver',
+            '-Dspring.datasource.driverClassName=org.hsqldb.jdbcDriver',
+            '-Dspring.jpa.properties.hibernate.dialect=',
             '-Dspring.datasource.username=sa',
             '-Dspring.datasource.password=',
-            '-Dspring.jpa.hibernate.ddl-auto=update'
+            '-Dflyway.enabled=false',
+            '-Dspring.jpa.hibernate.ddl-auto=update';
+}
+
+test {
+    systemProperties = [
+            'flyway.enabled': 'false'
+    ]
 }
 
 idea {
@@ -220,6 +228,7 @@ sourceCompatibility = 1.8
 ext {
     bintrayUser = System.getProperty("bintray.user")
     bintrayKey = System.getProperty("bintray.key")
+    buildNumber = System.getProperty("build.number")
 }
 
 def pomConfig = {
@@ -256,6 +265,7 @@ artifactory {
             publications('mavenPublication')
             publishArtifacts = true
             properties = [
+                    'build.number': buildNumber,
                     'build.name'  : project.name
             ]
         }
@@ -263,6 +273,7 @@ artifactory {
     resolve {
         repoKey = 'jcenter'
     }
+    clientConfig.info.setBuildNumber(buildNumber)
     clientConfig.info.setBuildName(project.name)
 }
 
@@ -278,6 +289,7 @@ bintray {
         licenses = ['MIT']
         vcsUrl = 'https://github.com/adessoag/budgeteer'
         version {
+            desc = "build ${buildNumber}"
             name = project.version
             released = new Date()
         }

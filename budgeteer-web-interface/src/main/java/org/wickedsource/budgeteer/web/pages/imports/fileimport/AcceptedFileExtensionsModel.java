@@ -9,7 +9,7 @@ import java.util.List;
 
 public class AcceptedFileExtensionsModel extends AbstractReadOnlyModel<String> {
 
-    private List<String> acceptedExtensions = new ArrayList<String>();
+    private List<String> acceptedExtensions = new ArrayList<>();
 
     public AcceptedFileExtensionsModel(Importer importer) {
         acceptedExtensions.addAll(importer.getSupportedFileExtensions());

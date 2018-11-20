@@ -48,7 +48,7 @@ public class SelectProjectWithKeycloakPage extends DialogPage {
     }
 
     private Form<String> createNewProjectForm(String id) {
-        Form<String> form = new Form<String>(id, new Model<String>("")) {
+        Form<String> form = new Form<String>(id, new Model<>("")) {
             @Override
             protected void onSubmit() {
                 try {
@@ -61,7 +61,7 @@ public class SelectProjectWithKeycloakPage extends DialogPage {
 
             }
         };
-        form.add(new RequiredTextField<String>("projectName", form.getModel()));
+        form.add(new RequiredTextField<>("projectName", form.getModel()));
         return form;
     }
 
@@ -73,9 +73,9 @@ public class SelectProjectWithKeycloakPage extends DialogPage {
                 return projectService.getDefaultProjectForUser(BudgeteerSession.get().getLoggedInUser().getId());
             }
         };
-        final Form<ProjectBaseData> form = new Form<ProjectBaseData>("chooseProjectForm", defaultProjectModel);
+        final Form<ProjectBaseData> form = new Form<>("chooseProjectForm", defaultProjectModel);
 
-        DropDownChoice<ProjectBaseData> choice = new DropDownChoice<ProjectBaseData>("projectChoice", form.getModel(), new ProjectsForUserModel(BudgeteerSession.get().getLoggedInUser().getId()), new ProjectChoiceRenderer());
+        DropDownChoice<ProjectBaseData> choice = new DropDownChoice<>("projectChoice", form.getModel(), new ProjectsForUserModel(BudgeteerSession.get().getLoggedInUser().getId()), new ProjectChoiceRenderer());
         choice.setRequired(true);
         choice.add(new OnChangeAjaxBehavior() {
             @Override

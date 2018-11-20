@@ -55,7 +55,7 @@ public class ImportTemplatesPage extends DialogPageWithBacklink {
     private static final AttributeModifier starUnchecked = new AttributeModifier("class", "btn bg-olive glyphicon glyphicon-star-empty");
 
 
-    private List<FileUpload> fileUploads = new ArrayList<FileUpload>();
+    private List<FileUpload> fileUploads = new ArrayList<>();
 
     ReportType exampleTemplateType = ReportType.BUDGET_REPORT;
 
@@ -69,7 +69,7 @@ public class ImportTemplatesPage extends DialogPageWithBacklink {
         IModel formModel = model(from(templateFormInputDto));
 
         this.setDefaultModel(formModel);
-        final Form<TemplateFormInputDto> form = new Form<TemplateFormInputDto>("importForm", new ClassAwareWrappingModel<>(new Model<>(new TemplateFormInputDto(BudgeteerSession.get().getProjectId())), TemplateFormInputDto.class));
+        final Form<TemplateFormInputDto> form = new Form<>("importForm", new ClassAwareWrappingModel<>(new Model<>(new TemplateFormInputDto(BudgeteerSession.get().getProjectId())), TemplateFormInputDto.class));
         form.setMultiPart(true);
 
         add(form);

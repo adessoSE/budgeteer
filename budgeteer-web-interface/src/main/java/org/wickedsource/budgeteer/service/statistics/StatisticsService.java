@@ -655,7 +655,6 @@ public class StatisticsService {
         List<MonthlyAggregatedRecordWithTitleAndTaxBean> burnedStats;
         List<MonthlyAggregatedRecordWithTaxBean> plannedStats;
         List<MonthlyAggregatedRecordWithTitleAndTaxBean> manualBurnedStats;
-
         if (budgetFilter.getSelectedTags().isEmpty()) {
             // aggregate all budgets
             burnedStats = workRecordRepository.aggregateByMonthAndPersonForBudgetsWithTax(budgetFilter.getProjectId(), startDate);

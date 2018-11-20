@@ -32,4 +32,6 @@
 
     <mockito:mock id="manualRecordRepository" class="org.wickedsource.budgeteer.persistence.manualRecord.ManualRecordRepository"/>
 
+    <mockito:mock id="contractSortingRepository" class="org.wickedsource.budgeteer.persistence.contract.ContractSortingRepository"/>
+
 </beans>

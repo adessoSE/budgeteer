@@ -15,21 +15,21 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name="CONTRACT")
+@Table(name = "CONTRACT")
 @Data
 public class ContractEntity implements Serializable {
 
-    public enum ContractType{
+    public enum ContractType {
         T_UND_M,
         FIXED_PRICE
     }
 
     @Id
-    @SequenceGenerator(name="SEQ_CONTRACT_ID", sequenceName="SEQ_CONTRACT_ID")
+    @SequenceGenerator(name = "SEQ_CONTRACT_ID", sequenceName = "SEQ_CONTRACT_ID")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_CONTRACT_ID")
     private long id;
 
-    @Column(name="CONTRACT_NAME", nullable = false, length = 255)
+    @Column(name = "CONTRACT_NAME", nullable = false, length = 255)
     private String name;
 
     @ManyToOne(optional = false)
@@ -37,33 +37,34 @@ public class ContractEntity implements Serializable {
     private ProjectEntity project;
 
     @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
-    @JoinColumn(name="CONTRACT_ID")
+    @JoinColumn(name = "CONTRACT_ID")
     private List<ContractFieldEntity> contractFields = new LinkedList<>();
 
-    @Column(name="BUDGET")
+    @Column(name = "BUDGET")
     private Money budget;
 
     @Column(name = "TAXRATE", precision = 10, scale = 4)
     private BigDecimal taxRate;
 
-    @Column(name="INTERNAL_NUMBER", length = 255)
+    @Column(name = "INTERNAL_NUMBER", length = 255)
     private String internalNumber;
 
-    @Column(name="START_DATE")
+    @Column(name = "START_DATE")
     @Temporal(TemporalType.DATE)
     private Date startDate;
 
     @Column(name = "CONTRACT_TYPE")
     @Enumerated(EnumType.ORDINAL)
     private ContractType type;
-
-    @OneToMany(mappedBy="contract")
-    private List<BudgetEntity> budgets = new LinkedList<BudgetEntity>();
+    
+    @OneToMany(mappedBy = "contract")
+    private List<BudgetEntity> budgets = new LinkedList<>();
 
     @Column(name = "LINK")
     private String link;
 
-    @Lob @Basic(fetch=FetchType.LAZY)
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
     @Column(name = "CONTRACT_FILE", length = 5 * 1024 * 1024) // five megabytes
     private byte[] file;
 

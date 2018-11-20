@@ -15,6 +15,7 @@ import org.apache.wicket.util.resource.AbstractResourceStreamWriter;
 import org.wickedsource.budgeteer.service.contract.DynamicAttributeField;
 import org.wickedsource.budgeteer.service.invoice.InvoiceBaseData;
 import org.wickedsource.budgeteer.web.PropertyLoader;
+import org.wickedsource.budgeteer.web.components.MarqueeLabel;
 import org.wickedsource.budgeteer.web.pages.base.basepage.BasePage;
 
 import java.io.IOException;
@@ -39,8 +40,8 @@ public class InvoiceHighlightsPanel extends GenericPanel<InvoiceBaseData> {
     @Override
     protected void onInitialize() {
         super.onInitialize();
-        add(new Label("name", model(from(getModelObject()).getInvoiceName())));
-        add(new Label("contractName", model(from(getModelObject()).getContractName())));
+        add(new MarqueeLabel("name", model(from(getModelObject()).getInvoiceName())));
+        add(new MarqueeLabel("contractName", model(from(getModelObject()).getContractName())));
         add(new Label("internalNumber", model(from(getModelObject()).getInternalNumber())));
         add(new Label("year", model(from(getModelObject()).getYear())));
         add(new Label("month", PropertyLoader.getProperty(BasePage.class, "monthRenderer.name." + getModelObject().getMonth())));

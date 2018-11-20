@@ -22,6 +22,6 @@ public class BudgetTagsModel extends LoadableDetachableModel<List<String>> {
 
     @Override
     protected List<String> load() {
-        return new ArrayList<String>(service.loadBudgetTags(projectId));
+        return new ArrayList<>(service.loadBudgetTags(projectId));
     }
 }

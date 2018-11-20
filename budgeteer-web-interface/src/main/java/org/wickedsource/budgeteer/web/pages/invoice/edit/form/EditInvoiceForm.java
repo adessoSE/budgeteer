@@ -59,15 +59,15 @@ public class EditInvoiceForm  extends Form<InvoiceBaseData> {
         feedbackPanel.setOutputMarkupId(true);
         add(feedbackPanel);
 
-        TextField<String> invoiceNameTextfield = new TextField<String>("invoiceName", model(from(getModelObject()).getInvoiceName()));
+        TextField<String> invoiceNameTextfield = new TextField<>("invoiceName", model(from(getModelObject()).getInvoiceName()));
         invoiceNameTextfield.setRequired(true);
         add(invoiceNameTextfield);
 
-        TextField<String> nameTextfield = new TextField<String>("contractName", model(from(getModelObject()).getContractName()));
+        TextField<String> nameTextfield = new TextField<>("contractName", model(from(getModelObject()).getContractName()));
         nameTextfield.setEnabled(false);
         add(nameTextfield);
 
-        TextField<String> internalNumberTextfield = new TextField<String>("internalNumber", model(from(getModelObject()).getInternalNumber()));
+        TextField<String> internalNumberTextfield = new TextField<>("internalNumber", model(from(getModelObject()).getInternalNumber()));
         internalNumberTextfield.setRequired(true);
         add(internalNumberTextfield);
 
@@ -75,9 +75,9 @@ public class EditInvoiceForm  extends Form<InvoiceBaseData> {
         budgetTextfield.setRequired(true);
         add(budgetTextfield);
 
-        add(new DropDownChoice<Integer>("year", model(from(getModelObject()).getYear()), DateUtil.getCurrentYears(5)));
+        add(new DropDownChoice<>("year", model(from(getModelObject()).getYear()), DateUtil.getCurrentYears(5)));
         List<Integer> monthList = Arrays.asList(0,1,2,3,4,5,6,7,8,9,10,11);
-        add(new DropDownChoice<Integer>("month", model(from(getModelObject()).getMonth()), monthList, new MonthRenderer()));
+        add(new DropDownChoice<>("month", model(from(getModelObject()).getMonth()), monthList, new MonthRenderer()));
 
         add(new DateInputField("paidDate", model(from(getModelObject()).getPaidDate())));
         add(new DateInputField("dueDate", model(from(getModelObject()).getDueDate())));
@@ -92,11 +92,11 @@ public class EditInvoiceForm  extends Form<InvoiceBaseData> {
             @Override
             protected void populateItem(ListItem<DynamicAttributeField> item) {
                 item.add(new Label("attributeTitle", item.getModelObject().getName()));
-                item.add(new TextField<String>("attributeValue", model(from(item.getModelObject()).getValue())));
+                item.add(new TextField<>("attributeValue", model(from(item.getModelObject()).getValue())));
             }
         });
         add(table);
-        newAttributeField = new TextField<String>("nameOfNewAttribute", Model.of(nameOfAttribute));
+        newAttributeField = new TextField<>("nameOfNewAttribute", Model.of(nameOfAttribute));
         newAttributeField.setOutputMarkupId(true);
         add(newAttributeField);
         AjaxButton addAttributeButton = new AjaxButton("addAttribute") {
