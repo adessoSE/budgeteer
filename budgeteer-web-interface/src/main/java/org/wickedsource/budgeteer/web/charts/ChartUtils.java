@@ -9,7 +9,7 @@ import java.util.List;
 
 public class ChartUtils {
 
-    private ChartUtils(){
+    private ChartUtils() {
 
     }
 
@@ -49,6 +49,36 @@ public class ChartUtils {
             c.add(Calendar.MONTH, -1);
         }
         Collections.reverse(labels);
+        return labels;
+    }
+
+    /**
+     * Creates a List of month labels for the burnedMonths months before today and the plannedMonths-burnedMonths after today
+     */
+    public static List<String> getForecastLabels(int plannedMonths, int burnedMonths) {
+        List<String> labels = new ArrayList<>();
+        List<String> planLabels = new ArrayList<>();
+        List<String> burnLabels = new ArrayList<>();
+
+        Calendar c = Calendar.getInstance();
+
+        for (int i = 0; i < burnedMonths; i++) {
+            burnLabels.add(monthFormat.format(c.getTime()));
+            c.add(Calendar.MONTH, -1);
+        }
+
+        c = Calendar.getInstance();
+        c.add(Calendar.MONTH, 1);
+
+        for (int i = 0; i < plannedMonths - burnedMonths; i++) {
+            planLabels.add(monthFormat.format(c.getTime()));
+            c.add(Calendar.MONTH, 1);
+        }
+
+        Collections.reverse(burnLabels);
+        labels.addAll(burnLabels);
+        labels.addAll(planLabels);
+
         return labels;
     }
 }

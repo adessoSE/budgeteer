@@ -2,6 +2,7 @@ package org.wickedsource.budgeteer.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import sun.util.resources.cldr.aa.CalendarData_aa_ER;
 
 import java.util.*;
 
@@ -88,5 +89,94 @@ public class DateUtil {
             result.add(currentYear - range + i);
         }
         return result;
+    }
+
+    /**
+     * Checks, if a date specified by a month and a year is before a given Date
+     * @param month month of the date
+     * @param year year of the date
+     * @param date Date to compare with
+     */
+    public static boolean monthAndYearIsBeforeDate(int month, int year, Date date) {
+        Calendar cal = getCalenderFromMonthAndYear(month, year);
+
+        Calendar cal2 = new GregorianCalendar();
+        cal2.setTime(date);
+
+        return cal.before(cal2);
+    }
+
+    /**
+     * Checks, if a date specified by a month and a year is after a given Date
+     * @param month month of the date
+     * @param year year of the date
+     * @param date Date to compare with
+     */
+    public static boolean monthAndYearIsAfterDate(int month, int year, Date date) {
+        Calendar cal = getCalenderFromMonthAndYear(month, year);
+
+        Calendar cal2 = new GregorianCalendar();
+        cal2.setTime(date);
+
+        return cal.after(cal2);
+    }
+
+    /**
+     * Checks, if a date is before a second date. Both dates are specified by a month and a year.
+     * @param month1 month of first date
+     * @param year1 year of first date
+     * @param month2 month of second date
+     * @param year2 year of second date
+     */
+    public static boolean isBefore(int month1, int year1, int month2, int year2) {
+        Calendar cal = getCalenderFromMonthAndYear(month1, year1);
+        Calendar cal2 = getCalenderFromMonthAndYear(month2, year2);
+        return cal.before(cal2);
+    }
+
+    /**
+     * Checks, if a date is after a second date. Both dates are specified by a month and a year.
+     * @param month1 month of first date
+     * @param year1 year of first date
+     * @param month2 month of second date
+     * @param year2 year of second date
+     */
+    public static boolean isAfter(int month1, int year1, int month2, int year2) {
+        Calendar cal = getCalenderFromMonthAndYear(month1, year1);
+        Calendar cal2 = getCalenderFromMonthAndYear(month2, year2);
+        return cal.after(cal2);
+    }
+
+    /**
+     * Create a Calender set to a date which is specified by a month and a year.
+     * @param month month of the date
+     * @param year year of the date
+     * @return Calender set to the date
+     */
+    public static Calendar getCalenderFromMonthAndYear(int month, int year) {
+        Calendar cal = new GregorianCalendar();
+        cal.setTime(new Date());
+        cal.set(Calendar.YEAR, year);
+        cal.set(Calendar.MONTH, month);
+
+        return cal;
+    }
+
+    /**
+     * @return Month (0-based) of today's date
+     */
+    public static int getMonthOfToday() {
+        Calendar cal = new GregorianCalendar();
+        cal.setTime(new Date());
+        return cal.get(Calendar.MONTH);
+    }
+
+    /**
+     * @return Year of today's date
+     */
+    public static int getYearOfToday() {
+        Calendar cal = new GregorianCalendar();
+        cal.setTime(new Date());
+        return cal.get(Calendar.YEAR);
     }
 }

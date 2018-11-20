@@ -15,11 +15,15 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.service.budget.BudgetDetailData;
 import org.wickedsource.budgeteer.service.budget.BudgetService;
+import org.wickedsource.budgeteer.service.statistics.TargetAndActual;
 import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.components.confirm.ConfirmationForm;
+import org.wickedsource.budgeteer.web.components.targetactualchart.TargetAndActualChart;
+import org.wickedsource.budgeteer.web.components.targetactualchart.TargetAndActualChartConfiguration;
 import org.wickedsource.budgeteer.web.pages.base.basepage.BasePage;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
 import org.wickedsource.budgeteer.web.pages.base.delete.DeleteDialog;
+import org.wickedsource.budgeteer.web.pages.budgets.components.targetactualchart.BudgetForecastModel;
 import org.wickedsource.budgeteer.web.pages.budgets.details.chart.PeopleDistributionChart;
 import org.wickedsource.budgeteer.web.pages.budgets.details.chart.PeopleDistributionChartModel;
 import org.wickedsource.budgeteer.web.pages.budgets.details.highlights.BudgetHighlightsModel;
@@ -51,6 +55,10 @@ public class BudgetDetailsPage extends BasePage {
         };
         add(new BudgetHighlightsPanel("highlightsPanel", new BudgetHighlightsModel(getParameterId())));
         add(new PeopleDistributionChart("distributionChart", new PeopleDistributionChartModel(getParameterId())));
+
+        IModel<TargetAndActual> chartModel = new BudgetForecastModel(model.getObject().getId());
+        add(new TargetAndActualChart("forecastChart", chartModel, TargetAndActualChartConfiguration.Mode.FORECAST));
+
         add(new BookmarkablePageLink<SingleBudgetWeekReportPage>("weekReportLink", SingleBudgetWeekReportPage.class, createParameters(getParameterId())));
         add(new BookmarkablePageLink<SingleBudgetMonthReportPage>("monthReportLink", SingleBudgetMonthReportPage.class, createParameters(getParameterId())));
         addContractLinks();
@@ -80,7 +88,7 @@ public class BudgetDetailsPage extends BasePage {
                 });
             }
         };
-        if(this.model.getObject().getContractName() != null){
+        if (this.model.getObject().getContractName() != null) {
             deleteForm.setEnabled(false);
             deleteForm.add(new AttributeAppender("style", "cursor: not-allowed;", " "));
             deleteForm.add(new AttributeModifier("title", getString("contract.still.exist")));

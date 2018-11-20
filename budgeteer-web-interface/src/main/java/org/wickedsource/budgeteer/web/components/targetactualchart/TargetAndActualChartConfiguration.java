@@ -21,69 +21,75 @@ import java.util.List;
 
 public class TargetAndActualChartConfiguration extends ChartConfiguration implements Serializable {
 
-	public enum Mode {
-		MONTHLY,
+    public enum Mode {
+        MONTHLY,
 
-		WEEKLY
-	}
+        WEEKLY,
 
-	public TargetAndActualChartConfiguration(IModel<TargetAndActual> model, Mode mode) {
-		setType(ChartType.STACKED_BAR);
-		List<String> labels = null;
-		switch (mode) {
-		case MONTHLY:
-			labels = ChartUtils.getMonthLabels(12);
-			break;
-		case WEEKLY:
-			labels = ChartUtils.getWeekLabels(12,
-					PropertyLoader.getProperty(TargetAndActualChart.class, "chart.weekLabelFormat"));
-		}
+        FORECAST
+    }
 
-		List<Dataset> datasets = null;
-		List<RgbColor> colorList = ChartStyling.getColors();
+    public TargetAndActualChartConfiguration(IModel<TargetAndActual> model, Mode mode) {
+        setType(ChartType.STACKED_BAR);
+        List<String> labels = null;
+        switch (mode) {
+            case MONTHLY:
+                labels = ChartUtils.getMonthLabels(12);
+                break;
+            case WEEKLY:
+                labels = ChartUtils.getWeekLabels(12,
+                        PropertyLoader.getProperty(TargetAndActualChart.class, "chart.weekLabelFormat"));
+                break;
+            case FORECAST:
+                TargetAndActual modelObject = model.getObject();
+                labels = ChartUtils.getForecastLabels(modelObject.getTargetSize(), modelObject.getActualSize());
+                break;
+        }
 
-		if (model.getObject() != null) {
-			datasets = new ArrayList<>(model.getObject().getActualSeries().size());
-			for (int i = 0; i < model.getObject().getActualSeries().size(); i++) {
-				MoneySeries series = model.getObject().getActualSeries().get(i);
-				Dataset newDataset = new Dataset().setLabel(series.getName())
-						.setData(DoubleValue.of(
-								MoneyUtil.toDouble(series.getMoneyValues(), BudgeteerSession.get().getSelectedBudgetUnit())))
-						.setBackgroundColor(colorList.get(i % colorList.size()));
-				datasets.add(newDataset);
-			}
+        List<Dataset> datasets = null;
+        List<RgbColor> colorList = ChartStyling.getColors();
 
-			Dataset planDataset = new Dataset()
-					.setLabel("Plan")
-					.setData(DoubleValue.of(MoneyUtil.toDouble(model.getObject().getTargetSeries().getMoneyValues(),
-			 BudgeteerSession.get().getSelectedBudgetUnit())))
-					.setFill(false)
-					.setType(ChartType.LINE)
-					.setBackgroundColor(SimpleColor.RED)
-					.setBorderColor(SimpleColor.RED);
-			datasets.add(planDataset);
-		}
+        if (model.getObject() != null) {
+            datasets = new ArrayList<>(model.getObject().getActualSeries().size());
+            for (int i = 0; i < model.getObject().getActualSeries().size(); i++) {
+                MoneySeries series = model.getObject().getActualSeries().get(i);
+                Dataset newDataset = new Dataset().setLabel(series.getName())
+                        .setData(DoubleValue.of(
+                                MoneyUtil.toDouble(series.getMoneyValues(), BudgeteerSession.get().getSelectedBudgetUnit())))
+                        .setBackgroundColor(colorList.get(i % colorList.size()));
+                datasets.add(newDataset);
+            }
 
-		setData(new Data().setDatasets(datasets).setLabels(TextLabel.of(labels)));
+            Dataset planDataset = new Dataset()
+                    .setLabel("Plan")
+                    .setData(DoubleValue.of(MoneyUtil.toDouble(model.getObject().getTargetSeries().getMoneyValues(),
+                            BudgeteerSession.get().getSelectedBudgetUnit())))
+                    .setFill(false)
+                    .setType(ChartType.LINE)
+                    .setBackgroundColor(SimpleColor.RED)
+                    .setBorderColor(SimpleColor.RED);
+            datasets.add(planDataset);
+        }
 
-		setOptions(new Options()
-				.setMaintainAspectRatio(false)
-				.setResponsive(true)
-				.setTooltips(new Tooltips()
-						.setIntersect(true)
-						.setMode(TooltipMode.INDEX))
-				.setLegend(new Legend()
-						.setDisplay(false))
-				.setScales(new Scales()
-						.setXAxes(new AxesScale()
-								.setStacked(true)
-								.setGridLines(new GridLines()
-										.setDisplay(false)
-										.setDrawBorder(false)))
-						.setYAxes(new AxesScale()
-								.setStacked(true)
-								.setGridLines(new GridLines()
-										.setDrawBorder(false)))));
+        setData(new Data().setDatasets(datasets).setLabels(TextLabel.of(labels)));
 
-	}
+        setOptions(new Options()
+                .setMaintainAspectRatio(false)
+                .setResponsive(true)
+                .setTooltips(new Tooltips()
+                        .setIntersect(true)
+                        .setMode(TooltipMode.INDEX))
+                .setLegend(new Legend()
+                        .setDisplay(false))
+                .setScales(new Scales()
+                        .setXAxes(new AxesScale()
+                                .setStacked(true)
+                                .setGridLines(new GridLines()
+                                        .setDisplay(false)
+                                        .setDrawBorder(false)))
+                        .setYAxes(new AxesScale()
+                                .setStacked(true)
+                                .setGridLines(new GridLines()
+                                        .setDrawBorder(false)))));
+    }
 }

@@ -18,16 +18,20 @@ public class MoneySeries {
         values.add(value);
     }
 
+    /***
+     * @return Returns the size of the MoneySeries
+     */
+    public int getSize() {
+        return values.size();
+    }
+
     /**
      * @return Returns the values with or without taxes, according to the current state of the session
-    * */
-    public List<Money> getMoneyValues()
-    {
-        if(BudgeteerSession.get().isTaxEnabled())
-        {
+     */
+    public List<Money> getMoneyValues() {
+        if (BudgeteerSession.get().isTaxEnabled()) {
             return values_gross;
-        }
-        else {
+        } else {
             return values;
         }
     }
