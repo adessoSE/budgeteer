@@ -37,4 +37,15 @@ public class User implements Serializable {
             return roles.get(projectId);
         }
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj.getClass().equals(User.class)) {
+            User other = (User) obj;
+            return this.id == other.id && this.name.equals(other.name) &&
+                    this.globalRole == other.globalRole;
+        }else{
+            return false;
+        }
+    }
 }

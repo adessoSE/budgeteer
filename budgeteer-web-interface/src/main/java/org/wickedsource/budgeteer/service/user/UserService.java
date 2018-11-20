@@ -229,7 +229,7 @@ public class UserService {
     public List<User> getAllAdmins(){
         List<User> result = new ArrayList<>();
         for(UserEntity u : userRepository.findAll()){
-            if(u.getGlobalRole().equals("admin")){
+            if(u.getGlobalRole().equals(UserRole.ADMIN)){
                 result.add(mapper.map(u));
             }
         }

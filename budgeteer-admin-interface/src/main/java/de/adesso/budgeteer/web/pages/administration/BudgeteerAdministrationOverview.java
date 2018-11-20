@@ -33,6 +33,7 @@ import org.wickedsource.budgeteer.web.settings.BudgeteerSettings;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import static org.wicketstuff.lazymodel.LazyModel.from;
 import static org.wicketstuff.lazymodel.LazyModel.model;
@@ -115,6 +116,7 @@ public class BudgeteerAdministrationOverview extends BasePage {
     private Component createEmailTextField(ListItem<User> item) {
         EmailTextField textField = new EmailTextField("setEmailTextBox", Model.of(item.getModelObject().getMail()));
         Form emailResetField = new Form("emailResetField"){
+
             @Override
             protected void onSubmit() {
                 try {
@@ -188,6 +190,7 @@ public class BudgeteerAdministrationOverview extends BasePage {
                                 new org.wickedsource.budgeteer.web.pages.base.delete.DeleteDialog() {
                                     @Override
                                     protected void onYes() {
+                                        item.getModelObject().setGlobalRole(makeAdminList.getModelObject());
                                         userService.setGlobalRoleForUser(item.getModelObject().getId(), makeAdminList.getModelObject());
                                         if(item.getModelObject().getId() == thisUser.getId()){
                                             BudgeteerSession.get().setLoggedInUser(item.getModelObject());
