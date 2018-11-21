@@ -12,6 +12,7 @@ import org.wickedsource.budgeteer.persistence.budget.MissingBudgetTotalBean;
 import org.wickedsource.budgeteer.persistence.record.*;
 import org.wickedsource.budgeteer.persistence.user.UserEntity;
 import org.wickedsource.budgeteer.persistence.user.UserRepository;
+import org.wickedsource.budgeteer.service.user.UserService;
 
 import javax.transaction.Transactional;
 import java.util.*;
@@ -31,6 +32,9 @@ public class NotificationService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private MissingDailyRateNotificationMapper missingDailyRateMapper;
@@ -127,11 +131,54 @@ public class NotificationService {
                             rate1.getPerson().getName(), (Date) startDate.clone(), (Date) endDate.clone()));
                 }
             }else{
-                if(rate1.getPerson().getId() != rate2.getPerson().getId()){
+                if(rate1.getPerson().getId() != rate2.getPerson().getId() || !rate2.getDailyRate().isZero()){
                     endDate = rate1.getDate();
                 }
                 MissingDailyRateBean missingDailyRateBean = new MissingDailyRateBean(rate1.getPerson().getId(),
                         rate1.getPerson().getName(), (Date) startDate.clone(), (Date) endDate.clone());
+                result.add(missingDailyRateBean);
+                startDate = null;
+            }
+        }
+        return result;
+    }
+
+    private List<MissingDailyRateForBudgetBean> getMissingDailyRatesForPerson(long personId) {
+        List<MissingDailyRateForBudgetBean> result = new ArrayList<>();
+        List<WorkRecordEntity> dailyRatesForProject = workRecordRepository.findByPersonId(personId);
+        dailyRatesForProject.sort((o1, o2) -> {
+            int dates = o1.getDate().compareTo(o2.getDate());
+            if(dates == 0){
+                return o1.getBudget().getName().compareTo(o2.getBudget().getName());
+            }else{
+                return dates;
+            }
+        });
+
+        Date endDate = null;
+        Date startDate = null;
+
+        for(int i = 0; i < dailyRatesForProject.size() - 1; i++){
+            WorkRecordEntity rate1 = dailyRatesForProject.get(i);
+            WorkRecordEntity rate2 = dailyRatesForProject.get(i+1);
+            if(!rate1.getDailyRate().isZero()){
+                continue;
+            }
+            if(startDate == null) {
+                endDate = rate2.getDate();
+                startDate = rate1.getDate();
+            }
+
+            if(rate1.getDailyRate().isZero() && rate2.getDailyRate().isZero()
+                    && rate1.getBudget().getId() == rate2.getBudget().getId()){
+                endDate = rate2.getDate();
+                if(i+1 == dailyRatesForProject.size() - 1){
+                    result.add(new MissingDailyRateForBudgetBean(rate1.getPerson().getId(),
+                            rate1.getPerson().getName(), (Date) startDate.clone(), (Date) endDate.clone(), rate1.getBudget().getName()));
+                }
+            }else{
+                MissingDailyRateForBudgetBean missingDailyRateBean = new MissingDailyRateForBudgetBean(rate1.getPerson().getId(),
+                        rate1.getPerson().getName(), (Date) startDate.clone(), (Date) endDate.clone(), rate1.getBudget().getName());
                 result.add(missingDailyRateBean);
                 startDate = null;
             }
@@ -146,9 +193,11 @@ public class NotificationService {
      * @return list of notifications concerning the given person.
      */
     public List<Notification> getNotificationsForPerson(long personId) {
-        List<MissingDailyRateForBudgetBean> missingDailyRatesForPerson = workRecordRepository.getMissingDailyRatesForPerson(personId);
+        List<MissingDailyRateForBudgetBean> missingDailyRatesForPerson = getMissingDailyRatesForPerson(personId);
         return missingDailyRateForBudgetNotificationMapper.map(missingDailyRatesForPerson);
     }
+
+
 
     /**
      * Returns all notifications currently available concerning the given budget.

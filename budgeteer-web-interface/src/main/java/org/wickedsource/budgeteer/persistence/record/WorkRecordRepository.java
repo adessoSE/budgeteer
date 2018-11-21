@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QueryDslPredicateExecutor;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.access.method.P;
 import org.wickedsource.budgeteer.persistence.budget.BudgetEntity;
 import org.wickedsource.budgeteer.persistence.person.PersonEntity;
 import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
@@ -307,6 +308,9 @@ public interface WorkRecordRepository extends CrudRepository<WorkRecordEntity, L
     @Override
     @Query("select wr from WorkRecordEntity wr where wr.budget.project.id = :projectId")
     List<WorkRecordEntity> findByProjectId(@Param("projectId") long projectId);
+
+    @Query("select r from WorkRecordEntity r where r.person.id = :personId")
+    List<WorkRecordEntity> findByPersonId(@Param("personId") long personId);
 
     @Override
     @Query("select new org.wickedsource.budgeteer.persistence.record.WeeklyAggregatedRecordWithTaxBean(r.year, r.month, r.week, sum(r.minutes), r.dailyRate, r.budget.contract.taxRate ) from WorkRecordEntity r join r.budget b where b.project.id=:projectId group by r.year, r.month, r.week, r.dailyRate, r.budget.contract.taxRate order by r.year, r.month, r.week")
