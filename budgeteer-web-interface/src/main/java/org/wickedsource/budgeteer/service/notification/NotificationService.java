@@ -1,5 +1,7 @@
 package org.wickedsource.budgeteer.service.notification;
 
+import org.apache.commons.lang3.time.DateUtils;
+import org.apache.poi.ss.usermodel.DateUtil;
 import org.joda.money.Money;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -7,16 +9,12 @@ import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.persistence.budget.BudgetRepository;
 import org.wickedsource.budgeteer.persistence.budget.LimitReachedBean;
 import org.wickedsource.budgeteer.persistence.budget.MissingBudgetTotalBean;
-import org.wickedsource.budgeteer.persistence.record.MissingDailyRateForBudgetBean;
-import org.wickedsource.budgeteer.persistence.record.PlanRecordRepository;
-import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
+import org.wickedsource.budgeteer.persistence.record.*;
 import org.wickedsource.budgeteer.persistence.user.UserEntity;
 import org.wickedsource.budgeteer.persistence.user.UserRepository;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 @Service
 @Transactional
@@ -61,7 +59,7 @@ public class NotificationService {
             notifications.add(new EmptyPlanRecordsNotification());
         }
         notifications.addAll(budgetRepository.getMissingContractForProject(projectId));
-        notifications.addAll(missingDailyRateMapper.map(workRecordRepository.getMissingDailyRatesForProject(projectId)));
+        notifications.addAll(missingDailyRateMapper.map(getMissingDailyRatesForProject(projectId)));
         notifications.addAll(missingBudgetTotalNotificationMapper.map(budgetRepository.getMissingBudgetTotalsForProject(projectId)));
 
         List<LimitReachedBean> beansList = budgetRepository.getBudgetsForProject(projectId);
@@ -87,6 +85,58 @@ public class NotificationService {
         }
 
         return notifications;
+    }
+
+    private List<MissingDailyRateBean> getMissingDailyRatesForProject(long projectId) {
+        List<MissingDailyRateBean> result = new ArrayList<>();
+        List<WorkRecordEntity> dailyRatesForProject = workRecordRepository.findByProjectId(projectId);
+        dailyRatesForProject.sort((o1, o2) -> {
+            int names = o1.getPerson().getName().compareTo(o2.getPerson().getName());
+            if (names == 0) {
+                int dates = o1.getDate().compareTo(o2.getDate());
+                if(dates == 0){
+                    return o1.getBudget().getName().compareTo(o2.getBudget().getName());
+                }else{
+                    return dates;
+                }
+            } else {
+                return names;
+            }
+        });
+
+        Date endDate = null;
+        Date startDate = null;
+
+        for(int i = 0; i < dailyRatesForProject.size() - 1; i++){
+            WorkRecordEntity rate1 = dailyRatesForProject.get(i);
+            WorkRecordEntity rate2 = dailyRatesForProject.get(i+1);
+            if(!rate1.getDailyRate().isZero()){
+                continue;
+            }
+            if(startDate == null) {
+                endDate = rate2.getDate();
+                startDate = rate1.getDate();
+            }
+
+            if(rate1.getDailyRate().isZero() && rate2.getDailyRate().isZero()
+                    && rate1.getPerson().getId() == rate2.getPerson().getId()
+                    && rate1.getBudget().getId() == rate2.getBudget().getId()){
+                endDate = rate2.getDate();
+                if(i+1 == dailyRatesForProject.size() - 1){
+                    result.add(new MissingDailyRateBean(rate1.getPerson().getId(),
+                            rate1.getPerson().getName(), (Date) startDate.clone(), (Date) endDate.clone()));
+                }
+            }else{
+                if(rate1.getPerson().getId() != rate2.getPerson().getId()){
+                    endDate = rate1.getDate();
+                }
+                MissingDailyRateBean missingDailyRateBean = new MissingDailyRateBean(rate1.getPerson().getId(),
+                        rate1.getPerson().getName(), (Date) startDate.clone(), (Date) endDate.clone());
+                result.add(missingDailyRateBean);
+                startDate = null;
+            }
+        }
+        return result;
     }
 
     /**
