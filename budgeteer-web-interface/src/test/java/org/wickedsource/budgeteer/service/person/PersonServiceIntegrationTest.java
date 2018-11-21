@@ -83,7 +83,7 @@ class PersonServiceIntegrationTest extends IntegrationTestTemplate {
     @DatabaseSetup("personWithRates.xml")
     @DatabaseTearDown(value = "personWithRates.xml", type = DatabaseOperation.DELETE_ALL)
     void testRemoveRateFromPerson() throws Exception{
-        PersonWithRates person = service.loadPersonWithRates(1);
+        PersonWithRates person = service.loadPersonWithRates(1L);
         Assertions.assertEquals(0, service.getMissingDailyRatesForPerson(person.getPersonId()).size());
 
         service.removeDailyRateFromPerson(person, person.getRates().get(0));
