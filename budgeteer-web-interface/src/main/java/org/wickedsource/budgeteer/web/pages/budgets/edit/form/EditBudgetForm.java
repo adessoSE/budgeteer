@@ -85,14 +85,19 @@ public class EditBudgetForm extends Form<EditBudgetData> {
         add(totalField);
         MoneyTextField limitField = new MoneyTextField("limit", model(from(getModel()).getLimit()));
         add(limitField);
-        DropDownChoice<ContractBaseData> contractDropDown = new DropDownChoice<>("contract", model(from(getModel()).getContract()),
+        DropDownChoice<ContractBaseData> contractDropDown = new DropDownChoice<ContractBaseData>("contract", model(from(getModel()).getContract()),
                 contractService.getContractsByProject(BudgeteerSession.get().getProjectId()),
                 new AbstractChoiceRenderer<ContractBaseData>() {
                     @Override
                     public Object getDisplayValue(ContractBaseData object) {
                         return object == null ? getString("no.contract") : object.getContractName();
                     }
-                });
+                }){
+            @Override
+            protected String getNullValidDisplayValue() {
+                return EditBudgetForm.this.getString("no.contract");
+            }
+        };
         contractDropDown.setNullValid(true);
         add(contractDropDown);
         add(createTagsList("tagsList", new BudgetTagsModel(BudgeteerSession.get().getProjectId()), tagsField));
