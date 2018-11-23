@@ -50,4 +50,8 @@ public class ContractSortingService {
         contractSortingRepository.save(contractSortingEntity);
     }
 
+    public void deleteSortingSortingEntry(ContractBaseData data, long userId){
+        ContractSortingEntity contractSortingEntity = contractSortingRepository.findByContractIdAndUserId(data.getContractId(), userId);
+        contractSortingRepository.delete(contractSortingEntity);
+    }
 }

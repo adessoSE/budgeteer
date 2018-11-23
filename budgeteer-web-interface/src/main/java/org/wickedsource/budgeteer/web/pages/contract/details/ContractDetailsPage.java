@@ -8,6 +8,8 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.service.contract.ContractService;
+import org.wickedsource.budgeteer.service.contract.ContractSortingService;
+import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.components.confirm.ConfirmationForm;
 import org.wickedsource.budgeteer.web.pages.base.basepage.BasePage;
@@ -30,6 +32,9 @@ public class ContractDetailsPage extends BasePage {
 
     @SpringBean
     private ContractService contractService;
+
+    @SpringBean
+    private ContractSortingService contractSortingService;
 
     private static final int numberOfMonths = 6;
 
@@ -70,6 +75,7 @@ public class ContractDetailsPage extends BasePage {
                 setResponsePage(new DeleteDialog() {
                     @Override
                     protected void onYes() {
+                        contractSortingService.deleteSortingSortingEntry(ContractDetailsPage.this.contractModel.getObject(), BudgeteerSession.get().getLoggedInUser().getId());
                         contractService.deleteContract(getParameterId());
                         setResponsePage(ContractOverviewPage.class);
                     }
