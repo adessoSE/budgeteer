@@ -5,6 +5,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.wickedsource.budgeteer.persistence.budget.BudgetRepository;
 import org.wickedsource.budgeteer.persistence.contract.ContractRepository;
+import org.wickedsource.budgeteer.persistence.contract.ContractSortingRepository;
 import org.wickedsource.budgeteer.persistence.imports.ImportRepository;
 import org.wickedsource.budgeteer.persistence.invoice.InvoiceRepository;
 import org.wickedsource.budgeteer.persistence.person.DailyRateRepository;
@@ -16,6 +17,7 @@ import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
 import org.wickedsource.budgeteer.persistence.user.UserEntity;
 import org.wickedsource.budgeteer.persistence.user.UserRepository;
 import org.wickedsource.budgeteer.service.DateRange;
+import org.wickedsource.budgeteer.service.contract.ContractSortingService;
 import org.wickedsource.budgeteer.web.pages.administration.Project;
 
 import javax.transaction.Transactional;
@@ -57,6 +59,9 @@ public class ProjectService {
 
     @Autowired
     private ContractRepository contractRepository;
+
+    @Autowired
+    private ContractSortingRepository contractSortingRepository;
 
     /**
      * Creates a new empty project with the given name.
@@ -120,6 +125,7 @@ public class ProjectService {
         invoiceRepository.deleteInvoiceFieldByProjectId(projectId);
         invoiceRepository.deleteContractInvoiceFieldByProject(projectId);
         invoiceRepository.deleteByProjectId(projectId);
+        contractSortingRepository.deleteByProjectId(projectId);
         contractRepository.deleteContractFieldByProjectId(projectId);
         contractRepository.deleteByProjectId(projectId);
         if(projectRepository.findOne(projectId) != null) {

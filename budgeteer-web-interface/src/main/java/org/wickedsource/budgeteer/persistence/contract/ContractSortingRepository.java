@@ -9,10 +9,10 @@ public interface ContractSortingRepository extends CrudRepository<ContractSortin
     @Query("select cs.sortingIndex from ContractSortingEntity cs where cs.contract.id = :contractId and cs.user.id = :userId")
     Integer getSortingIndex(@Param("contractId") long contractId, @Param("userId") long userId);
 
-    @Modifying
-    @Query("update ContractSortingEntity cs set cs.sortingIndex=:index where cs.user.id=:userId and cs.contract.id =:contractId")
-    void setSortingIndex(@Param("contractId") long contractId, @Param("userId") long userId, @Param("index") Integer index);
-
     @Query("select cs from ContractSortingEntity cs where cs.contract.id = :contractId and cs.user.id = :userId")
     ContractSortingEntity findByContractIdAndUserId(@Param("contractId") long contractId, @Param("userId") long userId);
+
+    @Modifying
+    @Query("delete from ContractSortingEntity c where c.id in (select s.id from ContractSortingEntity s where s.contract.project.id = :projectId)")
+    void deleteByProjectId(@Param("projectId") long projectId);
 }
