@@ -11,7 +11,7 @@
     </root>
 
     <!-- activate the following lines to enable HQL-logging -->
-    <!--<logger name="org.hibernate.SQL" level="DEBUG"/>-->
+    <logger name="org.hibernate.SQL" level="DEBUG"/>
     <!--<logger name="org.hibernate.type" level="TRACE"/>-->
 
 </configuration>
