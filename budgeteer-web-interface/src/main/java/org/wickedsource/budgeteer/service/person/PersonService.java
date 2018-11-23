@@ -17,6 +17,7 @@ import org.wickedsource.budgeteer.service.DateUtil;
 import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
 import org.wickedsource.budgeteer.service.notification.Notification;
 import org.wickedsource.budgeteer.service.notification.NotificationService;
+import org.wickedsource.budgeteer.service.record.RecordService;
 import org.wickedsource.budgeteer.service.record.WorkRecord;
 
 import javax.transaction.Transactional;
@@ -44,7 +45,7 @@ public class PersonService {
     private WorkRecordRepository workRecordRepository;
 
     @Autowired
-    private NotificationService notificationService;
+    private RecordService recordService;
 
     /**
      * Returns all people the given user can make use of to manage budgets.
@@ -176,7 +177,7 @@ public class PersonService {
     }
 
     public List<MissingDailyRateForBudgetBean> getMissingDailyRatesForPerson(long personId) {
-        return notificationService.getMissingDailyRatesForPerson(personId);
+        return recordService.getMissingDailyRatesForPerson(personId);
     }
 
     public void removeDailyRateFromPerson(PersonWithRates personWithRates, PersonRate rate) {

@@ -9,9 +9,7 @@ import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
 import org.wickedsource.budgeteer.service.statistics.MonthlyStats;
 
 import javax.transaction.Transactional;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 @Service
 @Transactional
@@ -227,5 +225,122 @@ public class RecordService {
         entity.setDailyRate(record.getDailyRate());
         entity.setEditedManually(record.isEditedManually());
         workRecordRepository.save(entity);
+    }
+
+    public List<MissingDailyRateBean> getMissingDailyRatesForProject(long projectId) {
+        List<MissingDailyRateBean> result = new ArrayList<>();
+        List<WorkRecordEntity> dailyRatesForProject = workRecordRepository.findByProjectId(projectId);
+
+        if(dailyRatesForProject.size() == 1){
+            WorkRecordEntity wr = dailyRatesForProject.get(0);
+            if(wr.getDailyRate().isZero()){
+                result.add(new MissingDailyRateBean(wr.getPerson().getId(), wr.getPerson().getName(), wr.getDate(), wr.getDate()));
+                return result;
+            }
+        }
+
+
+        dailyRatesForProject.sort((o1, o2) -> {
+            int names = o1.getPerson().getName().compareTo(o2.getPerson().getName());
+            if (names == 0) {
+                int dates = o1.getDate().compareTo(o2.getDate());
+                if(dates == 0){
+                    return o1.getBudget().getName().compareTo(o2.getBudget().getName());
+                }else{
+                    return dates;
+                }
+            } else {
+                return names;
+            }
+        });
+
+        Date endDate = null;
+        Date startDate = null;
+
+        for(int i = 0; i < dailyRatesForProject.size() - 1; i++){
+            WorkRecordEntity rate1 = dailyRatesForProject.get(i);
+            WorkRecordEntity rate2 = dailyRatesForProject.get(i+1);
+            if(!rate1.getDailyRate().isZero()){
+                continue;
+            }
+            if(startDate == null) {
+                endDate = rate2.getDate();
+                startDate = rate1.getDate();
+            }
+
+            if(rate1.getDailyRate().isZero() && rate2.getDailyRate().isZero()
+                    && rate1.getPerson().getId() == rate2.getPerson().getId()
+                    && rate1.getBudget().getId() == rate2.getBudget().getId()){
+                endDate = rate2.getDate();
+                if(i+1 == dailyRatesForProject.size() - 1){
+                    result.add(new MissingDailyRateBean(rate1.getPerson().getId(),
+                            rate1.getPerson().getName(), (Date) startDate.clone(), (Date) endDate.clone()));
+                }
+            }else{
+                if(rate1.getPerson().getId() != rate2.getPerson().getId() || !rate2.getDailyRate().isZero()){
+                    endDate = rate1.getDate();
+                }
+                MissingDailyRateBean missingDailyRateBean = new MissingDailyRateBean(rate1.getPerson().getId(),
+                        rate1.getPerson().getName(), (Date) startDate.clone(), (Date) endDate.clone());
+                result.add(missingDailyRateBean);
+                startDate = null;
+            }
+        }
+
+        return result;
+    }
+
+    public List<MissingDailyRateForBudgetBean> getMissingDailyRatesForPerson(long personId) {
+        List<MissingDailyRateForBudgetBean> result = new ArrayList<>();
+        List<WorkRecordEntity> dailyRatesForPerson = workRecordRepository.findByPersonId(personId);
+
+        //If there is only one entity
+        if(dailyRatesForPerson.size() == 1){
+            WorkRecordEntity wr = dailyRatesForPerson.get(0);
+            if(wr.getDailyRate().isZero()){
+                result.add(new MissingDailyRateForBudgetBean(wr.getPerson().getId(), wr.getPerson().getName(), wr.getDate(), wr.getDate(), wr.getBudget().getName()));
+                return result;
+            }
+        }
+
+        //Sort by date and budget name
+        dailyRatesForPerson.sort((o1, o2) -> {
+            int dates = o1.getDate().compareTo(o2.getDate());
+            if(dates == 0){
+                return o1.getBudget().getName().compareTo(o2.getBudget().getName());
+            }else{
+                return dates;
+            }
+        });
+
+        Date endDate = null;
+        Date startDate = null;
+
+        for(int i = 0; i < dailyRatesForPerson.size() - 1; i++){
+            WorkRecordEntity rate1 = dailyRatesForPerson.get(i);
+            WorkRecordEntity rate2 = dailyRatesForPerson.get(i+1);
+            if(!rate1.getDailyRate().isZero()){
+                continue;
+            }
+            if(startDate == null) {
+                endDate = rate2.getDate();
+                startDate = rate1.getDate();
+            }
+
+            if(rate1.getDailyRate().isZero() && rate2.getDailyRate().isZero()
+                    && rate1.getBudget().getId() == rate2.getBudget().getId()){
+                endDate = rate2.getDate();
+                if(i+1 == dailyRatesForPerson.size() - 1){
+                    result.add(new MissingDailyRateForBudgetBean(rate1.getPerson().getId(),
+                            rate1.getPerson().getName(), (Date) startDate.clone(), (Date) endDate.clone(), rate1.getBudget().getName()));
+                }
+            }else{
+                MissingDailyRateForBudgetBean missingDailyRateBean = new MissingDailyRateForBudgetBean(rate1.getPerson().getId(),
+                        rate1.getPerson().getName(), (Date) startDate.clone(), (Date) endDate.clone(), rate1.getBudget().getName());
+                result.add(missingDailyRateBean);
+                startDate = null;
+            }
+        }
+        return result;
     }
 }
