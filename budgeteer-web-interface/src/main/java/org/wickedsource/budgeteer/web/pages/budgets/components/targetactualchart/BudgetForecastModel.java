@@ -4,28 +4,35 @@ import org.apache.wicket.injection.Injector;
 import org.apache.wicket.model.IObjectClassAwareModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.wickedsource.budgeteer.service.DateUtil;
 import org.wickedsource.budgeteer.service.statistics.StatisticsService;
 import org.wickedsource.budgeteer.service.statistics.TargetAndActual;
-
-import java.util.Date;
 
 public class BudgetForecastModel extends LoadableDetachableModel<TargetAndActual> implements IObjectClassAwareModel<TargetAndActual> {
     @SpringBean
     private StatisticsService service;
 
-    private long budgetId;
+    private boolean isSingleBudgetForecast;
+    private long id;
 
-    public BudgetForecastModel(long budgetId) {
+    /**
+     * Creates a forecast model for a single budget (defined by a budgetId) or all budgets of a project(defined by a projectId)
+     *
+     * @param id                     project or budget ID
+     * @param isSingleBudgetForecast defines if the model is for a single budget or multiple budgets
+     */
+    public BudgetForecastModel(long id, boolean isSingleBudgetForecast) {
         Injector.get().inject(this);
-        this.budgetId = budgetId;
+        this.id = id;
+        this.isSingleBudgetForecast = isSingleBudgetForecast;
     }
 
     @Override
     protected TargetAndActual load() {
-        if (budgetId != 0) {
-            return service.getMonthlyForcastForBudget(budgetId, new Date());
+        if (isSingleBudgetForecast) {
+            return service.getMonthlyForecastForBudget(id, DateUtil.getEndOfThisMonth());
         } else {
-            throw new IllegalStateException("budgetId is not specified. Specify it in the constructor!");
+            return service.getMonthlyForecastForBudgets(id, DateUtil.getEndOfThisMonth());
         }
     }
 

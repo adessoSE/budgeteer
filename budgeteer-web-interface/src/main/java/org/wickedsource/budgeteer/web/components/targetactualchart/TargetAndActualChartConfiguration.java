@@ -42,7 +42,11 @@ public class TargetAndActualChartConfiguration extends ChartConfiguration implem
                 break;
             case FORECAST:
                 TargetAndActual modelObject = model.getObject();
-                labels = ChartUtils.getForecastLabels(modelObject.getTargetSize(), modelObject.getActualSize());
+                if (modelObject != null) {
+                    labels = ChartUtils.getForecastLabels(modelObject.getTargetSize(), modelObject.getActualSize());
+                } else {
+                    labels = new ArrayList<>();
+                }
                 break;
         }
 

@@ -6,17 +6,22 @@ import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.service.budget.BudgetService;
 import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
+import org.wickedsource.budgeteer.service.statistics.TargetAndActual;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.components.links.NetGrossLink;
+import org.wickedsource.budgeteer.web.components.targetactualchart.TargetAndActualChart;
+import org.wickedsource.budgeteer.web.components.targetactualchart.TargetAndActualChartConfiguration;
 import org.wickedsource.budgeteer.web.pages.base.basepage.BasePage;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
 import org.wickedsource.budgeteer.web.pages.budgets.BudgetTagsModel;
 import org.wickedsource.budgeteer.web.pages.budgets.RemainingBudgetFilterModel;
+import org.wickedsource.budgeteer.web.pages.budgets.components.targetactualchart.BudgetForecastModel;
 import org.wickedsource.budgeteer.web.pages.budgets.edit.EditBudgetPage;
 import org.wickedsource.budgeteer.web.pages.budgets.monthreport.multi.MultiBudgetMonthReportPage;
 import org.wickedsource.budgeteer.web.pages.budgets.overview.filter.BudgetRemainingFilterPanel;
@@ -44,11 +49,15 @@ public class BudgetsOverviewPage extends BasePage {
             BudgetTagFilter filter = new BudgetTagFilter(new ArrayList<>(), BudgeteerSession.get().getProjectId());
             BudgeteerSession.get().setBudgetFilter(filter);
         }
+
+        IModel<TargetAndActual> chartModel = new BudgetForecastModel(BudgeteerSession.get().getProjectId(), false);
+        add(new TargetAndActualChart("forecastChart", chartModel, TargetAndActualChartConfiguration.Mode.FORECAST));
+
         add(new BudgetRemainingFilterPanel("remainingFilter", new RemainingBudgetFilterModel(BudgeteerSession.get().getProjectId())));
         add(new BudgetTagFilterPanel("tagFilter", tagsModel));
         FilteredBudgetModel filteredBudgetModel = new FilteredBudgetModel(BudgeteerSession.get().getProjectId(), model(from(BudgeteerSession.get().getBudgetFilter())));
         filteredBudgetModel.setRemainingFilterModel(model(from(BudgeteerSession.get().getRemainingBudgetFilterValue())));
-        add(new BudgetOverviewTable("budgetTable", filteredBudgetModel ,getBreadcrumbsModel()));
+        add(new BudgetOverviewTable("budgetTable", filteredBudgetModel, getBreadcrumbsModel()));
         add(new BookmarkablePageLink<MultiBudgetWeekReportPage>("weekReportLink", MultiBudgetWeekReportPage.class));
         add(new BookmarkablePageLink<MultiBudgetMonthReportPage>("monthReportLink", MultiBudgetMonthReportPage.class));
         add(createNewBudgetLink("createBudgetLink"));
@@ -59,11 +68,11 @@ public class BudgetsOverviewPage extends BasePage {
 
     private Component createReportLink(String string) {
         Link link = new Link(string) {
-			@Override
-			public void onClick() {
-				setResponsePage(new BudgetReportPage(BudgetsOverviewPage.class, new PageParameters()));
-			}
-		};
+            @Override
+            public void onClick() {
+                setResponsePage(new BudgetReportPage(BudgetsOverviewPage.class, new PageParameters()));
+            }
+        };
 
         if (!budgetService.projectHasBudgets(BudgeteerSession.get().getProjectId())) {
             link.setEnabled(false);
@@ -71,7 +80,7 @@ public class BudgetsOverviewPage extends BasePage {
             link.add(new AttributeModifier("title", BudgetsOverviewPage.this.getString("links.budget.label.no.budget")));
         }
         return link;
-	}
+    }
 
     private Link createNewBudgetLink(String id) {
         return new Link(id) {

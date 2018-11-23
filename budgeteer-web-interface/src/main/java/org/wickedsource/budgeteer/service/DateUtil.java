@@ -2,8 +2,6 @@ package org.wickedsource.budgeteer.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import sun.util.resources.cldr.aa.CalendarData_aa_ER;
-
 import java.util.*;
 
 @Component
@@ -46,7 +44,6 @@ public class DateUtil {
      * Returns whether the date is between the start and end of the dateRange
      *
      * @param d         date to be checked
-     * @param dateRange
      * @return true if the date d is in the given dateRange
      */
     public static boolean isDateInDateRange(Date d, DateRange dateRange) {
@@ -91,13 +88,23 @@ public class DateUtil {
         return result;
     }
 
+    public static Date getEndOfThisMonth() {
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.setTime(new Date());
+        cal.add(Calendar.MONTH, 1);
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        cal.add(Calendar.DAY_OF_MONTH, -1);
+        return cal.getTime();
+    }
+
     /**
      * Checks, if a date specified by a month and a year is before a given Date
+     *
      * @param month month of the date
-     * @param year year of the date
-     * @param date Date to compare with
+     * @param year  year of the date
+     * @param date  Date to compare with
      */
-    public static boolean monthAndYearIsBeforeDate(int month, int year, Date date) {
+    public static boolean isBefore(int month, int year, Date date) {
         Calendar cal = getCalenderFromMonthAndYear(month, year);
 
         Calendar cal2 = new GregorianCalendar();
@@ -108,11 +115,12 @@ public class DateUtil {
 
     /**
      * Checks, if a date specified by a month and a year is after a given Date
+     *
      * @param month month of the date
-     * @param year year of the date
-     * @param date Date to compare with
+     * @param year  year of the date
+     * @param date  Date to compare with
      */
-    public static boolean monthAndYearIsAfterDate(int month, int year, Date date) {
+    public static boolean isAfter(int month, int year, Date date) {
         Calendar cal = getCalenderFromMonthAndYear(month, year);
 
         Calendar cal2 = new GregorianCalendar();
@@ -123,10 +131,11 @@ public class DateUtil {
 
     /**
      * Checks, if a date is before a second date. Both dates are specified by a month and a year.
+     *
      * @param month1 month of first date
-     * @param year1 year of first date
+     * @param year1  year of first date
      * @param month2 month of second date
-     * @param year2 year of second date
+     * @param year2  year of second date
      */
     public static boolean isBefore(int month1, int year1, int month2, int year2) {
         Calendar cal = getCalenderFromMonthAndYear(month1, year1);
@@ -136,10 +145,11 @@ public class DateUtil {
 
     /**
      * Checks, if a date is after a second date. Both dates are specified by a month and a year.
+     *
      * @param month1 month of first date
-     * @param year1 year of first date
+     * @param year1  year of first date
      * @param month2 month of second date
-     * @param year2 year of second date
+     * @param year2  year of second date
      */
     public static boolean isAfter(int month1, int year1, int month2, int year2) {
         Calendar cal = getCalenderFromMonthAndYear(month1, year1);
@@ -149,8 +159,9 @@ public class DateUtil {
 
     /**
      * Create a Calender set to a date which is specified by a month and a year.
+     *
      * @param month month of the date
-     * @param year year of the date
+     * @param year  year of the date
      * @return Calender set to the date
      */
     public static Calendar getCalenderFromMonthAndYear(int month, int year) {
@@ -165,18 +176,18 @@ public class DateUtil {
     /**
      * @return Month (0-based) of today's date
      */
-    public static int getMonthOfToday() {
+    public static int getMonth(Date date) {
         Calendar cal = new GregorianCalendar();
-        cal.setTime(new Date());
+        cal.setTime(date);
         return cal.get(Calendar.MONTH);
     }
 
     /**
      * @return Year of today's date
      */
-    public static int getYearOfToday() {
+    public static int getYear(Date date) {
         Calendar cal = new GregorianCalendar();
-        cal.setTime(new Date());
+        cal.setTime(date);
         return cal.get(Calendar.YEAR);
     }
 }

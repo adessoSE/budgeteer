@@ -767,24 +767,37 @@ public class StatisticsService {
     }
 
     /**
-     * Returns the burned values of records before today's date and the planned values after today's date
-     * @param budgetId ID of the budget whose data to load
-     * @param today today's date
-     * @return Monthly statistics of burned data before today and planned data after today
+     * Returns the burned values of records until the end of this month and the planned values after the end of this month for a budget
+     *
+     * @param budgetId   ID of the budget whose data to load
+     * @param endOfMonth date of last day in this month
+     * @return Monthly statistics of burned data before endOfMonth and planned data after endOfMonth
      */
-    public TargetAndActual getMonthlyForcastForBudget(long budgetId, Date today) {
+    public TargetAndActual getMonthlyForecastForBudget(long budgetId, Date endOfMonth) {
         List<MonthlyAggregatedRecordWithTaxBean> burnedStats = workRecordRepository.aggregateByMonthAndBudgetWithTax(budgetId);
         List<MonthlyAggregatedRecordWithTaxBean> plannedStats = planRecordRepository.aggregateByMonthForBudgetWithTax(budgetId);
-        return calculateForecast(burnedStats, plannedStats, today);
+        return calculateForecast(burnedStats, plannedStats, endOfMonth);
     }
 
-    private TargetAndActual calculateForecast(List<MonthlyAggregatedRecordWithTaxBean> burnedStats, List<MonthlyAggregatedRecordWithTaxBean> plannedStats, Date today) {
+    /**
+     * Returns the burned values of records until the end of this month and the planned values after the end of this month for all budgets of a project
+     *
+     * @param endOfMonth date of last day in this month
+     * @return Monthly statistics of burned data before endOfMonth and planned data after endOfMonth
+     */
+    public TargetAndActual getMonthlyForecastForBudgets(long projectId, Date endOfMonth) {
+        List<MonthlyAggregatedRecordWithTaxBean> burnedStats = workRecordRepository.aggregateByMonthForBudgetsWithTax(projectId);
+        List<MonthlyAggregatedRecordWithTaxBean> plannedStats = planRecordRepository.aggregateByMonthForBudgetsWithTax(projectId);
+        return calculateForecast(burnedStats, plannedStats, endOfMonth);
+    }
+
+    private TargetAndActual calculateForecast(List<MonthlyAggregatedRecordWithTaxBean> burnedStats, List<MonthlyAggregatedRecordWithTaxBean> plannedStats, Date endOfMonth) {
         TargetAndActual targetAndActual = new TargetAndActual();
 
-        int numberOfPlannedMonths = getNumberOfPlannedMonths(plannedStats, today);
-        int numberOfBurnedMonths = getNumberOfBurnedMonths(burnedStats, today);
+        int numberOfPlannedMonths = getNumberOfPlannedMonths(plannedStats, endOfMonth);
+        int numberOfBurnedMonths = getNumberOfBurnedMonths(burnedStats, endOfMonth);
 
-        MoneySeries targetSeries = calculateForecastTargetSeries(plannedStats, today, numberOfPlannedMonths, numberOfBurnedMonths);
+        MoneySeries targetSeries = calculateForecastTargetSeries(plannedStats, endOfMonth, numberOfPlannedMonths, numberOfBurnedMonths);
         targetAndActual.setTargetSeries(targetSeries);
 
         fillMissingMonthsInForecast(targetAndActual, burnedStats, numberOfBurnedMonths);
@@ -792,16 +805,16 @@ public class StatisticsService {
         return targetAndActual;
     }
 
-    private int getNumberOfPlannedMonths(List<MonthlyAggregatedRecordWithTaxBean> monthlyBeans, Date today) {
-        int minMonth = DateUtil.getMonthOfToday();
-        int minYear = DateUtil.getYearOfToday();
-        int maxMonth = DateUtil.getMonthOfToday();
-        int maxYear = DateUtil.getYearOfToday();
+    private int getNumberOfPlannedMonths(List<MonthlyAggregatedRecordWithTaxBean> monthlyBeans, Date endOfMonth) {
+        int minMonth = DateUtil.getMonth(endOfMonth);
+        int minYear = DateUtil.getYear(endOfMonth);
+        int maxMonth = DateUtil.getMonth(endOfMonth);
+        int maxYear = DateUtil.getYear(endOfMonth);
 
         for (MonthlyAggregatedRecordWithTaxBean bean : monthlyBeans) {
             int month = bean.getMonth();
             int year = bean.getYear();
-            if (DateUtil.monthAndYearIsAfterDate(month, year, today)) {
+            if (DateUtil.isAfter(month, year, endOfMonth)) {
                 if (DateUtil.isBefore(month, year, minMonth, minYear)) {
                     minMonth = month;
                     minYear = year;
@@ -816,16 +829,16 @@ public class StatisticsService {
         return 12 * (maxYear - minYear) + maxMonth - minMonth;
     }
 
-    private int getNumberOfBurnedMonths(List<MonthlyAggregatedRecordWithTaxBean> monthlyBeans, Date today) {
-        int minMonth = DateUtil.getMonthOfToday();
-        int minYear = DateUtil.getYearOfToday();
-        int maxMonth = DateUtil.getMonthOfToday();
-        int maxYear = DateUtil.getYearOfToday();
+    private int getNumberOfBurnedMonths(List<MonthlyAggregatedRecordWithTaxBean> monthlyBeans, Date endOfMonth) {
+        int minMonth = DateUtil.getMonth(endOfMonth);
+        int minYear = DateUtil.getYear(endOfMonth);
+        int maxMonth = DateUtil.getMonth(endOfMonth);
+        int maxYear = DateUtil.getYear(endOfMonth);
 
         for (MonthlyAggregatedRecordWithTaxBean bean : monthlyBeans) {
             int month = bean.getMonth();
             int year = bean.getYear();
-            if (DateUtil.monthAndYearIsBeforeDate(month, year, today)) {
+            if (DateUtil.isBefore(month, year, endOfMonth)) {
                 if (DateUtil.isBefore(month, year, minMonth, minYear)) {
                     minMonth = month;
                     minYear = year;
@@ -840,7 +853,7 @@ public class StatisticsService {
         return 12 * (maxYear - minYear) + maxMonth - minMonth + 1;
     }
 
-    private MoneySeries calculateForecastTargetSeries(List<MonthlyAggregatedRecordWithTaxBean> monthlyBeans, Date today, int numberOfPlannedMonths, int numberOfBurnedMonths) {
+    private MoneySeries calculateForecastTargetSeries(List<MonthlyAggregatedRecordWithTaxBean> monthlyBeans, Date endOfMonth, int numberOfPlannedMonths, int numberOfBurnedMonths) {
         MoneySeries targetSeries = new MoneySeries();
         targetSeries.setName("Target");
 
@@ -853,7 +866,7 @@ public class StatisticsService {
         }
 
         Calendar c = Calendar.getInstance();
-        c.setTime(today);
+        c.setTime(endOfMonth);
         c.add(Calendar.MONTH, 1);
 
         // Sum the money of each month and add the values to the lists

@@ -56,7 +56,7 @@ public class BudgetDetailsPage extends BasePage {
         add(new BudgetHighlightsPanel("highlightsPanel", new BudgetHighlightsModel(getParameterId())));
         add(new PeopleDistributionChart("distributionChart", new PeopleDistributionChartModel(getParameterId())));
 
-        IModel<TargetAndActual> chartModel = new BudgetForecastModel(model.getObject().getId());
+        IModel<TargetAndActual> chartModel = new BudgetForecastModel(model.getObject().getId(), true);
         add(new TargetAndActualChart("forecastChart", chartModel, TargetAndActualChartConfiguration.Mode.FORECAST));
 
         add(new BookmarkablePageLink<SingleBudgetWeekReportPage>("weekReportLink", SingleBudgetWeekReportPage.class, createParameters(getParameterId())));
