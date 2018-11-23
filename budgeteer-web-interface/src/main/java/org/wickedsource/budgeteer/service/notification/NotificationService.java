@@ -12,6 +12,7 @@ import org.wickedsource.budgeteer.persistence.record.PlanRecordRepository;
 import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
 import org.wickedsource.budgeteer.persistence.user.UserEntity;
 import org.wickedsource.budgeteer.persistence.user.UserRepository;
+import org.wickedsource.budgeteer.service.record.RecordService;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
@@ -33,6 +34,9 @@ public class NotificationService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private RecordService recordService;
 
     @Autowired
     private MissingDailyRateNotificationMapper missingDailyRateMapper;
@@ -61,7 +65,7 @@ public class NotificationService {
             notifications.add(new EmptyPlanRecordsNotification());
         }
         notifications.addAll(budgetRepository.getMissingContractForProject(projectId));
-        notifications.addAll(missingDailyRateMapper.map(workRecordRepository.getMissingDailyRatesForProject(projectId)));
+        notifications.addAll(missingDailyRateMapper.map(recordService.getMissingDailyRatesForProject(projectId)));
         notifications.addAll(missingBudgetTotalNotificationMapper.map(budgetRepository.getMissingBudgetTotalsForProject(projectId)));
 
         List<LimitReachedBean> beansList = budgetRepository.getBudgetsForProject(projectId);
@@ -96,9 +100,11 @@ public class NotificationService {
      * @return list of notifications concerning the given person.
      */
     public List<Notification> getNotificationsForPerson(long personId) {
-        List<MissingDailyRateForBudgetBean> missingDailyRatesForPerson = workRecordRepository.getMissingDailyRatesForPerson(personId);
+        List<MissingDailyRateForBudgetBean> missingDailyRatesForPerson = recordService.getMissingDailyRatesForPerson(personId);
         return missingDailyRateForBudgetNotificationMapper.map(missingDailyRatesForPerson);
     }
+
+
 
     /**
      * Returns all notifications currently available concerning the given budget.

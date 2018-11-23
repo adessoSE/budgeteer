@@ -68,18 +68,10 @@ public interface WorkRecordRepository extends CrudRepository<WorkRecordEntity, L
     @Query("delete from WorkRecordEntity r where r.id in (select p.id from WorkRecordEntity p where p.importRecord.project.id = :projectId )")
     void deleteByImportAndProjectId(@Param("projectId") long projectId);
 
-
     @Override
     @Modifying
     @Query("delete from WorkRecordEntity r where r.budget.id in ( select b.id from BudgetEntity b where b.project.id = :projectId)")
     void deleteByProjectId(@Param("projectId") long projectId);
-
-    @Query("select new org.wickedsource.budgeteer.persistence.record.MissingDailyRateBean(r.person.id, r.person.name, min(r.date), max(r.date)) from WorkRecordEntity r where r.dailyRate = 0 and r.person.project.id = :projectId group by r.person.id, r.person.name")
-    List<MissingDailyRateBean> getMissingDailyRatesForProject(@Param("projectId") long projectId);
-
-    @Query("select new org.wickedsource.budgeteer.persistence.record.MissingDailyRateForBudgetBean(r.person.id, r.person.name, min(r.date), max(r.date), b.name) from WorkRecordEntity r join r.budget b where r.dailyRate = 0 and r.person.id = :personId group by r.person.id, r.person.name, b.name")
-    List<MissingDailyRateForBudgetBean> getMissingDailyRatesForPerson(@Param("personId") long personId);
-
 
     @Override
     @Modifying
@@ -307,6 +299,9 @@ public interface WorkRecordRepository extends CrudRepository<WorkRecordEntity, L
     @Override
     @Query("select wr from WorkRecordEntity wr where wr.budget.project.id = :projectId")
     List<WorkRecordEntity> findByProjectId(@Param("projectId") long projectId);
+
+    @Query("select r from WorkRecordEntity r where r.person.id = :personId")
+    List<WorkRecordEntity> findByPersonId(@Param("personId") long personId);
 
     @Override
     @Query("select new org.wickedsource.budgeteer.persistence.record.WeeklyAggregatedRecordWithTaxBean(r.year, r.month, r.week, sum(r.minutes), r.dailyRate, r.budget.contract.taxRate ) from WorkRecordEntity r join r.budget b where b.project.id=:projectId group by r.year, r.month, r.week, r.dailyRate, r.budget.contract.taxRate order by r.year, r.month, r.week")
