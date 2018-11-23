@@ -353,11 +353,11 @@ public class RecordService {
                 //If we are the end of the list
                 if(i+1 == dailyRatesForPerson.size() - 1){
                     result.add(new MissingDailyRateForBudgetBean(rate1.getPerson().getId(),
-                            rate1.getPerson().getName(), (Date) startDate.clone(), (Date) endDate.clone(), rate1.getBudget().getName()));
+                            rate1.getPerson().getName(), startDate, endDate, rate1.getBudget().getName()));
                 }
             }else{
                 MissingDailyRateForBudgetBean missingDailyRateBean = new MissingDailyRateForBudgetBean(rate1.getPerson().getId(),
-                        rate1.getPerson().getName(), (Date) startDate.clone(), (Date) endDate.clone(), rate1.getBudget().getName());
+                        rate1.getPerson().getName(), startDate, endDate, rate1.getBudget().getName());
                 result.add(missingDailyRateBean);
                 startDate = null;
             }

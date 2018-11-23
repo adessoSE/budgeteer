@@ -112,8 +112,12 @@ public class PersonService {
 
         List<DailyRateEntity> dailyRates = new ArrayList<>();
 
-        for (PersonRate rate : person.getRates()) {
+        for (PersonRate rate : loadPersonWithRates(person.getPersonId()).getRates()) {
+            workRecordRepository.updateDailyRates(rate.getBudget().getId(), person.getPersonId(),
+                    rate.getDateRange().getStartDate(), rate.getDateRange().getEndDate(), Money.zero(CurrencyUnit.EUR));
+        }
 
+        for (PersonRate rate : person.getRates()) {
             DailyRateEntity rateEntity = new DailyRateEntity();
             rateEntity.setRate(rate.getRate());
             rateEntity.setBudget(budgetRepository.findOne(rate.getBudget().getId()));
@@ -121,10 +125,9 @@ public class PersonService {
             rateEntity.setDateStart(rate.getDateRange().getStartDate());
             rateEntity.setDateEnd(rate.getDateRange().getEndDate());
             dailyRates.add(rateEntity);
+
             workRecordRepository.updateDailyRates(rate.getBudget().getId(), person.getPersonId(),
                     rate.getDateRange().getStartDate(), rate.getDateRange().getEndDate(), rate.getRate());
-
-
         }
         personEntity.getDailyRates().clear();
         personEntity.getDailyRates().addAll(dailyRates);
