@@ -1,7 +1,5 @@
 package org.wickedsource.budgeteer.service.notification;
 
-import org.apache.commons.lang3.time.DateUtils;
-import org.apache.poi.ss.usermodel.DateUtil;
 import org.joda.money.Money;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,14 +7,17 @@ import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.persistence.budget.BudgetRepository;
 import org.wickedsource.budgeteer.persistence.budget.LimitReachedBean;
 import org.wickedsource.budgeteer.persistence.budget.MissingBudgetTotalBean;
-import org.wickedsource.budgeteer.persistence.record.*;
+import org.wickedsource.budgeteer.persistence.record.MissingDailyRateForBudgetBean;
+import org.wickedsource.budgeteer.persistence.record.PlanRecordRepository;
+import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
 import org.wickedsource.budgeteer.persistence.user.UserEntity;
 import org.wickedsource.budgeteer.persistence.user.UserRepository;
 import org.wickedsource.budgeteer.service.record.RecordService;
-import org.wickedsource.budgeteer.service.user.UserService;
 
 import javax.transaction.Transactional;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 @Service
 @Transactional

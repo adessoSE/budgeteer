@@ -17,7 +17,7 @@ import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
 import org.wickedsource.budgeteer.persistence.user.UserEntity;
 import org.wickedsource.budgeteer.persistence.user.UserRepository;
 import org.wickedsource.budgeteer.service.DateRange;
-import org.wickedsource.budgeteer.service.contract.ContractSortingService;
+import org.wickedsource.budgeteer.service.DateUtil;
 import org.wickedsource.budgeteer.web.pages.administration.Project;
 
 import javax.transaction.Transactional;
@@ -79,6 +79,8 @@ public class ProjectService {
         }
         project.setName(projectName);
         project.getAuthorizedUsers().add(user);
+        project.setProjectStart(DateUtil.getBeginOfYear());
+        project.setProjectEnd(DateUtil.getEndOfYear());
         ProjectEntity savedProject = projectRepository.save(project);
         user.getAuthorizedProjects().add(savedProject);
         return mapper.map(savedProject);

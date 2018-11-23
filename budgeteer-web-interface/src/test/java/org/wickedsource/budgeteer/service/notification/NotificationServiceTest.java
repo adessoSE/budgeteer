@@ -9,13 +9,10 @@ import org.wickedsource.budgeteer.persistence.budget.BudgetEntity;
 import org.wickedsource.budgeteer.persistence.budget.BudgetRepository;
 import org.wickedsource.budgeteer.persistence.budget.MissingBudgetTotalBean;
 import org.wickedsource.budgeteer.persistence.person.PersonEntity;
-import org.wickedsource.budgeteer.persistence.record.MissingDailyRateBean;
-import org.wickedsource.budgeteer.persistence.record.MissingDailyRateForBudgetBean;
 import org.wickedsource.budgeteer.persistence.record.WorkRecordEntity;
 import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
 import org.wickedsource.budgeteer.service.ServiceTestTemplate;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;

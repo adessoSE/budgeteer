@@ -4,7 +4,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -16,6 +15,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.service.budget.BudgetDetailData;
 import org.wickedsource.budgeteer.service.budget.BudgetService;
 import org.wickedsource.budgeteer.web.Mount;
+import org.wickedsource.budgeteer.web.components.MarqueeLabel;
 import org.wickedsource.budgeteer.web.components.confirm.ConfirmationForm;
 import org.wickedsource.budgeteer.web.pages.base.basepage.BasePage;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
@@ -107,7 +107,7 @@ public class BudgetDetailsPage extends BasePage {
                 }
             }
         };
-        contractLinkName.add(new Label("contractName", new AbstractReadOnlyModel() {
+        contractLinkName.add(new MarqueeLabel("contractName", new AbstractReadOnlyModel() {
                     @Override
                     public String getObject() {
                         return StringUtils.isBlank(model.getObject().getContractName()) ? getString("links.contract.label.no.contract") : model.getObject().getContractName();

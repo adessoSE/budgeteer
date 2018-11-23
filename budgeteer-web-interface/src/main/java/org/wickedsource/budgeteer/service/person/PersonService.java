@@ -15,10 +15,7 @@ import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
 import org.wickedsource.budgeteer.service.DateRange;
 import org.wickedsource.budgeteer.service.DateUtil;
 import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
-import org.wickedsource.budgeteer.service.notification.Notification;
-import org.wickedsource.budgeteer.service.notification.NotificationService;
 import org.wickedsource.budgeteer.service.record.RecordService;
-import org.wickedsource.budgeteer.service.record.WorkRecord;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
