@@ -330,7 +330,6 @@ public class RecordService {
             }
         });
 
-        Date endDate = null;
         Date startDate = null;
 
         //We check the rates in a loop and see if any two are adjacent (are both zero)
@@ -339,25 +338,28 @@ public class RecordService {
             WorkRecordEntity rate1 = dailyRatesForPerson.get(i);
             WorkRecordEntity rate2 = dailyRatesForPerson.get(i+1);
             if(!rate1.getDailyRate().isZero()){
-                continue;
+                if(i+1 == dailyRatesForPerson.size()-1 && rate2.getDailyRate().isZero()) {
+                    result.add(new MissingDailyRateForBudgetBean(rate2.getPerson().getId(),
+                            rate2.getPerson().getName(), rate2.getDate(), rate2.getDate(), rate2.getBudget().getName()));
+                    return result;
+                }else{
+                    continue;
+                }
             }
             if(startDate == null) {
-                endDate = rate2.getDate();
                 startDate = rate1.getDate();
             }
 
             if(rate1.getDailyRate().isZero() && rate2.getDailyRate().isZero()
                     && rate1.getBudget().getId() == rate2.getBudget().getId()){
-                endDate = rate2.getDate();
-
                 //If we are the end of the list
                 if(i+1 == dailyRatesForPerson.size() - 1){
                     result.add(new MissingDailyRateForBudgetBean(rate1.getPerson().getId(),
-                            rate1.getPerson().getName(), startDate, endDate, rate1.getBudget().getName()));
+                            rate1.getPerson().getName(), startDate, rate2.getDate(), rate1.getBudget().getName()));
                 }
             }else{
                 MissingDailyRateForBudgetBean missingDailyRateBean = new MissingDailyRateForBudgetBean(rate1.getPerson().getId(),
-                        rate1.getPerson().getName(), startDate, endDate, rate1.getBudget().getName());
+                        rate1.getPerson().getName(), startDate, rate1.getDate(), rate1.getBudget().getName());
                 result.add(missingDailyRateBean);
                 startDate = null;
             }
