@@ -62,7 +62,7 @@ public class PlanRecordDatabaseImporter extends RecordDatabaseImporter {
             // Select which record to delete for each budget individually
             List<ImportedPlanRecord> budgetRecords = getRecordsOfBudget(name, records);
             Date earliestDate = findEarliestDate(budgetRecords);
-            planRecordRepository.deleteByBudgetKeyAndDate(name, earliestDate);
+            planRecordRepository.deleteByBudgetKeyAndDate(getProjectId(), name, earliestDate);
         }
 
         for (RecordKey key : groupedRecords.keySet()) {
