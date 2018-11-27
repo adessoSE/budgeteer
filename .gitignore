@@ -32,3 +32,8 @@ out
 .classpath
 .project
 .settings/
+
+#Oracle DB
+
+ojdbc7.jar
+orai18n.jar

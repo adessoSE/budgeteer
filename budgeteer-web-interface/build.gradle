@@ -104,11 +104,18 @@ dependencies {
             [group: 'org.keycloak', name: 'keycloak-tomcat8-adapter', version: "${keycloak_spring_boot_version}"]
     )
 
-    runtime(
-            [group: 'org.hsqldb', name: 'hsqldb', version: "${hsqldb_version}"],
-            [group: 'mysql', name: 'mysql-connector-java', version: "${mysql_version}"],
-            files("lib/ojdbc7.jar", "lib/orai18n.jar")
-    )
+    if (project.hasProperty("oracledb")) {
+        runtime(
+                [group: 'org.hsqldb', name: 'hsqldb', version: "${hsqldb_version}"],
+                [group: 'mysql', name: 'mysql-connector-java', version: "${mysql_version}"],
+                files("lib/ojdbc7.jar", "lib/orai18n.jar")
+        )
+    }else{
+        runtime(
+                [group: 'org.hsqldb', name: 'hsqldb', version: "${hsqldb_version}"],
+                [group: 'mysql', name: 'mysql-connector-java', version: "${mysql_version}"],
+        )
+    }
 
     testCompile(
             [group: 'org.kubek2k', name: 'springockito', version: "${springockito_version}"],
