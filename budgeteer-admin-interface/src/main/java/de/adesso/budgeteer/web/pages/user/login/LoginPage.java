@@ -7,7 +7,6 @@ import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.service.user.InvalidLoginCredentialsException;
 import org.wickedsource.budgeteer.service.user.User;
-import org.wickedsource.budgeteer.service.user.UserIdNotFoundException;
 import org.wickedsource.budgeteer.service.user.UserService;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.Mount;

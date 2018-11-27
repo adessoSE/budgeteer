@@ -527,4 +527,14 @@ public class UserService {
             }
         }
     }
+
+    public void setUserUsername(long id, String username) throws UsernameAlreadyInUseException {
+        if (userRepository.findByName(username) != null) {
+            throw new UsernameAlreadyInUseException();
+        } else {
+            UserEntity user = userRepository.findById(id);
+            user.setName(username);
+            userRepository.save(user);
+        }
+    }
 }

@@ -84,7 +84,7 @@ public class BudgeteerAdministrationOverviewTest extends AbstractWebTestTemplate
 
         WicketTester tester = getTester();
         WebPage page = new BudgeteerAdministrationOverview();
-        tester.startPage(page);;
+        tester.startPage(page);
 
         //Test
         FormTester formTester = tester.newFormTester("userList:0:emailResetField");
@@ -165,7 +165,7 @@ public class BudgeteerAdministrationOverviewTest extends AbstractWebTestTemplate
     }
 
     @Test
-    void testUserRoleDropdownOnlyVisibleWhenTwoAdminsExist() {
+    void testUserRoleCheckboxesOnlyVisibleWhenTwoAdminsExist() {
         //set up
         User user1 = new User();
         user1.setName("Maxim");
@@ -189,14 +189,14 @@ public class BudgeteerAdministrationOverviewTest extends AbstractWebTestTemplate
 
         //Test
         //Dropdown should be visible as there are two admin users
-        Assertions.assertTrue(tester.getComponentFromLastRenderedPage("userList:0:roleDropdown").isVisible());
+        Assertions.assertTrue(tester.getComponentFromLastRenderedPage("userList:0:checkBoxContainer").isVisible());
 
         //Set the second user to have only user privileges and start the page again
         user2.setGlobalRole(UserRole.USER);
         page = new BudgeteerAdministrationOverview();
         tester.startPage(page);
 
-        tester.assertInvisible("userList:0:roleDropdown");
+        tester.assertInvisible("userList:0:checkBoxContainer");
     }
 
     @Test

@@ -33,7 +33,8 @@ import org.wickedsource.budgeteer.web.settings.BudgeteerSettings;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @NeedsLogin
 @NeedsProject

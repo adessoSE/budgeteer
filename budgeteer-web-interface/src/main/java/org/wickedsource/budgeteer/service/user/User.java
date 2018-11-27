@@ -1,12 +1,14 @@
 package org.wickedsource.budgeteer.service.user;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.wickedsource.budgeteer.web.components.user.UserRole;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class User implements Serializable {
     @Getter

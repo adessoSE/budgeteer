@@ -4,8 +4,9 @@ import de.adesso.budgeteer.web.pages.base.basepage.BasePage;
 import de.adesso.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
 import de.adesso.budgeteer.web.pages.user.login.LoginPage;
 import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.link.Link;
@@ -21,19 +22,16 @@ import org.wickedsource.budgeteer.service.project.ProjectService;
 import org.wickedsource.budgeteer.service.user.MailAlreadyInUseException;
 import org.wickedsource.budgeteer.service.user.User;
 import org.wickedsource.budgeteer.service.user.UserService;
+import org.wickedsource.budgeteer.service.user.UsernameAlreadyInUseException;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.ClassAwareWrappingModel;
 import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
-import org.wickedsource.budgeteer.web.components.multiselect.MultiselectBehavior;
 import org.wickedsource.budgeteer.web.components.user.UserRole;
 import org.wickedsource.budgeteer.web.pages.base.delete.DeleteDialog;
 import org.wickedsource.budgeteer.web.settings.BudgeteerSettings;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 
 import static org.wicketstuff.lazymodel.LazyModel.from;
 import static org.wicketstuff.lazymodel.LazyModel.model;
@@ -90,6 +88,7 @@ public class BudgeteerAdministrationOverview extends BasePage {
                 item.add(makeAdminList);
                 item.add(setPasswordTextField);
                 item.add(createEmailTextField(item));
+                item.add(createUsernameTextField(item));
                 item.add(rolesDropdownLabel);
             }
 
@@ -98,6 +97,29 @@ public class BudgeteerAdministrationOverview extends BasePage {
                 return super.newItem(index, new ClassAwareWrappingModel<>(itemModel, User.class));
             }
         };
+    }
+
+    private Component createUsernameTextField(ListItem<User> item) {
+        TextField<String> textField = new TextField<>("setUsernameTextBox", Model.of(""));
+        Form passwordResetField = new Form("usernameResetField"){
+            @Override
+            protected void onSubmit() {
+                if(textField.getModelObject() == null){
+                    feedbackPanel.error(getString("username.empty"));
+                    return;
+                }
+                try {
+                    userService.setUserUsername(item.getModelObject().getId(), textField.getModelObject());
+                    item.getModelObject().setName(textField.getModelObject());
+                }catch (UsernameAlreadyInUseException e){
+                    feedbackPanel.error(getString("username.in.use"));
+                    return;
+                }
+                feedbackPanel.success(getString("username.success"));
+            }
+        };
+        Button submitButton = new Button("resetUsernameButton");
+        return passwordResetField.add(textField, submitButton);
     }
 
     private Component createPasswordTextField(ListItem<User> item) {
@@ -167,60 +189,58 @@ public class BudgeteerAdministrationOverview extends BasePage {
         };
     }
 
-    private Component createRolesList(ListItem<User> item) {
-        List<UserRole> choices = new ArrayList<>();
-        choices.add(UserRole.ADMIN);
-        choices.add(UserRole.USER);
-        DropDownChoice<UserRole> makeAdminList = new DropDownChoice<>(
-                "roleDropdown", new Model<>(item.getModelObject().getGlobalRole()), choices);
-        HashMap<String, String> options = new HashMap<>();
-        options.clear();
-        options.put("buttonWidth","'120px'");
-        makeAdminList.add(new MultiselectBehavior(options));
-        makeAdminList.add(new AjaxFormComponentUpdatingBehavior("change") {
+    private WebMarkupContainer createRolesList(ListItem<User> item) {
+        CheckBox userCheckBox = new CheckBox("userCheckBox", model(from(item.getModelObject().getGlobalRole() == UserRole.USER)));
+        userCheckBox.add(new AjaxEventBehavior("ifClicked") {
             @Override
-            protected void onUpdate(AjaxRequestTarget target) {
-                if(!makeAdminList.getModelObject().toString().isEmpty()) {
+            protected void onEvent(AjaxRequestTarget target) {
+                if(item.getModelObject().getId() == BudgeteerSession.get().getLoggedInUser().getId()){
+                    setResponsePage(new DeleteDialog(){
 
-                    //Check if the user is losing admin privileges and ask if they are sure
-                    if(item.getModelObject().getId() == thisUser.getId() &&
-                            !makeAdminList.getModelObject().equals(UserRole.ADMIN)
-                            && item.getModelObject().getGlobalRole().equals(UserRole.ADMIN)){
-                        setResponsePage(
-                                new org.wickedsource.budgeteer.web.pages.base.delete.DeleteDialog() {
-                                    @Override
-                                    protected void onYes() {
-                                        item.getModelObject().setGlobalRole(makeAdminList.getModelObject());
-                                        userService.setGlobalRoleForUser(item.getModelObject().getId(), makeAdminList.getModelObject());
-                                        if(item.getModelObject().getId() == thisUser.getId()){
-                                            BudgeteerSession.get().setLoggedInUser(item.getModelObject());
-                                        }
-                                        setResponsePage(LoginPage.class);
-                                    }
+                        @Override
+                        protected void onYes() {
+                            item.getModelObject().setGlobalRole(UserRole.USER);
+                            userService.setGlobalRoleForUser(item.getModelObject().getId(), UserRole.USER);
+                            if(item.getModelObject().getId() == thisUser.getId()){
+                                BudgeteerSession.get().setLoggedInUser(item.getModelObject());
+                            }
+                            setResponsePage(LoginPage.class);
+                        }
 
-                                    @Override
-                                    protected void onNo() {
-                                        setResponsePage(BudgeteerAdministrationOverview.class);
-                                    }
+                        @Override
+                        protected void onNo() {
+                            setResponsePage(BudgeteerAdministrationOverview.class);
+                        }
 
-                                    @Override
-                                    protected String confirmationText() {
-                                        return new StringResourceModel("lose.adminship", BudgeteerAdministrationOverview.this).getString();
-                                    }
-                                });
-                    }else {
-                        userService.setGlobalRoleForUser(item.getModelObject().getId(), makeAdminList.getModelObject());
-                        setResponsePage(BudgeteerAdministrationOverview.class);
-                        return;
-                    }
-                }
-                if(item.getModelObject().getId() == thisUser.getId()){
-                    BudgeteerSession.get().setLoggedInUser(item.getModelObject());
+                        @Override
+                        protected String confirmationText() {
+                            return new StringResourceModel("lose.adminship", BudgeteerAdministrationOverview.this).getString();
+                        }
+                    });
+                }else {
+                    userService.setGlobalRoleForUser(item.getModelObject().getId(), UserRole.USER);
+                    item.getModelObject().setGlobalRole(UserRole.USER);
                 }
                 target.add(BudgeteerAdministrationOverview.this);
             }
         });
-        return makeAdminList;
+
+        CheckBox adminCheckBox = new CheckBox("adminCheckBox", model(from(item.getModelObject().getGlobalRole() == UserRole.ADMIN)));
+
+        adminCheckBox.add(new AjaxEventBehavior("ifClicked") {
+            @Override
+            protected void onEvent(AjaxRequestTarget target) {
+                userService.setGlobalRoleForUser(item.getModelObject().getId(), UserRole.ADMIN);
+                item.getModelObject().setGlobalRole(UserRole.ADMIN);
+                userCheckBox.setModel(model(from(Boolean.FALSE)));
+                target.add(BudgeteerAdministrationOverview.this);
+            }
+        });
+
+        WebMarkupContainer checkboxes = new WebMarkupContainer("checkBoxContainer");
+        checkboxes.add(userCheckBox.setOutputMarkupId(true));
+        checkboxes.add(adminCheckBox);
+        return checkboxes;
     }
 
     private ListView<ProjectBaseData> createProjectList(String id, IModel<List<ProjectBaseData>> model) {

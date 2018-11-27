@@ -1,14 +1,15 @@
 package org.wickedsource.budgeteer.persistence.user;
 
 import lombok.Data;
-import org.hibernate.annotations.CollectionType;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
 import org.wickedsource.budgeteer.web.components.user.UserRole;
 
 import javax.persistence.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 @Entity
 @Table(name = "BUDGETEER_USER",
