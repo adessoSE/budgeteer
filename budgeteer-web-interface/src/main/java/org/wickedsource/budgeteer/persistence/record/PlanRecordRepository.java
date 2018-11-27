@@ -244,8 +244,8 @@ public interface PlanRecordRepository extends CrudRepository<PlanRecordEntity, L
     List<PlanRecordEntity> findByPersonBudgetDate(@Param("personId") long personId, @Param("budgetId") long budgetId, @Param("date") Date date);
 
     @Modifying
-    @Query("delete from PlanRecordEntity r where r.budget.id in ( select b.id from BudgetEntity b where b.project.id = :projectId) AND r.date >= :date")
-    void deleteByProjectIdAndDate(@Param("projectId") long projectId, @Param("date") Date date);
+    @Query("delete from PlanRecordEntity r where r.budget.id in ( select b.id from BudgetEntity b where b.importKey = :importKey) AND r.date >= :date")
+    void deleteByBudgetKeyAndDate(@Param("importKey") String importKey, @Param("date") Date date);
 
     @Override
     @Query("select pr from PlanRecordEntity pr where pr.budget.project.id = :projectId")

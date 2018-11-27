@@ -17,8 +17,10 @@ import org.wickedsource.budgeteer.persistence.record.PlanRecordEntity;
 import org.wickedsource.budgeteer.persistence.record.PlanRecordRepository;
 
 import javax.annotation.PostConstruct;
+import javax.print.DocFlavor;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 @Scope("prototype")
@@ -53,22 +55,29 @@ public class PlanRecordDatabaseImporter extends RecordDatabaseImporter {
         Map<RecordKey, List<ImportedPlanRecord>> groupedRecords = groupRecords(records);
 
         //Because of Issue #70 all PlanRecords that are after the earliest of the imported ones, should be deleted
-        Date earliestDate = findEarliestDate(records);
-        planRecordRepository.deleteByProjectIdAndDate(getProjectId(), earliestDate);
+
+        // Delete only records of the imported budgets
+        List<String> budgetNames = getBudgetNames(records);
+        for (String name : budgetNames) {
+            // Select which record to delete for each budget individually
+            List<ImportedPlanRecord> budgetRecords = getRecordsOfBudget(name, records);
+            Date earliestDate = findEarliestDate(budgetRecords);
+            planRecordRepository.deleteByBudgetKeyAndDate(name, earliestDate);
+        }
 
         for (RecordKey key : groupedRecords.keySet()) {
             List<ImportedPlanRecord> importedPlanRecords = groupedRecords.get(key);
             List<List<String>> skippedPlanRecords = importRecordGroup(key, importedPlanRecords, filename);
-            if(skippedPlanRecords != null && !skippedPlanRecords.isEmpty()){
+            if (skippedPlanRecords != null && !skippedPlanRecords.isEmpty()) {
                 skippedRecords.addAll(skippedPlanRecords);
             }
         }
         //If all records haven been skipped the startDate of the import is new Date(Long.MAX_VALUE) and the EndDate is null.
         // This causes problems in our application, so they have to be set to properly values...
-        if(getImportRecord().getStartDate() == null || getImportRecord().getStartDate().equals(new Date(Long.MAX_VALUE))){
+        if (getImportRecord().getStartDate() == null || getImportRecord().getStartDate().equals(new Date(Long.MAX_VALUE))) {
             getImportRecord().setStartDate(new Date());
         }
-        if(getImportRecord().getEndDate() == null){
+        if (getImportRecord().getEndDate() == null) {
             getImportRecord().setEndDate(new Date());
         }
         getImportRecord().setNumberOfImportedFiles(getImportRecord().getNumberOfImportedFiles() + 1);
@@ -83,6 +92,36 @@ public class PlanRecordDatabaseImporter extends RecordDatabaseImporter {
             }
         }
         return da;
+    }
+
+    /**
+     * Get the names of all budgets in the imported records
+     *
+     * @param records imported records
+     * @return budget names of the imported records
+     */
+    private List<String> getBudgetNames(List<ImportedPlanRecord> records) {
+        List<String> names = new ArrayList<>();
+
+        for (ImportedPlanRecord record : records) {
+            String name = record.getBudgetName();
+            if (!names.contains(name)) {
+                names.add(name);
+            }
+        }
+
+        return names;
+    }
+
+    /**
+     * Get all records of one budget
+     *
+     * @param budgetname name of the budget
+     * @param records    import records
+     * @return records of the budget
+     */
+    private List<ImportedPlanRecord> getRecordsOfBudget(String budgetname, List<ImportedPlanRecord> records) {
+        return records.stream().filter(r -> r.getBudgetName().equals(budgetname)).collect(Collectors.toList());
     }
 
     private Map<RecordKey, List<ImportedPlanRecord>> groupRecords(List<ImportedPlanRecord> records) {
@@ -121,10 +160,10 @@ public class PlanRecordDatabaseImporter extends RecordDatabaseImporter {
             recordEntity.setImportRecord(getImportRecord());
             recordEntity.setDailyRate(record.getDailyRate());
 
-           if((project.getProjectEnd() != null && record.getDate().after(project.getProjectEnd())) ||
-                    (project.getProjectStart() != null && record.getDate().before(project.getProjectStart()))){
+            if ((project.getProjectEnd() != null && record.getDate().after(project.getProjectEnd())) ||
+                    (project.getProjectStart() != null && record.getDate().before(project.getProjectStart()))) {
                 skippedRecords.add(getRecordAsString(recordEntity, filename));
-           }else {
+            } else {
 
                 entitiesToImport.add(recordEntity);
 
@@ -136,7 +175,7 @@ public class PlanRecordDatabaseImporter extends RecordDatabaseImporter {
                 }
             }
         }
-        if(entitiesToImport != null && !entitiesToImport.isEmpty()) {
+        if (entitiesToImport != null && !entitiesToImport.isEmpty()) {
             planRecordRepository.save(entitiesToImport);
 
             // updating start and end date for import record
@@ -154,13 +193,13 @@ public class PlanRecordDatabaseImporter extends RecordDatabaseImporter {
         return getRecordAsString(recordEntity, filename, "Record is out of project-date-range");
     }
 
-    private List<String> getRecordAsString(PlanRecordEntity recordEntity,String filename, String reason) {
+    private List<String> getRecordAsString(PlanRecordEntity recordEntity, String filename, String reason) {
         List<String> result = new LinkedList<>();
         result.add(filename);
         result.add(recordEntity.getDate() != null ? formatter.format(recordEntity.getDate()) : "");
         result.add(recordEntity.getPerson().getName());
         result.add(recordEntity.getBudget().getName());
-        result.add(""+recordEntity.getMinutes());
+        result.add("" + recordEntity.getMinutes());
         result.add(recordEntity.getDailyRate() != null ? recordEntity.getDailyRate().toString() : "");
         result.add(reason);
         return result;
