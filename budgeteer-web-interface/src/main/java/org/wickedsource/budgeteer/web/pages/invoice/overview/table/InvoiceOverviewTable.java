@@ -13,12 +13,14 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.StringResourceModel;
 import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.service.contract.DynamicAttributeField;
 import org.wickedsource.budgeteer.service.invoice.InvoiceBaseData;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.PropertyLoader;
 import org.wickedsource.budgeteer.web.components.dataTable.DataTableBehavior;
+import org.wickedsource.budgeteer.web.components.tax.TaxLabelModel;
 import org.wickedsource.budgeteer.web.pages.base.basepage.BasePage;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
 import org.wickedsource.budgeteer.web.pages.invoice.edit.EditInvoicePage;
@@ -39,6 +41,7 @@ public class InvoiceOverviewTable extends Panel {
 
     private void addComponents(final InvoiceOverviewTableModel data) {
         WebMarkupContainer table = new WebMarkupContainer("table");
+        createNetGrossLabels(table);
         table.add(new DataTableBehavior(DataTableBehavior.getRecommendedOptions()));
         table.add(new ListView<String>("headerRow", model(from(data).getHeadline())) {
             @Override
@@ -50,6 +53,13 @@ public class InvoiceOverviewTable extends Panel {
             @Override
             protected void populateItem(final ListItem<InvoiceBaseData> item) {
                 final long invoiceId = item.getModelObject().getInvoiceId();
+                double taxCoefficient = 1.0;
+                BigDecimal taxRate = item.getModelObject().getTaxRate();
+                double taxRateDouble = taxRate.doubleValue();
+
+                if (BudgeteerSession.get().isTaxEnabled()) {
+                    taxCoefficient = 1.0 + taxRateDouble / 100.0;
+                }
 
                 ExternalLink contractLink;
                 contractLink = new ExternalLink("contractLink", "/contracts/details/" + item.getModelObject().getContractId());
@@ -68,7 +78,9 @@ public class InvoiceOverviewTable extends Panel {
                 item.add(new Label("year", model(from(item.getModelObject()).getYear())));
                 item.add(new Label("month_number", getMonthNumberAsString(item.getModelObject().getMonth())));
                 item.add(new Label("month", PropertyLoader.getProperty(BasePage.class, "monthRenderer.name." + item.getModelObject().getMonth())));
-                item.add(new Label("sum", Model.of(MoneyUtil.toDouble(item.getModelObject().getSum(), BudgeteerSession.get().getSelectedBudgetUnit()))));
+                //item.add(new Label("sum", Model.of(MoneyUtil.toDouble(item.getModelObject().getSum(), BudgeteerSession.get().getSelectedBudgetUnit()))));
+                item.add(new Label("sum", Model.of(MoneyUtil.toDouble(item.getModelObject().getSum(),
+                        BudgeteerSession.get().getSelectedBudgetUnit(), taxCoefficient))));
                 item.add(new Label("sum_gross", Model.of(MoneyUtil.toDouble(item.getModelObject().getSum_gross(), BudgeteerSession.get().getSelectedBudgetUnit()))));
                 item.add(new Label("taxAmount", Model.of(MoneyUtil.toDouble(item.getModelObject().getTaxAmount(), BudgeteerSession.get().getSelectedBudgetUnit()))));
                 item.add(new Label("taxRate", getTaxRateAsString(item.getModelObject().getTaxRate())));
@@ -148,5 +160,10 @@ public class InvoiceOverviewTable extends Panel {
     private String getTaxRateAsString(BigDecimal taxRate) {
         // convert the taxRate to a double first to show only the needed decimal places
         return taxRate.doubleValue() + " %";
+    }
+
+    private void createNetGrossLabels(WebMarkupContainer table) {
+        table.add(new Label("sumLabel", new TaxLabelModel(
+                new StringResourceModel("overview.table.invoice.sum", this))));
     }
 }

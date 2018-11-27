@@ -26,7 +26,6 @@
                 </div>
                 <div class="box-body">
                     <div class="row">
-
                         <div class="col-lg-4 col-xs-6">
                             <div class="small-box bg-aqua toggle-tax-info" style="cursor: pointer;">
                                 <div class="inner" >
@@ -41,7 +40,22 @@
                                 </a>
                             </div>
                         </div>
-
+                        <div class="col-lg-4 col-xs-6">
+                            <a wicket:id="netGrossLink">
+                                <div class="small-box bg-aqua">
+                                    <div class="inner">
+                                        <h3><span wicket:id="title">Title</span></h3>
+                                        <br/>
+                                        <br/>
+                                    </div>
+                                    <div class="icon"><i class="fa fa-book"></i></div>
+                                    <div class="small-box-footer">
+                                        Shows the values of this table as net/gross values.
+                                        <i class="fa fa-arrow-circle-right"/>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
                         <div class="col-lg-4 col-xs-6">
                             <div class="small-box bg-green" wicket:id="createInvoiceLink" style="cursor: pointer;">
                                 <div class="inner" >
@@ -56,10 +70,7 @@
                                 </a>
                             </div>
                         </div>
-
-
                     </div>
-
                 </div>
             </div>
         </div>
