@@ -28,23 +28,18 @@
                             <td class="row">
                                 <form class="btn" wicket:id="usernameResetField">
                                     <input type="text" wicket:id="setUsernameTextBox">
-                                    <button type="submit" wicket:id="resetUsernameButton" class="btn btn-danger btn-sm">Set new username</button>
+                                    <button type="submit" wicket:id="resetUsernameButton" class="btn btn-default btn-sm">Set new username</button>
                                 </form>
                                 <form class="btn" wicket:id="passwordResetField">
                                     <input type="password" onblur="" wicket:id="setPasswordTextBox">
-                                    <button type="submit" wicket:id="resetPasswordButton" class="btn btn-danger btn-sm">Set new password</button>
+                                    <button type="submit" wicket:id="resetPasswordButton" class="btn btn-default btn-sm">Set new password</button>
                                 </form>
                                 <form class="btn" wicket:id="emailResetField">
                                     <input type="email" wicket:id="setEmailTextBox">
-                                    <button type="submit" wicket:id="resetEmailButton" class="btn btn-danger btn-sm">Set new email</button>
+                                    <button type="submit" wicket:id="resetEmailButton" class="btn btn-default btn-sm">Set new email</button>
                                 </form>
-                                <label wicket:id="rolesDropdownLabel">Select the global role for this user: </label>
-                                <span wicket:id="checkBoxContainer">
-                                    user :<input type="checkbox" wicket:id="userCheckBox">
-                                    admin :<input type="checkbox" wicket:id="adminCheckBox">
-                                </span>
-
-
+                                <a class="btn btn-default btn-sm" wicket:id="makeUserAdmin">Make user a system admin</a>
+                                <a class="btn btn-default btn-sm" wicket:id="revokeAdminRights">Revoke system admin rights from user</a>
                                 <a wicket:id="deleteUserButton" class="btn btn-danger btn-sm">Remove from database</a>
                             </td>
                         </tr>

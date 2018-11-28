@@ -16,6 +16,7 @@ import org.wickedsource.budgeteer.web.pages.base.delete.DeleteDialog;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -47,6 +48,7 @@ public class BudgeteerAdministrationOverviewTest extends AbstractWebTestTemplate
         user2.setGlobalRole(UserRole.USER);
 
         when(userServiceMock.getAllUsers()).thenReturn(Arrays.asList(user1, user2));
+        when(userServiceMock.getAllAdmins()).thenReturn(new ArrayList<>());
 
         WicketTester tester = getTester();
         WebPage page = new BudgeteerAdministrationOverview();
@@ -81,6 +83,7 @@ public class BudgeteerAdministrationOverviewTest extends AbstractWebTestTemplate
         user2.setGlobalRole(UserRole.USER);
 
         when(userServiceMock.getAllUsers()).thenReturn(Arrays.asList(user1, user2));
+        when(userServiceMock.getAllAdmins()).thenReturn(new ArrayList<>());
 
         WicketTester tester = getTester();
         WebPage page = new BudgeteerAdministrationOverview();
@@ -115,6 +118,7 @@ public class BudgeteerAdministrationOverviewTest extends AbstractWebTestTemplate
         user2.setGlobalRole(UserRole.ADMIN);
 
         when(userServiceMock.getAllUsers()).thenReturn(Arrays.asList(user1, user2));
+        when(userServiceMock.getAllAdmins()).thenReturn(Arrays.asList(user1, user2));
 
 
         WicketTester tester = getTester();
@@ -145,6 +149,7 @@ public class BudgeteerAdministrationOverviewTest extends AbstractWebTestTemplate
         user2.setGlobalRole(UserRole.ADMIN);
 
         when(userServiceMock.getAllUsers()).thenReturn(Arrays.asList(user1, user2));
+        when(userServiceMock.getAllAdmins()).thenReturn(Arrays.asList(user1, user2));
 
         WicketTester tester = getTester();
 
@@ -158,6 +163,8 @@ public class BudgeteerAdministrationOverviewTest extends AbstractWebTestTemplate
 
         //Set the second user to have only user privileges and start the page again
         user2.setGlobalRole(UserRole.USER);
+        when(userServiceMock.getAllAdmins()).thenReturn(Collections.singletonList(user1));
+
         page = new BudgeteerAdministrationOverview();
         tester.startPage(page);
 
@@ -165,7 +172,7 @@ public class BudgeteerAdministrationOverviewTest extends AbstractWebTestTemplate
     }
 
     @Test
-    void testUserRoleCheckboxesOnlyVisibleWhenTwoAdminsExist() {
+    void testAddAndRevokeRightVisibleWhenTwoAdminsExist() {
         //set up
         User user1 = new User();
         user1.setName("Maxim");
@@ -180,6 +187,7 @@ public class BudgeteerAdministrationOverviewTest extends AbstractWebTestTemplate
         user2.setGlobalRole(UserRole.ADMIN);
 
         when(userServiceMock.getAllUsers()).thenReturn(Arrays.asList(user1, user2));
+        when(userServiceMock.getAllAdmins()).thenReturn(Arrays.asList(user1, user2));
 
         WicketTester tester = getTester();
 
@@ -188,15 +196,20 @@ public class BudgeteerAdministrationOverviewTest extends AbstractWebTestTemplate
         tester.startPage(page);
 
         //Test
-        //Dropdown should be visible as there are two admin users
-        Assertions.assertTrue(tester.getComponentFromLastRenderedPage("userList:0:checkBoxContainer").isVisible());
+        //Buttons should be visible as there are two admin users
+        tester.assertInvisible("userList:0:makeUserAdmin");
+        tester.assertVisible("userList:0:revokeAdminRights");
+        tester.assertInvisible("userList:1:makeUserAdmin");
+        tester.assertVisible("userList:1:revokeAdminRights");
 
         //Set the second user to have only user privileges and start the page again
         user2.setGlobalRole(UserRole.USER);
+        when(userServiceMock.getAllAdmins()).thenReturn(Collections.singletonList(user1));
         page = new BudgeteerAdministrationOverview();
         tester.startPage(page);
 
-        tester.assertInvisible("userList:0:checkBoxContainer");
+        tester.assertInvisible("userList:0:makeUserAdmin");
+        tester.assertInvisible("userList:0:revokeAdminRights");
     }
 
     @Test
