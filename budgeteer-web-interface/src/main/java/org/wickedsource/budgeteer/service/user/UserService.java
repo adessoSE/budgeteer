@@ -199,7 +199,11 @@ public class UserService {
             user.setRoles(new HashMap<>());
         }
         if(user.getRoles().get(projectID) == null || user.getRoles().get(projectID).size() == 0){
-            user.getRoles().put(projectID, new ArrayList<>(Collections.singleton(role)));
+            if(role == UserRole.ADMIN){
+                user.getRoles().put(projectID, new ArrayList<>(Arrays.asList(UserRole.USER, role)));
+            }else {
+                user.getRoles().put(projectID, new ArrayList<>(Collections.singleton(role)));
+            }
         }else{
             List<UserRole> newRoles = user.getRoles().get(projectID);
             if(!newRoles.contains(role)) {
@@ -214,16 +218,6 @@ public class UserService {
         UserEntity user = userRepository.findById(userId);
         user.getRoles().remove(projectID);
         userRepository.save(user);
-    }
-
-    private void removeRoleFromUser(long userId, long projectID, UserRole role) {
-        UserEntity user = userRepository.findById(userId);
-        if(user.getRoles().get(projectID) != null && user.getRoles().get(projectID).size() != 0){
-            List<UserRole> newRoles = user.getRoles().get(projectID);
-            newRoles.remove(role);
-            user.getRoles().put(projectID, newRoles);
-            userRepository.save(user);
-        }
     }
 
     public List<User> getAllAdmins(){

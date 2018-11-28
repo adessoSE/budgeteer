@@ -90,7 +90,7 @@ public abstract class BasePage extends WebPage {
 
     protected boolean currentUserIsAdmin() {
         HashSet<UserRole> roles = loadRolesFromCurrentUser();
-        return roles != null && roles.contains(UserRole.ADMIN);
+        return roles.contains(UserRole.ADMIN);
     }
 
     private HashSet<UserRole> loadRolesFromCurrentUser() {
