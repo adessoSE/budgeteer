@@ -12,14 +12,12 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.model.StringResourceModel;
 import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.service.contract.DynamicAttributeField;
 import org.wickedsource.budgeteer.service.invoice.InvoiceBaseData;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.PropertyLoader;
 import org.wickedsource.budgeteer.web.components.dataTable.DataTableBehavior;
-import org.wickedsource.budgeteer.web.components.tax.TaxLabelModel;
 import org.wickedsource.budgeteer.web.pages.base.basepage.BasePage;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
 import org.wickedsource.budgeteer.web.pages.invoice.edit.EditInvoicePage;
@@ -70,16 +68,11 @@ public class InvoiceOverviewTable extends Panel {
                 item.add(new Label("month", PropertyLoader.getProperty(BasePage.class, "monthRenderer.name." + item.getModelObject().getMonth())));
                 item.add(new Label("sum", Model.of(MoneyUtil.toDouble(item.getModelObject().getSum(),
                         BudgeteerSession.get().getSelectedBudgetUnit()))));
-                item.add(new Label("dueDate", model(from(item.getModelObject().getDueDate()))));
-                if (item.getModelObject().getPaidDate() != null) {
-                    item.add(new Label("paidDate", model(from(item.getModelObject().getPaidDate()))));
-                } else {
-                    item.add(new Label("paidDate", "Not paid"));
-                }
+                item.add(new Label("dueDate", item.getModelObject().getDueDate() != null ? item.getModelObject().getDueDate() : getString("overview.table.invoice.noDueDate")));
+                item.add(new Label("paidDate", item.getModelObject().getPaidDate() != null ? item.getModelObject().getPaidDate() : getString("overview.table.invoice.noPaidDate")));
                 item.add(new Label("sum_gross", Model.of(MoneyUtil.toDouble(item.getModelObject().getSum_gross(), BudgeteerSession.get().getSelectedBudgetUnit()))));
                 item.add(new Label("taxAmount", Model.of(MoneyUtil.toDouble(item.getModelObject().getTaxAmount(), BudgeteerSession.get().getSelectedBudgetUnit()))));
                 item.add(new Label("taxRate", getTaxRateAsString(item.getModelObject().getTaxRate())));
-
                 item.add(new ListView<DynamicAttributeField>("invoiceRow", model(from(item.getModelObject()).getDynamicInvoiceFields())) {
                     @Override
                     protected void populateItem(ListItem<DynamicAttributeField> item) {
@@ -93,7 +86,7 @@ public class InvoiceOverviewTable extends Panel {
                         setResponsePage(new EditInvoicePage(EditInvoicePage.createEditInvoiceParameters(invoiceId), this.getWebPage().getClass(), this.getPage().getPageParameters()));
                     }
                 });
-            };
+            }
         });
         table.add(new ListView<String>("footerRow", model(from(data).getFooter())) {
             @Override
