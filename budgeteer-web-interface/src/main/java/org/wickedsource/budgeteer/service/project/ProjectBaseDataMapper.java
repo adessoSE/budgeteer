@@ -9,9 +9,13 @@ public class ProjectBaseDataMapper extends AbstractMapper<ProjectEntity, Project
 
     @Override
     public ProjectBaseData map(ProjectEntity entity) {
-        ProjectBaseData project = new ProjectBaseData();
-        project.setId(entity.getId());
-        project.setName(entity.getName());
-        return project;
+        if(entity != null){
+            ProjectBaseData project = new ProjectBaseData();
+            project.setId(entity.getId());
+            project.setName(entity.getName());
+            return project;
+        }else{
+            return null;
+        }
     }
 }

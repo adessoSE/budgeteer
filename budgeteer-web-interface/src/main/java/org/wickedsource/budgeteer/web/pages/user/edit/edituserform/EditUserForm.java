@@ -5,10 +5,14 @@ import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.wickedsource.budgeteer.service.project.ProjectBaseData;
+import org.wickedsource.budgeteer.service.project.ProjectService;
 import org.wickedsource.budgeteer.service.user.*;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.ClassAwareWrappingModel;
 import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
+import org.wickedsource.budgeteer.web.pages.administration.Project;
+import org.wickedsource.budgeteer.web.pages.base.AbstractChoiceRenderer;
 
 import static org.wicketstuff.lazymodel.LazyModel.from;
 import static org.wicketstuff.lazymodel.LazyModel.model;
@@ -17,6 +21,9 @@ public class EditUserForm extends Form<EditUserData> {
 
     @SpringBean
     private UserService userService;
+
+    @SpringBean
+    private ProjectService projectService;
 
     public EditUserForm(String id) {
         super(id, new ClassAwareWrappingModel<>(Model.of(new EditUserData(BudgeteerSession.get().getLoggedInUser().getId())), EditUserData.class));
@@ -35,22 +42,43 @@ public class EditUserForm extends Form<EditUserData> {
 
         RequiredTextField<String> usernameRequiredTextField = new RequiredTextField<>("username", model(from(getModelObject().getName())));
         EmailTextField mailTextField;
-        if (getModelObject().getMail() == null)
+        if (getModelObject().getMail() == null) {
             mailTextField = new EmailTextField("mail");
-        else
+        }
+        else {
             mailTextField = new EmailTextField("mail", model(from(getModelObject().getMail())));
-        PasswordTextField currentPasswordTextField = new PasswordTextField("currentPassword");
-        PasswordTextField newPasswordTextField = new PasswordTextField("newPassword");
-        PasswordTextField newPasswordConfirmationTextField = new PasswordTextField("newPasswordConfirmation");
+        }
+
+        DropDownChoice<ProjectBaseData> defaultProjectDropdown = new DropDownChoice<ProjectBaseData>("defaultProjectDropdown",
+                model(from(getModel()).getDefaultProject()),
+                projectService.getProjectsForUser(getModelObject().getId()),
+                new AbstractChoiceRenderer<ProjectBaseData>(){
+                    @Override
+                    public Object getDisplayValue(ProjectBaseData object) {
+                        return object.getName();
+                    }
+        }){
+            @Override
+            protected String getNullValidDisplayValue() {
+                return "No default project";
+            }
+        };
+        defaultProjectDropdown.setNullValid(true);
+
+        PasswordTextField currentPasswordTextField = new PasswordTextField("currentPassword", new Model<>(""));
+        PasswordTextField newPasswordTextField = new PasswordTextField("newPassword", new Model<>(""));
+        PasswordTextField newPasswordConfirmationTextField = new PasswordTextField("newPasswordConfirmation", new Model<>(""));
 
         usernameRequiredTextField.setRequired(true);
         mailTextField.setRequired(true);
+        defaultProjectDropdown.setRequired(true);
         currentPasswordTextField.setRequired(false);
         newPasswordTextField.setRequired(false);
         newPasswordConfirmationTextField.setRequired(false);
 
         add(usernameRequiredTextField);
         add(mailTextField);
+        add(defaultProjectDropdown);
         add(currentPasswordTextField);
         add(newPasswordTextField);
         add(newPasswordConfirmationTextField);
@@ -127,7 +155,7 @@ public class EditUserForm extends Form<EditUserData> {
                 }
             }
         };
-        submitButton.setDefaultFormProcessing(false);
+        submitButton.setDefaultFormProcessing(true);
         add(submitButton);
     }
 }

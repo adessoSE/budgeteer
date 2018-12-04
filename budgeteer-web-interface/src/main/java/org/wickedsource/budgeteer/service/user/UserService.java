@@ -9,8 +9,10 @@ import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
 import org.wickedsource.budgeteer.persistence.project.ProjectRepository;
 import org.wickedsource.budgeteer.persistence.user.*;
 import org.wickedsource.budgeteer.service.UnknownEntityException;
+import org.wickedsource.budgeteer.service.project.ProjectBaseDataMapper;
 
 import javax.transaction.Transactional;
+import javax.validation.constraints.NotNull;
 import java.util.Calendar;
 import java.util.List;
 
@@ -220,6 +222,7 @@ public class UserService {
         editUserData.setName(userEntity.getName());
         editUserData.setMail(userEntity.getMail());
         editUserData.setPassword(userEntity.getPassword());
+        editUserData.setDefaultProject(new ProjectBaseDataMapper().map(userEntity.getDefaultProject()));
         return editUserData;
     }
 
@@ -235,41 +238,42 @@ public class UserService {
      * @param data           the new data for the user
      * @param changePassword specifies if the password should also be changed
      * @return true if the mail address is verified, otherwise false
-     * @throws UsernameAlreadyInUseException
-     * @throws MailAlreadyInUseException
+     * @throws UsernameAlreadyInUseException username is already taken
+     * @throws MailAlreadyInUseException email is already taken
      */
-    public boolean saveUser(EditUserData data, boolean changePassword) throws UsernameAlreadyInUseException, MailAlreadyInUseException {
-        assert data != null;
-        UserEntity userEntity = new UserEntity();
+    public boolean saveUser(@NotNull EditUserData data, boolean changePassword) throws UsernameAlreadyInUseException, MailAlreadyInUseException {
+        UserEntity userEntity;
 
         UserEntity testEntity = userRepository.findByName(data.getName());
-        if (testEntity != null)
-            if (testEntity.getId() != data.getId())
-                throw new UsernameAlreadyInUseException();
-
+        if (testEntity != null && testEntity.getId() != data.getId()) {
+            throw new UsernameAlreadyInUseException();
+        }
         testEntity = userRepository.findByMail(data.getMail());
-        if (testEntity != null)
-            if (testEntity.getId() != data.getId())
-                throw new MailAlreadyInUseException();
-
+        if (testEntity != null && testEntity.getId() != data.getId()) {
+            throw new MailAlreadyInUseException();
+        }
         userEntity = userRepository.findOne(data.getId());
 
         testEntity = userRepository.findOne(data.getId());
-        if (testEntity != null)
-            if (testEntity.getMail() == null)
-                userEntity.setMailVerified(false);
-            else if (!testEntity.getMail().equals(data.getMail()))
-                userEntity.setMailVerified(false);
+        if (testEntity != null && (testEntity.getMail() == null || !testEntity.getMail().equals(data.getMail()))) {
+            userEntity.setMailVerified(false);
+        }
 
         userEntity.setId(data.getId());
         userEntity.setName(data.getName());
         userEntity.setMail(data.getMail());
+        if(data.getDefaultProject() != null) {
+            userEntity.setDefaultProject(projectRepository.findOne(data.getDefaultProject().getId()));
+        } else{
+            userEntity.setDefaultProject(null);
+        }
 
-        if (changePassword)
+        if (changePassword) {
             userEntity.setPassword(passwordHasher.hash(data.getPassword()));
-        else
+        }
+        else {
             userEntity.setPassword(data.getPassword());
-
+        }
         userRepository.save(userEntity);
 
         return userEntity.getMailVerified();
