@@ -38,4 +38,6 @@
     <mockito:mock id="fixedDailyRateRepository"
                   class="org.wickedsource.budgeteer.persistence.fixedDailyRate.FixedDailyRateRepository"/>
 
+    <mockito:mock id="manualRecordRepository" class="org.wickedsource.budgeteer.persistence.manualRecord.ManualRecordRepository"/>
+
 </beans>

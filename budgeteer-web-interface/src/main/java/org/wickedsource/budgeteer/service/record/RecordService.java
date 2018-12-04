@@ -4,7 +4,9 @@ import com.querydsl.core.types.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.wickedsource.budgeteer.ListUtil;
+import org.wickedsource.budgeteer.persistence.budget.BudgetRepository;
 import org.wickedsource.budgeteer.persistence.record.*;
+import org.wickedsource.budgeteer.persistence.manualRecord.ManualRecordRepository;
 import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
 import org.wickedsource.budgeteer.service.statistics.MonthlyStats;
 
@@ -22,10 +24,16 @@ public class RecordService {
     private PlanRecordRepository planRecordRepository;
 
     @Autowired
+    private BudgetRepository budgetRepository;
+
+    @Autowired
     private RecordJoiner recordJoiner;
 
     @Autowired
     private WorkRecordMapper recordMapper;
+
+    @Autowired
+    private ManualRecordRepository manualRecordRepository;
 
     /**
      * Loads the actual budget burned by the given person and the budget planned for this person aggregated by week.
@@ -74,6 +82,9 @@ public class RecordService {
         List<WeeklyAggregatedRecordWithTitleAndTaxBean> workRecords = workRecordRepository.aggregateByWeekAndPersonForBudgetWithTax(budgetId);
         List<WeeklyAggregatedRecordWithTaxBean> planRecords = planRecordRepository.aggregateByWeekForBudgetWithTax(budgetId);
 
+        List<WeeklyAggregatedRecordWithTitleAndTaxBean> manualWorkRecords = manualRecordRepository.aggregateByWeekForBudgetWithTax(budgetId);
+        workRecords.addAll(manualWorkRecords);
+
         MonthlyStats monthlyStats = new MonthlyStats(budgetId, workRecordRepository, planRecordRepository);
 
         return recordJoiner.joinWeeklyByMonthFraction(workRecords, planRecords, monthlyStats);
@@ -101,6 +112,8 @@ public class RecordService {
         //ToDo
         List<MonthlyAggregatedRecordWithTaxBean> planRecords = planRecordRepository.aggregateByMonthAndBudgetWithTax(budgetId);
         List<MonthlyAggregatedRecordWithTaxBean> workRecords = workRecordRepository.aggregateByMonthAndBudgetWithTax(budgetId);
+        List<MonthlyAggregatedRecordWithTaxBean> manualWorkRecords = manualRecordRepository.aggregateByMonthAndBudgetWithTax(budgetId);
+        workRecords.addAll(manualWorkRecords);
         return recordJoiner.joinMonthlyWithTax(workRecords, planRecords);
     }
 
@@ -135,16 +148,19 @@ public class RecordService {
     public List<AggregatedRecord> getWeeklyAggregationForBudgetsWithTaxes(BudgetTagFilter budgetFilter) {
         List<WeeklyAggregatedRecordWithTaxBean> planRecords;
         List<WeeklyAggregatedRecordWithTitleAndTaxBean> workRecords;
+        List<WeeklyAggregatedRecordWithTitleAndTaxBean> manualWorkRecords;
 
         //ToDo
         if (budgetFilter.getSelectedTags().isEmpty()) {
             workRecords = workRecordRepository.aggregateByWeekAndPersonForBudgetsWithTax(budgetFilter.getProjectId());
             planRecords = planRecordRepository.aggregateByWeekForBudgetsWithTax(budgetFilter.getProjectId());
+            manualWorkRecords = manualRecordRepository.aggregateByWeekForBudgetsWithTax(budgetFilter.getProjectId());
         } else {
             workRecords = workRecordRepository.aggregateByWeekAndPersonForBudgetsWithTax(budgetFilter.getProjectId(), budgetFilter.getSelectedTags());
             planRecords = planRecordRepository.aggregateByWeekForBudgetsWithTax(budgetFilter.getProjectId(), budgetFilter.getSelectedTags());
+            manualWorkRecords = manualRecordRepository.aggregateByWeekForBudgetsWithTax(budgetFilter.getProjectId(), budgetFilter.getSelectedTags());
         }
-
+        workRecords.addAll(manualWorkRecords);
         MonthlyStats monthlyStats = new MonthlyStats(budgetFilter, workRecordRepository, planRecordRepository);
         return recordJoiner.joinWeeklyByMonthFraction(workRecords, planRecords, monthlyStats);
     }
@@ -178,13 +194,20 @@ public class RecordService {
         //ToDo
         List<MonthlyAggregatedRecordWithTaxBean> planRecords;
         List<MonthlyAggregatedRecordWithTaxBean> workRecords;
+        List<MonthlyAggregatedRecordWithTaxBean> manualWorkRecords;
+
         if (budgetFilter.getSelectedTags().isEmpty()) {
             workRecords = workRecordRepository.aggregateByMonthWithTax(budgetFilter.getProjectId());
             planRecords = planRecordRepository.aggregateByMonthWithTax(budgetFilter.getProjectId());
+            manualWorkRecords = manualRecordRepository.aggregateByMonthWithTax(budgetFilter.getProjectId());
         } else {
             workRecords = workRecordRepository.aggregateByMonthAndBudgetTagsWithTax(budgetFilter.getProjectId(), budgetFilter.getSelectedTags());
             planRecords = planRecordRepository.aggregateByMonthAndBudgetTagsWithTax(budgetFilter.getProjectId(), budgetFilter.getSelectedTags());
+            manualWorkRecords = manualRecordRepository.aggregateByMonthAndBudgetTagsWithTax(budgetFilter.getProjectId(), budgetFilter.getSelectedTags());
         }
+
+        workRecords.addAll(manualWorkRecords);
+
         return recordJoiner.joinMonthlyWithTax(workRecords, planRecords);
     }
 
@@ -197,7 +220,7 @@ public class RecordService {
      */
     public List<WorkRecord> getFilteredRecords(WorkRecordFilter filter) {
         Predicate query = WorkRecordQueries.findByFilter(filter);
-        List<WorkRecord> workRecords =  recordMapper.map(ListUtil.toArrayList(workRecordRepository.findAll(query)));
+        List<WorkRecord> workRecords = recordMapper.map(ListUtil.toArrayList(workRecordRepository.findAll(query)));
         switch (filter.getColumnToSort().getObject()) {
             case BUDGET:
                 workRecords.sort(Comparator.comparing(WorkRecord::getBudgetName));
@@ -218,7 +241,7 @@ public class RecordService {
                 workRecords.sort(Comparator.comparing(WorkRecord::getBudgetBurned));
                 break;
         }
-        if(filter.getSortType().getObject().equals("Descending")){
+        if (filter.getSortType().getObject().equals("Descending")) {
             Collections.reverse(workRecords);
         }
         return workRecords;
