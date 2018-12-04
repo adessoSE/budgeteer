@@ -81,14 +81,14 @@ public class InvoiceOverviewTable extends Panel {
                 item.add(new Label("sum", Model.of(MoneyUtil.toDouble(item.getModelObject().getSum(),
                         BudgeteerSession.get().getSelectedBudgetUnit(), taxCoefficient))));
                 item.add(new Label("dueDate", model(from(item.getModelObject().getDueDate()))));
-                item.add(new Label("paidDate", model(from(item.getModelObject().getPaidDate()))));
+                if (item.getModelObject().getPaidDate() != null) {
+                    item.add(new Label("paidDate", model(from(item.getModelObject().getPaidDate()))));
+                } else {
+                    item.add(new Label("paidDate", "Not paid"));
+                }
                 item.add(new Label("sum_gross", Model.of(MoneyUtil.toDouble(item.getModelObject().getSum_gross(), BudgeteerSession.get().getSelectedBudgetUnit()))));
                 item.add(new Label("taxAmount", Model.of(MoneyUtil.toDouble(item.getModelObject().getTaxAmount(), BudgeteerSession.get().getSelectedBudgetUnit()))));
                 item.add(new Label("taxRate", getTaxRateAsString(item.getModelObject().getTaxRate())));
-
-                CheckBox paid = new CheckBox("paid", model(from(item.getModelObject()).isPaid()));
-                paid.setEnabled(false);
-                item.add(paid);
 
                 item.add(new ListView<DynamicAttributeField>("invoiceRow", model(from(item.getModelObject()).getDynamicInvoiceFields())) {
                     @Override
