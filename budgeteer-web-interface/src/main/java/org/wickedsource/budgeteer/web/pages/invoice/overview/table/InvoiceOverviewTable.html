@@ -4,13 +4,15 @@
     <table class="table table-hover smallLastColumn" wicket:id="table">
         <thead>
             <tr>
-                <th><wicket:message key="overview.table.invoice.name">Invoice name</wicket:message></th>
+                <th style="max-width:25%;"><wicket:message key="overview.table.invoice.name">Invoice name</wicket:message></th>
                 <th><wicket:message key="overview.table.invoice.contract.name">Associated Contract</wicket:message></th>
                 <th><wicket:message key="overview.table.invoice.internalNumber">Internal-number</wicket:message></th>
                 <th><wicket:message key="overview.table.invoice.year">Year</wicket:message></th>
                 <th><wicket:message key="overview.table.invoice.month">Month</wicket:message></th>
                 <th wicket:id="headerRow"><span wicket:id="headerItem">Invoice Attribute Title</span></th>
                 <th><wicket:message wicket:id="sumLabel" key="overview.table.invoice.sum">Sum (net)</wicket:message></th>
+                <th><wicket:message key="overview.table.invoice.dueDate">Due Date</wicket:message></th>
+                <th><wicket:message key="overview.table.invoice.paidDate">Paid Date</wicket:message></th>
                 <th class="to-toggle"><wicket:message key="overview.table.invoice.sum_gross">Sum (gross)</wicket:message></th>
                 <th class="to-toggle"><wicket:message key="overview.table.invoice.taxAmount">Tax Amount</wicket:message></th>
                 <th class="to-toggle"><wicket:message key="overview.table.invoice.taxRate">Tax Rate</wicket:message></th>
@@ -20,13 +22,15 @@
         </thead>
         <tbody>
             <tr wicket:id="invoiceRows">
-                <td><a wicket:id="showInvoice"><span wicket:id="invoiceName"></span></a></td>
+                <td style="max-width:25%"><a wicket:id="showInvoice"><span wicket:id="invoiceName"></span></a></td>
                 <td><a wicket:id="contractLink"><span wicket:id="contractName"></span></a></td>
                 <td><span wicket:id="internalNumber"></span></td>
                 <td><span wicket:id="year"></span></td>
                 <td><span wicket:id="month_number" style="display: none"></span><span wicket:id="month"></span></td>
                 <td wicket:id="invoiceRow"><span wicket:id="invoiceRowText">Title</span></td>
                 <td><span wicket:id="sum"></span></td>
+                <td><span wicket:id="dueDate"></span></td>
+                <td><span wicket:id="paidDate"></span></td>
                 <td><span wicket:id="sum_gross"></span></td>
                 <td><span wicket:id="taxAmount"></span></td>
                 <td><span wicket:id="taxRate"></span></td>

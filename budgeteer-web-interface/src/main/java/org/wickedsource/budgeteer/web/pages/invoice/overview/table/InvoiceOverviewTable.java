@@ -78,9 +78,10 @@ public class InvoiceOverviewTable extends Panel {
                 item.add(new Label("year", model(from(item.getModelObject()).getYear())));
                 item.add(new Label("month_number", getMonthNumberAsString(item.getModelObject().getMonth())));
                 item.add(new Label("month", PropertyLoader.getProperty(BasePage.class, "monthRenderer.name." + item.getModelObject().getMonth())));
-                //item.add(new Label("sum", Model.of(MoneyUtil.toDouble(item.getModelObject().getSum(), BudgeteerSession.get().getSelectedBudgetUnit()))));
                 item.add(new Label("sum", Model.of(MoneyUtil.toDouble(item.getModelObject().getSum(),
                         BudgeteerSession.get().getSelectedBudgetUnit(), taxCoefficient))));
+                item.add(new Label("dueDate", model(from(item.getModelObject().getDueDate()))));
+                item.add(new Label("paidDate", model(from(item.getModelObject().getPaidDate()))));
                 item.add(new Label("sum_gross", Model.of(MoneyUtil.toDouble(item.getModelObject().getSum_gross(), BudgeteerSession.get().getSelectedBudgetUnit()))));
                 item.add(new Label("taxAmount", Model.of(MoneyUtil.toDouble(item.getModelObject().getTaxAmount(), BudgeteerSession.get().getSelectedBudgetUnit()))));
                 item.add(new Label("taxRate", getTaxRateAsString(item.getModelObject().getTaxRate())));

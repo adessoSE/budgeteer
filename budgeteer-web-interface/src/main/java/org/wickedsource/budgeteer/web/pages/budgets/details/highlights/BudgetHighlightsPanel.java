@@ -17,7 +17,6 @@ public class BudgetHighlightsPanel extends Panel {
 
     public BudgetHighlightsPanel(String id, IModel<BudgetDetailData> model) {
         super(id, model);
-        //add(new MarqueeLabel("name", model(from(model.getObject().getName()))));
         add(new MarqueeLabel("name", model(from(model).getName())));
         add(new MarqueeLabel("contract", nullsafeModel(model(from(model).getContractName()))));
         add(new MarqueeLabel("description", nullsafeModel(model(from(model).getDescription()))));
