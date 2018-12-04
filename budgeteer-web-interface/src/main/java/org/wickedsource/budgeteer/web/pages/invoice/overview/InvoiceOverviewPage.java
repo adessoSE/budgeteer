@@ -1,15 +1,12 @@
 package org.wickedsource.budgeteer.web.pages.invoice.overview;
 
 import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.service.invoice.InvoiceService;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.Mount;
-import org.wickedsource.budgeteer.web.components.tax.TaxSwitchLabelModel;
 import org.wickedsource.budgeteer.web.pages.base.basepage.BasePage;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
 import org.wickedsource.budgeteer.web.pages.contract.details.ContractDetailsPage;
@@ -50,25 +47,6 @@ public class InvoiceOverviewPage extends BasePage {
                 return getParameterId() != 0L;
             }
         });
-        add(createNetGrossLink("netGrossLink"));
-    }
-
-    private Link createNetGrossLink(String string) {
-        Link link = new Link(string) {
-            @Override
-            public void onClick() {
-                if (BudgeteerSession.get().isTaxEnabled()) {
-                    BudgeteerSession.get().setTaxEnabled(false);
-                } else {
-                    BudgeteerSession.get().setTaxEnabled(true);
-                }
-            }
-        };
-        link.add(new Label("title", new TaxSwitchLabelModel(
-                new StringResourceModel("links.tax.label.net", this),
-                new StringResourceModel("links.tax.label.gross", this)
-        )));
-        return link;
     }
 
     @SuppressWarnings("unchecked")
