@@ -944,13 +944,11 @@ public class StatisticsService {
 
     public TargetAndActual getMonthStatsForBudgetWithTax(long budgetId, int numberOfMonths) {
         Date startDate = dateUtil.monthsAgo(numberOfMonths);
-        List<MonthlyAggregatedRecordWithTitleAndTaxBean> burnedStats = workRecordRepository.aggregateByMonthAndPersonForBudgetWithTax(budgetId, startDate); //changed
-        List<MonthlyAggregatedRecordWithTaxBean> plannedStats = planRecordRepository.aggregateByMonthForBudgetWithTax(budgetId, startDate); //changed
+        List<MonthlyAggregatedRecordWithTitleAndTaxBean> burnedStats = workRecordRepository.aggregateByMonthAndPersonForBudgetWithTax(budgetId, startDate);
+        List<MonthlyAggregatedRecordWithTaxBean> plannedStats = planRecordRepository.aggregateByMonthForBudgetWithTax(budgetId, startDate);
         List<MonthlyAggregatedRecordWithTitleAndTaxBean> manualBurnedStats = manualRecordRepository.aggregateByMonthForBudgetWithTax(budgetId, startDate);
 
         burnedStats.addAll(manualBurnedStats);
-        List<MonthlyAggregatedRecordWithTitleAndTaxBean> burnedStats = workRecordRepository.aggregateByMonthAndPersonForBudgetWithTax(budgetId, startDate);
-        List<MonthlyAggregatedRecordWithTaxBean> plannedStats = planRecordRepository.aggregateByMonthForBudgetWithTax(budgetId, startDate);
 
         return calculateMonthlyTargetAndActual(numberOfMonths, plannedStats, burnedStats);
     }
