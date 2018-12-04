@@ -25,6 +25,7 @@ import org.wickedsource.budgeteer.web.pages.budgets.details.chart.PeopleDistribu
 import org.wickedsource.budgeteer.web.pages.budgets.details.highlights.BudgetHighlightsModel;
 import org.wickedsource.budgeteer.web.pages.budgets.details.highlights.BudgetHighlightsPanel;
 import org.wickedsource.budgeteer.web.pages.budgets.edit.EditBudgetPage;
+import org.wickedsource.budgeteer.web.pages.budgets.fixedDailyRates.FixedDailyRatesPage;
 import org.wickedsource.budgeteer.web.pages.budgets.hours.BudgetHoursPage;
 import org.wickedsource.budgeteer.web.pages.budgets.monthreport.single.SingleBudgetMonthReportPage;
 import org.wickedsource.budgeteer.web.pages.budgets.notes.BudgetNotesPage;
@@ -57,6 +58,7 @@ public class BudgetDetailsPage extends BasePage {
         add(new BookmarkablePageLink<BudgetHoursPage>("hoursLink", BudgetHoursPage.class, createParameters(getParameterId())));
         add(new BookmarkablePageLink<BudgetNotesPage>("notesLink", BudgetNotesPage.class, createParameters(getParameterId())));
         add(createEditLink("editLink"));
+        add(createFixedDailyRatesLink("fixedDailyRatesLink"));
 
         Form deleteForm = new ConfirmationForm("deleteForm", this, "confirmation.delete") {
             @Override
@@ -80,13 +82,23 @@ public class BudgetDetailsPage extends BasePage {
                 });
             }
         };
-        if(this.model.getObject().getContractName() != null){
+        if (this.model.getObject().getContractName() != null) {
             deleteForm.setEnabled(false);
             deleteForm.add(new AttributeAppender("style", "cursor: not-allowed;", " "));
             deleteForm.add(new AttributeModifier("title", getString("contract.still.exist")));
         }
         deleteForm.add(new SubmitLink("deleteLink"));
         add(deleteForm);
+    }
+
+    private Link createFixedDailyRatesLink(String id) {
+        return new Link(id) {
+            @Override
+            public void onClick() {
+                WebPage page = new FixedDailyRatesPage(getPageParameters());
+                setResponsePage(page);
+            }
+        };
     }
 
     public static PageParameters createParameters(long budgetId) {

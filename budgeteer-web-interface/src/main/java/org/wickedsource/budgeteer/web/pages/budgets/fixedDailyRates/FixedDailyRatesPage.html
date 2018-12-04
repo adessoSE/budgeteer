@@ -1,0 +1,53 @@
+<wicket:extend xmlns:wicket="http://www.w3.org/1999/xhtml">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-primary">
+                <div class="box-header">
+                    <i class="fa fa-list"></i>
+                    <h3 class="box-title">Fixed Daily Rates List
+                    </h3>
+                </div>
+                <div class="box-body">
+                    <div wicket:id="ratesTable" style="clear:both"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-primary">
+                <div class="box-header" style="cursor: move;">
+                    <i class="fa fa-cog"></i>
+                    <h3 class="box-title">Options
+                    </h3>
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-default btn-sm" data-widget="collapse"><i
+                                class="fa fa-minus"></i></button>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-lg-4 col-xs-6">
+                            <a wicket:id="addRateLink">
+                                <div class="small-box bg-green">
+                                    <div class="inner">
+                                        <h3>Add Fixed Daily Rate</h3>
+                                        <br/>
+                                        <br/>
+                                    </div>
+                                    <div class="icon">
+                                        <i class="ion ion-edit"></i>
+                                    </div>
+                                    <div class="small-box-footer">
+                                        Add a new fixed daily rate to this budget
+                                        <i class="fa fa-arrow-circle-right"></i>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</wicket:extend>
