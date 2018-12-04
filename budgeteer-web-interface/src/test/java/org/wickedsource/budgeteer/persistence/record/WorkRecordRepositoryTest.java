@@ -126,36 +126,6 @@ class WorkRecordRepositoryTest extends IntegrationTestTemplate {
     }
 
     @Test
-    @DatabaseSetup("getMissingDailyRates.xml")
-    @DatabaseTearDown(value = "getMissingDailyRates.xml", type = DatabaseOperation.DELETE_ALL)
-    void testGetMissingDailyRatesForProject() throws Exception {
-        List<MissingDailyRateBean> missingRates = repository.getMissingDailyRatesForProject(1L);
-        Assertions.assertEquals(2, missingRates.size());
-        Assertions.assertEquals(1L, missingRates.get(0).getPersonId());
-        Assertions.assertEquals("person1", missingRates.get(0).getPersonName());
-        Assertions.assertEquals(format.parse("01.01.2015"), missingRates.get(0).getStartDate());
-        Assertions.assertEquals(format.parse("15.08.2015"), missingRates.get(0).getEndDate());
-        Assertions.assertEquals(2L, missingRates.get(1).getPersonId());
-        Assertions.assertEquals("person2", missingRates.get(1).getPersonName());
-        Assertions.assertEquals(format.parse("01.01.2015"), missingRates.get(1).getStartDate());
-        Assertions.assertEquals(format.parse("15.08.2015"), missingRates.get(1).getEndDate());
-    }
-
-    @Test
-    @DatabaseSetup("getMissingDailyRates.xml")
-    @DatabaseTearDown(value = "getMissingDailyRates.xml", type = DatabaseOperation.DELETE_ALL)
-    void testGetMissingDailyRatesForPerson() throws Exception {
-        List<MissingDailyRateForBudgetBean> missingRates = repository.getMissingDailyRatesForPerson(1L);
-        Assertions.assertEquals(2, missingRates.size());
-
-        Assertions.assertEquals(1L, missingRates.get(0).getPersonId());
-        Assertions.assertEquals("person1", missingRates.get(0).getPersonName());
-        Assertions.assertEquals(format.parse("01.01.2015"), missingRates.get(0).getStartDate());
-        Assertions.assertEquals(format.parse("01.01.2015"), missingRates.get(0).getEndDate());
-        Assertions.assertEquals("Budget 1", missingRates.get(0).getBudgetName());
-    }
-
-    @Test
     @DatabaseSetup("updateDailyRates.xml")
     @DatabaseTearDown(value = "updateDailyRates.xml", type = DatabaseOperation.DELETE_ALL)
     void testUpdateWorkRecordDailyRates() throws Exception {
