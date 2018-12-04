@@ -4,7 +4,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -17,6 +16,7 @@ import org.wickedsource.budgeteer.service.budget.BudgetDetailData;
 import org.wickedsource.budgeteer.service.budget.BudgetService;
 import org.wickedsource.budgeteer.service.statistics.TargetAndActual;
 import org.wickedsource.budgeteer.web.Mount;
+import org.wickedsource.budgeteer.web.components.MarqueeLabel;
 import org.wickedsource.budgeteer.web.components.confirm.ConfirmationForm;
 import org.wickedsource.budgeteer.web.components.targetactualchart.TargetAndActualChart;
 import org.wickedsource.budgeteer.web.components.targetactualchart.TargetAndActualChartConfiguration;
@@ -30,6 +30,7 @@ import org.wickedsource.budgeteer.web.pages.budgets.details.highlights.BudgetHig
 import org.wickedsource.budgeteer.web.pages.budgets.details.highlights.BudgetHighlightsPanel;
 import org.wickedsource.budgeteer.web.pages.budgets.edit.EditBudgetPage;
 import org.wickedsource.budgeteer.web.pages.budgets.hours.BudgetHoursPage;
+import org.wickedsource.budgeteer.web.pages.budgets.manualRecords.overview.ManualRecordOverviewPage;
 import org.wickedsource.budgeteer.web.pages.budgets.monthreport.single.SingleBudgetMonthReportPage;
 import org.wickedsource.budgeteer.web.pages.budgets.notes.BudgetNotesPage;
 import org.wickedsource.budgeteer.web.pages.budgets.overview.BudgetsOverviewPage;
@@ -65,6 +66,7 @@ public class BudgetDetailsPage extends BasePage {
         add(new BookmarkablePageLink<BudgetHoursPage>("hoursLink", BudgetHoursPage.class, createParameters(getParameterId())));
         add(new BookmarkablePageLink<BudgetNotesPage>("notesLink", BudgetNotesPage.class, createParameters(getParameterId())));
         add(createEditLink("editLink"));
+        add(createManualRecordLink("manualRecordLink"));
 
         Form deleteForm = new ConfirmationForm("deleteForm", this, "confirmation.delete") {
             @Override
@@ -115,7 +117,7 @@ public class BudgetDetailsPage extends BasePage {
                 }
             }
         };
-        contractLinkName.add(new Label("contractName", new AbstractReadOnlyModel() {
+        contractLinkName.add(new MarqueeLabel("contractName", new AbstractReadOnlyModel() {
                     @Override
                     public String getObject() {
                         return StringUtils.isBlank(model.getObject().getContractName()) ? getString("links.contract.label.no.contract") : model.getObject().getContractName();
@@ -131,6 +133,16 @@ public class BudgetDetailsPage extends BasePage {
             @Override
             public void onClick() {
                 WebPage page = new EditBudgetPage(BasePage.createParameters(getParameterId()), BudgetDetailsPage.class, getPageParameters(), false);
+                setResponsePage(page);
+            }
+        };
+    }
+
+    private Link createManualRecordLink(String id) {
+        return new Link(id) {
+            @Override
+            public void onClick() {
+                WebPage page = new ManualRecordOverviewPage(getPageParameters());
                 setResponsePage(page);
             }
         };

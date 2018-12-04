@@ -5,17 +5,15 @@
                 <div class="box-header">
                     <i class="fa fa-list"></i>
 
-                    <h3 class="box-title">List of uploaded templates</h3>
-
-                    <div class="box-tools pull-right">
-                        <button class="btn btn-default btn-sm" data-widget="collapse"><i
-                                class="fa fa-minus"></i></button>
-                    </div>
+                    <h3 class="box-title">Manual Record List
+                    </h3>
                 </div>
                 <div class="box-body">
-                    <div wicket:id="filter"></div>
-                    <div wicket:id="templateTable"></div>
+
+                    <div wicket:id="recordTable" style="clear:both"></div>
+
                 </div>
+                <!-- /.box-body -->
             </div>
         </div>
     </div>
@@ -37,27 +35,26 @@
                     <div class="row">
                         <div class="col-lg-4 col-xs-6">
                             <!-- small box -->
-                            <a wicket:id="importLink">
-                                <div class="small-box bg-aqua">
+                            <a wicket:id="addRecordLink">
+                                <div class="small-box bg-green">
                                     <div class="inner">
-                                        <h3>Upload Template</h3>
+                                        <h3>Add Manual Record</h3>
                                         <br/>
                                         <br/>
                                     </div>
                                     <div class="icon">
-                                        <i class="fa fa-upload"></i>
+                                        <i class="ion ion-edit"></i>
                                     </div>
                                     <div class="small-box-footer">
-                                        Upload a new Excel template file. <i
-                                            class="fa fa-arrow-circle-right"></i>
+                                        Add a new manual record to this budget <i class="fa fa-arrow-circle-right"></i>
                                     </div>
                                 </div>
                             </a>
                         </div>
-                        <!-- ./col -->
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
 </wicket:extend>

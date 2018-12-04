@@ -29,6 +29,21 @@ public class WeeklyAggregatedRecordBean {
         this.valueInCents = valueInCents;
     }
 
+    public WeeklyAggregatedRecordBean(int year, int week, long valueInCents) {
+        this.week = week;
+        this.year = year;
+        this.valueInCents = valueInCents;
+        hours = 0.0;
+    }
+
+    public WeeklyAggregatedRecordBean(int year, int month, int week, long valueInCents) {
+        this.week = week;
+        this.month = month;
+        this.year = year;
+        this.valueInCents = valueInCents;
+        hours = 0.0;
+    }
+
     public WeeklyAggregatedRecordBean(int year, int month, int week, long minutes, Money dailyRate) {
         this.hours = ((double) minutes) / 60.0;
 

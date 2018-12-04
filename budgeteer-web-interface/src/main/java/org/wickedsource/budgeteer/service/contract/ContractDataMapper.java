@@ -11,6 +11,7 @@ import org.wickedsource.budgeteer.persistence.contract.ContractFieldEntity;
 import org.wickedsource.budgeteer.persistence.contract.ContractRepository;
 import org.wickedsource.budgeteer.persistence.invoice.InvoiceEntity;
 import org.wickedsource.budgeteer.persistence.project.ProjectContractField;
+import org.wickedsource.budgeteer.persistence.manualRecord.ManualRecordRepository;
 import org.wickedsource.budgeteer.service.AbstractMapper;
 import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
 import org.wickedsource.budgeteer.service.invoice.InvoiceDataMapper;
@@ -26,6 +27,9 @@ public class ContractDataMapper extends AbstractMapper<ContractEntity, ContractB
 
     @Autowired
     private ContractRepository contractRepository;
+
+    @Autowired
+    private ManualRecordRepository manualRecordRepository;
 
     @Override
     public ContractBaseData map(ContractEntity entity) {

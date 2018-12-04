@@ -1,16 +1,19 @@
 package org.wickedsource.budgeteer.service.notification;
 
+import org.joda.money.CurrencyUnit;
+import org.joda.money.Money;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.wickedsource.budgeteer.persistence.budget.BudgetEntity;
 import org.wickedsource.budgeteer.persistence.budget.BudgetRepository;
 import org.wickedsource.budgeteer.persistence.budget.MissingBudgetTotalBean;
-import org.wickedsource.budgeteer.persistence.record.MissingDailyRateBean;
-import org.wickedsource.budgeteer.persistence.record.MissingDailyRateForBudgetBean;
+import org.wickedsource.budgeteer.persistence.person.PersonEntity;
+import org.wickedsource.budgeteer.persistence.record.WorkRecordEntity;
 import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
 import org.wickedsource.budgeteer.service.ServiceTestTemplate;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -32,16 +35,16 @@ class NotificationServiceTest extends ServiceTestTemplate {
 
     @Test
     void testGetNotifications() throws Exception {
-        when(workRecordRepository.getMissingDailyRatesForProject(1L)).thenReturn(Arrays.asList(createMissingDailyRate()));
+        when(workRecordRepository.findByProjectId(1L)).thenReturn(Collections.singletonList(createWorkRecords()));
         when(workRecordRepository.countByProjectId(anyLong())).thenReturn(0L, 0L);
-        when(budgetRepository.getMissingBudgetTotalsForProject(1L)).thenReturn(Arrays.asList(createMissingBudgetTotal()));
+        when(budgetRepository.getMissingBudgetTotalsForProject(1L)).thenReturn(Collections.singletonList(createMissingBudgetTotal()));
         List<Notification> notifications = service.getNotifications(1L, 1L);
         Assertions.assertEquals(4, notifications.size());
     }
 
     @Test
     void testGetNotificationsForPerson() throws Exception {
-        when(workRecordRepository.getMissingDailyRatesForPerson(1L)).thenReturn(Arrays.asList(createMissingDailyRateForBudget()));
+        when(workRecordRepository.findByPersonId(1L)).thenReturn(Collections.singletonList(createWorkRecords()));
         List<Notification> notifications = service.getNotificationsForPerson(1L);
         Assertions.assertEquals(1, notifications.size());
         MissingDailyRateForBudgetNotification notification = (MissingDailyRateForBudgetNotification) notifications.get(0);
@@ -62,12 +65,19 @@ class NotificationServiceTest extends ServiceTestTemplate {
         Assertions.assertEquals("budget1", notification.getBudgetName());
     }
 
-    private MissingDailyRateBean createMissingDailyRate() {
-        return new MissingDailyRateBean(1L, "person1", fixedDate, fixedDate);
-    }
-
-    private MissingDailyRateForBudgetBean createMissingDailyRateForBudget() {
-        return new MissingDailyRateForBudgetBean(1L, "person1", fixedDate, fixedDate, "Budget1");
+    private WorkRecordEntity createWorkRecords() {
+        WorkRecordEntity entity = new WorkRecordEntity();
+        entity.setEditedManually(false);
+        entity.setDate(fixedDate);
+        entity.setDailyRate(Money.zero(CurrencyUnit.EUR));
+        BudgetEntity budgetEntity = new BudgetEntity();
+        budgetEntity.setName("Budget1");
+        entity.setBudget(budgetEntity);
+        PersonEntity personEntity = new PersonEntity();
+        personEntity.setName("person1");
+        personEntity.setId(1L);
+        entity.setPerson(personEntity);
+        return entity;
     }
 
     private MissingBudgetTotalBean createMissingBudgetTotal() {

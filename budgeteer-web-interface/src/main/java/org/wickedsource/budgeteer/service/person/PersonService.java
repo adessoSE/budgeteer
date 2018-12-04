@@ -15,6 +15,7 @@ import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
 import org.wickedsource.budgeteer.service.DateRange;
 import org.wickedsource.budgeteer.service.DateUtil;
 import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
+import org.wickedsource.budgeteer.service.record.RecordService;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
@@ -39,6 +40,9 @@ public class PersonService {
 
     @Autowired
     private WorkRecordRepository workRecordRepository;
+
+    @Autowired
+    private RecordService recordService;
 
     /**
      * Returns all people the given user can make use of to manage budgets.
@@ -105,8 +109,12 @@ public class PersonService {
 
         List<DailyRateEntity> dailyRates = new ArrayList<>();
 
-        for (PersonRate rate : person.getRates()) {
+        for (PersonRate rate : loadPersonWithRates(person.getPersonId()).getRates()) {
+            workRecordRepository.updateDailyRates(rate.getBudget().getId(), person.getPersonId(),
+                    rate.getDateRange().getStartDate(), rate.getDateRange().getEndDate(), Money.zero(CurrencyUnit.EUR));
+        }
 
+        for (PersonRate rate : person.getRates()) {
             DailyRateEntity rateEntity = new DailyRateEntity();
             rateEntity.setRate(rate.getRate());
             rateEntity.setBudget(budgetRepository.findOne(rate.getBudget().getId()));
@@ -114,10 +122,9 @@ public class PersonService {
             rateEntity.setDateStart(rate.getDateRange().getStartDate());
             rateEntity.setDateEnd(rate.getDateRange().getEndDate());
             dailyRates.add(rateEntity);
+
             workRecordRepository.updateDailyRates(rate.getBudget().getId(), person.getPersonId(),
                     rate.getDateRange().getStartDate(), rate.getDateRange().getEndDate(), rate.getRate());
-
-
         }
         personEntity.getDailyRates().clear();
         personEntity.getDailyRates().addAll(dailyRates);
@@ -170,11 +177,16 @@ public class PersonService {
     }
 
     public List<MissingDailyRateForBudgetBean> getMissingDailyRatesForPerson(long personId) {
-        return workRecordRepository.getMissingDailyRatesForPerson(personId);
+        return recordService.getMissingDailyRatesForPerson(personId);
     }
 
     public void removeDailyRateFromPerson(PersonWithRates personWithRates, PersonRate rate) {
-        workRecordRepository.updateDailyRates(rate.getBudget().getId(), personWithRates.getPersonId(),
-                rate.getDateRange().getStartDate(), rate.getDateRange().getEndDate(), Money.zero(CurrencyUnit.EUR));
+        List<WorkRecordEntity> records = workRecordRepository.findByPersonId(personWithRates.getPersonId());
+        for(WorkRecordEntity record : records){
+            if(record.getBudget().getName().equals(rate.getBudget().getName()) && DateUtil.isDateInDateRange(record.getDate(), rate.getDateRange())){
+                record.setDailyRate(Money.zero(CurrencyUnit.EUR));
+                workRecordRepository.save(record);
+            }
+        }
     }
 }
