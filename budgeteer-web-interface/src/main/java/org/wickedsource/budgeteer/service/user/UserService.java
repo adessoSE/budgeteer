@@ -14,6 +14,7 @@ import org.wickedsource.budgeteer.service.project.ProjectBaseDataMapper;
 import javax.transaction.Transactional;
 import javax.validation.constraints.NotNull;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -116,12 +117,15 @@ public class UserService {
      */
     public User login(String user, String password) throws InvalidLoginCredentialsException {
         UserEntity entity = userRepository.findByNameOrMailAndPassword(user, passwordHasher.hash(password));
-
-        if (entity == null)
+        if (entity == null) {
             throw new InvalidLoginCredentialsException();
+        }
 
-        if (entity.getMailVerified() == null)
+        entity.setLastLogin(new Date());
+
+        if (entity.getMailVerified() == null) {
             entity.setMailVerified(false);
+        }
 
         return mapper.map(entity);
     }
@@ -214,8 +218,9 @@ public class UserService {
     public EditUserData loadUserToEdit(long id) {
         UserEntity userEntity = userRepository.findOne(id);
 
-        if (userEntity == null)
+        if (userEntity == null) {
             throw new UnknownEntityException(UserEntity.class, id);
+        }
 
         EditUserData editUserData = new EditUserData();
         editUserData.setId(userEntity.getId());
@@ -223,6 +228,7 @@ public class UserService {
         editUserData.setMail(userEntity.getMail());
         editUserData.setPassword(userEntity.getPassword());
         editUserData.setDefaultProject(new ProjectBaseDataMapper().map(userEntity.getDefaultProject()));
+        editUserData.setLastLogin(userEntity.getLastLogin());
         return editUserData;
     }
 

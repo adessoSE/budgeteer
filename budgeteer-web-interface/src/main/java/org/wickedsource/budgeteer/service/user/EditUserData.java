@@ -2,9 +2,11 @@ package org.wickedsource.budgeteer.service.user;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.wicket.model.IModel;
 import org.wickedsource.budgeteer.service.project.ProjectBaseData;
 
 import java.io.Serializable;
+import java.util.Date;
 
 @NoArgsConstructor
 @Data
@@ -17,12 +19,13 @@ public class EditUserData implements Serializable {
     private String newPassword;
     private String newPasswordConfirmation;
     private ProjectBaseData defaultProject;
+    private Date lastLogin;
 
     public EditUserData(long userId) {
         this.id = userId;
     }
 
-    public EditUserData(long id, String name, String mail, String password, String newPassword, String newPasswordConfirmation, ProjectBaseData defaultProject) {
+    public EditUserData(long id, String name, String mail, String password, String newPassword, String newPasswordConfirmation, ProjectBaseData defaultProject, Date lastLogin) {
         this.id = id;
         this.name = name;
         this.mail = mail;
@@ -30,5 +33,6 @@ public class EditUserData implements Serializable {
         this.newPassword = newPassword;
         this.newPasswordConfirmation = newPasswordConfirmation;
         this.defaultProject = defaultProject;
+        this.lastLogin = lastLogin;
     }
 }

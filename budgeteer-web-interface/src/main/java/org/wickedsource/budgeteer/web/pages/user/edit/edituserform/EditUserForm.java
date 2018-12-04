@@ -1,6 +1,7 @@
 package org.wickedsource.budgeteer.web.pages.user.edit.edituserform;
 
 import org.apache.wicket.injection.Injector;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -40,7 +41,9 @@ public class EditUserForm extends Form<EditUserData> {
         CustomFeedbackPanel feedbackPanel = new CustomFeedbackPanel("feedback");
         add(feedbackPanel);
 
-        RequiredTextField<String> usernameRequiredTextField = new RequiredTextField<>("username", model(from(getModelObject().getName())));
+        Label lastLogin = new Label("lastLogin", getModelObject().getLastLogin());
+        Label username = new Label("username", getModelObject().getName());
+
         EmailTextField mailTextField;
         if (getModelObject().getMail() == null) {
             mailTextField = new EmailTextField("mail");
@@ -65,23 +68,13 @@ public class EditUserForm extends Form<EditUserData> {
         };
         defaultProjectDropdown.setNullValid(true);
 
-        PasswordTextField currentPasswordTextField = new PasswordTextField("currentPassword", new Model<>(""));
-        PasswordTextField newPasswordTextField = new PasswordTextField("newPassword", new Model<>(""));
-        PasswordTextField newPasswordConfirmationTextField = new PasswordTextField("newPasswordConfirmation", new Model<>(""));
-
-        usernameRequiredTextField.setRequired(true);
         mailTextField.setRequired(true);
         defaultProjectDropdown.setRequired(true);
-        currentPasswordTextField.setRequired(false);
-        newPasswordTextField.setRequired(false);
-        newPasswordConfirmationTextField.setRequired(false);
 
-        add(usernameRequiredTextField);
+        add(username);
         add(mailTextField);
         add(defaultProjectDropdown);
-        add(currentPasswordTextField);
-        add(newPasswordTextField);
-        add(newPasswordConfirmationTextField);
+        add(lastLogin);
 
         /*
          * The checks of the input fields must be done manually,
@@ -95,48 +88,12 @@ public class EditUserForm extends Form<EditUserData> {
             public void onSubmit() {
                 boolean changePassword = false;
 
-                if (usernameRequiredTextField.getInput().isEmpty()) {
-                    error(getString("form.username.Required"));
-                    return;
-                }
-
                 if (mailTextField.getInput().isEmpty()) {
                     error(getString("form.mail.Required"));
                     return;
                 }
 
-                if (currentPasswordTextField.getInput().isEmpty() && (!newPasswordTextField.getInput().isEmpty() || !newPasswordConfirmationTextField.getInput().isEmpty())) {
-                    error(getString("form.currentPassword.Required"));
-                    return;
-                }
-
-                if (!currentPasswordTextField.getInput().isEmpty()) {
-                    if (newPasswordTextField.getInput().isEmpty()) {
-                        error(getString("form.newPassword.Required"));
-                        return;
-                    }
-
-                    if (newPasswordConfirmationTextField.getInput().isEmpty()) {
-                        error(getString("form.newPasswordConfirmation.Required"));
-                        return;
-                    }
-
-                    if (!userService.checkPassword(EditUserForm.this.getModelObject().getId(), currentPasswordTextField.getInput())) {
-                        error(getString("message.wrongPassword"));
-                        return;
-                    }
-
-                    if (!newPasswordTextField.getInput().equals(newPasswordConfirmationTextField.getInput())) {
-                        error(getString("message.wrongPasswordConfirmation"));
-                        return;
-                    }
-
-                    EditUserForm.this.getModelObject().setPassword(newPasswordTextField.getInput());
-                    changePassword = true;
-                }
-
                 try {
-                    EditUserForm.this.getModelObject().setName(usernameRequiredTextField.getInput());
                     EditUserForm.this.getModelObject().setMail(mailTextField.getInput());
 
                     // If the user has changed his mail address, this will be displayed to him.

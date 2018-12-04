@@ -1,6 +1,6 @@
 <html xmlns:wicket>
 <wicket:extend>
-    <div class="form-box" id="login-box">
+    <div class="form-box" id="login-box" style="width: 30%">
         <div class="header">
             Edit User
             <div class="box-tools pull-right">
@@ -11,28 +11,16 @@
             <div class="body bg-gray">
                 <div wicket:id="feedback"></div>
                 <div class="form-group">
-                    <input wicket:id="username" maxlength="255" type="text" id="username" placeholder="Username" class="form-control"
-                           autofocus/>
+                    Username: <label wicket:id="username"></label>
                 </div>
                 <div class="form-group">
-                    <input wicket:id="mail" maxlength="255" type="email" id="mail" placeholder="Mail"
-                           class="form-control"/>
+                    Last Login: <label wicket:id="lastLogin"></label>
                 </div>
                 <div class="form-group">
-                    <select wicket:id="defaultProjectDropdown" id="defaultProjectDropdown" class="form-control"></select>
+                    E-mail: &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input wicket:id="mail" maxlength="255" style="width: 60%; alignment: right;" type="email" id="mail"/>
                 </div>
                 <div class="form-group">
-                    <input wicket:id="currentPassword" maxlength="512" type="password" id="currentPassword"
-                           placeholder="Current password"
-                           class="form-control"/>
-                </div>
-                <div class="form-group">
-                    <input wicket:id="newPassword" maxlength="512" type="password" id="newPassword" placeholder="New password"
-                           class="form-control"/>
-                </div>
-                <div class="form-group">
-                    <input wicket:id="newPasswordConfirmation" maxlength="512" type="password" id="newPasswordConfirmation"
-                           placeholder="Retype new password" class="form-control"/>
+                    Default project: <select wicket:id="defaultProjectDropdown" style="width: 60%; alignment: right;" id="defaultProjectDropdown"></select>
                 </div>
             </div>
             <div class="footer">

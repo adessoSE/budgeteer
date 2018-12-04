@@ -7,6 +7,7 @@ import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -41,11 +42,15 @@ public class UserEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private ProjectEntity defaultProject;
 
+    @Column
+    private Date lastLogin;
+
     public UserEntity() {
 
     }
 
-    public UserEntity(long id, String name, String password, String mail, boolean mailVerified, List<ProjectEntity> authorizedProjects, ProjectEntity defaultProject) {
+    public UserEntity(long id, String name, String password, String mail, boolean mailVerified, List<ProjectEntity> authorizedProjects, ProjectEntity defaultProject,
+                      Date lastLogin) {
         this.id = id;
         this.name = name;
         this.password = password;
@@ -53,6 +58,7 @@ public class UserEntity {
         this.mailVerified = mailVerified;
         this.authorizedProjects = authorizedProjects;
         this.defaultProject = defaultProject;
+        this.lastLogin = lastLogin;
     }
 
     @Override
