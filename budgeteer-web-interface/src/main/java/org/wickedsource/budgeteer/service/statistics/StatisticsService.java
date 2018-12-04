@@ -48,6 +48,7 @@ public class StatisticsService {
      */
     public List<Money> getWeeklyBudgetBurnedForProject(long projectId, int numberOfWeeks) {
         Date startDate = dateUtil.weeksAgo(numberOfWeeks);
+        //ToDo
         List<WeeklyAggregatedRecordBean> weeklyBeans = workRecordRepository.aggregateByWeekForProject(projectId, startDate);
         return fillInMissingWeeks(numberOfWeeks, weeklyBeans);
     }
@@ -530,6 +531,7 @@ public class StatisticsService {
      * @return the week statistics for the last numberOfWeeks weeks
      */
     public TargetAndActual getWeekStatsForBudgets(BudgetTagFilter budgetFilter, int numberOfWeeks) {
+        //ToDo
         Date startDate = dateUtil.weeksAgo(numberOfWeeks);
         List<WeeklyAggregatedRecordWithTitleBean> burnedStats = new ArrayList<>();
         List<WeeklyAggregatedRecordBean> plannedStats = new ArrayList<>();
@@ -561,6 +563,7 @@ public class StatisticsService {
      * @return the week statistics for the last numberOfWeeks weeks
      */
     public TargetAndActual getWeekStatsForBudgetsWithTax(BudgetTagFilter budgetFilter, int numberOfWeeks) {
+        //ToDo
         Date startDate = dateUtil.weeksAgo(numberOfWeeks);
         List<WeeklyAggregatedRecordWithTitleAndTaxBean> burnedStats = new ArrayList<>();
         List<WeeklyAggregatedRecordWithTaxBean> plannedStats = new ArrayList<>();
@@ -626,6 +629,7 @@ public class StatisticsService {
         Date startDate = dateUtil.monthsAgo(numberOfMonths);
         List<MonthlyAggregatedRecordWithTitleAndTaxBean> burnedStats = new ArrayList<>();
         List<MonthlyAggregatedRecordWithTaxBean> plannedStats = new ArrayList<>();
+        //ToDo
         if (budgetFilter.getSelectedTags().isEmpty()) {
             // aggregate all budgets
             burnedStats = workRecordRepository.aggregateByMonthAndPersonForBudgetsWithTax(budgetFilter.getProjectId(), startDate);
@@ -709,6 +713,7 @@ public class StatisticsService {
      */
     public TargetAndActual getWeekStatsForBudgetWithTax(long budgetId, int numberOfWeeks) {
         Date startDate = dateUtil.weeksAgo(numberOfWeeks);
+        //ToDo
         List<WeeklyAggregatedRecordWithTitleAndTaxBean> burnedStats = workRecordRepository.aggregateByWeekAndPersonForBudgetWithTax(budgetId, startDate);
         List<WeeklyAggregatedRecordWithTaxBean> plannedStats = planRecordRepository.aggregateByWeekForBudgetWithTax(budgetId, startDate);
         MonthlyStats monthlyStats = new MonthlyStats(budgetId, workRecordRepository, planRecordRepository);

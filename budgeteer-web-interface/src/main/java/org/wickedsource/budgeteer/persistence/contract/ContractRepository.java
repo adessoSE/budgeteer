@@ -16,6 +16,7 @@ public interface ContractRepository extends CrudRepository<ContractEntity, Long>
     ContractInvoiceField findInvoiceFieldByName(@Param("contractId") long contractID, @Param("fieldName") String fieldName);
 
 
+    //ToDo
     /**
      * returns a ContractStatisticBean for a given contract till the given month and year.
      * returns the remaining budget of the contract, the spend budget in budgeteer and the invoiced budget until the given date
@@ -41,6 +42,7 @@ public interface ContractRepository extends CrudRepository<ContractEntity, Long>
             ") from ContractEntity c where c.id = :contractId")
     ContractStatisticBean getContractStatisticAggregatedByMonthAndYear(@Param("contractId") Long contractId, @Param("month") Integer month, @Param("year") Integer year);
 
+    //ToDo
     /**
      * returns a ContractStatisticBean for a given contract till the given month and year.
      * returns the remaining budget of the contract, the spend budget in budgeteer and the invoiced budget for the given month
@@ -66,6 +68,7 @@ public interface ContractRepository extends CrudRepository<ContractEntity, Long>
             ") from ContractEntity c where c.id = :contractId")
     ContractStatisticBean getContractStatisticByMonthAndYear(@Param("contractId") Long contractId, @Param("month") Integer month, @Param("year") Integer year);
 
+    // ToDo
     @Query("select coalesce(sum(wr.minutes * wr.dailyRate/ 60 / 8),0) from WorkRecordEntity wr where wr.budget.contract.id = :contractId")
     Double getSpentBudgetByContractId(@Param("contractId") long contractId);
 

@@ -124,6 +124,7 @@ public class BudgetService {
         return enrichBudgetEntity(budget);
     }
 
+    //ToDo
     private BudgetDetailData enrichBudgetEntity(BudgetEntity entity) {
         Date lastUpdated = workRecordRepository.getLatestWorkRecordDate(entity.getId());
         Double spentBudgetInCents = workRecordRepository.getSpentBudget(entity.getId());
@@ -137,7 +138,7 @@ public class BudgetService {
         data.setName(entity.getName());
         data.setDescription(entity.getDescription());
         data.setTags(mapEntitiesToTags(entity.getTags()));
-        // Money
+
         data.setSpent(toMoneyNullsafe(spentBudgetInCents));
         data.setSpent_gross(data.getSpent().multipliedBy(taxCoefficient, RoundingMode.FLOOR));
         data.setTotal(entity.getTotal());
@@ -147,7 +148,7 @@ public class BudgetService {
         data.setUnplanned(entity.getTotal().minus(toMoneyNullsafe(plannedBudgetInCents)));
         data.setUnplanned_gross(data.getUnplanned().multipliedBy(taxCoefficient, RoundingMode.FLOOR));
         data.setLimit(entity.getLimit());
-        // Money end
+
         data.setContractName(entity.getContract() == null ? null : entity.getContract().getName());
         data.setContractId(entity.getContract() == null ? 0 : entity.getContract().getId());
         return data;

@@ -36,6 +36,6 @@
                   class="org.wickedsource.budgeteer.persistence.contract.ContractSortingRepository"/>
 
     <mockito:mock id="fixedDailyRateRepository"
-                  class="org.wickedsource.budgeteer.fixedDailyRate.FixedDailyRateRepository"/>
+                  class="org.wickedsource.budgeteer.persistence.fixedDailyRate.FixedDailyRateRepository"/>
 
 </beans>

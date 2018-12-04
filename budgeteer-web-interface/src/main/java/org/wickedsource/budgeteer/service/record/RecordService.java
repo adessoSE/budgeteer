@@ -70,6 +70,7 @@ public class RecordService {
      * @return one record for each week from the current week to the first week that was booked in the given budget
      */
     public List<AggregatedRecord> getWeeklyAggregationForBudgetWithTax(long budgetId) {
+        //ToDo
         List<WeeklyAggregatedRecordWithTitleAndTaxBean> workRecords = workRecordRepository.aggregateByWeekAndPersonForBudgetWithTax(budgetId);
         List<WeeklyAggregatedRecordWithTaxBean> planRecords = planRecordRepository.aggregateByWeekForBudgetWithTax(budgetId);
 
@@ -97,6 +98,7 @@ public class RecordService {
      * @return one record for each month from the current month to the first month that was booked in the given budget.
      */
     public List<AggregatedRecord> getMonthlyAggregationForBudgetWithTax(long budgetId) {
+        //ToDo
         List<MonthlyAggregatedRecordWithTaxBean> planRecords = planRecordRepository.aggregateByMonthAndBudgetWithTax(budgetId);
         List<MonthlyAggregatedRecordWithTaxBean> workRecords = workRecordRepository.aggregateByMonthAndBudgetWithTax(budgetId);
         return recordJoiner.joinMonthlyWithTax(workRecords, planRecords);
@@ -134,6 +136,7 @@ public class RecordService {
         List<WeeklyAggregatedRecordWithTaxBean> planRecords;
         List<WeeklyAggregatedRecordWithTitleAndTaxBean> workRecords;
 
+        //ToDo
         if (budgetFilter.getSelectedTags().isEmpty()) {
             workRecords = workRecordRepository.aggregateByWeekAndPersonForBudgetsWithTax(budgetFilter.getProjectId());
             planRecords = planRecordRepository.aggregateByWeekForBudgetsWithTax(budgetFilter.getProjectId());
@@ -172,6 +175,7 @@ public class RecordService {
      * @return one record for each month from the current month to the first month that was booked in the given budget.
      */
     public List<AggregatedRecord> getMonthlyAggregationForBudgetsWithTax(BudgetTagFilter budgetFilter) {
+        //ToDo
         List<MonthlyAggregatedRecordWithTaxBean> planRecords;
         List<MonthlyAggregatedRecordWithTaxBean> workRecords;
         if (budgetFilter.getSelectedTags().isEmpty()) {
