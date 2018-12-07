@@ -277,9 +277,9 @@ public class RecordService {
         dailyRatesForProject.sort((o1, o2) -> {
             int names = o1.getPerson().getName().compareTo(o2.getPerson().getName());
             if (names == 0) {
-                int dates = o1.getDate().compareTo(o2.getDate());
+                int dates = o1.getBudget().getName().compareTo(o2.getBudget().getName());
                 if(dates == 0){
-                    return o1.getBudget().getName().compareTo(o2.getBudget().getName());
+                    return o1.getDate().compareTo(o2.getDate());
                 }else{
                     return dates;
                 }
@@ -349,9 +349,9 @@ public class RecordService {
 
         //Sort by date and budget name, this is needed in the loop below.
         dailyRatesForPerson.sort((o1, o2) -> {
-            int dates = o1.getDate().compareTo(o2.getDate());
+            int dates = o1.getBudget().getName().compareTo(o2.getBudget().getName());
             if(dates == 0){
-                return o1.getBudget().getName().compareTo(o2.getBudget().getName());
+                return o1.getDate().compareTo(o2.getDate());
             }else{
                 return dates;
             }
