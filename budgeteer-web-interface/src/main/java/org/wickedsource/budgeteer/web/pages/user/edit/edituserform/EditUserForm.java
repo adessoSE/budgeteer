@@ -28,6 +28,11 @@ public class EditUserForm extends Form<EditUserData> {
     @SpringBean
     private ProjectService projectService;
 
+    private String currentPassword;
+    private String newPassword;
+    private String newPasswordRetyped;
+    boolean changeUsernameFormOpen = false;
+
     public EditUserForm(String id) {
         super(id, new ClassAwareWrappingModel<>(Model.of(new EditUserData(BudgeteerSession.get().getLoggedInUser().getId())), EditUserData.class));
         addComponents();
@@ -52,151 +57,18 @@ public class EditUserForm extends Form<EditUserData> {
             mailTextField = new EmailTextField("mail");
         }
         else {
-            mailTextField = new EmailTextField("mail", model(from(getModelObject().getMail())));
+            mailTextField = new EmailTextField("mail", model(from(getModelObject()).getMail()));
         }
-
-        TextField<String> usernameTextField = (TextField) new TextField<>("usernameTextField", new Model<>("")).add(
-                new AjaxFormComponentUpdatingBehavior("change") {
-                    @Override
-                    protected void onUpdate(AjaxRequestTarget target) {
-                    }
-                }
-        );
-        TextField<String> usernameRetypedTextField = (TextField<String>) new TextField<>("usernameRetypedTextField", new Model<>("")).add(
-                new AjaxFormComponentUpdatingBehavior("change") {
-                    @Override
-                    protected void onUpdate(AjaxRequestTarget target) {}
-                }
-        );
-        CustomFeedbackPanel feedbackPanelChangeUsername = new CustomFeedbackPanel("feedbackChangeUsername");
-        feedbackPanelChangeUsername.setOutputMarkupId(true);
-
-        Form changeUsername = new Form("usernameForm");
-        AjaxLink submitButton2 = new AjaxLink("submitButton2") {
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-                String newUsername = usernameTextField.getModelObject();
-                String newUsernameRetyped = usernameRetypedTextField.getModelObject();
-                if(newUsername.isEmpty() || newUsernameRetyped.isEmpty()){
-                    feedbackPanelChangeUsername.error("Username may not be empty!");
-                    target.add(feedbackPanelChangeUsername);
-                    return;
-                }
-                if(!newUsernameRetyped.equals(newUsername)){
-                    feedbackPanelChangeUsername.error("WRONG!");
-                }else{
-                    EditUserForm.this.getModelObject().setName(newUsername);
-                    try {
-                        userService.saveUser(EditUserForm.this.getModelObject(), false);
-                        feedbackPanelChangeUsername.success("Username successfully changed!");
-                        username.setDefaultModel(model(from(EditUserForm.this.getModel()).getName()));
-                        target.add(username);
-                    } catch (UsernameAlreadyInUseException e) {
-                        feedbackPanelChangeUsername.error("Username already in use");
-                    } catch (MailAlreadyInUseException e) {
-                        feedbackPanelChangeUsername.error("Email already in use");
-                    }
-                }
-                target.add(feedbackPanelChangeUsername);
-            }
-        };
-        changeUsername.add(feedbackPanelChangeUsername);
-        changeUsername.add(usernameTextField);
-        changeUsername.add(usernameRetypedTextField);
-
-        changeUsername.add(submitButton2);
-        add(changeUsername);
-
-
-        PasswordTextField currentPasswordTextField = (PasswordTextField) new PasswordTextField("currentPasswordTextField", new Model<>("")).add(
-                new AjaxFormComponentUpdatingBehavior("change") {
-                    @Override
-                    protected void onUpdate(AjaxRequestTarget target) {}
-                }
-        );
-        PasswordTextField passwordTextField = (PasswordTextField) new PasswordTextField("passwordTextField", new Model<>("")).add(
-                new AjaxFormComponentUpdatingBehavior("change") {
-                    @Override
-                    protected void onUpdate(AjaxRequestTarget target) {}
-                }
-        );
-        PasswordTextField passwordRetypedTextField = (PasswordTextField) new PasswordTextField("passwordRetypedTextField", new Model<>("")).add(
-                new AjaxFormComponentUpdatingBehavior("change") {
-                    @Override
-                    protected void onUpdate(AjaxRequestTarget target) {}
-                }
-        );
-        CustomFeedbackPanel feedbackPanelChangePassword = new CustomFeedbackPanel("feedbackChangePassword");
-        feedbackPanelChangePassword.setOutputMarkupId(true);
-
-        Form changePassword = new Form("passwordForm");
-        AjaxLink submitButton3 = new AjaxLink("submitButton3") {
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-                String currentPassowrd = currentPasswordTextField.getModelObject();
-                String newPassword = passwordTextField.getModelObject();
-                String newPasswordRetyped = passwordRetypedTextField.getModelObject();
-                if(currentPassowrd.isEmpty() || newPassword.isEmpty() || newPasswordRetyped.isEmpty()){
-                    feedbackPanelChangePassword.error("Password may not be empty!");
-                    target.add(feedbackPanelChangePassword);
-                    return;
-                }
-
-                if(!newPassword.equals(newPasswordRetyped)){//TODO
-                    feedbackPanelChangePassword.error("The new password does not blabla bla with blablabla!");
-                }else{
-                    try {
-                        currentPassowrd = new PasswordHasher().hash(currentPassowrd);
-                        String currentPassowrdCheck = userService.getUserById(EditUserForm.this.getModelObject().getId()).getPassword();
-                        if(!currentPassowrd.equals(currentPassowrdCheck)){
-                            feedbackPanelChangePassword.error("The current password is wrong");
-                        }else{
-                            EditUserForm.this.getModelObject().setPassword(currentPassowrd);
-                            try {
-                                userService.saveUser(EditUserForm.this.getModelObject(), true);
-                            } catch (UsernameAlreadyInUseException e) {
-                              //TODO  e.printStackTrace();
-                            } catch (MailAlreadyInUseException e) {
-                             //TODO   e.printStackTrace();
-                            }
-                            feedbackPanelChangePassword.success("Password successfully changed!");
-                        }
-                    } catch (UserIdNotFoundException e) {
-                        e.printStackTrace();//TODO
-                    }
-                }
-                target.add(feedbackPanelChangePassword);
-            }
-        };
-        changePassword.add(feedbackPanelChangePassword);
-        changePassword.add(passwordTextField);
-        changePassword.add(passwordRetypedTextField);
-        changePassword.add(currentPasswordTextField);
-        changePassword.add(submitButton3);
-        add(changePassword);
-
-        DropDownChoice<ProjectBaseData> defaultProjectDropdown = new DropDownChoice<ProjectBaseData>("defaultProjectDropdown",
-                model(from(getModel()).getDefaultProject()),
-                projectService.getProjectsForUser(getModelObject().getId()),
-                new AbstractChoiceRenderer<ProjectBaseData>(){
-                    @Override
-                    public Object getDisplayValue(ProjectBaseData object) {
-                        return object.getName();
-                    }
-        }){
-            @Override
-            protected String getNullValidDisplayValue() {
-                return "No default project";
-            }
-        };
-        defaultProjectDropdown.setNullValid(true);
 
         mailTextField.setRequired(true);
 
         add(username);
         add(mailTextField);
-        add(defaultProjectDropdown);
         add(lastLogin);
+
+        addChangeUsernameForm(username);
+        addChangePasswordForm();
+        addDropDownChoice();
 
         /*
          * The checks of the input fields must be done manually,
@@ -236,5 +108,163 @@ public class EditUserForm extends Form<EditUserData> {
         };
         submitButton.setDefaultFormProcessing(true);
         add(submitButton);
+    }
+
+    private void addDropDownChoice() {
+        DropDownChoice<ProjectBaseData> defaultProjectDropdown = new DropDownChoice<ProjectBaseData>("defaultProjectDropdown",
+                model(from(getModel()).getDefaultProject()),
+                projectService.getProjectsForUser(getModelObject().getId()),
+                new AbstractChoiceRenderer<ProjectBaseData>(){
+                    @Override
+                    public Object getDisplayValue(ProjectBaseData object) {
+                        return object.getName();
+                    }
+                }){
+            @Override
+            protected String getNullValidDisplayValue() {
+                return "No default project";
+            }
+        };
+        defaultProjectDropdown.setNullValid(true);
+        add(defaultProjectDropdown);
+    }
+
+    private void addChangeUsernameForm(Label username) {
+        TextField<String> usernameTextField = (TextField) new TextField<>("usernameTextField", new Model<>("")).add(
+                new AjaxFormComponentUpdatingBehavior("change") {
+                    @Override
+                    protected void onUpdate(AjaxRequestTarget target) {
+                    }
+                }
+        );
+        TextField<String> usernameRetypedTextField = (TextField<String>) new TextField<>("usernameRetypedTextField", new Model<>("")).add(
+                new AjaxFormComponentUpdatingBehavior("change") {
+                    @Override
+                    protected void onUpdate(AjaxRequestTarget target) {}
+                }
+        );
+        CustomFeedbackPanel feedbackPanelChangeUsername = new CustomFeedbackPanel("feedbackChangeUsername");
+        feedbackPanelChangeUsername.setOutputMarkupId(true);
+
+        Form changeUsername = new Form("usernameForm");
+        AjaxLink submitButton2 = new AjaxLink("submitButton2") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                String newUsername = usernameTextField.getModelObject();
+                String newUsernameRetyped = usernameRetypedTextField.getModelObject();
+                if(newUsername == null || newUsernameRetyped == null || newUsername.isEmpty() || newUsernameRetyped.isEmpty()){
+                    feedbackPanelChangeUsername.error(getString("form.username.Required"));
+                    target.add(feedbackPanelChangeUsername);
+                    return;
+                }
+                if(!newUsernameRetyped.equals(newUsername)){
+                    feedbackPanelChangeUsername.error(getString("message.wrongUsernameConfirmation"));
+                }else{
+                    EditUserForm.this.getModelObject().setName(newUsername);
+                    try {
+                        userService.saveUser(EditUserForm.this.getModelObject(), false);
+                        feedbackPanelChangeUsername.success(getString("message.success"));
+                        username.setDefaultModel(model(from(EditUserForm.this.getModel()).getName()));
+                        target.add(username);
+                    } catch (UsernameAlreadyInUseException e) {
+                        feedbackPanelChangeUsername.error(getString("message.duplicateUserName"));
+                    } catch (MailAlreadyInUseException e) {
+                        feedbackPanelChangeUsername.error(getString("message.duplicateMail"));
+                    }
+                }
+                target.add(feedbackPanelChangeUsername);
+            }
+        };
+        changeUsername.add(feedbackPanelChangeUsername);
+        changeUsername.add(usernameTextField);
+        changeUsername.add(usernameRetypedTextField);
+
+        changeUsername.add(submitButton2);
+        add(changeUsername);
+    }
+
+    private void addChangePasswordForm() {
+        PasswordTextField currentPasswordTextField = (PasswordTextField) new PasswordTextField("currentPasswordTextField", new Model<>("")).add(
+                new AjaxFormComponentUpdatingBehavior("change") {
+                    @Override
+                    protected void onUpdate(AjaxRequestTarget target) {
+                        currentPassword = ((PasswordTextField) this.getComponent()).getConvertedInput();
+                    }
+                }
+        );
+        currentPasswordTextField.setRequired(false);
+        PasswordTextField passwordTextField = (PasswordTextField) new PasswordTextField("passwordTextField", new Model<>("")).add(
+                new AjaxFormComponentUpdatingBehavior("change") {
+                    @Override
+                    protected void onUpdate(AjaxRequestTarget target) {
+                        newPassword = ((PasswordTextField) this.getComponent()).getConvertedInput();
+                    }
+                }
+        );
+        passwordTextField.setRequired(false);
+        PasswordTextField passwordRetypedTextField = (PasswordTextField) new PasswordTextField("passwordRetypedTextField", new Model<>("")).add(
+                new AjaxFormComponentUpdatingBehavior("change") {
+                    @Override
+                    protected void onUpdate(AjaxRequestTarget target) {
+                        newPasswordRetyped = ((PasswordTextField) this.getComponent()).getConvertedInput();
+                    }
+                }
+        );
+        passwordRetypedTextField.setRequired(false);
+        CustomFeedbackPanel feedbackPanelChangePassword = new CustomFeedbackPanel("feedbackChangePassword");
+        feedbackPanelChangePassword.setOutputMarkupId(true);
+
+        Form changePassword = new Form("passwordForm");
+        AjaxLink submitButton3 = new AjaxLink("submitButton3") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                if (currentPassword == null || currentPassword.isEmpty()) {
+                    feedbackPanelChangePassword.error(getString("form.currentPassword.Required"));
+                    target.add(feedbackPanelChangePassword);
+                    return;
+                }
+                else if (newPassword == null || newPassword.isEmpty()) {
+                    feedbackPanelChangePassword.error(getString("form.newPassword.Required"));
+                    target.add(feedbackPanelChangePassword);
+                    return;
+                }
+                else if (newPasswordRetyped == null || newPasswordRetyped.isEmpty()) {
+                    feedbackPanelChangePassword.error(getString("form.newPasswordConfirmation.Required"));
+                    target.add(feedbackPanelChangePassword);
+                    return;
+                }
+
+                if(!newPassword.equals(newPasswordRetyped)){
+                    feedbackPanelChangePassword.error(getString("message.wrongPasswordConfirmation"));
+                }else{
+                    try {
+                        currentPassword = new PasswordHasher().hash(currentPassword);
+                        String currentPassowrdCheck = userService.getUserById(EditUserForm.this.getModelObject().getId()).getPassword();
+                        if(!currentPassword.equals(currentPassowrdCheck)){
+                            feedbackPanelChangePassword.error(getString("message.wrongPassword"));
+                        }else{
+                            EditUserForm.this.getModelObject().setPassword(newPassword);
+                            try {
+                                userService.saveUser(EditUserForm.this.getModelObject(), true);
+                            } catch (UsernameAlreadyInUseException e) {
+                                feedbackPanelChangePassword.error("message.duplicateUserName");
+                            } catch (MailAlreadyInUseException e) {
+                                feedbackPanelChangePassword.error("message.duplicateMail");
+                            }
+                            feedbackPanelChangePassword.success(getString("message.success"));
+                        }
+                    } catch (UserIdNotFoundException e) {
+                        feedbackPanelChangePassword.error("This should not happen.");
+                    }
+                }
+                target.add(feedbackPanelChangePassword);
+            }
+        };
+        changePassword.add(feedbackPanelChangePassword);
+        changePassword.add(passwordTextField);
+        changePassword.add(passwordRetypedTextField);
+        changePassword.add(currentPasswordTextField);
+        changePassword.add(submitButton3);
+        add(changePassword);
     }
 }

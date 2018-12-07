@@ -23,20 +23,19 @@
                     </button>
                 </div>
                 <div class="form-group">
-                    E-mail: &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input wicket:id="mail" maxlength="255" style="width: 60%; alignment: right;" type="email" id="mail"/>
+                    E-mail: <input wicket:id="mail" maxlength="255" style="width: 60%; float: right;" type="email" id="mail"/>
                 </div>
                 <div class="form-group">
-                    Default project: <select wicket:id="defaultProjectDropdown" style="width: 60%; alignment: right;" id="defaultProjectDropdown"></select>
+                    Default project: <select wicket:id="defaultProjectDropdown" style="width: 60%; float: right;" id="defaultProjectDropdown"></select>
                 </div>
             </div>
             <div class="footer">
                 <div class="row">
                     <div class="col-lg-6">
-                        <button wicket:id="backlink2" id="cancel" type="button" class="btn bg-olive btn-block">Cancel
-                        </button>
+                        <button wicket:id="backlink2" id="cancel" type="button" class="btn bg-olive btn-block">Cancel</button>
                     </div>
                     <div class="col-lg-6">
-                        <button wicket:id="submitButton" id="submitButton" type="submit" class="btn bg-olive btn-block">
+                        <button wicket:id="submitButton" id="submitButton" type="button" class="btn bg-olive btn-block">
                             Save Changes
                         </button>
                     </div>
@@ -48,19 +47,21 @@
                     <div class="modal-dialog" style="width: 40%" role="document">
                         <div class="modal-content">
                             <div class="modal-header bg-olive">
-                                <h5 class="modal-title">Change username</h5>
-                                <button type="button" class="btn bg-olive btn-sm close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
+                                Change Username
+                                <span class="box-tools pull-right">
+                                    <button type="button" class="btn bg-olive btn-sm close" data-dismiss="modal" aria-label="Close">
+                                        <i class="fa fa-times"></i>
+                                    </button>
+                                </span>
                             </div>
                             <div class="modal-body bg-gray">
                                 <div wicket:id="feedbackChangeUsername"></div>
-                                New User Name <input wicket:id="usernameTextField" align="right" maxlength="255" style="width: 60%; float: right;" type="text"/>
+                                New User Name *<input wicket:id="usernameTextField" align="right" maxlength="255" style="width: 60%; float: right;" type="text"/>
                                 <br/><br/>
-                                Retype User Name <input wicket:id="usernameRetypedTextField" align="right" maxlength="255" style="width: 60%; float: right;" type="text"/>
+                                Retype User Name *<input wicket:id="usernameRetypedTextField" align="right" maxlength="255" style="width: 60%; float: right;" type="text"/>
                             </div>
                             <div class="modal-footer">
-                                <button wicket:id="submitButton2" class="btn bg-olive">Save changes</button>
+                                <button wicket:id="submitButton2" id="submitButton2" class="btn bg-olive">Save changes</button>
                                 <button type="button" class="btn bg-olive" data-dismiss="modal">Close</button>
                             </div>
                         </div>
@@ -73,18 +74,20 @@
                     <div class="modal-dialog" style="width: 40%" role="document">
                         <div class="modal-content">
                             <div class="modal-header bg-olive">
-                                <h5 class="modal-title">Change password</h5>
-                                <button type="button" class="btn bg-olive btn-sm close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
+                                Change Password
+                                <span class="box-tools pull-right">
+                                    <button type="button" class="btn bg-olive btn-sm close" data-dismiss="modal" aria-label="Close">
+                                        <i class="fa fa-times"></i>
+                                    </button>
+                                </span>
                             </div>
                             <div class="modal-body bg-gray">
                                 <div wicket:id="feedbackChangePassword"></div>
-                                Current Password <input wicket:id="currentPasswordTextField" type="password" maxlength="255" style="width: 60%; float: right;"/>
+                                Current Password *<input wicket:id="currentPasswordTextField" type="password" maxlength="255" style="width: 60%; float: right;"/>
                                 <br/><br/>
-                                New Password <input wicket:id="passwordTextField" type="password" maxlength="255" style="width: 60%; float: right;"/>
+                                New Password *<input wicket:id="passwordTextField" type="password" maxlength="255" style="width: 60%; float: right;"/>
                                 <br/><br/>
-                                Retype New Password <input wicket:id="passwordRetypedTextField" type="password" maxlength="255" style="width: 60%; float: right;"/>
+                                Retype New Password *<input wicket:id="passwordRetypedTextField" type="password" maxlength="255" style="width: 60%; float: right;"/>
                             </div>
                             <div class="modal-footer">
                                 <button wicket:id="submitButton3" class="btn bg-olive">Save changes</button>
@@ -96,6 +99,5 @@
             </form>
         </form>
     </div>
-    <script src="js/enterAndEscape.js"></script>
 </wicket:extend>
 </html>
