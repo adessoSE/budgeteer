@@ -197,7 +197,7 @@ class StatisticsServiceTest extends ServiceTestTemplate {
         when(planRecordRepository.aggregateByWeekForPerson(anyLong(), any(Date.class))).thenReturn(createLast5Weeks());
         TargetAndActual targetAndActual = service.getWeekStatsForPerson(1L, 5);
 
-        List<Money> targetSeries = targetAndActual.getTargetSeries().getValues();
+        List<Money> targetSeries = targetAndActual.getTargetSeries().getValuesNet();
         Assertions.assertEquals(5, targetSeries.size());
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(100000L), targetSeries.get(0));
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(200000L), targetSeries.get(1));
@@ -210,21 +210,21 @@ class StatisticsServiceTest extends ServiceTestTemplate {
 
         MoneySeries actualSeries1 = targetAndActual.getActualSeries().get(1);
         Assertions.assertEquals("Budget 2", actualSeries1.getName());
-        Assertions.assertEquals(5, actualSeries1.getValues().size());
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(100000L), actualSeries1.getValues().get(0));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(200000L), actualSeries1.getValues().get(1));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0L), actualSeries1.getValues().get(2));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0L), actualSeries1.getValues().get(3));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(500000L), actualSeries1.getValues().get(4));
+        Assertions.assertEquals(5, actualSeries1.getValuesNet().size());
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(100000L), actualSeries1.getValuesNet().get(0));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(200000L), actualSeries1.getValuesNet().get(1));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0L), actualSeries1.getValuesNet().get(2));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0L), actualSeries1.getValuesNet().get(3));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(500000L), actualSeries1.getValuesNet().get(4));
 
         MoneySeries actualSeries2 = targetAndActual.getActualSeries().get(0);
         Assertions.assertEquals("Budget 1", actualSeries2.getName());
-        Assertions.assertEquals(5, actualSeries1.getValues().size());
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(100000L), actualSeries2.getValues().get(0));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(200000L), actualSeries2.getValues().get(1));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0L), actualSeries2.getValues().get(2));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(400000L), actualSeries2.getValues().get(3));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(500000L), actualSeries2.getValues().get(4));
+        Assertions.assertEquals(5, actualSeries1.getValuesNet().size());
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(100000L), actualSeries2.getValuesNet().get(0));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(200000L), actualSeries2.getValuesNet().get(1));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0L), actualSeries2.getValuesNet().get(2));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(400000L), actualSeries2.getValuesNet().get(3));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(500000L), actualSeries2.getValuesNet().get(4));
     }
 
     @Test
@@ -234,7 +234,7 @@ class StatisticsServiceTest extends ServiceTestTemplate {
         when(planRecordRepository.aggregateByWeekForBudget(anyLong(), any(Date.class))).thenReturn(createLast5Weeks());
         TargetAndActual targetAndActual = service.getWeekStatsForBudget(1L, 5);
 
-        List<Money> targetSeries = targetAndActual.getTargetSeries().getValues();
+        List<Money> targetSeries = targetAndActual.getTargetSeries().getValuesNet();
         Assertions.assertEquals(5, targetSeries.size());
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(100000L), targetSeries.get(0));
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(200000L), targetSeries.get(1));
@@ -247,21 +247,21 @@ class StatisticsServiceTest extends ServiceTestTemplate {
 
         MoneySeries actualSeries1 = targetAndActual.getActualSeries().get(1);
         Assertions.assertEquals("Person 2", actualSeries1.getName());
-        Assertions.assertEquals(5, actualSeries1.getValues().size());
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(100000L), actualSeries1.getValues().get(0));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(200000L), actualSeries1.getValues().get(1));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0L), actualSeries1.getValues().get(2));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0L), actualSeries1.getValues().get(3));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(500000L), actualSeries1.getValues().get(4));
+        Assertions.assertEquals(5, actualSeries1.getValuesNet().size());
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(100000L), actualSeries1.getValuesNet().get(0));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(200000L), actualSeries1.getValuesNet().get(1));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0L), actualSeries1.getValuesNet().get(2));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0L), actualSeries1.getValuesNet().get(3));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(500000L), actualSeries1.getValuesNet().get(4));
 
         MoneySeries actualSeries2 = targetAndActual.getActualSeries().get(0);
         Assertions.assertEquals("Person 1", actualSeries2.getName());
-        Assertions.assertEquals(5, actualSeries1.getValues().size());
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(100000L), actualSeries2.getValues().get(0));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(200000L), actualSeries2.getValues().get(1));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0L), actualSeries2.getValues().get(2));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(400000L), actualSeries2.getValues().get(3));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(500000L), actualSeries2.getValues().get(4));
+        Assertions.assertEquals(5, actualSeries1.getValuesNet().size());
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(100000L), actualSeries2.getValuesNet().get(0));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(200000L), actualSeries2.getValuesNet().get(1));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0L), actualSeries2.getValuesNet().get(2));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(400000L), actualSeries2.getValuesNet().get(3));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(500000L), actualSeries2.getValuesNet().get(4));
     }
 
     @Test
@@ -274,7 +274,7 @@ class StatisticsServiceTest extends ServiceTestTemplate {
         monthlyStats.calculateCentValuesByMonthlyFraction(planStats, burnedStats);
         TargetAndActual targetAndActual = service.calculateWeeklyTargetAndActual(5, planStats, burnedStats);
 
-        List<Money> targetSeries_net = targetAndActual.getTargetSeries().getValues();
+        List<Money> targetSeries_net = targetAndActual.getTargetSeries().getValuesNet();
         Assertions.assertEquals(5, targetSeries_net.size());
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(37500), targetSeries_net.get(0));
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(38125), targetSeries_net.get(1));
@@ -282,7 +282,7 @@ class StatisticsServiceTest extends ServiceTestTemplate {
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(58125), targetSeries_net.get(3));
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(38750), targetSeries_net.get(4));
 
-        List<Money> targetSeries_gross = targetAndActual.getTargetSeries().getValues_gross();
+        List<Money> targetSeries_gross = targetAndActual.getTargetSeries().getValuesGross();
 
         Assertions.assertEquals(5, targetSeries_net.size());
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(43125), targetSeries_gross.get(0));
@@ -297,35 +297,35 @@ class StatisticsServiceTest extends ServiceTestTemplate {
 
         MoneySeries actualSeries1 = targetAndActual.getActualSeries().get(0);
         Assertions.assertEquals("Person 1", actualSeries1.getName());
-        Assertions.assertEquals(5, actualSeries1.getValues().size());
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(18750), actualSeries1.getValues().get(0));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(20000), actualSeries1.getValues().get(1));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0L), actualSeries1.getValues().get(2));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(57500), actualSeries1.getValues().get(3));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(19375), actualSeries1.getValues().get(4));
+        Assertions.assertEquals(5, actualSeries1.getValuesNet().size());
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(18750), actualSeries1.getValuesNet().get(0));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(20000), actualSeries1.getValuesNet().get(1));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0L), actualSeries1.getValuesNet().get(2));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(57500), actualSeries1.getValuesNet().get(3));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(19375), actualSeries1.getValuesNet().get(4));
 
-        Assertions.assertEquals(5, actualSeries1.getValues_gross().size());
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(20625), actualSeries1.getValues_gross().get(0));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(22000), actualSeries1.getValues_gross().get(1));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0L), actualSeries1.getValues_gross().get(2));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(67125), actualSeries1.getValues_gross().get(3));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(21313), actualSeries1.getValues_gross().get(4));
+        Assertions.assertEquals(5, actualSeries1.getValuesGross().size());
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(20625), actualSeries1.getValuesGross().get(0));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(22000), actualSeries1.getValuesGross().get(1));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0L), actualSeries1.getValuesGross().get(2));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(67125), actualSeries1.getValuesGross().get(3));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(21313), actualSeries1.getValuesGross().get(4));
 
         MoneySeries actualSeries2 = targetAndActual.getActualSeries().get(1);
         Assertions.assertEquals("Person 2", actualSeries2.getName());
-        Assertions.assertEquals(5, actualSeries2.getValues().size());
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(38125), actualSeries2.getValues().get(0));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(19375), actualSeries2.getValues().get(1));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0L), actualSeries2.getValues().get(2));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(19375), actualSeries2.getValues().get(3));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0), actualSeries2.getValues().get(4));
+        Assertions.assertEquals(5, actualSeries2.getValuesNet().size());
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(38125), actualSeries2.getValuesNet().get(0));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(19375), actualSeries2.getValuesNet().get(1));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0L), actualSeries2.getValuesNet().get(2));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(19375), actualSeries2.getValuesNet().get(3));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0), actualSeries2.getValuesNet().get(4));
 
-        Assertions.assertEquals(5, actualSeries2.getValues_gross().size());
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(43813), actualSeries2.getValues_gross().get(0));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(21313), actualSeries2.getValues_gross().get(1));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0L), actualSeries2.getValues_gross().get(2));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(21313), actualSeries2.getValues_gross().get(3));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0), actualSeries2.getValues_gross().get(4));
+        Assertions.assertEquals(5, actualSeries2.getValuesGross().size());
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(43813), actualSeries2.getValuesGross().get(0));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(21313), actualSeries2.getValuesGross().get(1));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0L), actualSeries2.getValuesGross().get(2));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(21313), actualSeries2.getValuesGross().get(3));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0), actualSeries2.getValuesGross().get(4));
     }
 
     @Test
@@ -335,7 +335,7 @@ class StatisticsServiceTest extends ServiceTestTemplate {
         when(planRecordRepository.aggregateByWeekForBudgets(anyLong(), anyList(), any(Date.class))).thenReturn(createLast5Weeks());
         TargetAndActual targetAndActual = service.getWeekStatsForBudgets(new BudgetTagFilter(Arrays.asList("tag1"), 1L), 5);
 
-        List<Money> targetSeries = targetAndActual.getTargetSeries().getValues();
+        List<Money> targetSeries = targetAndActual.getTargetSeries().getValuesNet();
         Assertions.assertEquals(5, targetSeries.size());
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(100000L), targetSeries.get(0));
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(200000L), targetSeries.get(1));
@@ -348,21 +348,21 @@ class StatisticsServiceTest extends ServiceTestTemplate {
 
         MoneySeries actualSeries1 = targetAndActual.getActualSeries().get(1);
         Assertions.assertEquals("Budget 2", actualSeries1.getName());
-        Assertions.assertEquals(5, actualSeries1.getValues().size());
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(100000L), actualSeries1.getValues().get(0));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(200000L), actualSeries1.getValues().get(1));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0L), actualSeries1.getValues().get(2));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0L), actualSeries1.getValues().get(3));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(500000L), actualSeries1.getValues().get(4));
+        Assertions.assertEquals(5, actualSeries1.getValuesNet().size());
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(100000L), actualSeries1.getValuesNet().get(0));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(200000L), actualSeries1.getValuesNet().get(1));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0L), actualSeries1.getValuesNet().get(2));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0L), actualSeries1.getValuesNet().get(3));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(500000L), actualSeries1.getValuesNet().get(4));
 
         MoneySeries actualSeries2 = targetAndActual.getActualSeries().get(0);
         Assertions.assertEquals("Budget 1", actualSeries2.getName());
-        Assertions.assertEquals(5, actualSeries1.getValues().size());
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(100000L), actualSeries2.getValues().get(0));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(200000L), actualSeries2.getValues().get(1));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0L), actualSeries2.getValues().get(2));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(400000L), actualSeries2.getValues().get(3));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(500000L), actualSeries2.getValues().get(4));
+        Assertions.assertEquals(5, actualSeries1.getValuesNet().size());
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(100000L), actualSeries2.getValuesNet().get(0));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(200000L), actualSeries2.getValuesNet().get(1));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0L), actualSeries2.getValuesNet().get(2));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(400000L), actualSeries2.getValuesNet().get(3));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(500000L), actualSeries2.getValuesNet().get(4));
     }
 
     @Test
@@ -375,7 +375,7 @@ class StatisticsServiceTest extends ServiceTestTemplate {
         monthlyStats.calculateCentValuesByMonthlyFraction(planStats, burnedStats);
         TargetAndActual targetAndActual = service.calculateWeeklyTargetAndActual(5, planStats, burnedStats);
 
-        List<Money> targetSeries_net = targetAndActual.getTargetSeries().getValues();
+        List<Money> targetSeries_net = targetAndActual.getTargetSeries().getValuesNet();
         Assertions.assertEquals(5, targetSeries_net.size());
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(37500), targetSeries_net.get(0));
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(38125), targetSeries_net.get(1));
@@ -383,7 +383,7 @@ class StatisticsServiceTest extends ServiceTestTemplate {
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(58125), targetSeries_net.get(3));
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(38750), targetSeries_net.get(4));
 
-        List<Money> targetSeries_gross = targetAndActual.getTargetSeries().getValues_gross();
+        List<Money> targetSeries_gross = targetAndActual.getTargetSeries().getValuesGross();
 
         Assertions.assertEquals(5, targetSeries_net.size());
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(43125), targetSeries_gross.get(0));
@@ -398,35 +398,35 @@ class StatisticsServiceTest extends ServiceTestTemplate {
 
         MoneySeries actualSeries1 = targetAndActual.getActualSeries().get(0);
         Assertions.assertEquals("Budget 1", actualSeries1.getName());
-        Assertions.assertEquals(5, actualSeries1.getValues().size());
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(18750), actualSeries1.getValues().get(0));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(20000), actualSeries1.getValues().get(1));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0L), actualSeries1.getValues().get(2));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(57500), actualSeries1.getValues().get(3));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(19375), actualSeries1.getValues().get(4));
+        Assertions.assertEquals(5, actualSeries1.getValuesNet().size());
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(18750), actualSeries1.getValuesNet().get(0));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(20000), actualSeries1.getValuesNet().get(1));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0L), actualSeries1.getValuesNet().get(2));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(57500), actualSeries1.getValuesNet().get(3));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(19375), actualSeries1.getValuesNet().get(4));
 
-        Assertions.assertEquals(5, actualSeries1.getValues_gross().size());
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(20625), actualSeries1.getValues_gross().get(0));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(22000), actualSeries1.getValues_gross().get(1));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0L), actualSeries1.getValues_gross().get(2));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(67125), actualSeries1.getValues_gross().get(3));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(21313), actualSeries1.getValues_gross().get(4));
+        Assertions.assertEquals(5, actualSeries1.getValuesGross().size());
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(20625), actualSeries1.getValuesGross().get(0));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(22000), actualSeries1.getValuesGross().get(1));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0L), actualSeries1.getValuesGross().get(2));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(67125), actualSeries1.getValuesGross().get(3));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(21313), actualSeries1.getValuesGross().get(4));
 
         MoneySeries actualSeries2 = targetAndActual.getActualSeries().get(1);
         Assertions.assertEquals("Budget 2", actualSeries2.getName());
-        Assertions.assertEquals(5, actualSeries2.getValues().size());
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(38125), actualSeries2.getValues().get(0));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(19375), actualSeries2.getValues().get(1));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0L), actualSeries2.getValues().get(2));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(19375), actualSeries2.getValues().get(3));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0), actualSeries2.getValues().get(4));
+        Assertions.assertEquals(5, actualSeries2.getValuesNet().size());
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(38125), actualSeries2.getValuesNet().get(0));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(19375), actualSeries2.getValuesNet().get(1));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0L), actualSeries2.getValuesNet().get(2));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(19375), actualSeries2.getValuesNet().get(3));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0), actualSeries2.getValuesNet().get(4));
 
-        Assertions.assertEquals(5, actualSeries2.getValues_gross().size());
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(43813), actualSeries2.getValues_gross().get(0));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(21313), actualSeries2.getValues_gross().get(1));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0L), actualSeries2.getValues_gross().get(2));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(21313), actualSeries2.getValues_gross().get(3));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0), actualSeries2.getValues_gross().get(4));
+        Assertions.assertEquals(5, actualSeries2.getValuesGross().size());
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(43813), actualSeries2.getValuesGross().get(0));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(21313), actualSeries2.getValuesGross().get(1));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0L), actualSeries2.getValuesGross().get(2));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(21313), actualSeries2.getValuesGross().get(3));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0), actualSeries2.getValuesGross().get(4));
     }
 
     private MonthlyStats createMonthlyStatsForBudgets() {
@@ -545,7 +545,7 @@ class StatisticsServiceTest extends ServiceTestTemplate {
         when(planRecordRepository.aggregateByMonthForPerson(anyLong(), any(Date.class))).thenReturn(createLast5Months());
         TargetAndActual targetAndActual = service.getMonthStatsForPerson(1L, 5);
 
-        List<Money> targetSeries = targetAndActual.getTargetSeries().getValues();
+        List<Money> targetSeries = targetAndActual.getTargetSeries().getValuesNet();
         Assertions.assertEquals(5, targetSeries.size());
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(100000L), targetSeries.get(0));
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(200000L), targetSeries.get(1));
@@ -558,21 +558,21 @@ class StatisticsServiceTest extends ServiceTestTemplate {
 
         MoneySeries actualSeries1 = targetAndActual.getActualSeries().get(1);
         Assertions.assertEquals("Budget 2", actualSeries1.getName());
-        Assertions.assertEquals(5, actualSeries1.getValues().size());
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(100000L), actualSeries1.getValues().get(0));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(200000L), actualSeries1.getValues().get(1));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0L), actualSeries1.getValues().get(2));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0L), actualSeries1.getValues().get(3));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(500000L), actualSeries1.getValues().get(4));
+        Assertions.assertEquals(5, actualSeries1.getValuesNet().size());
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(100000L), actualSeries1.getValuesNet().get(0));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(200000L), actualSeries1.getValuesNet().get(1));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0L), actualSeries1.getValuesNet().get(2));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0L), actualSeries1.getValuesNet().get(3));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(500000L), actualSeries1.getValuesNet().get(4));
 
         MoneySeries actualSeries2 = targetAndActual.getActualSeries().get(0);
         Assertions.assertEquals("Budget 1", actualSeries2.getName());
-        Assertions.assertEquals(5, actualSeries1.getValues().size());
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(100000L), actualSeries2.getValues().get(0));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(200000L), actualSeries2.getValues().get(1));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0L), actualSeries2.getValues().get(2));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(400000L), actualSeries2.getValues().get(3));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(500000L), actualSeries2.getValues().get(4));
+        Assertions.assertEquals(5, actualSeries1.getValuesNet().size());
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(100000L), actualSeries2.getValuesNet().get(0));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(200000L), actualSeries2.getValuesNet().get(1));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0L), actualSeries2.getValuesNet().get(2));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(400000L), actualSeries2.getValuesNet().get(3));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(500000L), actualSeries2.getValuesNet().get(4));
     }
 
     @Test
@@ -582,7 +582,7 @@ class StatisticsServiceTest extends ServiceTestTemplate {
         when(planRecordRepository.aggregateByMonthForBudgets(anyLong(), anyList(), any(Date.class))).thenReturn(createLast5Months());
         TargetAndActual targetAndActual = service.getMonthStatsForBudgets(new BudgetTagFilter(Arrays.asList("tag1"), 1L), 5);
 
-        List<Money> targetSeries = targetAndActual.getTargetSeries().getValues();
+        List<Money> targetSeries = targetAndActual.getTargetSeries().getValuesNet();
         Assertions.assertEquals(5, targetSeries.size());
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(100000L), targetSeries.get(0));
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(200000L), targetSeries.get(1));
@@ -595,21 +595,21 @@ class StatisticsServiceTest extends ServiceTestTemplate {
 
         MoneySeries actualSeries1 = targetAndActual.getActualSeries().get(1);
         Assertions.assertEquals("Budget 2", actualSeries1.getName());
-        Assertions.assertEquals(5, actualSeries1.getValues().size());
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(100000L), actualSeries1.getValues().get(0));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(200000L), actualSeries1.getValues().get(1));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0L), actualSeries1.getValues().get(2));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0L), actualSeries1.getValues().get(3));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(500000L), actualSeries1.getValues().get(4));
+        Assertions.assertEquals(5, actualSeries1.getValuesNet().size());
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(100000L), actualSeries1.getValuesNet().get(0));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(200000L), actualSeries1.getValuesNet().get(1));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0L), actualSeries1.getValuesNet().get(2));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0L), actualSeries1.getValuesNet().get(3));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(500000L), actualSeries1.getValuesNet().get(4));
 
         MoneySeries actualSeries2 = targetAndActual.getActualSeries().get(0);
         Assertions.assertEquals("Budget 1", actualSeries2.getName());
-        Assertions.assertEquals(5, actualSeries1.getValues().size());
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(100000L), actualSeries2.getValues().get(0));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(200000L), actualSeries2.getValues().get(1));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0L), actualSeries2.getValues().get(2));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(400000L), actualSeries2.getValues().get(3));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(500000L), actualSeries2.getValues().get(4));
+        Assertions.assertEquals(5, actualSeries1.getValuesNet().size());
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(100000L), actualSeries2.getValuesNet().get(0));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(200000L), actualSeries2.getValuesNet().get(1));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0L), actualSeries2.getValuesNet().get(2));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(400000L), actualSeries2.getValuesNet().get(3));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(500000L), actualSeries2.getValuesNet().get(4));
     }
 
     @Test
@@ -619,7 +619,7 @@ class StatisticsServiceTest extends ServiceTestTemplate {
         when(planRecordRepository.aggregateByMonthForBudget(anyLong(), any(Date.class))).thenReturn(createLast5Months());
         TargetAndActual targetAndActual = service.getMonthStatsForBudget(1L, 5);
 
-        List<Money> targetSeries = targetAndActual.getTargetSeries().getValues();
+        List<Money> targetSeries = targetAndActual.getTargetSeries().getValuesNet();
         Assertions.assertEquals(5, targetSeries.size());
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(100000L), targetSeries.get(0));
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(200000L), targetSeries.get(1));
@@ -632,33 +632,33 @@ class StatisticsServiceTest extends ServiceTestTemplate {
 
         MoneySeries actualSeries1 = targetAndActual.getActualSeries().get(1);
         Assertions.assertEquals("Budget 2", actualSeries1.getName());
-        Assertions.assertEquals(5, actualSeries1.getValues().size());
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(100000L), actualSeries1.getValues().get(0));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(200000L), actualSeries1.getValues().get(1));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0L), actualSeries1.getValues().get(2));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0L), actualSeries1.getValues().get(3));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(500000L), actualSeries1.getValues().get(4));
+        Assertions.assertEquals(5, actualSeries1.getValuesNet().size());
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(100000L), actualSeries1.getValuesNet().get(0));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(200000L), actualSeries1.getValuesNet().get(1));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0L), actualSeries1.getValuesNet().get(2));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0L), actualSeries1.getValuesNet().get(3));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(500000L), actualSeries1.getValuesNet().get(4));
 
         MoneySeries actualSeries2 = targetAndActual.getActualSeries().get(0);
         Assertions.assertEquals("Budget 1", actualSeries2.getName());
-        Assertions.assertEquals(5, actualSeries1.getValues().size());
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(100000L), actualSeries2.getValues().get(0));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(200000L), actualSeries2.getValues().get(1));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0L), actualSeries2.getValues().get(2));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(400000L), actualSeries2.getValues().get(3));
-        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(500000L), actualSeries2.getValues().get(4));
+        Assertions.assertEquals(5, actualSeries1.getValuesNet().size());
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(100000L), actualSeries2.getValuesNet().get(0));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(200000L), actualSeries2.getValuesNet().get(1));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(0L), actualSeries2.getValuesNet().get(2));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(400000L), actualSeries2.getValuesNet().get(3));
+        Assertions.assertEquals(MoneyUtil.createMoneyFromCents(500000L), actualSeries2.getValuesNet().get(4));
     }
 
     @Test
     void testFillMissingMonths() throws ParseException {
         SimpleDateFormat format1 = new SimpleDateFormat("dd.MM.yyyy");
-        List<MonthlyAggregatedRecordBean> beans = new LinkedList<MonthlyAggregatedRecordBean>();
+        List<MonthlyAggregatedRecordBean> beans = new LinkedList<>();
         beans.add(new MonthlyAggregatedRecordBean(2015, 1, 15d, 100000));
         beans.add(new MonthlyAggregatedRecordBean(2015, 2, 15d, 200000));
         beans.add(new MonthlyAggregatedRecordBean(2015, 4, 15d, 400000));
         beans.add(new MonthlyAggregatedRecordBean(2015, 5, 15d, 500000));
 
-        LinkedList<Money> testList = new LinkedList<Money>();
+        LinkedList<Money> testList = new LinkedList<>();
         DateUtil dateUtil = Mockito.mock(DateUtil.class);
         when(dateProvider.currentDate()).thenReturn(format.parse("01.05.2015"));
         service.fillMissingMonths(5, beans, testList);

@@ -11,29 +11,28 @@ import java.util.List;
 public class MoneySeries {
 
     private String name;
-    private List<Money> values = new ArrayList<>();
-    private List<Money> values_gross = new ArrayList<>();
+    private List<Money> valuesNet = new ArrayList<>();
+    private List<Money> valuesGross = new ArrayList<>();
 
     public void add(Money value) {
-        values.add(value);
+        valuesNet.add(value);
     }
 
     /***
      * @return Returns the size of the MoneySeries
      */
     public int getSize() {
-        return values.size();
+        return valuesNet.size();
     }
 
     /**
-     * @return Returns the values with or without taxes, according to the current state of the session
+     * @return Returns the valuesNet with or without taxes, according to the current state of the session
      */
     public List<Money> getMoneyValues() {
         if (BudgeteerSession.get().isTaxEnabled()) {
-            return values_gross;
+            return valuesGross;
         } else {
-            return values;
+            return valuesNet;
         }
     }
-
 }

@@ -267,7 +267,7 @@ public class StatisticsService {
 
         MoneySeries targetSeries = new MoneySeries();
         targetSeries.setName("Target");
-        targetSeries.setValues(fillInMissingWeeks(numberOfWeeks, plannedStats));
+        targetSeries.setValuesNet(fillInMissingWeeks(numberOfWeeks, plannedStats));
         targetAndActual.setTargetSeries(targetSeries);
 
         fillInMissingWeeks(numberOfWeeks, burnedStats, targetAndActual);
@@ -315,8 +315,8 @@ public class StatisticsService {
 
                 c.add(Calendar.WEEK_OF_YEAR, 1);
             }
-            titledSeries.setValues(resultList);
-            titledSeries.setValues_gross(resultList_gross);
+            titledSeries.setValuesNet(resultList);
+            titledSeries.setValuesGross(resultList_gross);
             targetAndActual.getActualSeries().add(titledSeries);
         }
     }
@@ -340,8 +340,8 @@ public class StatisticsService {
 
             c.add(Calendar.WEEK_OF_YEAR, 1);
         }
-        targetSeries.setValues(resultList);
-        targetSeries.setValues_gross(resultList_gross);
+        targetSeries.setValuesNet(resultList);
+        targetSeries.setValuesGross(resultList_gross);
 
         return targetSeries;
     }
@@ -440,8 +440,8 @@ public class StatisticsService {
                 sumMoneyAmountsOfMonthBeans(beans, resultList, resultList_gross);
                 c.add(Calendar.MONTH, 1);
             }
-            titledSeries.setValues(resultList);
-            titledSeries.setValues_gross(resultList_gross);
+            titledSeries.setValuesNet(resultList);
+            titledSeries.setValuesGross(resultList_gross);
             targetAndActual.getActualSeries().add(titledSeries);
         }
     }
@@ -547,7 +547,7 @@ public class StatisticsService {
 
         MoneySeries targetSeries = new MoneySeries();
         targetSeries.setName("Target");
-        targetSeries.setValues(fillInMissingMonths(numberOfMonths, plannedStats));
+        targetSeries.setValuesNet(fillInMissingMonths(numberOfMonths, plannedStats));
         targetAndActual.setTargetSeries(targetSeries);
 
         fillInMissingMonths(numberOfMonths, burnedStats, targetAndActual);
@@ -578,7 +578,7 @@ public class StatisticsService {
 
         MoneySeries targetSeries = new MoneySeries();
         targetSeries.setName("Target");
-        targetSeries.setValues(fillInMissingWeeks(numberOfWeeks, plannedStats));
+        targetSeries.setValuesNet(fillInMissingWeeks(numberOfWeeks, plannedStats));
         targetAndActual.setTargetSeries(targetSeries);
 
         fillInMissingWeeks(numberOfWeeks, burnedStats, targetAndActual);
@@ -645,7 +645,7 @@ public class StatisticsService {
 
         MoneySeries targetSeries = new MoneySeries();
         targetSeries.setName("Target");
-        targetSeries.setValues(fillInMissingMonths(numberOfMonths, plannedStats));
+        targetSeries.setValuesNet(fillInMissingMonths(numberOfMonths, plannedStats));
         targetAndActual.setTargetSeries(targetSeries);
 
         fillInMissingMonths(numberOfMonths, burnedStats, targetAndActual);
@@ -713,8 +713,8 @@ public class StatisticsService {
             c.add(Calendar.MONTH, 1);
         }
 
-        targetSeries.setValues(resultList);
-        targetSeries.setValues_gross(resultList_gros);
+        targetSeries.setValuesNet(resultList);
+        targetSeries.setValuesGross(resultList_gros);
 
         return targetSeries;
     }
@@ -735,7 +735,7 @@ public class StatisticsService {
 
         MoneySeries targetSeries = new MoneySeries();
         targetSeries.setName("Target");
-        targetSeries.setValues(fillInMissingWeeks(numberOfWeeks, plannedStats));
+        targetSeries.setValuesNet(fillInMissingWeeks(numberOfWeeks, plannedStats));
         targetAndActual.setTargetSeries(targetSeries);
 
         fillInMissingWeeks(numberOfWeeks, burnedStats, targetAndActual);
@@ -795,7 +795,7 @@ public class StatisticsService {
 
         MoneySeries targetSeries = new MoneySeries();
         targetSeries.setName("Target");
-        targetSeries.setValues(fillInMissingMonths(numberOfMonths, plannedStats));
+        targetSeries.setValuesNet(fillInMissingMonths(numberOfMonths, plannedStats));
         targetAndActual.setTargetSeries(targetSeries);
 
         fillInMissingMonths(numberOfMonths, burnedStats, targetAndActual);
@@ -920,8 +920,8 @@ public class StatisticsService {
             c.add(Calendar.MONTH, 1);
         }
 
-        targetSeries.setValues(resultList);
-        targetSeries.setValues_gross(resultList_gross);
+        targetSeries.setValuesNet(resultList);
+        targetSeries.setValuesGross(resultList_gross);
 
         return targetSeries;
     }
@@ -942,8 +942,8 @@ public class StatisticsService {
             sumMoneyAmountsOfMonthBeans(beans, resultList, resultList_gross);
             c.add(Calendar.MONTH, 1);
         }
-        actual.setValues(resultList);
-        actual.setValues_gross(resultList_gross);
+        actual.setValuesNet(resultList);
+        actual.setValuesGross(resultList_gross);
         targetAndActual.getActualSeries().add(actual);
     }
 

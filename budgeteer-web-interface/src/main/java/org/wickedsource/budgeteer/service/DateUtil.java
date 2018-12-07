@@ -2,6 +2,7 @@ package org.wickedsource.budgeteer.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 import java.util.*;
 
 @Component
@@ -43,7 +44,7 @@ public class DateUtil {
     /**
      * Returns whether the date is between the start and end of the dateRange
      *
-     * @param d         date to be checked
+     * @param d date to be checked
      * @return true if the date d is in the given dateRange
      */
     public static boolean isDateInDateRange(Date d, DateRange dateRange) {
@@ -88,6 +89,9 @@ public class DateUtil {
         return result;
     }
 
+    /***
+     * @return Get a Date set to the last day of today's month
+     */
     public static Date getEndOfThisMonth() {
         GregorianCalendar cal = new GregorianCalendar();
         cal.setTime(new Date());
@@ -174,7 +178,7 @@ public class DateUtil {
     }
 
     /**
-     * @return Month (0-based) of today's date
+     * @return Month (0-based) of a date
      */
     public static int getMonth(Date date) {
         Calendar cal = new GregorianCalendar();
@@ -183,7 +187,7 @@ public class DateUtil {
     }
 
     /**
-     * @return Year of today's date
+     * @return Year of a date
      */
     public static int getYear(Date date) {
         Calendar cal = new GregorianCalendar();
