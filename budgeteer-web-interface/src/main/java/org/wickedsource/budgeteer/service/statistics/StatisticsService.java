@@ -813,6 +813,9 @@ public class StatisticsService {
     public TargetAndActual getMonthlyForecastForBudget(long budgetId, Date endOfMonth) {
         List<MonthlyAggregatedRecordWithTaxBean> burnedStats = workRecordRepository.aggregateByMonthAndBudgetWithTax(budgetId);
         List<MonthlyAggregatedRecordWithTaxBean> plannedStats = planRecordRepository.aggregateByMonthForBudgetWithTax(budgetId);
+        List<MonthlyAggregatedRecordWithTaxBean> manualStats = manualRecordRepository.aggregateByMonthAndBudgetWithTax(budgetId);
+        burnedStats.addAll(manualStats);
+
         return calculateForecast(burnedStats, plannedStats, endOfMonth);
     }
 
@@ -825,6 +828,8 @@ public class StatisticsService {
     public TargetAndActual getMonthlyForecastForBudgets(long projectId, Date endOfMonth) {
         List<MonthlyAggregatedRecordWithTaxBean> burnedStats = workRecordRepository.aggregateByMonthForBudgetsWithTax(projectId);
         List<MonthlyAggregatedRecordWithTaxBean> plannedStats = planRecordRepository.aggregateByMonthForBudgetsWithTax(projectId);
+        List<MonthlyAggregatedRecordWithTaxBean> manualStats = manualRecordRepository.aggregateByMonthWithTax(projectId);
+        burnedStats.addAll(manualStats);
         return calculateForecast(burnedStats, plannedStats, endOfMonth);
     }
 

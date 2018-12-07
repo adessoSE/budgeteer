@@ -110,10 +110,8 @@ public class RecordService {
     public List<AggregatedRecord> getMonthlyAggregationForBudgetWithTax(long budgetId) {
         List<MonthlyAggregatedRecordWithTaxBean> planRecords = planRecordRepository.aggregateByMonthAndBudgetWithTax(budgetId);
         List<MonthlyAggregatedRecordWithTaxBean> workRecords = workRecordRepository.aggregateByMonthAndBudgetWithTax(budgetId);
-        /*
         List<MonthlyAggregatedRecordWithTaxBean> manualWorkRecords = manualRecordRepository.aggregateByMonthAndBudgetWithTax(budgetId);
         workRecords.addAll(manualWorkRecords);
-        */
         return recordJoiner.joinMonthlyWithTax(workRecords, planRecords);
     }
 
