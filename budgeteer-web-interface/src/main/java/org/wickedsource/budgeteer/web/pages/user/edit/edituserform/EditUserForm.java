@@ -9,6 +9,7 @@ import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.wickedsource.budgeteer.persistence.user.UserEntity;
 import org.wickedsource.budgeteer.service.project.ProjectBaseData;
 import org.wickedsource.budgeteer.service.project.ProjectService;
 import org.wickedsource.budgeteer.service.user.*;
@@ -31,7 +32,7 @@ public class EditUserForm extends Form<EditUserData> {
     private String currentPassword;
     private String newPassword;
     private String newPasswordRetyped;
-    boolean changeUsernameFormOpen = false;
+    private String currentEmail;
 
     public EditUserForm(String id) {
         super(id, new ClassAwareWrappingModel<>(Model.of(new EditUserData(BudgeteerSession.get().getLoggedInUser().getId())), EditUserData.class));
@@ -53,7 +54,8 @@ public class EditUserForm extends Form<EditUserData> {
         username.setOutputMarkupId(true);
 
         EmailTextField mailTextField;
-        if (getModelObject().getMail() == null) {
+        currentEmail = getModelObject().getMail();
+        if (currentEmail == null) {
             mailTextField = new EmailTextField("mail");
         }
         else {
@@ -91,7 +93,8 @@ public class EditUserForm extends Form<EditUserData> {
                     EditUserForm.this.getModelObject().setMail(mailTextField.getInput());
 
                     // If the user has changed his mail address, this will be displayed to him.
-                    if (!userService.saveUser(EditUserForm.this.getModelObject(), changePassword)) {
+                    userService.saveUser(EditUserForm.this.getModelObject(), changePassword);
+                    if (!mailTextField.getInput().equals(currentEmail)) {
                         userService.createNewVerificationTokenForUser(userService.getUserById(EditUserForm.this.getModelObject().getId()));
                         success(getString("message.successVerification"));
                     } else {
@@ -202,7 +205,7 @@ public class EditUserForm extends Form<EditUserData> {
                 }
         );
         passwordTextField.setRequired(false);
-        PasswordTextField passwordRetypedTextField = (PasswordTextField) new PasswordTextField("passwordRetypedTextField", new Model<>("")).add(
+        PasswordTextField passwordRetypedTextField = (PasswordTextField) new PasswordTextField("passwordRetypedTextField",  new Model<>("")).add(
                 new AjaxFormComponentUpdatingBehavior("change") {
                     @Override
                     protected void onUpdate(AjaxRequestTarget target) {

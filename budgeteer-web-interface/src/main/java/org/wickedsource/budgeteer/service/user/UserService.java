@@ -247,7 +247,7 @@ public class UserService {
      * @throws UsernameAlreadyInUseException username is already taken
      * @throws MailAlreadyInUseException email is already taken
      */
-    public boolean saveUser(@NotNull EditUserData data, boolean changePassword) throws UsernameAlreadyInUseException, MailAlreadyInUseException {
+    public void saveUser(@NotNull EditUserData data, boolean changePassword) throws UsernameAlreadyInUseException, MailAlreadyInUseException {
         UserEntity userEntity;
 
         UserEntity testEntity = userRepository.findByName(data.getName());
@@ -281,8 +281,6 @@ public class UserService {
             userEntity.setPassword(data.getPassword());
         }
         userRepository.save(userEntity);
-
-        return userEntity.getMailVerified();
     }
 
     /**
