@@ -13,7 +13,7 @@ import org.wickedsource.budgeteer.web.pages.user.edit.edituserform.EditUserForm;
 import static org.wicketstuff.lazymodel.LazyModel.from;
 import static org.wicketstuff.lazymodel.LazyModel.model;
 
-@Mount("edit-user/${id}")
+@Mount("user/edit")
 public class EditUserPage extends DialogPageWithBacklink {
 
     @SpringBean
