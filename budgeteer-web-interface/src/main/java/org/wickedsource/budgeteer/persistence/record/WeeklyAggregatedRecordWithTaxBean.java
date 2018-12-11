@@ -12,6 +12,11 @@ public class WeeklyAggregatedRecordWithTaxBean extends WeeklyAggregatedRecordBea
     @Setter
     private BigDecimal taxRate;
 
+    public WeeklyAggregatedRecordWithTaxBean(int year, int month, int week, long valueInCents, BigDecimal taxRate) {
+        super(year, month, week, valueInCents);
+        this.taxRate = taxRate;
+    }
+
     public WeeklyAggregatedRecordWithTaxBean(int year, int week, Double hours, long valueInCents, BigDecimal taxRate) {
         super(year, week, hours, valueInCents);
         this.taxRate = taxRate;
