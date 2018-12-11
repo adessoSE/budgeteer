@@ -2,7 +2,6 @@ package org.wickedsource.budgeteer.service.user;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.apache.wicket.model.IModel;
 import org.wickedsource.budgeteer.service.project.ProjectBaseData;
 
 import java.io.Serializable;

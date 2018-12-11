@@ -13,6 +13,8 @@ import org.wickedsource.budgeteer.web.AbstractWebTestTemplate;
 import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 import org.wickedsource.budgeteer.web.pages.user.edit.EditUserPage;
 
+import java.util.Date;
+
 import static org.mockito.Mockito.when;
 
 public class EditUserPageTest extends AbstractWebTestTemplate {
@@ -25,7 +27,7 @@ public class EditUserPageTest extends AbstractWebTestTemplate {
 
     @BeforeEach
     void setUpMocks() {
-        when(userService.loadUserToEdit(1L)).thenReturn(new EditUserData(1L, "test", "test@budgeteer.local", "password", null, null, new ProjectBaseData()));
+        when(userService.loadUserToEdit(1L)).thenReturn(new EditUserData(1L, "test", "test@budgeteer.local", "password", null, null, new ProjectBaseData(), new Date()));
         ProjectBaseData projectBaseData = new ProjectBaseData();
         projectBaseData.setId(1L);
         projectBaseData.setName("project1");

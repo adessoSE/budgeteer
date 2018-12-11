@@ -83,7 +83,7 @@ public class EditUserForm extends Form<EditUserData> {
                 boolean changePassword = false;
 
                 if (mailTextField.getInput().isEmpty()) {
-                    error(getString("form.mail.Required"));
+                    error(EditUserForm.this.getString("form.mail.Required"));
                     return;
                 }
 
@@ -106,8 +106,8 @@ public class EditUserForm extends Form<EditUserData> {
                 }
             }
         };
-        submitButton.setDefaultFormProcessing(true);
         add(submitButton);
+        setDefaultButton(submitButton);
     }
 
     private void addDropDownChoice() {
