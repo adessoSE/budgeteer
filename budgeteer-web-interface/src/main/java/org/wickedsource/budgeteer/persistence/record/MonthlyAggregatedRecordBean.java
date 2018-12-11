@@ -23,6 +23,13 @@ public class MonthlyAggregatedRecordBean {
 
     private long valueInCents;
 
+    public MonthlyAggregatedRecordBean(int year, int month, long valueInCents) {
+        this.year = year;
+        this.month = month;
+        this.valueInCents = valueInCents;
+        hours = 0.0;
+    }
+
     public MonthlyAggregatedRecordBean(int year, int month, long minutes, Money dailyRate) {
         this.hours = ((double) minutes) / 60.0;
 

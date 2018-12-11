@@ -12,6 +12,7 @@ import org.wickedsource.budgeteer.persistence.invoice.InvoiceRepository;
 import org.wickedsource.budgeteer.persistence.project.ProjectContractField;
 import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
 import org.wickedsource.budgeteer.persistence.project.ProjectRepository;
+import org.wickedsource.budgeteer.web.pages.contract.overview.table.ContractOverviewTableModel;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
@@ -35,6 +36,14 @@ public class ContractService {
 
     @Autowired
     private ContractDataMapper mapper;
+
+    @PreAuthorize("canReadProject(#projectId)")
+    public ContractOverviewTableModel getContractOverviewByProject(long projectId) {
+        ContractOverviewTableModel result = new ContractOverviewTableModel();
+        result.setContracts(mapper.map(contractRepository.findByProjectId(projectId)));
+        return result;
+    }
+
 
     @PreAuthorize("canReadContract(#contractId)")
     public ContractBaseData getContractById(long contractId) {
