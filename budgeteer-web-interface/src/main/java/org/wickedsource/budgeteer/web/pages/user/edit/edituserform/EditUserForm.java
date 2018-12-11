@@ -132,14 +132,16 @@ public class EditUserForm extends Form<EditUserData> {
     }
 
     private void addChangeUsernameForm(Label username) {
-        TextField<String> usernameTextField = (TextField) new TextField<>("usernameTextField", new Model<>("")).add(
+        TextField<String> usernameTextField = new TextField<>("usernameTextField", new Model<>(""));
+        usernameTextField.add(
                 new AjaxFormComponentUpdatingBehavior("change") {
                     @Override
                     protected void onUpdate(AjaxRequestTarget target) {
                     }
                 }
         );
-        TextField<String> usernameRetypedTextField = (TextField<String>) new TextField<>("usernameRetypedTextField", new Model<>("")).add(
+        TextField<String> usernameRetypedTextField = new TextField<>("usernameRetypedTextField", new Model<>(""));
+        usernameRetypedTextField.add(
                 new AjaxFormComponentUpdatingBehavior("change") {
                     @Override
                     protected void onUpdate(AjaxRequestTarget target) {}
