@@ -6,9 +6,12 @@ import org.apache.wicket.util.tester.WicketTester;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.wickedsource.budgeteer.persistence.user.UserEntity;
 import org.wickedsource.budgeteer.service.project.ProjectBaseData;
 import org.wickedsource.budgeteer.service.project.ProjectService;
 import org.wickedsource.budgeteer.service.user.EditUserData;
+import org.wickedsource.budgeteer.service.user.PasswordHasher;
+import org.wickedsource.budgeteer.service.user.UserIdNotFoundException;
 import org.wickedsource.budgeteer.service.user.UserService;
 import org.wickedsource.budgeteer.web.AbstractWebTestTemplate;
 import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
@@ -16,6 +19,7 @@ import org.wickedsource.budgeteer.web.pages.user.edit.EditUserPage;
 
 import java.util.Date;
 
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 public class EditUserPageTest extends AbstractWebTestTemplate {
@@ -27,8 +31,9 @@ public class EditUserPageTest extends AbstractWebTestTemplate {
     private ProjectService projectService;
 
     @BeforeEach
-    void setUpMocks() {
+    void setUpMocks() throws UserIdNotFoundException {
         when(userService.loadUserToEdit(1L)).thenReturn(new EditUserData(1L, "test", "test@budgeteer.local", "password", null, null, new ProjectBaseData(), new Date()));
+        when(userService.getUserById(anyLong())).thenReturn(new UserEntity(1L, "test", new PasswordHasher().hash("currentPassword"), "test@budgeteer.local", false, null, null, new Date()));
         ProjectBaseData projectBaseData = new ProjectBaseData();
         projectBaseData.setId(1L);
         projectBaseData.setName("project1");
@@ -82,9 +87,13 @@ public class EditUserPageTest extends AbstractWebTestTemplate {
         EditUserPage page = new EditUserPage(DashboardPage.class, new PageParameters().add("userId", 1L));
         tester.startPage(page);
         FormTester formTester = tester.newFormTester("form:usernameForm");
-        formTester.getForm().get("usernameTextField").setDefaultModelObject("");
-        formTester.getForm().get("usernameRetypedTextField").setDefaultModelObject("");
-        tester.clickLink("form:usernameForm:submitButton2", true);
+
+        formTester.setValue("usernameTextField", "");
+        tester.executeAjaxEvent("form:usernameForm:usernameTextField", "change");
+        formTester.setValue("usernameRetypedTextField", "");
+        tester.executeAjaxEvent("form:usernameForm:usernameRetypedTextField", "change");
+
+        tester.clickLink("form:usernameForm:submitButton2");
         tester.assertErrorMessages(formTester.getForm().getString("form.username.Required"));
     }
 
@@ -94,9 +103,13 @@ public class EditUserPageTest extends AbstractWebTestTemplate {
         EditUserPage page = new EditUserPage(DashboardPage.class, new PageParameters().add("userId", 1L));
         tester.startPage(page);
         FormTester formTester = tester.newFormTester("form:usernameForm");
-        formTester.getForm().get("usernameTextField").setDefaultModelObject("name");
-        formTester.getForm().get("usernameRetypedTextField").setDefaultModelObject("");
-        tester.clickLink("form:usernameForm:submitButton2", true);
+
+        formTester.setValue("usernameTextField", "name");
+        tester.executeAjaxEvent("form:usernameForm:usernameTextField", "change");
+        formTester.setValue("usernameRetypedTextField", "");
+        tester.executeAjaxEvent("form:usernameForm:usernameRetypedTextField", "change");
+
+        tester.clickLink("form:usernameForm:submitButton2");
         tester.assertErrorMessages(formTester.getForm().getString("form.username.Required"));
     }
 
@@ -106,9 +119,13 @@ public class EditUserPageTest extends AbstractWebTestTemplate {
         EditUserPage page = new EditUserPage(DashboardPage.class, new PageParameters().add("userId", 1L));
         tester.startPage(page);
         FormTester formTester = tester.newFormTester("form:usernameForm");
-        formTester.getForm().get("usernameTextField").setDefaultModelObject("");
-        formTester.getForm().get("usernameRetypedTextField").setDefaultModelObject("name");
-        tester.clickLink("form:usernameForm:submitButton2", true);
+
+        formTester.setValue("usernameTextField", "");
+        tester.executeAjaxEvent("form:usernameForm:usernameTextField", "change");
+        formTester.setValue("usernameRetypedTextField", "name");
+        tester.executeAjaxEvent("form:usernameForm:usernameRetypedTextField", "change");
+
+        tester.clickLink("form:usernameForm:submitButton2");
         tester.assertErrorMessages(formTester.getForm().getString("form.username.Required"));
     }
 
@@ -118,9 +135,13 @@ public class EditUserPageTest extends AbstractWebTestTemplate {
         EditUserPage page = new EditUserPage(DashboardPage.class, new PageParameters().add("userId", 1L));
         tester.startPage(page);
         FormTester formTester = tester.newFormTester("form:usernameForm");
-        formTester.getForm().get("usernameTextField").setDefaultModelObject("name");
-        formTester.getForm().get("usernameRetypedTextField").setDefaultModelObject("name");
-        tester.clickLink("form:usernameForm:submitButton2", true);
+
+        formTester.setValue("usernameTextField", "name");
+        tester.executeAjaxEvent("form:usernameForm:usernameTextField", "change");
+        formTester.setValue("usernameRetypedTextField", "name");
+        tester.executeAjaxEvent("form:usernameForm:usernameRetypedTextField", "change");
+
+        tester.clickLink("form:usernameForm:submitButton2");
         tester.assertFeedbackMessages(null, formTester.getForm().getString("message.success"));
     }
 
@@ -130,10 +151,15 @@ public class EditUserPageTest extends AbstractWebTestTemplate {
         EditUserPage page = new EditUserPage(DashboardPage.class, new PageParameters().add("userId", 1L));
         tester.startPage(page);
         FormTester formTester = tester.newFormTester("form:passwordForm");
-        formTester.getForm().get("currentPasswordTextField").setDefaultModelObject("");
-        formTester.getForm().get("passwordTextField").setDefaultModelObject("");
-        formTester.getForm().get("passwordRetypedTextField").setDefaultModelObject("");
-        tester.clickLink("form:passwordForm:submitButton3", true);
+
+        formTester.setValue("currentPasswordTextField", "");
+        tester.executeAjaxEvent("form:passwordForm:currentPasswordTextField", "change");
+        formTester.setValue("passwordTextField", "");
+        tester.executeAjaxEvent("form:passwordForm:passwordTextField", "change");
+        formTester.setValue("passwordRetypedTextField", "");
+        tester.executeAjaxEvent("form:passwordForm:passwordRetypedTextField", "change");
+
+        tester.clickLink("form:passwordForm:submitButton3");
         tester.assertErrorMessages(formTester.getForm().getString("form.currentPassword.Required"));
     }
 
@@ -143,9 +169,15 @@ public class EditUserPageTest extends AbstractWebTestTemplate {
         EditUserPage page = new EditUserPage(DashboardPage.class, new PageParameters().add("userId", 1L));
         tester.startPage(page);
         FormTester formTester = tester.newFormTester("form:passwordForm");
-        formTester.getForm().get("currentPasswordTextField").setDefaultModelObject("");
-        formTester.getForm().get("passwordTextField").setDefaultModelObject("newPassword");
-        formTester.getForm().get("passwordRetypedTextField").setDefaultModelObject("newPassword");
+
+        formTester.setValue("currentPasswordTextField", "");
+        tester.executeAjaxEvent("form:passwordForm:currentPasswordTextField", "change");
+        formTester.setValue("passwordTextField", "newPassword");
+        tester.executeAjaxEvent("form:passwordForm:passwordTextField", "change");
+        formTester.setValue("passwordRetypedTextField", "newPassword");
+        tester.executeAjaxEvent("form:passwordForm:passwordRetypedTextField", "change");
+
+
         tester.clickLink("form:passwordForm:submitButton3");
         tester.assertErrorMessages(formTester.getForm().getString("form.currentPassword.Required"));
     }
@@ -157,15 +189,15 @@ public class EditUserPageTest extends AbstractWebTestTemplate {
         tester.startPage(page);
         FormTester formTester = tester.newFormTester("form:passwordForm");
 
-        formTester.getForm().get("currentPasswordTextField").setDefaultModelObject("currentPassword");
-        formTester.getForm().get("passwordTextField").setDefaultModelObject("");
-        formTester.getForm().get("passwordRetypedTextField").setDefaultModelObject("newPassword");
+        formTester.setValue("currentPasswordTextField", "currentPassword");
+        tester.executeAjaxEvent("form:passwordForm:currentPasswordTextField", "change");
+        formTester.setValue("passwordTextField", "");
+        tester.executeAjaxEvent("form:passwordForm:passwordTextField", "change");
+        formTester.setValue("passwordRetypedTextField", "newPassword");
+        tester.executeAjaxEvent("form:passwordForm:passwordRetypedTextField", "change");
 
-        tester.executeAjaxEvent(formTester.getForm().get("currentPasswordTextField"), "change");
-        tester.executeAjaxEvent(formTester.getForm().get("passwordTextField"), "change");
-        tester.executeAjaxEvent(formTester.getForm().get("passwordRetypedTextField"), "change");
 
-        tester.clickLink("form:passwordForm:submitButton3", true);
+        tester.clickLink("form:passwordForm:submitButton3");
         tester.assertErrorMessages(formTester.getForm().getString("form.newPassword.Required"));
     }
 
@@ -175,13 +207,37 @@ public class EditUserPageTest extends AbstractWebTestTemplate {
         EditUserPage page = new EditUserPage(DashboardPage.class, new PageParameters().add("userId", 1L));
         tester.startPage(page);
         FormTester formTester = tester.newFormTester("form:passwordForm");
-        formTester.getForm().get("currentPasswordTextField").setDefaultModelObject("currentPassword");
-        formTester.getForm().get("passwordTextField").setDefaultModelObject("newPassword");
-        formTester.getForm().get("passwordRetypedTextField").setDefaultModelObject("");
+
+        formTester.setValue("currentPasswordTextField", "currentPassword");
+        tester.executeAjaxEvent("form:passwordForm:currentPasswordTextField", "change");
+        formTester.setValue("passwordTextField", "newPassword");
+        tester.executeAjaxEvent("form:passwordForm:passwordTextField", "change");
+        formTester.setValue("passwordRetypedTextField", "");
+        tester.executeAjaxEvent("form:passwordForm:passwordRetypedTextField", "change");
 
         tester.clickLink("form:passwordForm:submitButton3");
         tester.assertErrorMessages(formTester.getForm().getString("form.newPasswordConfirmation.Required"));
     }
+
+
+    @Test
+    void testSubmitPassword() {
+        WicketTester tester = getTester();
+        EditUserPage page = new EditUserPage(DashboardPage.class, new PageParameters().add("userId", 1L));
+        tester.startPage(page);
+        FormTester formTester = tester.newFormTester("form:passwordForm");
+
+        formTester.setValue("currentPasswordTextField", "currentPassword");
+        tester.executeAjaxEvent("form:passwordForm:currentPasswordTextField", "change");
+        formTester.setValue("passwordTextField", "newPassword");
+        tester.executeAjaxEvent("form:passwordForm:passwordTextField", "change");
+        formTester.setValue("passwordRetypedTextField", "newPassword");
+        tester.executeAjaxEvent("form:passwordForm:passwordRetypedTextField", "change");
+
+        tester.clickLink("form:passwordForm:submitButton3");
+        tester.assertFeedbackMessages(null, formTester.getForm().getString("message.success"));
+    }
+
 
     @Override
     protected void setupTest() {
