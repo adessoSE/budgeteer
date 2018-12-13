@@ -12,10 +12,15 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 
+import java.util.ArrayList;
+
 /**
  * A feedbackPanel according to the struktur and style-classes of AdminLTE
  */
 public class CustomFeedbackPanel extends Panel implements IFeedback {
+
+    private final MessageListView messageListView = new MessageListView("messages");
+
 
     private final class MessageListView extends ListView<FeedbackMessage> {
         private static final long serialVersionUID = 1L;
@@ -94,7 +99,6 @@ public class CustomFeedbackPanel extends Panel implements IFeedback {
 
     public CustomFeedbackPanel(final String id) {
         super(id);
-        final MessageListView messageListView = new MessageListView("messages");
         WebMarkupContainer messagesContainer = new WebMarkupContainer("feedbackContainer") {
             private static final long serialVersionUID = 1L;
 
@@ -109,6 +113,12 @@ public class CustomFeedbackPanel extends Panel implements IFeedback {
         messagesContainer.add(messageListView);
     }
 
+    /**
+     * Deletes all messages in the feedback panel
+     */
+    public void clear(){
+        messageListView.setModelObject(new ArrayList<>());
+    }
 
     /**
      * @see org.apache.wicket.Component#isVersioned()

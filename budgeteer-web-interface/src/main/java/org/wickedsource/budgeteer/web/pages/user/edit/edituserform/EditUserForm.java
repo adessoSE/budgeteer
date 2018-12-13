@@ -185,6 +185,16 @@ public class EditUserForm extends Form<EditUserData> {
 
         changeUsername.add(submitButton2);
         add(changeUsername);
+        add(new AjaxLink("changeUsernameButton") {
+
+            @Override //Clear the feedback panel and the text fields when opening the modal window
+            public void onClick(AjaxRequestTarget target) {
+                feedbackPanelChangeUsername.clear();
+                usernameTextField.setModelObject("");
+                usernameRetypedTextField.setModelObject("");
+                target.add(feedbackPanelChangeUsername, usernameTextField, usernameRetypedTextField);
+            }
+        });
     }
 
     private void addChangePasswordForm() {
@@ -270,5 +280,16 @@ public class EditUserForm extends Form<EditUserData> {
         changePassword.add(currentPasswordTextField);
         changePassword.add(submitButton3);
         add(changePassword);
+        add(new AjaxLink("changePasswordButton") {
+
+            @Override //Clear the feedback panel and the text fields when opening the modal window
+            public void onClick(AjaxRequestTarget target) {
+                feedbackPanelChangePassword.clear();
+                currentPasswordTextField.setModelObject("");
+                passwordTextField.setModelObject("");
+                passwordRetypedTextField.setModelObject("");
+                target.add(feedbackPanelChangePassword, currentPasswordTextField, passwordTextField, passwordRetypedTextField);
+            }
+        });
     }
 }
