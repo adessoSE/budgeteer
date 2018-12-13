@@ -15,6 +15,7 @@ import org.wickedsource.budgeteer.importer.resourceplan.ResourcePlanImporter;
 import org.wickedsource.budgeteer.imports.api.ImportException;
 import org.wickedsource.budgeteer.imports.api.ImportFile;
 import org.wickedsource.budgeteer.imports.api.InvalidFileFormatException;
+import org.wickedsource.budgeteer.persistence.manualRecord.ManualRecordRepository;
 import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
 import org.wickedsource.budgeteer.persistence.project.ProjectRepository;
 

@@ -26,6 +26,7 @@ import org.wickedsource.budgeteer.web.pages.budgets.details.highlights.BudgetHig
 import org.wickedsource.budgeteer.web.pages.budgets.details.highlights.BudgetHighlightsPanel;
 import org.wickedsource.budgeteer.web.pages.budgets.edit.EditBudgetPage;
 import org.wickedsource.budgeteer.web.pages.budgets.hours.BudgetHoursPage;
+import org.wickedsource.budgeteer.web.pages.budgets.manualRecords.overview.ManualRecordOverviewPage;
 import org.wickedsource.budgeteer.web.pages.budgets.monthreport.single.SingleBudgetMonthReportPage;
 import org.wickedsource.budgeteer.web.pages.budgets.notes.BudgetNotesPage;
 import org.wickedsource.budgeteer.web.pages.budgets.overview.BudgetsOverviewPage;
@@ -57,6 +58,7 @@ public class BudgetDetailsPage extends BasePage {
         add(new BookmarkablePageLink<BudgetHoursPage>("hoursLink", BudgetHoursPage.class, createParameters(getParameterId())));
         add(new BookmarkablePageLink<BudgetNotesPage>("notesLink", BudgetNotesPage.class, createParameters(getParameterId())));
         add(createEditLink("editLink"));
+        add(createManualRecordLink("manualRecordLink"));
 
         Form deleteForm = new ConfirmationForm("deleteForm", this, "confirmation.delete") {
             @Override
@@ -81,7 +83,7 @@ public class BudgetDetailsPage extends BasePage {
                 });
             }
         };
-        if(this.model.getObject().getContractName() != null){
+        if (this.model.getObject().getContractName() != null) {
             deleteForm.setEnabled(false);
             deleteForm.add(new AttributeAppender("style", "cursor: not-allowed;", " "));
             deleteForm.add(new AttributeModifier("title", getString("contract.still.exist")));
@@ -124,6 +126,16 @@ public class BudgetDetailsPage extends BasePage {
             @Override
             public void onClick() {
                 WebPage page = new EditBudgetPage(BasePage.createParameters(getParameterId()), BudgetDetailsPage.class, getPageParameters(), false);
+                setResponsePage(page);
+            }
+        };
+    }
+
+    private Link createManualRecordLink(String id) {
+        return new Link(id) {
+            @Override
+            public void onClick() {
+                WebPage page = new ManualRecordOverviewPage(getPageParameters());
                 setResponsePage(page);
             }
         };
