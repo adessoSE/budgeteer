@@ -253,8 +253,8 @@ public class EditUserForm extends Form<EditUserData> {
                 }else{
                     try {
                         currentPassword = new PasswordHasher().hash(currentPassword);
-                        String currentPassowrdCheck = userService.getUserById(EditUserForm.this.getModelObject().getId()).getPassword();
-                        if(!currentPassword.equals(currentPassowrdCheck)){
+                        String currentPasswordCheck = userService.getUserById(EditUserForm.this.getModelObject().getId()).getPassword();
+                        if(!currentPassword.equals(currentPasswordCheck)){
                             feedbackPanelChangePassword.error(getString("message.wrongPassword"));
                         }else{
                             EditUserForm.this.getModelObject().setPassword(newPassword);
