@@ -51,7 +51,7 @@ public class ResourcePlanImporter implements PlanRecordsImporter {
             List<DateColumn> dateColumns = getDateColumns(sheet);
             int i = FIRST_ENTRY_ROW;
             Row row = sheet.getRow(i);
-            while (row != null && row.getCell(0).getStringCellValue() != null) {
+            while (row != null && row.getCell(0) != null && row.getCell(0).getStringCellValue() != null) {
                 List<ImportedPlanRecord> records = parseRow(row, dateColumns, currencyUnit, skippedRecords);
                 resultList.addAll(records);
                 row = sheet.getRow(++i);
@@ -150,7 +150,7 @@ public class ResourcePlanImporter implements PlanRecordsImporter {
         ExampleFile file = new ExampleFile();
         file.setFileName("resource_plan.xlsx");
         file.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-        
+
         try {
             Date date = new Date();
             Calendar calendar = Calendar.getInstance();
