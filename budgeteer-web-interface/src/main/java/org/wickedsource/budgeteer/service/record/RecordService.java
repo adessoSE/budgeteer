@@ -8,6 +8,7 @@ import org.wickedsource.budgeteer.persistence.budget.BudgetRepository;
 import org.wickedsource.budgeteer.persistence.record.*;
 import org.wickedsource.budgeteer.persistence.manualRecord.ManualRecordRepository;
 import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
+import org.wickedsource.budgeteer.service.fixedDailyRate.FixedDailyRateService;
 import org.wickedsource.budgeteer.service.statistics.MonthlyStats;
 
 import javax.transaction.Transactional;
@@ -34,6 +35,9 @@ public class RecordService {
 
     @Autowired
     private ManualRecordRepository manualRecordRepository;
+
+    @Autowired
+    private FixedDailyRateService fixedDailyRateService;
 
     /**
      * Loads the actual budget burned by the given person and the budget planned for this person aggregated by week.
@@ -84,6 +88,9 @@ public class RecordService {
 
         List<WeeklyAggregatedRecordWithTitleAndTaxBean> manualWorkRecords = manualRecordRepository.aggregateByWeekForBudgetWithTax(budgetId);
         workRecords.addAll(manualWorkRecords);
+
+        List<WeeklyAggregatedRecordWithTitleAndTaxBean> fixedDailyRateRecords = fixedDailyRateService.aggregateByWeekForBudgetWithTax(budgetId);
+        workRecords.addAll(fixedDailyRateRecords);
 
         MonthlyStats monthlyStats = new MonthlyStats(budgetId, workRecordRepository, planRecordRepository);
 

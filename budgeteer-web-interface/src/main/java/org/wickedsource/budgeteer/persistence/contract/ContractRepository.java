@@ -19,7 +19,6 @@ public interface ContractRepository extends CrudRepository<ContractEntity, Long>
     //ToDo
     /**
      * returns a ContractStatisticBean for a given contract till the given month and year.
-     * returns the remaining budget of the contract, the spend budget in budgeteer and the invoiced budget until the given date
      */
     @Query("select new org.wickedsource.budgeteer.persistence.contract.ContractStatisticBean" +
             "(:year+0," + // year
@@ -69,8 +68,7 @@ public interface ContractRepository extends CrudRepository<ContractEntity, Long>
 
     //ToDo
     /**
-     * returns a ContractStatisticBean for a given contract till the given month and year.
-     * returns the remaining budget of the contract, the spend budget in budgeteer and the invoiced budget for the given month
+     * returns a ContractStatisticBean for a given contract for the given month and year.
      */
     @Query("select new org.wickedsource.budgeteer.persistence.contract.ContractStatisticBean(:year+0," + //year
             "case when (abs(cast(c.budget AS double)) < 10e-16) then null else (" + //progress

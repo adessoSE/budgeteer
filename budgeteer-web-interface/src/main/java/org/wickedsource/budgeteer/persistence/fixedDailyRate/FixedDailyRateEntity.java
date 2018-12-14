@@ -32,6 +32,9 @@ public class FixedDailyRateEntity {
     @Column(name = "END_DATE")
     private Date endDate;
 
+    @Column
+    private Integer days;
+
     @Column(nullable = false)
     private Money moneyAmount;
 

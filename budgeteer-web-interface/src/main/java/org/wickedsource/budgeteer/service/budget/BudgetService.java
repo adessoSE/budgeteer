@@ -11,6 +11,8 @@ import org.wickedsource.budgeteer.persistence.budget.BudgetRepository;
 import org.wickedsource.budgeteer.persistence.budget.BudgetTagEntity;
 import org.wickedsource.budgeteer.persistence.contract.ContractEntity;
 import org.wickedsource.budgeteer.persistence.contract.ContractRepository;
+import org.wickedsource.budgeteer.persistence.fixedDailyRate.FixedDailyRateEntity;
+import org.wickedsource.budgeteer.persistence.fixedDailyRate.FixedDailyRateRepository;
 import org.wickedsource.budgeteer.persistence.person.DailyRateRepository;
 import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
 import org.wickedsource.budgeteer.persistence.project.ProjectRepository;
@@ -58,6 +60,9 @@ public class BudgetService {
 
     @Autowired
     private ManualRecordRepository manualRecordRepository;
+
+    @Autowired
+    private FixedDailyRateRepository fixedDailyRateRepository;
 
     /**
      * Loads all Budgets that the given user is qualified for and returns base data about them.
@@ -131,7 +136,7 @@ public class BudgetService {
     //ToDo
     private BudgetDetailData enrichBudgetEntity(BudgetEntity entity) {
         Date lastUpdated = workRecordRepository.getLatestWorkRecordDate(entity.getId());
-        Double spentBudgetInCents = workRecordRepository.getSpentBudget(entity.getId()) + manualRecordRepository.getManualRecordSumForBudget(entity.getId());
+        Double spentBudgetInCents = budgetRepository.getSpentBudgetOfBudget(entity.getId());
         Double plannedBudgetInCents = planRecordRepository.getPlannedBudget(entity.getId());
         Double avgDailyRateInCents = workRecordRepository.getAverageDailyRate(entity.getId());
         Double taxCoefficient = budgetRepository.getTaxCoefficientByBudget(entity.getId());
@@ -311,6 +316,14 @@ public class BudgetService {
 
     @PreAuthorize("canReadBudget(#id)")
     public void deleteBudget(long id) {
+        // delete all fixed daily rates of the budget
+        List<FixedDailyRateEntity> fixedDailyRateEntities = fixedDailyRateRepository.getFixedDailyRateByBudgetId(id);
+        for(FixedDailyRateEntity rateEntity : fixedDailyRateEntities)
+        {
+            fixedDailyRateRepository.delete(rateEntity.getId());
+        }
+
+        // delete the budget
         budgetRepository.delete(id);
     }
 

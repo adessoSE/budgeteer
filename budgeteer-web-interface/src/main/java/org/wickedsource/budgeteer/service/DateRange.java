@@ -6,6 +6,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 public class DateRange implements Serializable {
 
@@ -30,6 +31,12 @@ public class DateRange implements Serializable {
 
     public String toString(){
         return (startDate != null ? formatter.format(startDate) : "undefined") + " - " + (endDate != null ? formatter.format(endDate) : "undefined");
+    }
+
+    public int getNumberOfDays()
+    {
+        long milliseconds = endDate.getTime()-startDate.getTime();
+        return (int) TimeUnit.DAYS.convert(milliseconds, TimeUnit.MILLISECONDS);
     }
 
     @SuppressWarnings("EqualsWhichDoesntCheckParameterClass")

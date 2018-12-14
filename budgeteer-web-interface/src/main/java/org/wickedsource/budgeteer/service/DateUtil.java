@@ -89,4 +89,12 @@ public class DateUtil {
         }
         return result;
     }
+
+    public static Calendar getCalendarOfDate(Date date)
+    {
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.setTime(date);
+
+        return cal;
+    }
 }

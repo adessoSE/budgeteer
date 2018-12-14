@@ -1,5 +1,6 @@
 package org.wickedsource.budgeteer.service.fixedDailyRate;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.joda.money.Money;
@@ -7,6 +8,7 @@ import org.wickedsource.budgeteer.persistence.fixedDailyRate.FixedDailyRateEntit
 import org.wickedsource.budgeteer.service.DateRange;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 @NoArgsConstructor
@@ -20,6 +22,8 @@ public class FixedDailyRate implements Serializable {
     private Date endDate;
     private String description;
     private String name;
+    private BigDecimal taxRate;
+    private int days;
 
     public FixedDailyRate(FixedDailyRateEntity entity) {
         id = entity.getId();
@@ -30,6 +34,8 @@ public class FixedDailyRate implements Serializable {
         description = entity.getDescription();
         name = entity.getName();
         dateRange = new DateRange(entity.getStartDate(), entity.getEndDate());
+        taxRate = entity.getBudget().getContract().getTaxRate();
+        days = entity.getDays();
     }
 
     public FixedDailyRate(long budgetId) {
