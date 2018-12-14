@@ -10,11 +10,11 @@
                            http://www.mockito.org/spring/mockito
                             http://www.mockito.org/spring/mockito.xsd">
 
-    <context:component-scan base-package="org.wickedsource.budgeteer.service"/>
+    <context:component-scan base-package="de.adesso.budgeteer.service"/>
 
-    <mockito:mock id="dateProvider" class="org.wickedsource.budgeteer.service.DateProvider"/>
+    <mockito:mock id="dateProvider" class="de.adesso.budgeteer.service.DateProvider"/>
 
     <!-- add Expression Root mock here because it is required in nearly every service test -->
-    <mockito:mock id="expressionRoot" class="org.wickedsource.budgeteer.service.security.BudgeteerMethodSecurityExpressionRoot"/>
+    <mockito:mock id="expressionRoot" class="de.adesso.budgeteer.service.security.BudgeteerMethodSecurityExpressionRoot"/>
 
 </beans>

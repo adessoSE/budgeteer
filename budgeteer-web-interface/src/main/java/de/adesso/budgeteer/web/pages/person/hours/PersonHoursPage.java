@@ -1,0 +1,46 @@
+package de.adesso.budgeteer.web.pages.person.hours;
+
+import de.adesso.budgeteer.service.budget.BudgetService;
+import de.adesso.budgeteer.service.person.PersonBaseData;
+import de.adesso.budgeteer.service.record.WorkRecordFilter;
+import de.adesso.budgeteer.web.BudgeteerSession;
+import de.adesso.budgeteer.web.Mount;
+import de.adesso.budgeteer.web.pages.base.basepage.BasePage;
+import de.adesso.budgeteer.web.pages.base.basepage.breadcrumbs.Breadcrumb;
+import de.adesso.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
+import de.adesso.budgeteer.web.pages.person.PersonNameModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import de.adesso.budgeteer.web.components.burntable.BurnTableWithFilter;
+import de.adesso.budgeteer.web.pages.dashboard.DashboardPage;
+import de.adesso.budgeteer.web.pages.person.details.PersonDetailsPage;
+import de.adesso.budgeteer.web.pages.person.overview.PeopleOverviewPage;
+
+import javax.inject.Inject;
+
+@Mount("people/hours/${id}")
+public class PersonHoursPage extends BasePage {
+
+    @Inject
+    private BudgetService budgetService;
+
+    public PersonHoursPage(PageParameters parameters) {
+        super(parameters);
+
+        WorkRecordFilter filter = new WorkRecordFilter(BudgeteerSession.get().getProjectId());
+        filter.getPersonList().add(new PersonBaseData(getParameterId()));
+        filter.getPossibleBudgets().addAll(budgetService.loadBudgetBaseDataByPersonId(getParameterId()));
+
+        BurnTableWithFilter table = new BurnTableWithFilter("burnTable", filter, this, parameters);
+        table.setPersonFilterEnabled(false);
+        add(table);
+    }
+
+    @SuppressWarnings("unchecked")
+    protected BreadcrumbsModel getBreadcrumbsModel() {
+        BreadcrumbsModel model = new BreadcrumbsModel(DashboardPage.class, PeopleOverviewPage.class);
+        model.addBreadcrumb(new Breadcrumb(PersonDetailsPage.class, PersonDetailsPage.createParameters(getParameterId()), new PersonNameModel(getParameterId())));
+        model.addBreadcrumb(new Breadcrumb(PersonHoursPage.class, getPageParameters(), getString("breadcrumb.title")));
+        return model;
+    }
+
+}

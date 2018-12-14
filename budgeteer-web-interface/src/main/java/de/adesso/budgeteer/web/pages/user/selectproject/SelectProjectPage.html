@@ -1,0 +1,42 @@
+<wicket:extend xmlns:wicket="http://www.w3.org/1999/xhtml">
+    <div class="form-box" id="login-box">
+        <div class="header">Choose Project
+            <div class="box-tools pull-right">
+                <button wicket:id="backlink1" id="backlink1" class="btn bg-olive btn-sm"><i class="fa fa-times"></i></button>
+            </div>
+        </div>
+        <div class="body bg-gray">
+            <form wicket:id="feedbackForm">
+                <div wicket:id="feedback"></div>
+            </form>
+            <form wicket:id="newProjectForm">
+                <h4>Create a new Project</h4>
+                <div class="input-group margin">
+                    <input wicket:id="projectName" maxlength="255" type="text" name="name" id="projectName" placeholder="Project Name"
+                           class="form-control"/>
+                    <span class="input-group-btn">
+                        <button class="btn bg-olive glyphicon glyphicon-log-in" style="top: 0" type="submit"></button>
+                    </span>
+                </div>
+            </form>
+
+            <form wicket:id="chooseProjectForm">
+                <h4>Or select an existing one</h4>
+                <div class="input-group margin">
+                    <select wicket:id="projectChoice" id="proCh" placeholder="Project Name" class="form-control" autofocus>
+                    </select>
+                    <div class="input-group-btn">
+                        <button wicket:id="markProject" class="btn bg-olive glyphicon glyphicon-star" style="top: 0"></button>
+                        <button  wicket:id="goButton" id="goBtn" class="btn bg-olive glyphicon glyphicon-log-in" style="top: 0"></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="footer">
+            <div class="row">
+                <button wicket:id="logoutLink" id="logout" type="button" class="btn bg-olive btn-block">Logout</button>
+            </div>
+        </div>
+    </div>
+    <script src="js/selectProject.js"></script>
+</wicket:extend>

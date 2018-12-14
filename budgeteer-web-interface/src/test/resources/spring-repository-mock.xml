@@ -4,34 +4,34 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
     http://www.mockito.org/spring/mockito  http://www.mockito.org/spring/mockito.xsd">
 
-    <mockito:mock id="userRepository" class="org.wickedsource.budgeteer.persistence.user.UserRepository"/>
+    <mockito:mock id="userRepository" class="de.adesso.budgeteer.persistence.user.UserRepository"/>
 
-    <mockito:mock id="projectRepository" class="org.wickedsource.budgeteer.persistence.project.ProjectRepository"/>
+    <mockito:mock id="projectRepository" class="de.adesso.budgeteer.persistence.project.ProjectRepository"/>
 
-    <mockito:mock id="budgetRepository" class="org.wickedsource.budgeteer.persistence.budget.BudgetRepository"/>
+    <mockito:mock id="budgetRepository" class="de.adesso.budgeteer.persistence.budget.BudgetRepository"/>
 
-    <mockito:mock id="workRecordRepository" class="org.wickedsource.budgeteer.persistence.record.WorkRecordRepository"/>
+    <mockito:mock id="workRecordRepository" class="de.adesso.budgeteer.persistence.record.WorkRecordRepository"/>
 
-    <mockito:mock id="planRecordRepository" class="org.wickedsource.budgeteer.persistence.record.PlanRecordRepository"/>
+    <mockito:mock id="planRecordRepository" class="de.adesso.budgeteer.persistence.record.PlanRecordRepository"/>
 
-    <mockito:mock id="dailyRateRepository" class="org.wickedsource.budgeteer.persistence.person.DailyRateRepository"/>
+    <mockito:mock id="dailyRateRepository" class="de.adesso.budgeteer.persistence.person.DailyRateRepository"/>
 
-    <mockito:mock id="importRepository" class="org.wickedsource.budgeteer.persistence.imports.ImportRepository"/>
+    <mockito:mock id="importRepository" class="de.adesso.budgeteer.persistence.imports.ImportRepository"/>
 
-    <mockito:mock id="personRepository" class="org.wickedsource.budgeteer.persistence.person.PersonRepository"/>
+    <mockito:mock id="personRepository" class="de.adesso.budgeteer.persistence.person.PersonRepository"/>
 
-    <mockito:mock id="contractRepository" class="org.wickedsource.budgeteer.persistence.contract.ContractRepository"/>
+    <mockito:mock id="contractRepository" class="de.adesso.budgeteer.persistence.contract.ContractRepository"/>
 
-    <mockito:mock id="invoiceRepository" class="org.wickedsource.budgeteer.persistence.invoice.InvoiceRepository"/>
+    <mockito:mock id="invoiceRepository" class="de.adesso.budgeteer.persistence.invoice.InvoiceRepository"/>
 
-    <mockito:mock id="templateRepository" class="org.wickedsource.budgeteer.persistence.template.TemplateRepository"/>
+    <mockito:mock id="templateRepository" class="de.adesso.budgeteer.persistence.template.TemplateRepository"/>
 
-    <mockito:mock id="verificationTokenRepository" class="org.wickedsource.budgeteer.persistence.user.VerificationTokenRepository"/>
+    <mockito:mock id="verificationTokenRepository" class="de.adesso.budgeteer.persistence.user.VerificationTokenRepository"/>
 
-    <mockito:mock id="forgotPasswordTokenRepository" class="org.wickedsource.budgeteer.persistence.user.ForgotPasswordTokenRepository"/>
+    <mockito:mock id="forgotPasswordTokenRepository" class="de.adesso.budgeteer.persistence.user.ForgotPasswordTokenRepository"/>
 
-    <mockito:mock id="manualRecordRepository" class="org.wickedsource.budgeteer.persistence.manualRecord.ManualRecordRepository"/>
+    <mockito:mock id="manualRecordRepository" class="de.adesso.budgeteer.persistence.manualRecord.ManualRecordRepository"/>
 
-    <mockito:mock id="contractSortingRepository" class="org.wickedsource.budgeteer.persistence.contract.ContractSortingRepository"/>
+    <mockito:mock id="contractSortingRepository" class="de.adesso.budgeteer.persistence.contract.ContractSortingRepository"/>
 
 </beans>

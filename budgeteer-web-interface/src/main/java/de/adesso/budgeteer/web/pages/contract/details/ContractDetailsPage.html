@@ -1,0 +1,141 @@
+<wicket:extend xmlns:wicket="http://www.w3.org/1999/xhtml">
+    <div class="row">
+        <div wicket:id="highlightsPanel">
+        </div>
+
+        <div class="col-md-12">
+            <div>
+                <div class="box box-primary">
+                    <div class="box-header">
+                        <i class="fa fa-info-circle"></i>
+
+                        <h3 class="box-title"><wicket:message key="comparison_diagram"></wicket:message></h3>
+
+                        <div class="box-tools pull-right">
+                                <span class="btn btn-default btn-sm" data-widget="collapse">
+                                    <i class="fa fa-minus"></i>
+                                </span>
+                        </div>
+                    </div>
+                    <div class="box-body" style="height: 390px;">
+                  		<canvas wicket:id="comparisonChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="box box-primary">
+                    <div class="box-header">
+                        <i class="fa fa-info-circle"></i>
+                        <h3 class="box-title"><wicket:message key="comparison_table"></wicket:message></h3>
+                        <div class="box-tools pull-right">
+                                <span class="btn btn-default btn-sm" data-widget="collapse">
+                                    <i class="fa fa-minus"></i>
+                                </span>
+                        </div>
+                    </div>
+                    <div class="box-body" wicket:id="differenceTable">  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-primary">
+                <div class="box-header" style="cursor: move;">
+                    <i class="fa fa-cog"></i>
+
+                    <h3 class="box-title">Options
+                    </h3>
+
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-default btn-sm" data-widget="collapse"><i
+                                class="fa fa-minus"></i></button>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-lg-4 col-xs-6">
+                            <!-- small box -->
+                            <div class="small-box bg-green" wicket:id="editLink" style="cursor: pointer;">
+                                <div class="inner" >
+                                    <h3><a >Edit Contract</a></h3>
+                                    <br/>
+                                    <br/>
+                                </div>
+                                <div class="icon">  <i class="ion ion-edit"></i> </div>
+                                <a class="small-box-footer">
+                                    Edit the data of this contract
+                                    <i  class="fa fa-arrow-circle-right" />
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-xs-6">
+                            <!-- small box -->
+                            <div class="small-box bg-green" wicket:id="addInvoiceLink" style="cursor: pointer;">
+                                <div class="inner" >
+                                    <h3><a >Add Invoice</a></h3>
+                                    <br/>
+                                    <br/>
+                                </div>
+                                <div class="icon">  <i class="fa fa-eur"></i> </div>
+                                <a class="small-box-footer">
+                                    Add an invoice to the contract
+                                    <i  class="fa fa-arrow-circle-right" />
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-xs-6">
+                            <!-- small box -->
+                            <div class="small-box bg-teal" wicket:id="showInvoiceLink" style="cursor: pointer;">
+                                <div class="inner" >
+                                    <h3><a >Show Invoices</a></h3>
+                                    <br/>
+                                    <br/>
+                                </div>
+                                <div class="icon">  <i class="fa fa-eur"></i> </div>
+                                <a class="small-box-footer">
+                                    Show Invoices
+                                    <i  class="fa fa-arrow-circle-right" />
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-xs-6">
+                            <!-- small box -->
+                            <div class="small-box bg-teal" wicket:id="showContractLink" style="cursor: pointer;">
+                                <div class="inner" >
+                                    <h3><a >Show Budgets</a></h3>
+                                    <br/>
+                                    <br/>
+                                </div>
+                                <div class="icon">  <i class="fa fa-book"></i> </div>
+                                <a class="small-box-footer">
+                                    Show Budgets
+                                    <i  class="fa fa-arrow-circle-right" />
+                                </a>
+                            </div>
+                        </div>
+                        <form wicket:id="deleteForm">
+                            <div class="col-lg-4 col-xs-6">
+                                <!-- small box -->
+                                <div class="small-box  bg-red" wicket:id="deleteLink" style="cursor: pointer;">
+                                    <div class="inner" >
+                                        <h3>Delete contract</h3>
+                                        <br/>
+                                        <br/>
+                                    </div>
+                                    <div class="icon">  <i class="ion ion-close"></i> </div>
+                                    <a class="small-box-footer">
+                                        Delete this contract
+                                        <i  class="fa fa-arrow-circle-right" />
+                                    </a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- ./col -->
+                </div>
+            </div>
+        </div>
+    </div>
+</wicket:extend>

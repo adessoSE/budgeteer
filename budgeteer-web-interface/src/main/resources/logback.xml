@@ -4,7 +4,7 @@
         <encoder>
             <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>
-        <filter class="org.wickedsource.budgeteer.LoggerFilter"/>
+        <filter class="de.adesso.budgeteer.LoggerFilter"/>
     </appender>
 
     <root level="WARN">

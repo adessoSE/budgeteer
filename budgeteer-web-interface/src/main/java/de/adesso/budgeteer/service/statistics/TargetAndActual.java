@@ -1,0 +1,13 @@
+package de.adesso.budgeteer.service.statistics;
+
+import lombok.Data;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Data
+public class TargetAndActual {
+
+    private List<MoneySeries> actualSeries = new ArrayList<>();
+    private MoneySeries targetSeries;
+}

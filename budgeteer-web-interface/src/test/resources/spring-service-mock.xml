@@ -4,30 +4,30 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
     http://www.mockito.org/spring/mockito  http://www.mockito.org/spring/mockito.xsd">
 
-    <mockito:mock id="notificationService" class="org.wickedsource.budgeteer.service.notification.NotificationService"/>
+    <mockito:mock id="notificationService" class="de.adesso.budgeteer.service.notification.NotificationService"/>
 
-    <mockito:mock id="statisticsService" class="org.wickedsource.budgeteer.service.statistics.StatisticsService"/>
+    <mockito:mock id="statisticsService" class="de.adesso.budgeteer.service.statistics.StatisticsService"/>
 
-    <mockito:mock id="peopleService" class="org.wickedsource.budgeteer.service.person.PersonService"/>
+    <mockito:mock id="peopleService" class="de.adesso.budgeteer.service.person.PersonService"/>
 
-    <mockito:mock id="budgetService" class="org.wickedsource.budgeteer.service.budget.BudgetService"/>
+    <mockito:mock id="budgetService" class="de.adesso.budgeteer.service.budget.BudgetService"/>
 
-    <mockito:mock id="aggregationService" class="org.wickedsource.budgeteer.service.record.RecordService"/>
+    <mockito:mock id="aggregationService" class="de.adesso.budgeteer.service.record.RecordService"/>
 
-    <mockito:mock id="importsService" class="org.wickedsource.budgeteer.service.imports.ImportService"/>
+    <mockito:mock id="importsService" class="de.adesso.budgeteer.service.imports.ImportService"/>
 
-    <mockito:mock id="exportService" class="org.wickedsource.budgeteer.service.exports.ExportService"/>
+    <mockito:mock id="exportService" class="de.adesso.budgeteer.service.exports.ExportService"/>
 
-    <mockito:mock id="userService" class="org.wickedsource.budgeteer.service.user.UserService"/>
+    <mockito:mock id="userService" class="de.adesso.budgeteer.service.user.UserService"/>
 
-    <mockito:mock id="projectService" class="org.wickedsource.budgeteer.service.project.ProjectService"/>
+    <mockito:mock id="projectService" class="de.adesso.budgeteer.service.project.ProjectService"/>
 
-    <mockito:mock id="contractService" class="org.wickedsource.budgeteer.service.contract.ContractService"/>
+    <mockito:mock id="contractService" class="de.adesso.budgeteer.service.contract.ContractService"/>
 
-    <mockito:mock id="contractSortingService" class="org.wickedsource.budgeteer.service.contract.ContractSortingService"/>
+    <mockito:mock id="contractSortingService" class="de.adesso.budgeteer.service.contract.ContractSortingService"/>
 
-    <mockito:mock id="invoiceService" class="org.wickedsource.budgeteer.service.invoice.InvoiceService"/>
+    <mockito:mock id="invoiceService" class="de.adesso.budgeteer.service.invoice.InvoiceService"/>
 
-    <mockito:mock id="templateService" class="org.wickedsource.budgeteer.service.template.TemplateService"/>
+    <mockito:mock id="templateService" class="de.adesso.budgeteer.service.template.TemplateService"/>
 
 </beans>

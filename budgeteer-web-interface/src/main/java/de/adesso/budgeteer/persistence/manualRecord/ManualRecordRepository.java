@@ -1,0 +1,64 @@
+package de.adesso.budgeteer.persistence.manualRecord;
+
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.querydsl.QueryDslPredicateExecutor;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
+import de.adesso.budgeteer.persistence.record.MonthlyAggregatedRecordWithTaxBean;
+import de.adesso.budgeteer.persistence.record.MonthlyAggregatedRecordWithTitleAndTaxBean;
+import de.adesso.budgeteer.persistence.record.WeeklyAggregatedRecordBean;
+import de.adesso.budgeteer.persistence.record.WeeklyAggregatedRecordWithTitleAndTaxBean;
+
+import java.util.Date;
+import java.util.List;
+
+
+public interface ManualRecordRepository extends CrudRepository<ManualRecordEntity, Long>,
+        QueryDslPredicateExecutor<ManualRecordEntity>, JpaSpecificationExecutor {
+
+    @Query("select coalesce(sum(record.moneyAmount),0) from ManualRecordEntity record where record.budget.id = :budgetId")
+    Double getManualRecordSumForBudget(@Param("budgetId") long budgetId);
+
+    @Query("select new de.adesso.budgeteer.persistence.record.WeeklyAggregatedRecordBean(r.year, r.week, coalesce(sum(r.moneyAmount),0)) from ManualRecordEntity r where r.budget.project.id=:projectId and r.billingDate >= :startDate group by r.year, r.week order by r.year, r.week")
+    List<WeeklyAggregatedRecordBean> aggregateByWeekForProject(@Param("projectId") long projectId, @Param("startDate") Date start);
+
+    @Query("select new de.adesso.budgeteer.persistence.record.MonthlyAggregatedRecordWithTitleAndTaxBean(r.year, r.month, coalesce(sum(r.moneyAmount),0), 'Manual records', r.budget.contract.taxRate ) from ManualRecordEntity r join r.budget b where b.project.id=:projectId and r.billingDate >= :startDate group by r.year, r.month, r.budget.contract.taxRate order by r.year, r.month")
+    List<MonthlyAggregatedRecordWithTitleAndTaxBean> aggregateByMonthForBudgetsWithTax(@Param("projectId") long projectId, @Param("startDate") Date startDate);
+
+    @Query("select new de.adesso.budgeteer.persistence.record.MonthlyAggregatedRecordWithTitleAndTaxBean(r.year, r.month, coalesce(sum(r.moneyAmount),0), 'Manual records', r.budget.contract.taxRate ) from ManualRecordEntity r join r.budget b join b.tags t where b.project.id=:projectId and t.tag in (:tags) and r.billingDate >= :startDate group by r.year, r.month, r.budget.contract.taxRate order by r.year, r.month")
+    List<MonthlyAggregatedRecordWithTitleAndTaxBean> aggregateByMonthForBudgetsWithTax(@Param("projectId") long projectId, @Param("tags") List<String> tags, @Param("startDate") Date startDate);
+
+    @Query("select new de.adesso.budgeteer.persistence.record.MonthlyAggregatedRecordWithTitleAndTaxBean(r.year, r.month, coalesce(sum(r.moneyAmount),0), 'Manual records', r.budget.contract.taxRate ) from ManualRecordEntity r where r.budget.id=:budgetId and r.billingDate >= :startDate group by r.year, r.month, r.budget.contract.taxRate order by r.year, r.month")
+    List<MonthlyAggregatedRecordWithTitleAndTaxBean> aggregateByMonthForBudgetWithTax(@Param("budgetId") long budgetId, @Param("startDate") Date startDate);
+
+    @Query("select new de.adesso.budgeteer.persistence.record.MonthlyAggregatedRecordWithTaxBean(r.year, r.month, coalesce(sum(r.moneyAmount),0), r.budget.contract.taxRate ) from ManualRecordEntity r where r.budget.id=:budgetId group by r.year, r.month, r.budget.contract.taxRate order by r.year, r.month")
+    List<MonthlyAggregatedRecordWithTaxBean> aggregateByMonthAndBudgetWithTax(@Param("budgetId") long budgetId);
+
+    @Query("select new de.adesso.budgeteer.persistence.record.MonthlyAggregatedRecordWithTaxBean(r.year, r.month, coalesce(sum(r.moneyAmount),0), r.budget.contract.taxRate) from ManualRecordEntity r join r.budget b where b.project.id=:projectId group by r.year, r.month, r.budget.contract.taxRate order by r.year, r.month")
+    List<MonthlyAggregatedRecordWithTaxBean> aggregateByMonthWithTax(@Param("projectId") long projectId);
+
+    @Query("select new de.adesso.budgeteer.persistence.record.MonthlyAggregatedRecordWithTaxBean(r.year, r.month, coalesce(sum(r.moneyAmount),0), r.budget.contract.taxRate) from ManualRecordEntity r join r.budget b join b.tags t where b.project.id=:projectId and t.tag in (:tags) group by r.year, r.month, r.budget.contract.taxRate order by r.year, r.month")
+    List<MonthlyAggregatedRecordWithTaxBean> aggregateByMonthAndBudgetTagsWithTax(@Param("projectId") long projectId, @Param("tags") List<String> tags);
+
+    @Query("select new de.adesso.budgeteer.persistence.record.WeeklyAggregatedRecordWithTitleAndTaxBean(r.year, r.month, r.week, coalesce(sum(r.moneyAmount),0), r.budget.contract.taxRate, 'Manual records' ) from ManualRecordEntity r join r.budget b where b.project.id=:projectId group by r.year, r.month, r.week, r.budget.contract.taxRate order by r.year, r.week")
+    List<WeeklyAggregatedRecordWithTitleAndTaxBean> aggregateByWeekForBudgetsWithTax(@Param("projectId") long projectId);
+
+    @Query("select new de.adesso.budgeteer.persistence.record.WeeklyAggregatedRecordWithTitleAndTaxBean(r.year, r.month, r.week, coalesce(sum(r.moneyAmount),0), r.budget.contract.taxRate, 'Manual records') from ManualRecordEntity r join r.budget b join b.tags t where b.project.id=:projectId and t.tag in (:tags) and r.billingDate >= :startDate group by r.year, r.month, r.week, r.budget.contract.taxRate order by  r.year, r.week")
+    List<WeeklyAggregatedRecordWithTitleAndTaxBean> aggregateByWeekForBudgetsWithTax(@Param("projectId") long projectId, @Param("tags") List<String> tags, @Param("startDate") Date startDate);
+
+    @Query("select new de.adesso.budgeteer.persistence.record.WeeklyAggregatedRecordWithTitleAndTaxBean(r.year, r.month, r.week, coalesce(sum(r.moneyAmount),0), r.budget.contract.taxRate,'Manual records' ) from ManualRecordEntity r join r.budget b where b.project.id=:projectId and r.billingDate >= :startDate group by r.year, r.month, r.week, r.budget.contract.taxRate order by r.year, r.week")
+    List<WeeklyAggregatedRecordWithTitleAndTaxBean> aggregateByWeekForBudgetsWithTax(@Param("projectId") long projectId, @Param("startDate") Date startDate);
+
+    @Query("select new de.adesso.budgeteer.persistence.record.WeeklyAggregatedRecordWithTitleAndTaxBean(r.year, r.month, r.week,  coalesce(sum(r.moneyAmount),0), r.budget.contract.taxRate, 'Manual records') from ManualRecordEntity r join r.budget b join b.tags t where b.project.id=:projectId and t.tag in (:tags) group by r.year, r.month, r.week, r.budget.contract.taxRate order by r.year, r.week")
+    List<WeeklyAggregatedRecordWithTitleAndTaxBean> aggregateByWeekForBudgetsWithTax(@Param("projectId") long projectId, @Param("tags") List<String> tags);
+
+    @Query("select new de.adesso.budgeteer.persistence.record.WeeklyAggregatedRecordWithTitleAndTaxBean(r.year, r.month, r.week, coalesce(sum(r.moneyAmount),0), r.budget.contract.taxRate, 'Manual records' ) from ManualRecordEntity r where r.budget.id=:budgetId group by r.year, r.month, r.week, r.budget.contract.taxRate order by r.year, r.week")
+    List<WeeklyAggregatedRecordWithTitleAndTaxBean> aggregateByWeekForBudgetWithTax(@Param("budgetId") long budgetId);
+
+    @Query("select new de.adesso.budgeteer.persistence.record.WeeklyAggregatedRecordWithTitleAndTaxBean(r.year, r.month, r.week, coalesce(sum(r.moneyAmount),0), r.budget.contract.taxRate, 'Manual records' ) from ManualRecordEntity r where r.budget.id=:budgetId and r.billingDate >= :startDate group by r.year, r.month, r.week, r.budget.contract.taxRate order by r.year, r.week")
+    List<WeeklyAggregatedRecordWithTitleAndTaxBean> aggregateByWeekForBudgetWithTax(@Param("budgetId") long budgetId, @Param("startDate") Date startDate);
+
+    @Query("select new ManualRecordEntity(r.id, r.description, r.moneyAmount, r.budget, r.creationDate, r.billingDate, r.year, r.month, r.day, r.week) from ManualRecordEntity r where r.budget.id = :budgetId")
+    List<ManualRecordEntity> getManualRecordByBudgetId(@Param("budgetId") long budgetId);
+}

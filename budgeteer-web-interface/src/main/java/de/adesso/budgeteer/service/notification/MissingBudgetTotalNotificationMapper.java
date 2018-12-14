@@ -1,0 +1,18 @@
+package de.adesso.budgeteer.service.notification;
+
+import de.adesso.budgeteer.persistence.budget.MissingBudgetTotalBean;
+import org.springframework.stereotype.Component;
+import de.adesso.budgeteer.service.AbstractMapper;
+
+@Component
+public class MissingBudgetTotalNotificationMapper extends AbstractMapper<MissingBudgetTotalBean, Notification> {
+
+    @Override
+    public Notification map(MissingBudgetTotalBean missingTotal) {
+        MissingBudgetTotalNotification notification = new MissingBudgetTotalNotification();
+        notification.setBudgetId(missingTotal.getBudgetId());
+        notification.setBudgetName(missingTotal.getBudgetName());
+        return notification;
+    }
+
+}
