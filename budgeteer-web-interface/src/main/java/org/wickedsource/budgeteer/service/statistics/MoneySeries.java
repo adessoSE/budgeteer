@@ -26,7 +26,7 @@ public class MoneySeries {
     }
 
     /**
-     * @return Returns the valuesNet with or without taxes, according to the current state of the session
+     * @return Returns the values with or without taxes, according to the current state of the session
      */
     public List<Money> getMoneyValues() {
         if (BudgeteerSession.get().isTaxEnabled()) {
