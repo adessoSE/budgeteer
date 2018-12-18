@@ -90,8 +90,40 @@ public class DateUtil {
         return result;
     }
 
-    public static Calendar getCalendarOfDate(Date date)
-    {
+    /***
+     * @return Get a Date set to the last day of a month
+     */
+    public static Date getEndOfMonth(int month) {
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.set(Calendar.MONTH, month);
+        cal.add(Calendar.MONTH, 1);
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        cal.add(Calendar.DAY_OF_MONTH, -1);
+        return cal.getTime();
+    }
+
+    /***
+     * @return Get a Date set to the first day of a month
+     */
+    public static Date getStartOfMonth(int month) {
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.set(Calendar.MONTH, month);
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        return cal.getTime();
+    }
+
+    /***
+     * @return Get the number of days in a month
+     */
+    public static int getDaysInMonth(int month) {
+        Date firstDay = getStartOfMonth(month);
+        Date lastDay = getEndOfMonth(month);
+        DateRange monthRange = new DateRange(firstDay, lastDay);
+
+        return monthRange.getNumberOfDays() + 1;
+    }
+
+    public static Calendar getCalendarOfDate(Date date) {
         GregorianCalendar cal = new GregorianCalendar();
         cal.setTime(date);
 

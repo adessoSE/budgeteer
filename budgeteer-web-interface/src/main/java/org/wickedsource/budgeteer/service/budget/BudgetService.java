@@ -133,10 +133,10 @@ public class BudgetService {
         return enrichBudgetEntity(budget);
     }
 
-    //ToDo
     private BudgetDetailData enrichBudgetEntity(BudgetEntity entity) {
         Date lastUpdated = workRecordRepository.getLatestWorkRecordDate(entity.getId());
         Double spentBudgetInCents = budgetRepository.getSpentBudgetOfBudget(entity.getId());
+
         Double plannedBudgetInCents = planRecordRepository.getPlannedBudget(entity.getId());
         Double avgDailyRateInCents = workRecordRepository.getAverageDailyRate(entity.getId());
         Double taxCoefficient = budgetRepository.getTaxCoefficientByBudget(entity.getId());
@@ -317,9 +317,8 @@ public class BudgetService {
     @PreAuthorize("canReadBudget(#id)")
     public void deleteBudget(long id) {
         // delete all fixed daily rates of the budget
-        List<FixedDailyRateEntity> fixedDailyRateEntities = fixedDailyRateRepository.getFixedDailyRateByBudgetId(id);
-        for(FixedDailyRateEntity rateEntity : fixedDailyRateEntities)
-        {
+        List<FixedDailyRateEntity> fixedDailyRateEntities = fixedDailyRateRepository.getFixedDailyRateEntitesByBudgetId(id);
+        for (FixedDailyRateEntity rateEntity : fixedDailyRateEntities) {
             fixedDailyRateRepository.delete(rateEntity.getId());
         }
 

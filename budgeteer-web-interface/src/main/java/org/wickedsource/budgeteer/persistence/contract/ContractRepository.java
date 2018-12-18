@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface ContractRepository extends CrudRepository<ContractEntity, Long>{
+public interface ContractRepository extends CrudRepository<ContractEntity, Long> {
 
     List<ContractEntity> findByProjectId(long projectId);
 
@@ -48,7 +48,7 @@ public interface ContractRepository extends CrudRepository<ContractEntity, Long>
             "coalesce(" + //spentBudget
             "((select sum(wr.minutes * wr.dailyRate/ 60 / 8)" +
             "from WorkRecordEntity wr " +
-            "where wr.budget.contract.id = :contractId "+
+            "where wr.budget.contract.id = :contractId " +
             "AND (wr.year < :year OR (wr.year = :year AND wr.month <= :month))" +
             ")" +
             "+ (select coalesce(sum(record.moneyAmount),0) " +
@@ -67,6 +67,7 @@ public interface ContractRepository extends CrudRepository<ContractEntity, Long>
     ContractStatisticBean getContractStatisticAggregatedByMonthAndYear(@Param("contractId") Long contractId, @Param("month") Integer month, @Param("year") Integer year);
 
     //ToDo
+
     /**
      * returns a ContractStatisticBean for a given contract for the given month and year.
      */
@@ -82,10 +83,10 @@ public interface ContractRepository extends CrudRepository<ContractEntity, Long>
             "from WorkRecordEntity wr where wr.budget.contract.id = :contractId " +
             "AND (wr.year = :year AND wr.month = :month)" +
             "),0l)" +
-            "- (select coalesce(sum(record.moneyAmount),0) from ManualRecordEntity record where record.budget.contract.id = :contractId and record.month = :month and record.year = :year)"+
+            "- (select coalesce(sum(record.moneyAmount),0) from ManualRecordEntity record where record.budget.contract.id = :contractId and record.month = :month and record.year = :year)" +
             ")," +
             "(coalesce((select sum(wr.minutes * wr.dailyRate/ 60 / 8)" + //spent
-            "from WorkRecordEntity wr where wr.budget.contract.id = :contractId "+
+            "from WorkRecordEntity wr where wr.budget.contract.id = :contractId " +
             "AND (wr.year = :year AND wr.month = :month)" +
             "),0l)+ " +
             "(select coalesce(sum(record.moneyAmount),0) from ManualRecordEntity record where record.budget.contract.id = :contractId and record.month = :month and record.year = :year))," +
@@ -94,23 +95,26 @@ public interface ContractRepository extends CrudRepository<ContractEntity, Long>
             ") from ContractEntity c where c.id = :contractId")
     ContractStatisticBean getContractStatisticByMonthAndYear(@Param("contractId") Long contractId, @Param("month") Integer month, @Param("year") Integer year);
 
-    // ToDo
-    @Query("select (coalesce(sum(wr.minutes * wr.dailyRate/ 60 / 8),0) +" +
-           " (select coalesce(sum(record.moneyAmount),0) " +
+    // ToDo TEST
+    @Query("select (coalesce(sum(wr.minutes * wr.dailyRate/ 60 / 8),0)" +
+            "+ (select coalesce(sum(record.moneyAmount),0) " +
             "from ManualRecordEntity record " +
-            "where record.budget.contract.id = :contractId)"+
-            ")" +
+            "where record.budget.contract.id = :contractId))" +
+            "+ (select coalesce(sum(fixed.moneyAmount * fixed.days),0) " +
+            "from FixedDailyRateEntity fixed " +
+            "where fixed.budget.contract.id = :contractId)" +
             "from WorkRecordEntity wr " +
             "where wr.budget.contract.id = :contractId)")
     Double getSpentBudgetByContractId(@Param("contractId") long contractId);
 
-    //ToDo
+    //ToDo TEST
     @Query("select (c.budget " +
             "- coalesce((select sum(wr.minutes * wr.dailyRate)/ 60 / 8 from WorkRecordEntity wr where wr.budget.contract.id = :contractId) ,0)" +
             "- coalesce( ( select sum(record.moneyAmount) from ManualRecordEntity record where record.budget.contract.id = :contractId), 0))" +
+            "- coalesce((select sum(fixed.moneyAmount * fixed.days) from FixedDailyRateEntity fixed where fixed.budget.contract.id = :contractId),0)" +
             " from ContractEntity c where c.id = :contractId")
     Double getBudgetLeftByContractId(@Param("contractId") long contractId);
-    
+
     @Modifying
     @Query("delete from ContractEntity c where c.project.id = :projectId")
     void deleteByProjectId(@Param(value = "projectId") long projectId);
@@ -126,11 +130,11 @@ public interface ContractRepository extends CrudRepository<ContractEntity, Long>
     List<ContractFieldEntity> findContractFieldsByContractId(@Param("contractID") Long contractID);
 
     @Query("select coalesce(sum(wr.minutes * wr.dailyRate/ 60 / 8),0) from WorkRecordEntity wr where wr.budget.contract.id = :contractId AND (wr.year < :year OR (wr.year = :year AND wr.month <= :month))")
-	Double getSpentBudgetByContractIdUntilDate(@Param("contractId") Long contractId, @Param("month") Integer month, @Param("year") Integer year);
+    Double getSpentBudgetByContractIdUntilDate(@Param("contractId") Long contractId, @Param("month") Integer month, @Param("year") Integer year);
 
     @Query("select ( coalesce(sum(wr.minutes * wr.dailyRate/ 60 / 8),0)*"
-    		+ "coalesce((select 1.0+c.taxRate/100.0 from ContractEntity c where c.id = :contractId),1.0)) "
-    		+ "from WorkRecordEntity wr where wr.budget.contract.id = :contractId")
-	Double getSpentBudgetGrossByContractId(@Param("contractId") Long contractId);
+            + "coalesce((select 1.0+c.taxRate/100.0 from ContractEntity c where c.id = :contractId),1.0)) "
+            + "from WorkRecordEntity wr where wr.budget.contract.id = :contractId")
+    Double getSpentBudgetGrossByContractId(@Param("contractId") Long contractId);
 
 }

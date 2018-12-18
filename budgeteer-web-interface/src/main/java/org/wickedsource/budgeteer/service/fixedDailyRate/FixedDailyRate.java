@@ -38,6 +38,19 @@ public class FixedDailyRate implements Serializable {
         days = entity.getDays();
     }
 
+    public FixedDailyRate(long id, long budgetId, Money moneyAmount, Date startDate, Date endDate, String description, String name, BigDecimal taxRate, int days) {
+        this.id = id;
+        this.budgetId = budgetId;
+        this.moneyAmount = moneyAmount;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.description = description;
+        this.name = name;
+        this.taxRate = taxRate;
+        this.days = days;
+
+    }
+
     public FixedDailyRate(long budgetId) {
         this.budgetId = budgetId;
     }

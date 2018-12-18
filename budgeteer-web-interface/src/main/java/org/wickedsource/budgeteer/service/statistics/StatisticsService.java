@@ -11,6 +11,7 @@ import org.wickedsource.budgeteer.persistence.record.*;
 import org.wickedsource.budgeteer.persistence.manualRecord.ManualRecordRepository;
 import org.wickedsource.budgeteer.service.DateUtil;
 import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
+import org.wickedsource.budgeteer.service.fixedDailyRate.FixedDailyRateService;
 import org.wickedsource.budgeteer.web.pages.contract.details.contractDetailChart.ContractDetailBudgetChart;
 
 import javax.transaction.Transactional;
@@ -43,6 +44,9 @@ public class StatisticsService {
     @Autowired
     private InvoiceRepository invoiceRepository;
 
+    @Autowired
+    private FixedDailyRateService fixedDailyRateService;
+
     /**
      * Returns the budget burned in each of the last numberOfWeeks weeks. All of the project's budgets are aggregated.
      *
@@ -52,28 +56,36 @@ public class StatisticsService {
      */
     public List<Money> getWeeklyBudgetBurnedForProject(long projectId, int numberOfWeeks) {
         Date startDate = dateUtil.weeksAgo(numberOfWeeks);
-        //ToDo
+        //ToDo Test
         List<WeeklyAggregatedRecordBean> weeklyBeans = workRecordRepository.aggregateByWeekForProject(projectId, startDate);
         // Get Manual records
         List<WeeklyAggregatedRecordBean> manualBeans = manualRecordRepository.aggregateByWeekForProject(projectId, startDate);
+        // Get records of fixed daily rates
+        List<WeeklyAggregatedRecordBean> fixedBeans = fixedDailyRateService.aggregateByWeekForProject(projectId, startDate);
 
-        // Add the manual records' money amounts to a weekly bean of the same week
-        for (WeeklyAggregatedRecordBean manual : manualBeans) {
+        addRecordsToWeeklyRecords(weeklyBeans, manualBeans);
+        addRecordsToWeeklyRecords(weeklyBeans, fixedBeans);
+
+        return fillInMissingWeeks(numberOfWeeks, weeklyBeans);
+    }
+
+    private void addRecordsToWeeklyRecords(List<WeeklyAggregatedRecordBean> weeklyBeans, List<WeeklyAggregatedRecordBean> additionalBeans) {
+        // Add the additional records' money amounts to a weekly bean of the same week
+        for (WeeklyAggregatedRecordBean additional : additionalBeans) {
             boolean found = false;
             for (WeeklyAggregatedRecordBean bean : weeklyBeans) {
-                if (manual.getYear() == bean.getYear() && manual.getWeek() == bean.getWeek()) {
-                    bean.setValueInCents(bean.getValueInCents() + manual.getValueInCents());
+                if (additional.getYear() == bean.getYear() && additional.getWeek() == bean.getWeek()) {
+                    bean.setValueInCents(bean.getValueInCents() + additional.getValueInCents());
                     found = true;
                     break;
                 }
             }
 
-            // If there is no weekly bean for this manual record's week, add the manual record to the weekly beans
+            // If there is no weekly bean for this additional record's week, add the additional record to the weekly beans
             if (!found) {
-                weeklyBeans.add(manual);
+                weeklyBeans.add(additional);
             }
         }
-        return fillInMissingWeeks(numberOfWeeks, weeklyBeans);
     }
 
     /**
@@ -586,20 +598,23 @@ public class StatisticsService {
      * @return the week statistics for the last numberOfWeeks weeks
      */
     public TargetAndActual getWeekStatsForBudgetsWithTax(BudgetTagFilter budgetFilter, int numberOfWeeks) {
-        //ToDo
+        //ToDo Test
         Date startDate = dateUtil.weeksAgo(numberOfWeeks);
         List<WeeklyAggregatedRecordWithTitleAndTaxBean> burnedStats;
         List<WeeklyAggregatedRecordWithTaxBean> plannedStats;
         List<WeeklyAggregatedRecordWithTitleAndTaxBean> manualBurnedStats;
+        List<WeeklyAggregatedRecordWithTitleAndTaxBean> fixedStats;
 
         if (budgetFilter.getSelectedTags().isEmpty()) {
             burnedStats = workRecordRepository.aggregateByWeekAndPersonForBudgetsWithTax(budgetFilter.getProjectId(), startDate);
             plannedStats = planRecordRepository.aggregateByWeekForBudgetsWithTax(budgetFilter.getProjectId(), startDate);
             manualBurnedStats = manualRecordRepository.aggregateByWeekForBudgetsWithTax(budgetFilter.getProjectId(), startDate);
+            fixedStats = fixedDailyRateService.aggregateByWeekWithTitleAndTaxForProject(budgetFilter.getProjectId(), startDate);
         } else {
             burnedStats = workRecordRepository.aggregateByWeekAndPersonForBudgetsWithTax(budgetFilter.getProjectId(), budgetFilter.getSelectedTags(), startDate);
             plannedStats = planRecordRepository.aggregateByWeekForBudgetsWithTax(budgetFilter.getProjectId(), budgetFilter.getSelectedTags(), startDate);
             manualBurnedStats = manualRecordRepository.aggregateByWeekForBudgetsWithTax(budgetFilter.getProjectId(), budgetFilter.getSelectedTags(), startDate);
+            fixedStats = fixedDailyRateService.aggregateByWeekForBudgetsWithTax(budgetFilter.getProjectId(), budgetFilter.getSelectedTags(), startDate);
         }
 
         // Calculate the money amount of the weekly records as fractions of monthly records
@@ -610,6 +625,7 @@ public class StatisticsService {
         monthlyStats.calculateCentValuesByMonthlyFraction(planList, workList);
 
         workList.addAll(manualBurnedStats);
+        workList.addAll(fixedStats);
         return calculateWeeklyTargetAndActual(numberOfWeeks, planList, workList);
     }
 
@@ -658,20 +674,25 @@ public class StatisticsService {
         List<MonthlyAggregatedRecordWithTitleAndTaxBean> burnedStats;
         List<MonthlyAggregatedRecordWithTaxBean> plannedStats;
         List<MonthlyAggregatedRecordWithTitleAndTaxBean> manualBurnedStats;
-        //ToDo
+        List<MonthlyAggregatedRecordWithTitleAndTaxBean> fixedStats;
+
+        //ToDo Test
         if (budgetFilter.getSelectedTags().isEmpty()) {
             // aggregate all budgets
             burnedStats = workRecordRepository.aggregateByMonthAndPersonForBudgetsWithTax(budgetFilter.getProjectId(), startDate);
             plannedStats = planRecordRepository.aggregateByMonthForBudgetsWithTax(budgetFilter.getProjectId(), startDate);
             manualBurnedStats = manualRecordRepository.aggregateByMonthForBudgetsWithTax(budgetFilter.getProjectId(), startDate);
+            fixedStats = fixedDailyRateService.aggregateByMonthForBudgetsWithTax(budgetFilter.getProjectId(), startDate);
         } else {
             // aggregate only budgets with the selected tags
             burnedStats = workRecordRepository.aggregateByMonthAndPersonForBudgetsWithTax(budgetFilter.getProjectId(), budgetFilter.getSelectedTags(), startDate);
             plannedStats = planRecordRepository.aggregateByMonthForBudgetsWithTax(budgetFilter.getProjectId(), budgetFilter.getSelectedTags(), startDate);
             manualBurnedStats = manualRecordRepository.aggregateByMonthForBudgetsWithTax(budgetFilter.getProjectId(), budgetFilter.getSelectedTags(), startDate);
+            fixedStats = fixedDailyRateService.aggregateByMonthForBudgetsWithTax(budgetFilter.getProjectId(), budgetFilter.getSelectedTags(), startDate);
         }
 
         burnedStats.addAll(manualBurnedStats);
+        burnedStats.addAll(fixedStats);
 
         return calculateMonthlyTargetAndActual(numberOfMonths, plannedStats, burnedStats);
     }
@@ -746,12 +767,14 @@ public class StatisticsService {
      */
     public TargetAndActual getWeekStatsForBudgetWithTax(long budgetId, int numberOfWeeks) {
         Date startDate = dateUtil.weeksAgo(numberOfWeeks);
-        //ToDo
+        //ToDo Test
         List<WeeklyAggregatedRecordWithTitleAndTaxBean> burnedStats = workRecordRepository.aggregateByWeekAndPersonForBudgetWithTax(budgetId, startDate);
         List<WeeklyAggregatedRecordWithTaxBean> plannedStats = planRecordRepository.aggregateByWeekForBudgetWithTax(budgetId, startDate);
         List<WeeklyAggregatedRecordWithTitleAndTaxBean> manualBurnedStats = manualRecordRepository.aggregateByWeekForBudgetWithTax(budgetId, startDate);
+        List<WeeklyAggregatedRecordWithTitleAndTaxBean> fixedStats = fixedDailyRateService.aggregateByWeekForBudgetWithTax(budgetId, startDate);
 
         burnedStats.addAll(manualBurnedStats);
+        burnedStats.addAll(fixedStats);
 
         MonthlyStats monthlyStats = new MonthlyStats(budgetId, workRecordRepository, planRecordRepository);
 

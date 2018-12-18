@@ -46,13 +46,11 @@ public interface BudgetRepository extends CrudRepository<BudgetEntity, Long> {
     @Query("select new org.wickedsource.budgeteer.service.notification.MissingContractForBudgetNotification(b.id) from BudgetEntity b where b.contract = null and b.project.id=:projectId")
     List<MissingContractForBudgetNotification> getMissingContractForProject(@Param("projectId") long projectId);
 
-
-    // ToDo working?
     @Query("select coalesce(sum(record.minutes * record.dailyRate) / 60 / 8,0) " +
-            "+(select coalesce(sum(manual.moneyAmount),0) from ManualRecordEntity manual where manual.budget.id = :budgetId)"+
+            "+(select coalesce(sum(manual.moneyAmount),0) from ManualRecordEntity manual where manual.budget.id = :budgetId)" +
             "+(select coalesce(sum(fixed.moneyAmount*fixed.days),0) from FixedDailyRateEntity fixed where fixed.budget.id = :budgetId)" +
             "from WorkRecordEntity record where record.budget.id = :budgetId")
-   Double getSpentBudgetOfBudget(@Param("budgetId") long budgetId);
+    Double getSpentBudgetOfBudget(@Param("budgetId") long budgetId);
 
     @Modifying
     @Query("delete from BudgetEntity b where b.project.id = :projectId")
