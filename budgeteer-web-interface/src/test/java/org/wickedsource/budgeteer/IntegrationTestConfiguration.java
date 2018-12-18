@@ -2,6 +2,7 @@ package org.wickedsource.budgeteer;
 
 import org.mockito.Mockito;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.flyway.FlywayAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -15,7 +16,7 @@ import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
-@EnableAutoConfiguration
+@EnableAutoConfiguration(exclude = FlywayAutoConfiguration.class)
 @ComponentScan(basePackages = "org.wickedsource.budgeteer")
 public class IntegrationTestConfiguration {
 
