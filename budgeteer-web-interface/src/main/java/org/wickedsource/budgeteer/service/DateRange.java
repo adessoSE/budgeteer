@@ -2,13 +2,10 @@ package org.wickedsource.budgeteer.service;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import sun.util.resources.cldr.aa.CalendarData_aa_ER;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 public class DateRange implements Serializable {
 

@@ -1,7 +1,5 @@
 package org.wickedsource.budgeteer.service.fixedDailyRate;
 
-import org.joda.money.Money;
-import org.openxmlformats.schemas.drawingml.x2006.main.CTRegularTextRun;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.wickedsource.budgeteer.MoneyUtil;
@@ -17,8 +15,6 @@ import org.wickedsource.budgeteer.service.DateRange;
 import org.wickedsource.budgeteer.service.DateUtil;
 
 import javax.transaction.Transactional;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
