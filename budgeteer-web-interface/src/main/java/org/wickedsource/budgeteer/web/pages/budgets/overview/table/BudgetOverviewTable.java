@@ -99,13 +99,9 @@ public class BudgetOverviewTable extends Panel {
             BudgetTagFilter filter = (BudgetTagFilter) event.getPayload();
             FilteredBudgetModel model = (FilteredBudgetModel) getDefaultModel();
             model.setFilter(model(from(filter)));
-        } else if (payload instanceof String) {
+        } else if (payload instanceof Long) {
             Long remainingFilter;
-            try {
-                remainingFilter = Long.parseLong((String) event.getPayload());
-            } catch (NumberFormatException e) {
-                return;
-            }
+            remainingFilter = (Long) event.getPayload();
             FilteredBudgetModel model = (FilteredBudgetModel) getDefaultModel();
             model.setRemainingFilterModel(model(from(remainingFilter)));
             BudgeteerSession.get().setRemainingBudetFilterValue(remainingFilter);
