@@ -62,7 +62,7 @@ class BudgetServiceTest extends ServiceTestTemplate {
 
     @Test
     void testLoadBudgetTags() {
-        List<String> tags = new ArrayList<String>();
+        List<String> tags = new ArrayList<>();
         tags.add("1");
         tags.add("2");
         when(budgetRepository.getAllTagsInProject(1L)).thenReturn(tags);
@@ -77,7 +77,7 @@ class BudgetServiceTest extends ServiceTestTemplate {
         Date date = new Date();
         when(budgetRepository.findOne(1L)).thenReturn(createBudgetEntity());
         when(workRecordRepository.getLatestWorkRecordDate(1L)).thenReturn(date);
-        when(workRecordRepository.getSpentBudget(1L)).thenReturn(100000.0);
+        when(budgetRepository.getSpentBudgetOfBudget(1L)).thenReturn(100000.0);
         when(planRecordRepository.getPlannedBudget(1L)).thenReturn(200000.0);
         when(workRecordRepository.getAverageDailyRate(1L)).thenReturn(50000.0);
         BudgetDetailData data = budgetService.loadBudgetDetailData(1L);
@@ -91,7 +91,7 @@ class BudgetServiceTest extends ServiceTestTemplate {
         Date date = new Date();
         when(budgetRepository.findByAtLeastOneTag(1L, Arrays.asList("1", "2", "3"))).thenReturn(Arrays.asList(createBudgetEntity()));
         when(workRecordRepository.getLatestWorkRecordDate(1L)).thenReturn(date);
-        when(workRecordRepository.getSpentBudget(1L)).thenReturn(100000.0);
+        when(budgetRepository.getSpentBudgetOfBudget(1L)).thenReturn(100000.0);
         when(planRecordRepository.getPlannedBudget(1L)).thenReturn(200000.0);
         when(workRecordRepository.getAverageDailyRate(1L)).thenReturn(50000.0);
         List<BudgetDetailData> data = budgetService.loadBudgetsDetailData(1L, new BudgetTagFilter(Arrays.asList("1", "2", "3"), 1L));
@@ -162,12 +162,12 @@ class BudgetServiceTest extends ServiceTestTemplate {
         ContractEntity entity = new ContractEntity();
         entity.setId(1);
         entity.setName("TestName");
-        entity.setBudgets(new LinkedList<BudgetEntity>());
+        entity.setBudgets(new LinkedList<>());
         return entity;
     }
 
     private List<String> mapEntitiesToTags(List<BudgetTagEntity> tagEntities) {
-        List<String> tags = new ArrayList<String>();
+        List<String> tags = new ArrayList<>();
         for (BudgetTagEntity entity : tagEntities) {
             tags.add(entity.getTag());
         }
