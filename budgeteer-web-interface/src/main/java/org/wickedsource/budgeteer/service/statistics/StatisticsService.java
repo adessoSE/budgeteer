@@ -56,7 +56,7 @@ public class StatisticsService {
      */
     public List<Money> getWeeklyBudgetBurnedForProject(long projectId, int numberOfWeeks) {
         Date startDate = dateUtil.weeksAgo(numberOfWeeks);
-        //ToDo Test
+
         List<WeeklyAggregatedRecordBean> weeklyBeans = workRecordRepository.aggregateByWeekForProject(projectId, startDate);
         // Get Manual records
         List<WeeklyAggregatedRecordBean> manualBeans = manualRecordRepository.aggregateByWeekForProject(projectId, startDate);
@@ -134,13 +134,23 @@ public class StatisticsService {
         // adding values to result list and adding zero-values for weeks that are not included in the query result
         Calendar c = Calendar.getInstance();
         c.setTime(startDate);
+        int currentYear = c.get(Calendar.YEAR);
+        int currentWeek = c.get(Calendar.WEEK_OF_YEAR);
+
         for (int i = 0; i < numberOfWeeks; i++) {
+            // If the year changes, increase it
+            if (c.get(Calendar.WEEK_OF_YEAR) < currentWeek) {
+                currentYear++;
+                c.set(Calendar.YEAR, currentYear);
+            }
+
             WeeklyAggregatedRecordBean weekBean = getBeanForWeek(c.get(Calendar.YEAR), c.get(Calendar.WEEK_OF_YEAR), weeklyBeans);
             if (weekBean == null) {
                 resultList.add(MoneyUtil.createMoneyFromCents(0L));
             } else {
                 resultList.add(MoneyUtil.createMoneyFromCents(weekBean.getValueInCents()));
             }
+            currentWeek = c.get(Calendar.WEEK_OF_YEAR);
             c.add(Calendar.WEEK_OF_YEAR, 1);
         }
 
@@ -313,8 +323,12 @@ public class StatisticsService {
         Date startDate = dateUtil.weeksAgo(numberOfWeeks);
         Set<String> titles = getAllTitlesWeekly(castToWeeklyRecordWithTitle(burnedStats));
         Calendar c = Calendar.getInstance();
+
         for (String title : titles) {
             c.setTime(startDate);
+            int currentYear = c.get(Calendar.YEAR);
+            int currentWeek = c.get(Calendar.WEEK_OF_YEAR);
+
             MoneySeries titledSeries = new MoneySeries();
             titledSeries.setName(title);
 
@@ -322,10 +336,17 @@ public class StatisticsService {
             List<Money> resultList_gross = new ArrayList<>();
 
             for (int i = 0; i < numberOfWeeks; i++) {
+                // If the year changes, increase it
+                if (c.get(Calendar.WEEK_OF_YEAR) < currentWeek) {
+                    currentYear++;
+                    c.set(Calendar.YEAR, currentYear);
+                }
+
                 List<WeeklyAggregatedRecordWithTaxBean> beans = getAllBeansForWeekAndTitleWithTax(c.get(Calendar.YEAR), c.get(Calendar.WEEK_OF_YEAR), title, burnedStats);
 
                 sumMoneyAmountsOfWeekBeans(beans, resultList, resultList_gross);
 
+                currentWeek = c.get(Calendar.WEEK_OF_YEAR);
                 c.add(Calendar.WEEK_OF_YEAR, 1);
             }
             titledSeries.setValues(resultList);
@@ -344,13 +365,22 @@ public class StatisticsService {
 
         Calendar c = Calendar.getInstance();
         c.setTime(startDate);
+        int currentYear = c.get(Calendar.YEAR);
+        int currentWeek = c.get(Calendar.WEEK_OF_YEAR);
 
         // Sum the money of each week and add the values to the lists
         for (int i = 0; i < numberOfWeeks; i++) {
+            // If the year changes, increase it
+            if (c.get(Calendar.WEEK_OF_YEAR) < currentWeek) {
+                currentYear++;
+                c.set(Calendar.YEAR, currentYear);
+            }
+
             List<WeeklyAggregatedRecordWithTaxBean> weekBeans = getAllBeansForWeek(c.get(Calendar.YEAR), c.get(Calendar.WEEK_OF_YEAR), weeklyBeans);
 
             sumMoneyAmountsOfWeekBeans(weekBeans, resultList, resultList_gross);
 
+            currentWeek = c.get(Calendar.WEEK_OF_YEAR);
             c.add(Calendar.WEEK_OF_YEAR, 1);
         }
         targetSeries.setValues(resultList);
@@ -566,7 +596,6 @@ public class StatisticsService {
      * @return the week statistics for the last numberOfWeeks weeks
      */
     public TargetAndActual getWeekStatsForBudgets(BudgetTagFilter budgetFilter, int numberOfWeeks) {
-        //ToDo
         Date startDate = dateUtil.weeksAgo(numberOfWeeks);
         List<WeeklyAggregatedRecordWithTitleBean> burnedStats;
         List<WeeklyAggregatedRecordBean> plannedStats;
@@ -598,7 +627,6 @@ public class StatisticsService {
      * @return the week statistics for the last numberOfWeeks weeks
      */
     public TargetAndActual getWeekStatsForBudgetsWithTax(BudgetTagFilter budgetFilter, int numberOfWeeks) {
-        //ToDo Test
         Date startDate = dateUtil.weeksAgo(numberOfWeeks);
         List<WeeklyAggregatedRecordWithTitleAndTaxBean> burnedStats;
         List<WeeklyAggregatedRecordWithTaxBean> plannedStats;
@@ -626,6 +654,7 @@ public class StatisticsService {
 
         workList.addAll(manualBurnedStats);
         workList.addAll(fixedStats);
+
         return calculateWeeklyTargetAndActual(numberOfWeeks, planList, workList);
     }
 
@@ -676,7 +705,6 @@ public class StatisticsService {
         List<MonthlyAggregatedRecordWithTitleAndTaxBean> manualBurnedStats;
         List<MonthlyAggregatedRecordWithTitleAndTaxBean> fixedStats;
 
-        //ToDo Test
         if (budgetFilter.getSelectedTags().isEmpty()) {
             // aggregate all budgets
             burnedStats = workRecordRepository.aggregateByMonthAndPersonForBudgetsWithTax(budgetFilter.getProjectId(), startDate);
@@ -714,7 +742,7 @@ public class StatisticsService {
 
         Date startDate = dateUtil.monthsAgo(numberOfMonths);
         List<Money> resultList = new ArrayList<>();
-        List<Money> resultList_gros = new ArrayList<>();
+        List<Money> resultListGross = new ArrayList<>();
 
         Calendar c = Calendar.getInstance();
         c.setTime(startDate);
@@ -723,13 +751,13 @@ public class StatisticsService {
         for (int i = 0; i < numberOfMonths; i++) {
             List<MonthlyAggregatedRecordWithTaxBean> monthBeans = getAllBeansForMonth(c.get(Calendar.YEAR), c.get(Calendar.MONTH), monthlyBeans);
 
-            sumMoneyAmountsOfMonthBeans(monthBeans, resultList, resultList_gros);
+            sumMoneyAmountsOfMonthBeans(monthBeans, resultList, resultListGross);
 
             c.add(Calendar.MONTH, 1);
         }
 
         targetSeries.setValues(resultList);
-        targetSeries.setValues_gross(resultList_gros);
+        targetSeries.setValues_gross(resultListGross);
 
         return targetSeries;
     }
@@ -767,7 +795,6 @@ public class StatisticsService {
      */
     public TargetAndActual getWeekStatsForBudgetWithTax(long budgetId, int numberOfWeeks) {
         Date startDate = dateUtil.weeksAgo(numberOfWeeks);
-        //ToDo Test
         List<WeeklyAggregatedRecordWithTitleAndTaxBean> burnedStats = workRecordRepository.aggregateByWeekAndPersonForBudgetWithTax(budgetId, startDate);
         List<WeeklyAggregatedRecordWithTaxBean> plannedStats = planRecordRepository.aggregateByWeekForBudgetWithTax(budgetId, startDate);
         List<WeeklyAggregatedRecordWithTitleAndTaxBean> manualBurnedStats = manualRecordRepository.aggregateByWeekForBudgetWithTax(budgetId, startDate);
@@ -823,11 +850,13 @@ public class StatisticsService {
 
     public TargetAndActual getMonthStatsForBudgetWithTax(long budgetId, int numberOfMonths) {
         Date startDate = dateUtil.monthsAgo(numberOfMonths);
-        List<MonthlyAggregatedRecordWithTitleAndTaxBean> burnedStats = workRecordRepository.aggregateByMonthAndPersonForBudgetWithTax(budgetId, startDate); //changed
-        List<MonthlyAggregatedRecordWithTaxBean> plannedStats = planRecordRepository.aggregateByMonthForBudgetWithTax(budgetId, startDate); //changed
+        List<MonthlyAggregatedRecordWithTitleAndTaxBean> burnedStats = workRecordRepository.aggregateByMonthAndPersonForBudgetWithTax(budgetId, startDate);
+        List<MonthlyAggregatedRecordWithTaxBean> plannedStats = planRecordRepository.aggregateByMonthForBudgetWithTax(budgetId, startDate);
         List<MonthlyAggregatedRecordWithTitleAndTaxBean> manualBurnedStats = manualRecordRepository.aggregateByMonthForBudgetWithTax(budgetId, startDate);
+        List<MonthlyAggregatedRecordWithTitleAndTaxBean> fixedStats = fixedDailyRateService.aggregateByMonthForBudgetWithTax(budgetId, startDate);
 
         burnedStats.addAll(manualBurnedStats);
+        burnedStats.addAll(fixedStats);
 
         return calculateMonthlyTargetAndActual(numberOfMonths, plannedStats, burnedStats);
     }
@@ -840,11 +869,26 @@ public class StatisticsService {
         Calendar currentDate = Calendar.getInstance();
         currentDate.setTime(new Date());
         while (cal.before(currentDate)) {
-            ContractStatisticBean bean = contractRepository.getContractStatisticAggregatedByMonthAndYear(contractId, cal.get(Calendar.MONTH), cal.get(Calendar.YEAR));
+            ContractStatisticBean bean = getContractStatisticAggregatedTillMonthAndYear(contractId, cal.get(Calendar.MONTH), cal.get(Calendar.YEAR));
             result.add(bean);
             cal.add(Calendar.MONTH, 1);
         }
         return result;
+    }
+
+    private ContractStatisticBean getContractStatisticAggregatedTillMonthAndYear(long contractId, int month, int year) {
+        double contractBudget = contractRepository.getBudgetOfContract(contractId);
+        double spentByWork = workRecordRepository.getSpentMoneyOfContractTillMonthAndYear(contractId, month, year);
+        double spentByManual = manualRecordRepository.getSpentMoneyOfContractTillMonthAndYear(contractId, month, year);
+        double spentByFixed = fixedDailyRateService.getCentsOfContractTillMonthAndYear(contractId, month, year);
+
+        long spentBudget = (long) (spentByFixed + spentByManual + spentByWork);
+        long remainingBudget = (long) (contractBudget - spentBudget);
+
+        Double progress = spentBudget / contractBudget;
+        long invoicedBudget = Math.round(contractRepository.getInvoicedBudgetTillMonthAndYear(contractId, month, year));
+
+        return new ContractStatisticBean(year, progress, remainingBudget, spentBudget, invoicedBudget, month);
     }
 
     public List<ContractStatisticBean> getMonthlyStatisticsForContract(long contractId, Date startDate) {
@@ -854,11 +898,34 @@ public class StatisticsService {
         Calendar currentDate = Calendar.getInstance();
         currentDate.setTime(new Date());
         while (cal.before(currentDate)) {
-            ContractStatisticBean bean = contractRepository.getContractStatisticByMonthAndYear(contractId, cal.get(Calendar.MONTH), cal.get(Calendar.YEAR));
+
+            ContractStatisticBean bean = getContractStatisticByMonthAndYear(contractId, cal.get(Calendar.MONTH), cal.get(Calendar.YEAR));
             result.add(bean);
             cal.add(Calendar.MONTH, 1);
         }
         return result;
+    }
+
+    private ContractStatisticBean getContractStatisticByMonthAndYear(long contractId, int month, int year) {
+        double contractBudget = contractRepository.getBudgetOfContract(contractId);
+        double spentByWork = workRecordRepository.getSpentMoneyOfContractOfMonth(contractId, month, year);
+        double spentByManual = manualRecordRepository.getSpentMoneyOfContractOfMonth(contractId, month, year);
+        double spentByFixed = fixedDailyRateService.getMoneyOfContractOfMonth(contractId, month, year);
+
+        long spentBudget = (long) (spentByFixed + spentByManual + spentByWork);
+        long remainingBudget = (long) (contractBudget - spentBudget);
+
+        long invoicedBudget = Math.round(contractRepository.getInvoicedBudgetOfMonth(contractId, month, year));
+
+        double spentByWorkTillMonth = workRecordRepository.getSpentMoneyOfContractTillMonthAndYear(contractId, month, year);
+        double spentByManualTillMonth = manualRecordRepository.getSpentMoneyOfContractTillMonthAndYear(contractId, month, year);
+        double spentByFixedTillMonth = fixedDailyRateService.getCentsOfContractTillMonthAndYear(contractId, month, year);
+
+        long spentBudgetTillMonth = (long) (spentByFixedTillMonth + spentByManualTillMonth + spentByWorkTillMonth);
+
+        Double progress = spentBudgetTillMonth / contractBudget;
+
+        return new ContractStatisticBean(year, progress, remainingBudget, spentBudget, invoicedBudget, month);
     }
 
     public ContractDetailBudgetChart getMonthlyBudgetBurnedForContract(long contractId, int numberOfMonths) {

@@ -48,7 +48,6 @@ public class FixedDailyRate implements Serializable {
         this.name = name;
         this.taxRate = taxRate;
         this.days = days;
-
     }
 
     public FixedDailyRate(long budgetId) {

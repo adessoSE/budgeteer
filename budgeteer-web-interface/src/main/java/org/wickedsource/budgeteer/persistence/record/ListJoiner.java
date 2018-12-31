@@ -41,6 +41,7 @@ public class ListJoiner {
                 workMap.put(String.format("%d%d%d%s%s", bean.getYear(), bean.getMonth(), bean.getWeek(), bean.getTaxRate(), bean.getTitle()), bean);
             } else {
                 record.setHours(record.getHours() + bean.getHours());
+                record.setValueInCents(record.getValueInCents() + bean.getValueInCents());
             }
         }
         return new ArrayList<>(workMap.values());

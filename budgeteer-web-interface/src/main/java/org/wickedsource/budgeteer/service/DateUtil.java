@@ -45,7 +45,7 @@ public class DateUtil {
      * Returns whether the date is between the start and end of the dateRange
      *
      * @param d         date to be checked
-     * @param dateRange
+     * @param dateRange the dateRange
      * @return true if the date d is in the given dateRange
      */
     public static boolean isDateInDateRange(Date d, DateRange dateRange) {
@@ -60,6 +60,9 @@ public class DateUtil {
                 (isDateInDateRange(d2.getStartDate(), d1) && isDateInDateRange(d2.getEndDate(), d1)));
     }
 
+    /**
+     * @return Returns the Date of the first day in the current year
+     */
     public static Date getBeginOfYear() {
         Calendar cal = new GregorianCalendar();
         cal.setTime(new Date());
@@ -68,6 +71,9 @@ public class DateUtil {
         return cal.getTime();
     }
 
+    /**
+     * @return Returns the Date of the last day of the current year
+     */
     public static Date getEndOfYear() {
         Calendar cal = new GregorianCalendar();
         cal.setTime(new Date());
@@ -93,40 +99,54 @@ public class DateUtil {
     /***
      * @return Get a Date set to the last day of a month
      */
-    public static Date getEndOfMonth(int month) {
-        GregorianCalendar cal = new GregorianCalendar();
-        cal.set(Calendar.MONTH, month);
-        cal.add(Calendar.MONTH, 1);
-        cal.set(Calendar.DAY_OF_MONTH, 1);
-        cal.add(Calendar.DAY_OF_MONTH, -1);
+    public static Date getEndOfMonth(int month, int year) {
+        GregorianCalendar cal = new GregorianCalendar(year, month, 1);
+
+        int maxDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+        cal.set(Calendar.DAY_OF_MONTH, maxDay);
+
         return cal.getTime();
     }
 
     /***
      * @return Get a Date set to the first day of a month
      */
-    public static Date getStartOfMonth(int month) {
-        GregorianCalendar cal = new GregorianCalendar();
-        cal.set(Calendar.MONTH, month);
-        cal.set(Calendar.DAY_OF_MONTH, 1);
+    public static Date getStartOfMonth(int month, int year) {
+        GregorianCalendar cal = new GregorianCalendar(year, month, 1);
         return cal.getTime();
     }
 
     /***
      * @return Get the number of days in a month
      */
-    public static int getDaysInMonth(int month) {
-        Date firstDay = getStartOfMonth(month);
-        Date lastDay = getEndOfMonth(month);
-        DateRange monthRange = new DateRange(firstDay, lastDay);
+    public static int getDaysInMonth(int month, int year) {
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.set(Calendar.MONTH, month);
+        cal.set(Calendar.YEAR, year);
 
-        return monthRange.getNumberOfDays() + 1;
+        return cal.getActualMaximum(Calendar.DAY_OF_MONTH);
     }
 
+    /**
+     * @param date the date
+     * @return Get a calendar set to a given date
+     */
     public static Calendar getCalendarOfDate(Date date) {
         GregorianCalendar cal = new GregorianCalendar();
         cal.setTime(date);
 
         return cal;
+    }
+
+    /**
+     * Get a date set to 00:00:00 of a given date
+     */
+    public static Date getMidnightOfDate(Date date) {
+        Calendar calendar = getCalendarOfDate(date);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+
+        return calendar.getTime();
     }
 }

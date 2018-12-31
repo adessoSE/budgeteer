@@ -17,9 +17,6 @@ import java.util.List;
 public interface ManualRecordRepository extends CrudRepository<ManualRecordEntity, Long>,
         QueryDslPredicateExecutor<ManualRecordEntity>, JpaSpecificationExecutor {
 
-    @Query("select coalesce(sum(record.moneyAmount),0) from ManualRecordEntity record where record.budget.id = :budgetId")
-    Double getManualRecordSumForBudget(@Param("budgetId") long budgetId);
-
     @Query("select new org.wickedsource.budgeteer.persistence.record.WeeklyAggregatedRecordBean(r.year, r.week, coalesce(sum(r.moneyAmount),0)) from ManualRecordEntity r where r.budget.project.id=:projectId and r.billingDate >= :startDate group by r.year, r.week order by r.year, r.week")
     List<WeeklyAggregatedRecordBean> aggregateByWeekForProject(@Param("projectId") long projectId, @Param("startDate") Date start);
 
@@ -61,4 +58,14 @@ public interface ManualRecordRepository extends CrudRepository<ManualRecordEntit
 
     @Query("select new ManualRecordEntity(r.id, r.description, r.moneyAmount, r.budget, r.creationDate, r.billingDate, r.year, r.month, r.day, r.week) from ManualRecordEntity r where r.budget.id = :budgetId")
     List<ManualRecordEntity> getManualRecordByBudgetId(@Param("budgetId") long budgetId);
+
+    @Query("select coalesce(sum(record.moneyAmount),0) " +
+            "from ManualRecordEntity record " +
+            "where record.budget.contract.id = :contractId and record.month <= :month and record.year <= :year")
+    Double getSpentMoneyOfContractTillMonthAndYear(@Param("contractId") Long contractId, @Param("month") Integer month, @Param("year") Integer year);
+
+    @Query("select coalesce(sum(record.moneyAmount),0) " +
+            "from ManualRecordEntity record " +
+            "where record.budget.contract.id = :contractId and record.month = :month and record.year = :year")
+    Double getSpentMoneyOfContractOfMonth(@Param("contractId") Long contractId, @Param("month") Integer month, @Param("year") Integer year);
 }

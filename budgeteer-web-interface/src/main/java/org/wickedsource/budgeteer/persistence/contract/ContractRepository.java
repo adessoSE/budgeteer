@@ -15,8 +15,6 @@ public interface ContractRepository extends CrudRepository<ContractEntity, Long>
     @Query("select cif from ContractInvoiceField cif where cif.contract.id = :contractId AND cif.fieldName = :fieldName")
     ContractInvoiceField findInvoiceFieldByName(@Param("contractId") long contractID, @Param("fieldName") String fieldName);
 
-
-    //ToDo
     /**
      * returns a ContractStatisticBean for a given contract till the given month and year.
      */
@@ -66,7 +64,6 @@ public interface ContractRepository extends CrudRepository<ContractEntity, Long>
             "where c.id = :contractId")
     ContractStatisticBean getContractStatisticAggregatedByMonthAndYear(@Param("contractId") Long contractId, @Param("month") Integer month, @Param("year") Integer year);
 
-    //ToDo
 
     /**
      * returns a ContractStatisticBean for a given contract for the given month and year.
@@ -95,7 +92,6 @@ public interface ContractRepository extends CrudRepository<ContractEntity, Long>
             ") from ContractEntity c where c.id = :contractId")
     ContractStatisticBean getContractStatisticByMonthAndYear(@Param("contractId") Long contractId, @Param("month") Integer month, @Param("year") Integer year);
 
-    // ToDo TEST
     @Query("select (coalesce(sum(wr.minutes * wr.dailyRate/ 60 / 8),0)" +
             "+ (select coalesce(sum(record.moneyAmount),0) " +
             "from ManualRecordEntity record " +
@@ -107,7 +103,6 @@ public interface ContractRepository extends CrudRepository<ContractEntity, Long>
             "where wr.budget.contract.id = :contractId)")
     Double getSpentBudgetByContractId(@Param("contractId") long contractId);
 
-    //ToDo TEST
     @Query("select (c.budget " +
             "- coalesce((select sum(wr.minutes * wr.dailyRate)/ 60 / 8 from WorkRecordEntity wr where wr.budget.contract.id = :contractId) ,0)" +
             "- coalesce( ( select sum(record.moneyAmount) from ManualRecordEntity record where record.budget.contract.id = :contractId), 0))" +
@@ -137,4 +132,13 @@ public interface ContractRepository extends CrudRepository<ContractEntity, Long>
             + "from WorkRecordEntity wr where wr.budget.contract.id = :contractId")
     Double getSpentBudgetGrossByContractId(@Param("contractId") Long contractId);
 
+    @Query("select cast(c.budget AS double) from ContractEntity c " +
+            "where c.id = :contractId")
+    Double getBudgetOfContract(@Param("contractId") Long contractId);
+
+    @Query("select coalesce(sum(i.invoiceSum),0l) from InvoiceEntity i where i.contract.id = :contractId AND (i.year < :year OR (i.year = :year AND i.month <= :month))")
+    Double getInvoicedBudgetTillMonthAndYear(@Param("contractId") Long contractId, @Param("month") Integer month, @Param("year") Integer year);
+
+    @Query("select coalesce(sum(i.invoiceSum),0l) from InvoiceEntity i where i.contract.id = :contractId AND (i.year = :year AND i.month = :month)")
+    Double getInvoicedBudgetOfMonth(@Param("contractId") Long contractId, @Param("month") Integer month, @Param("year") Integer year);
 }

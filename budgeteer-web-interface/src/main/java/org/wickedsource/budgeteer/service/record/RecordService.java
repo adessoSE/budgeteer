@@ -82,7 +82,6 @@ public class RecordService {
      * @return one record for each week from the current week to the first week that was booked in the given budget
      */
     public List<AggregatedRecord> getWeeklyAggregationForBudgetWithTax(long budgetId) {
-        //ToDo TEST
         List<WeeklyAggregatedRecordWithTitleAndTaxBean> workRecords = workRecordRepository.aggregateByWeekAndPersonForBudgetWithTax(budgetId);
         List<WeeklyAggregatedRecordWithTaxBean> planRecords = planRecordRepository.aggregateByWeekForBudgetWithTax(budgetId);
 
@@ -116,7 +115,6 @@ public class RecordService {
      * @return one record for each month from the current month to the first month that was booked in the given budget.
      */
     public List<AggregatedRecord> getMonthlyAggregationForBudgetWithTax(long budgetId) {
-        //ToDo Test
         List<MonthlyAggregatedRecordWithTaxBean> planRecords = planRecordRepository.aggregateByMonthAndBudgetWithTax(budgetId);
         List<MonthlyAggregatedRecordWithTaxBean> workRecords = workRecordRepository.aggregateByMonthAndBudgetWithTax(budgetId);
         List<MonthlyAggregatedRecordWithTaxBean> manualWorkRecords = manualRecordRepository.aggregateByMonthAndBudgetWithTax(budgetId);
@@ -162,7 +160,6 @@ public class RecordService {
         List<WeeklyAggregatedRecordWithTitleAndTaxBean> manualWorkRecords;
         List<WeeklyAggregatedRecordWithTitleAndTaxBean> fixedRecords;
 
-        //ToDo TEST
         if (budgetFilter.getSelectedTags().isEmpty()) {
             workRecords = workRecordRepository.aggregateByWeekAndPersonForBudgetsWithTax(budgetFilter.getProjectId());
             planRecords = planRecordRepository.aggregateByWeekForBudgetsWithTax(budgetFilter.getProjectId());
@@ -206,7 +203,6 @@ public class RecordService {
      * @return one record for each month from the current month to the first month that was booked in the given budget.
      */
     public List<AggregatedRecord> getMonthlyAggregationForBudgetsWithTax(BudgetTagFilter budgetFilter) {
-        //ToDo Test
         List<MonthlyAggregatedRecordWithTaxBean> planRecords;
         List<MonthlyAggregatedRecordWithTaxBean> workRecords;
         List<MonthlyAggregatedRecordWithTaxBean> manualWorkRecords;
