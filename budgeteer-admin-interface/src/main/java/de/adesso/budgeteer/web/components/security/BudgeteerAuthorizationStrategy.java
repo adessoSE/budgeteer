@@ -14,17 +14,11 @@ public class BudgeteerAuthorizationStrategy implements IAuthorizationStrategy {
 
     @Override
     public <T extends IRequestableComponent> boolean isInstantiationAuthorized(Class<T> componentClass) {
-        NeedsLogin annotation = componentClass.getAnnotation(NeedsLogin.class);
-        boolean isAnnotated = (annotation != null);
-        if (!isAnnotated) {
-            return true;
-        } else {
-            if(!BudgeteerSession.get().isLoggedIn()) {
-                throw new RestartResponseAtInterceptPageException(LoginPage.class);
-            } else {
-                return true;
-            }
+        boolean needsLogin = componentClass.isAnnotationPresent(NeedsLogin.class);
+        if(needsLogin && !BudgeteerSession.get().isLoggedIn()) {
+            throw new RestartResponseAtInterceptPageException(LoginPage.class);
         }
+        return true;
     }
 
     @Override

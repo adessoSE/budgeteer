@@ -73,18 +73,18 @@ public class BudgeteerAdministrationOverview extends BasePage {
                 Component makeUserAdmin = createMakeUserAdminButton(item);
                 Component revokeAdminRights = createRevokeAdminRightsButton(item);
 
-                // a user may not delete herself/himself unless another admin is present
+                //If this is the current user
                 if (item.getModelObject().getId() == thisUser.getId()){
-                    deleteUserButton.setVisible(false);
-                    makeUserAdmin.setVisible(false);
-                    revokeAdminRights.setVisible(false);
-                    if(userService.getAllAdmins().size() > 1){
+                    deleteUserButton.setVisible(false); //Make the delete button invisible
+                    revokeAdminRights.setVisible(false); //The button to revoke rights is hidden
+                    if(userService.getAllAdmins().size() > 1){  // a user may not delete herself/himself unless another admin is present
                         deleteUserButton.setVisible(true);
-                        makeUserAdmin.setVisible(false);
                         revokeAdminRights.setVisible(true);
                     }
+                    makeUserAdmin.setVisible(false);  //We cannot make the user an admin if they already are one
                 }else{
-                    if(item.getModelObject().getGlobalRole().equals(UserRole.ADMIN)){
+                    if(item.getModelObject().getGlobalRole().equals(UserRole.ADMIN)){ //If the user is an admin
+                        //We don't check for other admins here since this is not the logged in user (who must be an admin)
                         deleteUserButton.setVisible(true);
                         makeUserAdmin.setVisible(false);
                         revokeAdminRights.setVisible(true);
@@ -127,7 +127,7 @@ public class BudgeteerAdministrationOverview extends BasePage {
                 feedbackPanel.success(getString("username.success"));
             }
         };
-        Button submitButton = new Button("resetUsernameButton");
+        Button submitButton = new Button("resetUsernameButton", Model.of(BudgeteerAdministrationOverview.this.getString("reset.username")));
         return passwordResetField.add(textField, submitButton);
     }
 
@@ -140,7 +140,7 @@ public class BudgeteerAdministrationOverview extends BasePage {
                 feedbackPanel.success(getString("password.success"));
             }
         };
-        Button submitButton = new Button("resetPasswordButton");
+        Button submitButton = new Button("resetPasswordButton",  Model.of(BudgeteerAdministrationOverview.this.getString("reset.password")));
         return passwordResetField.add(textField, submitButton);
     }
 
@@ -159,7 +159,7 @@ public class BudgeteerAdministrationOverview extends BasePage {
                 }
             }
         };
-        Button submitButton = new Button("resetEmailButton");
+        Button submitButton = new Button("resetEmailButton",  Model.of(BudgeteerAdministrationOverview.this.getString("reset.email")));
         return emailResetField.add(textField, submitButton);
     }
 
@@ -199,7 +199,7 @@ public class BudgeteerAdministrationOverview extends BasePage {
     }
 
     private Component createMakeUserAdminButton(ListItem<User> item) {
-        return new Link("makeUserAdmin") {
+        return new Link<String>("makeUserAdmin") {
             @Override
             public void onClick() {
                 setResponsePage(new org.wickedsource.budgeteer.web.pages.base.delete.DeleteDialog() {

@@ -6,7 +6,7 @@
                 <div class="box-header">
                     <i class="fa fa-list"></i>
 
-                    <h3 class="box-title">All users in this Budgeteer install</h3>
+                    <h3 class="box-title"><wicket:message key="header.text">Hello</wicket:message></h3>
                     <div class="box-tools pull-right">
                         <button class="btn btn-default btn-sm" data-widget="collapse"><i
                                 class="fa fa-minus"></i></button>
@@ -14,33 +14,39 @@
                 </div>
 
                 <div class="box-body">
-                    <p>List of all users that are currently registered in the database.</p>
+                    <p><wicket:message key="list.description"></wicket:message></p>
                     <table class="table table-hover table-bordered">
                         <thead>
                         <tr>
-                            <th>User</th>
-                            <th>Options</th>
+                            <th><wicket:message key="table.column.users"></wicket:message></th>
+                            <th><wicket:message key="table.column.options"></wicket:message></th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr wicket:id="userList">
-                            <td wicket:id="username">Username / E-mail</td>
+                            <td wicket:id="username"></td>
                             <td class="row">
                                 <form class="btn" wicket:id="usernameResetField">
                                     <input type="text" wicket:id="setUsernameTextBox">
-                                    <button type="submit" wicket:id="resetUsernameButton" class="btn btn-default btn-sm">Set new username</button>
+                                    <button type="submit" wicket:id="resetUsernameButton" class="btn btn-default btn-sm"></button>
                                 </form>
                                 <form class="btn" wicket:id="passwordResetField">
                                     <input type="password" onblur="" wicket:id="setPasswordTextBox">
-                                    <button type="submit" wicket:id="resetPasswordButton" class="btn btn-default btn-sm">Set new password</button>
+                                    <button type="submit" wicket:id="resetPasswordButton" class="btn btn-default btn-sm"></button>
                                 </form>
                                 <form class="btn" wicket:id="emailResetField">
                                     <input type="email" wicket:id="setEmailTextBox">
-                                    <button type="submit" wicket:id="resetEmailButton" class="btn btn-default btn-sm">Set new email</button>
+                                    <button type="submit" wicket:id="resetEmailButton" class="btn btn-default btn-sm"></button>
                                 </form>
-                                <a class="btn btn-default btn-sm" wicket:id="makeUserAdmin">Make user a system admin</a>
-                                <a class="btn btn-default btn-sm" wicket:id="revokeAdminRights">Revoke system admin rights from user</a>
-                                <a wicket:id="deleteUserButton" class="btn btn-danger btn-sm">Remove from database</a>
+                                <a class="btn btn-default btn-sm" wicket:id="makeUserAdmin">
+                                    <wicket:message key="make.user.admin"></wicket:message>
+                                </a>
+                                <a class="btn btn-default btn-sm" wicket:id="revokeAdminRights">
+                                    <wicket:message key="revoke.admin.rights"></wicket:message>
+                                </a>
+                                <a wicket:id="deleteUserButton" class="btn btn-danger btn-sm">
+                                    <wicket:message key="delete.user"></wicket:message>
+                                </a>
                             </td>
                         </tr>
                         </tbody>
@@ -52,7 +58,7 @@
                 <div class="box-header">
                     <i class="fa fa-list"></i>
 
-                    <h3 class="box-title">All projects in this Budgeteer install</h3>
+                    <h3 class="box-title"><wicket:message key="header.projects.text"></wicket:message></h3>
                     <div class="box-tools pull-right">
                         <button class="btn btn-default btn-sm" data-widget="collapse"><i
                                 class="fa fa-minus"></i></button>
@@ -60,20 +66,20 @@
                 </div>
 
                 <div class="box-body">
-                    <p>List of all projects that are currently in the database.</p>
+                    <p><wicket:message key="list.projects.text"></wicket:message></p>
                     <table class="table table-hover table-bordered">
                         <thead>
                         <tr>
-                            <th>Project name</th>
-                            <th>Options</th>
+                            <th><wicket:message key="project.name.column.text"></wicket:message></th>
+                            <th><wicket:message key="project.options.column.text"></wicket:message></th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr wicket:id="projectList">
-                            <td wicket:id="projectname">Project Name</td>
+                            <td wicket:id="projectname"></td>
                             <td class="row">
-                                <a wicket:id="deleteProjectButton" class="btn btn-danger btn-sm">Remove from database</a>
-                                <a wicket:id="editProjectButton" class="btn btn-success btn-sm">Edit this project</a>
+                                <a wicket:id="deleteProjectButton" class="btn btn-danger btn-sm"><wicket:message key="remove.project.text"></wicket:message></a>
+                                <a wicket:id="editProjectButton" class="btn btn-success btn-sm"><wicket:message key="edit.project.text"></wicket:message></a>
                             </td>
                         </tr>
                         </tbody>

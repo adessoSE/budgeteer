@@ -3,22 +3,22 @@
     <div class="row">
         <div class="col-md-12">
             <a wicket:id="backButton" class="btn btn-success btn-sm">
-                <label style="font-size: 20px">Back to overview</label>
+                <label style="font-size: 20px"><wicket:message key="back.to.overview"></wicket:message></label>
             </a>
             <p>   </p>
             <form wicket:id="projectChangeForm">
                 <div class="box box-primary">
                     <div class="box-header">
                         <i class="fa fa-edit"></i>
-                        <h3 class="box-title">Project-details</h3>
+                        <h3 class="box-title"><wicket:message key="project.form.header"></wicket:message></h3>
                     </div>
                     <div class="box-body">
                         <div class="col-md-3">
-                            <label for="projectTitle" class="col-md-4">Project-title: </label>
+                            <label for="projectTitle" class="col-md-4"><wicket:message key="project.title.label"></wicket:message></label>
                             <input id="projectTitle" name="projectTitle" class="col-md-6" wicket:id="projectTitle">
                         </div>
                         <div class="col-md-8">
-                            <label for="projectStart" class="col-md-3" >Begin and End of Project: </label>
+                            <label for="projectStart" class="col-md-3"><wicket:message key="project.start.label"></wicket:message></label>
                             <input id="projectStart" name="projectStart" class="col-md-6" type="text" wicket:id="projectStart">
                         </div>
                         <input type="submit" value="Save" class="btn btn-primary btn-flat">
@@ -33,10 +33,10 @@
                 <div class="box-header">
                     <i class="fa fa-list"></i>
 
-                    <h3 class="box-title">Users in this Project</h3>
+                    <h3 class="box-title"><wicket:message key="project.user.list"></wicket:message></h3>
                 </div>
                 <div class="box-body">
-                    <p>List of all Users that currently have access to this project.</p>
+                    <p><wicket:message key="user.list.description"></wicket:message></p>
                     <table class="table table-hover table-bordered">
                         <thead>
                         <tr>
@@ -46,10 +46,12 @@
                         </thead>
                         <tbody>
                         <tr wicket:id="userList">
-                            <td wicket:id="username">Username</td>
+                            <td wicket:id="username"></td>
                             <td>
                                 <span wicket:id="roleDropdown"></span>
-                                <a wicket:id="deleteButton" class="btn btn-danger btn-sm">Remove from Project</a>
+                                <a wicket:id="deleteButton" class="btn btn-danger btn-sm">
+                                    <wicket:message key="remove.user"></wicket:message>
+                                </a>
                             </td>
                         </tr>
                         </tbody>
@@ -64,17 +66,18 @@
                 <div class="box-header">
                     <i class="fa fa-user"></i>
 
-                    <h3 class="box-title">Add User to this Project</h3>
+                    <h3 class="box-title"><wicket:message key="add.user.header"></wicket:message></h3>
                 </div>
                 <div class="box-body">
-                    <p>Choose a user to allow him or her access to this project.</p>
-
+                    <p><wicket:message key="add.user.description"></wicket:message></p>
                     <form wicket:id="addUserForm">
                         <div class="input-group margin">
                             <select wicket:id="userChoice" placeholder="Project Name" class="form-control">
                             </select>
                         <span class="input-group-btn">
-                          <button class="btn btn-primary btn-flat" type="submit">Add User</button>
+                          <button class="btn btn-primary btn-flat" type="submit">
+                              <wicket:message key="add.user.button"></wicket:message>
+                          </button>
                         </span>
                         </div>
                     </form>

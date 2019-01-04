@@ -24,10 +24,9 @@ public class UserRoleDropdown extends Panel {
     @SpringBean
     private UserService userService;
 
-    public UserRoleDropdown(String id, User user) {
+    public UserRoleDropdown(String id, User user, long projectID) {
         super(id);
         List<UserRole> choices = Arrays.asList(UserRole.values());
-        long projectID = BudgeteerSession.get().getProjectId();
         User thisUser = BudgeteerSession.get().getLoggedInUser();
         ListMultipleChoice<UserRole> dropdown = new ListMultipleChoice<>("roleDropdown", new Model<>(
                 new ArrayList<>(user.getRoles(projectID))), choices);

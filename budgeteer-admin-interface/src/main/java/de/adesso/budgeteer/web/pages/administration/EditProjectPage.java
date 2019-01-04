@@ -120,7 +120,7 @@ public class EditProjectPage extends BasePage {
                     }
                 };
 
-                UserRoleDropdown makeAdminList = new UserRoleDropdown("roleDropdown", item.getModelObject());
+                UserRoleDropdown makeAdminList = new UserRoleDropdown("roleDropdown", item.getModelObject(), projectID);
                 // a user may not delete herself/himself unless another admin is present
                 if (item.getModelObject().getId() == thisUser.getId()){
                     List<User> usersInProjects = userService.getUsersInProject(projectID);
