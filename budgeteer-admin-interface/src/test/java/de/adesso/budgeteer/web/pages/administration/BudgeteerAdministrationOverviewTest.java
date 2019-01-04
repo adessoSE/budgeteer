@@ -229,9 +229,9 @@ public class BudgeteerAdministrationOverviewTest extends AbstractWebTestTemplate
         //Test
         //Buttons should be visible as there are two admin users
         tester.assertInvisible("userList:0:makeUserAdmin");
-        tester.assertVisible("userList:0:revokeAdminRights");
-        tester.assertInvisible("userList:1:makeUserAdmin");
-        tester.assertVisible("userList:1:revokeAdminRights");
+        tester.assertInvisible("userList:0:revokeAdminRights");
+        tester.assertVisible("userList:1:makeUserAdmin");
+        tester.assertInvisible("userList:1:revokeAdminRights");
 
         //Set the second user to have only user privileges and start the page again
         user2.setGlobalRole(UserRole.USER);
