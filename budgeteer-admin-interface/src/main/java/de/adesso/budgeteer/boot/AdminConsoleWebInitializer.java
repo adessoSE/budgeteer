@@ -14,7 +14,7 @@ public class AdminConsoleWebInitializer implements ServletContextInitializer {
 
     @Override
     public void onStartup(ServletContext sc) throws ServletException {
-        FilterRegistration filter = sc.addFilter("wicket-filter",
+        FilterRegistration filter = sc.addFilter("'wicket-filter-admin-console",
                 WicketFilter.class);
         filter.setInitParameter(WicketFilter.APP_FACT_PARAM,
                 SpringWebApplicationFactory.class.getName());
