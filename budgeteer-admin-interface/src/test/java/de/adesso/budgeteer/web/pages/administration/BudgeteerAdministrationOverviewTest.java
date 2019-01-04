@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.wickedsource.budgeteer.service.project.ProjectBaseData;
 import org.wickedsource.budgeteer.service.user.User;
+import org.wickedsource.budgeteer.service.user.UsernameAlreadyInUseException;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.components.user.UserRole;
 import org.wickedsource.budgeteer.web.pages.administration.Project;
@@ -79,6 +80,30 @@ public class BudgeteerAdministrationOverviewTest extends AbstractWebTestTemplate
 
 
         Mockito.verify(userServiceMock, times(1)).setUserEmail(1L, "email1@adesso.de");
+    }
+
+    @Test
+    void testSetUsernameField() throws UsernameAlreadyInUseException {
+        //set up
+        User user1 = new User();
+        user1.setName("Maxim");
+        user1.setId(1L);
+        user1.setMail("maxim@adesso.de");
+        user1.setGlobalRole(UserRole.USER);
+
+        when(userServiceMock.getAllUsers()).thenReturn(Collections.singletonList(user1));
+        when(userServiceMock.getAllAdmins()).thenReturn(new ArrayList<>());
+
+        WicketTester tester = getTester();
+        WebPage page = new BudgeteerAdministrationOverview();
+        tester.startPage(page);
+
+        //Test
+        FormTester formTester = tester.newFormTester("userList:0:usernameResetField");
+        formTester.setValue("setUsernameTextBox", "newUsername");
+        formTester.submit();
+
+        Mockito.verify(userServiceMock, times(1)).setUserUsername(1L, "newUsername");
     }
 
     @Test

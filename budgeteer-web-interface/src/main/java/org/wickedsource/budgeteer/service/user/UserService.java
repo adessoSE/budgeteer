@@ -194,7 +194,7 @@ public class UserService {
     }
 
     public void addRoleToUser(Long userId, Long projectID, UserRole role) {
-        UserEntity user = userRepository.findById(userId);
+        UserEntity user = userRepository.findOne(userId);
         if(user.getRoles() == null){
             user.setRoles(new HashMap<>());
         }
@@ -215,7 +215,7 @@ public class UserService {
     }
 
     public void removeAllRolesFromUser(Long userId, Long projectID) {
-        UserEntity user = userRepository.findById(userId);
+        UserEntity user = userRepository.findOne(userId);
         user.getRoles().remove(projectID);
         userRepository.save(user);
     }
@@ -232,7 +232,7 @@ public class UserService {
 
     public void setGlobalRoleForUser(Long userId, UserRole role){
         if(userId != 0) {
-            UserEntity entity = userRepository.findById(userId);
+            UserEntity entity = userRepository.findOne(userId);
             entity.setGlobalRole(role);
             userRepository.save(entity);
         }
@@ -240,7 +240,7 @@ public class UserService {
 
     public void setUserPassword(Long userId, String password){
         if(userId != 0) {
-            UserEntity entity = userRepository.findById(userId);
+            UserEntity entity = userRepository.findOne(userId);
             entity.setPassword(passwordHasher.hash(password));
             userRepository.save(entity);
         }
@@ -513,7 +513,7 @@ public class UserService {
         if (userRepository.findByMail(email) != null) {
             throw new MailAlreadyInUseException();
         } else {
-            UserEntity user = userRepository.findById(id);
+            UserEntity user = userRepository.findOne(id);
             user.setMail(email);
             userRepository.save(user);
             if (!email.equals("") && Boolean.valueOf(mailActivated)) {
@@ -526,7 +526,7 @@ public class UserService {
         if (userRepository.findByName(username) != null) {
             throw new UsernameAlreadyInUseException();
         } else {
-            UserEntity user = userRepository.findById(id);
+            UserEntity user = userRepository.findOne(id);
             user.setName(username);
             userRepository.save(user);
         }

@@ -10,6 +10,7 @@ import org.wickedsource.budgeteer.persistence.project.ProjectRepository;
 import org.wickedsource.budgeteer.persistence.user.*;
 import org.wickedsource.budgeteer.service.ServiceTestTemplate;
 import org.wickedsource.budgeteer.service.UnknownEntityException;
+import org.wickedsource.budgeteer.web.components.user.UserRole;
 
 import java.util.*;
 
@@ -340,6 +341,62 @@ class UserServiceTest extends ServiceTestTemplate{
         when(forgotPasswordTokenRepository.findByToken(uuid)).thenReturn(forgotPasswordToken);
         service.deleteForgotPasswordToken(uuid);
         verify(forgotPasswordTokenRepository, times(1)).delete(forgotPasswordToken);
+    }
+
+    @Test
+    void testAddRoleToUser() throws UsernameAlreadyInUseException {
+        //Set up
+        UserEntity user = createUserEntity();
+        when(userRepository.findOne(1L)).thenReturn(user);
+
+        //Test
+        service.addRoleToUser(user.getId(), 1L, UserRole.ADMIN);
+        Assertions.assertTrue(userRepository.findOne(user.getId()).getRoles().get(1L).contains(UserRole.ADMIN));
+    }
+
+    @Test
+    void testSetUserEmail() throws MailAlreadyInUseException {
+        //Set up
+        UserEntity user = createUserEntity();
+        when(userRepository.findOne(1L)).thenReturn(user);
+
+        //Test
+        service.setUserEmail(user.getId(), "user@budgeteer.budgeteer");
+        Assertions.assertEquals("user@budgeteer.budgeteer", userRepository.findOne(user.getId()).getMail());
+    }
+
+    @Test
+    void testSetUserEmailThrowsMailInUseException() {
+        //Set up
+        UserEntity user = createUserEntity();
+        when(userRepository.findOne(1L)).thenReturn(user);
+        when(userRepository.findByMail(user.getMail())).thenReturn(user);
+
+        //Test
+        Assertions.assertThrows(MailAlreadyInUseException.class, () -> service.setUserEmail(user.getId(), user.getMail()));
+    }
+
+    @Test
+    void testSetUserUsername() throws UsernameAlreadyInUseException {
+        //Set up
+        UserEntity user = createUserEntity();
+        when(userRepository.findOne(1L)).thenReturn(user);
+
+        //Test
+        service.setUserUsername(user.getId(), "user-new");
+        Assertions.assertEquals("user-new", userRepository.findOne(user.getId()).getName());
+    }
+
+
+    @Test
+    void testSetUserUsernameThrowsUsernameInUseException() {
+        //Set up
+        UserEntity user = createUserEntity();
+        when(userRepository.findOne(1L)).thenReturn(user);
+        when(userRepository.findByName(user.getName())).thenReturn(user);
+
+        //Test
+        Assertions.assertThrows(UsernameAlreadyInUseException.class, () -> service.setUserUsername(user.getId(), user.getName()));
     }
 
     private UserEntity createUserEntity() {
