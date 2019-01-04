@@ -58,10 +58,7 @@ dependencies {
 
     compile(
             [group: 'org.apache.wicket', name: 'wicket-spring', version: "${wicket_spring_version}"],
-            [group: 'org.apache.wicket', name: 'wicket-extensions', version: "${wicket_spring_version}"],
             [group: 'org.wicketstuff', name: 'wicketstuff-lazymodel', version: "${wicketstuff_lazymodel_version}"],
-            [group: 'org.wicketstuff', name: 'wicketstuff-tinymce4', version: "${wicketstuff_tinymce4_version}"],
-            [group: 'de.adesso.wicked-charts', name: 'wicked-charts-wicket7', version: "${wickedcharts_version}"]
     )
 
     compile group: 'org.springframework', name: 'spring-webmvc', version: "${spring_version}"
@@ -118,41 +115,6 @@ dependencies {
     providedCompile group: 'org.projectlombok', name: 'lombok', version: "${lombok_version}"
 }
 
-sourceSets {
-    generated {
-        java {
-            srcDirs = ['src/generated/java']
-        }
-    }
-}
-
-task generateQueryDSL(type: JavaCompile, group: 'build', description: 'Generates the QueryDSL query types') {
-
-    source = sourceSets.main.java
-    classpath = configurations.compile + configurations.querydslapt
-    options.compilerArgs = [
-            "-proc:only",
-            "-processor", "com.querydsl.apt.jpa.JPAAnnotationProcessor"
-    ]
-
-    destinationDir = sourceSets.generated.java.srcDirs.iterator().next()
-}
-
-compileJava {
-    dependsOn generateQueryDSL
-    source generateQueryDSL.destinationDir
-}
-
-compileGeneratedJava {
-    dependsOn generateQueryDSL
-    options.warnings = false
-    classpath += sourceSets.main.runtimeClasspath
-}
-
-clean {
-    delete sourceSets.generated.java.srcDirs
-}
-
 bootRun {
     // default application configuration for running application via bootRun in development mode
     // (in production, these properties are defined in application.properties)
@@ -169,38 +131,4 @@ bootRun {
             '-Dspring.datasource.password=',
             '-Dflyway.enabled=false',
             '-Dspring.jpa.hibernate.ddl-auto=update';
-}
-
-idea {
-    module {
-        scopes.PROVIDED.plus += [configurations.providedCompile]
-        sourceDirs += sourceSets.generated.java.srcDirs
-        downloadSources = true
-    }
-
-    module.iml.withXml {
-        def springFacet = '''
-            <component name="FacetManager">
-                <facet type="Spring" name="Spring">
-                  <configuration>
-                    <fileset id="fileset" name="Spring Application Context" removed="false">
-                      <file>file://$MODULE_DIR$/src/main/java/org/wickedsource/budgeteer/boot/WebInitializer.java</file>
-                    </fileset>
-                  </configuration>
-                </facet>
-                <facet type="web" name="Web">
-                  <configuration>
-                    <webroots>
-                      <root url="file://$MODULE_DIR$/src/main/webapp" relative="/" />
-                    </webroots>
-                    <sourceRoots>
-                      <root url="file://$MODULE_DIR$/src/generated/java" />
-                      <root url="file://$MODULE_DIR$/src/main/java" />
-                      <root url="file://$MODULE_DIR$/src/main/resources" />
-                    </sourceRoots>
-                  </configuration>
-                </facet>
-            </component>'''
-        it.asNode().append(new XmlParser().parseText(springFacet))
-    }
 }
