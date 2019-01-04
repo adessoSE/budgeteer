@@ -13,6 +13,7 @@ import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
 import org.wickedsource.budgeteer.web.components.user.UserRole;
 import org.wickedsource.budgeteer.web.pages.base.dialogpage.DialogPage;
+import org.wickedsource.budgeteer.web.pages.user.login.LoginCredentials;
 import org.wickedsource.budgeteer.web.settings.BudgeteerSettings;
 
 import static org.wicketstuff.lazymodel.LazyModel.from;
@@ -33,7 +34,7 @@ public class LoginPage extends DialogPage {
             protected void onSubmit() {
                 try {
                     User user = userService.login(getModelObject().getUsername(), getModelObject().getPassword());
-                    if(userService.getAllAdmins().contains(user)){
+                    if(user.getGlobalRole().equals(UserRole.ADMIN)){
                         BudgeteerSession.get().login(user);
                         setResponsePage(BudgeteerAdministrationOverview.class);
                     }else if(userService.getAllAdmins().isEmpty()){ //The first user to log into this tool gets the admin role

@@ -18,10 +18,8 @@ public enum UserRole {
     public static UserRole getEnum(String value){
         if(value.equals("user")){
             return UserRole.USER;
-        }else if(value.equals("admin")){
+        }else {
             return UserRole.ADMIN;
-        }else{
-            return UserRole.USER;
         }
     }
 }

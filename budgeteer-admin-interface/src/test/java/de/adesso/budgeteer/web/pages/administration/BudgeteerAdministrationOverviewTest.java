@@ -26,7 +26,7 @@ import static org.mockito.Mockito.when;
 public class BudgeteerAdministrationOverviewTest extends AbstractWebTestTemplate {
 
     @Test
-    void test() {
+    void renderTest() {
         WicketTester tester = getTester();
         tester.startPage(BudgeteerAdministrationOverview.class);
         tester.assertRenderedPage(BudgeteerAdministrationOverview.class);
@@ -41,30 +41,19 @@ public class BudgeteerAdministrationOverviewTest extends AbstractWebTestTemplate
         user1.setMail("maxim@adesso.de");
         user1.setGlobalRole(UserRole.USER);
 
-        User user2 = new User();
-        user2.setName("Kilian");
-        user2.setId(2L);
-        user2.setMail("kilian@adesso.de");
-        user2.setGlobalRole(UserRole.USER);
-
-        when(userServiceMock.getAllUsers()).thenReturn(Arrays.asList(user1, user2));
+        when(userServiceMock.getAllUsers()).thenReturn(Collections.singletonList(user1));
         when(userServiceMock.getAllAdmins()).thenReturn(new ArrayList<>());
 
         WicketTester tester = getTester();
         WebPage page = new BudgeteerAdministrationOverview();
-        tester.startPage(page);;
+        tester.startPage(page);
 
         //Test
         FormTester formTester = tester.newFormTester("userList:0:passwordResetField");
         formTester.setValue("setPasswordTextBox", "password1");
         formTester.submit();
 
-        formTester = tester.newFormTester("userList:1:passwordResetField");
-        formTester.setValue("setPasswordTextBox", "password2");
-        formTester.submit();
-
         Mockito.verify(userServiceMock, times(1)).setUserPassword(1L, "password1");
-        Mockito.verify(userServiceMock, times(1)).setUserPassword(2L, "password2");
     }
 
     @Test
@@ -76,13 +65,7 @@ public class BudgeteerAdministrationOverviewTest extends AbstractWebTestTemplate
         user1.setMail("maxim@adesso.de");
         user1.setGlobalRole(UserRole.USER);
 
-        User user2 = new User();
-        user2.setName("Kilian");
-        user2.setId(2L);
-        user2.setMail("kilian@adesso.de");
-        user2.setGlobalRole(UserRole.USER);
-
-        when(userServiceMock.getAllUsers()).thenReturn(Arrays.asList(user1, user2));
+        when(userServiceMock.getAllUsers()).thenReturn(Collections.singletonList(user1));
         when(userServiceMock.getAllAdmins()).thenReturn(new ArrayList<>());
 
         WicketTester tester = getTester();
@@ -94,12 +77,8 @@ public class BudgeteerAdministrationOverviewTest extends AbstractWebTestTemplate
         formTester.setValue("setEmailTextBox", "email1@adesso.de");
         formTester.submit();
 
-        formTester = tester.newFormTester("userList:1:emailResetField");
-        formTester.setValue("setEmailTextBox", "email2@adesso.de");
-        formTester.submit();
 
         Mockito.verify(userServiceMock, times(1)).setUserEmail(1L, "email1@adesso.de");
-        Mockito.verify(userServiceMock, times(1)).setUserEmail(2L, "email2@adesso.de");
     }
 
     @Test
@@ -134,7 +113,7 @@ public class BudgeteerAdministrationOverviewTest extends AbstractWebTestTemplate
     }
 
     @Test
-    void testRemoveUserButtonOnlyVisibleWhenTwoAdminsExist() {
+    void testRemoveUserButtonVisibleWhenTwoAdminsExist() {
         //set up
         User user1 = new User();
         user1.setName("Maxim");
@@ -160,14 +139,34 @@ public class BudgeteerAdministrationOverviewTest extends AbstractWebTestTemplate
         //Test
         //Button should be visible as there are two admin users
         Assertions.assertTrue(tester.getComponentFromLastRenderedPage("userList:0:deleteUserButton").isVisible());
+    }
 
-        //Set the second user to have only user privileges and start the page again
+    @Test
+    void testRemoveUserButtonInvisibleWhenOnlyOneAdminExists() {
+        //set up
+        User user1 = new User();
+        user1.setName("Maxim");
+        user1.setId(1L);
+        user1.setMail("maxim@adesso.de");
+        user1.setGlobalRole(UserRole.ADMIN);
+
+        User user2 = new User();
+        user2.setName("Kilian");
+        user2.setId(2L);
+        user2.setMail("kilian@adesso.de");
         user2.setGlobalRole(UserRole.USER);
+
+        when(userServiceMock.getAllUsers()).thenReturn(Arrays.asList(user1, user2));
         when(userServiceMock.getAllAdmins()).thenReturn(Collections.singletonList(user1));
 
-        page = new BudgeteerAdministrationOverview();
+        WicketTester tester = getTester();
+
+        ((BudgeteerSession)tester.getSession()).setLoggedInUser(user1);
+        WebPage page = new BudgeteerAdministrationOverview();
         tester.startPage(page);
 
+        //Test
+        //Button should be visible as there are two admin users
         tester.assertInvisible("userList:0:deleteUserButton");
     }
 
@@ -201,6 +200,38 @@ public class BudgeteerAdministrationOverviewTest extends AbstractWebTestTemplate
         tester.assertVisible("userList:0:revokeAdminRights");
         tester.assertInvisible("userList:1:makeUserAdmin");
         tester.assertVisible("userList:1:revokeAdminRights");
+    }
+
+    @Test
+    void testAddAndRevokeRightInvisibleWhenOnlyOneAdminExists() {
+        //set up
+        User user1 = new User();
+        user1.setName("Maxim");
+        user1.setId(1L);
+        user1.setMail("maxim@adesso.de");
+        user1.setGlobalRole(UserRole.ADMIN);
+
+        User user2 = new User();
+        user2.setName("Kilian");
+        user2.setId(2L);
+        user2.setMail("kilian@adesso.de");
+        user2.setGlobalRole(UserRole.USER);
+
+        when(userServiceMock.getAllUsers()).thenReturn(Arrays.asList(user1, user2));
+        when(userServiceMock.getAllAdmins()).thenReturn(Collections.singletonList(user1));
+
+        WicketTester tester = getTester();
+
+        ((BudgeteerSession)tester.getSession()).setLoggedInUser(user1);
+        WebPage page = new BudgeteerAdministrationOverview();
+        tester.startPage(page);
+
+        //Test
+        //Buttons should be visible as there are two admin users
+        tester.assertInvisible("userList:0:makeUserAdmin");
+        tester.assertVisible("userList:0:revokeAdminRights");
+        tester.assertInvisible("userList:1:makeUserAdmin");
+        tester.assertVisible("userList:1:revokeAdminRights");
 
         //Set the second user to have only user privileges and start the page again
         user2.setGlobalRole(UserRole.USER);
@@ -219,16 +250,9 @@ public class BudgeteerAdministrationOverviewTest extends AbstractWebTestTemplate
         project1.setId(1L);
         project1.setName("project1");
 
-        ProjectBaseData project2 = new ProjectBaseData();
-        project2.setId(2L);
-        project2.setName("project2");
-
         when(userServiceMock.getUsersInProject(anyLong())).thenReturn(new ArrayList<>());
-        when(projectServiceMock.getAllProjects()).thenReturn(Arrays.asList(project1, project2));
         when(projectServiceMock.findProjectById(1L))
                 .thenReturn(new Project(project1.getId(), new Date(), new Date(), project1.getName()));
-        when(projectServiceMock.findProjectById(2L))
-                .thenReturn(new Project(project2.getId(), new Date(), new Date(), project2.getName()));
 
         WicketTester tester = getTester();
         WebPage page = new BudgeteerAdministrationOverview();
@@ -247,11 +271,7 @@ public class BudgeteerAdministrationOverviewTest extends AbstractWebTestTemplate
         project1.setId(1L);
         project1.setName("project1");
 
-        ProjectBaseData project2 = new ProjectBaseData();
-        project2.setId(2L);
-        project2.setName("project2");
-
-        when(projectServiceMock.getAllProjects()).thenReturn(Arrays.asList(project1, project2));
+        when(projectServiceMock.getAllProjects()).thenReturn(Collections.singletonList(project1));
 
         WicketTester tester = getTester();
         WebPage page = new BudgeteerAdministrationOverview();

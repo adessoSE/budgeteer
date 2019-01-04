@@ -1,7 +1,7 @@
 <wicket:extend xmlns:wicket="http://www.w3.org/1999/xhtml">
 
     <div class="form-box" id="login-box">
-        <div class="header">Login to the Budgeteer administration menu
+        <div class="header"> <wicket:message key="login.header"></wicket:message>
         </div>
         <form wicket:id="loginForm" method="post">
             <div class="body bg-gray">
@@ -15,7 +15,9 @@
             </div>
             <div class="footer">
                 <div class="row">
-                    <button type="submit" class="btn bg-olive btn-block">Login</button>
+                    <button type="submit" class="btn bg-olive btn-block">
+                        <wicket:message key="login.button"></wicket:message>
+                    </button>
                 </div>
             </div>
         </form>

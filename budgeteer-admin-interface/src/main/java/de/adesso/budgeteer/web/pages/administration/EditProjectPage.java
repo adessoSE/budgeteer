@@ -99,11 +99,7 @@ public class EditProjectPage extends BasePage {
                         setResponsePage(new DeleteDialog() {
                             @Override
                             protected void onYes() {
-                                if(thisUser.getId() == item.getModelObject().getId()){
-                                    userService.removeUserFromProject(projectID, item.getModelObject().getId());
-                                }else{
-                                    userService.removeUserFromProject(projectID, item.getModelObject().getId());
-                                }
+                                userService.removeUserFromProject(projectID, item.getModelObject().getId());
                                 setResponsePage(EditProjectPage.class, EditProjectPage.this.getPageParameters());
                             }
 

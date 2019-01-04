@@ -302,10 +302,7 @@ publishing {
         mavenPublication(MavenPublication) {
             artifact(file("$libsDir/${project.name}-${project.version}" + '.war')) {
                 classifier 'exec'
-            }/*
-            artifact(file("$libsDir/../../../budgeteer-admin-interface/build/libs/budgeteer-admin-interface-${project.version}" + '.war')) {
-                classifier 'exec'
-            }*/
+            }
             groupId 'de.adesso.budgeteer'
             artifactId project.name
             version project.version

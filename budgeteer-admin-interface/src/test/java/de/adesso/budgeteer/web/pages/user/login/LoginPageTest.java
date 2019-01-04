@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 public class LoginPageTest extends AbstractWebTestTemplate {
 
     @Test
-    void test() {
+    void renderTest() {
         WicketTester tester = getTester();
         tester.startPage(LoginPage.class);
         tester.assertRenderedPage(LoginPage.class);

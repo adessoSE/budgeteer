@@ -111,7 +111,6 @@ public class EditProjectPageTest extends AbstractWebTestTemplate {
         project1.setId(1L);
         project1.setName("project1");
 
-
         when(userServiceMock.getUsersInProject(anyLong())).thenReturn(Arrays.asList(user1, user2));
         when(projectServiceMock.getAllProjects()).thenReturn(Collections.singletonList(project1));
         when(projectServiceMock.findProjectById(1L))
