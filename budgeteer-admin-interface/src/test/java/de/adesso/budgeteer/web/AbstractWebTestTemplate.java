@@ -12,12 +12,10 @@ import org.wickedsource.budgeteer.service.record.AggregatedRecord;
 import org.wickedsource.budgeteer.service.user.User;
 import org.wickedsource.budgeteer.service.user.UserService;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
+import org.wickedsource.budgeteer.web.components.user.UserRole;
 import org.wickedsource.budgeteer.web.pages.administration.Project;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
@@ -40,7 +38,6 @@ public abstract class AbstractWebTestTemplate {
         // If required, explicit behavior can be implemented for each test class in setupTest()
         when(projectServiceMock.findProjectById(anyLong())).thenReturn(new Project(0,new Date(), new Date(),"test"));
         when(userServiceMock.getUsersInProject(1L)).thenReturn(getUsersInProject());
-
         if (tester == null) {
             tester = new WicketTester(application);
             loginAndSetProject();
@@ -78,12 +75,17 @@ public abstract class AbstractWebTestTemplate {
         return list;
     }
 
-    private List<User> getUsersInProject() {
-        List<User> users = new ArrayList<User>();
+    protected List<User> getUsersInProject() {
+        List<User> users = new ArrayList<>();
         for (int i = 1; i <= 5; i++) {
             User user = new User();
             user.setId(i);
             user.setName("User " + i);
+            user.setMail("mail@mail.de");
+            user.setGlobalRole(UserRole.USER);
+            Map<Long, List<UserRole>> userprojectRoles = new HashMap<>();
+            userprojectRoles.put(1L, new ArrayList<>(Collections.singletonList(UserRole.USER)));
+            user.setRoles(userprojectRoles);
             users.add(user);
         }
         return users;

@@ -5,6 +5,7 @@ import org.joda.money.CurrencyUnit;
 import org.joda.money.Money;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -55,7 +56,7 @@ public abstract class AbstractWebTestTemplate {
         when(budgetServiceMock.loadBudgetBaseData(anyLong())).thenReturn(new BudgetBaseData(0, "test"));
         when(budgetServiceMock.loadBudgetDetailData(1L)).thenReturn(createBudget());
         when(recordServiceMock.getWeeklyAggregationForPerson(1L)).thenReturn(getWeeklyAggregationForPerson(1L));
-        when(userServiceMock.getUsersInProject(1L)).thenReturn(getUsersInProject());
+        when(userServiceMock.getUsersInProject(anyLong())).thenReturn(getUsersInProject());
         when(importServiceMock.loadImports(1L)).thenReturn(createImports());
         when(personServiceMock.loadPersonDetailData(1L)).thenReturn(createPerson());
 
@@ -82,7 +83,7 @@ public abstract class AbstractWebTestTemplate {
 
     private List<AggregatedRecord> getWeeklyAggregationForPerson(long personId) {
         Random random = new Random();
-        List<AggregatedRecord> list = new ArrayList<AggregatedRecord>();
+        List<AggregatedRecord> list = new ArrayList<>();
         for (int i = 0; i < 20; i++) {
             AggregatedRecord record = new AggregatedRecord();
             record.setAggregationPeriodTitle("Week #" + i);
@@ -97,7 +98,7 @@ public abstract class AbstractWebTestTemplate {
     }
 
     protected List<User> getUsersInProject() {
-        List<User> users = new ArrayList<User>();
+        List<User> users = new ArrayList<>();
         for (int i = 1; i <= 5; i++) {
             User user = new User();
             user.setId(i);
@@ -105,7 +106,7 @@ public abstract class AbstractWebTestTemplate {
             user.setMail("mail@mail.de");
             user.setGlobalRole(UserRole.USER);
             Map<Long, List<UserRole>> userprojectRoles = new HashMap<>();
-            userprojectRoles.put(1L, new ArrayList<>(Collections.singletonList(UserRole.ADMIN)));
+            userprojectRoles.put(1L, new ArrayList<>(Collections.singletonList(UserRole.USER)));
             user.setRoles(userprojectRoles);
             users.add(user);
         }

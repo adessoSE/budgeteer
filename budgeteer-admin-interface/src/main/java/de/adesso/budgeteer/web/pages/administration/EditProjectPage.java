@@ -30,6 +30,7 @@ import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPa
 import org.wickedsource.budgeteer.web.components.daterange.DateRangeInputField;
 import org.wickedsource.budgeteer.web.components.multiselect.MultiselectBehavior;
 import org.wickedsource.budgeteer.web.components.user.UserRole;
+import org.wickedsource.budgeteer.web.components.user.UserRoleDropdown;
 import org.wickedsource.budgeteer.web.pages.administration.Project;
 import org.wickedsource.budgeteer.web.pages.administration.UserChoiceRenderer;
 import org.wickedsource.budgeteer.web.pages.base.delete.DeleteDialog;
@@ -119,61 +120,7 @@ public class EditProjectPage extends BasePage {
                     }
                 };
 
-                List<UserRole> choices = Arrays.asList(UserRole.values());
-                ListMultipleChoice<UserRole> makeAdminList = new ListMultipleChoice<>("roleDropdown", new Model<>(
-                        new ArrayList<>(item.getModelObject().getRoles(projectID))), choices);
-                HashMap<String, String> options = new HashMap<>();
-                options.clear();
-                options.put("buttonWidth","'120px'");
-                makeAdminList.add(new MultiselectBehavior(options));
-                makeAdminList.add(new AjaxFormComponentUpdatingBehavior("change") {
-                    @Override
-                    protected void onUpdate(AjaxRequestTarget target) {
-                        if(!makeAdminList.getModelObject().isEmpty()) {
-
-                            //Check if the user is losing admin privileges and ask if they are sure
-                            if(item.getModelObject().getId() == thisUser.getId() &&
-                                    !makeAdminList.getModelObject().contains(UserRole.ADMIN)
-                                    && item.getModelObject().getRoles(projectID).contains(UserRole.ADMIN)){
-                                setResponsePage(
-                                        new DeleteDialog() {
-                                            @Override
-                                            protected void onYes() {
-                                                userService.removeAllRolesFromUser(item.getModelObject().getId(), projectID);
-                                                for (UserRole e : makeAdminList.getModelObject()) {
-                                                    userService.addRoleToUser(item.getModelObject().getId(), projectID, e);
-                                                }
-                                                if(item.getModelObject().getId() == thisUser.getId()){
-                                                    BudgeteerSession.get().setLoggedInUser(item.getModelObject());
-                                                }
-                                                setResponsePage(EditProjectPage.class, createParameters(projectID));
-                                            }
-
-                                            @Override
-                                            protected void onNo() {
-                                                setResponsePage(EditProjectPage.class, createParameters(projectID));
-                                            }
-
-                                            @Override
-                                            protected String confirmationText() {
-                                                return new StringResourceModel("user.lose.adminship.project", EditProjectPage.this).getString();
-                                            }
-                                        });
-                            }else {
-                                userService.removeAllRolesFromUser(item.getModelObject().getId(), projectID);
-                                for (UserRole e : makeAdminList.getModelObject()) {
-                                    userService.addRoleToUser(item.getModelObject().getId(), projectID, e);
-                                }
-                            }
-                        }
-                        if(item.getModelObject().getId() == thisUser.getId()){
-                            BudgeteerSession.get().setLoggedInUser(item.getModelObject());
-                        }
-                        target.add(EditProjectPage.this);
-                    }
-                });
-
-
+                UserRoleDropdown makeAdminList = new UserRoleDropdown("roleDropdown", item.getModelObject());
                 // a user may not delete herself/himself unless another admin is present
                 if (item.getModelObject().getId() == thisUser.getId()){
                     List<User> usersInProjects = userService.getUsersInProject(projectID);

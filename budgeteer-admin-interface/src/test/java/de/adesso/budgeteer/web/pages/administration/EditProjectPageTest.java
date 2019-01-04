@@ -5,6 +5,7 @@ import org.apache.wicket.util.tester.WicketTester;
 import org.junit.jupiter.api.Test;
 import org.wickedsource.budgeteer.service.project.ProjectBaseData;
 import org.wickedsource.budgeteer.service.user.User;
+import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.components.user.UserRole;
 import org.wickedsource.budgeteer.web.pages.administration.Project;
 
@@ -127,5 +128,6 @@ public class EditProjectPageTest extends AbstractWebTestTemplate {
 
     @Override
     protected void setupTest() {
+        BudgeteerSession.get().setProjectId(1L);
     }
 }

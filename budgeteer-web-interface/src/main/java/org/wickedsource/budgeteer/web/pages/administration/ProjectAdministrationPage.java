@@ -101,7 +101,11 @@ public class ProjectAdministrationPage extends BasePage {
                             @Override
                             protected void onYes() {
                                 userService.removeUserFromProject(BudgeteerSession.get().getProjectId(), item.getModelObject().getId());
-                                setResponsePage(ProjectAdministrationPage.class, getPageParameters());
+                                if(item.getModelObject().getId() == thisUser.getId()) {
+                                    setResponsePage(SelectProjectPage.class, getPageParameters());
+                                }else{
+                                    setResponsePage(ProjectAdministrationPage.class, getPageParameters());
+                                }
                             }
 
                             @Override
