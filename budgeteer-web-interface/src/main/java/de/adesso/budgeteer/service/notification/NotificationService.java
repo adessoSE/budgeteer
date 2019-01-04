@@ -9,10 +9,10 @@ import de.adesso.budgeteer.persistence.record.PlanRecordRepository;
 import de.adesso.budgeteer.persistence.record.WorkRecordRepository;
 import de.adesso.budgeteer.persistence.user.UserEntity;
 import de.adesso.budgeteer.persistence.user.UserRepository;
+import de.adesso.budgeteer.service.record.RecordService;
 import org.joda.money.Money;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import de.adesso.budgeteer.service.record.RecordService;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;

@@ -1,5 +1,10 @@
 package de.adesso.budgeteer.web.pages.budgets.edit.form;
 
+import de.adesso.budgeteer.service.budget.BudgetService;
+import de.adesso.budgeteer.service.budget.EditBudgetData;
+import de.adesso.budgeteer.web.AbstractWebTestTemplate;
+import de.adesso.budgeteer.web.pages.budgets.edit.EditBudgetPage;
+import de.adesso.budgeteer.web.pages.budgets.overview.BudgetsOverviewPage;
 import org.apache.wicket.feedback.IFeedbackMessageFilter;
 import org.apache.wicket.util.tester.FormTester;
 import org.apache.wicket.util.tester.WicketTester;
@@ -7,11 +12,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import de.adesso.budgeteer.service.budget.BudgetService;
-import de.adesso.budgeteer.service.budget.EditBudgetData;
-import de.adesso.budgeteer.web.AbstractWebTestTemplate;
-import de.adesso.budgeteer.web.pages.budgets.edit.EditBudgetPage;
-import de.adesso.budgeteer.web.pages.budgets.overview.BudgetsOverviewPage;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;

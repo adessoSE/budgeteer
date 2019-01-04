@@ -1,10 +1,10 @@
 package de.adesso.budgeteer.web.components.burntable.table;
 
-import org.apache.wicket.util.tester.WicketTester;
-import org.junit.jupiter.api.Test;
 import de.adesso.budgeteer.service.record.WorkRecordFilter;
 import de.adesso.budgeteer.web.AbstractWebTestTemplate;
 import de.adesso.budgeteer.web.components.burntable.filter.FilteredRecordsModel;
+import org.apache.wicket.util.tester.WicketTester;
+import org.junit.jupiter.api.Test;
 
 public class BurnTableTest extends AbstractWebTestTemplate {
 

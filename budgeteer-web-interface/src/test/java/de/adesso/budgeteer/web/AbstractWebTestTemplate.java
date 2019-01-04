@@ -1,13 +1,5 @@
 package de.adesso.budgeteer.web;
 
-import org.apache.wicket.util.tester.WicketTester;
-import org.joda.money.CurrencyUnit;
-import org.joda.money.Money;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import de.adesso.budgeteer.MoneyUtil;
 import de.adesso.budgeteer.service.budget.BudgetBaseData;
 import de.adesso.budgeteer.service.budget.BudgetDetailData;
@@ -22,6 +14,14 @@ import de.adesso.budgeteer.service.record.RecordService;
 import de.adesso.budgeteer.service.user.User;
 import de.adesso.budgeteer.service.user.UserService;
 import de.adesso.budgeteer.web.pages.administration.Project;
+import org.apache.wicket.util.tester.WicketTester;
+import org.joda.money.CurrencyUnit;
+import org.joda.money.Money;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.ArrayList;
 import java.util.Date;

@@ -7,10 +7,10 @@ import de.adesso.budgeteer.persistence.invoice.InvoiceEntity;
 import de.adesso.budgeteer.persistence.invoice.InvoiceFieldEntity;
 import de.adesso.budgeteer.persistence.invoice.InvoiceRepository;
 import de.adesso.budgeteer.service.contract.DynamicAttributeField;
+import de.adesso.budgeteer.web.pages.invoice.overview.table.InvoiceOverviewTableModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
-import de.adesso.budgeteer.web.pages.invoice.overview.table.InvoiceOverviewTableModel;
 
 import javax.transaction.Transactional;
 import java.text.ParseException;

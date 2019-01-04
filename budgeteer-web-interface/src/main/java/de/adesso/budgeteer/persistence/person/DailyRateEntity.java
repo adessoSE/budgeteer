@@ -1,8 +1,8 @@
 package de.adesso.budgeteer.persistence.person;
 
+import de.adesso.budgeteer.persistence.budget.BudgetEntity;
 import lombok.Data;
 import org.joda.money.Money;
-import de.adesso.budgeteer.persistence.budget.BudgetEntity;
 
 import javax.persistence.*;
 import java.util.Date;

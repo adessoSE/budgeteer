@@ -1,14 +1,14 @@
 package de.adesso.budgeteer.web.pages.user.resettoken;
 
+import de.adesso.budgeteer.persistence.user.UserEntity;
+import de.adesso.budgeteer.service.user.UserIdNotFoundException;
+import de.adesso.budgeteer.service.user.UserService;
+import de.adesso.budgeteer.web.AbstractWebTestTemplate;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import de.adesso.budgeteer.persistence.user.UserEntity;
-import de.adesso.budgeteer.service.user.UserIdNotFoundException;
-import de.adesso.budgeteer.service.user.UserService;
-import de.adesso.budgeteer.web.AbstractWebTestTemplate;
 
 import java.util.Date;
 

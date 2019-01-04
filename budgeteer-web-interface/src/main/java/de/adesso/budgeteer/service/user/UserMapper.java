@@ -1,8 +1,8 @@
 package de.adesso.budgeteer.service.user;
 
 import de.adesso.budgeteer.persistence.user.UserEntity;
-import org.springframework.stereotype.Component;
 import de.adesso.budgeteer.service.AbstractMapper;
+import org.springframework.stereotype.Component;
 
 @Component
 public class UserMapper extends AbstractMapper<UserEntity, User>{

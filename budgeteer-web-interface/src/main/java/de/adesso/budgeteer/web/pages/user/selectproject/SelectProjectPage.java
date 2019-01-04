@@ -1,8 +1,14 @@
 package de.adesso.budgeteer.web.pages.user.selectproject;
 
+import de.adesso.budgeteer.service.project.ProjectBaseData;
+import de.adesso.budgeteer.service.project.ProjectNameAlreadyInUseException;
+import de.adesso.budgeteer.service.project.ProjectService;
+import de.adesso.budgeteer.service.user.UserService;
 import de.adesso.budgeteer.web.BudgeteerSession;
 import de.adesso.budgeteer.web.Mount;
+import de.adesso.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
 import de.adesso.budgeteer.web.pages.base.dialogpage.DialogPageWithBacklink;
+import de.adesso.budgeteer.web.pages.dashboard.DashboardPage;
 import de.adesso.budgeteer.web.pages.user.login.LoginPage;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
@@ -16,12 +22,6 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import de.adesso.budgeteer.service.project.ProjectBaseData;
-import de.adesso.budgeteer.service.project.ProjectNameAlreadyInUseException;
-import de.adesso.budgeteer.service.project.ProjectService;
-import de.adesso.budgeteer.service.user.UserService;
-import de.adesso.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
-import de.adesso.budgeteer.web.pages.dashboard.DashboardPage;
 
 import java.io.Serializable;
 

@@ -1,10 +1,10 @@
 package de.adesso.budgeteer.web.pages.contract.overview;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import de.adesso.budgeteer.service.contract.ContractService;
 import de.adesso.budgeteer.service.contract.ContractSortingService;
 import de.adesso.budgeteer.web.AbstractWebTestTemplate;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 

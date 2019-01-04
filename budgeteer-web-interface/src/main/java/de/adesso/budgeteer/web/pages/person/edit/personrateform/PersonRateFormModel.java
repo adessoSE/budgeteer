@@ -1,11 +1,11 @@
 package de.adesso.budgeteer.web.pages.person.edit.personrateform;
 
+import de.adesso.budgeteer.service.DateRange;
+import de.adesso.budgeteer.service.budget.BudgetBaseData;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.joda.money.Money;
-import de.adesso.budgeteer.service.DateRange;
-import de.adesso.budgeteer.service.budget.BudgetBaseData;
 
 import java.io.Serializable;
 import java.util.ArrayList;

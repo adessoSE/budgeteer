@@ -3,14 +3,13 @@ package de.adesso.budgeteer.service.user;
 import de.adesso.budgeteer.persistence.project.ProjectEntity;
 import de.adesso.budgeteer.persistence.project.ProjectRepository;
 import de.adesso.budgeteer.persistence.user.*;
+import de.adesso.budgeteer.service.UnknownEntityException;
 import de.adesso.budgeteer.service.project.ProjectBaseDataMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
-import de.adesso.budgeteer.persistence.user.*;
-import de.adesso.budgeteer.service.UnknownEntityException;
 
 import javax.transaction.Transactional;
 import javax.validation.constraints.NotNull;

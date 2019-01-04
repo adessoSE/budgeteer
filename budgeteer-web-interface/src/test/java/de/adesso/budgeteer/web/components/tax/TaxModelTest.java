@@ -1,9 +1,9 @@
 package de.adesso.budgeteer.web.components.tax;
 
-import org.apache.wicket.markup.html.basic.Label;
-import org.junit.jupiter.api.Test;
 import de.adesso.budgeteer.web.AbstractWebTestTemplate;
 import de.adesso.budgeteer.web.BudgeteerSession;
+import org.apache.wicket.markup.html.basic.Label;
+import org.junit.jupiter.api.Test;
 
 
 public class TaxModelTest extends AbstractWebTestTemplate {

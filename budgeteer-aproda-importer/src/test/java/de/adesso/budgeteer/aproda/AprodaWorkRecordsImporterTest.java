@@ -1,12 +1,12 @@
 package de.adesso.budgeteer.aproda;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
 import de.adesso.budgeteer.importer.aproda.AprodaWorkRecordsImporter;
 import de.adesso.budgeteer.imports.api.ExampleFile;
 import de.adesso.budgeteer.imports.api.ImportFile;
 import de.adesso.budgeteer.imports.api.ImportedWorkRecord;
 import de.adesso.budgeteer.imports.api.InvalidFileFormatException;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.io.InputStream;
 import java.text.DateFormat;

@@ -1,12 +1,12 @@
 package de.adesso.budgeteer.service.imports;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import de.adesso.budgeteer.persistence.imports.ImportEntity;
 import de.adesso.budgeteer.persistence.imports.ImportRepository;
 import de.adesso.budgeteer.persistence.record.WorkRecordRepository;
 import de.adesso.budgeteer.service.ServiceTestTemplate;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Arrays;
 import java.util.Date;

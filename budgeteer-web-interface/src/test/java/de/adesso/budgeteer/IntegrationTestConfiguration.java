@@ -1,5 +1,6 @@
 package de.adesso.budgeteer;
 
+import de.adesso.budgeteer.service.security.BudgeteerMethodSecurityExpressionRoot;
 import org.mockito.Mockito;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -9,7 +10,6 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
-import de.adesso.budgeteer.service.security.BudgeteerMethodSecurityExpressionRoot;
 
 import javax.sql.DataSource;
 import java.util.Properties;

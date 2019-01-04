@@ -3,7 +3,6 @@ package de.adesso.budgeteer.importer.aproda;
 import de.adesso.budgeteer.imports.api.*;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.*;
-import de.adesso.budgeteer.imports.api.*;
 
 import java.io.File;
 import java.io.FileInputStream;

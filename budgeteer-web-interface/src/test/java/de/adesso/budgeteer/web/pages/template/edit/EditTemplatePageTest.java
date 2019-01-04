@@ -1,12 +1,5 @@
 package de.adesso.budgeteer.web.pages.template.edit;
 
-import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.util.tester.FormTester;
-import org.apache.wicket.util.tester.WicketTester;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.kubek2k.springockito.annotations.ReplaceWithMock;
-import org.springframework.beans.factory.annotation.Autowired;
 import de.adesso.budgeteer.service.template.Template;
 import de.adesso.budgeteer.service.template.TemplateService;
 import de.adesso.budgeteer.web.AbstractWebTestTemplate;
@@ -14,6 +7,13 @@ import de.adesso.budgeteer.web.pages.base.delete.DeleteDialog;
 import de.adesso.budgeteer.web.pages.dashboard.DashboardPage;
 import de.adesso.budgeteer.web.pages.templates.TemplatesPage;
 import de.adesso.budgeteer.web.pages.templates.edit.EditTemplatePage;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.util.tester.FormTester;
+import org.apache.wicket.util.tester.WicketTester;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.kubek2k.springockito.annotations.ReplaceWithMock;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.mockito.Mockito.when;

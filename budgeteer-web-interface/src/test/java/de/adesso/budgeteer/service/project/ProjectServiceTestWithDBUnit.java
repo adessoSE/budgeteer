@@ -4,6 +4,13 @@ import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
+import de.adesso.budgeteer.IntegrationTestConfiguration;
+import de.adesso.budgeteer.ServiceIntegrationTestTemplate;
+import de.adesso.budgeteer.persistence.contract.ContractRepository;
+import de.adesso.budgeteer.persistence.invoice.InvoiceRepository;
+import de.adesso.budgeteer.persistence.project.ProjectRepository;
+import de.adesso.budgeteer.persistence.record.PlanRecordRepository;
+import de.adesso.budgeteer.persistence.record.WorkRecordRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,13 +21,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
-import de.adesso.budgeteer.IntegrationTestConfiguration;
-import de.adesso.budgeteer.ServiceIntegrationTestTemplate;
-import de.adesso.budgeteer.persistence.contract.ContractRepository;
-import de.adesso.budgeteer.persistence.invoice.InvoiceRepository;
-import de.adesso.budgeteer.persistence.project.ProjectRepository;
-import de.adesso.budgeteer.persistence.record.PlanRecordRepository;
-import de.adesso.budgeteer.persistence.record.WorkRecordRepository;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {IntegrationTestConfiguration.class})

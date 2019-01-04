@@ -1,10 +1,10 @@
 package de.adesso.budgeteer.web.pages.base.basepage.breadcrumbs;
 
+import de.adesso.budgeteer.web.AbstractWebTestTemplate;
+import de.adesso.budgeteer.web.pages.dashboard.DashboardPage;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.jupiter.api.Test;
-import de.adesso.budgeteer.web.AbstractWebTestTemplate;
-import de.adesso.budgeteer.web.pages.dashboard.DashboardPage;
 
 import java.util.ArrayList;
 import java.util.List;

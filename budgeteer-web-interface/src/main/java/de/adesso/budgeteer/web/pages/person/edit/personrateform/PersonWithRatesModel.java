@@ -1,9 +1,9 @@
 package de.adesso.budgeteer.web.pages.person.edit.personrateform;
 
+import de.adesso.budgeteer.service.person.PersonWithRates;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.IObjectClassAwareModel;
 import org.apache.wicket.model.Model;
-import de.adesso.budgeteer.service.person.PersonWithRates;
 
 public class PersonWithRatesModel implements IModel<PersonWithRates>, IObjectClassAwareModel<PersonWithRates> {
 

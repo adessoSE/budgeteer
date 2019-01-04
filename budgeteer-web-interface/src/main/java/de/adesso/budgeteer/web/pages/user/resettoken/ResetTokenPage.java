@@ -1,8 +1,14 @@
 package de.adesso.budgeteer.web.pages.user.resettoken;
 
 import de.adesso.budgeteer.persistence.user.UserEntity;
+import de.adesso.budgeteer.service.user.MailNotFoundException;
+import de.adesso.budgeteer.service.user.TokenStatus;
+import de.adesso.budgeteer.service.user.UserIdNotFoundException;
+import de.adesso.budgeteer.service.user.UserService;
 import de.adesso.budgeteer.web.Mount;
+import de.adesso.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
 import de.adesso.budgeteer.web.pages.base.dialogpage.DialogPage;
+import de.adesso.budgeteer.web.pages.dashboard.DashboardPage;
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.EmailTextField;
@@ -10,12 +16,6 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import de.adesso.budgeteer.service.user.MailNotFoundException;
-import de.adesso.budgeteer.service.user.TokenStatus;
-import de.adesso.budgeteer.service.user.UserIdNotFoundException;
-import de.adesso.budgeteer.service.user.UserService;
-import de.adesso.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
-import de.adesso.budgeteer.web.pages.dashboard.DashboardPage;
 import org.wicketstuff.lazymodel.LazyModel;
 
 import static org.wicketstuff.lazymodel.LazyModel.from;

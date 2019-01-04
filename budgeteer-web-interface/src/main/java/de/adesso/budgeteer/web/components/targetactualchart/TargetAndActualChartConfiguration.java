@@ -5,6 +5,8 @@ import de.adesso.budgeteer.service.statistics.MoneySeries;
 import de.adesso.budgeteer.service.statistics.TargetAndActual;
 import de.adesso.budgeteer.web.BudgeteerSession;
 import de.adesso.budgeteer.web.PropertyLoader;
+import de.adesso.budgeteer.web.charts.ChartStyling;
+import de.adesso.budgeteer.web.charts.ChartUtils;
 import de.adesso.wickedcharts.chartjs.ChartConfiguration;
 import de.adesso.wickedcharts.chartjs.chartoptions.*;
 import de.adesso.wickedcharts.chartjs.chartoptions.colors.RgbColor;
@@ -12,8 +14,6 @@ import de.adesso.wickedcharts.chartjs.chartoptions.colors.SimpleColor;
 import de.adesso.wickedcharts.chartjs.chartoptions.label.TextLabel;
 import de.adesso.wickedcharts.chartjs.chartoptions.valueType.DoubleValue;
 import org.apache.wicket.model.IModel;
-import de.adesso.budgeteer.web.charts.ChartStyling;
-import de.adesso.budgeteer.web.charts.ChartUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;

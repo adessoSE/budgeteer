@@ -2,11 +2,20 @@ package de.adesso.budgeteer.web.pages.person.details;
 
 import de.adesso.budgeteer.service.person.PersonService;
 import de.adesso.budgeteer.web.Mount;
+import de.adesso.budgeteer.web.components.confirm.ConfirmationForm;
 import de.adesso.budgeteer.web.pages.base.basepage.BasePage;
 import de.adesso.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
 import de.adesso.budgeteer.web.pages.base.delete.DeleteDialog;
+import de.adesso.budgeteer.web.pages.dashboard.DashboardPage;
+import de.adesso.budgeteer.web.pages.person.details.chart.BudgetDistributionChart;
+import de.adesso.budgeteer.web.pages.person.details.chart.BudgetDistributionChartModel;
+import de.adesso.budgeteer.web.pages.person.details.highlights.PersonHighlightsModel;
+import de.adesso.budgeteer.web.pages.person.details.highlights.PersonHighlightsPanel;
 import de.adesso.budgeteer.web.pages.person.edit.EditPersonPage;
 import de.adesso.budgeteer.web.pages.person.hours.PersonHoursPage;
+import de.adesso.budgeteer.web.pages.person.monthreport.PersonMonthReportPage;
+import de.adesso.budgeteer.web.pages.person.overview.PeopleOverviewPage;
+import de.adesso.budgeteer.web.pages.person.weekreport.PersonWeekReportPage;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.SubmitLink;
@@ -14,15 +23,6 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import de.adesso.budgeteer.web.components.confirm.ConfirmationForm;
-import de.adesso.budgeteer.web.pages.dashboard.DashboardPage;
-import de.adesso.budgeteer.web.pages.person.details.chart.BudgetDistributionChart;
-import de.adesso.budgeteer.web.pages.person.details.chart.BudgetDistributionChartModel;
-import de.adesso.budgeteer.web.pages.person.details.highlights.PersonHighlightsModel;
-import de.adesso.budgeteer.web.pages.person.details.highlights.PersonHighlightsPanel;
-import de.adesso.budgeteer.web.pages.person.monthreport.PersonMonthReportPage;
-import de.adesso.budgeteer.web.pages.person.overview.PeopleOverviewPage;
-import de.adesso.budgeteer.web.pages.person.weekreport.PersonWeekReportPage;
 
 @Mount("people/details/${id}")
 public class PersonDetailsPage extends BasePage {

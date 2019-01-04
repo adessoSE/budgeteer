@@ -1,11 +1,11 @@
 package de.adesso.budgeteer.persistence.manualRecord;
 
+import de.adesso.budgeteer.persistence.budget.BudgetEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.joda.money.Money;
-import de.adesso.budgeteer.persistence.budget.BudgetEntity;
 
 import javax.persistence.*;
 import java.util.Calendar;

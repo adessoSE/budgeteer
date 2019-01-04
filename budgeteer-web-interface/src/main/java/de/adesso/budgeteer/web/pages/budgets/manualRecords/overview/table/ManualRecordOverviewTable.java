@@ -1,6 +1,12 @@
 package de.adesso.budgeteer.web.pages.budgets.manualRecords.overview.table;
 
+import de.adesso.budgeteer.service.manualRecord.ManualRecord;
 import de.adesso.budgeteer.service.manualRecord.ManualRecordService;
+import de.adesso.budgeteer.web.components.dataTable.DataTableBehavior;
+import de.adesso.budgeteer.web.components.money.MoneyLabel;
+import de.adesso.budgeteer.web.pages.base.delete.DeleteDialog;
+import de.adesso.budgeteer.web.pages.budgets.manualRecords.add.AddManualRecordPage;
+import de.adesso.budgeteer.web.pages.budgets.manualRecords.overview.ManualRecordOverviewPage;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
@@ -11,13 +17,6 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import de.adesso.budgeteer.service.manualRecord.ManualRecord;
-import de.adesso.budgeteer.web.components.dataTable.DataTableBehavior;
-import de.adesso.budgeteer.web.components.money.MoneyLabel;
-import de.adesso.budgeteer.web.pages.base.delete.DeleteDialog;
-import de.adesso.budgeteer.web.pages.budgets.manualRecords.add.AddManualRecordPage;
-import de.adesso.budgeteer.web.pages.budgets.manualRecords.overview.ManualRecordOverviewPage;
-
 
 import java.util.List;
 

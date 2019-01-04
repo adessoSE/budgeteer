@@ -1,10 +1,5 @@
 package de.adesso.budgeteer.service.notification;
 
-import org.joda.money.CurrencyUnit;
-import org.joda.money.Money;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import de.adesso.budgeteer.persistence.budget.BudgetEntity;
 import de.adesso.budgeteer.persistence.budget.BudgetRepository;
 import de.adesso.budgeteer.persistence.budget.MissingBudgetTotalBean;
@@ -12,6 +7,11 @@ import de.adesso.budgeteer.persistence.person.PersonEntity;
 import de.adesso.budgeteer.persistence.record.WorkRecordEntity;
 import de.adesso.budgeteer.persistence.record.WorkRecordRepository;
 import de.adesso.budgeteer.service.ServiceTestTemplate;
+import org.joda.money.CurrencyUnit;
+import org.joda.money.Money;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Collections;
 import java.util.Date;

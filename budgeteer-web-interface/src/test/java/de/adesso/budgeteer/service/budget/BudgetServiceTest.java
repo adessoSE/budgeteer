@@ -1,10 +1,5 @@
 package de.adesso.budgeteer.service.budget;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import de.adesso.budgeteer.MoneyUtil;
 import de.adesso.budgeteer.persistence.budget.BudgetEntity;
 import de.adesso.budgeteer.persistence.budget.BudgetRepository;
@@ -16,6 +11,11 @@ import de.adesso.budgeteer.persistence.record.PlanRecordRepository;
 import de.adesso.budgeteer.persistence.record.WorkRecordRepository;
 import de.adesso.budgeteer.service.ServiceTestTemplate;
 import de.adesso.budgeteer.service.contract.ContractBaseData;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import java.util.*;
 

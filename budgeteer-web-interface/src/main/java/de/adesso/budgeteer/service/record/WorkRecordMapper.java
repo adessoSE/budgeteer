@@ -1,8 +1,8 @@
 package de.adesso.budgeteer.service.record;
 
 import de.adesso.budgeteer.persistence.record.WorkRecordEntity;
-import org.springframework.stereotype.Component;
 import de.adesso.budgeteer.service.AbstractMapper;
+import org.springframework.stereotype.Component;
 
 import java.math.RoundingMode;
 

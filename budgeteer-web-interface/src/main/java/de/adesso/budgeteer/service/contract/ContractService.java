@@ -9,10 +9,10 @@ import de.adesso.budgeteer.persistence.invoice.InvoiceRepository;
 import de.adesso.budgeteer.persistence.project.ProjectContractField;
 import de.adesso.budgeteer.persistence.project.ProjectEntity;
 import de.adesso.budgeteer.persistence.project.ProjectRepository;
+import de.adesso.budgeteer.web.pages.contract.overview.table.ContractOverviewTableModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
-import de.adesso.budgeteer.web.pages.contract.overview.table.ContractOverviewTableModel;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;

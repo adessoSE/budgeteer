@@ -5,6 +5,7 @@ import de.adesso.budgeteer.web.Mount;
 import de.adesso.budgeteer.web.pages.base.basepage.BasePage;
 import de.adesso.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
 import de.adesso.budgeteer.web.pages.budgets.overview.BudgetsOverviewPage;
+import de.adesso.budgeteer.web.pages.contract.overview.ContractOverviewPage;
 import de.adesso.budgeteer.web.pages.dashboard.burnedbudgetchart.BurnedBudgetChart;
 import de.adesso.budgeteer.web.pages.dashboard.burnedbudgetchart.BurnedBudgetChartModel;
 import de.adesso.budgeteer.web.pages.dashboard.dailyratechart.AverageDailyRateChart;
@@ -16,7 +17,6 @@ import de.adesso.budgeteer.web.pages.person.overview.PeopleOverviewPage;
 import de.adesso.budgeteer.web.pages.templates.TemplatesPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
-import de.adesso.budgeteer.web.pages.contract.overview.ContractOverviewPage;
 
 @Mount("dashboard")
 public class DashboardPage extends BasePage {

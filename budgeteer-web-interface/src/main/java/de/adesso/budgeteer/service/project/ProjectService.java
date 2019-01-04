@@ -13,12 +13,12 @@ import de.adesso.budgeteer.persistence.record.PlanRecordRepository;
 import de.adesso.budgeteer.persistence.record.WorkRecordRepository;
 import de.adesso.budgeteer.persistence.user.UserEntity;
 import de.adesso.budgeteer.persistence.user.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Service;
 import de.adesso.budgeteer.service.DateRange;
 import de.adesso.budgeteer.service.DateUtil;
 import de.adesso.budgeteer.web.pages.administration.Project;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;

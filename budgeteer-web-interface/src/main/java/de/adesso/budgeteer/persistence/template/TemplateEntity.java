@@ -1,13 +1,13 @@
 package de.adesso.budgeteer.persistence.template;
 
 
+import de.adesso.budgeteer.service.ReportType;
+import de.adesso.budgeteer.service.template.Template;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import de.adesso.budgeteer.service.ReportType;
-import de.adesso.budgeteer.service.template.Template;
 
 import javax.persistence.*;
 import java.io.ByteArrayInputStream;

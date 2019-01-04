@@ -1,14 +1,14 @@
 package de.adesso.budgeteer.web.pages.budgets.details.highlights;
 
 import de.adesso.budgeteer.service.budget.BudgetDetailData;
+import de.adesso.budgeteer.web.components.MarqueeLabel;
+import de.adesso.budgeteer.web.components.money.MoneyLabel;
 import de.adesso.budgeteer.web.components.nullmodel.NullsafeModel;
+import de.adesso.budgeteer.web.components.percent.PercentageLabel;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.StringResourceModel;
-import de.adesso.budgeteer.web.components.MarqueeLabel;
-import de.adesso.budgeteer.web.components.money.MoneyLabel;
-import de.adesso.budgeteer.web.components.percent.PercentageLabel;
 
 import static org.wicketstuff.lazymodel.LazyModel.from;
 import static org.wicketstuff.lazymodel.LazyModel.model;

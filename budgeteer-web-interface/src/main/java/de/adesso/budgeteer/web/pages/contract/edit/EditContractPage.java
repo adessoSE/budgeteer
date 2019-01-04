@@ -4,14 +4,14 @@ import de.adesso.budgeteer.service.contract.ContractBaseData;
 import de.adesso.budgeteer.service.contract.ContractService;
 import de.adesso.budgeteer.web.Mount;
 import de.adesso.budgeteer.web.pages.base.dialogpage.DialogPageWithBacklink;
+import de.adesso.budgeteer.web.pages.contract.edit.form.EditContractForm;
+import de.adesso.budgeteer.web.pages.contract.overview.ContractOverviewPage;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.StringValue;
-import de.adesso.budgeteer.web.pages.contract.edit.form.EditContractForm;
-import de.adesso.budgeteer.web.pages.contract.overview.ContractOverviewPage;
 
 import static org.wicketstuff.lazymodel.LazyModel.from;
 import static org.wicketstuff.lazymodel.LazyModel.model;

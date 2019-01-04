@@ -1,10 +1,10 @@
 package de.adesso.budgeteer.persistence.contract;
 
-import lombok.Data;
-import org.joda.money.Money;
 import de.adesso.budgeteer.persistence.budget.BudgetEntity;
 import de.adesso.budgeteer.persistence.invoice.InvoiceEntity;
 import de.adesso.budgeteer.persistence.project.ProjectEntity;
+import lombok.Data;
+import org.joda.money.Money;
 
 import javax.persistence.*;
 import java.io.Serializable;

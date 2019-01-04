@@ -1,11 +1,11 @@
 package de.adesso.budgeteer.service.invoice;
 
 import de.adesso.budgeteer.service.contract.DynamicAttributeField;
+import de.adesso.budgeteer.web.components.fileUpload.FileUploadModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.joda.money.Money;
-import de.adesso.budgeteer.web.components.fileUpload.FileUploadModel;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

@@ -1,7 +1,7 @@
 package de.adesso.budgeteer.persistence.contract;
 
-import lombok.Data;
 import de.adesso.budgeteer.persistence.user.UserEntity;
+import lombok.Data;
 
 import javax.persistence.*;
 

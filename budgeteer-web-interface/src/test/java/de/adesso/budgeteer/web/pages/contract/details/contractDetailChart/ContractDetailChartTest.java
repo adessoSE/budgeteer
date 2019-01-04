@@ -1,10 +1,10 @@
 package de.adesso.budgeteer.web.pages.contract.details.contractDetailChart;
 
-import org.apache.wicket.util.tester.WicketTester;
-import org.junit.jupiter.api.Test;
 import de.adesso.budgeteer.web.AbstractWebTestTemplate;
 import de.adesso.budgeteer.web.pages.budgets.details.chart.PeopleDistributionChart;
 import de.adesso.budgeteer.web.pages.budgets.details.chart.PeopleDistributionChartModel;
+import org.apache.wicket.util.tester.WicketTester;
+import org.junit.jupiter.api.Test;
 
 public class ContractDetailChartTest extends AbstractWebTestTemplate {
 

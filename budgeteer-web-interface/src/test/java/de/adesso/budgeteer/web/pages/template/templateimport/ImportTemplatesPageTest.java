@@ -1,14 +1,14 @@
 package de.adesso.budgeteer.web.pages.template.templateimport;
 
+import de.adesso.budgeteer.web.AbstractWebTestTemplate;
+import de.adesso.budgeteer.web.pages.templates.TemplatesPage;
+import de.adesso.budgeteer.web.pages.templates.templateimport.ImportTemplatesPage;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.file.File;
 import org.apache.wicket.util.tester.FormTester;
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import de.adesso.budgeteer.web.AbstractWebTestTemplate;
-import de.adesso.budgeteer.web.pages.templates.TemplatesPage;
-import de.adesso.budgeteer.web.pages.templates.templateimport.ImportTemplatesPage;
 
 import java.net.URISyntaxException;
 

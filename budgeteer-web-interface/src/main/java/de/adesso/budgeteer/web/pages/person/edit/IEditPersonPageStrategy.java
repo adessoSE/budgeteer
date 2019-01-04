@@ -1,8 +1,8 @@
 package de.adesso.budgeteer.web.pages.person.edit;
 
+import de.adesso.budgeteer.web.pages.person.edit.personrateform.EditPersonForm;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
-import de.adesso.budgeteer.web.pages.person.edit.personrateform.EditPersonForm;
 
 import java.io.Serializable;
 

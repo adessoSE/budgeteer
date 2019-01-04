@@ -2,11 +2,11 @@ package de.adesso.budgeteer.web.pages.person.edit;
 
 import de.adesso.budgeteer.web.Mount;
 import de.adesso.budgeteer.web.pages.base.dialogpage.DialogPageWithBacklink;
+import de.adesso.budgeteer.web.pages.person.edit.personrateform.EditPersonForm;
+import de.adesso.budgeteer.web.pages.person.overview.PeopleOverviewPage;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
-import de.adesso.budgeteer.web.pages.person.edit.personrateform.EditPersonForm;
-import de.adesso.budgeteer.web.pages.person.overview.PeopleOverviewPage;
 
 @Mount({"people/edit/${id}"})
 public class EditPersonPage extends DialogPageWithBacklink {

@@ -5,6 +5,9 @@ import de.adesso.budgeteer.web.Mount;
 import de.adesso.budgeteer.web.components.confirm.ConfirmationForm;
 import de.adesso.budgeteer.web.pages.base.basepage.BasePage;
 import de.adesso.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
+import de.adesso.budgeteer.web.pages.contract.details.ContractDetailsPage;
+import de.adesso.budgeteer.web.pages.dashboard.DashboardPage;
+import de.adesso.budgeteer.web.pages.invoice.details.highlights.InvoiceHighlightsPanel;
 import de.adesso.budgeteer.web.pages.invoice.edit.EditInvoicePage;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -16,9 +19,6 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import de.adesso.budgeteer.web.pages.contract.details.ContractDetailsPage;
-import de.adesso.budgeteer.web.pages.dashboard.DashboardPage;
-import de.adesso.budgeteer.web.pages.invoice.details.highlights.InvoiceHighlightsPanel;
 
 @Mount("invoices/details/${id}")
 public class InvoiceDetailsPage extends BasePage {

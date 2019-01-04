@@ -1,5 +1,7 @@
 package de.adesso.budgeteer.persistence.record;
 
+import de.adesso.budgeteer.persistence.budget.BudgetEntity;
+import de.adesso.budgeteer.persistence.person.PersonEntity;
 import de.adesso.budgeteer.persistence.project.ProjectEntity;
 import org.joda.money.Money;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -8,8 +10,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QueryDslPredicateExecutor;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
-import de.adesso.budgeteer.persistence.budget.BudgetEntity;
-import de.adesso.budgeteer.persistence.person.PersonEntity;
 
 import java.util.Date;
 import java.util.List;

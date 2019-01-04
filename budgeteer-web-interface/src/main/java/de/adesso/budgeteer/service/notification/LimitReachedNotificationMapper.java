@@ -1,8 +1,8 @@
 package de.adesso.budgeteer.service.notification;
 
 import de.adesso.budgeteer.persistence.budget.LimitReachedBean;
-import org.springframework.stereotype.Component;
 import de.adesso.budgeteer.service.AbstractMapper;
+import org.springframework.stereotype.Component;
 
 @Component
 public class LimitReachedNotificationMapper extends AbstractMapper<LimitReachedBean, Notification> {

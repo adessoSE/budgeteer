@@ -1,5 +1,8 @@
 package de.adesso.budgeteer.web.pages.base.basepage.notifications;
 
+import de.adesso.budgeteer.service.notification.Notification;
+import de.adesso.budgeteer.web.components.notificationlist.NotificationLinkFactory;
+import de.adesso.budgeteer.web.components.notificationlist.NotificationMessageFactory;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
@@ -8,9 +11,6 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
-import de.adesso.budgeteer.service.notification.Notification;
-import de.adesso.budgeteer.web.components.notificationlist.NotificationLinkFactory;
-import de.adesso.budgeteer.web.components.notificationlist.NotificationMessageFactory;
 
 public class NotificationDropdown extends Panel {
 

@@ -1,5 +1,11 @@
 package de.adesso.budgeteer.service.template;
 
+import de.adesso.budgeteer.imports.api.ImportFile;
+import de.adesso.budgeteer.persistence.template.TemplateEntity;
+import de.adesso.budgeteer.persistence.template.TemplateRepository;
+import de.adesso.budgeteer.service.ReportType;
+import de.adesso.budgeteer.service.ServiceTestTemplate;
+import de.adesso.budgeteer.web.pages.templates.templateimport.TemplateFormInputDto;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -7,12 +13,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import de.adesso.budgeteer.imports.api.ImportFile;
-import de.adesso.budgeteer.persistence.template.TemplateEntity;
-import de.adesso.budgeteer.persistence.template.TemplateRepository;
-import de.adesso.budgeteer.service.ReportType;
-import de.adesso.budgeteer.service.ServiceTestTemplate;
-import de.adesso.budgeteer.web.pages.templates.templateimport.TemplateFormInputDto;
 
 import java.io.IOException;
 

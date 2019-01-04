@@ -1,12 +1,12 @@
 package de.adesso.budgeteer.service.record;
 
-import lombok.Getter;
-import lombok.Setter;
-import org.apache.wicket.model.Model;
 import de.adesso.budgeteer.service.DateRange;
 import de.adesso.budgeteer.service.budget.BudgetBaseData;
 import de.adesso.budgeteer.service.person.PersonBaseData;
 import de.adesso.budgeteer.web.components.burntable.filter.BurnTableSortColumn;
+import lombok.Getter;
+import lombok.Setter;
+import org.apache.wicket.model.Model;
 
 import java.io.Serializable;
 import java.util.LinkedList;

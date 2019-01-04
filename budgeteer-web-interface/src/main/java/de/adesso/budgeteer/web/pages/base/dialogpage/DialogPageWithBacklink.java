@@ -1,9 +1,9 @@
 package de.adesso.budgeteer.web.pages.base.dialogpage;
 
+import de.adesso.budgeteer.web.components.security.NeedsLogin;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import de.adesso.budgeteer.web.components.security.NeedsLogin;
 
 @NeedsLogin
 public abstract class DialogPageWithBacklink extends DialogPage {

@@ -2,7 +2,6 @@ package de.adesso.budgeteer.web.components.notificationlist;
 
 import de.adesso.budgeteer.service.notification.*;
 import de.adesso.budgeteer.web.PropertyLoader;
-import de.adesso.budgeteer.service.notification.*;
 
 import java.io.Serializable;
 

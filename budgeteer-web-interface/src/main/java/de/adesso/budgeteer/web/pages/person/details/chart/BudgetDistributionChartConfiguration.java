@@ -2,12 +2,12 @@ package de.adesso.budgeteer.web.pages.person.details.chart;
 
 import de.adesso.budgeteer.MoneyUtil;
 import de.adesso.budgeteer.web.BudgeteerSession;
+import de.adesso.budgeteer.web.charts.ChartStyling;
 import de.adesso.wickedcharts.chartjs.ChartConfiguration;
 import de.adesso.wickedcharts.chartjs.chartoptions.*;
 import de.adesso.wickedcharts.chartjs.chartoptions.colors.RgbColor;
 import de.adesso.wickedcharts.chartjs.chartoptions.label.TextLabel;
 import de.adesso.wickedcharts.chartjs.chartoptions.valueType.DoubleValue;
-import de.adesso.budgeteer.web.charts.ChartStyling;
 
 import java.io.Serializable;
 import java.util.ArrayList;

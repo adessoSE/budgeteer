@@ -1,10 +1,10 @@
 package de.adesso.budgeteer.web.pages.budgets.overview;
 
+import de.adesso.budgeteer.web.AbstractWebTestTemplate;
+import de.adesso.budgeteer.web.BudgeteerSession;
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import de.adesso.budgeteer.web.AbstractWebTestTemplate;
-import de.adesso.budgeteer.web.BudgeteerSession;
 
 public class BudgetsOverviewPageTest extends AbstractWebTestTemplate {
 

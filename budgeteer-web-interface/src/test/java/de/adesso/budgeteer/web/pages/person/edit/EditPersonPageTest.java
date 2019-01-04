@@ -1,14 +1,14 @@
 package de.adesso.budgeteer.web.pages.person.edit;
 
+import de.adesso.budgeteer.service.person.PersonService;
+import de.adesso.budgeteer.service.person.PersonWithRates;
+import de.adesso.budgeteer.web.AbstractWebTestTemplate;
+import de.adesso.budgeteer.web.pages.person.overview.PeopleOverviewPage;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import de.adesso.budgeteer.service.person.PersonService;
-import de.adesso.budgeteer.service.person.PersonWithRates;
-import de.adesso.budgeteer.web.AbstractWebTestTemplate;
-import de.adesso.budgeteer.web.pages.person.overview.PeopleOverviewPage;
 
 import java.util.ArrayList;
 

@@ -1,8 +1,8 @@
 package de.adesso.budgeteer.service.budget;
 
 import de.adesso.budgeteer.persistence.budget.BudgetEntity;
-import org.springframework.stereotype.Component;
 import de.adesso.budgeteer.service.AbstractMapper;
+import org.springframework.stereotype.Component;
 
 @Component
 public class BudgetBaseDataMapper extends AbstractMapper<BudgetEntity, BudgetBaseData> {

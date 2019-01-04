@@ -9,7 +9,13 @@ import de.adesso.budgeteer.web.pages.base.basepage.BasePage;
 import de.adesso.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
 import de.adesso.budgeteer.web.pages.base.delete.DeleteDialog;
 import de.adesso.budgeteer.web.pages.contract.budgetOverview.BudgetForContractOverviewPage;
+import de.adesso.budgeteer.web.pages.contract.details.contractDetailChart.ContractDetailChart;
+import de.adesso.budgeteer.web.pages.contract.details.contractDetailChart.ContractDetailChartModel;
+import de.adesso.budgeteer.web.pages.contract.details.differenceTable.DifferenceTable;
+import de.adesso.budgeteer.web.pages.contract.details.differenceTable.DifferenceTableModel;
+import de.adesso.budgeteer.web.pages.contract.details.highlights.ContractHighlightsPanel;
 import de.adesso.budgeteer.web.pages.contract.edit.EditContractPage;
+import de.adesso.budgeteer.web.pages.contract.overview.ContractOverviewPage;
 import de.adesso.budgeteer.web.pages.dashboard.DashboardPage;
 import de.adesso.budgeteer.web.pages.invoice.edit.EditInvoicePage;
 import org.apache.wicket.markup.html.WebPage;
@@ -19,12 +25,6 @@ import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import de.adesso.budgeteer.web.pages.contract.details.contractDetailChart.ContractDetailChart;
-import de.adesso.budgeteer.web.pages.contract.details.contractDetailChart.ContractDetailChartModel;
-import de.adesso.budgeteer.web.pages.contract.details.differenceTable.DifferenceTable;
-import de.adesso.budgeteer.web.pages.contract.details.differenceTable.DifferenceTableModel;
-import de.adesso.budgeteer.web.pages.contract.details.highlights.ContractHighlightsPanel;
-import de.adesso.budgeteer.web.pages.contract.overview.ContractOverviewPage;
 
 @Mount("contracts/details/${id}")
 public class ContractDetailsPage extends BasePage {

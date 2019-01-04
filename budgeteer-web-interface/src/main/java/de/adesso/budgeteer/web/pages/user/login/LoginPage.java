@@ -1,9 +1,19 @@
 package de.adesso.budgeteer.web.pages.user.login;
 
+import de.adesso.budgeteer.service.user.InvalidLoginCredentialsException;
+import de.adesso.budgeteer.service.user.TokenStatus;
+import de.adesso.budgeteer.service.user.User;
+import de.adesso.budgeteer.service.user.UserService;
 import de.adesso.budgeteer.web.BudgeteerSession;
 import de.adesso.budgeteer.web.BudgeteerSettings;
 import de.adesso.budgeteer.web.Mount;
+import de.adesso.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
 import de.adesso.budgeteer.web.pages.base.dialogpage.DialogPage;
+import de.adesso.budgeteer.web.pages.user.forgotpassword.ForgotPasswordPage;
+import de.adesso.budgeteer.web.pages.user.register.RegisterPage;
+import de.adesso.budgeteer.web.pages.user.resettoken.ResetTokenPage;
+import de.adesso.budgeteer.web.pages.user.selectproject.SelectProjectPage;
+import de.adesso.budgeteer.web.pages.user.selectproject.SelectProjectWithKeycloakPage;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.RequiredTextField;
@@ -12,16 +22,6 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.representations.AccessToken;
-import de.adesso.budgeteer.service.user.InvalidLoginCredentialsException;
-import de.adesso.budgeteer.service.user.TokenStatus;
-import de.adesso.budgeteer.service.user.User;
-import de.adesso.budgeteer.service.user.UserService;
-import de.adesso.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
-import de.adesso.budgeteer.web.pages.user.forgotpassword.ForgotPasswordPage;
-import de.adesso.budgeteer.web.pages.user.register.RegisterPage;
-import de.adesso.budgeteer.web.pages.user.resettoken.ResetTokenPage;
-import de.adesso.budgeteer.web.pages.user.selectproject.SelectProjectPage;
-import de.adesso.budgeteer.web.pages.user.selectproject.SelectProjectWithKeycloakPage;
 
 import javax.servlet.http.HttpServletRequest;
 

@@ -1,8 +1,8 @@
 package de.adesso.budgeteer.web.pages.person.monthreport;
 
+import de.adesso.budgeteer.web.AbstractWebTestTemplate;
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.jupiter.api.Test;
-import de.adesso.budgeteer.web.AbstractWebTestTemplate;
 
 public class PersonMonthReportPageTest extends AbstractWebTestTemplate{
 

@@ -4,7 +4,6 @@ import de.adesso.budgeteer.MoneyUtil;
 import de.adesso.budgeteer.persistence.record.*;
 import de.adesso.budgeteer.service.statistics.MonthlyStats;
 import org.springframework.stereotype.Component;
-import de.adesso.budgeteer.persistence.record.*;
 
 import java.util.*;
 

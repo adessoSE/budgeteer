@@ -3,10 +3,10 @@ package de.adesso.budgeteer.web.pages.budgets.overview.report;
 import de.adesso.budgeteer.service.budget.report.ReportMetaInformation;
 import de.adesso.budgeteer.web.Mount;
 import de.adesso.budgeteer.web.pages.base.dialogpage.DialogPageWithBacklink;
+import de.adesso.budgeteer.web.pages.budgets.overview.report.form.BudgetReportForm;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import de.adesso.budgeteer.web.pages.budgets.overview.report.form.BudgetReportForm;
 
 @Mount({"budgets/report"})
 public class BudgetReportPage extends DialogPageWithBacklink {

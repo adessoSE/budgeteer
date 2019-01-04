@@ -5,6 +5,9 @@ import de.adesso.budgeteer.service.template.TemplateService;
 import de.adesso.budgeteer.web.BudgeteerSession;
 import de.adesso.budgeteer.web.ClassAwareWrappingModel;
 import de.adesso.budgeteer.web.components.dataTable.DataTableBehavior;
+import de.adesso.budgeteer.web.pages.templates.TemplateFilter;
+import de.adesso.budgeteer.web.pages.templates.TemplatesPage;
+import de.adesso.budgeteer.web.pages.templates.edit.EditTemplatePage;
 import de.adesso.budgeteer.web.pages.templates.templateimport.TemplateFormInputDto;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -20,9 +23,6 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import de.adesso.budgeteer.web.pages.templates.TemplateFilter;
-import de.adesso.budgeteer.web.pages.templates.TemplatesPage;
-import de.adesso.budgeteer.web.pages.templates.edit.EditTemplatePage;
 
 import java.util.List;
 

@@ -1,8 +1,8 @@
 package de.adesso.budgeteer.service.statistics;
 
 import de.adesso.budgeteer.persistence.record.ShareBean;
-import org.springframework.stereotype.Component;
 import de.adesso.budgeteer.service.AbstractMapper;
+import org.springframework.stereotype.Component;
 
 @Component
 public class ShareBeanToShareMapper extends AbstractMapper<ShareBean, Share> {

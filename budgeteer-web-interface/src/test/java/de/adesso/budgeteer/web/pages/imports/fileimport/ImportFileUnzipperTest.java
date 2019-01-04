@@ -1,8 +1,8 @@
 package de.adesso.budgeteer.web.pages.imports.fileimport;
 
+import de.adesso.budgeteer.imports.api.ImportFile;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
-import de.adesso.budgeteer.imports.api.ImportFile;
 
 import java.io.BufferedReader;
 import java.io.IOException;

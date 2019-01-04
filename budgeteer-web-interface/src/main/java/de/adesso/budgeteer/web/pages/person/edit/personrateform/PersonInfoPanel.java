@@ -2,9 +2,11 @@ package de.adesso.budgeteer.web.pages.person.edit.personrateform;
 
 import de.adesso.budgeteer.MoneyUtil;
 import de.adesso.budgeteer.service.person.PersonRate;
+import de.adesso.budgeteer.service.person.PersonService;
 import de.adesso.budgeteer.service.person.PersonWithRates;
 import de.adesso.budgeteer.web.pages.base.delete.DeleteDialog;
 import de.adesso.budgeteer.web.pages.person.edit.EditPersonPage;
+import de.adesso.budgeteer.web.pages.person.overview.PeopleOverviewPage;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.basic.Label;
@@ -14,8 +16,6 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import de.adesso.budgeteer.service.person.PersonService;
-import de.adesso.budgeteer.web.pages.person.overview.PeopleOverviewPage;
 
 import java.util.List;
 

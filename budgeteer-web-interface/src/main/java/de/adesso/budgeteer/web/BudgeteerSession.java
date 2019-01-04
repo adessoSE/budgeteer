@@ -1,15 +1,15 @@
 package de.adesso.budgeteer.web;
 
+import de.adesso.budgeteer.service.budget.BudgetTagFilter;
+import de.adesso.budgeteer.service.security.BudgeteerAuthenticationToken;
+import de.adesso.budgeteer.service.user.User;
+import de.adesso.budgeteer.web.pages.templates.TemplateFilter;
 import org.apache.wicket.protocol.http.WebSession;
 import org.apache.wicket.request.Request;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
-import de.adesso.budgeteer.service.budget.BudgetTagFilter;
-import de.adesso.budgeteer.service.security.BudgeteerAuthenticationToken;
-import de.adesso.budgeteer.service.user.User;
-import de.adesso.budgeteer.web.pages.templates.TemplateFilter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;

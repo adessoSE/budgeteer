@@ -5,15 +5,15 @@ import de.adesso.budgeteer.service.person.PersonBaseData;
 import de.adesso.budgeteer.service.record.WorkRecordFilter;
 import de.adesso.budgeteer.web.BudgeteerSession;
 import de.adesso.budgeteer.web.Mount;
+import de.adesso.budgeteer.web.components.burntable.BurnTableWithFilter;
 import de.adesso.budgeteer.web.pages.base.basepage.BasePage;
 import de.adesso.budgeteer.web.pages.base.basepage.breadcrumbs.Breadcrumb;
 import de.adesso.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
-import de.adesso.budgeteer.web.pages.person.PersonNameModel;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
-import de.adesso.budgeteer.web.components.burntable.BurnTableWithFilter;
 import de.adesso.budgeteer.web.pages.dashboard.DashboardPage;
+import de.adesso.budgeteer.web.pages.person.PersonNameModel;
 import de.adesso.budgeteer.web.pages.person.details.PersonDetailsPage;
 import de.adesso.budgeteer.web.pages.person.overview.PeopleOverviewPage;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import javax.inject.Inject;
 

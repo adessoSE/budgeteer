@@ -1,9 +1,9 @@
 package de.adesso.budgeteer.web.planning;
 
+import de.adesso.budgeteer.MoneyUtil;
 import org.joda.time.LocalDate;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import de.adesso.budgeteer.MoneyUtil;
 
 import java.util.Calendar;
 

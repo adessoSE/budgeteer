@@ -1,10 +1,10 @@
 package de.adesso.budgeteer.web.pages.person.details.component;
 
-import org.apache.wicket.util.tester.WicketTester;
-import org.junit.jupiter.api.Test;
 import de.adesso.budgeteer.web.AbstractWebTestTemplate;
 import de.adesso.budgeteer.web.pages.person.details.highlights.PersonHighlightsModel;
 import de.adesso.budgeteer.web.pages.person.details.highlights.PersonHighlightsPanel;
+import org.apache.wicket.util.tester.WicketTester;
+import org.junit.jupiter.api.Test;
 
 public class PersonHighlightsPanelTest extends AbstractWebTestTemplate {
 

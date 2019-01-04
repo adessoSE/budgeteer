@@ -1,7 +1,7 @@
 package de.adesso.budgeteer.web.pages.budgets.notes;
 
-import org.junit.jupiter.api.Test;
 import de.adesso.budgeteer.web.AbstractWebTestTemplate;
+import org.junit.jupiter.api.Test;
 
 public class BudgetNotesPageTest extends AbstractWebTestTemplate {
 

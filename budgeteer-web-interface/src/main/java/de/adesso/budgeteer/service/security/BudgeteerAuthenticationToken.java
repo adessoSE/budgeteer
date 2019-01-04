@@ -1,10 +1,10 @@
 package de.adesso.budgeteer.service.security;
 
+import de.adesso.budgeteer.service.user.User;
 import de.adesso.budgeteer.web.BudgeteerSession;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
-import de.adesso.budgeteer.service.user.User;
 
 /**
  * A {@link AbstractAuthenticationToken} that is used to set the {@link Authentication} object

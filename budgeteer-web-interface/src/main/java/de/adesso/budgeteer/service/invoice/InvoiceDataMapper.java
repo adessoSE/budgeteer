@@ -4,10 +4,10 @@ import de.adesso.budgeteer.MoneyUtil;
 import de.adesso.budgeteer.persistence.contract.ContractInvoiceField;
 import de.adesso.budgeteer.persistence.invoice.InvoiceEntity;
 import de.adesso.budgeteer.persistence.invoice.InvoiceFieldEntity;
-import de.adesso.budgeteer.service.contract.DynamicAttributeField;
-import org.springframework.stereotype.Component;
 import de.adesso.budgeteer.service.AbstractMapper;
+import de.adesso.budgeteer.service.contract.DynamicAttributeField;
 import de.adesso.budgeteer.web.components.fileUpload.FileUploadModel;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.util.*;

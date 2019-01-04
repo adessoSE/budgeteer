@@ -1,14 +1,14 @@
 package de.adesso.budgeteer.web.pages.person.edit;
 
+import de.adesso.budgeteer.service.person.PersonService;
+import de.adesso.budgeteer.service.person.PersonWithRates;
+import de.adesso.budgeteer.web.components.notificationlist.PersonNotificationListPanel;
+import de.adesso.budgeteer.web.pages.person.edit.personrateform.EditPersonForm;
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import de.adesso.budgeteer.service.person.PersonService;
-import de.adesso.budgeteer.service.person.PersonWithRates;
-import de.adesso.budgeteer.web.components.notificationlist.PersonNotificationListPanel;
-import de.adesso.budgeteer.web.pages.person.edit.personrateform.EditPersonForm;
 
 /**
  * Strategy to be used by EditPersonPage to UPDATE an existing person.

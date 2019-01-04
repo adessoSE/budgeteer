@@ -1,8 +1,8 @@
 package de.adesso.budgeteer.service.budget.report;
 
+import de.adesso.budgeteer.service.DateRange;
 import de.adesso.budgeteer.service.template.Template;
 import lombok.Data;
-import de.adesso.budgeteer.service.DateRange;
 
 import java.io.Serializable;
 

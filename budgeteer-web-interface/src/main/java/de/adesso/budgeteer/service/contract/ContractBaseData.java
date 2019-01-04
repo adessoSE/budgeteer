@@ -1,13 +1,13 @@
 package de.adesso.budgeteer.service.contract;
 
 import de.adesso.budgeteer.persistence.contract.ContractEntity;
+import de.adesso.budgeteer.service.budget.BudgetBaseData;
+import de.adesso.budgeteer.service.invoice.InvoiceBaseData;
+import de.adesso.budgeteer.web.components.fileUpload.FileUploadModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.joda.money.Money;
-import de.adesso.budgeteer.service.budget.BudgetBaseData;
-import de.adesso.budgeteer.service.invoice.InvoiceBaseData;
-import de.adesso.budgeteer.web.components.fileUpload.FileUploadModel;
 
 import java.io.Serializable;
 import java.util.Date;

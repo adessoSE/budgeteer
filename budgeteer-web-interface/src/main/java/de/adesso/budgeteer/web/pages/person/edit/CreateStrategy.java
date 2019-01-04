@@ -1,11 +1,11 @@
 package de.adesso.budgeteer.web.pages.person.edit;
 
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.StringResourceModel;
 import de.adesso.budgeteer.web.components.notificationlist.EmptyNotificationsModel;
 import de.adesso.budgeteer.web.components.notificationlist.PersonNotificationListPanel;
 import de.adesso.budgeteer.web.pages.person.edit.personrateform.EditPersonForm;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.StringResourceModel;
 
 /**
  * Strategy to be used by EditPersonPage to CREATE a new person.

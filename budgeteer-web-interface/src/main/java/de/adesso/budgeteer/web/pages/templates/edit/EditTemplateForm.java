@@ -8,6 +8,8 @@ import de.adesso.budgeteer.web.BudgeteerSession;
 import de.adesso.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
 import de.adesso.budgeteer.web.pages.base.AbstractChoiceRenderer;
 import de.adesso.budgeteer.web.pages.base.delete.DeleteDialog;
+import de.adesso.budgeteer.web.pages.dashboard.DashboardPage;
+import de.adesso.budgeteer.web.pages.templates.TemplatesPage;
 import de.adesso.budgeteer.web.pages.templates.templateimport.TemplateFormInputDto;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.wicket.AttributeModifier;
@@ -26,8 +28,6 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.resource.AbstractResourceStreamWriter;
-import de.adesso.budgeteer.web.pages.dashboard.DashboardPage;
-import de.adesso.budgeteer.web.pages.templates.TemplatesPage;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;

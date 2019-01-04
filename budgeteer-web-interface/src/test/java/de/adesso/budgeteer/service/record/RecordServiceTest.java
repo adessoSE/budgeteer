@@ -1,12 +1,6 @@
 package de.adesso.budgeteer.service.record;
 
 import com.querydsl.core.types.Predicate;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.kubek2k.springockito.annotations.ReplaceWithMock;
-import org.kubek2k.springockito.annotations.SpringockitoContextLoader;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
 import de.adesso.budgeteer.MoneyUtil;
 import de.adesso.budgeteer.persistence.budget.BudgetEntity;
 import de.adesso.budgeteer.persistence.imports.ImportEntity;
@@ -17,6 +11,12 @@ import de.adesso.budgeteer.persistence.record.WorkRecordEntity;
 import de.adesso.budgeteer.persistence.record.WorkRecordRepository;
 import de.adesso.budgeteer.service.ServiceTestTemplate;
 import de.adesso.budgeteer.service.budget.BudgetTagFilter;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.kubek2k.springockito.annotations.ReplaceWithMock;
+import org.kubek2k.springockito.annotations.SpringockitoContextLoader;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
 
 import java.util.ArrayList;
 import java.util.Date;

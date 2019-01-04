@@ -3,6 +3,11 @@ package de.adesso.budgeteer.web.components.aggregatedrecordtable;
 import de.adesso.budgeteer.service.record.AggregatedRecord;
 import de.adesso.budgeteer.web.BudgeteerSession;
 import de.adesso.budgeteer.web.ClassAwareWrappingModel;
+import de.adesso.budgeteer.web.components.dataTable.DataTableBehavior;
+import de.adesso.budgeteer.web.components.money.BudgetUnitMoneyModel;
+import de.adesso.budgeteer.web.components.money.MoneyLabel;
+import de.adesso.budgeteer.web.components.tax.TaxBudgetUnitMoneyModel;
+import de.adesso.budgeteer.web.components.tax.TaxLabelModel;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -12,11 +17,6 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.joda.money.Money;
-import de.adesso.budgeteer.web.components.dataTable.DataTableBehavior;
-import de.adesso.budgeteer.web.components.money.BudgetUnitMoneyModel;
-import de.adesso.budgeteer.web.components.money.MoneyLabel;
-import de.adesso.budgeteer.web.components.tax.TaxBudgetUnitMoneyModel;
-import de.adesso.budgeteer.web.components.tax.TaxLabelModel;
 
 import java.util.List;
 

@@ -1,6 +1,8 @@
 package de.adesso.budgeteer.web.components.dataTable.editableMoneyField;
 
 import de.adesso.budgeteer.web.components.dataTable.CustomDataTableEventBehavior;
+import de.adesso.budgeteer.web.components.money.MoneyLabel;
+import de.adesso.budgeteer.web.components.money.MoneyTextField;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -11,8 +13,6 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.IModel;
 import org.joda.money.Money;
-import de.adesso.budgeteer.web.components.money.MoneyLabel;
-import de.adesso.budgeteer.web.components.money.MoneyTextField;
 
 public abstract class EditableMoneyField extends GenericPanel<Money> {
 

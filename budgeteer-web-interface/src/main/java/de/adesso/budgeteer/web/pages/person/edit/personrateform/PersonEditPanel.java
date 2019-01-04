@@ -1,6 +1,14 @@
 package de.adesso.budgeteer.web.pages.person.edit.personrateform;
 
+import de.adesso.budgeteer.service.DateRange;
+import de.adesso.budgeteer.service.budget.BudgetBaseData;
+import de.adesso.budgeteer.service.budget.BudgetService;
+import de.adesso.budgeteer.service.person.PersonRate;
 import de.adesso.budgeteer.web.BudgeteerSession;
+import de.adesso.budgeteer.web.components.daterange.DateRangeInputField;
+import de.adesso.budgeteer.web.components.listMultipleChoiceWithGroups.OptionGroup;
+import de.adesso.budgeteer.web.components.money.MoneyTextField;
+import de.adesso.budgeteer.web.components.multiselect.MultiselectBehavior;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.extensions.markup.html.form.select.IOptionRenderer;
 import org.apache.wicket.extensions.markup.html.form.select.Select;
@@ -17,14 +25,6 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.joda.money.CurrencyUnit;
 import org.joda.money.Money;
-import de.adesso.budgeteer.service.DateRange;
-import de.adesso.budgeteer.service.budget.BudgetBaseData;
-import de.adesso.budgeteer.service.budget.BudgetService;
-import de.adesso.budgeteer.service.person.PersonRate;
-import de.adesso.budgeteer.web.components.daterange.DateRangeInputField;
-import de.adesso.budgeteer.web.components.listMultipleChoiceWithGroups.OptionGroup;
-import de.adesso.budgeteer.web.components.money.MoneyTextField;
-import de.adesso.budgeteer.web.components.multiselect.MultiselectBehavior;
 
 import java.util.ArrayList;
 import java.util.Date;

@@ -1,14 +1,14 @@
 package de.adesso.budgeteer.persistence.manualRecord;
 
+import de.adesso.budgeteer.persistence.record.MonthlyAggregatedRecordWithTaxBean;
+import de.adesso.budgeteer.persistence.record.MonthlyAggregatedRecordWithTitleAndTaxBean;
+import de.adesso.budgeteer.persistence.record.WeeklyAggregatedRecordBean;
+import de.adesso.budgeteer.persistence.record.WeeklyAggregatedRecordWithTitleAndTaxBean;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QueryDslPredicateExecutor;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
-import de.adesso.budgeteer.persistence.record.MonthlyAggregatedRecordWithTaxBean;
-import de.adesso.budgeteer.persistence.record.MonthlyAggregatedRecordWithTitleAndTaxBean;
-import de.adesso.budgeteer.persistence.record.WeeklyAggregatedRecordBean;
-import de.adesso.budgeteer.persistence.record.WeeklyAggregatedRecordWithTitleAndTaxBean;
 
 import java.util.Date;
 import java.util.List;

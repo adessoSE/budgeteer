@@ -1,13 +1,13 @@
 package de.adesso.budgeteer.service.security.configuration;
 
+import de.adesso.budgeteer.service.user.User;
+import de.adesso.budgeteer.service.user.UserService;
 import de.adesso.budgeteer.web.BudgeteerSession;
+import de.adesso.budgeteer.web.components.security.NeedsLogin;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import de.adesso.budgeteer.service.user.User;
-import de.adesso.budgeteer.service.user.UserService;
-import de.adesso.budgeteer.web.components.security.NeedsLogin;
 
 /**
  * A configuration to set up spring boot security. Only used for authorization. Authentication

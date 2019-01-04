@@ -5,15 +5,15 @@ import de.adesso.budgeteer.web.BudgeteerSession;
 import de.adesso.budgeteer.web.Mount;
 import de.adesso.budgeteer.web.pages.base.basepage.BasePage;
 import de.adesso.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
+import de.adesso.budgeteer.web.pages.contract.details.ContractDetailsPage;
+import de.adesso.budgeteer.web.pages.contract.overview.ContractOverviewPage;
+import de.adesso.budgeteer.web.pages.dashboard.DashboardPage;
 import de.adesso.budgeteer.web.pages.invoice.edit.EditInvoicePage;
+import de.adesso.budgeteer.web.pages.invoice.overview.table.InvoiceOverviewTable;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import de.adesso.budgeteer.web.pages.contract.details.ContractDetailsPage;
-import de.adesso.budgeteer.web.pages.contract.overview.ContractOverviewPage;
-import de.adesso.budgeteer.web.pages.dashboard.DashboardPage;
-import de.adesso.budgeteer.web.pages.invoice.overview.table.InvoiceOverviewTable;
 
 
 @Mount({"/invoices", "contracts/details/invoices/${id}"})

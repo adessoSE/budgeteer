@@ -1,9 +1,9 @@
 package de.adesso.budgeteer.web.components.aggregatedrecordtable;
 
-import org.apache.wicket.util.tester.WicketTester;
-import org.junit.jupiter.api.Test;
 import de.adesso.budgeteer.web.AbstractWebTestTemplate;
 import de.adesso.budgeteer.web.pages.person.weekreport.table.PersonWeeklyAggregatedRecordsModel;
+import org.apache.wicket.util.tester.WicketTester;
+import org.junit.jupiter.api.Test;
 
 public class AggregatedRecordTableTest extends AbstractWebTestTemplate {
 

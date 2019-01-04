@@ -7,6 +7,8 @@ import de.adesso.budgeteer.web.components.burntable.filter.FilteredRecordsModel;
 import de.adesso.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
 import de.adesso.budgeteer.web.components.dataTable.DataTableBehavior;
 import de.adesso.budgeteer.web.components.dataTable.editableMoneyField.EditableMoneyField;
+import de.adesso.budgeteer.web.components.money.BudgetUnitMoneyModel;
+import de.adesso.budgeteer.web.components.money.MoneyLabel;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -23,8 +25,6 @@ import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.markup.repeater.data.ListDataProvider;
 import org.apache.wicket.model.Model;
 import org.joda.money.Money;
-import de.adesso.budgeteer.web.components.money.BudgetUnitMoneyModel;
-import de.adesso.budgeteer.web.components.money.MoneyLabel;
 
 import javax.inject.Inject;
 import java.util.HashMap;

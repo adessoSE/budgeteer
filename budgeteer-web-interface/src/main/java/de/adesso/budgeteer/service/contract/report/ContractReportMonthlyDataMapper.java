@@ -5,9 +5,9 @@ import de.adesso.budgeteer.persistence.contract.ContractEntity;
 import de.adesso.budgeteer.persistence.contract.ContractFieldEntity;
 import de.adesso.budgeteer.persistence.contract.ContractRepository;
 import de.adesso.budgeteer.persistence.contract.ContractStatisticBean;
+import de.adesso.budgeteer.service.contract.DynamicAttributeField;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import de.adesso.budgeteer.service.contract.DynamicAttributeField;
 
 import java.time.LocalDate;
 import java.time.ZoneId;

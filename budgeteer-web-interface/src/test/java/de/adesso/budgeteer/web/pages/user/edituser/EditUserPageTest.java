@@ -1,11 +1,5 @@
 package de.adesso.budgeteer.web.pages.user.edituser;
 
-import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.util.tester.FormTester;
-import org.apache.wicket.util.tester.WicketTester;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import de.adesso.budgeteer.persistence.user.UserEntity;
 import de.adesso.budgeteer.service.project.ProjectBaseData;
 import de.adesso.budgeteer.service.project.ProjectService;
@@ -16,6 +10,12 @@ import de.adesso.budgeteer.service.user.UserService;
 import de.adesso.budgeteer.web.AbstractWebTestTemplate;
 import de.adesso.budgeteer.web.pages.dashboard.DashboardPage;
 import de.adesso.budgeteer.web.pages.user.edit.EditUserPage;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.util.tester.FormTester;
+import org.apache.wicket.util.tester.WicketTester;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
 

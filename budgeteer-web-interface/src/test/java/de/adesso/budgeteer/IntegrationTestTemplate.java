@@ -1,6 +1,7 @@
 package de.adesso.budgeteer;
 
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
+import de.adesso.budgeteer.service.security.BudgeteerAuthenticationToken;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -10,7 +11,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
-import de.adesso.budgeteer.service.security.BudgeteerAuthenticationToken;
 
 import javax.transaction.Transactional;
 

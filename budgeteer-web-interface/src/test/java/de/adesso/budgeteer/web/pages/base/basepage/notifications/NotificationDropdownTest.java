@@ -1,13 +1,13 @@
 package de.adesso.budgeteer.web.pages.base.basepage.notifications;
 
-import org.apache.wicket.util.tester.WicketTester;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import de.adesso.budgeteer.service.notification.MissingDailyRateNotification;
 import de.adesso.budgeteer.service.notification.Notification;
 import de.adesso.budgeteer.service.notification.NotificationService;
 import de.adesso.budgeteer.web.AbstractWebTestTemplate;
 import de.adesso.budgeteer.web.PropertyLoader;
+import org.apache.wicket.util.tester.WicketTester;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;

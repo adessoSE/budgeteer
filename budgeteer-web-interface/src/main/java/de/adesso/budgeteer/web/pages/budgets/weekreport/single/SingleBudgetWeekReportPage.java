@@ -14,10 +14,10 @@ import de.adesso.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
 import de.adesso.budgeteer.web.pages.budgets.components.targetactualchart.BudgetsWeeklyAggregationModel;
 import de.adesso.budgeteer.web.pages.budgets.components.weekreporttable.BudgetsWeeklyAggregatedRecordsModel;
 import de.adesso.budgeteer.web.pages.budgets.overview.BudgetsOverviewPage;
+import de.adesso.budgeteer.web.pages.dashboard.DashboardPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import de.adesso.budgeteer.web.pages.dashboard.DashboardPage;
 
 import javax.inject.Inject;
 import java.util.List;

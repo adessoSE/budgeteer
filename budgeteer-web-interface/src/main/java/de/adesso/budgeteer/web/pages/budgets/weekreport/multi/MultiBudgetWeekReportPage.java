@@ -13,14 +13,13 @@ import de.adesso.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
 import de.adesso.budgeteer.web.pages.budgets.components.targetactualchart.BudgetsWeeklyAggregationModel;
 import de.adesso.budgeteer.web.pages.budgets.components.weekreporttable.BudgetsWeeklyAggregatedRecordsModel;
 import de.adesso.budgeteer.web.pages.budgets.overview.BudgetsOverviewPage;
+import de.adesso.budgeteer.web.pages.dashboard.DashboardPage;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import de.adesso.budgeteer.web.pages.dashboard.DashboardPage;
 import org.wicketstuff.lazymodel.LazyModel;
 
 import java.util.List;
 
-import static org.wicketstuff.lazymodel.LazyModel.from;
 import static org.wicketstuff.lazymodel.LazyModel.model;
 
 @Mount("budgets/weeks")

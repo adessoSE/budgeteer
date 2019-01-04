@@ -1,8 +1,8 @@
 package de.adesso.budgeteer.web.pages.budgets.details.chart;
 
+import de.adesso.budgeteer.web.AbstractWebTestTemplate;
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.jupiter.api.Test;
-import de.adesso.budgeteer.web.AbstractWebTestTemplate;
 
 public class PeopleDistributionChartTest extends AbstractWebTestTemplate {
 

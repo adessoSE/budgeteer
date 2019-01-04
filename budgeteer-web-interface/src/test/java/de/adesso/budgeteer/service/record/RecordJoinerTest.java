@@ -1,13 +1,12 @@
 package de.adesso.budgeteer.service.record;
 
-import de.adesso.budgeteer.persistence.record.*;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import de.adesso.budgeteer.MoneyUtil;
 import de.adesso.budgeteer.persistence.record.*;
 import de.adesso.budgeteer.service.ServiceTestTemplate;
 import de.adesso.budgeteer.service.statistics.MonthlyStats;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
 import java.text.DateFormat;

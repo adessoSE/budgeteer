@@ -6,13 +6,12 @@ import de.adesso.budgeteer.persistence.contract.ContractStatisticBean;
 import de.adesso.budgeteer.persistence.invoice.InvoiceRepository;
 import de.adesso.budgeteer.persistence.manualRecord.ManualRecordRepository;
 import de.adesso.budgeteer.persistence.record.*;
-import org.joda.money.Money;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import de.adesso.budgeteer.persistence.record.*;
 import de.adesso.budgeteer.service.DateUtil;
 import de.adesso.budgeteer.service.budget.BudgetTagFilter;
 import de.adesso.budgeteer.web.pages.contract.details.contractDetailChart.ContractDetailBudgetChart;
+import org.joda.money.Money;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.*;

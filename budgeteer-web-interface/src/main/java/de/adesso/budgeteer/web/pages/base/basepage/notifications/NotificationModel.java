@@ -1,13 +1,13 @@
 package de.adesso.budgeteer.web.pages.base.basepage.notifications;
 
+import de.adesso.budgeteer.service.notification.Notification;
+import de.adesso.budgeteer.service.notification.NotificationService;
 import de.adesso.budgeteer.web.PropertyLoader;
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import de.adesso.budgeteer.service.notification.Notification;
-import de.adesso.budgeteer.service.notification.NotificationService;
 
 import java.util.List;
 

@@ -14,6 +14,7 @@ import de.adesso.budgeteer.web.components.daterange.DateRangeInputField;
 import de.adesso.budgeteer.web.pages.base.basepage.BasePage;
 import de.adesso.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
 import de.adesso.budgeteer.web.pages.base.delete.DeleteDialog;
+import de.adesso.budgeteer.web.pages.dashboard.DashboardPage;
 import de.adesso.budgeteer.web.pages.user.login.LoginPage;
 import de.adesso.budgeteer.web.pages.user.selectproject.SelectProjectPage;
 import de.adesso.budgeteer.web.pages.user.selectproject.SelectProjectWithKeycloakPage;
@@ -28,7 +29,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import de.adesso.budgeteer.web.pages.dashboard.DashboardPage;
 
 import java.util.List;
 

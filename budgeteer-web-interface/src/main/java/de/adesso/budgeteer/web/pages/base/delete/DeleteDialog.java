@@ -1,8 +1,8 @@
 package de.adesso.budgeteer.web.pages.base.delete;
 
+import de.adesso.budgeteer.web.pages.base.dialogpage.DialogPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
-import de.adesso.budgeteer.web.pages.base.dialogpage.DialogPage;
 
 public abstract class DeleteDialog extends DialogPage{
 

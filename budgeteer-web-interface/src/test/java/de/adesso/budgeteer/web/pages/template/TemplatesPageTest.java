@@ -1,10 +1,10 @@
 package de.adesso.budgeteer.web.pages.template;
 
-import org.apache.wicket.util.tester.WicketTester;
-import org.junit.jupiter.api.Test;
 import de.adesso.budgeteer.web.AbstractWebTestTemplate;
 import de.adesso.budgeteer.web.pages.templates.TemplatesPage;
 import de.adesso.budgeteer.web.pages.templates.templateimport.ImportTemplatesPage;
+import org.apache.wicket.util.tester.WicketTester;
+import org.junit.jupiter.api.Test;
 
 public class TemplatesPageTest extends AbstractWebTestTemplate {
 

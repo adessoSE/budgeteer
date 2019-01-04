@@ -1,5 +1,7 @@
 package de.adesso.budgeteer.service;
 
+import de.adesso.budgeteer.service.security.BudgeteerAuthenticationToken;
+import de.adesso.budgeteer.service.security.BudgeteerMethodSecurityExpressionRoot;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.kubek2k.springockito.annotations.SpringockitoContextLoader;
@@ -10,8 +12,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import de.adesso.budgeteer.service.security.BudgeteerAuthenticationToken;
-import de.adesso.budgeteer.service.security.BudgeteerMethodSecurityExpressionRoot;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(loader = SpringockitoContextLoader.class, locations = {"classpath:spring-service.xml", "classpath:spring-repository-mock.xml"})

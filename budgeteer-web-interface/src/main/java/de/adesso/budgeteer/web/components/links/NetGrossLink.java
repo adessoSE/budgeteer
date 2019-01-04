@@ -1,13 +1,13 @@
 package de.adesso.budgeteer.web.components.links;
 
 import de.adesso.budgeteer.web.BudgeteerSession;
+import de.adesso.budgeteer.web.components.tax.TaxSwitchLabelModel;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.StringResourceModel;
-import de.adesso.budgeteer.web.components.tax.TaxSwitchLabelModel;
 
 public class NetGrossLink extends Panel {
 

@@ -1,8 +1,11 @@
 package de.adesso.budgeteer.web.pages.user.edit.edituserform;
 
+import de.adesso.budgeteer.service.project.ProjectBaseData;
+import de.adesso.budgeteer.service.project.ProjectService;
 import de.adesso.budgeteer.service.user.*;
 import de.adesso.budgeteer.web.BudgeteerSession;
 import de.adesso.budgeteer.web.ClassAwareWrappingModel;
+import de.adesso.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
 import de.adesso.budgeteer.web.pages.base.AbstractChoiceRenderer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -13,10 +16,6 @@ import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import de.adesso.budgeteer.service.project.ProjectBaseData;
-import de.adesso.budgeteer.service.project.ProjectService;
-import de.adesso.budgeteer.service.user.*;
-import de.adesso.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
 
 import static org.wicketstuff.lazymodel.LazyModel.from;
 import static org.wicketstuff.lazymodel.LazyModel.model;

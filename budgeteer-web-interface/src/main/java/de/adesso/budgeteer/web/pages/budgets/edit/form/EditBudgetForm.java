@@ -6,10 +6,14 @@ import de.adesso.budgeteer.service.contract.ContractBaseData;
 import de.adesso.budgeteer.service.contract.ContractService;
 import de.adesso.budgeteer.web.BudgeteerSession;
 import de.adesso.budgeteer.web.ClassAwareWrappingModel;
+import de.adesso.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
+import de.adesso.budgeteer.web.components.money.MoneyTextField;
 import de.adesso.budgeteer.web.components.notificationlist.NotificationListPanel;
 import de.adesso.budgeteer.web.pages.base.AbstractChoiceRenderer;
 import de.adesso.budgeteer.web.pages.budgets.BudgetTagsModel;
 import de.adesso.budgeteer.web.pages.budgets.edit.EditBudgetPage;
+import de.adesso.budgeteer.web.pages.budgets.edit.tagsfield.TagsTextField;
+import de.adesso.budgeteer.web.pages.budgets.overview.BudgetsOverviewPage;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -27,10 +31,6 @@ import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.springframework.dao.DataIntegrityViolationException;
-import de.adesso.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
-import de.adesso.budgeteer.web.components.money.MoneyTextField;
-import de.adesso.budgeteer.web.pages.budgets.edit.tagsfield.TagsTextField;
-import de.adesso.budgeteer.web.pages.budgets.overview.BudgetsOverviewPage;
 
 import java.util.List;
 

@@ -1,11 +1,11 @@
 package de.adesso.budgeteer.persistence.budget;
 
+import de.adesso.budgeteer.service.notification.MissingContractForBudgetNotification;
 import org.joda.money.Money;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
-import de.adesso.budgeteer.service.notification.MissingContractForBudgetNotification;
 
 import java.util.List;
 

@@ -1,13 +1,13 @@
 package de.adesso.budgeteer.service.invoice;
 
 
-import org.junit.jupiter.api.Test;
 import de.adesso.budgeteer.MoneyUtil;
 import de.adesso.budgeteer.persistence.contract.ContractEntity;
 import de.adesso.budgeteer.persistence.contract.ContractInvoiceField;
 import de.adesso.budgeteer.persistence.invoice.InvoiceEntity;
 import de.adesso.budgeteer.persistence.invoice.InvoiceFieldEntity;
 import de.adesso.budgeteer.persistence.project.ProjectEntity;
+import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.util.Date;

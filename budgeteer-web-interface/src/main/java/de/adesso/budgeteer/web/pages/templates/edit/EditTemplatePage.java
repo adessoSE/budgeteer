@@ -3,13 +3,13 @@ package de.adesso.budgeteer.web.pages.templates.edit;
 import de.adesso.budgeteer.web.BudgeteerSession;
 import de.adesso.budgeteer.web.Mount;
 import de.adesso.budgeteer.web.pages.base.dialogpage.DialogPageWithBacklink;
+import de.adesso.budgeteer.web.pages.templates.TemplatesPage;
 import de.adesso.budgeteer.web.pages.templates.templateimport.TemplateFormInputDto;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
-import de.adesso.budgeteer.web.pages.templates.TemplatesPage;
 
 import static org.wicketstuff.lazymodel.LazyModel.from;
 import static org.wicketstuff.lazymodel.LazyModel.model;

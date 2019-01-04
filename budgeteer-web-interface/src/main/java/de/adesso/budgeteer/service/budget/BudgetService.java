@@ -12,15 +12,15 @@ import de.adesso.budgeteer.persistence.project.ProjectEntity;
 import de.adesso.budgeteer.persistence.project.ProjectRepository;
 import de.adesso.budgeteer.persistence.record.PlanRecordRepository;
 import de.adesso.budgeteer.persistence.record.WorkRecordRepository;
+import de.adesso.budgeteer.service.UnknownEntityException;
 import de.adesso.budgeteer.service.contract.ContractDataMapper;
 import de.adesso.budgeteer.web.BudgeteerSession;
+import de.adesso.budgeteer.web.components.listMultipleChoiceWithGroups.OptionGroup;
 import org.joda.money.BigMoney;
 import org.joda.money.Money;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
-import de.adesso.budgeteer.service.UnknownEntityException;
-import de.adesso.budgeteer.web.components.listMultipleChoiceWithGroups.OptionGroup;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;

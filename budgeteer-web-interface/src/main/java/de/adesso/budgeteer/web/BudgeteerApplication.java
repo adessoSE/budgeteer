@@ -1,5 +1,9 @@
 package de.adesso.budgeteer.web;
 
+import de.adesso.budgeteer.web.components.instantiation.BudgeteerRequiresProjectListener;
+import de.adesso.budgeteer.web.components.security.BudgeteerAuthorizationStrategy;
+import de.adesso.budgeteer.web.components.security.BudgeteerUnauthorizedComponentInstantiationListener;
+import de.adesso.budgeteer.web.pages.dashboard.DashboardPage;
 import de.adesso.wickedcharts.wicket7.JavaScriptResourceRegistry;
 import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.Session;
@@ -21,10 +25,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
-import de.adesso.budgeteer.web.components.instantiation.BudgeteerRequiresProjectListener;
-import de.adesso.budgeteer.web.components.security.BudgeteerAuthorizationStrategy;
-import de.adesso.budgeteer.web.components.security.BudgeteerUnauthorizedComponentInstantiationListener;
-import de.adesso.budgeteer.web.pages.dashboard.DashboardPage;
 
 import java.util.Set;
 

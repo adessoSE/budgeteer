@@ -2,6 +2,8 @@ package de.adesso.budgeteer.web.pages.base.basepage.budgetunitchoice;
 
 import de.adesso.budgeteer.MoneyUtil;
 import de.adesso.budgeteer.web.BudgeteerSession;
+import de.adesso.budgeteer.web.components.fontawesome.FontAwesomeIcon;
+import de.adesso.budgeteer.web.components.fontawesome.FontAwesomeIconType;
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
@@ -9,8 +11,6 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import de.adesso.budgeteer.web.components.fontawesome.FontAwesomeIcon;
-import de.adesso.budgeteer.web.components.fontawesome.FontAwesomeIconType;
 
 import java.util.List;
 

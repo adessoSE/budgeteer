@@ -1,8 +1,8 @@
 package de.adesso.budgeteer;
 
+import de.adesso.budgeteer.service.security.BudgeteerAuthenticationToken;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.security.core.context.SecurityContextHolder;
-import de.adesso.budgeteer.service.security.BudgeteerAuthenticationToken;
 
 /**
  * Test base class for service integration tests to set a authentication in the

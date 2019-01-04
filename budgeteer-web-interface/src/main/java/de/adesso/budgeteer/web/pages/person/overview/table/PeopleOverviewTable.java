@@ -1,6 +1,8 @@
 package de.adesso.budgeteer.web.pages.person.overview.table;
 
 import de.adesso.budgeteer.service.person.PersonBaseData;
+import de.adesso.budgeteer.web.components.dataTable.DataTableBehavior;
+import de.adesso.budgeteer.web.components.money.MoneyLabel;
 import de.adesso.budgeteer.web.pages.person.details.PersonDetailsPage;
 import de.adesso.budgeteer.web.pages.person.edit.EditPersonPage;
 import de.adesso.budgeteer.web.pages.person.overview.PeopleOverviewPage;
@@ -14,8 +16,6 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import de.adesso.budgeteer.web.components.dataTable.DataTableBehavior;
-import de.adesso.budgeteer.web.components.money.MoneyLabel;
 
 import java.util.List;
 

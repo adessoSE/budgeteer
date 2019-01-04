@@ -5,10 +5,10 @@ import de.adesso.budgeteer.web.pages.base.basepage.BasePage;
 import de.adesso.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
 import de.adesso.budgeteer.web.pages.budgets.overview.table.BudgetOverviewTable;
 import de.adesso.budgeteer.web.pages.budgets.overview.table.FilteredBudgetModelByContract;
-import de.adesso.budgeteer.web.pages.dashboard.DashboardPage;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
 import de.adesso.budgeteer.web.pages.contract.details.ContractDetailsPage;
 import de.adesso.budgeteer.web.pages.contract.overview.ContractOverviewPage;
+import de.adesso.budgeteer.web.pages.dashboard.DashboardPage;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 @Mount("/contracts/details/budgets/${id}")
 public class BudgetForContractOverviewPage extends BasePage {

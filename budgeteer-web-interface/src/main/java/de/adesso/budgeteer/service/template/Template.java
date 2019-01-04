@@ -1,8 +1,8 @@
 package de.adesso.budgeteer.service.template;
 
+import de.adesso.budgeteer.service.ReportType;
 import lombok.Data;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import de.adesso.budgeteer.service.ReportType;
 
 import java.io.Serializable;
 

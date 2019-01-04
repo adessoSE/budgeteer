@@ -1,12 +1,12 @@
 package de.adesso.budgeteer.web.pages.budgets.details.highlights;
 
-import org.apache.wicket.util.tester.WicketTester;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import de.adesso.budgeteer.MoneyUtil;
 import de.adesso.budgeteer.service.budget.BudgetDetailData;
 import de.adesso.budgeteer.service.budget.BudgetService;
 import de.adesso.budgeteer.web.AbstractWebTestTemplate;
+import org.apache.wicket.util.tester.WicketTester;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Arrays;
 import java.util.Date;

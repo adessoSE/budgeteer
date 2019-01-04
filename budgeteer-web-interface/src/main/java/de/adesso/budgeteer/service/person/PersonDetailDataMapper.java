@@ -2,8 +2,8 @@ package de.adesso.budgeteer.service.person;
 
 import de.adesso.budgeteer.MoneyUtil;
 import de.adesso.budgeteer.persistence.person.PersonDetailDataBean;
-import org.springframework.stereotype.Component;
 import de.adesso.budgeteer.service.AbstractMapper;
+import org.springframework.stereotype.Component;
 
 @Component
 public class PersonDetailDataMapper extends AbstractMapper<PersonDetailDataBean, PersonDetailData> {

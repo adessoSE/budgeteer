@@ -1,10 +1,10 @@
 package de.adesso.budgeteer.web.pages.person.overview;
 
-import org.apache.wicket.util.tester.WicketTester;
-import org.junit.jupiter.api.Test;
 import de.adesso.budgeteer.web.AbstractWebTestTemplate;
 import de.adesso.budgeteer.web.pages.person.overview.table.PeopleModel;
 import de.adesso.budgeteer.web.pages.person.overview.table.PeopleOverviewTable;
+import org.apache.wicket.util.tester.WicketTester;
+import org.junit.jupiter.api.Test;
 
 public class PeopleOverviewTableTest extends AbstractWebTestTemplate {
 

@@ -3,13 +3,13 @@ package de.adesso.budgeteer.service.contract.report;
 import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
+import de.adesso.budgeteer.IntegrationTestTemplate;
+import de.adesso.budgeteer.persistence.contract.ContractEntity;
+import de.adesso.budgeteer.persistence.contract.ContractRepository;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.data.Percentage;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import de.adesso.budgeteer.IntegrationTestTemplate;
-import de.adesso.budgeteer.persistence.contract.ContractEntity;
-import de.adesso.budgeteer.persistence.contract.ContractRepository;
 
 import java.util.Date;
 
