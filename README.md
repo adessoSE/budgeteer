@@ -18,7 +18,6 @@ your budgets are heading.
 ### Month Report
 ![Month Report](https://raw.githubusercontent.com/adessoAG/budgeteer/master/screenshots/month-report.png)
 
-## SSO using Keycloak
-
-Instead of using the default budgeteer authentication you can activate a preconfigured [Keycloak](http://www.keycloak.org/) for authentication and authorisation. 
-For detailed instructions on how to activate Keycloak have a look at the READMEKeycloak.md.
+## Wiki
+For information on how to set up and run the Budgeteer, use Keycloak for authentication and set up a local email server, visit 
+the Budgeteer [Wiki](https://github.com/adessoAG/budgeteer/wiki)
