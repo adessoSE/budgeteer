@@ -24,7 +24,7 @@ class PersonRepositoryTest extends IntegrationTestTemplate {
     @DatabaseTearDown(value = "findBaseData.xml", type = DatabaseOperation.DELETE_ALL)
     void testFindBaseDataByProjectId() throws Exception {
         List<PersonBaseDataBean> data = personRepository.findBaseDataByProjectId(1L);
-        Assertions.assertEquals(2, data.size());
+        Assertions.assertEquals(3, data.size());
 
         PersonBaseDataBean bean1 = data.get(0);
         Assertions.assertEquals(Long.valueOf(1), bean1.getId());
