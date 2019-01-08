@@ -81,8 +81,6 @@ public class EditUserForm extends Form<EditUserData> {
         Button submitButton = new Button("submitButton") {
             @Override
             public void onSubmit() {
-                boolean changePassword = false;
-
                 if (mailTextField.getInput().isEmpty()) {
                     error(EditUserForm.this.getString("form.mail.Required"));
                     return;
@@ -92,7 +90,7 @@ public class EditUserForm extends Form<EditUserData> {
                     EditUserForm.this.getModelObject().setMail(mailTextField.getInput());
 
                     // If the user has changed his mail address, this will be displayed to him.
-                    userService.saveUser(EditUserForm.this.getModelObject(), changePassword);
+                    userService.saveUser(EditUserForm.this.getModelObject(), false);
                     if (!mailTextField.getInput().equals(currentEmail)) {
                         userService.createNewVerificationTokenForUser(userService.getUserById(EditUserForm.this.getModelObject().getId()));
                         success(getString("message.successVerification"));
@@ -257,9 +255,9 @@ public class EditUserForm extends Form<EditUserData> {
                         if(!currentPassword.equals(currentPasswordCheck)){
                             feedbackPanelChangePassword.error(getString("message.wrongPassword"));
                         }else{
-                            EditUserForm.this.getModelObject().setPassword(newPassword);
+                            EditUserForm.this.getModelObject().setPassword(new PasswordHasher().hash(newPassword));
                             try {
-                                userService.saveUser(EditUserForm.this.getModelObject(), true);
+                                userService.saveUser(EditUserForm.this.getModelObject(), false);
                             } catch (UsernameAlreadyInUseException e) {
                                 feedbackPanelChangePassword.error("message.duplicateUserName");
                             } catch (MailAlreadyInUseException e) {
