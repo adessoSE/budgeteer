@@ -29,6 +29,11 @@ public interface FixedDailyRateRepository extends QueryDslPredicateExecutor<Fixe
 
     @Query("select new org.wickedsource.budgeteer.service.fixedDailyRate.FixedDailyRate(r.id, r.budget.id, r.moneyAmount, r.startDate, r.endDate, r.description, r.name, r.budget.contract.taxRate, r.days) " +
             "from FixedDailyRateEntity r " +
+            "where r.budget.id = :budgetId and r.endDate >= :startDate")
+    List<FixedDailyRate> getFixedDailyRatesByBudgetId(@Param("budgetId") long budgetId, @Param("startDate") Date start);
+
+    @Query("select new org.wickedsource.budgeteer.service.fixedDailyRate.FixedDailyRate(r.id, r.budget.id, r.moneyAmount, r.startDate, r.endDate, r.description, r.name, r.budget.contract.taxRate, r.days) " +
+            "from FixedDailyRateEntity r " +
             "where r.budget.project.id = :projectId ")
     List<FixedDailyRate> getFixedDailyRatesByProjectId(@Param("projectId") long projectId);
 
@@ -37,10 +42,15 @@ public interface FixedDailyRateRepository extends QueryDslPredicateExecutor<Fixe
             "where f.budget.project.id=:projectId and f.endDate >= :startDate")
     List<FixedDailyRate> getFixedDailyRatesByProjectIdAndStartDate(@Param("projectId") long projectId, @Param("startDate") Date start);
 
-    @Query("select new org.wickedsource.budgeteer.service.fixedDailyRate.FixedDailyRate(r.id, b.id, r.moneyAmount, r.startDate, r.endDate, r.description, r.name, b.contract.taxRate, r.days) " +
+    @Query("select distinct new org.wickedsource.budgeteer.service.fixedDailyRate.FixedDailyRate(r.id, b.id, r.moneyAmount, r.startDate, r.endDate, r.description, r.name, b.contract.taxRate, r.days) " +
             "from FixedDailyRateEntity r " +
-            "join r.budget b join b.tags t where b.project.id=:projectId and t.tag in (:tags) ")
+            "join r.budget b join b.tags t join b.project p where p.id=:projectId and t.tag in (:tags) ")
     List<FixedDailyRate> getFixedDailyRatesByProjectIdAndTags(@Param("projectId") long projectId, @Param("tags") List<String> tags);
+
+    @Query("select distinct new org.wickedsource.budgeteer.service.fixedDailyRate.FixedDailyRate(r.id, b.id, r.moneyAmount, r.startDate, r.endDate, r.description, r.name, b.contract.taxRate, r.days) " +
+            "from FixedDailyRateEntity r " +
+            "join r.budget b join b.tags t join b.project p where p.id=:projectId and t.tag in (:tags) and r.endDate >= :startDate")
+    List<FixedDailyRate> getFixedDailyRatesByProjectIdAndTags(@Param("projectId") long projectId, @Param("tags") List<String> tags, @Param("startDate") Date start);
 
     @Query("select new org.wickedsource.budgeteer.service.fixedDailyRate.FixedDailyRate(r.id, r.budget.id, r.moneyAmount, r.startDate, r.endDate, r.description, r.name, r.budget.contract.taxRate, r.days) " +
             "from FixedDailyRateEntity r " +

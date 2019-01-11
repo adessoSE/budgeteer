@@ -1,5 +1,6 @@
 package org.wickedsource.budgeteer.service;
 
+import org.openxmlformats.schemas.drawingml.x2006.main.CTRegularTextRun;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -101,11 +102,17 @@ public class DateUtil {
      */
     public static Date getEndOfMonth(int month, int year) {
         GregorianCalendar cal = new GregorianCalendar(year, month, 1);
+        return getEndOfMonth(cal);
+    }
 
+    /***
+     * @return Get a Date set to the last day of a month
+     */
+    public static Date getEndOfMonth(Calendar cal) {
         int maxDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
-        cal.set(Calendar.DAY_OF_MONTH, maxDay);
+        Calendar copy = new GregorianCalendar(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), maxDay);
 
-        return cal.getTime();
+        return copy.getTime();
     }
 
     /***
@@ -124,6 +131,10 @@ public class DateUtil {
         cal.set(Calendar.MONTH, month);
         cal.set(Calendar.YEAR, year);
 
+        return getDaysInMonth(cal);
+    }
+
+    public static int getDaysInMonth(Calendar cal) {
         return cal.getActualMaximum(Calendar.DAY_OF_MONTH);
     }
 

@@ -1,0 +1,18 @@
+<dataset>
+
+    <PROJECT id="1" name="project1"/>
+
+    <CONTRACT id="1" CONTRACT_NAME="contract1" PROJECT_ID="1" BUDGET="1000000" INTERNAL_NUMBER="1" START_DATE="2015-01-01"
+              CONTRACT_TYPE="0" TAXRATE="10.0"/>
+
+    <BUDGET id="1" name="Budget 1" total="100000" import_key="budget1" project_id="1" CONTRACT_ID="1"/>
+    <BUDGET id="2" name="Budget 2" total="100000" import_key="budget2" project_id="1" CONTRACT_ID="1"/>
+
+    <FIXED_DAILY_RATE id="1" BUDGET_ID="1" START_DATE="2018-01-01" END_DATE="2018-01-10" DAYS="10"
+                      MONEY_AMOUNT="100" NAME="r1" DESCRIPTION="r1"/>
+    <FIXED_DAILY_RATE id="2" BUDGET_ID="1" START_DATE="2018-01-01" END_DATE="2018-03-01" DAYS="90"
+                      MONEY_AMOUNT="200" NAME="r2" DESCRIPTION="r2"/>
+    <FIXED_DAILY_RATE id="3" BUDGET_ID="2" START_DATE="2018-01-01" END_DATE="2018-01-18" DAYS="18"
+                      MONEY_AMOUNT="100" NAME="r3" DESCRIPTION="r3"/>
+
+</dataset>

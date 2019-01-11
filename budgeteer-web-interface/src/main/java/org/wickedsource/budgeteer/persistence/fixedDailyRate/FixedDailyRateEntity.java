@@ -4,20 +4,24 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.apache.poi.xssf.model.ThemesTable;
 import org.joda.money.Money;
 import org.wickedsource.budgeteer.persistence.budget.BudgetEntity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
+@Table(name = "FIXED_DAILY_RATE")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class FixedDailyRateEntity {
+public class FixedDailyRateEntity implements Serializable {
     @Id
-    @GeneratedValue
+    @SequenceGenerator(name = "SEQ_FIXED_DAILY_RATE_ID", sequenceName = "SEQ_FIXED_DAILY_RATE_ID")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_FIXED_DAILY_RATE_ID")
     private long id;
 
     @ManyToOne(optional = false)
@@ -32,16 +36,16 @@ public class FixedDailyRateEntity {
     @Column(name = "END_DATE")
     private Date endDate;
 
-    @Column
+    @Column(name = "DAYS")
     private Integer days;
 
-    @Column(nullable = false)
+    @Column(name = "MONEY_AMOUNT", nullable = false)
     private Money moneyAmount;
 
-    @Column(nullable = false)
+    @Column(name = "NAME", nullable = false)
     private String name;
 
-    @Column
+    @Column(name = "DESCRIPTION")
     private String description;
 
     @Override
@@ -55,8 +59,11 @@ public class FixedDailyRateEntity {
         if (startDate != null ? !startDate.equals(that.startDate) : that.startDate != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (description != null ? !description.equals(that.description) : that.description != null) return false;
+        if (days != that.days) return false;
+        if (moneyAmount != null ? !moneyAmount.equals(that.moneyAmount) : that.moneyAmount != null) return false;
         return true;
     }
+
 
     @Override
     public int hashCode() {
@@ -66,6 +73,8 @@ public class FixedDailyRateEntity {
         result = 31 * result + (endDate != null ? endDate.hashCode() : 0);
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31* result + (days ^(days >>>32));
+        result = 31 * result + (moneyAmount != null ? moneyAmount.hashCode() : 0);
         return result;
     }
 }

@@ -1,0 +1,39 @@
+<dataset>
+
+    <PROJECT id="2" name="project2"/>
+    <PROJECT id="1" name="project1"/>
+
+    <CONTRACT id="1" CONTRACT_NAME="contract1" PROJECT_ID="1" BUDGET="1000000" INTERNAL_NUMBER="1" START_DATE="2015-01-01"
+              CONTRACT_TYPE="0" TAXRATE="10.0"/>
+
+    <CONTRACT id="2" CONTRACT_NAME="contract2" PROJECT_ID="2" BUDGET="1000000" INTERNAL_NUMBER="2" START_DATE="2015-01-01"
+              CONTRACT_TYPE="0" TAXRATE="20.0"/>
+
+    <BUDGET id="1" name="Budget 1" total="100000" import_key="budget1" project_id="1" CONTRACT_ID="1"/>
+    <BUDGET_TAG budget_id="1" tag="Tag 1"/>
+    <BUDGET_TAG budget_id="1" tag="Tag 2"/>
+
+    <BUDGET id="2" name="Budget 2" total="100000" import_key="budget2" project_id="1" CONTRACT_ID="1"/>
+    <BUDGET_TAG budget_id="2" tag="Tag 1"/>
+    <BUDGET_TAG budget_id="2" tag="Tag 2"/>
+    <BUDGET_TAG budget_id="2" tag="Tag 3"/>
+
+    <BUDGET id="3" name="Budget 3" total="100000" import_key="budget3" project_id="1" CONTRACT_ID="1"/>
+    <BUDGET_TAG budget_id="3" tag="Tag 2"/>
+    <BUDGET_TAG budget_id="3" tag="Tag 3"/>
+
+    <BUDGET id="4" name="Budget 4" total="100000" import_key="budget4" project_id="2" CONTRACT_ID="2"/>
+    <BUDGET_TAG budget_id="4" tag="Tag 1"/>
+    <BUDGET_TAG budget_id="4" tag="Tag 2"/>
+    <BUDGET_TAG budget_id="4" tag="Tag 3"/>
+
+
+    <FIXED_DAILY_RATE id="1" BUDGET_ID="1" START_DATE="2018-01-01" END_DATE="2018-01-6" DAYS="6"
+                      MONEY_AMOUNT="100" NAME="r1" DESCRIPTION="r1"/>
+    <FIXED_DAILY_RATE id="2" BUDGET_ID="2" START_DATE="2018-01-01" END_DATE="2018-01-6" DAYS="6"
+                      MONEY_AMOUNT="100" NAME="r2" DESCRIPTION="r2"/>
+    <FIXED_DAILY_RATE id="3" BUDGET_ID="3" START_DATE="2018-01-01" END_DATE="2018-01-6" DAYS="6"
+                      MONEY_AMOUNT="100" NAME="r3" DESCRIPTION="r3"/>
+    <FIXED_DAILY_RATE id="4" BUDGET_ID="4" START_DATE="2018-01-01" END_DATE="2018-01-6" DAYS="6"
+                      MONEY_AMOUNT="100" NAME="r4" DESCRIPTION="r4"/>
+</dataset>

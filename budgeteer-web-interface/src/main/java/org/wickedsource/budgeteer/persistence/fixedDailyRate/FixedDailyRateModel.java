@@ -19,6 +19,7 @@ public class FixedDailyRateModel extends LoadableDetachableModel<List<FixedDaily
 
     public FixedDailyRateModel(long budgetId, FixedDailyRateService service) {
         this.budgetId = budgetId;
+
         this.service = service;
     }
 

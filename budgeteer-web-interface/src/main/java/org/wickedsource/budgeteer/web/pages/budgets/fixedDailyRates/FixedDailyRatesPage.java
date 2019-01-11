@@ -17,18 +17,17 @@ import org.wickedsource.budgeteer.web.pages.budgets.fixedDailyRates.table.FixedD
 import org.wickedsource.budgeteer.web.pages.budgets.overview.BudgetsOverviewPage;
 import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 
-import static org.wicketstuff.lazymodel.LazyModel.from;
-
 @Mount({"budgets/details/fixedDailyRates/${id}", "budgets/details/fixedDailyRates"})
 public class FixedDailyRatesPage extends BasePage {
     @SpringBean
-    private FixedDailyRateService manualRecordService;
+    private FixedDailyRateService fixedDailyRateService;
     private FixedDailyRateModel model;
 
     public FixedDailyRatesPage(PageParameters parameters) {
         super(parameters);
-        model = new FixedDailyRateModel(getPageParameters().get("id").toLong(), manualRecordService);
-        add(new FixedDailyRatesTable("ratesTable", model, parameters));
+        model = new FixedDailyRateModel(getPageParameters().get("id").toLong(), fixedDailyRateService);
+        FixedDailyRatesTable table = new FixedDailyRatesTable("ratesTable", model, parameters);
+        add(table);
         add(createManualRecordLink("addRateLink"));
     }
 

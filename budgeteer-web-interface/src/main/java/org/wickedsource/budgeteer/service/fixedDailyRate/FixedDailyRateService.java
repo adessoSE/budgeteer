@@ -51,7 +51,11 @@ public class FixedDailyRateService {
      * @return the fixed daily rate with the given ID
      */
     public FixedDailyRate loadFixedDailyRate(long fixedDailyRateId) {
-        return new FixedDailyRate(fixedDailyRateRepository.findOne(fixedDailyRateId));
+        FixedDailyRateEntity entity = fixedDailyRateRepository.findOne(fixedDailyRateId);
+        if(entity != null) {
+            return new FixedDailyRate(entity);
+        }
+        return null;
     }
 
     /**
@@ -200,7 +204,7 @@ public class FixedDailyRateService {
      * @return Get the cent amounts of all fixed daily rates of budgets with the given tags of a given project aggregated by week after a given start date
      */
     public List<WeeklyAggregatedRecordWithTitleAndTaxBean> aggregateByWeekForBudgetsWithTax(long projectId, List<String> tags, Date startDate) {
-        return aggregateWeeklyWithStartDate(fixedDailyRateRepository.getFixedDailyRatesByProjectIdAndTags(projectId, tags), startDate);
+        return aggregateWeeklyWithStartDate(fixedDailyRateRepository.getFixedDailyRatesByProjectIdAndTags(projectId, tags, startDate), startDate);
     }
 
     /**
@@ -260,7 +264,7 @@ public class FixedDailyRateService {
      * @return Get the cent amounts of all fixed daily rates of a given budget aggregated by month after a given start date
      */
     public List<MonthlyAggregatedRecordWithTitleAndTaxBean> aggregateByMonthForBudgetWithTax(long budgetId, Date startDate) {
-        return aggregateMonthlyWithStartDate(fixedDailyRateRepository.getFixedDailyRatesByBudgetId(budgetId), startDate);
+        return aggregateMonthlyWithStartDate(fixedDailyRateRepository.getFixedDailyRatesByBudgetId(budgetId, startDate), startDate);
     }
 
     /**
@@ -269,7 +273,7 @@ public class FixedDailyRateService {
      * @return Get the cent amounts of all fixed daily rates of a given project aggregated by month after a given start date
      */
     public List<MonthlyAggregatedRecordWithTitleAndTaxBean> aggregateByMonthForBudgetsWithTax(long projectId, Date startDate) {
-        return aggregateMonthlyWithStartDate(fixedDailyRateRepository.getFixedDailyRatesByProjectId(projectId), startDate);
+        return aggregateMonthlyWithStartDate(fixedDailyRateRepository.getFixedDailyRatesByProjectIdAndStartDate(projectId, startDate), startDate);
     }
 
     /**
@@ -279,7 +283,7 @@ public class FixedDailyRateService {
      * @return Get the cent amounts of all fixed daily rates of budgets with the given budget tags of a given project aggregated by month after a given start date
      */
     public List<MonthlyAggregatedRecordWithTitleAndTaxBean> aggregateByMonthForBudgetsWithTax(long projectId, List<String> tags, Date startDate) {
-        return aggregateMonthlyWithStartDate(fixedDailyRateRepository.getFixedDailyRatesByProjectIdAndTags(projectId, tags), startDate);
+        return aggregateMonthlyWithStartDate(fixedDailyRateRepository.getFixedDailyRatesByProjectIdAndTags(projectId, tags, startDate), startDate);
     }
 
     private List<MonthlyAggregatedRecordWithTitleAndTaxBean> getMonthlyRecordsOfRate(FixedDailyRate rate, Date startDate) {
@@ -289,16 +293,18 @@ public class FixedDailyRateService {
         Calendar endCalendar = DateUtil.getCalendarOfDate(rate.getEndDate());
 
         // Calculate number the days of the rate in its start month
-        Calendar helpCalendar = DateUtil.getCalendarOfDate(DateUtil.getEndOfMonth(currentCalendar.get(Calendar.MONTH), currentCalendar.get(Calendar.YEAR)));
+        Calendar helpCalendar = DateUtil.getCalendarOfDate(DateUtil.getEndOfMonth(currentCalendar));
         int daysInStartMonth = new DateRange(startDate, helpCalendar.getTime()).getNumberOfDays() + 1;
 
         // Calculate number the days of the rate in its end month
-        helpCalendar = DateUtil.getCalendarOfDate(DateUtil.getEndOfMonth(endCalendar.get(Calendar.MONTH), endCalendar.get(Calendar.YEAR)));
+        helpCalendar = DateUtil.getCalendarOfDate(DateUtil.getEndOfMonth(endCalendar));
         helpCalendar.set(Calendar.DAY_OF_MONTH, 1);
         int daysInEndMonth = new DateRange(helpCalendar.getTime(), rate.getEndDate()).getNumberOfDays() + 1;
 
+        int daysInRate = new DateRange(startDate, rate.getEndDate()).getNumberOfDays()+1;
+
         // Check if the rate spreads over more than one month
-        if (rate.getDays() > DateUtil.getDaysInMonth(helpCalendar.get(Calendar.MONTH), helpCalendar.get(Calendar.YEAR))) {
+        if (daysInRate > DateUtil.getDaysInMonth(helpCalendar)) {
             helpCalendar.add(Calendar.DAY_OF_YEAR, -1);
 
             // Add records for the start month
@@ -307,7 +313,7 @@ public class FixedDailyRateService {
 
             // Add records for each middle month
             while (currentCalendar.getTime().before(helpCalendar.getTime())) {
-                records.add(getMonthlyRecord(currentCalendar, rate, DateUtil.getDaysInMonth(helpCalendar.get(Calendar.MONTH), helpCalendar.get(Calendar.YEAR))));
+                records.add(getMonthlyRecord(currentCalendar, rate, DateUtil.getDaysInMonth(helpCalendar)));
                 currentCalendar.add(Calendar.MONTH, 1);
             }
 
@@ -317,7 +323,7 @@ public class FixedDailyRateService {
             // Check if the rate is only in one month
             if (currentCalendar.get(Calendar.MONTH) == endCalendar.get(Calendar.MONTH)) {
                 // Add a record for the rate's month
-                records.add(getMonthlyRecord(currentCalendar, rate, new DateRange(startDate, rate.getEndDate()).getNumberOfDays() + 1));
+                records.add(getMonthlyRecord(currentCalendar, rate, daysInRate));
             } else {
                 // Add a record for the start and a record for the end month
                 records.add(getMonthlyRecord(currentCalendar, rate, daysInStartMonth));
