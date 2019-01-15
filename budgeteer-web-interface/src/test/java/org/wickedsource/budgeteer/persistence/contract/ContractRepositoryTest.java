@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.budgeteer.IntegrationTestTemplate;
+import org.wickedsource.budgeteer.MoneyUtil;
 
 import java.text.ParseException;
 
@@ -65,6 +66,7 @@ class ContractRepositoryTest extends IntegrationTestTemplate {
     void testGetBudgetLeftByContractId() {
         Double BudgetLeft1 = repository.getBudgetLeftByContractId(1L);
         Double BudgetLeft2 = repository.getBudgetLeftByContractId(2L);
+
         Assertions.assertEquals(9400, BudgetLeft1,10e-8);
         Assertions.assertEquals(10000, BudgetLeft2,10e-8);
     }

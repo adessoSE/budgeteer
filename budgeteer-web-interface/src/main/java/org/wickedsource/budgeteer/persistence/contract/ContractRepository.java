@@ -1,6 +1,7 @@
 package org.wickedsource.budgeteer.persistence.contract;
 
 
+import org.joda.money.Money;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -104,10 +105,13 @@ public interface ContractRepository extends CrudRepository<ContractEntity, Long>
     Double getSpentBudgetByContractId(@Param("contractId") long contractId);
 
     @Query("select (c.budget " +
-            "- coalesce((select sum(wr.minutes * wr.dailyRate)/ 60 / 8 from WorkRecordEntity wr where wr.budget.contract.id = :contractId) ,0)" +
-            "- coalesce( ( select sum(record.moneyAmount) from ManualRecordEntity record where record.budget.contract.id = :contractId), 0))" +
-            "- coalesce((select sum(fixed.moneyAmount * fixed.days) from FixedDailyRateEntity fixed where fixed.budget.contract.id = :contractId),0)" +
-            " from ContractEntity c where c.id = :contractId")
+            "- coalesce((select sum(wr.minutes * wr.dailyRate)/ 60 / 8 " +
+            "from WorkRecordEntity wr " +
+            "where wr.budget.contract.id = :contractId) ,0) " +
+            "- coalesce((select sum(manual.moneyAmount) from ManualRecordEntity manual where manual.budget.contract.id = :contractId) ,0) " +
+            "- coalesce((select sum(fixed.moneyAmount * fixed.days) from FixedDailyRateEntity fixed where fixed.budget.contract.id = :contractId) ,0)) " +
+            "from ContractEntity c where c.id = :contractId " +
+            "group by c.budget")
     Double getBudgetLeftByContractId(@Param("contractId") long contractId);
 
     @Modifying
