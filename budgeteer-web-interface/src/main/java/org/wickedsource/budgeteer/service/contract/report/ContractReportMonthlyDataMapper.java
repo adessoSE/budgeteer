@@ -8,6 +8,7 @@ import org.wickedsource.budgeteer.persistence.contract.ContractFieldEntity;
 import org.wickedsource.budgeteer.persistence.contract.ContractRepository;
 import org.wickedsource.budgeteer.persistence.contract.ContractStatisticBean;
 import org.wickedsource.budgeteer.service.contract.DynamicAttributeField;
+import org.wickedsource.budgeteer.service.statistics.StatisticsService;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -19,9 +20,12 @@ public class ContractReportMonthlyDataMapper {
     @Autowired
     private ContractRepository contractRepository;
 
+    @Autowired
+    private StatisticsService statisticsService;
+
     public ContractReportData map(ContractEntity contract, Date endDate) {
         LocalDate end = endDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        ContractStatisticBean statistics = contractRepository.getContractStatisticByMonthAndYear(contract.getId(), end.getMonthValue()-1, end.getYear());
+        ContractStatisticBean statistics = statisticsService.getContractStatisticByMonthAndYear(contract.getId(), end.getMonthValue() - 1, end.getYear());
 
         LocalDate firstOfMonth = end.withDayOfMonth(1);
 
@@ -30,7 +34,7 @@ public class ContractReportMonthlyDataMapper {
         report.setContractId(contract.getInternalNumber());
 
         Map<String, DynamicAttributeField> contractAttributes = new HashMap<>();
-        for(ContractFieldEntity fieldEntity : contract.getContractFields()){
+        for (ContractFieldEntity fieldEntity : contract.getContractFields()) {
             contractAttributes.put(fieldEntity.getField().getFieldName(), new DynamicAttributeField(fieldEntity.getField().getFieldName(), fieldEntity.getValue()));
         }
         report.setAttributes(new ArrayList<>(contractAttributes.values()));
@@ -39,7 +43,7 @@ public class ContractReportMonthlyDataMapper {
         report.setFrom(Date.from(firstOfMonth.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
         report.setUntil(endDate);
         report.setBudgetSpent_net(MoneyUtil.createMoneyFromCents(statistics.getSpentBudget()).getAmount().doubleValue());
-        report.setBudgetLeft_net(contract.getBudget().getAmount().doubleValue() - MoneyUtil.createMoneyFromCents(contractRepository.getSpentBudgetByContractIdUntilDate(contract.getId(),end.getMonthValue()-1,end.getYear()).longValue()).getAmount().doubleValue());
+        report.setBudgetLeft_net(contract.getBudget().getAmount().doubleValue() - MoneyUtil.createMoneyFromCents(contractRepository.getSpentBudgetByContractIdUntilDate(contract.getId(), end.getMonthValue() - 1, end.getYear()).longValue()).getAmount().doubleValue());
         report.setBudgetTotal_net(contract.getBudget().getAmount().doubleValue());
 
         double taxCoefficient = 1.0 + report.getTaxRate().doubleValue();
@@ -51,10 +55,10 @@ public class ContractReportMonthlyDataMapper {
         return report;
     }
 
-    public List<ContractReportData> map(List<ContractEntity> entityList, Date endDate){
+    public List<ContractReportData> map(List<ContractEntity> entityList, Date endDate) {
         List<ContractReportData> result = new LinkedList<>();
-        for(ContractEntity entity : entityList){
-            result.add(map(entity,endDate));
+        for (ContractEntity entity : entityList) {
+            result.add(map(entity, endDate));
         }
         return result;
     }

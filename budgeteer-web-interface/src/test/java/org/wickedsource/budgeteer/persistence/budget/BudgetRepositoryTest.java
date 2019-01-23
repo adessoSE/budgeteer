@@ -83,4 +83,11 @@ class BudgetRepositoryTest extends IntegrationTestTemplate {
         Assertions.assertEquals(1.0, taxCoefficient4, 10e-8);
     }
 
+    @Test
+    @DatabaseSetup("getSpentBudgetOfBudget.xml")
+    @DatabaseTearDown(value = "getSpentBudgetOfBudget.xml", type = DatabaseOperation.DELETE_ALL)
+    void testGetSpentBudgetOfBudget() {
+        double spent = budgetRepository.getSpentBudgetOfBudget(1);
+        Assertions.assertEquals(1000.0, spent);
+    }
 }

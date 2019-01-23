@@ -876,7 +876,7 @@ public class StatisticsService {
         return result;
     }
 
-    private ContractStatisticBean getContractStatisticAggregatedTillMonthAndYear(long contractId, int month, int year) {
+    public ContractStatisticBean getContractStatisticAggregatedTillMonthAndYear(long contractId, int month, int year) {
         double contractBudget = contractRepository.getBudgetOfContract(contractId);
         double spentByWork = workRecordRepository.getSpentMoneyOfContractTillMonthAndYear(contractId, month, year);
         double spentByManual = manualRecordRepository.getSpentMoneyOfContractTillMonthAndYear(contractId, month, year);
@@ -906,7 +906,7 @@ public class StatisticsService {
         return result;
     }
 
-    private ContractStatisticBean getContractStatisticByMonthAndYear(long contractId, int month, int year) {
+    public ContractStatisticBean getContractStatisticByMonthAndYear(long contractId, int month, int year) {
         double contractBudget = contractRepository.getBudgetOfContract(contractId);
         double spentByWork = workRecordRepository.getSpentMoneyOfContractOfMonth(contractId, month, year);
         double spentByManual = manualRecordRepository.getSpentMoneyOfContractOfMonth(contractId, month, year);

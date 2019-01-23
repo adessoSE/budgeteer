@@ -16,83 +16,6 @@ public interface ContractRepository extends CrudRepository<ContractEntity, Long>
     @Query("select cif from ContractInvoiceField cif where cif.contract.id = :contractId AND cif.fieldName = :fieldName")
     ContractInvoiceField findInvoiceFieldByName(@Param("contractId") long contractID, @Param("fieldName") String fieldName);
 
-    /**
-     * returns a ContractStatisticBean for a given contract till the given month and year.
-     */
-    @Query("select new org.wickedsource.budgeteer.persistence.contract.ContractStatisticBean" +
-            "(:year+0," + // year
-            "case when (abs(cast(c.budget AS double)) < 10e-16) then null " + //progress
-            "else (" +
-            "((SELECT coalesce(sum(wr.minutes * wr.dailyRate/ 60 / 8),0)" +
-            " FROM WorkRecordEntity wr" +
-            " WHERE wr.budget.contract.id = :contractId " +
-            "AND(wr.year < :year " +
-            "OR (wr.year = :year AND wr.month <= :month)))" +
-            "- (select coalesce(sum(record.moneyAmount),0) " +
-            "from ManualRecordEntity record " +
-            "where record.budget.contract.id = :contractId and record.month <= :month and record.year <= :year))" +
-            " / cast(c.budget AS double)" +
-            ") end, " +
-            "(c.budget " + // remainingContractBudget
-            "- ( select coalesce(sum(record.moneyAmount),0) " +
-            "from ManualRecordEntity record " +
-            "where record.budget.contract.id = :contractId and record.month <= :month and record.year <= :year)" +
-            "- (coalesce(" +
-            "(select sum(wr.minutes * wr.dailyRate/ 60 / 8) " +
-            "from WorkRecordEntity wr " +
-            "where wr.budget.contract.id = :contractId " +
-            "AND (wr.year < :year OR (wr.year = :year AND wr.month <= :month))" +
-            "),0l))" +
-            ")," +
-            "coalesce(" + //spentBudget
-            "((select sum(wr.minutes * wr.dailyRate/ 60 / 8)" +
-            "from WorkRecordEntity wr " +
-            "where wr.budget.contract.id = :contractId " +
-            "AND (wr.year < :year OR (wr.year = :year AND wr.month <= :month))" +
-            ")" +
-            "+ (select coalesce(sum(record.moneyAmount),0) " +
-            "from ManualRecordEntity record " +
-            "where record.budget.contract.id = :contractId and record.month <= :month and record.year <= :year)" +
-            "),0l)," +
-            "coalesce((" + //invoicedBudget
-            "select sum(i.invoiceSum) " +
-            "from InvoiceEntity i " +
-            "where i.contract.id = :contractId " +
-            "AND (i.year < :year OR (i.year = :year AND i.month <= :month) ))" +
-            ",0l)" +
-            ",:month +0" +
-            ") from ContractEntity c " +
-            "where c.id = :contractId")
-    ContractStatisticBean getContractStatisticAggregatedByMonthAndYear(@Param("contractId") Long contractId, @Param("month") Integer month, @Param("year") Integer year);
-
-
-    /**
-     * returns a ContractStatisticBean for a given contract for the given month and year.
-     */
-    @Query("select new org.wickedsource.budgeteer.persistence.contract.ContractStatisticBean(:year+0," + //year
-            "case when (abs(cast(c.budget AS double)) < 10e-16) then null else (" + //progress
-            "((SELECT coalesce(sum(wr.minutes * wr.dailyRate/ 60 / 8),0)" +
-            " FROM WorkRecordEntity wr" +
-            " WHERE wr.budget.contract.id = :contractId AND (wr.year < :year OR (wr.year = :year AND wr.month <= :month)))" +
-            "+(select coalesce(sum(record.moneyAmount),0) from ManualRecordEntity record where record.budget.contract.id = :contractId and record.month = :month and record.year = :year))" +
-            " / cast(c.budget AS double)" +
-            ") end, " +
-            "(c.budget - coalesce((select sum(wr.minutes * wr.dailyRate/ 60 / 8) " + //remaining
-            "from WorkRecordEntity wr where wr.budget.contract.id = :contractId " +
-            "AND (wr.year = :year AND wr.month = :month)" +
-            "),0l)" +
-            "- (select coalesce(sum(record.moneyAmount),0) from ManualRecordEntity record where record.budget.contract.id = :contractId and record.month = :month and record.year = :year)" +
-            ")," +
-            "(coalesce((select sum(wr.minutes * wr.dailyRate/ 60 / 8)" + //spent
-            "from WorkRecordEntity wr where wr.budget.contract.id = :contractId " +
-            "AND (wr.year = :year AND wr.month = :month)" +
-            "),0l)+ " +
-            "(select coalesce(sum(record.moneyAmount),0) from ManualRecordEntity record where record.budget.contract.id = :contractId and record.month = :month and record.year = :year))," +
-            "coalesce((select sum(i.invoiceSum) from InvoiceEntity i where i.contract.id = :contractId AND (i.year = :year AND i.month = :month) ),0l)" + //invoiced
-            ",:month +0" +
-            ") from ContractEntity c where c.id = :contractId")
-    ContractStatisticBean getContractStatisticByMonthAndYear(@Param("contractId") Long contractId, @Param("month") Integer month, @Param("year") Integer year);
-
     @Query("select (coalesce(sum(wr.minutes * wr.dailyRate/ 60 / 8),0)" +
             "+ (select coalesce(sum(record.moneyAmount),0) " +
             "from ManualRecordEntity record " +
@@ -130,11 +53,6 @@ public interface ContractRepository extends CrudRepository<ContractEntity, Long>
 
     @Query("select coalesce(sum(wr.minutes * wr.dailyRate/ 60 / 8),0) from WorkRecordEntity wr where wr.budget.contract.id = :contractId AND (wr.year < :year OR (wr.year = :year AND wr.month <= :month))")
     Double getSpentBudgetByContractIdUntilDate(@Param("contractId") Long contractId, @Param("month") Integer month, @Param("year") Integer year);
-
-    @Query("select ( coalesce(sum(wr.minutes * wr.dailyRate/ 60 / 8),0)*"
-            + "coalesce((select 1.0+c.taxRate/100.0 from ContractEntity c where c.id = :contractId),1.0)) "
-            + "from WorkRecordEntity wr where wr.budget.contract.id = :contractId")
-    Double getSpentBudgetGrossByContractId(@Param("contractId") Long contractId);
 
     @Query("select cast(c.budget AS double) from ContractEntity c " +
             "where c.id = :contractId")

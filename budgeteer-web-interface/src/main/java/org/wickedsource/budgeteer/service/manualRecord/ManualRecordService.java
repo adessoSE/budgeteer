@@ -34,7 +34,12 @@ public class ManualRecordService {
     }
 
     public ManualRecord loadManualRecord(long manualRecordId) {
-        return new ManualRecord(manualRecordRepository.findOne(manualRecordId));
+        ManualRecordEntity entity = manualRecordRepository.findOne(manualRecordId);
+        if (entity != null) {
+            return new ManualRecord(entity);
+        }
+
+        return null;
     }
 
     public long saveManualRecord(ManualRecord data) {

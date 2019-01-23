@@ -621,4 +621,20 @@ class WorkRecordRepositoryTest extends IntegrationTestTemplate {
         Assertions.assertEquals(2, records.size());
 
     }
+
+    @Test
+    @DatabaseSetup("getSpentMoneyOfContractTillMonthAndYear.xml")
+    @DatabaseTearDown(value = "getSpentMoneyOfContractTillMonthAndYear.xml", type = DatabaseOperation.DELETE_ALL)
+    void testGetSpentMoneyOfContractTillMonthAndYear() throws ParseException {
+        double spent = repository.getSpentMoneyOfContractTillMonthAndYear(1L, 11, 2015);
+        Assertions.assertEquals(spent,500);
+    }
+
+    @Test
+    @DatabaseSetup("getSpentMoneyOfContractOfMonth.xml")
+    @DatabaseTearDown(value = "getSpentMoneyOfContractOfMonth.xml", type = DatabaseOperation.DELETE_ALL)
+    void testGetSpentMoneyOfContractOfMonth() throws ParseException {
+       double spent = repository.getSpentMoneyOfContractOfMonth(1L, 1, 2015);
+        Assertions.assertEquals(spent,200 );
+    }
 }
