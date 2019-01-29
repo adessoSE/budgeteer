@@ -186,7 +186,7 @@ public class FixedDailyRateServiceTest extends ServiceIntegrationTestTemplate {
     @DatabaseSetup("fixedDailyRate.xml")
     @DatabaseTearDown(value = "fixedDailyRate.xml", type = DatabaseOperation.DELETE_ALL)
     void testAggregateByWeekForBudgetWithTaxWithStartDate() {
-        Calendar calendar = new GregorianCalendar(2018, 1, 5);
+        Calendar calendar = new GregorianCalendar(2018, Calendar.FEBRUARY, 5);
         Date startDate = calendar.getTime();
         List<WeeklyAggregatedRecordWithTitleAndTaxBean> records = fixedDailyRateService.aggregateByWeekForBudgetWithTax(1L, startDate);
 
