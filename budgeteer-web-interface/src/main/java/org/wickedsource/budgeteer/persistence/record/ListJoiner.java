@@ -4,11 +4,17 @@ import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.service.record.PlanAndWorkRecord;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
 public class ListJoiner {
+
+    /**
+     * Sums the hours and values of the beans for each week and year
+     *
+     * @param beans List of WeeklyAggregatedRecordBean that should be summed
+     * @return new list with summed beans
+     */
     public static List<WeeklyAggregatedRecordBean> joinWeeklyBeans(List<WeeklyAggregatedRecordBean> beans) {
         HashMap<String, WeeklyAggregatedRecordBean> map = new HashMap();
         for (WeeklyAggregatedRecordBean bean : beans) {
@@ -22,8 +28,8 @@ public class ListJoiner {
             }
         }
 
-       List<WeeklyAggregatedRecordBean>records = new ArrayList<>(map.values());
-       records.sort(new WeeklyAggregatedRecordBeanComparator());
+        List<WeeklyAggregatedRecordBean> records = new ArrayList<>(map.values());
+        records.sort(new WeeklyAggregatedRecordBeanComparator());
         return records;
     }
 

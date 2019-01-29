@@ -12,12 +12,10 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.springframework.dao.DataIntegrityViolationException;
 
-import org.wickedsource.budgeteer.service.DateRange;
 import org.wickedsource.budgeteer.service.fixedDailyRate.FixedDailyRate;
 import org.wickedsource.budgeteer.service.fixedDailyRate.FixedDailyRateService;
 import org.wickedsource.budgeteer.web.ClassAwareWrappingModel;
 import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
-import org.wickedsource.budgeteer.web.components.daterange.DateInputField;
 import org.wickedsource.budgeteer.web.components.daterange.DateRangeInputField;
 import org.wickedsource.budgeteer.web.components.money.MoneyTextField;
 import org.wickedsource.budgeteer.web.pages.budgets.fixedDailyRates.FixedDailyRatesPage;

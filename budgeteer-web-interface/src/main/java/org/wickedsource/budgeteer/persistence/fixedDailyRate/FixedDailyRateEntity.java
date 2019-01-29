@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.apache.poi.xssf.model.ThemesTable;
 import org.joda.money.Money;
 import org.wickedsource.budgeteer.persistence.budget.BudgetEntity;
 

@@ -4,9 +4,7 @@ import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
-import org.apache.wicket.RestartResponseAtInterceptPageException;
 import org.assertj.core.data.Percentage;
-import org.dbunit.Assertion;
 import org.joda.money.Money;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -318,7 +316,7 @@ public class FixedDailyRateServiceTest extends ServiceIntegrationTestTemplate {
     @DatabaseSetup("fixedDailyRate.xml")
     @DatabaseTearDown(value = "fixedDailyRate.xml", type = DatabaseOperation.DELETE_ALL)
     void testAggregateByWeekForBudgetsWithTaxWithTagsAndStartDate() {
-     List<String> tags = new ArrayList<>();
+        List<String> tags = new ArrayList<>();
         tags.add("Tag 3");
         Calendar calendar = new GregorianCalendar(2018, 0, 15);
         Date startDate = calendar.getTime();
@@ -372,7 +370,7 @@ public class FixedDailyRateServiceTest extends ServiceIntegrationTestTemplate {
         Date startDate = calendar.getTime();
         List<WeeklyAggregatedRecordWithTitleAndTaxBean> records = fixedDailyRateService.aggregateByWeekWithTitleAndTaxForProject(2, startDate);
 
-         Assertions.assertEquals(7, records.size());
+        Assertions.assertEquals(7, records.size());
 
         Assertions.assertEquals(4, records.get(0).getWeek());
         Assertions.assertEquals(700, records.get(0).getValueInCents());
@@ -417,25 +415,25 @@ public class FixedDailyRateServiceTest extends ServiceIntegrationTestTemplate {
         Assertions.assertEquals(2700, records.get(3).getValueInCents());
     }
 
-  @Test
+    @Test
     @DatabaseSetup("fixedDailyRate.xml")
     @DatabaseTearDown(value = "fixedDailyRate.xml", type = DatabaseOperation.DELETE_ALL)
     void testAggregateByMonthWithTax() {
         List<MonthlyAggregatedRecordWithTaxBean> records = fixedDailyRateService.aggregateByMonthWithTax(2L);
 
-      Assertions.assertEquals(4, records.size());
+        Assertions.assertEquals(4, records.size());
 
-      Assertions.assertEquals(0, records.get(0).getMonth());
-      Assertions.assertEquals(2300, records.get(0).getValueInCents());
+        Assertions.assertEquals(0, records.get(0).getMonth());
+        Assertions.assertEquals(2300, records.get(0).getValueInCents());
 
-      Assertions.assertEquals(1, records.get(1).getMonth());
-      Assertions.assertEquals(2800, records.get(1).getValueInCents());
+        Assertions.assertEquals(1, records.get(1).getMonth());
+        Assertions.assertEquals(2800, records.get(1).getValueInCents());
 
-      Assertions.assertEquals(2, records.get(2).getMonth());
-      Assertions.assertEquals(600, records.get(2).getValueInCents());
+        Assertions.assertEquals(2, records.get(2).getMonth());
+        Assertions.assertEquals(600, records.get(2).getValueInCents());
 
-      Assertions.assertEquals(0, records.get(3).getMonth());
-      Assertions.assertEquals(800, records.get(3).getValueInCents());
+        Assertions.assertEquals(0, records.get(3).getMonth());
+        Assertions.assertEquals(800, records.get(3).getValueInCents());
     }
 
     @Test
@@ -480,7 +478,7 @@ public class FixedDailyRateServiceTest extends ServiceIntegrationTestTemplate {
     @DatabaseSetup("fixedDailyRate.xml")
     @DatabaseTearDown(value = "fixedDailyRate.xml", type = DatabaseOperation.DELETE_ALL)
     void testAggregateByMonthForBudgetsWithTax() {
-    Calendar calendar = new GregorianCalendar(2018, 1, 1);
+        Calendar calendar = new GregorianCalendar(2018, 1, 1);
         Date startDate = calendar.getTime();
         List<MonthlyAggregatedRecordWithTitleAndTaxBean> records = fixedDailyRateService.aggregateByMonthForBudgetsWithTax(2L, startDate);
 
@@ -497,7 +495,7 @@ public class FixedDailyRateServiceTest extends ServiceIntegrationTestTemplate {
     @DatabaseSetup("fixedDailyRate.xml")
     @DatabaseTearDown(value = "fixedDailyRate.xml", type = DatabaseOperation.DELETE_ALL)
     void testAggregateByMonthForBudgetsWithTaxWithTags() {
-     List<String> tags = new ArrayList<>();
+        List<String> tags = new ArrayList<>();
         tags.add("Tag 3");
         Calendar calendar = new GregorianCalendar(2018, 0, 13);
         Date startDate = calendar.getTime();

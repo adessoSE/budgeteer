@@ -7,7 +7,6 @@ import org.apache.wicket.util.tester.WicketTester;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.wickedsource.budgeteer.service.fixedDailyRate.FixedDailyRate;
 import org.wickedsource.budgeteer.service.fixedDailyRate.FixedDailyRateService;
 import org.wickedsource.budgeteer.web.AbstractWebTestTemplate;

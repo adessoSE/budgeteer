@@ -20,7 +20,6 @@ import org.wickedsource.budgeteer.web.pages.budgets.fixedDailyRates.FixedDailyRa
 import org.wickedsource.budgeteer.web.pages.budgets.fixedDailyRates.edit.EditFixedDailyRatesPage;
 
 import java.util.List;
-import java.util.List;
 
 import static org.wicketstuff.lazymodel.LazyModel.from;
 import static org.wicketstuff.lazymodel.LazyModel.model;

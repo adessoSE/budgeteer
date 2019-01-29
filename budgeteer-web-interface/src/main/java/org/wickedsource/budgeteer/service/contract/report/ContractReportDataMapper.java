@@ -24,7 +24,6 @@ public class ContractReportDataMapper {
     @Autowired
     private StatisticsService statisticsService;
 
-
     public ContractReportData map(ContractEntity contract, Date endDate) {
         LocalDate end = endDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         ContractStatisticBean statistics = statisticsService.getContractStatisticAggregatedTillMonthAndYear(contract.getId(), end.getMonthValue() - 1, end.getYear());
@@ -63,6 +62,4 @@ public class ContractReportDataMapper {
         }
         return result;
     }
-
-
 }

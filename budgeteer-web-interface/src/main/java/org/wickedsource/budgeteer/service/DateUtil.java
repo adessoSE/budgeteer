@@ -1,6 +1,5 @@
 package org.wickedsource.budgeteer.service;
 
-import org.openxmlformats.schemas.drawingml.x2006.main.CTRegularTextRun;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -134,6 +133,12 @@ public class DateUtil {
         return getDaysInMonth(cal);
     }
 
+    /**
+     * Get tha number of days in a month
+     *
+     * @param cal calendar set to a date
+     * @return number of days in the month of the calendar's date
+     */
     public static int getDaysInMonth(Calendar cal) {
         return cal.getActualMaximum(Calendar.DAY_OF_MONTH);
     }

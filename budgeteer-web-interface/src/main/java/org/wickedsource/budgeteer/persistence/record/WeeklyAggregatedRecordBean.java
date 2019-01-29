@@ -7,7 +7,6 @@ import org.wickedsource.budgeteer.MoneyUtil;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -81,10 +80,8 @@ public class WeeklyAggregatedRecordBean {
         this.year = increaseYearIfYearChanges(year, month);
     }
 
-    private int increaseYearIfYearChanges(int year, int month)
-    {
-        if(month == 11 && week == 1)
-        {
+    private int increaseYearIfYearChanges(int year, int month) {
+        if (month == 11 && week == 1) {
             year++;
         }
 

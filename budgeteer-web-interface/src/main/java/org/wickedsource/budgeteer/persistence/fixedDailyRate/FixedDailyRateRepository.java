@@ -1,16 +1,12 @@
 package org.wickedsource.budgeteer.persistence.fixedDailyRate;
 
-import org.joda.money.Money;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QueryDslPredicateExecutor;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
-import org.wickedsource.budgeteer.persistence.record.WeeklyAggregatedRecordBean;
-import org.wickedsource.budgeteer.persistence.record.WeeklyAggregatedRecordWithTitleAndTaxBean;
 import org.wickedsource.budgeteer.service.fixedDailyRate.FixedDailyRate;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 

@@ -52,7 +52,7 @@ public class FixedDailyRateService {
      */
     public FixedDailyRate loadFixedDailyRate(long fixedDailyRateId) {
         FixedDailyRateEntity entity = fixedDailyRateRepository.findOne(fixedDailyRateId);
-        if(entity != null) {
+        if (entity != null) {
             return new FixedDailyRate(entity);
         }
         return null;
@@ -301,7 +301,7 @@ public class FixedDailyRateService {
         helpCalendar.set(Calendar.DAY_OF_MONTH, 1);
         int daysInEndMonth = new DateRange(helpCalendar.getTime(), rate.getEndDate()).getNumberOfDays() + 1;
 
-        int daysInRate = new DateRange(startDate, rate.getEndDate()).getNumberOfDays()+1;
+        int daysInRate = new DateRange(startDate, rate.getEndDate()).getNumberOfDays() + 1;
 
         // Check if the rate spreads over more than one month
         if (daysInRate > DateUtil.getDaysInMonth(helpCalendar)) {

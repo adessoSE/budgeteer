@@ -46,7 +46,7 @@ public class FixedDailyRateRepositoryTest extends IntegrationTestTemplate {
         Assertions.assertEquals(1, rates.get(0).getId());
         Assertions.assertEquals("r1", rates.get(0).getName());
         Assertions.assertEquals(startDate, rates.get(0).getStartDate());
-        org.assertj.core.api.Assertions.assertThat( rates.get(0).getTaxRate()).isCloseTo(taxRate, Percentage.withPercentage(10e-8));
+        org.assertj.core.api.Assertions.assertThat(rates.get(0).getTaxRate()).isCloseTo(taxRate, Percentage.withPercentage(10e-8));
         Assertions.assertEquals(10, rates.get(0).getDays());
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(100), rates.get(0).getMoneyAmount());
         Assertions.assertEquals(new DateRange(startDate, endDate1), rates.get(0).getDateRange());
@@ -57,7 +57,7 @@ public class FixedDailyRateRepositoryTest extends IntegrationTestTemplate {
         Assertions.assertEquals(2, rates.get(1).getId());
         Assertions.assertEquals("r2", rates.get(1).getName());
         Assertions.assertEquals(startDate, rates.get(1).getStartDate());
-        org.assertj.core.api.Assertions.assertThat( rates.get(1).getTaxRate()).isCloseTo(taxRate, Percentage.withPercentage(10e-8));
+        org.assertj.core.api.Assertions.assertThat(rates.get(1).getTaxRate()).isCloseTo(taxRate, Percentage.withPercentage(10e-8));
         Assertions.assertEquals(90, rates.get(1).getDays());
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(200), rates.get(1).getMoneyAmount());
         Assertions.assertEquals(new DateRange(startDate, endDate2), rates.get(1).getDateRange());
@@ -89,7 +89,7 @@ public class FixedDailyRateRepositoryTest extends IntegrationTestTemplate {
         Assertions.assertEquals(1, entities.get(0).getId());
         Assertions.assertEquals("r1", entities.get(0).getName());
         Assertions.assertEquals(startDate, entities.get(0).getStartDate());
-        org.assertj.core.api.Assertions.assertThat( entities.get(0).getBudget().getContract().getTaxRate()).isCloseTo(taxRate, Percentage.withPercentage(10e-8));
+        org.assertj.core.api.Assertions.assertThat(entities.get(0).getBudget().getContract().getTaxRate()).isCloseTo(taxRate, Percentage.withPercentage(10e-8));
         Assertions.assertEquals(new Integer(10), entities.get(0).getDays());
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(100), entities.get(0).getMoneyAmount());
 
@@ -99,7 +99,7 @@ public class FixedDailyRateRepositoryTest extends IntegrationTestTemplate {
         Assertions.assertEquals(2, entities.get(1).getId());
         Assertions.assertEquals("r2", entities.get(1).getName());
         Assertions.assertEquals(startDate, entities.get(1).getStartDate());
-        org.assertj.core.api.Assertions.assertThat( entities.get(1).getBudget().getContract().getTaxRate()).isCloseTo(taxRate, Percentage.withPercentage(10e-8));
+        org.assertj.core.api.Assertions.assertThat(entities.get(1).getBudget().getContract().getTaxRate()).isCloseTo(taxRate, Percentage.withPercentage(10e-8));
         Assertions.assertEquals(new Integer(90), entities.get(1).getDays());
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(200), entities.get(1).getMoneyAmount());
     }
@@ -137,7 +137,7 @@ public class FixedDailyRateRepositoryTest extends IntegrationTestTemplate {
         Assertions.assertEquals(1, rates1.get(0).getId());
         Assertions.assertEquals("r1", rates1.get(0).getName());
         Assertions.assertEquals(startDate, rates1.get(0).getStartDate());
-        org.assertj.core.api.Assertions.assertThat( rates1.get(0).getTaxRate()).isCloseTo(taxRate, Percentage.withPercentage(10e-8));
+        org.assertj.core.api.Assertions.assertThat(rates1.get(0).getTaxRate()).isCloseTo(taxRate, Percentage.withPercentage(10e-8));
         Assertions.assertEquals(10, rates1.get(0).getDays());
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(100), rates1.get(0).getMoneyAmount());
         Assertions.assertEquals(new DateRange(startDate, endDate1), rates1.get(0).getDateRange());
@@ -148,7 +148,7 @@ public class FixedDailyRateRepositoryTest extends IntegrationTestTemplate {
         Assertions.assertEquals(2, rates1.get(1).getId());
         Assertions.assertEquals("r2", rates1.get(1).getName());
         Assertions.assertEquals(startDate, rates1.get(1).getStartDate());
-        org.assertj.core.api.Assertions.assertThat( rates1.get(1).getTaxRate()).isCloseTo(taxRate, Percentage.withPercentage(10e-8));
+        org.assertj.core.api.Assertions.assertThat(rates1.get(1).getTaxRate()).isCloseTo(taxRate, Percentage.withPercentage(10e-8));
         Assertions.assertEquals(90, rates1.get(1).getDays());
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(200), rates1.get(1).getMoneyAmount());
         Assertions.assertEquals(new DateRange(startDate, endDate2), rates1.get(1).getDateRange());
@@ -159,7 +159,7 @@ public class FixedDailyRateRepositoryTest extends IntegrationTestTemplate {
         Assertions.assertEquals(3, rates2.get(0).getId());
         Assertions.assertEquals("r3", rates2.get(0).getName());
         Assertions.assertEquals(startDate, rates2.get(0).getStartDate());
-        org.assertj.core.api.Assertions.assertThat( rates2.get(0).getTaxRate()).isCloseTo(taxRate2, Percentage.withPercentage(10e-8));
+        org.assertj.core.api.Assertions.assertThat(rates2.get(0).getTaxRate()).isCloseTo(taxRate2, Percentage.withPercentage(10e-8));
         Assertions.assertEquals(18, rates2.get(0).getDays());
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(100), rates2.get(0).getMoneyAmount());
         Assertions.assertEquals(new DateRange(startDate, endDate3), rates2.get(0).getDateRange());
@@ -195,7 +195,7 @@ public class FixedDailyRateRepositoryTest extends IntegrationTestTemplate {
         Assertions.assertEquals(3, rates.get(0).getId());
         Assertions.assertEquals("r3", rates.get(0).getName());
         Assertions.assertEquals(startDate, rates.get(0).getStartDate());
-        org.assertj.core.api.Assertions.assertThat( rates.get(0).getTaxRate()).isCloseTo(taxRate, Percentage.withPercentage(10e-8));
+        org.assertj.core.api.Assertions.assertThat(rates.get(0).getTaxRate()).isCloseTo(taxRate, Percentage.withPercentage(10e-8));
         Assertions.assertEquals(5, rates.get(0).getDays());
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(100), rates.get(0).getMoneyAmount());
         Assertions.assertEquals(new DateRange(startDate, endDate1), rates.get(0).getDateRange());
@@ -206,7 +206,7 @@ public class FixedDailyRateRepositoryTest extends IntegrationTestTemplate {
         Assertions.assertEquals(4, rates.get(1).getId());
         Assertions.assertEquals("r4", rates.get(1).getName());
         Assertions.assertEquals(startDate, rates.get(1).getStartDate());
-        org.assertj.core.api.Assertions.assertThat( rates.get(1).getTaxRate()).isCloseTo(taxRate, Percentage.withPercentage(10e-8));
+        org.assertj.core.api.Assertions.assertThat(rates.get(1).getTaxRate()).isCloseTo(taxRate, Percentage.withPercentage(10e-8));
         Assertions.assertEquals(6, rates.get(1).getDays());
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(100), rates.get(1).getMoneyAmount());
         Assertions.assertEquals(new DateRange(startDate, endDate2), rates.get(1).getDateRange());
@@ -217,7 +217,7 @@ public class FixedDailyRateRepositoryTest extends IntegrationTestTemplate {
         Assertions.assertEquals(6, rates.get(2).getId());
         Assertions.assertEquals("r6", rates.get(2).getName());
         Assertions.assertEquals(startDate, rates.get(2).getStartDate());
-        org.assertj.core.api.Assertions.assertThat( rates.get(2).getTaxRate()).isCloseTo(taxRate, Percentage.withPercentage(10e-8));
+        org.assertj.core.api.Assertions.assertThat(rates.get(2).getTaxRate()).isCloseTo(taxRate, Percentage.withPercentage(10e-8));
         Assertions.assertEquals(18, rates.get(2).getDays());
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(100), rates.get(2).getMoneyAmount());
         Assertions.assertEquals(new DateRange(startDate, endDate3), rates.get(2).getDateRange());
@@ -248,7 +248,7 @@ public class FixedDailyRateRepositoryTest extends IntegrationTestTemplate {
         Assertions.assertEquals(2, rates.get(0).getId());
         Assertions.assertEquals("r2", rates.get(0).getName());
         Assertions.assertEquals(startDate, rates.get(0).getStartDate());
-        org.assertj.core.api.Assertions.assertThat( rates.get(0).getTaxRate()).isCloseTo(taxRate, Percentage.withPercentage(10e-8));
+        org.assertj.core.api.Assertions.assertThat(rates.get(0).getTaxRate()).isCloseTo(taxRate, Percentage.withPercentage(10e-8));
         Assertions.assertEquals(6, rates.get(0).getDays());
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(100), rates.get(0).getMoneyAmount());
         Assertions.assertEquals(new DateRange(startDate, endDate1), rates.get(0).getDateRange());
@@ -259,7 +259,7 @@ public class FixedDailyRateRepositoryTest extends IntegrationTestTemplate {
         Assertions.assertEquals(3, rates.get(1).getId());
         Assertions.assertEquals("r3", rates.get(1).getName());
         Assertions.assertEquals(startDate, rates.get(1).getStartDate());
-        org.assertj.core.api.Assertions.assertThat( rates.get(1).getTaxRate()).isCloseTo(taxRate, Percentage.withPercentage(10e-8));
+        org.assertj.core.api.Assertions.assertThat(rates.get(1).getTaxRate()).isCloseTo(taxRate, Percentage.withPercentage(10e-8));
         Assertions.assertEquals(6, rates.get(1).getDays());
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(100), rates.get(1).getMoneyAmount());
         Assertions.assertEquals(new DateRange(startDate, endDate1), rates.get(1).getDateRange());
@@ -287,7 +287,7 @@ public class FixedDailyRateRepositoryTest extends IntegrationTestTemplate {
         Assertions.assertEquals(1, rates.get(0).getId());
         Assertions.assertEquals("r1", rates.get(0).getName());
         Assertions.assertEquals(startDate, rates.get(0).getStartDate());
-        org.assertj.core.api.Assertions.assertThat( rates.get(0).getTaxRate()).isCloseTo(taxRate, Percentage.withPercentage(10e-8));
+        org.assertj.core.api.Assertions.assertThat(rates.get(0).getTaxRate()).isCloseTo(taxRate, Percentage.withPercentage(10e-8));
         Assertions.assertEquals(10, rates.get(0).getDays());
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(100), rates.get(0).getMoneyAmount());
         Assertions.assertEquals(new DateRange(startDate, endDate1), rates.get(0).getDateRange());

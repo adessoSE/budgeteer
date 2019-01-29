@@ -16,7 +16,6 @@ import org.wickedsource.budgeteer.persistence.record.WeeklyAggregatedRecordBean;
 import org.wickedsource.budgeteer.persistence.record.WorkRecordEntity;
 import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
 import org.wickedsource.budgeteer.service.ServiceTestTemplate;
-import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
 
 import java.util.ArrayList;
 import java.util.Date;

@@ -7,7 +7,6 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.wickedsource.budgeteer.service.budget.EditBudgetData;
 import org.wickedsource.budgeteer.service.fixedDailyRate.FixedDailyRate;
 import org.wickedsource.budgeteer.service.fixedDailyRate.FixedDailyRateService;
 import org.wickedsource.budgeteer.web.AbstractWebTestTemplate;
@@ -27,7 +26,7 @@ public class EditFixedDailyRatesPageTest extends AbstractWebTestTemplate {
     protected void setupTest() {
         PageParameters backlinkParams = new PageParameters();
         backlinkParams.add("id", 1L);
-        EditFixedDailyRatesPage page = new EditFixedDailyRatesPage(FixedDailyRatesPage.class,backlinkParams);
+        EditFixedDailyRatesPage page = new EditFixedDailyRatesPage(FixedDailyRatesPage.class, backlinkParams);
         getTester().startPage(page);
         Mockito.reset(fixedDailyRateServiceMock);
     }
@@ -67,10 +66,10 @@ public class EditFixedDailyRatesPageTest extends AbstractWebTestTemplate {
         when(fixedDailyRateServiceMock.saveFixedDailyRate(any())).thenReturn(0L);
         when(fixedDailyRateServiceMock.loadFixedDailyRate(anyLong())).thenReturn(new FixedDailyRate(1));
         FormTester formTester = getTester().newFormTester("form");
-        formTester.setValue("title","TestRate");
-        formTester.setValue("description","a test Rate");
-        formTester.setValue("total","100");
-        formTester.setValue("dateRangeField","01.01.2018 - 02.01.2018");
+        formTester.setValue("title", "TestRate");
+        formTester.setValue("description", "a test Rate");
+        formTester.setValue("total", "100");
+        formTester.setValue("dateRangeField", "01.01.2018 - 02.01.2018");
         formTester.submit();
 
         getTester().dumpPage();
@@ -80,10 +79,10 @@ public class EditFixedDailyRatesPageTest extends AbstractWebTestTemplate {
     @Test
     void onInvalidInputErrorMessagesAreShown() {
         FormTester formTester = getTester().newFormTester("form");
-        formTester.setValue("title","TestRate");
-        formTester.setValue("description","a test Rate");
+        formTester.setValue("title", "TestRate");
+        formTester.setValue("description", "a test Rate");
 
-        formTester.setValue("dateRangeField","01.01.2018 - 02.01.2018");
+        formTester.setValue("dateRangeField", "01.01.2018 - 02.01.2018");
         formTester.submit();
 
         Assertions.assertThat(getTester().getFeedbackMessages(null)).hasSize(1);

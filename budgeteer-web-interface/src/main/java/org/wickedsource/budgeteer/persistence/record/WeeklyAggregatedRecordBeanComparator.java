@@ -1,7 +1,5 @@
 package org.wickedsource.budgeteer.persistence.record;
 
-import org.wickedsource.budgeteer.service.record.AggregatedRecord;
-
 import java.util.Comparator;
 
 public class WeeklyAggregatedRecordBeanComparator implements Comparator<WeeklyAggregatedRecordBean> {

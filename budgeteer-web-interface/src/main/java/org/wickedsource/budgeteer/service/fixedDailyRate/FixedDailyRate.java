@@ -1,6 +1,5 @@
 package org.wickedsource.budgeteer.service.fixedDailyRate;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.joda.money.Money;

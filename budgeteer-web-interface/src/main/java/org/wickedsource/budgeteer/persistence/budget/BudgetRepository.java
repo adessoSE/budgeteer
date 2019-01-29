@@ -62,7 +62,6 @@ public interface BudgetRepository extends CrudRepository<BudgetEntity, Long> {
     @Query("select coalesce(sum(fixed.moneyAmount*fixed.days),0) from FixedDailyRateEntity fixed where fixed.budget.id = :budgetId")
     Double getSpentBudgetOfBudgetFixed(@Param("budgetId") long budgetId);
 
-
     @Modifying
     @Query("delete from BudgetEntity b where b.project.id = :projectId")
     void deleteByProjectId(@Param("projectId") long projectId);
