@@ -9,7 +9,6 @@ import java.util.*;
 
 @Component
 public class RecordJoiner {
-
     /**
      * Joins the given work records and the given plan records since it is not possible to join them in the database with JPA.
      */
@@ -19,14 +18,16 @@ public class RecordJoiner {
             AggregatedRecord record = recordMap.getOrCreateRecord(bean);
             record.setBudgetPlanned_net(MoneyUtil.createMoneyFromCents(bean.getValueInCents()));
         }
+        addWeeklyWorkBeans(workRecords, recordMap);
+        return recordMap.toList();
+    }
+
+    private void addWeeklyWorkBeans(List<WeeklyAggregatedRecordBean> workRecords, RecordMap recordMap) {
         for (WeeklyAggregatedRecordBean bean : workRecords) {
             AggregatedRecord record = recordMap.getOrCreateRecord(bean);
             record.setBudgetBurned_net(MoneyUtil.createMoneyFromCents(bean.getValueInCents()));
             record.setHours(bean.getHours());
         }
-        List<AggregatedRecord> records = new ArrayList<>(recordMap.values());
-        Collections.sort(records, new AggregatedRecordComparator());
-        return records;
     }
 
     /**
@@ -50,10 +51,8 @@ public class RecordJoiner {
             recordList.add(new AggregatedRecord(planAndWorkRecord));
         }
 
-        Collections.sort(recordList, new AggregatedRecordComparator());
-        recordList = sumRecordsForEachPeriod(recordList);
-
-        return recordList;
+        recordList.sort(new AggregatedRecordComparator());
+       return sumRecordsForEachPeriod(recordList);
     }
 
     /**
@@ -107,9 +106,8 @@ public class RecordJoiner {
             record.setBudgetBurned_net(MoneyUtil.createMoneyFromCents(bean.getValueInCents()));
             record.setHours(bean.getHours());
         }
-        List<AggregatedRecord> records = new ArrayList<>(recordMap.values());
-        Collections.sort(records, new AggregatedRecordComparator());
-        return records;
+
+        return recordMap.toList();
     }
 
     public List<AggregatedRecord> joinMonthlyWithTax(List<MonthlyAggregatedRecordWithTaxBean> workRecords, List<MonthlyAggregatedRecordWithTaxBean> planRecords) {
@@ -121,10 +119,8 @@ public class RecordJoiner {
             recordList.add(new AggregatedRecord(planAndWorkRecord));
         }
 
-        Collections.sort(recordList, new AggregatedRecordComparator());
-        recordList = sumRecordsForEachPeriod(recordList);
-
-        return recordList;
+        recordList.sort(new AggregatedRecordComparator());
+        return sumRecordsForEachPeriod(recordList);
     }
 
     class RecordMap extends HashMap<String, AggregatedRecord> {
@@ -162,6 +158,12 @@ public class RecordJoiner {
                 put(getKey(recordBean), record);
             }
             return record;
+        }
+
+        public List<AggregatedRecord> toList() {
+            List<AggregatedRecord> records = new ArrayList<>(this.values());
+            records.sort(new AggregatedRecordComparator());
+            return records;
         }
 
         private String getKey(WeeklyAggregatedRecordBean recordBean) {

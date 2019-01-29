@@ -21,6 +21,7 @@ import org.wickedsource.budgeteer.persistence.record.PlanRecordRepository;
 import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
 import org.wickedsource.budgeteer.service.UnknownEntityException;
 import org.wickedsource.budgeteer.service.contract.ContractDataMapper;
+import org.wickedsource.budgeteer.service.fixedDailyRate.FixedDailyRate;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.components.listMultipleChoiceWithGroups.OptionGroup;
 
@@ -136,6 +137,12 @@ public class BudgetService {
     private BudgetDetailData enrichBudgetEntity(BudgetEntity entity) {
         Date lastUpdated = workRecordRepository.getLatestWorkRecordDate(entity.getId());
         Double spentBudgetInCents = budgetRepository.getSpentBudgetOfBudget(entity.getId());
+
+        Double work = budgetRepository.getSpentBudgetOfBudgetWork(entity.getId());
+        Double manual = budgetRepository.getSpentBudgetOfBudgetManual(entity.getId());
+        Double fixed = budgetRepository.getSpentBudgetOfBudgetFixed(entity.getId());
+
+        List<FixedDailyRate> rates = fixedDailyRateRepository.getFixedDailyRatesByBudgetId(entity.getId());
 
         Double plannedBudgetInCents = planRecordRepository.getPlannedBudget(entity.getId());
         Double avgDailyRateInCents = workRecordRepository.getAverageDailyRate(entity.getId());

@@ -58,8 +58,12 @@ public class StatisticsService {
         Date startDate = dateUtil.weeksAgo(numberOfWeeks);
 
         List<WeeklyAggregatedRecordBean> weeklyBeans = workRecordRepository.aggregateByWeekForProject(projectId, startDate);
+        weeklyBeans = ListJoiner.joinWeeklyBeans(weeklyBeans);
+
         // Get Manual records
         List<WeeklyAggregatedRecordBean> manualBeans = manualRecordRepository.aggregateByWeekForProject(projectId, startDate);
+
+
         // Get records of fixed daily rates
         List<WeeklyAggregatedRecordBean> fixedBeans = fixedDailyRateService.aggregateByWeekForProject(projectId, startDate);
 
@@ -144,12 +148,15 @@ public class StatisticsService {
                 c.set(Calendar.YEAR, currentYear);
             }
 
-            WeeklyAggregatedRecordBean weekBean = getBeanForWeek(c.get(Calendar.YEAR), c.get(Calendar.WEEK_OF_YEAR), weeklyBeans);
-            if (weekBean == null) {
-                resultList.add(MoneyUtil.createMoneyFromCents(0L));
-            } else {
-                resultList.add(MoneyUtil.createMoneyFromCents(weekBean.getValueInCents()));
+            List<WeeklyAggregatedRecordBean> weekBeans = getAllBeansForWeek(c.get(Calendar.YEAR), c.get(Calendar.WEEK_OF_YEAR), weeklyBeans);
+
+            long cents = 0;
+
+            for (WeeklyAggregatedRecordBean bean : weekBeans) {
+                cents += bean.getValueInCents();
             }
+            resultList.add(MoneyUtil.createMoneyFromCents(cents));
+
             currentWeek = c.get(Calendar.WEEK_OF_YEAR);
             c.add(Calendar.WEEK_OF_YEAR, 1);
         }
@@ -186,9 +193,19 @@ public class StatisticsService {
         return null;
     }
 
-    private List<WeeklyAggregatedRecordWithTaxBean> getAllBeansForWeek(int year, int week, List<WeeklyAggregatedRecordWithTaxBean> beans) {
+    private List<WeeklyAggregatedRecordWithTaxBean> getAllBeansForWeekWithTax(int year, int week, List<WeeklyAggregatedRecordWithTaxBean> beans) {
         List<WeeklyAggregatedRecordWithTaxBean> result = new ArrayList<>();
         for (WeeklyAggregatedRecordWithTaxBean bean : beans) {
+            if (bean.getYear() == year && bean.getWeek() == week) {
+                result.add(bean);
+            }
+        }
+        return result;
+    }
+
+    private List<WeeklyAggregatedRecordBean> getAllBeansForWeek(int year, int week, List<WeeklyAggregatedRecordBean> beans) {
+        List<WeeklyAggregatedRecordBean> result = new ArrayList<>();
+        for (WeeklyAggregatedRecordBean bean : beans) {
             if (bean.getYear() == year && bean.getWeek() == week) {
                 result.add(bean);
             }
@@ -376,7 +393,7 @@ public class StatisticsService {
                 c.set(Calendar.YEAR, currentYear);
             }
 
-            List<WeeklyAggregatedRecordWithTaxBean> weekBeans = getAllBeansForWeek(c.get(Calendar.YEAR), c.get(Calendar.WEEK_OF_YEAR), weeklyBeans);
+            List<WeeklyAggregatedRecordWithTaxBean> weekBeans = getAllBeansForWeekWithTax(c.get(Calendar.YEAR), c.get(Calendar.WEEK_OF_YEAR), weeklyBeans);
 
             sumMoneyAmountsOfWeekBeans(weekBeans, resultList, resultList_gross);
 

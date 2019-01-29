@@ -7,6 +7,7 @@ import org.wickedsource.budgeteer.MoneyUtil;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -39,9 +40,19 @@ public class WeeklyAggregatedRecordBean {
     public WeeklyAggregatedRecordBean(int year, int month, int week, long valueInCents) {
         this.week = week;
         this.month = month;
-        this.year = year;
+
+        this.year = increaseYearIfYearChanges(year, month);
         this.valueInCents = valueInCents;
         hours = 0.0;
+    }
+
+    public WeeklyAggregatedRecordBean(int year, int month, int week, Double hours, long valueInCents) {
+        this.week = week;
+        this.month = month;
+
+        this.year = increaseYearIfYearChanges(year, month);
+        this.hours = hours;
+        this.valueInCents = valueInCents;
     }
 
     public WeeklyAggregatedRecordBean(int year, int month, int week, long minutes, Money dailyRate) {
@@ -66,6 +77,17 @@ public class WeeklyAggregatedRecordBean {
 
         this.week = week;
         this.month = month;
-        this.year = year;
+
+        this.year = increaseYearIfYearChanges(year, month);
+    }
+
+    private int increaseYearIfYearChanges(int year, int month)
+    {
+        if(month == 11 && week == 1)
+        {
+            year++;
+        }
+
+        return year;
     }
 }

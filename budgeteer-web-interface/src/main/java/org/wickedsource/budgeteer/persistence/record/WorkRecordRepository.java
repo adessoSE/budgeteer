@@ -119,7 +119,7 @@ public interface WorkRecordRepository extends CrudRepository<WorkRecordEntity, L
     List<MonthlyAggregatedRecordWithTaxBean> aggregateByMonthAndBudgetTagsWithTax(@Param("projectId") long projectId, @Param("tags") List<String> tags);
 
     @Override
-    @Query("select new org.wickedsource.budgeteer.persistence.record.WeeklyAggregatedRecordBean(r.year, r.week, sum(r.minutes) / 60.0, sum(r.minutes * r.dailyRate) / 60 / 8 ) from WorkRecordEntity r where r.budget.project.id=:projectId and r.date >= :startDate group by r.year, r.week order by r.year, r.week")
+    @Query("select new org.wickedsource.budgeteer.persistence.record.WeeklyAggregatedRecordBean(r.year, r.month, r.week, sum(r.minutes) / 60.0, sum(r.minutes * r.dailyRate) / 60 / 8 ) from WorkRecordEntity r where r.budget.project.id=:projectId and r.date >= :startDate group by r.year, r.month, r.week order by r.year, r.week")
     List<WeeklyAggregatedRecordBean> aggregateByWeekForProject(@Param("projectId") long projectId, @Param("startDate") Date start);
 
     @Query("select new org.wickedsource.budgeteer.persistence.record.DailyAverageRateBean(r.year, r.month, r.day, avg(r.dailyRate)) from WorkRecordEntity r where r.budget.project.id = :projectId and r.date >= :startDate group by r.year, r.month, r.day order by r.year, r.month, r.day")

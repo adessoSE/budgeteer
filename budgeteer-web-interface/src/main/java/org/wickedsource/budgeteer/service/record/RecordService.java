@@ -64,18 +64,6 @@ public class RecordService {
     }
 
     /**
-     * Loads the actual budget burned in the given budget and the budget planned for all people active in this budget aggregated by week.
-     *
-     * @param budgetId ID of the budget whose target and actual records to load
-     * @return one record for each week from the current week to the first week that was booked in the given budget
-     */
-    public List<AggregatedRecord> getWeeklyAggregationForBudget(long budgetId) {
-        List<WeeklyAggregatedRecordBean> planRecords = planRecordRepository.aggregateByWeekAndBudget(budgetId);
-        List<WeeklyAggregatedRecordBean> workRecords = workRecordRepository.aggregateByWeekAndBudget(budgetId);
-        return recordJoiner.joinWeekly(workRecords, planRecords);
-    }
-
-    /**
      * Loads the actual budget burned in the given budget and the budget planned for all people active in this budget aggregated by week with taxes.
      *
      * @param budgetId ID of the budget whose target and actual records to load
@@ -97,18 +85,6 @@ public class RecordService {
     }
 
     /**
-     * Loads the actual budget burned in the given budget and the budget planned for all people active in this budget aggregated by month.
-     *
-     * @param budgetId ID of the budget whose target and actual records to load
-     * @return one record for each month from the current month to the first month that was booked in the given budget.
-     */
-    public List<AggregatedRecord> getMonthlyAggregationForBudget(long budgetId) {
-        List<MonthlyAggregatedRecordBean> planRecords = planRecordRepository.aggregateByMonthAndBudget(budgetId);
-        List<MonthlyAggregatedRecordBean> workRecords = workRecordRepository.aggregateByMonthAndBudget(budgetId);
-        return recordJoiner.joinMonthly(workRecords, planRecords);
-    }
-
-    /**
      * Loads the actual budget burned in the given budget and the budget planned for all people active in this budget aggregated by month with taxes.
      *
      * @param budgetId ID of the budget whose target and actual records to load
@@ -124,28 +100,6 @@ public class RecordService {
         workRecords.addAll(fixedRecords);
 
         return recordJoiner.joinMonthlyWithTax(workRecords, planRecords);
-    }
-
-    /**
-     * Loads the actual budget burned in a set of given budgets and the budget planned for all people active in these budgets aggregated by week.
-     *
-     * @param budgetFilter filter that identifies the set of budgets whose data to load
-     * @return one record for each week from the current week to the first week that was booked in the given budget
-     */
-
-    public List<AggregatedRecord> getWeeklyAggregationForBudgets(BudgetTagFilter budgetFilter) {
-        List<WeeklyAggregatedRecordBean> planRecords;
-        List<WeeklyAggregatedRecordBean> workRecords;
-
-        if (budgetFilter.getSelectedTags().isEmpty()) {
-            planRecords = planRecordRepository.aggregateByWeek(budgetFilter.getProjectId());
-            workRecords = workRecordRepository.aggregateByWeek(budgetFilter.getProjectId());
-        } else {
-            planRecords = planRecordRepository.aggregateByWeekAndBudgetTags(budgetFilter.getProjectId(), budgetFilter.getSelectedTags());
-            workRecords = workRecordRepository.aggregateByWeekAndBudgetTags(budgetFilter.getProjectId(), budgetFilter.getSelectedTags());
-        }
-
-        return recordJoiner.joinWeekly(workRecords, planRecords);
     }
 
     /**
@@ -175,25 +129,6 @@ public class RecordService {
         workRecords.addAll(manualWorkRecords);
         MonthlyStats monthlyStats = new MonthlyStats(budgetFilter, workRecordRepository, planRecordRepository);
         return recordJoiner.joinWeeklyByMonthFraction(workRecords, planRecords, monthlyStats);
-    }
-
-    /**
-     * Loads the actual budget burned in a set of given budgets and the budget planned for all people active in these budget aggregated by month.
-     *
-     * @param budgetFilter filter that identifies the set of budgets whose data to load
-     * @return one record for each month from the current month to the first month that was booked in the given budget.
-     */
-    public List<AggregatedRecord> getMonthlyAggregationForBudgets(BudgetTagFilter budgetFilter) {
-        List<MonthlyAggregatedRecordBean> planRecords;
-        List<MonthlyAggregatedRecordBean> workRecords;
-        if (budgetFilter.getSelectedTags().isEmpty()) {
-            workRecords = workRecordRepository.aggregateByMonth(budgetFilter.getProjectId());
-            planRecords = planRecordRepository.aggregateByMonth(budgetFilter.getProjectId());
-        } else {
-            workRecords = workRecordRepository.aggregateByMonthAndBudgetTags(budgetFilter.getProjectId(), budgetFilter.getSelectedTags());
-            planRecords = planRecordRepository.aggregateByMonthAndBudgetTags(budgetFilter.getProjectId(), budgetFilter.getSelectedTags());
-        }
-        return recordJoiner.joinMonthly(workRecords, planRecords);
     }
 
     /**

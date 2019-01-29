@@ -4,10 +4,29 @@ import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.service.record.PlanAndWorkRecord;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
 public class ListJoiner {
+    public static List<WeeklyAggregatedRecordBean> joinWeeklyBeans(List<WeeklyAggregatedRecordBean> beans) {
+        HashMap<String, WeeklyAggregatedRecordBean> map = new HashMap();
+        for (WeeklyAggregatedRecordBean bean : beans) {
+            WeeklyAggregatedRecordBean record = map.get(String.format("%d%d", bean.getWeek(), bean.getYear()));
+
+            if (record == null) {
+                map.put(String.format("%d%d", bean.getWeek(), bean.getYear()), bean);
+            } else {
+                record.setHours(record.getHours() + bean.getHours());
+                record.setValueInCents(record.getValueInCents() + bean.getValueInCents());
+            }
+        }
+
+       List<WeeklyAggregatedRecordBean>records = new ArrayList<>(map.values());
+       records.sort(new WeeklyAggregatedRecordBeanComparator());
+        return records;
+    }
+
     /**
      * Sums the hours of weekly plan-beans with the same year, month, week and tax rate.
      *

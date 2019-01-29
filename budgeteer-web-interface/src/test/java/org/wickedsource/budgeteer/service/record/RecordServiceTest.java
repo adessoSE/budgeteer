@@ -57,38 +57,6 @@ class RecordServiceTest extends ServiceTestTemplate {
     }
 
     @Test
-    void testGetWeeklyAggregationForBudget() throws Exception {
-        List<AggregatedRecord> recordList = createAggregatedRecordList();
-        when(recordJoiner.joinWeekly(anyListOf(WeeklyAggregatedRecordBean.class), anyListOf(WeeklyAggregatedRecordBean.class))).thenReturn(recordList);
-        List<AggregatedRecord> resultList = service.getWeeklyAggregationForBudget(1L);
-        Assertions.assertEquals(recordList, resultList);
-    }
-
-    @Test
-    void testGetMonthlyAggregationForBudget() throws Exception {
-        List<AggregatedRecord> recordList = createAggregatedRecordList();
-        when(recordJoiner.joinWeekly(anyListOf(WeeklyAggregatedRecordBean.class), anyListOf(WeeklyAggregatedRecordBean.class))).thenReturn(recordList);
-        List<AggregatedRecord> resultList = service.getWeeklyAggregationForBudget(1L);
-        Assertions.assertEquals(recordList, resultList);
-    }
-
-    @Test
-    void testGetWeeklyAggregationForBudgets() throws Exception {
-        List<AggregatedRecord> recordList = createAggregatedRecordList();
-        when(recordJoiner.joinWeekly(anyListOf(WeeklyAggregatedRecordBean.class), anyListOf(WeeklyAggregatedRecordBean.class))).thenReturn(recordList);
-        List<AggregatedRecord> resultList = service.getWeeklyAggregationForBudgets(new BudgetTagFilter(EMPTY_STRING_LIST, 1L));
-        Assertions.assertEquals(recordList, resultList);
-    }
-
-    @Test
-    void testGetMonthlyAggregationForBudgets() throws Exception {
-        List<AggregatedRecord> recordList = createAggregatedRecordList();
-        when(recordJoiner.joinMonthly(anyListOf(MonthlyAggregatedRecordBean.class), anyListOf(MonthlyAggregatedRecordBean.class))).thenReturn(recordList);
-        List<AggregatedRecord> resultList = service.getMonthlyAggregationForBudgets(new BudgetTagFilter(EMPTY_STRING_LIST, 1L));
-        Assertions.assertEquals(recordList, resultList);
-    }
-
-    @Test
     void testGetFilteredRecords() throws Exception {
         List<WorkRecordEntity> recordList = createRecordList();
         when(workRecordRepository.findAll(any(Predicate.class))).thenReturn(recordList);
