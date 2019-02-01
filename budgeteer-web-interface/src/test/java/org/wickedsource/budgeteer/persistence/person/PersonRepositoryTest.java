@@ -24,7 +24,7 @@ class PersonRepositoryTest extends IntegrationTestTemplate {
     @DatabaseTearDown(value = "findBaseData.xml", type = DatabaseOperation.DELETE_ALL)
     void testFindBaseDataByProjectId() throws Exception {
         List<PersonBaseDataBean> data = personRepository.findBaseDataByProjectId(1L);
-        Assertions.assertEquals(2, data.size());
+        Assertions.assertEquals(3, data.size());
 
         PersonBaseDataBean bean1 = data.get(0);
         Assertions.assertEquals(Long.valueOf(1), bean1.getId());
@@ -64,7 +64,21 @@ class PersonRepositoryTest extends IntegrationTestTemplate {
         Assertions.assertEquals(format.parse("15.08.2015"), bean.getLastBookedDate());
         Assertions.assertEquals(Long.valueOf(60000), bean.getBudgetBurnedInCents());
         Assertions.assertEquals(24d, bean.getHoursBooked(), 1d);
+    }
 
+    @Test
+    @DatabaseSetup("findBaseData.xml")
+    @DatabaseTearDown(value = "findBaseData.xml", type = DatabaseOperation.DELETE_ALL)
+    void testFindDetailDataByPersonIdNullValues() {
+        PersonDetailDataBean bean = personRepository.findDetailDataByPersonId(3L);
+
+        Assertions.assertEquals(Long.valueOf(3), bean.getId());
+        Assertions.assertEquals("person3", bean.getName());
+        Assertions.assertEquals(Long.valueOf(0L), bean.getAverageDailyRateInCents());
+        Assertions.assertNull(bean.getFirstBookedDate());
+        Assertions.assertNull(bean.getLastBookedDate());
+        Assertions.assertEquals(Long.valueOf(0L), bean.getBudgetBurnedInCents());
+        Assertions.assertEquals(0.0, bean.getHoursBooked(), 1d);
     }
 
     @Test

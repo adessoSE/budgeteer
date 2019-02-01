@@ -6,6 +6,8 @@
 
     <PERSON id="1" name="person1" import_key="person1" project_id="1"/>
     <PERSON id="2" name="person2" import_key="person2" project_id="1"/>
+    <PERSON id="3" name="person3" import_key="person3" project_id="1"/>
+
 
     <IMPORT id="1" import_date="2015-01-01" start_date="2015-01-01" end_date="2015-01-01" import_type="Testimport" project_id="1"/>
 
