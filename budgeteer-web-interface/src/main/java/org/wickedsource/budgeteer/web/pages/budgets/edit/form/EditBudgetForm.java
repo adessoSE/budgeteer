@@ -33,7 +33,6 @@ import org.wickedsource.budgeteer.web.pages.budgets.edit.EditBudgetPage;
 import org.wickedsource.budgeteer.web.pages.budgets.edit.tagsfield.TagsTextField;
 import org.wickedsource.budgeteer.web.pages.budgets.overview.BudgetsOverviewPage;
 
-import javax.swing.text.html.HTML;
 import java.util.List;
 
 import static org.wicketstuff.lazymodel.LazyModel.from;
