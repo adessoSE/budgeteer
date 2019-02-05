@@ -1,5 +1,9 @@
 package org.wickedsource.budgeteer.web.pages.administration;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
@@ -47,8 +51,10 @@ public class ProjectAdministrationPage extends BasePage {
     @SpringBean
     private BudgeteerSettings settings;
 
+    private CustomFeedbackPanel feedbackPanel = new CustomFeedbackPanel("feedback");
+
     public ProjectAdministrationPage() {
-        add(new CustomFeedbackPanel("feedback"));
+        add(feedbackPanel.setOutputMarkupId(true));
         add(createUserList("userList", new UsersInProjectModel(BudgeteerSession.get().getProjectId())));
         add(createDeleteProjectButton("deleteProjectButton"));
         add(createAddUserForm("addUserForm"));
@@ -56,22 +62,39 @@ public class ProjectAdministrationPage extends BasePage {
     }
 
     private Form<Project> createEditProjectForm(String formId) {
-        Form<Project> form = new Form<Project>(formId, model(from(projectService.findProjectById(BudgeteerSession.get().getProjectId())))) {
+        Form<Project> form = new Form<>(formId, model(from(projectService.findProjectById(BudgeteerSession.get().getProjectId()))));
+
+        //Ajax behaviour needed to get data on form submission as we use an ajaxLink for it
+        TextField<String> textField = (TextField<String>) new TextField<String>("projectTitle", model(from(form.getModelObject()).getName())).add(new AjaxFormComponentUpdatingBehavior("change") {
             @Override
-            protected void onSubmit() {
-                super.onSubmit();
-                if(getModelObject().getName() == null){
-                    error(getString("error.no.name"));
-                }else {
-                    Project ent = getModelObject();
+            protected void onUpdate(AjaxRequestTarget target) {}});
+
+        DateRange defaultDateRange = new DateRange(DateUtil.getBeginOfYear(), DateUtil.getEndOfYear());
+
+        //Ajax behaviour needed to get data on form submission as we use an ajaxLink for it
+        DateRangeInputField dateField = (DateRangeInputField) new DateRangeInputField("projectStart", model(from(form.getModelObject()).getDateRange()), defaultDateRange, DateRangeInputField.DROP_LOCATION.DOWN).add(new AjaxFormComponentUpdatingBehavior("change") {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {}});
+
+        AjaxLink submitLink = new AjaxLink("submitLink") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                if(textField.getModelObject() == null || textField.getModelObject().isEmpty()){
+                    feedbackPanel.error(ProjectAdministrationPage.this.getString("error.no.name"));
+                }else{
+                    Project ent = form.getModelObject();
+                    ent.setName(textField.getModelObject());
+                    ent.setDateRange(dateField.getModelObject());
                     projectService.save(ent);
-                    success(getString("project.saved"));
+                    feedbackPanel.success(ProjectAdministrationPage.this.getString("project.saved"));
                 }
+                target.add(feedbackPanel);
             }
         };
-        form.add(new TextField<>("projectTitle", model(from(form.getModelObject()).getName())));
-        DateRange defaultDateRange = new DateRange(DateUtil.getBeginOfYear(), DateUtil.getEndOfYear());
-        form.add(new DateRangeInputField("projectStart", model(from(form.getModelObject()).getDateRange()), defaultDateRange, DateRangeInputField.DROP_LOCATION.DOWN));
+
+        form.add(submitLink);
+        form.add(textField);
+        form.add(dateField);
         return form;
     }
 
