@@ -18,6 +18,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.wickedsource.budgeteer.service.budget.BudgetService;
+import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
 import org.wickedsource.budgeteer.service.budget.EditBudgetData;
 import org.wickedsource.budgeteer.service.contract.ContractBaseData;
 import org.wickedsource.budgeteer.service.contract.ContractService;
@@ -32,6 +33,7 @@ import org.wickedsource.budgeteer.web.pages.budgets.edit.EditBudgetPage;
 import org.wickedsource.budgeteer.web.pages.budgets.edit.tagsfield.TagsTextField;
 import org.wickedsource.budgeteer.web.pages.budgets.overview.BudgetsOverviewPage;
 
+import javax.swing.text.html.HTML;
 import java.util.List;
 
 import static org.wicketstuff.lazymodel.LazyModel.from;
@@ -72,7 +74,11 @@ public class EditBudgetForm extends Form<EditBudgetData> {
             @Override
             protected void onEvent(AjaxRequestTarget target) {
                 if (getModelObject().getTags().size() > 0) {
-                    BudgeteerSession.get().getBudgetFilter().getSelectedTags().remove(getModelObject().getTags().remove(0));
+                    String tag = getModelObject().getTags().remove(0);
+                    BudgetTagFilter filter = BudgeteerSession.get().getBudgetFilter();
+                    if (filter != null) {
+                        filter.getSelectedTags().remove(tag);
+                    }
                 }
             }
         });
@@ -92,7 +98,7 @@ public class EditBudgetForm extends Form<EditBudgetData> {
                     public Object getDisplayValue(ContractBaseData object) {
                         return object == null ? getString("no.contract") : object.getContractName();
                     }
-                }){
+                }) {
             @Override
             protected String getNullValidDisplayValue() {
                 return EditBudgetForm.this.getString("no.contract");
