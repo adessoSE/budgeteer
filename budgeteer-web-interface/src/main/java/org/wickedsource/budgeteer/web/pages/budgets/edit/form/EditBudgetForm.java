@@ -18,7 +18,6 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.wickedsource.budgeteer.service.budget.BudgetService;
-import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
 import org.wickedsource.budgeteer.service.budget.EditBudgetData;
 import org.wickedsource.budgeteer.service.contract.ContractBaseData;
 import org.wickedsource.budgeteer.service.contract.ContractService;
@@ -33,7 +32,6 @@ import org.wickedsource.budgeteer.web.pages.budgets.edit.EditBudgetPage;
 import org.wickedsource.budgeteer.web.pages.budgets.edit.tagsfield.TagsTextField;
 import org.wickedsource.budgeteer.web.pages.budgets.overview.BudgetsOverviewPage;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.wicketstuff.lazymodel.LazyModel.from;
@@ -74,7 +72,6 @@ public class EditBudgetForm extends Form<EditBudgetData> {
             @Override
             protected void onEvent(AjaxRequestTarget target) {
                 if (getModelObject().getTags().size() > 0) {
-                    String tag = getModelObject().getTags().remove(0);
                     BudgeteerSession.get().getBudgetFilter().getSelectedTags().remove(getModelObject().getTags().remove(0));
                 }
             }

@@ -9,7 +9,6 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.service.budget.BudgetService;
-import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.components.links.NetGrossLink;
@@ -27,8 +26,6 @@ import org.wickedsource.budgeteer.web.pages.budgets.overview.table.FilteredBudge
 import org.wickedsource.budgeteer.web.pages.budgets.weekreport.multi.MultiBudgetWeekReportPage;
 import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 
-import java.util.ArrayList;
-
 import static org.wicketstuff.lazymodel.LazyModel.from;
 import static org.wicketstuff.lazymodel.LazyModel.model;
 
@@ -40,12 +37,6 @@ public class BudgetsOverviewPage extends BasePage {
 
     public BudgetsOverviewPage() {
         BudgetTagsModel tagsModel = new BudgetTagsModel(BudgeteerSession.get().getProjectId());
-        /*
-        if (BudgeteerSession.get().getBudgetFilter() == null) {
-            BudgetTagFilter filter = new BudgetTagFilter(new ArrayList<>(), BudgeteerSession.get().getProjectId());
-            BudgeteerSession.get().setBudgetFilter(filter);
-        }
-        */
         add(new BudgetRemainingFilterPanel("remainingFilter", new RemainingBudgetFilterModel(BudgeteerSession.get().getProjectId())));
         add(new BudgetTagFilterPanel("tagFilter", tagsModel));
         FilteredBudgetModel filteredBudgetModel = new FilteredBudgetModel(BudgeteerSession.get().getProjectId(), model(from(BudgeteerSession.get().getBudgetFilter())));
