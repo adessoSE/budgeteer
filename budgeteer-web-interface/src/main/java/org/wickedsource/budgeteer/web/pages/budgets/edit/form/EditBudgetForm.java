@@ -33,6 +33,7 @@ import org.wickedsource.budgeteer.web.pages.budgets.edit.EditBudgetPage;
 import org.wickedsource.budgeteer.web.pages.budgets.edit.tagsfield.TagsTextField;
 import org.wickedsource.budgeteer.web.pages.budgets.overview.BudgetsOverviewPage;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.wicketstuff.lazymodel.LazyModel.from;
@@ -74,10 +75,7 @@ public class EditBudgetForm extends Form<EditBudgetData> {
             protected void onEvent(AjaxRequestTarget target) {
                 if (getModelObject().getTags().size() > 0) {
                     String tag = getModelObject().getTags().remove(0);
-                    BudgetTagFilter filter = BudgeteerSession.get().getBudgetFilter();
-                    if (filter != null) {
-                        filter.getSelectedTags().remove(tag);
-                    }
+                    BudgeteerSession.get().getBudgetFilter().getSelectedTags().remove(getModelObject().getTags().remove(0));
                 }
             }
         });

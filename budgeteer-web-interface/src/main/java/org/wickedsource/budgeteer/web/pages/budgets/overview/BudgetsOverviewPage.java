@@ -40,15 +40,17 @@ public class BudgetsOverviewPage extends BasePage {
 
     public BudgetsOverviewPage() {
         BudgetTagsModel tagsModel = new BudgetTagsModel(BudgeteerSession.get().getProjectId());
+        /*
         if (BudgeteerSession.get().getBudgetFilter() == null) {
             BudgetTagFilter filter = new BudgetTagFilter(new ArrayList<>(), BudgeteerSession.get().getProjectId());
             BudgeteerSession.get().setBudgetFilter(filter);
         }
+        */
         add(new BudgetRemainingFilterPanel("remainingFilter", new RemainingBudgetFilterModel(BudgeteerSession.get().getProjectId())));
         add(new BudgetTagFilterPanel("tagFilter", tagsModel));
         FilteredBudgetModel filteredBudgetModel = new FilteredBudgetModel(BudgeteerSession.get().getProjectId(), model(from(BudgeteerSession.get().getBudgetFilter())));
         filteredBudgetModel.setRemainingFilterModel(model(from(BudgeteerSession.get().getRemainingBudgetFilterValue())));
-        add(new BudgetOverviewTable("budgetTable", filteredBudgetModel ,getBreadcrumbsModel()));
+        add(new BudgetOverviewTable("budgetTable", filteredBudgetModel, getBreadcrumbsModel()));
         add(new BookmarkablePageLink<MultiBudgetWeekReportPage>("weekReportLink", MultiBudgetWeekReportPage.class));
         add(new BookmarkablePageLink<MultiBudgetMonthReportPage>("monthReportLink", MultiBudgetMonthReportPage.class));
         add(createNewBudgetLink("createBudgetLink"));
@@ -59,11 +61,11 @@ public class BudgetsOverviewPage extends BasePage {
 
     private Component createReportLink(String string) {
         Link link = new Link(string) {
-			@Override
-			public void onClick() {
-				setResponsePage(new BudgetReportPage(BudgetsOverviewPage.class, new PageParameters()));
-			}
-		};
+            @Override
+            public void onClick() {
+                setResponsePage(new BudgetReportPage(BudgetsOverviewPage.class, new PageParameters()));
+            }
+        };
 
         if (!budgetService.projectHasBudgets(BudgeteerSession.get().getProjectId())) {
             link.setEnabled(false);
@@ -71,7 +73,7 @@ public class BudgetsOverviewPage extends BasePage {
             link.add(new AttributeModifier("title", BudgetsOverviewPage.this.getString("links.budget.label.no.budget")));
         }
         return link;
-	}
+    }
 
     private Link createNewBudgetLink(String id) {
         return new Link(id) {
