@@ -17,6 +17,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
 import org.wickedsource.budgeteer.persistence.user.UserEntity;
 import org.wickedsource.budgeteer.service.project.ProjectBaseData;
 import org.wickedsource.budgeteer.service.project.ProjectService;
@@ -60,11 +61,9 @@ public class BudgeteerAdministrationOverview extends BasePage {
         add(createProjectList("projectList", new ListModel<>(projectService.getAllProjects())));
     }
 
-
     private ListView<User> createUserList(String id, IModel<List<User>> model) {
 
         return new ListView<User>(id, model) {
-
             @Override
             protected void populateItem(final ListItem<User> item) {
                 item.add(new Label("username", model(from(item.getModel()).getName())));
@@ -146,6 +145,7 @@ public class BudgeteerAdministrationOverview extends BasePage {
 
     private Component createEmailTextField(ListItem<User> item) {
         EmailTextField textField = new EmailTextField("setEmailTextBox", Model.of(item.getModelObject().getMail()));
+
         Form emailResetField = new Form("emailResetField"){
 
             @Override
@@ -158,6 +158,8 @@ public class BudgeteerAdministrationOverview extends BasePage {
                     feedbackPanel.error(getString("email.error"));
                 }
             }
+
+
         };
         Button submitButton = new Button("resetEmailButton",  Model.of(BudgeteerAdministrationOverview.this.getString("reset.email")));
         return emailResetField.add(textField, submitButton);

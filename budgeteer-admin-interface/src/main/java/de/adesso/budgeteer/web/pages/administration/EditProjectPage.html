@@ -15,13 +15,13 @@
                     <div class="box-body">
                         <div class="col-md-3">
                             <label for="projectTitle" class="col-md-4"><wicket:message key="project.title.label"></wicket:message></label>
-                            <input id="projectTitle" name="projectTitle" class="col-md-6" wicket:id="projectTitle">
+                            <input id="projectTitle" name="projectTitle" maxlength="255" class="col-md-6" wicket:id="projectTitle">
                         </div>
                         <div class="col-md-8">
                             <label for="projectStart" class="col-md-3"><wicket:message key="project.start.label"></wicket:message></label>
-                            <input id="projectStart" name="projectStart" class="col-md-6" type="text" wicket:id="projectStart">
+                            <input id="projectStart" name="projectStart" maxlength="255" class="col-md-6" type="text" wicket:id="projectStart">
                         </div>
-                        <input type="submit" value="Save" class="btn btn-primary btn-flat">
+                        <input type="submit" value="Save" class="btn btn-success btn-sm">
                     </div>
                 </div>
             </form>
@@ -71,11 +71,11 @@
                 <div class="box-body">
                     <p><wicket:message key="add.user.description"></wicket:message></p>
                     <form wicket:id="addUserForm">
-                        <div class="input-group margin">
-                            <select wicket:id="userChoice" placeholder="Project Name" class="form-control">
+                        <div class="input-group">
+                            <select wicket:id="userChoice" placeholder="Project Name" class="form-control big-drop-dropdown">
                             </select>
                         <span class="input-group-btn">
-                          <button class="btn btn-primary btn-flat" type="submit">
+                          <button class="btn btn-success btn-sm" type="submit">
                               <wicket:message key="add.user.button"></wicket:message>
                           </button>
                         </span>

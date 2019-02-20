@@ -109,3 +109,18 @@ table.smallLastColumn tr td:last-child {
 .budgetDetails {
 	height: 270px;
 }
+
+.entry{
+    height: 28px;
+    position: relative;
+    top: 1.5px;
+}
+
+.entry-cell{
+    box-shadow: inset 0px 0px 0px 0px rgba(0, 0, 0, 0);
+    display: inline-block;
+}
+
+.big-drop-dropdown{
+    height: 30px;
+}
