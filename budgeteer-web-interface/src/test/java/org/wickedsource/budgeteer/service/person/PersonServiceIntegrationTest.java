@@ -6,8 +6,6 @@ import com.github.springtestdbunit.annotation.DatabaseTearDown;
 import org.joda.money.CurrencyUnit;
 import org.joda.money.Money;
 import org.joda.time.DateTime;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -122,16 +120,17 @@ class PersonServiceIntegrationTest extends IntegrationTestTemplate {
     @DatabaseSetup("personWithRates.xml")
     @DatabaseTearDown(value = "personWithRates.xml", type = DatabaseOperation.DELETE_ALL)
     void testWarnAboutManuallyEditedRates() {
-        Locale.setDefault(Locale.GERMANY);
-
         PersonWithRates person = service.loadPersonWithRates(1);
+
+        Locale.setDefault(Locale.GERMANY);
+        SimpleDateFormat dateFormat = new SimpleDateFormat();
+        DateRange.setFormatter(dateFormat);
 
         List<String> warnings = service.getOverlapWithManuallyEditedRecords(person, 1);
         Assertions.assertEquals(1, warnings.size());
 
         DateTime startDate = new DateTime(2015, 1, 1, 0, 0);
         DateTime endDate = new DateTime(2015, 8, 16, 0, 0);
-        SimpleDateFormat dateFormat = new SimpleDateFormat();
 
         Assertions.assertEquals("A work record in the range " +
                 dateFormat.format(startDate.toDate()) + " - " + dateFormat.format(endDate.toDate()) +

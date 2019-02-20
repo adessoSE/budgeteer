@@ -1,5 +1,7 @@
 package org.wickedsource.budgeteer.service;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -13,6 +15,8 @@ public class DateRange implements Serializable {
 
     private Date endDate;
 
+    @Setter
+    @Getter
     private static SimpleDateFormat formatter = new SimpleDateFormat();
 
     public DateRange(Date startDate, Date endDate) {
