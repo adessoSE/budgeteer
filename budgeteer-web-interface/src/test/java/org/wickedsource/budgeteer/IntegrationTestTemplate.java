@@ -25,9 +25,7 @@ public abstract class IntegrationTestTemplate {
 
     @BeforeEach
     public void setAuthentication() {
-        Locale.setDefault(Locale.GERMANY);
         // set placeholder authentication
         SecurityContextHolder.getContext().setAuthentication(new BudgeteerAuthenticationToken("user"));
     }
-
 }

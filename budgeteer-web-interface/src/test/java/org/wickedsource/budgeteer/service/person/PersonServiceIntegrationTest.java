@@ -6,6 +6,8 @@ import com.github.springtestdbunit.annotation.DatabaseTearDown;
 import org.joda.money.CurrencyUnit;
 import org.joda.money.Money;
 import org.joda.time.DateTime;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,7 @@ import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 
 class PersonServiceIntegrationTest extends IntegrationTestTemplate {
 
@@ -82,7 +85,7 @@ class PersonServiceIntegrationTest extends IntegrationTestTemplate {
     @Test
     @DatabaseSetup("personWithRates.xml")
     @DatabaseTearDown(value = "personWithRates.xml", type = DatabaseOperation.DELETE_ALL)
-    void testRemoveRateFromPerson() throws Exception{
+    void testRemoveRateFromPerson() throws Exception {
         PersonWithRates person = service.loadPersonWithRates(1L);
         Assertions.assertEquals(0, service.getMissingDailyRatesForPerson(person.getPersonId()).size());
 
@@ -129,7 +132,7 @@ class PersonServiceIntegrationTest extends IntegrationTestTemplate {
         SimpleDateFormat dateFormat = new SimpleDateFormat();
 
         Assertions.assertEquals("A work record in the range " +
-                dateFormat.format(startDate.toDate()) +" - " + dateFormat.format(endDate.toDate()) +
+                dateFormat.format(startDate.toDate()) + " - " + dateFormat.format(endDate.toDate()) +
                 " (Exact Date and Amount: 2015-01-01, EUR 100.00) for budget \"Budget 1\" has " +
                 "already been edited manually and will not be overwritten.", warnings.get(0));
     }

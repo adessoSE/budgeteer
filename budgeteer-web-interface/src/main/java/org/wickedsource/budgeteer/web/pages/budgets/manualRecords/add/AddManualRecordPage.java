@@ -29,7 +29,7 @@ public class AddManualRecordPage extends DialogPageWithBacklink {
     public AddManualRecordPage(Class<? extends WebPage> backlinkPage, PageParameters backlinkParameters) {
         super(backlinkPage, backlinkParameters);
         isEditing = false;
-        Form<ManualRecord> form = new AddManualRecordForm("form",backlinkParameters);
+        Form<ManualRecord> form = new AddManualRecordForm("form", backlinkParameters);
         addComponents(form);
     }
 
@@ -38,7 +38,7 @@ public class AddManualRecordPage extends DialogPageWithBacklink {
      *
      * @param parameters page parameters containing the id of the manual record to edit.
      */
-    public AddManualRecordPage(PageParameters parameters, Class<? extends WebPage> backlinkPage, PageParameters backlinkParameters,boolean isEditingNewRecord, boolean isSaveResponse) {
+    public AddManualRecordPage(PageParameters parameters, Class<? extends WebPage> backlinkPage, PageParameters backlinkParameters, boolean isEditingNewRecord, boolean isSaveResponse) {
         super(parameters, backlinkPage, backlinkParameters);
         isEditing = true;
         ManualRecord record = service.loadManualRecord(getManualRecordId());
@@ -51,10 +51,9 @@ public class AddManualRecordPage extends DialogPageWithBacklink {
         add(createBacklink("cancelButton1"));
         form.add(createBacklink("cancelButton2"));
 
-        if(isEditing){
+        if (isEditing) {
             add(new Label("pageTitle", new ResourceModel("page.title.editmode")));
-        }
-        else{
+        } else {
             add(new Label("pageTitle", new ResourceModel("page.title.createmode")));
         }
 

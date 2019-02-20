@@ -10,7 +10,6 @@ import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.wickedsource.budgeteer.service.DateUtil;
 import org.wickedsource.budgeteer.service.manualRecord.ManualRecord;
 import org.wickedsource.budgeteer.service.manualRecord.ManualRecordService;
 import org.wickedsource.budgeteer.web.ClassAwareWrappingModel;
@@ -52,11 +51,10 @@ public class AddManualRecordForm extends Form<ManualRecord> {
         Injector.get().inject(this);
         addComponents();
 
-        if(isEditingNewRecord)
-        {
+        if (isEditingNewRecord) {
             this.success("Record successfully created.");
         }
-        if(isSaveResponse){
+        if (isSaveResponse) {
             this.success("Changes successfully saved.");
         }
     }
@@ -65,7 +63,7 @@ public class AddManualRecordForm extends Form<ManualRecord> {
         add(new CustomFeedbackPanel("feedback"));
         add(new RequiredTextField<>("description", model(from(getModel()).getDescription())));
 
-        if(getModelObject().getBillingDate() == null){
+        if (getModelObject().getBillingDate() == null) {
             getModelObject().setBillingDate(new Date());
         }
         add(new DateInputField("billingDate", model(from(getModelObject()).getBillingDate())));
@@ -92,8 +90,7 @@ public class AddManualRecordForm extends Form<ManualRecord> {
                 long newId = service.saveManualRecord(getModelObject());
                 setResponsePage(new AddManualRecordPage(AddManualRecordPage.createParameters(newId),
                         ManualRecordOverviewPage.class, backlinkParameters, true, false));
-            }
-            else{
+            } else {
                 this.success(getString("feedback.success"));
                 long newId = service.saveManualRecord(getModelObject());
                 setResponsePage(new AddManualRecordPage(AddManualRecordPage.createParameters(newId),

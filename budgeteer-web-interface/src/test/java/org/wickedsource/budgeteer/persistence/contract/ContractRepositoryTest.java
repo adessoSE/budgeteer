@@ -16,17 +16,6 @@ class ContractRepositoryTest extends IntegrationTestTemplate {
     @Test
     @DatabaseSetup("contract.xml")
     @DatabaseTearDown(value = "contract.xml", type = DatabaseOperation.DELETE_ALL)
-    void testGetBudgetLeftByContractId() {
-        Double BudgetLeft1 = repository.getBudgetLeftByContractId(1L);
-        Double BudgetLeft2 = repository.getBudgetLeftByContractId(2L);
-
-        Assertions.assertEquals(8600, BudgetLeft1, 10e-8);
-        Assertions.assertEquals(10000, BudgetLeft2, 10e-8);
-    }
-
-    @Test
-    @DatabaseSetup("contract.xml")
-    @DatabaseTearDown(value = "contract.xml", type = DatabaseOperation.DELETE_ALL)
     void testGetBudgetOfContract() {
         double budget = repository.getBudgetOfContract(1L);
         Assertions.assertEquals(10000, budget);

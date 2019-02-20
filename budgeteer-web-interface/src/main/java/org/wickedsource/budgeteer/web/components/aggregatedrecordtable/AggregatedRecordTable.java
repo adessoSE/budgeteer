@@ -47,29 +47,27 @@ public class AggregatedRecordTable extends Panel {
                 item.add(new Label("endDate", model(from(item.getModel()).getAggregationPeriodEnd())));
                 item.add(new Label("hours", model(from(item.getModel()).getHours())));
 
-                item.add(new MoneyLabel( "budgetBurned_net",
+                item.add(new MoneyLabel("budgetBurned_net",
                         new TaxBudgetUnitMoneyModel(
                                 new BudgetUnitMoneyModel(model(from(item.getModel()).getBudgetBurned_net())),
                                 new BudgetUnitMoneyModel(model(from(item.getModel()).getBudgetBurned_gross()))
                         )));
 
-                item.add(new MoneyLabel( "budgetPlanned_net",
+                item.add(new MoneyLabel("budgetPlanned_net",
                         new TaxBudgetUnitMoneyModel(
                                 new BudgetUnitMoneyModel(model(from(item.getModel()).getBudgetPlanned_net())),
                                 new BudgetUnitMoneyModel(model(from(item.getModel()).getBudgetPlanned_gross()))
                         )));
 
                 Money difference;
-                if(!BudgeteerSession.get().isTaxEnabled())
-                {
+                if (!BudgeteerSession.get().isTaxEnabled()) {
                     difference = from(item.getModel()).getDifference();
-                }
-                else {
+                } else {
                     difference = from(item.getModel()).getDifference_gross();
                 }
 
                 Label differenceLabel = new MoneyLabel("difference", new BudgetUnitMoneyModel(model(difference))) {
-                //Label differenceLabel = new MoneyLabel("difference", new BudgetUnitMoneyModel(model(from(item.getModel()).getDifference()))) {
+                    //Label differenceLabel = new MoneyLabel("difference", new BudgetUnitMoneyModel(model(from(item.getModel()).getDifference()))) {
                     @Override
                     protected void onConfigure() {
                         IModel<Money> model = (IModel<Money>) getDefaultModel();
@@ -90,10 +88,9 @@ public class AggregatedRecordTable extends Panel {
         };
     }
 
-    private void createNetGrossLabels(WebMarkupContainer table)
-    {
+    private void createNetGrossLabels(WebMarkupContainer table) {
         table.add(new Label("plannedLabel", new TaxLabelModel(
-            new StringResourceModel("aggregated.table.budget.plannedLabel", this))));
+                new StringResourceModel("aggregated.table.budget.plannedLabel", this))));
         table.add(new Label("burnedLabel", new TaxLabelModel(
                 new StringResourceModel("aggregated.table.budget.burnedLabel", this))));
         table.add(new Label("differenceLabel", new TaxLabelModel(

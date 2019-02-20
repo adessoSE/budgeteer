@@ -13,6 +13,7 @@ import java.util.List;
 
 public interface FixedDailyRateRepository extends QueryDslPredicateExecutor<FixedDailyRateEntity>,
         CrudRepository<FixedDailyRateEntity, Long>, JpaSpecificationExecutor {
+
     @Query("select new FixedDailyRateEntity(r.id,  r.budget, r.startDate, r.endDate, r.days, r.moneyAmount, r.name, r.description) " +
             "from FixedDailyRateEntity r " +
             "where r.budget.id = :budgetId")
@@ -52,4 +53,9 @@ public interface FixedDailyRateRepository extends QueryDslPredicateExecutor<Fixe
             "from FixedDailyRateEntity r " +
             "where r.budget.contract.id=:contractId")
     List<FixedDailyRate> getFixedDailyRatesByContract(@Param("contractId") long contractId);
+
+    @Query("select coalesce(sum(fixed.moneyAmount * fixed.days),0) " +
+            "from FixedDailyRateEntity fixed " +
+            "where fixed.budget.contract.id = :contractId")
+    Double getSpentMoneyOfContract(@Param("contractId") long contractId);
 }

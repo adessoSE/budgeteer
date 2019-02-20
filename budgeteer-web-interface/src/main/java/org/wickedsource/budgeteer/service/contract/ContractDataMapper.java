@@ -31,6 +31,9 @@ public class ContractDataMapper extends AbstractMapper<ContractEntity, ContractB
     @Autowired
     private ManualRecordRepository manualRecordRepository;
 
+    @Autowired
+    private ContractService contractService;
+
     @Override
     public ContractBaseData map(ContractEntity entity) {
         if (entity == null) {
@@ -41,8 +44,8 @@ public class ContractDataMapper extends AbstractMapper<ContractEntity, ContractB
         result.setContractId(entity.getId());
         result.setSortingIndex(0);
         result.setBudget(entity.getBudget());
-        result.setBudgetLeft(toMoneyNullsafe(contractRepository.getBudgetLeftByContractId(entity.getId())));
-        result.setBudgetSpent(toMoneyNullsafe(contractRepository.getSpentBudgetByContractId(entity.getId())));
+        result.setBudgetLeft(contractService.getBudgetLeft(entity.getId()));
+        result.setBudgetSpent(contractService.getBudgetSpent(entity.getId()));
         result.setInternalNumber(entity.getInternalNumber());
         result.setProjectId(entity.getProject().getId());
         result.setType(entity.getType());
@@ -80,11 +83,5 @@ public class ContractDataMapper extends AbstractMapper<ContractEntity, ContractB
         return result;
     }
 
-    private Money toMoneyNullsafe(Double cents) {
-        if (cents == null) {
-            return MoneyUtil.createMoneyFromCents(0L);
-        } else {
-            return MoneyUtil.createMoneyFromCents(Math.round(cents));
-        }
-    }
+
 }
