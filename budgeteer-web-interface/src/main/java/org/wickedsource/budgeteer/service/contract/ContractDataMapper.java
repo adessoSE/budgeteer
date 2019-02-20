@@ -82,6 +82,4 @@ public class ContractDataMapper extends AbstractMapper<ContractEntity, ContractB
         }
         return result;
     }
-
-
 }

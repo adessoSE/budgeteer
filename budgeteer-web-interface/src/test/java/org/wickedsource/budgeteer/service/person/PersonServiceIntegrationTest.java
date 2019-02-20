@@ -122,6 +122,8 @@ class PersonServiceIntegrationTest extends IntegrationTestTemplate {
     @DatabaseSetup("personWithRates.xml")
     @DatabaseTearDown(value = "personWithRates.xml", type = DatabaseOperation.DELETE_ALL)
     void testWarnAboutManuallyEditedRates() {
+        Locale.setDefault(Locale.GERMANY);
+
         PersonWithRates person = service.loadPersonWithRates(1);
 
         List<String> warnings = service.getOverlapWithManuallyEditedRecords(person, 1);
