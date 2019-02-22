@@ -12,6 +12,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.StringValue;
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.representations.AccessToken;
+import org.wickedsource.budgeteer.service.user.User;
 import org.wickedsource.budgeteer.web.BudgeteerReferences;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.components.instantiation.NeedsProject;
@@ -34,6 +35,8 @@ import org.wickedsource.budgeteer.web.settings.BudgeteerSettings;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.Set;
 
 @NeedsLogin
@@ -76,7 +79,7 @@ public abstract class BasePage extends WebPage {
         add(notificationDropdown);
         add(new BudgetUnitChoice("budgetUnitDropdown", new BudgetUnitModel(projectId)));
 
-        BookmarkablePageLink<ProjectAdministrationPage> pageLink = new BookmarkablePageLink<ProjectAdministrationPage>("administrationLink", ProjectAdministrationPage.class);
+        BookmarkablePageLink<ProjectAdministrationPage> pageLink = new BookmarkablePageLink<>("administrationLink", ProjectAdministrationPage.class);
         add(pageLink);
         if (!currentUserIsAdmin()) {
             pageLink.setVisible(false);
@@ -98,12 +101,13 @@ public abstract class BasePage extends WebPage {
             HttpServletRequest request = (HttpServletRequest) getRequestCycle().getRequest().getContainerRequest();
             AccessToken accessToken = ((KeycloakPrincipal) request.getUserPrincipal()).getKeycloakSecurityContext().getToken();
             Set<String> realmRoles = accessToken.getRealmAccess().getRoles();
-            HashSet<UserRole> roles= new HashSet<>();
-            for(String s : realmRoles){
+            HashSet<UserRole> roles = new HashSet<>();
+
+            for (String s : realmRoles) {
                 roles.add(UserRole.valueOf(s));
             }
             return roles;
-        }else{
+        } else {
             return new HashSet<>(BudgeteerSession.get().getLoggedInUser().getRoles(BudgeteerSession.get().getProjectId()));
         }
     }

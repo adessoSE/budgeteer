@@ -159,7 +159,9 @@ public class EditProjectPage extends BasePage {
 
     @Override
     protected BreadcrumbsModel getBreadcrumbsModel() {
-        return new BreadcrumbsModel(BudgeteerAdministrationOverview.class, EditProjectPage.class);
+        BreadcrumbsModel model = new BreadcrumbsModel(BudgeteerAdministrationOverview.class);
+        model.addBreadcrumb(EditProjectPage.class, getPageParameters());
+        return model;
     }
 
     private Component createBackButton(){

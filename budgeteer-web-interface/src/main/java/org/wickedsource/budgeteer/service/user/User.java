@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.*;
 
 public class User implements Serializable {
     @Getter
@@ -30,23 +31,28 @@ public class User implements Serializable {
     @Setter
     private String mail;
 
-    public List<UserRole> getRoles(long projectId){
-        if(roles == null){
+    public List<UserRole> getRoles(long projectId) {
+        List<UserRole> userRoles;
+        if (roles == null) {
             roles = new HashMap<>();
             roles.put(projectId, Collections.singletonList(UserRole.USER));
-            return roles.get(projectId);
-        }else{
-            return roles.get(projectId);
+            userRoles = roles.get(projectId);
+        } else {
+            userRoles = roles.get(projectId);
+            if (userRoles == null) {
+                //ToDo?
+            }
         }
+        return userRoles;
     }
 
     @Override
     public boolean equals(Object obj) {
-        if(obj.getClass().equals(User.class)) {
+        if (obj.getClass().equals(User.class)) {
             User other = (User) obj;
             return this.id == other.id && this.name.equals(other.name) &&
                     this.globalRole == other.globalRole;
-        }else{
+        } else {
             return false;
         }
     }
