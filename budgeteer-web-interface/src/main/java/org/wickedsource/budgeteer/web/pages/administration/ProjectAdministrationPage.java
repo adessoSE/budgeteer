@@ -31,6 +31,7 @@ import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPa
 import org.wickedsource.budgeteer.web.components.daterange.DateRangeInputField;
 import org.wickedsource.budgeteer.web.components.multiselect.MultiselectBehavior;
 import org.wickedsource.budgeteer.web.components.user.UserRole;
+import org.wickedsource.budgeteer.web.components.user.UserRoleCheckBox;
 import org.wickedsource.budgeteer.web.components.user.UserRoleDropdown;
 import org.wickedsource.budgeteer.web.pages.base.basepage.BasePage;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
@@ -144,22 +145,24 @@ public class ProjectAdministrationPage extends BasePage {
                     }
                 };
 
-                UserRoleDropdown makeAdminList = new UserRoleDropdown("roleDropdown", item.getModelObject(), projectID);
+                //UserRoleDropdown makeAdminList = new UserRoleDropdown("roleDropdown", item.getModelObject(), projectID);
+                UserRoleCheckBox adminCheckBox = new UserRoleCheckBox("adminCheckbox", item.getModelObject(), projectID);
+
                 // a user may not delete herself/himself unless another admin is present
                 if (item.getModelObject().getId() == thisUser.getId()){
                     List<User> usersInProjects = userService.getUsersInProject(projectID);
                     deleteButton.setVisible(false);
-                    makeAdminList.setVisible(false);
+                    adminCheckBox.setVisible(false);
                     for(User e : usersInProjects){
                         if(e.getId() != thisUser.getId() && e.getRoles(projectID).contains(UserRole.ADMIN)){
                             deleteButton.setVisible(true);
-                            makeAdminList.setVisible(true);
+                            adminCheckBox.setVisible(true);
                             break;
                         }
                     }
                 }
                 item.add(deleteButton);
-                item.add(makeAdminList);
+                item.add(adminCheckBox);
                 item.setOutputMarkupId(true);
             }
 
