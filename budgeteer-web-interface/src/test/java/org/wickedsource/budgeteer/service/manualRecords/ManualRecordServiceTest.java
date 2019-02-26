@@ -4,7 +4,6 @@ import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
-import net.bytebuddy.agent.builder.AgentBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,7 +25,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
@@ -42,7 +40,6 @@ public class ManualRecordServiceTest extends ServiceIntegrationTestTemplate {
     @Autowired
     private ManualRecordService manualRecordService;
 
-    //ToDo
     @Test
     @DatabaseSetup("manualRecords.xml")
     @DatabaseTearDown(value = "manualRecords.xml", type = DatabaseOperation.DELETE_ALL)
@@ -90,6 +87,14 @@ public class ManualRecordServiceTest extends ServiceIntegrationTestTemplate {
     @Test
     @DatabaseSetup("manualRecords.xml")
     @DatabaseTearDown(value = "manualRecords.xml", type = DatabaseOperation.DELETE_ALL)
+    void testLoadManualRecordNotExisting() {
+        ManualRecord record = manualRecordService.loadManualRecord(6L);
+        Assertions.assertNull(record);
+    }
+
+    @Test
+    @DatabaseSetup("manualRecords.xml")
+    @DatabaseTearDown(value = "manualRecords.xml", type = DatabaseOperation.DELETE_ALL)
     void testSaveManualRecord() {
         ManualRecord record = new ManualRecord();
 
@@ -115,7 +120,7 @@ public class ManualRecordServiceTest extends ServiceIntegrationTestTemplate {
     @DatabaseSetup("manualRecords.xml")
     @DatabaseTearDown(value = "manualRecords.xml", type = DatabaseOperation.DELETE_ALL)
     void testDeleteRecord() {
-        assertNotNull( manualRecordService.loadManualRecord(1L));
+        assertNotNull(manualRecordService.loadManualRecord(1L));
         manualRecordService.deleteRecord(1L);
         assertNull(manualRecordService.loadManualRecord(1L));
     }

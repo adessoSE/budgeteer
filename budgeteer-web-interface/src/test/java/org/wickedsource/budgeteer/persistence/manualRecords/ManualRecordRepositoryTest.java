@@ -24,6 +24,14 @@ public class ManualRecordRepositoryTest extends IntegrationTestTemplate {
     private ManualRecordRepository manualRecordRepository;
 
     @Test
+    @DatabaseSetup("getManualRecordSumForBudget.xml")
+    @DatabaseTearDown(value = "getManualRecordSumForBudget.xml", type = DatabaseOperation.DELETE_ALL)
+    void testGetManualRecordSumForBudget() throws Exception {
+        double sum = manualRecordRepository.getManualRecordSumForBudget(1L);
+        Assertions.assertEquals(1300.0, sum);
+    }
+
+    @Test
     @DatabaseSetup("aggregateByWeekForProject.xml")
     @DatabaseTearDown(value = "aggregateByWeekForProject.xml", type = DatabaseOperation.DELETE_ALL)
     void testAggregateByWeekForProject() throws Exception {
@@ -363,19 +371,10 @@ public class ManualRecordRepositoryTest extends IntegrationTestTemplate {
     }
 
     @Test
-    @DatabaseSetup("getSpentMoneyOfContractTillMonthAndYear.xml")
-    @DatabaseTearDown(value = "getSpentMoneyOfContractTillMonthAndYear.xml", type = DatabaseOperation.DELETE_ALL)
-    void testGetSpentMoneyOfContractTillMonthAndYear() throws Exception {
-        double spent = manualRecordRepository.getSpentMoneyOfContractTillMonthAndYear(1L, 5, 2016);
-        Assertions.assertEquals(1300, spent);
+    @DatabaseSetup("getSpentMoneyOfContract.xml")
+    @DatabaseTearDown(value = "getSpentMoneyOfContract.xml", type = DatabaseOperation.DELETE_ALL)
+    void testGetSpentMoneyOfContract() throws Exception {
+        double spent = manualRecordRepository.getSpentMoneyOfContract(1L);
+        Assertions.assertEquals(1400, spent);
     }
-
-    @Test
-    @DatabaseSetup("getSpentMoneyOfContractOfMonth.xml")
-    @DatabaseTearDown(value = "getSpentMoneyOfContractOfMonth.xml", type = DatabaseOperation.DELETE_ALL)
-    void testGetSpentMoneyOfContractOfMonth() throws Exception {
-        double spent = manualRecordRepository.getSpentMoneyOfContractOfMonth(1L, 1, 2016);
-        Assertions.assertEquals(1300, spent);
-    }
-
 }

@@ -1,0 +1,23 @@
+<dataset>
+    <PROJECT id="1" name="project1"/>
+
+    <CONTRACT id="1" CONTRACT_NAME="contract1" PROJECT_ID="1" BUDGET="1000000" INTERNAL_NUMBER="1"
+              START_DATE="2015-01-01"
+              CONTRACT_TYPE="0" TAXRATE="10.0"/>
+
+    <BUDGET id="1" name="Budget 1" total="100000" import_key="budget1" project_id="1" CONTRACT_ID="1"/>
+    <BUDGET id="2" name="Budget 2" total="100000" import_key="budget12" project_id="1" CONTRACT_ID="1"/>
+
+    <MANUAL_RECORD_ENTITY id="1" description="manual 1" MONEY_AMOUNT="800" BUDGET_ID="1" CREATION_DATE="2016-02-3"
+                          BILLING_DATE="2016-02-3" RECORD_YEAR="2016" RECORD_MONTH="1" RECORD_DAY="3" RECORD_WEEK="5"/>
+
+    <MANUAL_RECORD_ENTITY id="2" description="manual 1" MONEY_AMOUNT="400" BUDGET_ID="1" CREATION_DATE="2015-02-3"
+                          BILLING_DATE="2015-02-3" RECORD_YEAR="2015" RECORD_MONTH="1" RECORD_DAY="3" RECORD_WEEK="5"/>
+
+    <MANUAL_RECORD_ENTITY id="3" description="manual 1" MONEY_AMOUNT="200" BUDGET_ID="2" CREATION_DATE="2017-02-3"
+                          BILLING_DATE="2017-02-3" RECORD_YEAR="2017" RECORD_MONTH="1" RECORD_DAY="3" RECORD_WEEK="5"/>
+
+    <MANUAL_RECORD_ENTITY id="5" description="manual 1" MONEY_AMOUNT="100" BUDGET_ID="1" CREATION_DATE="2015-02-3"
+                          BILLING_DATE="2015-02-3" RECORD_YEAR="2015" RECORD_MONTH="1" RECORD_DAY="3" RECORD_WEEK="5"/>
+
+</dataset>
