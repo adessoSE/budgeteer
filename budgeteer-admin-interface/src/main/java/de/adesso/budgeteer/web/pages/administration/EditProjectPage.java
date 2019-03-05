@@ -57,9 +57,15 @@ public class EditProjectPage extends BasePage {
     @SpringBean
     private BudgeteerSettings settings;
 
+    private CustomFeedbackPanel feedbackPanel;
+
+
     public EditProjectPage(PageParameters pageParameters) {
         super(pageParameters);
-        add(new CustomFeedbackPanel("feedback"));
+      feedbackPanel = new CustomFeedbackPanel("feedback");
+        feedbackPanel.setOutputMarkupId(true);
+        add(feedbackPanel);
+       // add(new CustomFeedbackPanel("feedback"));
         add(createUserList("userList", new UsersInProjectModel(getParameterId())));
         add(createAddUserForm("addUserForm"));
         add(createEditProjectForm("projectChangeForm"));
@@ -124,8 +130,8 @@ public class EditProjectPage extends BasePage {
                     List<User> usersInProjects = userService.getUsersInProject(projectID);
                     deleteButton.setVisible(false);
                     adminCheckBox.setVisible(false);
-                    for(User e : usersInProjects){
-                        if(e.getId() != thisUser.getId() && e.getRoles(projectID).contains(UserRole.ADMIN)){
+                    for(User user : usersInProjects){
+                        if(user.getId() != thisUser.getId() && user.isProjectAdmin(projectID)){
                             deleteButton.setVisible(true);
                             adminCheckBox.setVisible(true);
                             break;

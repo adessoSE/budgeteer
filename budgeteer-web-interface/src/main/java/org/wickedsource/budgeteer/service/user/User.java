@@ -39,11 +39,20 @@ public class User implements Serializable {
             userRoles = roles.get(projectId);
         } else {
             userRoles = roles.get(projectId);
-            if (userRoles == null) {
+            if (userRoles == null)
+            {
                 //ToDo?
             }
         }
         return userRoles;
+    }
+
+    public boolean isProjectAdmin(long projectId) {
+        List<UserRole> roles = getRoles(projectId);
+        if (roles.contains(UserRole.ADMIN)) {
+            return true;
+        }
+        return false;
     }
 
     @Override
