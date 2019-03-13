@@ -13,6 +13,7 @@ import org.wickedsource.budgeteer.web.pages.templates.TemplateFilter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class BudgeteerSession extends WebSession {
@@ -91,16 +92,24 @@ public class BudgeteerSession extends WebSession {
     }
 
     public BudgetTagFilter getBudgetFilter() {
-        return budgetFilter.get(getProjectId());
+        BudgetTagFilter filter = budgetFilter.get(projectId);
+
+        if (filter == null) {
+            filter = new BudgetTagFilter(new ArrayList<>(), projectId);
+            setBudgetFilter(filter);
+        }
+
+        return filter;
     }
 
     public void setBudgetFilter(BudgetTagFilter budgetTagFilter) {
         this.budgetFilter.put(projectId, budgetTagFilter);
     }
+
     public TemplateFilter getTemplateFilter() {
-        if(templateFilter.get(getProjectId()) == null){
+        if (templateFilter.get(getProjectId()) == null) {
             return new TemplateFilter(getProjectId());
-        }else {
+        } else {
             return templateFilter.get(getProjectId());
         }
     }
@@ -144,8 +153,7 @@ public class BudgeteerSession extends WebSession {
      * Sets the given {@link Authentication} in the current {@link SecurityContext}
      * and saves the context in the session.
      *
-     * @param authToken
-     *          The {@link Authentication} to set in the {@link SecurityContext}.
+     * @param authToken The {@link Authentication} to set in the {@link SecurityContext}.
      */
     private void setAuthInSecurityContext(Authentication authToken) {
 
