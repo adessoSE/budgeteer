@@ -92,7 +92,7 @@ public class EditBudgetForm extends Form<EditBudgetData> {
                     public Object getDisplayValue(ContractBaseData object) {
                         return object == null ? getString("no.contract") : object.getContractName();
                     }
-                }){
+                }) {
             @Override
             protected String getNullValidDisplayValue() {
                 return EditBudgetForm.this.getString("no.contract");
