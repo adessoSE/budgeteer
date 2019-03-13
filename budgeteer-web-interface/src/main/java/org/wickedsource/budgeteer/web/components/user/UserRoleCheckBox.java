@@ -16,6 +16,8 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.service.user.User;
+import org.wickedsource.budgeteer.service.user.UserIdNotFoundException;
+import org.wickedsource.budgeteer.service.user.UserMapper;
 import org.wickedsource.budgeteer.service.user.UserService;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
@@ -131,6 +133,7 @@ public class UserRoleCheckBox extends Panel {
                             userService.removeAllRolesFromUser(user.getId(), projectID);
                             userService.addRoleToUser(user.getId(), projectID, UserRole.USER);
                             if (user.getId() == thisUser.getId()) {
+                                user = userService.updateUser(user);
                                 BudgeteerSession.get().setLoggedInUser(user);
                             }
                             setResponsePage(afterAdminDeletionPage, pageParameters);
@@ -159,6 +162,7 @@ public class UserRoleCheckBox extends Panel {
 
         if (user.getId() == thisUser.getId()) {
             BudgeteerSession.get().setLoggedInUser(user);
+            user = userService.updateUser(user);
         }
     }
 }

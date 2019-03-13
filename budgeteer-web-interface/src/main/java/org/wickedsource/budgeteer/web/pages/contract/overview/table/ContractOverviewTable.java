@@ -155,48 +155,186 @@ public class ContractOverviewTable extends Panel {
                                 "var target = false;\n" +
                                 "\n" +
                                 "$(document).ready(function(){\n" +
-                                "    table = $('.table').DataTable();\n" +
-                                "    // Remove arrows in the header cell of the sorting buttons\n" +
-                                "    $('#btnsHeadCell').removeClass('sorting_asc');\n" +
+                                "   table = $('.table').DataTable();\n" +
+                                "   // Remove arrows in the header cell of the sorting buttons\n" +
+                                "   $('#btnsHeadCell').removeClass('sorting_asc');\n" +
+                                "\n"+
+                                "   table.on('draw', function(){\n" +
+                                "       $('.upBtn').on('click',function(event){\n" +
+                                "           up(event);\n" +
+                                "       });\n"+
                                 "\n" +
-                                "    $('tr').click(function(){\n" +
-                                "        // Remove arrows in the header cell of the sorting buttons\n" +
-                                "        $('#btnsHeadCell').removeClass('sorting');\n" +
-                                "        saveSorting();\n" +
-                                "    })\n" +
-                                "$('.sorting-row').on('mousedown',function(event){\n" +
-                                "target = event.target;\n" +
-                                " handleBtn = $(event).closest('.dragBtn');\n" +
-                                "})\n" +
-                                "});" +
+                                "       $('.downBtn').on('click', function(event){\n" +
+                                "           down(event);\n"+
+                                "       });\n"+
+                                "   })\n"+
                                 "\n" +
-                                "function saveSorting(){\n" +
-                                "    var rows = table.rows();\n" +
-                                "    var contractIDs = [];\n" +
+                                "   // Get all row indices of the table\n" +
+                                "   function getAllIndices(){\n" +
+                                "       var indices = [];\n" +
+                                "       table.rows().eq(0).each( function ( index ) {\n" +
+                                "           indices.push(index);\n" +
+                                "       });\n" +
+                                "       return indices;\n" +
+                                "   }\n" +
                                 "\n" +
-                                "    rows.iterator('row', function(context, index){\n" +
-                                "         var node = $(this.row(index).node());\n" +
-                                "         var contractID = $(node).find(\"input\").get(0);\n" +
-                                "         contractIDs.push($(contractID).val());\n" +
-                                "    });\n" +
+                                "   // Get the row index of the element which triggered the event\n" +
+                                "   function getRowIndex(event){\n" +
+                                "       var source = event.target || event.srcElement;\n" +
+                                "       var thisRow = $(source).closest('tr');\n" +
+                                "       return table.row(thisRow).index();\n" +
+                                "   }\n" +
                                 "\n" +
-                                "    postAJAX(contractIDs);\n" +
+                                "   // Swap the rows of the two indices\n" +
+                                "   function swapRows(firstIndex, secondIndex) {\n" +
+                                "       var firstRowData = table.row(firstIndex).data();\n" +
+                                "       var secondRowData = table.row(secondIndex).data();\n" +
                                 "\n" +
-                                "    // Remove arrows in the header cell of the sorting buttons\n" +
-                                "    $(\"#btnsHeadCell\").removeClass('sorting_asc sorting');\n" +
-                                "}\n" +
+                                "       if(typeof secondRowData !== 'undefined'){\n" +
+                                "           table.row(firstIndex).data(secondRowData).draw(false);\n" +
+                                "           table.row(secondIndex).data(firstRowData).draw(false);\n" +
+                                "       }\n" +
+                                "   }\n" +
                                 "\n" +
-                                "function postAJAX(tableData){\n" +
-                                "    try{\n" +
-                                "        var commandToSend = 'tableData ='+tableData;\n" +
-                                "        var wcall = Wicket.Ajax.post({\n" +
-                                "            u: callbackUrl + '&'+commandToSend\n" +
-                                "        });\n" +
-                                "    }\n" +
-                                "    catch(e){\n" +
-                                "    }\n" +
-                                "}\n" +
-                                ""
+                                "   function down(event){\n" +
+                                "       var page = table.page();\n" +
+                                "       // Order by the first column, else row swapping doesn't work\n" +
+                                "       table.order([0, 'asc']);\n" +
+                                "       var thisIndex = getRowIndex(event);\n" +
+                                "       var allIndices = getAllIndices();\n" +
+                                "       var arrayIndex = allIndices.indexOf(thisIndex);\n" +
+                                "       var nextIndex = allIndices[arrayIndex+1];\n" +
+                                "       swapRows(thisIndex, nextIndex);\n" +
+                                "       table.page(page).draw(false );\n" +
+                                "       saveSorting();\n" +
+                                "   }\n"+
+                                "\n" +
+                                "   function up(event){\n" +
+                                "       var page = table.page();\n" +
+                                "       // Order by the first column, else row swapping doesn't work\n" +
+                                "       table.order([0, 'asc']);\n" +
+                                "       var thisIndex = getRowIndex(event);\n" +
+                                "       var allIndices = getAllIndices();\n" +
+                                "       var arrayIndex = allIndices.indexOf(thisIndex);\n" +
+                                "       var previousIndex = allIndices[arrayIndex-1];\n" +
+                                "       swapRows(thisIndex, previousIndex);\n" +
+                                "       table.page(page).draw( false );\n" +
+                                "       saveSorting();\n" +
+                                "   }\n"+
+                                "\n" +
+                                "   $('tr').click(function(){\n" +
+                                "       // Remove arrows in the header cell of the sorting buttons\n" +
+                                "       $('#btnsHeadCell').removeClass('sorting');\n" +
+                                "       saveSorting();\n" +
+                                "   });\n" +
+                                "\n" +
+                                "   $('.upBtn').on('mouseenter', function(event){\n" +
+                                "       hover(event, true);\n" +
+                                "   });\n" +
+                                "\n" +
+                                "   $('.upBtn').on('mouseleave', function(event){\n" +
+                                "       hover(event, false);\n" +
+                                "   });\n" +
+                                "\n" +
+                                "   $('.upBtn').on('click',function(event){\n" +
+                                "       up(event);" +
+                                "   });\n"+
+                                "\n" +
+                                "   $('.downBtn').on('click', function(event){\n" +
+                                "       down(event);"+
+                                "   });\n"+
+                                "\n" +
+                                "   $('.downBtn').on('mouseenter', function(event){\n" +
+                                "       hover(event, true);\n" +
+                                "   });\n" +
+                                "\n" +
+                                "   $('.downBtn').on('mouseleave', function(event){\n" +
+                                "       hover(event, false);\n" +
+                                "   });\n" +
+                                "\n" +
+                                "   $('.dragBtn').on('mouseenter', function(event){\n" +
+                                "       hover(event, true);\n" +
+                                "   });\n" +
+                                "\n" +
+                                "   $('.dragBtn').on('mouseleave', function(event){\n" +
+                                "       hover(event, false);\n" +
+                                "   });\n" +
+                                "\n" +
+                                "   $('.sorting-row').on('mousedown',function(event){\n" +
+                                "       target = event.target;\n" +
+                                "       handleBtn = $(event).closest('.dragBtn');\n" +
+                                "   });\n" +
+                                "\n" +
+                                "   $('.sorting-row').on('drop', function(event){ \n" +
+                                "       event.stopPropagation();\n" +
+                                "       event.preventDefault();\n" +
+                                "       var currentIndex = getRowIndex(event);\n" +
+                                "       var oldIndex = table.row(draggedRow).index();\n" +
+                                "       swapRows(currentIndex, oldIndex);\n" +
+                                "       saveSorting();\n" +
+                                "   });\n" +
+                                "\n" +
+                                "   $('.sorting-row').on('dragover', function(ev){ \n" +
+                                "       ev.preventDefault();\n" +
+                                "   });\n" +
+                                "\n" +
+                                "   $('.sorting-row').on('dragstart', function(event){\n" +
+                                "       event.dataTransfer = event.originalEvent.dataTransfer;\n"+
+                                "       if($(target).hasClass('dragBtn') || $(target).hasClass('fa-hand-o-up')){\n" +
+                                "           event.dataTransfer.setData('text/plain', 'handleBtn');\n" +
+                                "           // Order by the first column, else row swapping doesn't work\n" +
+                                "           table.order([0, 'asc']);\n" +
+                                "           draggedRow = $(event.target);\n" +
+                                "       }\n" +
+                                "       else{\n" +
+                                "           event.preventDefault();\n" +
+                                "       }\n" +
+                                "   });\n" +
+                                "\n" +
+                                "   function saveSorting(){\n" +
+                                "       var rows = table.rows();\n" +
+                                "       var contractIDs = [];\n" +
+                                "\n" +
+                                "       rows.iterator('row', function(context, index){\n" +
+                                "           var node = $(this.row(index).node());\n" +
+                                "           var contractID = $(node).find(\"input\").get(0);\n" +
+                                "           contractIDs.push($(contractID).val());\n" +
+                                "       });\n" +
+                                "\n" +
+                                "       postAJAX(contractIDs);\n" +
+                                "\n" +
+                                "       // Remove arrows in the header cell of the sorting buttons\n" +
+                                "       $(\"#btnsHeadCell\").removeClass('sorting_asc sorting');\n" +
+                                "   }\n" +
+                                "\n" +
+                                "   function postAJAX(tableData){\n" +
+                                "       try{\n" +
+                                "           var commandToSend = 'tableData ='+tableData;\n" +
+                                "           var wcall = Wicket.Ajax.post({\n" +
+                                "               u: callbackUrl + '&'+commandToSend\n" +
+                                "           });\n" +
+                                "       }\n" +
+                                "       catch(e){\n" +
+                                "       }\n" +
+                                "       $('.upBtn').on('click',function(event){\n" +
+                                "           up(event);" +
+                                "       });\n"+
+                                "\n" +
+                                "       $('.downBtn').on('click', function(event){\n" +
+                                "           down(event);"+
+                                "       });\n"+
+                                "   }\n" +
+                                "});\n"+
+                                "function hover(event, show){\n" +
+                                "   var source = event.target || event.srcElement;\n" +
+                                "   \n" +
+                                "   if(show){\n" +
+                                "       $(source).tooltip('show');\n" +
+                                "   }\n" +
+                                "   else{\n" +
+                                "       $(source).tooltip('hide');\n" +
+                                "   }\n" +
+                                "}"
                                 ));
             }
         });

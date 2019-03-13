@@ -39,11 +39,11 @@ public class User implements Serializable {
             userRoles = roles.get(projectId);
         } else {
             userRoles = roles.get(projectId);
-            if (userRoles == null)
-            {
-                int x =0;
-                //ToDo?
-            }
+        }
+        if(userRoles==null)
+        {
+            userRoles = Collections.singletonList(UserRole.USER);
+            roles.put(projectId, userRoles);
         }
         return userRoles;
     }

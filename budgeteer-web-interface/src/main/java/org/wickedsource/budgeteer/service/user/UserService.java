@@ -531,4 +531,14 @@ public class UserService {
             userRepository.save(user);
         }
     }
+
+    public User updateUser(User user){
+        try {
+            return new UserMapper().map(getUserById(user.getId()));
+        }
+        catch(UserIdNotFoundException exception)
+        {
+            return user;
+        }
+    }
 }

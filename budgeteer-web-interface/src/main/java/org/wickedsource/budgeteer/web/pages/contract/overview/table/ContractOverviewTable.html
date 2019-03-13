@@ -31,18 +31,15 @@
         </tr>
         </thead>
         <tbody>
-        <tr class="sorting-row" wicket:id="contractRows" ondrop="drop(event)" ondragover="allowDrop(event)" draggable="true" ondragstart="drag(event)">
+        <tr class="sorting-row" wicket:id="contractRows" draggable="true">
             <td style="width:100px;">
-                <span class="btn btn-default btn-sm dragBtn"  onmouseenter="hover(event, true)"
-                      onmouseleave="hover(event, false)"  data-toggle="tooltip" title="Drag this row for sorting" style="cursor:move;">
+                <span class="btn btn-default btn-sm dragBtn" data-toggle="tooltip" title="Drag this row for sorting" style="cursor:move;">
                     <i class="fa fa-hand-o-up" aria-hidden="true"></i>
                 </span>
-                <span class="btn btn-default btn-sm upBtn" onclick="up(event)" onmouseenter="hover(event, true)" onmouseleave="hover(event, false)"
-                      data-toggle="tooltip" title="Swap this row with the previous row">
+                <span class="btn btn-default btn-sm upBtn" data-toggle="tooltip" title="Swap this row with the previous row">
                     <i class="fa fa-sort-up"></i>
                 </span>
-                <span class="btn btn-default btn-sm downBtn" onclick="down(event)" onmouseenter="hover(event, true)" onmouseleave="hover(event, false)"
-                      data-toggle="tooltip" title="Swap this row with the next row">
+                <span class="btn btn-default btn-sm downBtn" data-toggle="tooltip" title="Swap this row with the next row">
                     <i class="fa fa-sort-down"></i>
                 </span>
                 <input type="hidden" wicket:id="contractID">
