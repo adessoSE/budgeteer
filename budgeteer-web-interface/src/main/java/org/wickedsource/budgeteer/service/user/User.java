@@ -41,6 +41,7 @@ public class User implements Serializable {
             userRoles = roles.get(projectId);
             if (userRoles == null)
             {
+                int x =0;
                 //ToDo?
             }
         }

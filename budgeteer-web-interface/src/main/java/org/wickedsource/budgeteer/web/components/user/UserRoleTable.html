@@ -1,0 +1,35 @@
+<wicket:panel xmlns:wicket="http://www.w3.org/1999/xhtml">
+    <div class="box box-primary">
+        <div class="box-header">
+            <i class="fa fa-list"></i>
+
+            <h3 class="box-title">
+                <wicket:message key="project.user.list"></wicket:message>
+            </h3>
+        </div>
+        <div class="box-body">
+            <p>
+                <wicket:message key="user.list.description"></wicket:message>
+            </p>
+            <table class="table table-hover table-bordered">
+                <thead>
+                <tr>
+                    <th>User</th>
+                    <th>Options</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr wicket:id="userList">
+                    <td wicket:id="username"></td>
+                    <td>
+                        <span wicket:id="adminCheckbox"></span>
+                        <a wicket:id="deleteButton" class="btn btn-danger btn-sm">
+                            <wicket:message key="remove.user"></wicket:message>
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</wicket:panel>

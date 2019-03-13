@@ -3,8 +3,10 @@ package org.wickedsource.budgeteer.web.pages.contract.overview.table;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.EnumLabel;
 import org.apache.wicket.markup.html.basic.Label;
@@ -141,6 +143,63 @@ public class ContractOverviewTable extends Panel {
 
         addTableSummaryLabels(table, data);
         add(table);
+
+        add(new Behavior() {
+            @Override
+            public void renderHead(Component component, IHeaderResponse response) {
+                super.renderHead(component, response);
+                response.render(OnDomReadyHeaderItem.forScript(
+                        "var table;\n" +
+                                "var draggedRow;\n" +
+                                "var handleBtn;\n" +
+                                "var target = false;\n" +
+                                "\n" +
+                                "$(document).ready(function(){\n" +
+                                "    table = $('.table').DataTable();\n" +
+                                "    // Remove arrows in the header cell of the sorting buttons\n" +
+                                "    $('#btnsHeadCell').removeClass('sorting_asc');\n" +
+                                "\n" +
+                                "    $('tr').click(function(){\n" +
+                                "        // Remove arrows in the header cell of the sorting buttons\n" +
+                                "        $('#btnsHeadCell').removeClass('sorting');\n" +
+                                "        saveSorting();\n" +
+                                "    })\n" +
+                                "$('.sorting-row').on('mousedown',function(event){\n" +
+                                "target = event.target;\n" +
+                                " handleBtn = $(event).closest('.dragBtn');\n" +
+                                "})\n" +
+                                "});" +
+                                "\n" +
+                                "function saveSorting(){\n" +
+                                "    var rows = table.rows();\n" +
+                                "    var contractIDs = [];\n" +
+                                "\n" +
+                                "    rows.iterator('row', function(context, index){\n" +
+                                "         var node = $(this.row(index).node());\n" +
+                                "         var contractID = $(node).find(\"input\").get(0);\n" +
+                                "         contractIDs.push($(contractID).val());\n" +
+                                "    });\n" +
+                                "\n" +
+                                "    postAJAX(contractIDs);\n" +
+                                "\n" +
+                                "    // Remove arrows in the header cell of the sorting buttons\n" +
+                                "    $(\"#btnsHeadCell\").removeClass('sorting_asc sorting');\n" +
+                                "}\n" +
+                                "\n" +
+                                "function postAJAX(tableData){\n" +
+                                "    try{\n" +
+                                "        var commandToSend = 'tableData ='+tableData;\n" +
+                                "        var wcall = Wicket.Ajax.post({\n" +
+                                "            u: callbackUrl + '&'+commandToSend\n" +
+                                "        });\n" +
+                                "    }\n" +
+                                "    catch(e){\n" +
+                                "    }\n" +
+                                "}\n" +
+                                ""
+                                ));
+            }
+        });
     }
 
     private void addTableSummaryLabels(WebMarkupContainer table, IModel<List<ContractBaseData>> model) {

@@ -13,14 +13,13 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.service.user.User;
 import org.wickedsource.budgeteer.service.user.UserService;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
-import org.wickedsource.budgeteer.web.pages.administration.ProjectAdministrationPage;
 import org.wickedsource.budgeteer.web.pages.base.delete.DeleteDialog;
-import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 
 import java.util.Set;
 
@@ -33,11 +32,18 @@ public class UserRoleCheckBox extends Panel {
     private long projectID;
     private Boolean isAdmin;
     private User thisUser;
+    private Class originPage;
+    private Class afterAdminDeletionPage;
+    private PageParameters pageParameters;
 
-    public UserRoleCheckBox(String id, User user, long projectID) {
+    public UserRoleCheckBox(String id, User user, long projectID, CustomFeedbackPanel feedbackPanel, UserRoleTable table,
+                            Class originPage, Class afterAdminDeletionPage, PageParameters pageParameters) {
         super(id);
         this.user = user;
         this.projectID = projectID;
+        this.originPage = originPage;
+        this.afterAdminDeletionPage = afterAdminDeletionPage;
+        this.pageParameters = pageParameters;
 
         thisUser = BudgeteerSession.get().getLoggedInUser();
         isAdmin = user.isProjectAdmin(projectID);
@@ -49,7 +55,6 @@ public class UserRoleCheckBox extends Panel {
             }
         };
 
-        // AJAX handler for post requests from JavaScript
         final AbstractDefaultAjaxBehavior behave = new AbstractDefaultAjaxBehavior() {
             @Override
             protected void respond(AjaxRequestTarget target) {
@@ -62,12 +67,19 @@ public class UserRoleCheckBox extends Panel {
 
                 if (extractedID == user.getId()) {
                     changeAdminState(checked);
-                }
-                else {
+                } else {
                     error(getString("checkbox.error"));
                 }
 
-                target.add(getPage());
+                target.add(feedbackPanel);
+                target.add(table);
+
+                // Call the iCheck-Plugin, so the style of the checkbox stays the same
+                target.appendJavaScript("$('input').iCheck({\n" +
+                        "    checkboxClass: 'icheckbox_minimal',\n" +
+                        "    radioClass: 'iradio_minimal',\n" +
+                        "    increaseArea: '20%'\n" +
+                        "  });");
             }
 
             @Override
@@ -75,26 +87,33 @@ public class UserRoleCheckBox extends Panel {
                 super.renderHead(component, response);
                 String componentMarkupId = component.getMarkupId();
                 String callbackUrl = getCallbackUrl().toString();
-                response.render(JavaScriptHeaderItem.forScript("var componentMarkupId='" + componentMarkupId + "'; var callbackUrl"+user.getId()+"='" + callbackUrl + "';", String.valueOf(user.getId())));
+                response.render(JavaScriptHeaderItem.forScript("var componentMarkupId='" + componentMarkupId + "'; var callbackUrl" + user.getId() + "='" + callbackUrl + "';", String.valueOf(user.getId())));
             }
         };
 
         add(behave);
 
-        this.add(new Behavior() {
+        add(new Behavior() {
             @Override
             public void renderHead(Component component, IHeaderResponse response) {
                 super.renderHead(component, response);
                 response.render(OnDomReadyHeaderItem.forScript(
-                        "$(\"input[userId=" + user.getId() + "]\").on('ifChanged', function (e) {\n" +
-                                "   id = $(this).attr(\"userId\");\n" +
-                                "   checked = $(this).is(\":checked\");\n" +
-                                "   var commandToSend = id+'='+checked;\n" +
-                                "   var wcall = Wicket.Ajax.post({\n" +
-                                "       u: callbackUrl"+user.getId()+"+'&'+commandToSend\n" +
-                                "   });\n" +
-                                "   $(this).trigger(\"change\", e);\n" +
-                                "});"));
+                        "$('input[userId=" + user.getId() + "]').on('ifChanged', function (e) {\n" +
+                                "sendAJAX" + user.getId() + "(this);\n" +
+                                "});\n" +
+                                "\n" +
+                                "$('input[userId=" + user.getId() + "]').change(function(){\n" +
+                                "sendAJAX" + user.getId() + "(this);\n" +
+                                "});\n" +
+                                "\n" +
+                                "function sendAJAX" + user.getId() + "(checkBox){\n" +
+                                "id = $(checkBox).attr('userId');\n" +
+                                "checked = $(checkBox).is(':checked');\n" +
+                                "var commandToSend = id+'='+checked;\n" +
+                                " var wcall = Wicket.Ajax.get({\n" +
+                                "u: callbackUrl" + user.getId() + "+'&'+commandToSend\n" +
+                                "});\n" +
+                                "}"));
             }
         });
 
@@ -114,12 +133,12 @@ public class UserRoleCheckBox extends Panel {
                             if (user.getId() == thisUser.getId()) {
                                 BudgeteerSession.get().setLoggedInUser(user);
                             }
-                            setResponsePage(DashboardPage.class);
+                            setResponsePage(afterAdminDeletionPage, pageParameters);
                         }
 
                         @Override
                         protected void onNo() {
-                            setResponsePage(ProjectAdministrationPage.class);
+                            setResponsePage(originPage, pageParameters);
                         }
 
                         @Override

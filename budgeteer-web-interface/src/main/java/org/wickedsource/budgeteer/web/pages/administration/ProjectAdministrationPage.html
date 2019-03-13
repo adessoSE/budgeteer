@@ -11,11 +11,13 @@
                     <div class="box-body">
                         <div class="col-md-3">
                             <label for="projectTitle" class="col-md-4">Project title: </label>
-                            <input id="projectTitle" type="text" maxlength="255" name="projectTitle" class="col-md-6" wicket:id="projectTitle">
+                            <input id="projectTitle" type="text" maxlength="255" name="projectTitle" class="col-md-6"
+                                   wicket:id="projectTitle">
                         </div>
                         <div class="col-md-8">
-                            <label for="projectStart" class="col-md-3" >Begin and End of Project: </label>
-                            <input id="projectStart" name="projectStart" class="col-md-6" type="text" wicket:id="projectStart">
+                            <label for="projectStart" class="col-md-3">Begin and End of Project: </label>
+                            <input id="projectStart" name="projectStart" class="col-md-6" type="text"
+                                   wicket:id="projectStart">
                         </div>
                         <a wicket:id="submitLink" class="btn btn-primary btn-flat">Save</a>
                     </div>
@@ -25,36 +27,8 @@
     </div>
     <div class="row">
         <div class="col-md-6">
-            <div class="box box-primary">
-                <div class="box-header">
-                    <i class="fa fa-list"></i>
-
-                    <h3 class="box-title">Users in this Project</h3>
-                </div>
-                <div class="box-body">
-                    <p>List of all Users that currently have access to this project.</p>
-                    <table class="table table-hover table-bordered">
-                        <thead>
-                        <tr>
-                            <th>User</th>
-                            <th>Options</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr wicket:id="userList">
-                            <td wicket:id="username">Username</td>
-                            <td>
-                                <span wicket:id="adminCheckbox"/>
-                                <a wicket:id="deleteButton" class="btn btn-danger btn-sm">Remove from Project</a>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <!-- /.box-body -->
-            </div>
+            <div wicket:id="projectUsers"/>
         </div>
-
         <div class="col-md-6">
             <div class="box box-primary">
                 <div class="box-header">
@@ -69,7 +43,7 @@
                         <div class="input-group margin">
                             <select wicket:id="userChoice" placeholder="Project Name" class="form-control">
                             </select>
-                        <span class="input-group-btn">
+                            <span class="input-group-btn">
                           <button class="btn btn-primary btn-flat" type="submit">Add User</button>
                         </span>
                         </div>
@@ -89,7 +63,5 @@
                 </div>
             </div>
         </div>
-
     </div>
-
 </wicket:extend>

@@ -1,21 +1,12 @@
 package org.wickedsource.budgeteer.web.pages.administration;
 
-import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
-import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.ListMultipleChoice;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -25,14 +16,10 @@ import org.wickedsource.budgeteer.service.project.ProjectService;
 import org.wickedsource.budgeteer.service.user.User;
 import org.wickedsource.budgeteer.service.user.UserService;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
-import org.wickedsource.budgeteer.web.ClassAwareWrappingModel;
 import org.wickedsource.budgeteer.web.Mount;
 import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
 import org.wickedsource.budgeteer.web.components.daterange.DateRangeInputField;
-import org.wickedsource.budgeteer.web.components.multiselect.MultiselectBehavior;
-import org.wickedsource.budgeteer.web.components.user.UserRole;
-import org.wickedsource.budgeteer.web.components.user.UserRoleCheckBox;
-import org.wickedsource.budgeteer.web.components.user.UserRoleDropdown;
+import org.wickedsource.budgeteer.web.components.user.UserRoleTable;
 import org.wickedsource.budgeteer.web.pages.base.basepage.BasePage;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
 import org.wickedsource.budgeteer.web.pages.base.delete.DeleteDialog;
@@ -41,11 +28,6 @@ import org.wickedsource.budgeteer.web.pages.user.login.LoginPage;
 import org.wickedsource.budgeteer.web.pages.user.selectproject.SelectProjectPage;
 import org.wickedsource.budgeteer.web.pages.user.selectproject.SelectProjectWithKeycloakPage;
 import org.wickedsource.budgeteer.web.settings.BudgeteerSettings;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
 
 import static org.wicketstuff.lazymodel.LazyModel.from;
 import static org.wicketstuff.lazymodel.LazyModel.model;
@@ -66,7 +48,7 @@ public class ProjectAdministrationPage extends BasePage {
 
     public ProjectAdministrationPage() {
         add(feedbackPanel.setOutputMarkupId(true));
-        add(createUserList("userList", new UsersInProjectModel(BudgeteerSession.get().getProjectId())));
+        add(new UserRoleTable("projectUsers", BudgeteerSession.get().getProjectId(), feedbackPanel, ProjectAdministrationPage.class, SelectProjectPage.class, DashboardPage.class, getPageParameters()));
         add(createDeleteProjectButton("deleteProjectButton"));
         add(createAddUserForm("addUserForm"));
         add(createEditProjectForm("projectChangeForm"));
@@ -107,70 +89,6 @@ public class ProjectAdministrationPage extends BasePage {
         form.add(textField);
         form.add(dateField);
         return form;
-    }
-
-    private ListView<User> createUserList(String id, IModel<List<User>> model) {
-        User thisUser = BudgeteerSession.get().getLoggedInUser();
-        long projectID = BudgeteerSession.get().getProjectId();
-        return new ListView<User>(id, model) {
-
-            @Override
-            protected void populateItem(final ListItem<User> item) {
-                item.add(new Label("username", model(from(item.getModel()).getName())));
-                Link deleteButton = new Link("deleteButton") {
-                    @Override
-                    public void onClick() {
-                        setResponsePage(new DeleteDialog() {
-
-                            @Override
-                            protected void onYes() {
-                                userService.removeUserFromProject(BudgeteerSession.get().getProjectId(), item.getModelObject().getId());
-                                if(item.getModelObject().getId() == thisUser.getId()) {
-                                    setResponsePage(SelectProjectPage.class, getPageParameters());
-                                }else{
-                                    setResponsePage(ProjectAdministrationPage.class, getPageParameters());
-                                }
-                            }
-
-                            @Override
-                            protected void onNo() {
-                                setResponsePage(ProjectAdministrationPage.class, getPageParameters());
-                            }
-
-                            @Override
-                            protected String confirmationText() {
-                                return ProjectAdministrationPage.this.getString("delete.person.confirmation");
-                            }
-                        });
-                    }
-                };
-
-                //UserRoleDropdown makeAdminList = new UserRoleDropdown("roleDropdown", item.getModelObject(), projectID);
-                UserRoleCheckBox adminCheckBox = new UserRoleCheckBox("adminCheckbox", item.getModelObject(), projectID);
-
-                // a user may not delete herself/himself unless another admin is present
-                if (item.getModelObject().getId() == thisUser.getId()){
-                    List<User> usersInProjects = userService.getUsersInProject(projectID);
-                    deleteButton.setVisible(false);
-                    adminCheckBox.setVisible(false);
-                    for(User e : usersInProjects){
-                        if(e.getId() != thisUser.getId() && e.getRoles(projectID).contains(UserRole.ADMIN)){
-                            deleteButton.setVisible(true);
-                            adminCheckBox.setVisible(true);
-                            break;
-                        }
-                    }
-                }
-                item.add(deleteButton);
-                item.add(adminCheckBox);
-                item.setOutputMarkupId(true);
-            }
-
-            @Override
-            protected ListItem<User> newItem(int index, IModel<User> itemModel) {
-                return super.newItem(index, new ClassAwareWrappingModel<>(itemModel, User.class));
-            }
-        };
     }
 
     private Form<User> createAddUserForm(String id) {

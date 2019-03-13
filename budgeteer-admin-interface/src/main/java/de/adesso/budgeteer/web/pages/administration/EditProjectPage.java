@@ -32,6 +32,7 @@ import org.wickedsource.budgeteer.web.components.multiselect.MultiselectBehavior
 import org.wickedsource.budgeteer.web.components.user.UserRole;
 import org.wickedsource.budgeteer.web.components.user.UserRoleCheckBox;
 import org.wickedsource.budgeteer.web.components.user.UserRoleDropdown;
+import org.wickedsource.budgeteer.web.components.user.UserRoleTable;
 import org.wickedsource.budgeteer.web.pages.administration.Project;
 import org.wickedsource.budgeteer.web.pages.administration.UserChoiceRenderer;
 import org.wickedsource.budgeteer.web.pages.base.delete.DeleteDialog;
@@ -59,14 +60,12 @@ public class EditProjectPage extends BasePage {
 
     private CustomFeedbackPanel feedbackPanel;
 
-
     public EditProjectPage(PageParameters pageParameters) {
         super(pageParameters);
-      feedbackPanel = new CustomFeedbackPanel("feedback");
+        feedbackPanel = new CustomFeedbackPanel("feedback");
         feedbackPanel.setOutputMarkupId(true);
         add(feedbackPanel);
-       // add(new CustomFeedbackPanel("feedback"));
-        add(createUserList("userList", new UsersInProjectModel(getParameterId())));
+        add(new UserRoleTable("projectUsers", getParameterId(), feedbackPanel, EditProjectPage.class, EditProjectPage.class, EditProjectPage.class, pageParameters));
         add(createAddUserForm("addUserForm"));
         add(createEditProjectForm("projectChangeForm"));
         add(createBackButton());
@@ -77,9 +76,9 @@ public class EditProjectPage extends BasePage {
             @Override
             protected void onSubmit() {
                 super.onSubmit();
-                if(getModelObject().getName() == null){
+                if (getModelObject().getName() == null) {
                     error(getString("error.no.name"));
-                }else {
+                } else {
                     Project ent = getModelObject();
                     projectService.save(ent);
                     success(getString("project.saved"));
@@ -90,64 +89,6 @@ public class EditProjectPage extends BasePage {
         DateRange defaultDateRange = new DateRange(DateUtil.getBeginOfYear(), DateUtil.getEndOfYear());
         form.add(new DateRangeInputField("projectStart", model(from(form.getModelObject()).getDateRange()), defaultDateRange, DateRangeInputField.DROP_LOCATION.DOWN));
         return form;
-    }
-
-    private ListView<User> createUserList(String id, IModel<List<User>> model) {
-        User thisUser = BudgeteerSession.get().getLoggedInUser();
-        long projectID = getParameterId();
-        return new ListView<User>(id, model) {
-
-            @Override
-            protected void populateItem(final ListItem<User> item) {
-                item.add(new Label("username", model(from(item.getModel()).getName())));
-                Link deleteButton = new Link("deleteButton") {
-                    @Override
-                    public void onClick() {
-                        setResponsePage(new DeleteDialog() {
-                            @Override
-                            protected void onYes() {
-                                userService.removeUserFromProject(projectID, item.getModelObject().getId());
-                                setResponsePage(EditProjectPage.class, EditProjectPage.this.getPageParameters());
-                            }
-
-                            @Override
-                            protected void onNo() {
-                                setResponsePage(EditProjectPage.class, EditProjectPage.this.getPageParameters());
-                            }
-
-                            @Override
-                            protected String confirmationText() {
-                                return new StringResourceModel("delete.user.from.project.confirmation", EditProjectPage.this).getString();
-                            }
-                        });
-                    }
-                };
-                UserRoleCheckBox adminCheckBox = new UserRoleCheckBox("adminCheckbox", item.getModelObject(), projectID);
-
-                //UserRoleDropdown makeAdminList = new UserRoleDropdown("roleDropdown", item.getModelObject(), projectID);
-                // a user may not delete herself/himself unless another admin is present
-                if (item.getModelObject().getId() == thisUser.getId()){
-                    List<User> usersInProjects = userService.getUsersInProject(projectID);
-                    deleteButton.setVisible(false);
-                    adminCheckBox.setVisible(false);
-                    for(User user : usersInProjects){
-                        if(user.getId() != thisUser.getId() && user.isProjectAdmin(projectID)){
-                            deleteButton.setVisible(true);
-                            adminCheckBox.setVisible(true);
-                            break;
-                        }
-                    }
-                }
-                item.add(deleteButton);
-                item.add(adminCheckBox);
-                item.setOutputMarkupId(true);
-            }
-
-            @Override
-            protected ListItem<User> newItem(int index, IModel<User> itemModel) {
-                return super.newItem(index, new ClassAwareWrappingModel<>(itemModel, User.class));
-            }
-        };
     }
 
     private Form<User> createAddUserForm(String id) {
@@ -172,7 +113,7 @@ public class EditProjectPage extends BasePage {
         return model;
     }
 
-    private Component createBackButton(){
+    private Component createBackButton() {
         return new Link("backButton") {
             @Override
             public void onClick() {
@@ -180,5 +121,4 @@ public class EditProjectPage extends BasePage {
             }
         };
     }
-
 }
