@@ -8,6 +8,7 @@ import org.wickedsource.budgeteer.web.components.user.UserRole;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -42,6 +43,9 @@ public class UserEntity {
     @Column(nullable = true)
     private Boolean mailVerified = false;
 
+    @Column(nullable = true)
+    private Date creationDate = new Date();
+
     @LazyCollection(LazyCollectionOption.FALSE)
     @ManyToMany(mappedBy = "authorizedUsers")
     private List<ProjectEntity> authorizedProjects = new ArrayList<>();
@@ -53,20 +57,36 @@ public class UserEntity {
 
     }
 
-    public UserEntity(long id, String name, String password, String mail, boolean mailVerified, List<ProjectEntity> authorizedProjects, ProjectEntity defaultProject) {
+    public UserEntity(long id, String name, String password, String mail, boolean mailVerified, Date creationDate, List<ProjectEntity> authorizedProjects, ProjectEntity defaultProject) {
         this.id = id;
         this.name = name;
         this.password = password;
         this.mail = mail;
         this.mailVerified = mailVerified;
+
+        if (creationDate == null) {
+            creationDate = new Date();
+        }
+        this.creationDate = creationDate;
+
         this.authorizedProjects = authorizedProjects;
         this.defaultProject = defaultProject;
+    }
+
+    public void ensureCreationDate() {
+        if (creationDate == null) {
+            creationDate = new Date();
+        }
+    }
+
+    public void ensureGlobalRole() {
+        if (globalRole == null) {
+            globalRole = UserRole.USER;
+        }
     }
 
     @Override
     public String toString() {
         return "User( Id:" + id + ", name: " + name + ")";
     }
-
-    
 }

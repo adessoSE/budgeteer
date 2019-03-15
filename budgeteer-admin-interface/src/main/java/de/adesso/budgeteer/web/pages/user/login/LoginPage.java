@@ -34,15 +34,15 @@ public class LoginPage extends DialogPage {
             protected void onSubmit() {
                 try {
                     User user = userService.login(getModelObject().getUsername(), getModelObject().getPassword());
-                    if(user.getGlobalRole().equals(UserRole.ADMIN)){
+                    if (user.isGlobalAdmin()) {
                         BudgeteerSession.get().login(user);
                         setResponsePage(BudgeteerAdministrationOverview.class);
-                    }else if(userService.getAllAdmins().isEmpty()){ //The first user to log into this tool gets the admin role
+                    } else if (userService.getAllAdmins().isEmpty()) { //The first user to log into this tool gets the admin role
                         userService.setGlobalRoleForUser(user.getId(), UserRole.ADMIN);
                         user.setGlobalRole(UserRole.ADMIN);
                         BudgeteerSession.get().login(user);
                         setResponsePage(BudgeteerAdministrationOverview.class);
-                    } else{
+                    } else {
                         error(getString("loginForm.unauthorized"));
                     }
                 } catch (InvalidLoginCredentialsException e) {

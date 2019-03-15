@@ -4,9 +4,6 @@ import de.adesso.budgeteer.web.pages.base.basepage.BasePage;
 import de.adesso.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
 import de.adesso.budgeteer.web.pages.user.login.LoginPage;
 import org.apache.wicket.Component;
-import org.apache.wicket.ajax.AjaxEventBehavior;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.link.Link;
@@ -17,8 +14,6 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
-import org.wickedsource.budgeteer.persistence.user.UserEntity;
 import org.wickedsource.budgeteer.service.project.ProjectBaseData;
 import org.wickedsource.budgeteer.service.project.ProjectService;
 import org.wickedsource.budgeteer.service.user.MailAlreadyInUseException;
@@ -34,7 +29,6 @@ import org.wickedsource.budgeteer.web.pages.base.delete.DeleteDialog;
 import org.wickedsource.budgeteer.web.settings.BudgeteerSettings;
 
 import java.util.List;
-import java.util.function.Predicate;
 
 import static org.wicketstuff.lazymodel.LazyModel.from;
 import static org.wicketstuff.lazymodel.LazyModel.model;
@@ -82,7 +76,7 @@ public class BudgeteerAdministrationOverview extends BasePage {
                     }
                     makeUserAdmin.setVisible(false);  //We cannot make the user an admin if they already are one
                 } else {
-                    if (item.getModelObject().getGlobalRole().equals(UserRole.ADMIN)) { //If the user is an admin
+                    if (item.getModelObject().isGlobalAdmin()) { //If the user is an admin
                         //We don't check for other admins here since this is not the logged in user (who must be an admin)
                         deleteUserButton.setVisible(true);
                         makeUserAdmin.setVisible(false);

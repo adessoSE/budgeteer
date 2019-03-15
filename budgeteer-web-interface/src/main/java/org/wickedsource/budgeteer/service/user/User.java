@@ -5,10 +5,6 @@ import lombok.Setter;
 import org.wickedsource.budgeteer.web.components.user.UserRole;
 
 import java.io.Serializable;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.*;
 
 public class User implements Serializable {
@@ -50,6 +46,10 @@ public class User implements Serializable {
     public boolean isProjectAdmin(long projectId) {
         List<UserRole> roles = getRoles(projectId);
         return roles.contains(UserRole.ADMIN);
+    }
+
+    public boolean isGlobalAdmin() {
+        return globalRole.equals(UserRole.ADMIN);
     }
 
     @Override

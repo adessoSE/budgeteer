@@ -42,6 +42,31 @@ public class UserService {
     @Value("${budgeteer.mail.activate}")
     private String mailActivated;
 
+    private User mapToUser(UserEntity entity) {
+        // make sure the entity's creationDate and globalRole isn't set to null
+        entity.ensureCreationDate();
+        entity.ensureGlobalRole();
+        userRepository.save(entity);
+
+        // If there aren't any global admins, make the user who registered first an admin
+        if (!globalAdminExists()) {
+            createGlobalAdmin();
+        }
+
+        return mapper.map(entity);
+    }
+
+    private boolean globalAdminExists() {
+        List<UserEntity> admins = userRepository.getGlobalAdmins();
+        return admins.size() != 0;
+    }
+
+    private void createGlobalAdmin() {
+        UserEntity admin = userRepository.getFirstUser();
+        admin.setGlobalRole(UserRole.ADMIN);
+        userRepository.save(admin);
+    }
+
     /**
      * Returns a list of all users that currently have access to the given project.
      *
@@ -123,7 +148,7 @@ public class UserService {
         if (entity.getMailVerified() == null)
             entity.setMailVerified(false);
 
-        return mapper.map(entity);
+        return mapToUser(entity);
     }
 
     /**
@@ -135,7 +160,7 @@ public class UserService {
             registerUser(username);
             userEntity = userRepository.findByName(username);
         }
-        return mapper.map(userEntity);
+        return mapToUser(userEntity);
     }
 
     /**
@@ -178,7 +203,7 @@ public class UserService {
 
     public List<User> getAllUsers() {
         List<UserEntity> result = new ArrayList<>();
-        for(UserEntity e : userRepository.findAll()){
+        for (UserEntity e : userRepository.findAll()) {
             result.add(e);
         }
         return mapper.map(result);
@@ -195,18 +220,18 @@ public class UserService {
 
     public void addRoleToUser(Long userId, Long projectID, UserRole role) {
         UserEntity user = userRepository.findOne(userId);
-        if(user.getRoles() == null){
+        if (user.getRoles() == null) {
             user.setRoles(new HashMap<>());
         }
-        if(user.getRoles().get(projectID) == null || user.getRoles().get(projectID).size() == 0){
-            if(role == UserRole.ADMIN){
+        if (user.getRoles().get(projectID) == null || user.getRoles().get(projectID).size() == 0) {
+            if (role == UserRole.ADMIN) {
                 user.getRoles().put(projectID, new ArrayList<>(Arrays.asList(UserRole.USER, role)));
-            }else {
+            } else {
                 user.getRoles().put(projectID, new ArrayList<>(Collections.singleton(role)));
             }
-        }else{
+        } else {
             List<UserRole> newRoles = user.getRoles().get(projectID);
-            if(!newRoles.contains(role)) {
+            if (!newRoles.contains(role)) {
                 newRoles.add(role);
                 user.getRoles().put(projectID, newRoles);
             }
@@ -220,26 +245,26 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public List<User> getAllAdmins(){
+    public List<User> getAllAdmins() {
         List<User> result = new ArrayList<>();
-        for(UserEntity u : userRepository.findAll()){
-            if(u.getGlobalRole().equals(UserRole.ADMIN)){
-                result.add(mapper.map(u));
+        for (UserEntity u : userRepository.findAll()) {
+            if (u.getGlobalRole().equals(UserRole.ADMIN)) {
+                result.add(mapToUser(u));
             }
         }
         return result;
     }
 
-    public void setGlobalRoleForUser(Long userId, UserRole role){
-        if(userId != 0) {
+    public void setGlobalRoleForUser(Long userId, UserRole role) {
+        if (userId != 0) {
             UserEntity entity = userRepository.findOne(userId);
             entity.setGlobalRole(role);
             userRepository.save(entity);
         }
     }
 
-    public void setUserPassword(Long userId, String password){
-        if(userId != 0) {
+    public void setUserPassword(Long userId, String password) {
+        if (userId != 0) {
             UserEntity entity = userRepository.findOne(userId);
             entity.setPassword(passwordHasher.hash(password));
             userRepository.save(entity);
@@ -509,7 +534,7 @@ public class UserService {
             forgotPasswordTokenRepository.delete(forgotPasswordToken);
     }
 
-    public void setUserEmail(long id, String email) throws MailAlreadyInUseException{
+    public void setUserEmail(long id, String email) throws MailAlreadyInUseException {
         if (userRepository.findByMail(email) != null) {
             throw new MailAlreadyInUseException();
         } else {
@@ -534,14 +559,13 @@ public class UserService {
 
     /**
      * Load a given User again from the database
+     *
      * @param user User to load from the database
      */
-    public User getUpdatedUser(User user){
+    public User getUpdatedUser(User user) {
         try {
-            return new UserMapper().map(getUserById(user.getId()));
-        }
-        catch(UserIdNotFoundException exception)
-        {
+            return mapToUser(getUserById(user.getId()));
+        } catch (UserIdNotFoundException exception) {
             return user;
         }
     }
