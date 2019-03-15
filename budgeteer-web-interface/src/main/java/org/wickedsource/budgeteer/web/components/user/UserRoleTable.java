@@ -38,6 +38,7 @@ public class UserRoleTable extends Panel {
         UserRoleTable table = this;
 
         User thisUser = BudgeteerSession.get().getLoggedInUser();
+
         add(new ListView<User>("userList", model) {
             @Override
             protected void populateItem(final ListItem<User> item) {
@@ -73,19 +74,14 @@ public class UserRoleTable extends Panel {
                 UserRoleCheckBox adminCheckBox = new UserRoleCheckBox("adminCheckbox", item.getModelObject(),
                         projectID, feedbackPanel, table, originPage, afterAdminDeletionPage, pageParameters);
 
-                // a user may not delete herself/himself unless another admin is present
-                if (item.getModelObject().getId() == thisUser.getId()) {
-                    List<User> usersInProjects = userService.getUsersInProject(projectID);
+                int projectAdminsCount = countProjectAdmins(projectID);
+
+                // only if there is more than one admin for this project, the current admins can become non-admins or be removed from the project
+                if (item.getModelObject().isProjectAdmin(projectID) && projectAdminsCount < 2) {
                     deleteButton.setVisible(false);
                     adminCheckBox.setVisible(false);
-                    for (User e : usersInProjects) {
-                        if (e.getId() != thisUser.getId() && e.getRoles(projectID).contains(UserRole.ADMIN)) {
-                            deleteButton.setVisible(true);
-                            adminCheckBox.setVisible(true);
-                            break;
-                        }
-                    }
                 }
+
                 item.add(deleteButton);
                 item.add(adminCheckBox);
                 item.setOutputMarkupId(true);
@@ -96,5 +92,18 @@ public class UserRoleTable extends Panel {
                 return super.newItem(index, new ClassAwareWrappingModel<>(itemModel, User.class));
             }
         });
+    }
+
+    private int countProjectAdmins(long projectID) {
+        // Count how many admins for the project exist
+        int projectAdminCount = 0;
+        List<User> usersInProjects = userService.getUsersInProject(projectID);
+        for (User e : usersInProjects) {
+            if (e.isProjectAdmin(projectID)) {
+                projectAdminCount++;
+            }
+        }
+
+        return projectAdminCount;
     }
 }
