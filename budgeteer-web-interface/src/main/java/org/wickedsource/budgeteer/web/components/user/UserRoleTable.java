@@ -13,6 +13,7 @@ import org.wickedsource.budgeteer.service.user.UserService;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.ClassAwareWrappingModel;
 import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
+import org.wickedsource.budgeteer.web.pages.administration.ProjectAdministrationPage;
 import org.wickedsource.budgeteer.web.pages.administration.UsersInProjectModel;
 import org.wickedsource.budgeteer.web.pages.base.delete.DeleteDialog;
 
@@ -69,7 +70,8 @@ public class UserRoleTable extends Panel {
                     }
                 };
 
-                UserRoleCheckBox adminCheckBox = new UserRoleCheckBox("adminCheckbox", item.getModelObject(), projectID, feedbackPanel, table, originPage, afterAdminDeletionPage, pageParameters);
+                UserRoleCheckBox adminCheckBox = new UserRoleCheckBox("adminCheckbox", item.getModelObject(),
+                        projectID, feedbackPanel, table, originPage, afterAdminDeletionPage, pageParameters);
 
                 // a user may not delete herself/himself unless another admin is present
                 if (item.getModelObject().getId() == thisUser.getId()) {

@@ -15,29 +15,61 @@
                 <div wicket:id="mainFormFeedback"></div>
 
                 <div class="form-group">
-                    <label for="titleInput"><wicket:message key="page.person.name">Name</wicket:message></label>
-                    <input wicket:id="name" maxlength="255" type="text" name="name" id="titleInput" class="form-control"/>
+                    <label for="titleInput">
+                        <wicket:message key="page.person.name">Name</wicket:message>
+                    </label>
+                    <input wicket:id="name" maxlength="255" type="text" name="name" id="titleInput"
+                           class="form-control"/>
 
-                    <p class="help-block"><wicket:message key="page.person.name.hint">The full name of the person as it should be displayed in the dashboard</wicket:message></p>
+                    <p class="help-block">
+                        <wicket:message key="page.person.name.hint">The full name of the person as it should be
+                            displayed in the dashboard
+                        </wicket:message>
+                    </p>
                 </div>
 
                 <div class="form-group">
-                    <label for="importKeyInput"><wicket:message key="page.person.importKey.title">Import Key</wicket:message></label>
-                    <input wicket:id="importKey" maxlength="255" type="text" name="name" id="importKeyInput" class="form-control"/>
+                    <label for="importKeyInput">
+                        <wicket:message key="page.person.importKey.title">Import Key</wicket:message>
+                    </label>
+                    <input wicket:id="importKey" maxlength="255" type="text" name="name" id="importKeyInput"
+                           class="form-control"/>
 
-                    <p class="help-block"><wicket:message key="page.person.importKey.hint">The unique key that identifies this person when importing data.</wicket:message></p>
+                    <p class="help-block">
+                        <wicket:message key="page.person.importKey.hint">The unique key that identifies this person when
+                            importing data.
+                        </wicket:message>
+                    </p>
                 </div>
 
                 <div class="form-group">
-                    <label><wicket:message key="page.person.budget.title">Daily Rates</wicket:message></label>
-                    <p class="help-block"><wicket:message key="page.person.budget.hint">Define daily rates for different budgets and different date ranges in the table below.</wicket:message></p>
+                    <label>
+                        <wicket:message key="page.person.budget.title">Daily Rates</wicket:message>
+                    </label>
+                    <p class="help-block">
+                        <wicket:message key="page.person.budget.hint">Define daily rates for different budgets and
+                            different date ranges in the table below.
+                        </wicket:message>
+                    </p>
                     <table wicket:id="ratesTable" class="table table-condensed">
                         <thead>
                         <tr>
-                            <th><wicket:message key="page.person.budget.table.columnDescription.rate">Rate</wicket:message></th>
-                            <th><wicket:message key="page.person.budget.table.columnDescription.budget">Budget</wicket:message></th>
-                            <th><wicket:message key="page.person.budget.table.columnDescription.date">Date Range</wicket:message></th>
-                            <th><wicket:message key="page.person.budget.table.columnDescription.options">Options</wicket:message></th>
+                            <th>
+                                <wicket:message key="page.person.budget.table.columnDescription.rate">Rate
+                                </wicket:message>
+                            </th>
+                            <th>
+                                <wicket:message key="page.person.budget.table.columnDescription.budget">Budget
+                                </wicket:message>
+                            </th>
+                            <th>
+                                <wicket:message key="page.person.budget.table.columnDescription.date">Date Range
+                                </wicket:message>
+                            </th>
+                            <th>
+                                <wicket:message key="page.person.budget.table.columnDescription.options">Options
+                                </wicket:message>
+                            </th>
                         </tr>
                         </thead>
                         <tbody>
@@ -46,7 +78,7 @@
                         </tr>
                         </tbody>
                         <tfoot>
-                            <span wicket:id="newRatePanel"></span>
+                        <span wicket:id="newRatePanel"></span>
                         </tfoot>
                     </table>
                 </div>
@@ -54,7 +86,8 @@
             <div class="footer">
                 <div class="row">
                     <div class="col-lg-3">
-                        <button wicket:id="backlink2" id="cancel" type="button" class="btn bg-olive btn-block">Cancel</button>
+                        <button wicket:id="backlink2" id="cancel" type="button" class="btn bg-olive btn-block">Cancel
+                        </button>
                     </div>
                     <div class="col-lg-9">
                         <button wicket:id="submitButton" id="submitButton" type="submit" class="btn bg-olive btn-block"><span

@@ -16,8 +16,6 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.service.user.User;
-import org.wickedsource.budgeteer.service.user.UserIdNotFoundException;
-import org.wickedsource.budgeteer.service.user.UserMapper;
 import org.wickedsource.budgeteer.service.user.UserService;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
@@ -57,18 +55,15 @@ public class UserRoleCheckBox extends Panel {
             }
         };
 
-        final AbstractDefaultAjaxBehavior behave = new AbstractDefaultAjaxBehavior() {
+        final AbstractDefaultAjaxBehavior afterCheckBoxClickBehavior = new AbstractDefaultAjaxBehavior() {
+            String sentID;
+
             @Override
             protected void respond(AjaxRequestTarget target) {
                 IRequestParameters params = RequestCycle.get().getRequest().getQueryParameters();
 
-                Set<String> parameterNames = params.getParameterNames();
-                String sentID = parameterNames.toArray()[1].toString();
-                long extractedID = Long.parseLong(sentID);
-                boolean checked = Boolean.parseBoolean(params.getParameterValue(sentID).toString());
-
-                if (extractedID == user.getId()) {
-                    changeAdminState(checked);
+                if (sendParametersAreCorrect(params)) {
+                    changeAdminState(isChecked(params));
                 } else {
                     error(getString("checkbox.error"));
                 }
@@ -84,6 +79,18 @@ public class UserRoleCheckBox extends Panel {
                         "  });");
             }
 
+            private boolean sendParametersAreCorrect(IRequestParameters params) {
+                Set<String> parameterNames = params.getParameterNames();
+                sentID = parameterNames.toArray()[1].toString();
+                long extractedID = Long.parseLong(sentID);
+
+                return extractedID == user.getId();
+            }
+
+            private boolean isChecked(IRequestParameters params) {
+                return Boolean.parseBoolean(params.getParameterValue(sentID).toString());
+            }
+
             @Override
             public void renderHead(Component component, IHeaderResponse response) {
                 super.renderHead(component, response);
@@ -93,8 +100,9 @@ public class UserRoleCheckBox extends Panel {
             }
         };
 
-        add(behave);
+        add(afterCheckBoxClickBehavior);
 
+        // send a request via AJAX when the checkbox is clicked
         add(new Behavior() {
             @Override
             public void renderHead(Component component, IHeaderResponse response) {
@@ -122,7 +130,7 @@ public class UserRoleCheckBox extends Panel {
         add(checkBox);
     }
 
-    void changeAdminState(boolean checked) {
+    private void changeAdminState(boolean checked) {
         isAdmin = checked;
         if (user.getId() == thisUser.getId() &&
                 !checked && user.isProjectAdmin(projectID)) {
@@ -133,7 +141,7 @@ public class UserRoleCheckBox extends Panel {
                             userService.removeAllRolesFromUser(user.getId(), projectID);
                             userService.addRoleToUser(user.getId(), projectID, UserRole.USER);
                             if (user.getId() == thisUser.getId()) {
-                                user = userService.updateUser(user);
+                                user = userService.getUpdatedUser(user);
                                 BudgeteerSession.get().setLoggedInUser(user);
                             }
                             setResponsePage(afterAdminDeletionPage, pageParameters);
@@ -162,7 +170,7 @@ public class UserRoleCheckBox extends Panel {
 
         if (user.getId() == thisUser.getId()) {
             BudgeteerSession.get().setLoggedInUser(user);
-            user = userService.updateUser(user);
+            user = userService.getUpdatedUser(user);
         }
     }
 }

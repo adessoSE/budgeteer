@@ -40,8 +40,7 @@ public class User implements Serializable {
         } else {
             userRoles = roles.get(projectId);
         }
-        if(userRoles==null)
-        {
+        if (userRoles == null) {
             userRoles = Collections.singletonList(UserRole.USER);
             roles.put(projectId, userRoles);
         }
@@ -50,10 +49,7 @@ public class User implements Serializable {
 
     public boolean isProjectAdmin(long projectId) {
         List<UserRole> roles = getRoles(projectId);
-        if (roles.contains(UserRole.ADMIN)) {
-            return true;
-        }
-        return false;
+        return roles.contains(UserRole.ADMIN);
     }
 
     @Override

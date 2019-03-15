@@ -73,21 +73,21 @@ public class BudgeteerAdministrationOverview extends BasePage {
                 Component revokeAdminRights = createRevokeAdminRightsButton(item);
 
                 //If this is the current user
-                if (item.getModelObject().getId() == thisUser.getId()){
+                if (item.getModelObject().getId() == thisUser.getId()) {
                     deleteUserButton.setVisible(false); //Make the delete button invisible
                     revokeAdminRights.setVisible(false); //The button to revoke rights is hidden
-                    if(userService.getAllAdmins().size() > 1){  // a user may not delete herself/himself unless another admin is present
+                    if (userService.getAllAdmins().size() > 1) {  // a user may not delete herself/himself unless another admin is present
                         deleteUserButton.setVisible(true);
                         revokeAdminRights.setVisible(true);
                     }
                     makeUserAdmin.setVisible(false);  //We cannot make the user an admin if they already are one
-                }else{
-                    if(item.getModelObject().getGlobalRole().equals(UserRole.ADMIN)){ //If the user is an admin
+                } else {
+                    if (item.getModelObject().getGlobalRole().equals(UserRole.ADMIN)) { //If the user is an admin
                         //We don't check for other admins here since this is not the logged in user (who must be an admin)
                         deleteUserButton.setVisible(true);
                         makeUserAdmin.setVisible(false);
                         revokeAdminRights.setVisible(true);
-                    }else {
+                    } else {
                         makeUserAdmin.setVisible(true);
                         revokeAdminRights.setVisible(false);
                     }
@@ -109,17 +109,17 @@ public class BudgeteerAdministrationOverview extends BasePage {
 
     private Component createUsernameTextField(ListItem<User> item) {
         TextField<String> textField = new TextField<>("setUsernameTextBox", Model.of(""));
-        Form passwordResetField = new Form("usernameResetField"){
+        Form passwordResetField = new Form("usernameResetField") {
             @Override
             protected void onSubmit() {
-                if(textField.getModelObject() == null){
+                if (textField.getModelObject() == null) {
                     feedbackPanel.error(getString("username.empty"));
                     return;
                 }
                 try {
                     userService.setUserUsername(item.getModelObject().getId(), textField.getModelObject());
                     item.getModelObject().setName(textField.getModelObject());
-                }catch (UsernameAlreadyInUseException e){
+                } catch (UsernameAlreadyInUseException e) {
                     feedbackPanel.error(getString("username.in.use"));
                     return;
                 }
@@ -132,21 +132,21 @@ public class BudgeteerAdministrationOverview extends BasePage {
 
     private Component createPasswordTextField(ListItem<User> item) {
         PasswordTextField textField = new PasswordTextField("setPasswordTextBox", Model.of(""));
-        Form passwordResetField = new Form("passwordResetField"){
+        Form passwordResetField = new Form("passwordResetField") {
             @Override
             protected void onSubmit() {
                 userService.setUserPassword(item.getModelObject().getId(), textField.getModelObject());
                 feedbackPanel.success(getString("password.success"));
             }
         };
-        Button submitButton = new Button("resetPasswordButton",  Model.of(BudgeteerAdministrationOverview.this.getString("reset.password")));
+        Button submitButton = new Button("resetPasswordButton", Model.of(BudgeteerAdministrationOverview.this.getString("reset.password")));
         return passwordResetField.add(textField, submitButton);
     }
 
     private Component createEmailTextField(ListItem<User> item) {
         EmailTextField textField = new EmailTextField("setEmailTextBox", Model.of(item.getModelObject().getMail()));
 
-        Form emailResetField = new Form("emailResetField"){
+        Form emailResetField = new Form("emailResetField") {
 
             @Override
             protected void onSubmit() {
@@ -154,28 +154,26 @@ public class BudgeteerAdministrationOverview extends BasePage {
                     userService.setUserEmail(item.getModelObject().getId(), textField.getModelObject());
                     item.getModelObject().setMail(textField.getModelObject());
                     feedbackPanel.success(getString("email.success"));
-                }catch (MailAlreadyInUseException e){
+                } catch (MailAlreadyInUseException e) {
                     feedbackPanel.error(getString("email.error"));
                 }
             }
-
-
         };
-        Button submitButton = new Button("resetEmailButton",  Model.of(BudgeteerAdministrationOverview.this.getString("reset.email")));
+        Button submitButton = new Button("resetEmailButton", Model.of(BudgeteerAdministrationOverview.this.getString("reset.email")));
         return emailResetField.add(textField, submitButton);
     }
 
-    private Link createDeleteUserButton(ListItem<User> item){
+    private Link createDeleteUserButton(ListItem<User> item) {
         return new Link("deleteUserButton") {
             @Override
             public void onClick() {
                 setResponsePage(new org.wickedsource.budgeteer.web.pages.base.delete.DeleteDialog() {
                     @Override
                     protected void onYes() {
-                        if(thisUser.getId() == item.getModelObject().getId()){
+                        if (thisUser.getId() == item.getModelObject().getId()) {
                             userService.removeUser(item.getModelObject().getId());
                             BudgeteerSession.get().logout(); // Log the user out if he deletes himself
-                        }else{
+                        } else {
                             userService.removeUser(item.getModelObject().getId());
                         }
                         setResponsePage(BudgeteerAdministrationOverview.class, getPageParameters());
@@ -188,10 +186,9 @@ public class BudgeteerAdministrationOverview extends BasePage {
 
                     @Override
                     protected String confirmationText() {
-                        if(thisUser.getId() == item.getModelObject().getId()){
+                        if (thisUser.getId() == item.getModelObject().getId()) {
                             return new StringResourceModel("remove.self.confirmation", BudgeteerAdministrationOverview.this).getString();
-                        }
-                        else{
+                        } else {
                             return new StringResourceModel("remove.confirmation", BudgeteerAdministrationOverview.this).getString();
                         }
                     }
@@ -235,9 +232,9 @@ public class BudgeteerAdministrationOverview extends BasePage {
                     protected void onYes() {
                         userService.setGlobalRoleForUser(item.getModelObject().getId(), UserRole.USER);
                         item.getModelObject().setGlobalRole(UserRole.USER);
-                        if(item.getModelObject().getId() == BudgeteerSession.get().getLoggedInUser().getId()){
+                        if (item.getModelObject().getId() == BudgeteerSession.get().getLoggedInUser().getId()) {
                             setResponsePage(LoginPage.class);
-                        }else{
+                        } else {
                             setResponsePage(BudgeteerAdministrationOverview.class, getPageParameters());
                         }
                     }
@@ -249,13 +246,11 @@ public class BudgeteerAdministrationOverview extends BasePage {
 
                     @Override
                     protected String confirmationText() {
-                        if(item.getModelObject().getId() == BudgeteerSession.get().getLoggedInUser().getId()){
+                        if (item.getModelObject().getId() == BudgeteerSession.get().getLoggedInUser().getId()) {
                             return new StringResourceModel("lose.adminship", BudgeteerAdministrationOverview.this).getString();
-                        }else{
+                        } else {
                             return new StringResourceModel("revoke.admin.rights.confirmation", BudgeteerAdministrationOverview.this).getString();
                         }
-
-
                     }
                 });
             }
@@ -270,6 +265,7 @@ public class BudgeteerAdministrationOverview extends BasePage {
                 item.add(createDeleteProjectButton(item));
                 item.add(createProjectEditButton(item));
             }
+
             @Override
             protected ListItem<ProjectBaseData> newItem(int index, IModel<ProjectBaseData> itemModel) {
                 return super.newItem(index, new ClassAwareWrappingModel<>(itemModel, ProjectBaseData.class));
@@ -277,7 +273,7 @@ public class BudgeteerAdministrationOverview extends BasePage {
         };
     }
 
-    private Component createProjectEditButton(ListItem<ProjectBaseData> item){
+    private Component createProjectEditButton(ListItem<ProjectBaseData> item) {
         return new Link("editProjectButton") {
             @Override
             public void onClick() {
@@ -286,7 +282,7 @@ public class BudgeteerAdministrationOverview extends BasePage {
         };
     }
 
-    private Component createDeleteProjectButton(ListItem<ProjectBaseData> item){
+    private Component createDeleteProjectButton(ListItem<ProjectBaseData> item) {
         return new Link("deleteProjectButton") {
             @Override
             public void onClick() {
@@ -315,5 +311,4 @@ public class BudgeteerAdministrationOverview extends BasePage {
     protected BreadcrumbsModel getBreadcrumbsModel() {
         return new BreadcrumbsModel(BudgeteerAdministrationOverview.class);
     }
-
 }

@@ -314,7 +314,7 @@ public class UserService {
      */
     public boolean saveUser(EditUserData data, boolean changePassword) throws UsernameAlreadyInUseException, MailAlreadyInUseException {
         assert data != null;
-        UserEntity userEntity = new UserEntity();
+        UserEntity userEntity;
 
         UserEntity testEntity = userRepository.findByName(data.getName());
         if (testEntity != null)
@@ -532,7 +532,11 @@ public class UserService {
         }
     }
 
-    public User updateUser(User user){
+    /**
+     * Load a given User again from the database
+     * @param user User to load from the database
+     */
+    public User getUpdatedUser(User user){
         try {
             return new UserMapper().map(getUserById(user.getId()));
         }

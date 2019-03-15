@@ -45,7 +45,8 @@ public class EditProjectPage extends BasePage {
         feedbackPanel = new CustomFeedbackPanel("feedback");
         feedbackPanel.setOutputMarkupId(true);
         add(feedbackPanel);
-        add(new UserRoleTable("projectUsers", getParameterId(), feedbackPanel, EditProjectPage.class, EditProjectPage.class, EditProjectPage.class, pageParameters));
+        add(new UserRoleTable("projectUsers", getParameterId(), feedbackPanel, EditProjectPage.class,
+                EditProjectPage.class, EditProjectPage.class, pageParameters));
         add(createAddUserForm("addUserForm"));
         add(createEditProjectForm("projectChangeForm"));
         add(createBackButton());
@@ -67,7 +68,8 @@ public class EditProjectPage extends BasePage {
         };
         form.add(new TextField<>("projectTitle", model(from(form.getModelObject()).getName())));
         DateRange defaultDateRange = new DateRange(DateUtil.getBeginOfYear(), DateUtil.getEndOfYear());
-        form.add(new DateRangeInputField("projectStart", model(from(form.getModelObject()).getDateRange()), defaultDateRange, DateRangeInputField.DROP_LOCATION.DOWN));
+        form.add(new DateRangeInputField("projectStart", model(from(form.getModelObject()).getDateRange()),
+                defaultDateRange, DateRangeInputField.DROP_LOCATION.DOWN));
         return form;
     }
 

@@ -48,7 +48,8 @@ public class ProjectAdministrationPage extends BasePage {
 
     public ProjectAdministrationPage() {
         add(feedbackPanel.setOutputMarkupId(true));
-        add(new UserRoleTable("projectUsers", BudgeteerSession.get().getProjectId(), feedbackPanel, ProjectAdministrationPage.class, SelectProjectPage.class, DashboardPage.class, getPageParameters()));
+        add(new UserRoleTable("projectUsers", BudgeteerSession.get().getProjectId(), feedbackPanel,
+                ProjectAdministrationPage.class, SelectProjectPage.class, DashboardPage.class, getPageParameters()));
         add(createDeleteProjectButton("deleteProjectButton"));
         add(createAddUserForm("addUserForm"));
         add(createEditProjectForm("projectChangeForm"));
@@ -58,14 +59,17 @@ public class ProjectAdministrationPage extends BasePage {
         Form<Project> form = new Form<>(formId, model(from(projectService.findProjectById(BudgeteerSession.get().getProjectId()))));
 
         //Ajax behaviour needed to get data on form submission as we use an ajaxLink for it
-        TextField<String> textField = (TextField<String>) new TextField<String>("projectTitle", model(from(form.getModelObject()).getName())).add(new AjaxFormComponentUpdatingBehavior("change") {
+        TextField<String> textField = (TextField<String>) new TextField<>("projectTitle",
+                model(from(form.getModelObject()).getName())).add(new AjaxFormComponentUpdatingBehavior("change") {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {}});
 
         DateRange defaultDateRange = new DateRange(DateUtil.getBeginOfYear(), DateUtil.getEndOfYear());
 
         //Ajax behaviour needed to get data on form submission as we use an ajaxLink for it
-        DateRangeInputField dateField = (DateRangeInputField) new DateRangeInputField("projectStart", model(from(form.getModelObject()).getDateRange()), defaultDateRange, DateRangeInputField.DROP_LOCATION.DOWN).add(new AjaxFormComponentUpdatingBehavior("change") {
+        DateRangeInputField dateField = (DateRangeInputField) new DateRangeInputField("projectStart",
+                model(from(form.getModelObject()).getDateRange()), defaultDateRange,
+                DateRangeInputField.DROP_LOCATION.DOWN).add(new AjaxFormComponentUpdatingBehavior("change") {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {}});
 
@@ -99,7 +103,8 @@ public class ProjectAdministrationPage extends BasePage {
             }
         };
 
-        DropDownChoice<User> userChoice = new DropDownChoice<>("userChoice", form.getModel(), new UsersNotInProjectModel(BudgeteerSession.get().getProjectId()), new UserChoiceRenderer());
+        DropDownChoice<User> userChoice = new DropDownChoice<>("userChoice", form.getModel(),
+                new UsersNotInProjectModel(BudgeteerSession.get().getProjectId()), new UserChoiceRenderer());
         userChoice.setRequired(true);
         form.add(userChoice);
         return form;

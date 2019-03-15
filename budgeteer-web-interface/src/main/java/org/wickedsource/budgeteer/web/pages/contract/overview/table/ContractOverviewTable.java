@@ -144,6 +144,7 @@ public class ContractOverviewTable extends Panel {
         addTableSummaryLabels(table, data);
         add(table);
 
+        // JavaScript Code for manual contract sorting
         add(new Behavior() {
             @Override
             public void renderHead(Component component, IHeaderResponse response) {
@@ -158,16 +159,16 @@ public class ContractOverviewTable extends Panel {
                                 "   table = $('.table').DataTable();\n" +
                                 "   // Remove arrows in the header cell of the sorting buttons\n" +
                                 "   $('#btnsHeadCell').removeClass('sorting_asc');\n" +
-                                "\n"+
+                                "\n" +
                                 "   table.on('draw', function(){\n" +
                                 "       $('.upBtn').on('click',function(event){\n" +
                                 "           up(event);\n" +
-                                "       });\n"+
+                                "       });\n" +
                                 "\n" +
                                 "       $('.downBtn').on('click', function(event){\n" +
-                                "           down(event);\n"+
-                                "       });\n"+
-                                "   })\n"+
+                                "           down(event);\n" +
+                                "       });\n" +
+                                "   })\n" +
                                 "\n" +
                                 "   // Get all row indices of the table\n" +
                                 "   function getAllIndices(){\n" +
@@ -207,7 +208,7 @@ public class ContractOverviewTable extends Panel {
                                 "       swapRows(thisIndex, nextIndex);\n" +
                                 "       table.page(page).draw(false );\n" +
                                 "       saveSorting();\n" +
-                                "   }\n"+
+                                "   }\n" +
                                 "\n" +
                                 "   function up(event){\n" +
                                 "       var page = table.page();\n" +
@@ -220,7 +221,7 @@ public class ContractOverviewTable extends Panel {
                                 "       swapRows(thisIndex, previousIndex);\n" +
                                 "       table.page(page).draw( false );\n" +
                                 "       saveSorting();\n" +
-                                "   }\n"+
+                                "   }\n" +
                                 "\n" +
                                 "   $('tr').click(function(){\n" +
                                 "       // Remove arrows in the header cell of the sorting buttons\n" +
@@ -238,11 +239,11 @@ public class ContractOverviewTable extends Panel {
                                 "\n" +
                                 "   $('.upBtn').on('click',function(event){\n" +
                                 "       up(event);" +
-                                "   });\n"+
+                                "   });\n" +
                                 "\n" +
                                 "   $('.downBtn').on('click', function(event){\n" +
-                                "       down(event);"+
-                                "   });\n"+
+                                "       down(event);" +
+                                "   });\n" +
                                 "\n" +
                                 "   $('.downBtn').on('mouseenter', function(event){\n" +
                                 "       hover(event, true);\n" +
@@ -279,7 +280,7 @@ public class ContractOverviewTable extends Panel {
                                 "   });\n" +
                                 "\n" +
                                 "   $('.sorting-row').on('dragstart', function(event){\n" +
-                                "       event.dataTransfer = event.originalEvent.dataTransfer;\n"+
+                                "       event.dataTransfer = event.originalEvent.dataTransfer;\n" +
                                 "       if($(target).hasClass('dragBtn') || $(target).hasClass('fa-hand-o-up')){\n" +
                                 "           event.dataTransfer.setData('text/plain', 'handleBtn');\n" +
                                 "           // Order by the first column, else row swapping doesn't work\n" +
@@ -318,13 +319,13 @@ public class ContractOverviewTable extends Panel {
                                 "       }\n" +
                                 "       $('.upBtn').on('click',function(event){\n" +
                                 "           up(event);" +
-                                "       });\n"+
+                                "       });\n" +
                                 "\n" +
                                 "       $('.downBtn').on('click', function(event){\n" +
-                                "           down(event);"+
-                                "       });\n"+
+                                "           down(event);" +
+                                "       });\n" +
                                 "   }\n" +
-                                "});\n"+
+                                "});\n" +
                                 "function hover(event, show){\n" +
                                 "   var source = event.target || event.srcElement;\n" +
                                 "   \n" +
@@ -335,7 +336,7 @@ public class ContractOverviewTable extends Panel {
                                 "       $(source).tooltip('hide');\n" +
                                 "   }\n" +
                                 "}"
-                                ));
+                ));
             }
         });
     }
