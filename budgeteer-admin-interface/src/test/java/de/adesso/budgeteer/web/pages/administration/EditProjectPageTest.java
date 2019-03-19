@@ -78,12 +78,12 @@ public class EditProjectPageTest extends AbstractWebTestTemplate {
         tester.startPage(EditProjectPage.class, EditProjectPage.createParameters(1));
 
         //Invisible for the admin
-        tester.assertInvisible("userList:0:deleteButton");
-        tester.assertInvisible("userList:0:roleDropdown");
+        tester.assertInvisible("projectUsers:userList:0:deleteButton");
+        tester.assertInvisible("projectUsers:userList:0:adminCheckbox:roleCheckBox");
 
         //Visible for the user
-        tester.assertVisible("userList:1:deleteButton");
-        tester.assertVisible("userList:1:roleDropdown");
+        tester.assertVisible("projectUsers:userList:1:deleteButton");
+        tester.assertVisible("projectUsers:userList:1:adminCheckbox:roleCheckBox");
     }
 
     @Test
@@ -119,10 +119,10 @@ public class EditProjectPageTest extends AbstractWebTestTemplate {
         WicketTester tester = getTester();
         tester.startPage(EditProjectPage.class, EditProjectPage.createParameters(1));
 
-        tester.assertVisible("userList:0:deleteButton");
-        tester.assertVisible("userList:0:roleDropdown");
-        tester.assertVisible("userList:1:deleteButton");
-        tester.assertVisible("userList:1:roleDropdown");
+        tester.assertVisible("projectUsers:userList:0:deleteButton");
+        tester.assertVisible("projectUsers:userList:0:adminCheckbox:roleCheckBox");
+        tester.assertVisible("projectUsers:userList:1:deleteButton");
+        tester.assertVisible("projectUsers:userList:1:adminCheckbox:roleCheckBox");
     }
 
     @Override

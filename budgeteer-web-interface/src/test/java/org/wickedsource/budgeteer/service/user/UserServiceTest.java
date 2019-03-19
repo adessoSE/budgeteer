@@ -16,9 +16,9 @@ import java.util.*;
 
 import static org.mockito.Mockito.*;
 
-@TestPropertySource(locations="classpath:application.properties")
+@TestPropertySource(locations = "classpath:application.properties")
 @EnableAutoConfiguration
-class UserServiceTest extends ServiceTestTemplate{
+class UserServiceTest extends ServiceTestTemplate {
 
     @Autowired
     private UserRepository userRepository;
@@ -40,7 +40,7 @@ class UserServiceTest extends ServiceTestTemplate{
 
 
     @Test
-    void testRegisterUser() throws Exception{
+    void testRegisterUser() throws Exception {
         service.registerUser("User", "", "Password");
         verify(userRepository, times(1)).save(any(UserEntity.class));
     }
@@ -57,6 +57,7 @@ class UserServiceTest extends ServiceTestTemplate{
     @Test
     void testLoginSuccess() throws Exception {
         when(userRepository.findByNameOrMailAndPassword("user", passwordHasher.hash("password"))).thenReturn(createUserEntity());
+        when(userRepository.getFirstUser()).thenReturn(createUserEntity());
         User user = service.login("user", "password");
         Assertions.assertNotNull(user);
     }
@@ -399,6 +400,13 @@ class UserServiceTest extends ServiceTestTemplate{
         Assertions.assertThrows(UsernameAlreadyInUseException.class, () -> service.setUserUsername(user.getId(), user.getName()));
     }
 
+    @Test
+    void testGetUpdatedUser() {
+        when(userRepository.findOne(1L)).thenReturn(createUserEntity());
+        User user = service.getUpdatedUser(new User());
+        Assertions.assertNotNull(user);
+    }
+
     private UserEntity createUserEntity() {
         UserEntity user = new UserEntity();
         user.setId(1L);
@@ -408,6 +416,8 @@ class UserServiceTest extends ServiceTestTemplate{
         user.setPassword(passwordHasher.hash("password"));
         user.setAuthorizedProjects(new ArrayList<>());
         user.setRoles(new HashMap<>());
+        Calendar calendar = new GregorianCalendar(2015, 1, 1);
+        user.setCreationDate(calendar.getTime());
         return user;
     }
 

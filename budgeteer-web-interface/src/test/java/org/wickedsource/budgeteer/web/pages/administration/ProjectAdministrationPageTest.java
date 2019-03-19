@@ -5,10 +5,6 @@ import org.apache.wicket.util.tester.FormTester;
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.mockito.Mockito;
-import org.wickedsource.budgeteer.service.DateRange;
-import org.wickedsource.budgeteer.service.DateUtil;
-import org.wickedsource.budgeteer.service.project.ProjectService;
 import org.wickedsource.budgeteer.web.AbstractWebTestTemplate;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.components.user.UserRole;
@@ -16,7 +12,6 @@ import org.wickedsource.budgeteer.web.pages.base.delete.DeleteDialog;
 import org.wickedsource.budgeteer.web.pages.user.selectproject.SelectProjectPage;
 
 import static org.mockito.Matchers.anyLong;
-import static org.mockito.Mockito.when;
 
 import static org.mockito.ArgumentMatchers.any;
 
@@ -70,8 +65,8 @@ public class ProjectAdministrationPageTest extends AbstractWebTestTemplate {
 
         //See if the delete button is visible or not
         tester.startPage(ProjectAdministrationPage.class);
-        tester.assertInvisible("userList:0:deleteButton");
-        tester.assertVisible("userList:1:deleteButton");
+        tester.assertInvisible("projectUsers:userList:0:deleteButton");
+        tester.assertVisible("projectUsers:userList:1:deleteButton");
     }
 
     @Test
@@ -86,8 +81,8 @@ public class ProjectAdministrationPageTest extends AbstractWebTestTemplate {
 
         //See if the delete button is visible or not
         tester.startPage(ProjectAdministrationPage.class);
-        tester.assertVisible("userList:0:deleteButton");
-        tester.assertVisible("userList:1:deleteButton");
+        tester.assertVisible("projectUsers:userList:0:deleteButton");
+        tester.assertVisible("projectUsers:userList:1:deleteButton");
     }
 
     @Test
@@ -100,8 +95,8 @@ public class ProjectAdministrationPageTest extends AbstractWebTestTemplate {
 
         //See if the delete button is visible or not
         tester.startPage(ProjectAdministrationPage.class);
-        tester.assertInvisible("userList:0:roleDropdown");
-        tester.assertVisible("userList:1:roleDropdown");
+        tester.assertInvisible("projectUsers:userList:0:adminCheckbox:roleCheckBox");
+        tester.assertVisible("projectUsers:userList:1:adminCheckbox:roleCheckBox");
     }
 
     @Test
@@ -116,8 +111,8 @@ public class ProjectAdministrationPageTest extends AbstractWebTestTemplate {
 
         //See if the delete button is visible or not
         tester.startPage(ProjectAdministrationPage.class);
-        tester.assertVisible("userList:0:roleDropdown");
-        tester.assertVisible("userList:1:roleDropdown");
+        tester.assertVisible("projectUsers:userList:0:adminCheckbox:roleCheckBox");
+        tester.assertVisible("projectUsers:userList:1:adminCheckbox:roleCheckBox");
     }
 
     @Test
@@ -130,7 +125,7 @@ public class ProjectAdministrationPageTest extends AbstractWebTestTemplate {
 
         //Verify the correct behaviour when pressing yes
         tester.startPage(ProjectAdministrationPage.class);
-        tester.clickLink("userList:1:deleteButton");
+        tester.clickLink("projectUsers:userList:1:deleteButton");
         tester.assertRenderedPage(DeleteDialog.class);
         tester.clickLink("yesButton");
         Mockito.verify(userServiceMock, Mockito.times(1)).removeUserFromProject(anyLong(), anyLong());
@@ -148,7 +143,7 @@ public class ProjectAdministrationPageTest extends AbstractWebTestTemplate {
 
         //Verify the correct behaviour when pressing no
         tester.startPage(ProjectAdministrationPage.class);
-        tester.clickLink("userList:0:deleteButton");
+        tester.clickLink("projectUsers:userList:0:deleteButton");
         tester.assertRenderedPage(DeleteDialog.class);
         tester.clickLink("noButton");
         tester.assertRenderedPage(ProjectAdministrationPage.class);
@@ -162,11 +157,11 @@ public class ProjectAdministrationPageTest extends AbstractWebTestTemplate {
         BudgeteerSession.get().setProjectId(1L);
         userServiceMock.getUsersInProject(1L).get(0).getRoles(1L).add(UserRole.ADMIN);
         userServiceMock.getUsersInProject(1L).get(1).getRoles(1L).add(UserRole.ADMIN);
-        BudgeteerSession.get().setLoggedInUser( userServiceMock.getUsersInProject(1L).get(0));
+        BudgeteerSession.get().setLoggedInUser(userServiceMock.getUsersInProject(1L).get(0));
 
         //Verify the correct behaviour when pressing yes
         tester.startPage(ProjectAdministrationPage.class);
-        tester.clickLink("userList:0:deleteButton");
+        tester.clickLink("projectUsers:userList:0:deleteButton");
         tester.assertRenderedPage(DeleteDialog.class);
         tester.clickLink("yesButton");
         Mockito.verify(userServiceMock, Mockito.times(1)).removeUserFromProject(anyLong(), anyLong());

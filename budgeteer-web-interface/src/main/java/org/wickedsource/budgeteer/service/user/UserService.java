@@ -248,11 +248,21 @@ public class UserService {
     public List<User> getAllAdmins() {
         List<User> result = new ArrayList<>();
         for (UserEntity u : userRepository.findAll()) {
-            if (u.getGlobalRole().equals(UserRole.ADMIN)) {
+            if (isGlobalAdmin(u)) {
                 result.add(mapToUser(u));
             }
         }
         return result;
+    }
+
+    private boolean isGlobalAdmin(UserEntity user) {
+        if (user.getGlobalRole() != null) {
+            return user.getGlobalRole().equals(UserRole.ADMIN);
+        } else {
+            user.setGlobalRole(UserRole.USER);
+            userRepository.save(user);
+            return false;
+        }
     }
 
     public void setGlobalRoleForUser(Long userId, UserRole role) {

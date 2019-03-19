@@ -141,7 +141,6 @@ public class BudgeteerAdministrationOverview extends BasePage {
         EmailTextField textField = new EmailTextField("setEmailTextBox", Model.of(item.getModelObject().getMail()));
 
         Form emailResetField = new Form("emailResetField") {
-
             @Override
             protected void onSubmit() {
                 try {
@@ -153,6 +152,7 @@ public class BudgeteerAdministrationOverview extends BasePage {
                 }
             }
         };
+
         Button submitButton = new Button("resetEmailButton", Model.of(BudgeteerAdministrationOverview.this.getString("reset.email")));
         return emailResetField.add(textField, submitButton);
     }

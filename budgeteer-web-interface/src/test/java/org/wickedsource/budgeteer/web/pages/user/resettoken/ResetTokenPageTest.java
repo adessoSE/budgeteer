@@ -10,6 +10,8 @@ import org.wickedsource.budgeteer.service.user.UserIdNotFoundException;
 import org.wickedsource.budgeteer.service.user.UserService;
 import org.wickedsource.budgeteer.web.AbstractWebTestTemplate;
 
+import java.util.Date;
+
 import static org.mockito.Mockito.when;
 
 public class ResetTokenPageTest extends AbstractWebTestTemplate {
@@ -20,7 +22,8 @@ public class ResetTokenPageTest extends AbstractWebTestTemplate {
     @BeforeEach
     void setUpMocks() {
         try {
-            when(userService.getUserById(1L)).thenReturn(new UserEntity(1L, "test", "password", "test@budgeteer.local", false, null, null));
+            when(userService.getUserById(1L)).thenReturn(new UserEntity(1L, "test", "password",
+                    "test@budgeteer.local", false, new Date(), null, null));
         } catch (UserIdNotFoundException e) {
             e.printStackTrace();
         }

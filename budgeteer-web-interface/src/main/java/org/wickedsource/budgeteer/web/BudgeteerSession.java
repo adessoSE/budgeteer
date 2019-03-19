@@ -52,7 +52,6 @@ public class BudgeteerSession extends WebSession {
         loggedInUser = updatedUser;
     }
 
-
     public boolean isLoggedIn() {
         return this.loggedInUser != null;
     }
