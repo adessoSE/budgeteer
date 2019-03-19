@@ -73,6 +73,14 @@ public class UserEntity {
         this.defaultProject = defaultProject;
     }
 
+    public HashMap<Long, List<UserRole>> getRoles() {
+        if (roles == null) {
+            roles = new HashMap<>();
+        }
+
+        return roles;
+    }
+
     public void ensureCreationDate() {
         if (creationDate == null) {
             creationDate = new Date();

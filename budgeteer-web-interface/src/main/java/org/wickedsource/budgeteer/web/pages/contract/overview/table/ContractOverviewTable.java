@@ -160,6 +160,7 @@ public class ContractOverviewTable extends Panel {
                                 "   // Remove arrows in the header cell of the sorting buttons\n" +
                                 "   $('#btnsHeadCell').removeClass('sorting_asc');\n" +
                                 "\n" +
+                                // Called when the table is updated
                                 "   table.on('draw', function(){\n" +
                                 "       $('.upBtn').on('click',function(event){\n" +
                                 "           up(event);\n" +
@@ -170,7 +171,7 @@ public class ContractOverviewTable extends Panel {
                                 "       });\n" +
                                 "   })\n" +
                                 "\n" +
-                                "   // Get all row indices of the table\n" +
+                                 // Get all row indices of the table
                                 "   function getAllIndices(){\n" +
                                 "       var indices = [];\n" +
                                 "       table.rows().eq(0).each( function ( index ) {\n" +
@@ -179,14 +180,14 @@ public class ContractOverviewTable extends Panel {
                                 "       return indices;\n" +
                                 "   }\n" +
                                 "\n" +
-                                "   // Get the row index of the element which triggered the event\n" +
+                                 // Get the row index of the element which triggered the event
                                 "   function getRowIndex(event){\n" +
                                 "       var source = event.target || event.srcElement;\n" +
                                 "       var thisRow = $(source).closest('tr');\n" +
                                 "       return table.row(thisRow).index();\n" +
                                 "   }\n" +
                                 "\n" +
-                                "   // Swap the rows of the two indices\n" +
+                               // Swap the rows of the two indices
                                 "   function swapRows(firstIndex, secondIndex) {\n" +
                                 "       var firstRowData = table.row(firstIndex).data();\n" +
                                 "       var secondRowData = table.row(secondIndex).data();\n" +
@@ -199,7 +200,7 @@ public class ContractOverviewTable extends Panel {
                                 "\n" +
                                 "   function down(event){\n" +
                                 "       var page = table.page();\n" +
-                                "       // Order by the first column, else row swapping doesn't work\n" +
+                                // Order by the first column, else row swapping doesn't work
                                 "       table.order([0, 'asc']);\n" +
                                 "       var thisIndex = getRowIndex(event);\n" +
                                 "       var allIndices = getAllIndices();\n" +
@@ -212,7 +213,7 @@ public class ContractOverviewTable extends Panel {
                                 "\n" +
                                 "   function up(event){\n" +
                                 "       var page = table.page();\n" +
-                                "       // Order by the first column, else row swapping doesn't work\n" +
+                                // Order by the first column, else row swapping doesn't work
                                 "       table.order([0, 'asc']);\n" +
                                 "       var thisIndex = getRowIndex(event);\n" +
                                 "       var allIndices = getAllIndices();\n" +
@@ -224,7 +225,7 @@ public class ContractOverviewTable extends Panel {
                                 "   }\n" +
                                 "\n" +
                                 "   $('tr').click(function(){\n" +
-                                "       // Remove arrows in the header cell of the sorting buttons\n" +
+                                // Remove arrows in the header cell of the sorting buttons
                                 "       $('#btnsHeadCell').removeClass('sorting');\n" +
                                 "       saveSorting();\n" +
                                 "   });\n" +
@@ -283,7 +284,7 @@ public class ContractOverviewTable extends Panel {
                                 "       event.dataTransfer = event.originalEvent.dataTransfer;\n" +
                                 "       if($(target).hasClass('dragBtn') || $(target).hasClass('fa-hand-o-up')){\n" +
                                 "           event.dataTransfer.setData('text/plain', 'handleBtn');\n" +
-                                "           // Order by the first column, else row swapping doesn't work\n" +
+                                // Order by the first column, else row swapping doesn't work
                                 "           table.order([0, 'asc']);\n" +
                                 "           draggedRow = $(event.target);\n" +
                                 "       }\n" +
@@ -304,7 +305,7 @@ public class ContractOverviewTable extends Panel {
                                 "\n" +
                                 "       postAJAX(contractIDs);\n" +
                                 "\n" +
-                                "       // Remove arrows in the header cell of the sorting buttons\n" +
+                               // Remove arrows in the header cell of the sorting buttons
                                 "       $(\"#btnsHeadCell\").removeClass('sorting_asc sorting');\n" +
                                 "   }\n" +
                                 "\n" +
