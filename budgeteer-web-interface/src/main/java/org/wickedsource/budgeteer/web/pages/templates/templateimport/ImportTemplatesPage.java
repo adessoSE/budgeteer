@@ -1,5 +1,6 @@
 package org.wickedsource.budgeteer.web.pages.templates.templateimport;
 
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -87,23 +88,35 @@ public class ImportTemplatesPage extends DialogPageWithBacklink {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 try {
-                    if(model(from(templateFormInputDto)).getObject().getName() == null){
-                        error(getString("message.error.no.name"));
-                    }
-                    if(model(from(templateFormInputDto)).getObject().getType() == null){
-                        error(getString("message.error.no.type"));
-                    }
                     ImportFile file = new ImportFile(fileUploads.get(0).getClientFileName(), fileUploads.get(0).getInputStream());
-                    if(model(from(templateFormInputDto)).getObject().getName() != null && model(from(templateFormInputDto)).getObject().getType() != null){
+
+                    if (model(from(templateFormInputDto)).getObject().getName() == null) {
+                        error(getString("message.error.no.name"));
+                    } else if (model(from(templateFormInputDto)).getObject().getType() == null) {
+                        error(getString("message.error.no.type"));
+                    } else if (!hasValidFileExtension(file)) {
+                        error(getString("message.invalidFormatException"));
+                    } else {
                         service.doImport(BudgeteerSession.get().getProjectId(), file, model(from(templateFormInputDto)));
                         success(getString("message.success"));
                     }
-                }  catch (IOException e) {
+                } catch (IOException e) {
                     error(String.format(getString("message.ioError"), e.getMessage()));
-                }  catch (IllegalArgumentException e) {
+                } catch (IllegalArgumentException e) {
                     error(String.format(getString("message.importError"), e.getMessage()));
+                } catch (InvalidFormatException e) {
+                    error(getString("message.invalidFormatException"));
                 }
                 target.add(feedback);
+            }
+
+            private boolean hasValidFileExtension(ImportFile file) {
+                String filename = file.getFilename();
+                String[] filenameParts = filename.split("[.]");
+                if (filenameParts.length > 0) {
+                    return filenameParts[filenameParts.length - 1].equals("xlsx") || filenameParts[filenameParts.length - 1].equals("xls");
+                }
+                return false;
             }
 
             @Override
@@ -119,11 +132,11 @@ public class ImportTemplatesPage extends DialogPageWithBacklink {
         AjaxLink checkBox = new AjaxLink("setAsDefault") {
             @Override
             public void onClick(AjaxRequestTarget ajaxRequestTarget) {
-                if(templateFormInputDto.isDefault()){
+                if (templateFormInputDto.isDefault()) {
                     form.getModel().getObject().setDefault(false);
                     this.add(starUnchecked);
                     templateFormInputDto.setDefault(false);
-                }else{
+                } else {
                     form.getModel().getObject().setDefault(true);
                     this.add(starChecked);
                     templateFormInputDto.setDefault(true);
@@ -131,9 +144,9 @@ public class ImportTemplatesPage extends DialogPageWithBacklink {
                 ajaxRequestTarget.add(this, this.getMarkupId());
             }
         };
-        if(templateFormInputDto.isDefault()){
+        if (templateFormInputDto.isDefault()) {
             checkBox.add(starChecked);
-        }else{
+        } else {
             checkBox.add(starUnchecked);
         }
         checkBox.setOutputMarkupId(true);
@@ -150,9 +163,9 @@ public class ImportTemplatesPage extends DialogPageWithBacklink {
                     public Object getDisplayValue(ReportType object) {
                         return object == null ? "Unnamed" : object.toString();
                     }
-                }){
+                }) {
             @Override
-            public String getModelValue (){
+            public String getModelValue() {
                 return null;
             }
         };
@@ -171,27 +184,27 @@ public class ImportTemplatesPage extends DialogPageWithBacklink {
                     public Object getDisplayValue(ReportType object) {
                         return object.toString() + " template";
                     }
-        }){
+                }) {
             @Override
-            public String getModelValue (){
+            public String getModelValue() {
                 return null;
             }
         };
         HashMap<String, String> options = MultiselectBehavior.getRecommendedOptions();
         options.clear();
-        options.put("buttonClass","'btn bg-olive'");
-        options.put("buttonWidth","'140px'");
+        options.put("buttonClass", "'btn bg-olive'");
+        options.put("buttonWidth", "'140px'");
         dropDownChoice.add(new MultiselectBehavior(options));
         dropDownChoice.add(new AjaxFormComponentUpdatingBehavior("change") {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
-                exampleTemplateType = (ReportType)this.getComponent().getDefaultModel().getObject();
+                exampleTemplateType = (ReportType) this.getComponent().getDefaultModel().getObject();
             }
         });
         return dropDownChoice;
     }
 
-    private Link<Void> createExampleFileButton(String wicketId){
+    private Link<Void> createExampleFileButton(String wicketId) {
         return new Link<Void>(wicketId) {
             @Override
             public void onClick() {

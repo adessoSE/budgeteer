@@ -31,7 +31,7 @@ class TemplateServiceTest extends ServiceTestTemplate {
     TemplateRepository templateRepository;
 
     @Test
-    void doImportTest() {
+    void doImportTest() throws IOException, InvalidFormatException {
         Mockito.when(templateRepository.save(any(TemplateEntity.class))).thenReturn(new TemplateEntity());
         TemplateFormInputDto testDto = new TemplateFormInputDto(1);
         testDto.setName("TEST");
@@ -40,7 +40,7 @@ class TemplateServiceTest extends ServiceTestTemplate {
         testDto.setDefault(false);
         templateService.doImport(1, new ImportFile("exampleTemplate1.xlsx",
                         getClass().getResourceAsStream("exampleTemplate1.xlsx")),
-                        model(from(testDto)));
+                model(from(testDto)));
         Mockito.verify(templateRepository, times(1)).save(any(TemplateEntity.class));
     }
 
@@ -66,11 +66,11 @@ class TemplateServiceTest extends ServiceTestTemplate {
     }
 
     @Test
-    void getExampleFileTest(){
+    void getExampleFileTest() {
         try {
-            XSSFWorkbook testWorkbok = (XSSFWorkbook)WorkbookFactory.create(templateService.getExampleFile(ReportType.CONTRACT_REPORT).getInputStream());
+            XSSFWorkbook testWorkbok = (XSSFWorkbook) WorkbookFactory.create(templateService.getExampleFile(ReportType.CONTRACT_REPORT).getInputStream());
             Assertions.assertNotNull(testWorkbok);
-        }catch (IOException | InvalidFormatException e){
+        } catch (IOException | InvalidFormatException e) {
             e.printStackTrace();
             Assertions.fail();
         }

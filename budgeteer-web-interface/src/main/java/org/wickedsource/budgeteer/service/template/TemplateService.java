@@ -28,12 +28,11 @@ public class TemplateService {
     private TemplateRepository templateRepository;
 
     /**
-     *
      * @return All the templates from the repository.
      */
-    public List<Template> getTemplates(){
+    public List<Template> getTemplates() {
         List<Template> result = new ArrayList<>();
-        for(TemplateEntity E : templateRepository.findAll()){
+        for (TemplateEntity E : templateRepository.findAll()) {
             result.add(new Template(E.getId(), E.getName(), E.getDescription(), E.getType(), E.getWb(), E.isDefault(), E.getProjectId()));
         }
         return result;
@@ -43,18 +42,18 @@ public class TemplateService {
      * @param projectID The ID of the current project.
      * @return All the templates in the current project.
      */
-    public List<Template> getTemplatesInProject(long projectID){
+    public List<Template> getTemplatesInProject(long projectID) {
         List<Template> result = new ArrayList<>();
-        for(TemplateEntity E : templateRepository.findByProjectId(projectID)){
-            result.add(new Template(E.getId(), E.getName(), E.getDescription(), E.getType() , E.getWb(), E.isDefault(), E.getProjectId()));
+        for (TemplateEntity E : templateRepository.findByProjectId(projectID)) {
+            result.add(new Template(E.getId(), E.getName(), E.getDescription(), E.getType(), E.getWb(), E.isDefault(), E.getProjectId()));
         }
         return result;
     }
 
-    public Template getDefault(ReportType type, long projectID){
-        for(Template E : getTemplatesInProject(projectID)){
-            if(E.getType() == type){
-                if(E.isDefault()){
+    public Template getDefault(ReportType type, long projectID) {
+        for (Template E : getTemplatesInProject(projectID)) {
+            if (E.getType() == type) {
+                if (E.isDefault()) {
                     return E;
                 }
             }
@@ -66,11 +65,11 @@ public class TemplateService {
      * @param filter The Filter to use.
      * @return All the templates in the current project.
      */
-    public List<Template> getFilteredTemplatesInProject(@NotNull TemplateFilter filter){
+    public List<Template> getFilteredTemplatesInProject(@NotNull TemplateFilter filter) {
         List<Template> result = new ArrayList<>();
-        for(TemplateEntity E : templateRepository.findByProjectId(filter.getProjectId())){
-            for(ReportType type : filter.getTypesList()){
-                if(type == E.getType()){
+        for (TemplateEntity E : templateRepository.findByProjectId(filter.getProjectId())) {
+            for (ReportType type : filter.getTypesList()) {
+                if (type == E.getType()) {
                     result.add(new Template(E.getId(), E.getName(), E.getDescription(), E.getType(), E.getWb(), E.isDefault(), E.getProjectId()));
                 }
             }
@@ -80,12 +79,13 @@ public class TemplateService {
 
     /**
      * Returns a template from the database given it's ID.
+     *
      * @param templateID The ID of the template.
      * @return A new Template object.
      */
-    public Template getById(long templateID){
+    public Template getById(long templateID) {
         TemplateEntity templateEntity = templateRepository.findOne(templateID);
-        if(templateEntity == null){
+        if (templateEntity == null) {
             return null;
         } else {
             return templateEntity.getTemplate();
@@ -94,17 +94,18 @@ public class TemplateService {
 
     /**
      * Delete a template given it's id.
+     *
      * @param templateID The ID of the template.
      */
-    public void deleteTemplate(long templateID){
+    public void deleteTemplate(long templateID) {
         templateRepository.delete(templateID);
     }
 
-    public void resolveDefaults(long templateId, IModel<TemplateFormInputDto> temModel){
-        if(temModel.getObject().isDefault()){
-            for(TemplateEntity E : templateRepository.findAll()){
-                if(E.getType() == temModel.getObject().getType() && E.getId() != templateId){
-                    if(E.isDefault()){
+    public void resolveDefaults(long templateId, IModel<TemplateFormInputDto> temModel) {
+        if (temModel.getObject().isDefault()) {
+            for (TemplateEntity E : templateRepository.findAll()) {
+                if (E.getType() == temModel.getObject().getType() && E.getId() != templateId) {
+                    if (E.isDefault()) {
                         templateRepository.save(new TemplateEntity(E.getId(), E.getName(), E.getDescription(), E.getType(),
                                 E.getWb(), false, E.getProjectId()));
                     }
@@ -114,28 +115,27 @@ public class TemplateService {
     }
 
     /**
-     *
-     * @param projectId The id of the current project
+     * @param projectId  The id of the current project
      * @param templateId The id of the template to edit
      * @param importFile The file if containing the Workbook (can be null if we do not want to reupload)
-     * @param temModel The model for the template that is being edited
+     * @param temModel   The model for the template that is being edited
      */
     public void editTemplate(long projectId, long templateId, ImportFile importFile, IModel<TemplateFormInputDto> temModel) {
         resolveDefaults(templateId, temModel);
         TemplateEntity temp;
-        if(importFile != null) {
+        if (importFile != null) {
             try {
                 temp = new TemplateEntity(templateId, temModel.getObject().getName(),
                         temModel.getObject().getDescription(),
                         temModel.getObject().getType(),
-                        (XSSFWorkbook)WorkbookFactory.create(importFile.getInputStream()),
+                        (XSSFWorkbook) WorkbookFactory.create(importFile.getInputStream()),
                         temModel.getObject().isDefault(),
                         projectId);
                 templateRepository.save(temp);
             } catch (IOException | InvalidFormatException e) {
                 e.printStackTrace();
             }
-        }else{
+        } else {
             temp = new TemplateEntity(templateId, temModel.getObject().getName(),
                     temModel.getObject().getDescription(),
                     temModel.getObject().getType(),
@@ -148,36 +148,34 @@ public class TemplateService {
 
     /**
      * Imports a template into the repository
-     * @param projectId The id of the current project
+     *
+     * @param projectId  The id of the current project
      * @param importFile The file to import
-     * @param temModel The data model (name, description, id).
+     * @param temModel   The data model (name, description, id).
      */
-    public void doImport(long projectId, ImportFile importFile, IModel<TemplateFormInputDto> temModel) {
-        try {
-            TemplateEntity temp = new TemplateEntity(temModel.getObject().getName(),
-                    temModel.getObject().getDescription(),
-                    temModel.getObject().getType(),
-                    (XSSFWorkbook)WorkbookFactory.create(importFile.getInputStream()),
-                    temModel.getObject().isDefault(),
-                    projectId);
-            resolveDefaults(temp.getId(), temModel);
-            templateRepository.save(temp);
-        } catch (IOException | InvalidFormatException e){
-            e.printStackTrace();
-        }
+    public void doImport(long projectId, ImportFile importFile, IModel<TemplateFormInputDto> temModel) throws IOException, InvalidFormatException {
+        TemplateEntity temp = new TemplateEntity(temModel.getObject().getName(),
+                temModel.getObject().getDescription(),
+                temModel.getObject().getType(),
+                (XSSFWorkbook) WorkbookFactory.create(importFile.getInputStream()),
+                temModel.getObject().isDefault(),
+                projectId);
+        resolveDefaults(temp.getId(), temModel);
+        templateRepository.save(temp);
     }
 
     /**
      * Reads an example template file from disk.
      * The file must be named like in the following format:
      * type-report-template.xlsx
-     *
+     * <p>
      * where type is any of the available template types.
+     *
      * @return An example file that shows how a template could look
      */
     public ExampleFile getExampleFile(ReportType type) {
         ExampleFile file = new ExampleFile();
-        file.setFileName("Example_" + type.toString().toLowerCase() +"_template.xlsx");
+        file.setFileName("Example_" + type.toString().toLowerCase() + "_template.xlsx");
         file.setInputStream(getClass().getResourceAsStream("/" + type.toString().toLowerCase() + "-report-template.xlsx"));
         return file;
     }

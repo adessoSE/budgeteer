@@ -40,7 +40,7 @@ public class ImportTemplatesPageTest extends AbstractWebTestTemplate {
     }
 
     @Test
-    void NoDataFormSubmitTest(){
+    void NoDataFormSubmitTest() {
         WicketTester tester = getTester();
         ImportTemplatesPage testPage = new ImportTemplatesPage(TemplatesPage.class, new PageParameters());
         tester.startPage(testPage);
@@ -54,7 +54,7 @@ public class ImportTemplatesPageTest extends AbstractWebTestTemplate {
     }
 
     @Test
-    void NameAndDescriptionFormSubmitTest(){
+    void NameAndDescriptionFormSubmitTest() {
         WicketTester tester = getTester();
         ImportTemplatesPage testPage = new ImportTemplatesPage(TemplatesPage.class, new PageParameters());
         tester.startPage(testPage);
@@ -70,7 +70,7 @@ public class ImportTemplatesPageTest extends AbstractWebTestTemplate {
     }
 
     @Test
-    void NoNameNoDescriptionWithFileTest(){ //yes I know this is a horrible name
+    void NoNameNoDescriptionWithFileTest() { //yes I know this is a horrible name
         WicketTester tester = getTester();
         ImportTemplatesPage testPage = new ImportTemplatesPage(TemplatesPage.class, new PageParameters());
         tester.startPage(testPage);
@@ -87,7 +87,7 @@ public class ImportTemplatesPageTest extends AbstractWebTestTemplate {
     }
 
     @Test
-    public void NoTypeTest(){
+    public void NoTypeTest() {
         WicketTester tester = getTester();
         ImportTemplatesPage testPage = new ImportTemplatesPage(TemplatesPage.class, new PageParameters());
         tester.startPage(testPage);
@@ -99,12 +99,29 @@ public class ImportTemplatesPageTest extends AbstractWebTestTemplate {
         formTester.setValue("description", "TEST_D");
         tester.executeAjaxEvent("importForm:save", "onclick");
         tester.assertRenderedPage(ImportTemplatesPage.class);
-        tester.assertErrorMessages( "You have not selected a type");
+        tester.assertErrorMessages("You have not selected a type");
         assertThat(tester.getFeedbackMessages(null)).hasSize(1);
     }
 
     @Test
-    void AllCorrectInputForm(){
+    public void InvalidFileTest() {
+        WicketTester tester = getTester();
+        ImportTemplatesPage testPage = new ImportTemplatesPage(TemplatesPage.class, new PageParameters());
+        tester.startPage(testPage);
+        Assertions.assertNotNull(testPage.get("importForm"));
+        FormTester formTester = tester.newFormTester("importForm", true);
+        formTester.setClearFeedbackMessagesBeforeSubmit(true);
+        formTester.setFile("fileUpload", getInvalidExampleTemplate(), "txt");
+        formTester.setValue("name", "TEST_N");
+        formTester.setValue("description", "TEST_D");
+        formTester.select("type", 1);
+        tester.executeAjaxEvent("importForm:save", "onclick");
+        tester.assertRenderedPage(ImportTemplatesPage.class);
+        tester.assertErrorMessages("The file did not match the expected file format. Please choose a .xls- or a .xlsx-file.");
+    }
+
+    @Test
+    void AllCorrectInputForm() {
         WicketTester tester = getTester();
         ImportTemplatesPage testPage = new ImportTemplatesPage(TemplatesPage.class, new PageParameters());
         tester.startPage(testPage);
@@ -122,17 +139,26 @@ public class ImportTemplatesPageTest extends AbstractWebTestTemplate {
         assertThat(tester.getFeedbackMessages(null)).hasSize(1);
     }
 
-    private File getExampleTemplate(){
+    private File getExampleTemplate() {
         try {
             return new File(getClass().getResource("exampleTemplate1.xlsx").toURI());
-        }catch (URISyntaxException e){
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private File getInvalidExampleTemplate() {
+        try {
+            return new File(getClass().getResource("invalidTemplate.txt").toURI());
+        } catch (URISyntaxException e) {
             e.printStackTrace();
             return null;
         }
     }
 
     @Override
-    public void setupTest(){
+    public void setupTest() {
 
     }
 }
