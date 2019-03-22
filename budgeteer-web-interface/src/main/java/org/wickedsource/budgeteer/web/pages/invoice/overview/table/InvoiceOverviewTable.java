@@ -18,11 +18,13 @@ import org.wickedsource.budgeteer.service.invoice.InvoiceBaseData;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.PropertyLoader;
 import org.wickedsource.budgeteer.web.components.dataTable.DataTableBehavior;
+import org.wickedsource.budgeteer.web.components.nullmodel.NullsafeDateModel;
 import org.wickedsource.budgeteer.web.pages.base.basepage.BasePage;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
 import org.wickedsource.budgeteer.web.pages.invoice.edit.EditInvoicePage;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 
 import static org.wicketstuff.lazymodel.LazyModel.from;
 import static org.wicketstuff.lazymodel.LazyModel.model;
@@ -68,8 +70,11 @@ public class InvoiceOverviewTable extends Panel {
                 item.add(new Label("month", PropertyLoader.getProperty(BasePage.class, "monthRenderer.name." + item.getModelObject().getMonth())));
                 item.add(new Label("sum", Model.of(MoneyUtil.toDouble(item.getModelObject().getSum(),
                         BudgeteerSession.get().getSelectedBudgetUnit()))));
-                item.add(new Label("dueDate", item.getModelObject().getDueDate() != null ? item.getModelObject().getDueDate() : getString("overview.table.invoice.noDueDate")));
-                item.add(new Label("paidDate", item.getModelObject().getPaidDate() != null ? item.getModelObject().getPaidDate() : getString("overview.table.invoice.noPaidDate")));
+
+                SimpleDateFormat formatter = new SimpleDateFormat();
+                item.add(new Label("dueDate", new NullsafeDateModel(item.getModelObject().getDueDate(), getString("overview.table.invoice.noDueDate"), formatter)));
+                item.add(new Label("paidDate", new NullsafeDateModel(item.getModelObject().getPaidDate(), getString("overview.table.invoice.noPaidDate"), formatter)));
+
                 item.add(new Label("sum_gross", Model.of(MoneyUtil.toDouble(item.getModelObject().getSum_gross(), BudgeteerSession.get().getSelectedBudgetUnit()))));
                 item.add(new Label("taxAmount", Model.of(MoneyUtil.toDouble(item.getModelObject().getTaxAmount(), BudgeteerSession.get().getSelectedBudgetUnit()))));
                 item.add(new Label("taxRate", getTaxRateAsString(item.getModelObject().getTaxRate())));
@@ -80,7 +85,7 @@ public class InvoiceOverviewTable extends Panel {
                     }
                 });
 
-                item.add(new Link("editLink"){
+                item.add(new Link("editLink") {
                     @Override
                     public void onClick() {
                         setResponsePage(new EditInvoicePage(EditInvoicePage.createEditInvoiceParameters(invoiceId), this.getWebPage().getClass(), this.getPage().getPageParameters()));

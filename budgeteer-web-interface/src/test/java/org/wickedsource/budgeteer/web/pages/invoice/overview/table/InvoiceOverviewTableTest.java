@@ -33,6 +33,15 @@ public class InvoiceOverviewTableTest extends AbstractWebTestTemplate {
         tester.startComponentInPage(table);
     }
 
+    @Test
+    void testTableRenderWithoutDatesSet() {
+        WicketTester tester = getTester();
+        when(service.getEmptyInvoiceModel(anyLong())).thenReturn(createTestDataWithoutDates());
+        InvoiceOverviewTableModel model = new InvoiceOverviewTableModel();
+        InvoiceOverviewTable table = new InvoiceOverviewTable("table", model, null);
+        tester.startComponentInPage(table);
+    }
+
     private InvoiceBaseData createTestData() {
         InvoiceBaseData data = new InvoiceBaseData();
         data.setContractId(1L);
@@ -43,6 +52,27 @@ public class InvoiceOverviewTableTest extends AbstractWebTestTemplate {
         data.setInvoiceName("invoice");
         data.setDueDate(new Date());
         data.setPaidDate(new Date());
+        Money sum = Money.of(CurrencyUnit.EUR, random.nextInt());
+        data.setSum(sum);
+        BigDecimal taxRate = new BigDecimal(random.nextInt(100));
+        data.setTaxRate(taxRate);
+        double taxAmount = sum.getAmount().doubleValue() * taxRate.doubleValue() / 100;
+        data.setTaxAmount(Money.of(CurrencyUnit.EUR, taxAmount));
+        double sumGross = sum.getAmount().doubleValue() + taxAmount;
+        data.setSum_gross(Money.of(CurrencyUnit.EUR, sumGross));
+        return data;
+    }
+
+    private InvoiceBaseData createTestDataWithoutDates() {
+        InvoiceBaseData data = new InvoiceBaseData();
+        data.setContractId(1L);
+        data.setContractName("contract");
+        data.setFileUploadModel(new FileUploadModel());
+        data.setInternalNumber("internalNumber");
+        data.setInvoiceId(1L);
+        data.setInvoiceName("invoice");
+        data.setDueDate(null);
+        data.setPaidDate(null);
         Money sum = Money.of(CurrencyUnit.EUR, random.nextInt());
         data.setSum(sum);
         BigDecimal taxRate = new BigDecimal(random.nextInt(100));
