@@ -377,7 +377,6 @@ class WorkRecordRepositoryTest extends IntegrationTestTemplate {
         Assertions.assertEquals(8d, records.get(0).getHours(), 0.1d);
         Assertions.assertEquals(10000L, records.get(0).getValueInCents());
         Assertions.assertEquals("person1", records.get(0).getTitle());
-
     }
 
     @Test
@@ -412,7 +411,6 @@ class WorkRecordRepositoryTest extends IntegrationTestTemplate {
         Assertions.assertEquals(8d, records.get(0).getHours(), 0.1d);
         Assertions.assertEquals(10000L, records.get(0).getValueInCents());
         Assertions.assertEquals("person1", records.get(0).getTitle());
-
     }
 
     @Test
@@ -517,7 +515,6 @@ class WorkRecordRepositoryTest extends IntegrationTestTemplate {
         Assertions.assertEquals(16d, records.get(1).getHours(), 0.1d);
         Assertions.assertEquals(0L, records.get(1).getValueInCents());
         Assertions.assertEquals("person2", records.get(1).getTitle());
-
     }
 
     @Test
@@ -610,7 +607,6 @@ class WorkRecordRepositoryTest extends IntegrationTestTemplate {
         PersonEntity person = new PersonEntity();
         person.setId(1L);
 
-
         List<WorkRecordEntity> records = repository.findDuplicateEntries(budget, person, formatter.parse("2014-01-01"), 480);
         Assertions.assertEquals(1, records.size());
 
@@ -621,7 +617,6 @@ class WorkRecordRepositoryTest extends IntegrationTestTemplate {
         budget.setId(4L);
         records = repository.findDuplicateEntries(budget, person, formatter.parse("2016-08-15"), 960);
         Assertions.assertEquals(2, records.size());
-
     }
 
     @Test
@@ -638,5 +633,13 @@ class WorkRecordRepositoryTest extends IntegrationTestTemplate {
     void testGetSpentMoneyOfContractOfMonth() throws ParseException {
         double spent = repository.getSpentMoneyOfContractOfMonth(1L, 1, 2015);
         Assertions.assertEquals(spent, 200);
+    }
+
+    @Test
+    @DatabaseSetup("getSpentMoneyOfContract.xml")
+    @DatabaseTearDown(value = "getSpentMoneyOfContract.xml", type = DatabaseOperation.DELETE_ALL)
+    void testGetSpentMoneyOfContract() throws ParseException {
+        double money = repository.getSpentMoneyOfContract(1L);
+        Assertions.assertEquals(1500, money);
     }
 }

@@ -24,12 +24,15 @@
 
     <mockito:mock id="contractService" class="org.wickedsource.budgeteer.service.contract.ContractService"/>
 
-    <mockito:mock id="contractSortingService" class="org.wickedsource.budgeteer.service.contract.ContractSortingService"/>
+    <mockito:mock id="contractSortingService"
+                  class="org.wickedsource.budgeteer.service.contract.ContractSortingService"/>
 
     <mockito:mock id="invoiceService" class="org.wickedsource.budgeteer.service.invoice.InvoiceService"/>
 
     <mockito:mock id="templateService" class="org.wickedsource.budgeteer.service.template.TemplateService"/>
 
     <mockito:mock id="fixedDailyRateService" class="org.wickedsource.budgeteer.service.fixedDailyRate.FixedDailyRateService"/>
+
+    <mockito:mock id="manualRecordService" class="org.wickedsource.budgeteer.service.manualRecord.ManualRecordService"/>
 
 </beans>
