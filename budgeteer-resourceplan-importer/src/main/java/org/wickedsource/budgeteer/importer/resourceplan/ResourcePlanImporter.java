@@ -51,7 +51,7 @@ public class ResourcePlanImporter implements PlanRecordsImporter {
             List<DateColumn> dateColumns = getDateColumns(sheet);
             int i = FIRST_ENTRY_ROW;
             Row row = sheet.getRow(i);
-            while (row != null && row.getCell(0) != null && row.getCell(0).getStringCellValue() != null) {
+            while (!SpreadsheetAccessor.cellIsNull(row, 0)) {
                 List<ImportedPlanRecord> records = parseRow(row, dateColumns, currencyUnit, skippedRecords);
                 resultList.addAll(records);
                 row = sheet.getRow(++i);
@@ -98,8 +98,8 @@ public class ResourcePlanImporter implements PlanRecordsImporter {
         List<ImportedPlanRecord> recordsList = new ArrayList<>();
 
         for (DateColumn dateColumn : dateColumns) {
-
             Cell hoursCell = row.getCell(dateColumn.getColumnIndex());
+
             if (hoursCell != null) {
                 double hoursPlanned = 0d;
                 try {
