@@ -1,17 +1,21 @@
 package org.wickedsource.budgeteer.service.contract;
 
+import org.joda.money.Money;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.persistence.budget.BudgetEntity;
 import org.wickedsource.budgeteer.persistence.budget.BudgetRepository;
 import org.wickedsource.budgeteer.persistence.contract.ContractEntity;
 import org.wickedsource.budgeteer.persistence.contract.ContractFieldEntity;
 import org.wickedsource.budgeteer.persistence.contract.ContractRepository;
 import org.wickedsource.budgeteer.persistence.invoice.InvoiceRepository;
+import org.wickedsource.budgeteer.persistence.manualRecord.ManualRecordRepository;
 import org.wickedsource.budgeteer.persistence.project.ProjectContractField;
 import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
 import org.wickedsource.budgeteer.persistence.project.ProjectRepository;
+import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
 import org.wickedsource.budgeteer.web.pages.contract.overview.table.ContractOverviewTableModel;
 
 import javax.transaction.Transactional;
@@ -35,7 +39,28 @@ public class ContractService {
     private InvoiceRepository invoiceRepository;
 
     @Autowired
+    private ManualRecordRepository manualRecordRepository;
+
+    @Autowired
+    private WorkRecordRepository workRecordRepository;
+
+    @Autowired
     private ContractDataMapper mapper;
+
+    @PreAuthorize("canReadContract(#contractId)")
+    public Money getBudgetLeft(long contractId) {
+        Money spent = getBudgetSpent(contractId);
+        Money contractBudget = MoneyUtil.toMoneyNullsafe(contractRepository.getBudgetOfContract(contractId));
+        return contractBudget.minus(spent);
+    }
+
+    @PreAuthorize("canReadContract(#contractId)")
+    public Money getBudgetSpent(long contractId) {
+        Double manual = manualRecordRepository.getSpentMoneyOfContract(contractId);
+        Double work = workRecordRepository.getSpentMoneyOfContract(contractId);
+
+        return MoneyUtil.toMoneyNullsafe(manual + work);
+    }
 
     @PreAuthorize("canReadProject(#projectId)")
     public ContractOverviewTableModel getContractOverviewByProject(long projectId) {
@@ -47,8 +72,7 @@ public class ContractService {
 
     @PreAuthorize("canReadContract(#contractId)")
     public ContractBaseData getContractById(long contractId) {
-        ContractBaseData data = mapper.map(contractRepository.findOne(contractId));
-        return data;
+        return mapper.map(contractRepository.findOne(contractId));
     }
 
     @PreAuthorize("canReadProject(#projectId)")

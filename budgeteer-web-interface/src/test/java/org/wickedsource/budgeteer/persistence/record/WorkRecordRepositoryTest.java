@@ -104,7 +104,7 @@ class WorkRecordRepositoryTest extends IntegrationTestTemplate {
     @DatabaseTearDown(value = "getTotalHoursByBudgetId.xml", type = DatabaseOperation.DELETE_ALL)
     void testGetTotalHoursByBudgetId() throws Exception {
         double hours = repository.getTotalHoursByBudgetId(1L);
-        Assertions.assertEquals(23.5, hours,10e-6);
+        Assertions.assertEquals(23.5, hours, 10e-6);
     }
 
     @Test
@@ -112,8 +112,8 @@ class WorkRecordRepositoryTest extends IntegrationTestTemplate {
     @DatabaseTearDown(value = "getTotalHoursByBudgetIdAndUntilDate.xml", type = DatabaseOperation.DELETE_ALL)
     void testGetTotalHoursByBudgetIdAndUntilDate() throws Exception {
         Date date = format.parse("01.01.2015");
-        double hours = repository.getTotalHoursByBudgetIdAndUntilDate(1L,date);
-        Assertions.assertEquals(15.5, hours,10e-6);
+        double hours = repository.getTotalHoursByBudgetIdAndUntilDate(1L, date);
+        Assertions.assertEquals(15.5, hours, 10e-6);
     }
 
     @Test
@@ -121,7 +121,7 @@ class WorkRecordRepositoryTest extends IntegrationTestTemplate {
     @DatabaseTearDown(value = "getFirstWorkRecordDateByBudgetIds.xml", type = DatabaseOperation.DELETE_ALL)
     void testGetFirstWorkRecordDateByBudgetIds() throws Exception {
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = repository.getFirstWorkRecordDateByBudgetIds(Arrays.asList(2L,3L));
+        Date date = repository.getFirstWorkRecordDateByBudgetIds(Arrays.asList(2L, 3L));
         Assertions.assertEquals(format.parse("2015-08-15"), date);
     }
 
@@ -377,7 +377,6 @@ class WorkRecordRepositoryTest extends IntegrationTestTemplate {
         Assertions.assertEquals(8d, records.get(0).getHours(), 0.1d);
         Assertions.assertEquals(10000L, records.get(0).getValueInCents());
         Assertions.assertEquals("person1", records.get(0).getTitle());
-
     }
 
     @Test
@@ -412,7 +411,6 @@ class WorkRecordRepositoryTest extends IntegrationTestTemplate {
         Assertions.assertEquals(8d, records.get(0).getHours(), 0.1d);
         Assertions.assertEquals(10000L, records.get(0).getValueInCents());
         Assertions.assertEquals("person1", records.get(0).getTitle());
-
     }
 
     @Test
@@ -517,7 +515,6 @@ class WorkRecordRepositoryTest extends IntegrationTestTemplate {
         Assertions.assertEquals(16d, records.get(1).getHours(), 0.1d);
         Assertions.assertEquals(0L, records.get(1).getValueInCents());
         Assertions.assertEquals("person2", records.get(1).getTitle());
-
     }
 
     @Test
@@ -567,14 +564,14 @@ class WorkRecordRepositoryTest extends IntegrationTestTemplate {
     @Test
     @DatabaseSetup("aggregateByMonthAndPersonForBudgets.xml")
     @DatabaseTearDown(value = "aggregateByMonthAndPersonForBudgets.xml", type = DatabaseOperation.DELETE_ALL)
-    void testDeleteByProjectId(){
+    void testDeleteByProjectId() {
         repository.deleteByProjectId(1L);
     }
 
     @Test
     @DatabaseSetup("countByProjectId.xml")
     @DatabaseTearDown(value = "countByProjectId.xml", type = DatabaseOperation.DELETE_ALL)
-    void testCountByProjectId(){
+    void testCountByProjectId() {
         Assertions.assertEquals(6, (long) repository.countByProjectId(1L));
         Assertions.assertEquals(0, (long) repository.countByProjectId(2L));
     }
@@ -584,19 +581,19 @@ class WorkRecordRepositoryTest extends IntegrationTestTemplate {
     @DatabaseTearDown(value = "findManuallyEditedEntries.xml", type = DatabaseOperation.DELETE_ALL)
     void testFindManuallyEditedEntries() throws ParseException {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        List<WorkRecordEntity> records = repository.findManuallyEditedEntries(2L, formatter.parse("2014-01-01"), new Date() );
+        List<WorkRecordEntity> records = repository.findManuallyEditedEntries(2L, formatter.parse("2014-01-01"), new Date());
         Assertions.assertEquals(0, records.size());
 
-        records = repository.findManuallyEditedEntries(1L, formatter.parse("2014-01-01"), formatter.parse("2016-08-15") );
+        records = repository.findManuallyEditedEntries(1L, formatter.parse("2014-01-01"), formatter.parse("2016-08-15"));
         Assertions.assertEquals(1, records.size());
 
-        records = repository.findManuallyEditedEntries(1L, formatter.parse("2014-01-01"), formatter.parse("2016-08-14") );
+        records = repository.findManuallyEditedEntries(1L, formatter.parse("2014-01-01"), formatter.parse("2016-08-14"));
         Assertions.assertEquals(0, records.size());
 
-        records = repository.findManuallyEditedEntries(1L, formatter.parse("2012-01-01"), formatter.parse("2016-08-14") );
+        records = repository.findManuallyEditedEntries(1L, formatter.parse("2012-01-01"), formatter.parse("2016-08-14"));
         Assertions.assertEquals(1, records.size());
 
-        records = repository.findManuallyEditedEntries(1L, formatter.parse("2012-01-01"), formatter.parse("2016-08-16") );
+        records = repository.findManuallyEditedEntries(1L, formatter.parse("2012-01-01"), formatter.parse("2016-08-16"));
         Assertions.assertEquals(2, records.size());
     }
 
@@ -605,9 +602,10 @@ class WorkRecordRepositoryTest extends IntegrationTestTemplate {
     @DatabaseTearDown(value = "findDuplicateEntries.xml", type = DatabaseOperation.DELETE_ALL)
     void testFindDuplicateEntries() throws ParseException {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        BudgetEntity budget = new BudgetEntity(); budget.setId(1L);
-        PersonEntity person = new PersonEntity(); person.setId(1L);
-
+        BudgetEntity budget = new BudgetEntity();
+        budget.setId(1L);
+        PersonEntity person = new PersonEntity();
+        person.setId(1L);
 
         List<WorkRecordEntity> records = repository.findDuplicateEntries(budget, person, formatter.parse("2014-01-01"), 480);
         Assertions.assertEquals(1, records.size());
@@ -619,6 +617,13 @@ class WorkRecordRepositoryTest extends IntegrationTestTemplate {
         budget.setId(4L);
         records = repository.findDuplicateEntries(budget, person, formatter.parse("2016-08-15"), 960);
         Assertions.assertEquals(2, records.size());
+    }
 
+    @Test
+    @DatabaseSetup("getSpentMoneyOfContract.xml")
+    @DatabaseTearDown(value = "getSpentMoneyOfContract.xml", type = DatabaseOperation.DELETE_ALL)
+    void testGetSpentMoneyOfContract() throws ParseException {
+        double money = repository.getSpentMoneyOfContract(1L);
+        Assertions.assertEquals(1500, money);
     }
 }
