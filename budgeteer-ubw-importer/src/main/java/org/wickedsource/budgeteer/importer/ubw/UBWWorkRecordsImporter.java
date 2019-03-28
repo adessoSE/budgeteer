@@ -64,9 +64,16 @@ public class UBWWorkRecordsImporter implements WorkRecordsImporter {
     private boolean isCompletelyEmpty(Row row) {
         for (short i = row.getFirstCellNum(); i < row.getLastCellNum(); i++) {
             Cell cell = row.getCell(i);
-            if (!isBlank(cell.toString())) {
+            if (!isBlank(cell)) {
                 return false;
             }
+        }
+        return true;
+    }
+
+    private boolean isBlank(Cell cell) {
+        if (cell != null) {
+            return isBlank(cell.toString());
         }
         return true;
     }
@@ -229,10 +236,11 @@ public class UBWWorkRecordsImporter implements WorkRecordsImporter {
     }
 
     private boolean isImportable(Row row) {
-        return row != null && ("ja".equalsIgnoreCase(row.getCell(COLUMN_INVOICABLE).getStringCellValue()))
-                && (row.getCell(COLUMN_BUDGET).getStringCellValue() != null)
-                && (!"".equals(row.getCell(COLUMN_BUDGET).getStringCellValue().trim()))
-                && (row.getCell(COLUMN_PERSON).getStringCellValue() != null)
-                && (!"".equals(row.getCell(COLUMN_PERSON).getStringCellValue().trim()));
+        CellContentValidator cellNotEmptyValidator = (String s) -> !"".equals(s.trim());
+
+        return row != null
+                && SpreadsheetAccessor.cellContentIsValid(row, COLUMN_INVOICABLE, "ja"::equalsIgnoreCase)
+                && SpreadsheetAccessor.cellContentIsValid(row, COLUMN_BUDGET, cellNotEmptyValidator)
+                && SpreadsheetAccessor.cellContentIsValid(row, COLUMN_PERSON, cellNotEmptyValidator);
     }
 }
