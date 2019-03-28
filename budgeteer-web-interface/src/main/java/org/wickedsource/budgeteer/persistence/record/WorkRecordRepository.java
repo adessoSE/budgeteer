@@ -325,4 +325,9 @@ public interface WorkRecordRepository extends CrudRepository<WorkRecordEntity, L
     @Override
     @Query("select new org.wickedsource.budgeteer.persistence.record.MonthlyAggregatedRecordWithTaxBean(r.year, r.month, sum(r.minutes), r.dailyRate, r.budget.contract.taxRate ) from WorkRecordEntity r join r.budget b join b.tags t where b.project.id=:projectId and t.tag in (:tags) group by r.year, r.month, r.dailyRate, r.budget.contract.taxRate order by r.year, r.month")
     List<MonthlyAggregatedRecordWithTaxBean> aggregateByMonthForBudgetsWithTax(@Param("projectId") long projectId, @Param("tags") List<String> tags);
+
+    @Query("select coalesce(sum(wr.minutes * wr.dailyRate/ 60 / 8),0) " +
+            "from WorkRecordEntity wr " +
+            "where wr.budget.contract.id = :contractId")
+    Double getSpentMoneyOfContract(@Param("contractId") long contractId);
 }

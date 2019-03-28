@@ -111,4 +111,12 @@ public class MoneyUtil {
     public static long getCentsWithTaxes(long valueInCents, BigDecimal taxRate) {
         return Math.round(valueInCents * (1 + taxRate.doubleValue() / 100));
     }
+
+    public static Money toMoneyNullsafe(Double cents) {
+        if (cents == null) {
+            return MoneyUtil.createMoneyFromCents(0L);
+        } else {
+            return MoneyUtil.createMoneyFromCents(Math.round(cents));
+        }
+    }
 }
