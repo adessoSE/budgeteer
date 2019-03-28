@@ -239,19 +239,8 @@ public class UBWWorkRecordsImporter implements WorkRecordsImporter {
         CellContentValidator cellNotEmptyValidator = (String s) -> !"".equals(s.trim());
 
         return row != null
-                && cellContentIsImportable(row, COLUMN_INVOICABLE, (String s) -> "ja".equalsIgnoreCase(s))
-                && cellContentIsImportable(row, COLUMN_BUDGET, cellNotEmptyValidator)
-                && cellContentIsImportable(row, COLUMN_PERSON, cellNotEmptyValidator);
-    }
-
-    boolean cellContentIsImportable(Row row, int cellNumber, CellContentValidator validator) {
-        Cell cell = row.getCell(cellNumber);
-        if (cell != null) {
-            String cellValue = cell.getStringCellValue();
-            if (cellValue != null) {
-                return validator.isValid(cellValue);
-            }
-        }
-        return false;
+                && SpreadsheetAccessor.cellContentIsValid(row, COLUMN_INVOICABLE, "ja"::equalsIgnoreCase)
+                && SpreadsheetAccessor.cellContentIsValid(row, COLUMN_BUDGET, cellNotEmptyValidator)
+                && SpreadsheetAccessor.cellContentIsValid(row, COLUMN_PERSON, cellNotEmptyValidator);
     }
 }
