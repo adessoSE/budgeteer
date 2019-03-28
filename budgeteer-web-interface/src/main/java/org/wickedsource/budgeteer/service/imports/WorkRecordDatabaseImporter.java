@@ -36,7 +36,7 @@ public class WorkRecordDatabaseImporter extends RecordDatabaseImporter {
     private Date earliestRecordDate = new Date(Long.MAX_VALUE);
 
     @Getter @Setter
-    private Date latestRecordDate = new Date(1l);
+    private Date latestRecordDate = new Date(1L);
 
     private List<DailyRateEntity> dailyRates;
 

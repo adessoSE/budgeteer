@@ -61,7 +61,7 @@ public class ImportFilesPage extends DialogPageWithBacklink {
 
     private List<List<String>> skippedImports;
 
-    UploadProgressBar uploadProgressBar;
+    private UploadProgressBar uploadProgressBar;
 
     public ImportFilesPage(PageParameters backlinkParameters) {
         this(ImportsOverviewPage.class, new PageParameters());
@@ -73,7 +73,7 @@ public class ImportFilesPage extends DialogPageWithBacklink {
         createForm();
     }
 
-    private void createForm(){
+    private void createForm() {
         final Form<ImportFormBean> form = new Form<ImportFormBean>("importForm", new ClassAwareWrappingModel<>(new Model<>(new ImportFormBean()), ImportFormBean.class)) {
 
             boolean uploadCompleted = false;
@@ -81,7 +81,7 @@ public class ImportFilesPage extends DialogPageWithBacklink {
             @Override
             public void renderHead(IHeaderResponse response) {
                 super.renderHead(response);
-                if(uploadCompleted){
+                if (uploadCompleted) {
                     //If the upload has been successfully completed, display the filled progress bar.
                     String barId = uploadProgressBar.get("bar").getMarkupId();
                     String statusId = uploadProgressBar.get("status").getMarkupId();
@@ -92,11 +92,11 @@ public class ImportFilesPage extends DialogPageWithBacklink {
                                     "barDiv.style.display = 'block'\n" +
                                     "barDiv.innerHTML= " +
                                     "\"<div class=\\\"wupb-border\\\">" +
-                                        "<div class=\\\"wupb-background\\\">" +
-                                            "<div class=\\\"wupb-foreground\\\" style=\\\"text-align:center;\\\">" +
-                                                "<label>Upload 100% Completed</label>" +
-                                            "</div>" +
-                                        "</div>" +
+                                    "<div class=\\\"wupb-background\\\">" +
+                                    "<div class=\\\"wupb-foreground\\\" style=\\\"text-align:center;\\\">" +
+                                    "<label>Upload 100% Completed</label>" +
+                                    "</div>" +
+                                    "</div>" +
                                     "</div>\"\n" +
                                     "statusDiv.style.visibility = 'visible'\n" +
                                     "statusDiv.style.height = '20px'\n" +
@@ -125,20 +125,20 @@ public class ImportFilesPage extends DialogPageWithBacklink {
                     error(String.format(getString("message.ioError"), e.getMessage()));
                 } catch (ImportException | IllegalArgumentException e) {
                     error(String.format(getString("message.importError"), e.getMessage()));
-                } catch(InvalidFileFormatException e){
+                } catch (InvalidFileFormatException e) {
                     error(String.format(getString("message.invalidFileException"), e.getFileName()));
                 }
             }
         };
 
 
-        WebMarkupContainer importFeedback = new WebMarkupContainer("importFeedback"){
+        WebMarkupContainer importFeedback = new WebMarkupContainer("importFeedback") {
             @Override
             public boolean isVisible() {
                 return skippedImports != null && !skippedImports.isEmpty();
             }
         };
-        IModel fileModel = new LoadableDetachableModel(){
+        IModel fileModel = new LoadableDetachableModel() {
             @Override
             protected Object load() {
                 return ImportReportGenerator.generateReport(skippedImports);
@@ -184,7 +184,7 @@ public class ImportFilesPage extends DialogPageWithBacklink {
         });
         form.add(fileUpload);
 
-        uploadProgressBar = new UploadProgressBar("progressBar", form, fileUpload){
+        uploadProgressBar = new UploadProgressBar("progressBar", form, fileUpload) {
             @Override
             protected ResourceReference getCss() {
                 return new UrlResourceReference(Url.parse("css/budgeteer/uploadProgressBar.css")).setContextRelative(true);
@@ -204,7 +204,7 @@ public class ImportFilesPage extends DialogPageWithBacklink {
      * Creates a button to download an example import file.
      */
     private Link createExampleFileButton(String wicketId) {
-        return new Link<Void>(wicketId) {
+        return new Link(wicketId) {
             @Override
             public void onClick() {
                 final ExampleFile downloadFile = importer.getExampleFile();
