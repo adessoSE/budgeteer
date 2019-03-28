@@ -69,8 +69,7 @@ class UBWWorkRecordsImporterTest {
     }
 
     @Test
-    void testWrongFormattedFileIsAccepted() throws Exception
-    {
+    void testWrongFormattedFileIsAccepted() throws Exception {
         UBWWorkRecordsImporter importer = new UBWWorkRecordsImporter();
         InputStream in = getClass().getResourceAsStream("/demo_ubw_report_wrong_formatted.xlsx");
         List<ImportedWorkRecord> records = importer.importFile(new ImportFile("file.xslx", in));
