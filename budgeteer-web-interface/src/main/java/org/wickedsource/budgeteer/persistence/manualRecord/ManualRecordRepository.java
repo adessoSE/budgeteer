@@ -61,4 +61,9 @@ public interface ManualRecordRepository extends CrudRepository<ManualRecordEntit
 
     @Query("select new ManualRecordEntity(r.id, r.description, r.moneyAmount, r.budget, r.creationDate, r.billingDate, r.year, r.month, r.day, r.week) from ManualRecordEntity r where r.budget.id = :budgetId")
     List<ManualRecordEntity> getManualRecordByBudgetId(@Param("budgetId") long budgetId);
+
+    @Query("select coalesce(sum(record.moneyAmount),0) " +
+            "from ManualRecordEntity record " +
+            "where record.budget.contract.id = :contractId")
+    Double getSpentMoneyOfContract(@Param("contractId") long contractId);
 }
