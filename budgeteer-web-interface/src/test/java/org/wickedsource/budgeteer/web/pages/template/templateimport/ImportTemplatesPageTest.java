@@ -104,7 +104,7 @@ public class ImportTemplatesPageTest extends AbstractWebTestTemplate {
     }
 
     @Test
-    public void InvalidFileTest() {
+    public void InvalidFileTest() throws Exception {
         WicketTester tester = getTester();
         ImportTemplatesPage testPage = new ImportTemplatesPage(TemplatesPage.class, new PageParameters());
         tester.startPage(testPage);
@@ -148,13 +148,8 @@ public class ImportTemplatesPageTest extends AbstractWebTestTemplate {
         }
     }
 
-    private File getInvalidExampleTemplate() {
-        try {
-            return new File(getClass().getResource("invalidTemplate.txt").toURI());
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-            return null;
-        }
+    private File getInvalidExampleTemplate() throws Exception {
+        return new File(getClass().getResource("invalidTemplate.txt").toURI());
     }
 
     @Override
