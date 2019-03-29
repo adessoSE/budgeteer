@@ -24,9 +24,6 @@ public class ContractDataMapper extends AbstractMapper<ContractEntity, ContractB
     @Autowired
     private ContractService contractService;
 
-    @Autowired
-    private ContractService contractService;
-
     @Override
     public ContractBaseData map(ContractEntity entity) {
         if (entity == null) {

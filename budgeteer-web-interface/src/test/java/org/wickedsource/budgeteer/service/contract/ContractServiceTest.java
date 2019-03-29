@@ -258,11 +258,7 @@ class ContractServiceTest extends ServiceIntegrationTestTemplate {
     @DatabaseTearDown(value = "contractDeletionTest.xml", type = DatabaseOperation.DELETE_ALL)
     void testDeleteContract() {
         assertNotNull(service.getContractById(3));
-        assertEquals(contractRepository.findContractFieldsByContractId(3L).size(), 2);
-        assertEquals(contractRepository.findContractFieldsByContractId(4L).size(), 1);
         service.deleteContract(3);
-        assertEquals(contractRepository.findContractFieldsByContractId(3L).size(), 0);
-        assertEquals(contractRepository.findContractFieldsByContractId(4L).size(), 1);
         assertNull(service.getContractById(3));
     }
 }

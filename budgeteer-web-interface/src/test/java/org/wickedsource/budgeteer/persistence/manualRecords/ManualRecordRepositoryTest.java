@@ -24,17 +24,9 @@ public class ManualRecordRepositoryTest extends IntegrationTestTemplate {
     private ManualRecordRepository manualRecordRepository;
 
     @Test
-    @DatabaseSetup("getManualRecordSumForBudget.xml")
-    @DatabaseTearDown(value = "getManualRecordSumForBudget.xml", type = DatabaseOperation.DELETE_ALL)
-    void testGetManualRecordSumForBudget() throws Exception {
-        double sum = manualRecordRepository.getManualRecordSumForBudget(1L);
-        Assertions.assertEquals(1300.0, sum);
-    }
-
-    @Test
     @DatabaseSetup("aggregateByWeekForProject.xml")
     @DatabaseTearDown(value = "aggregateByWeekForProject.xml", type = DatabaseOperation.DELETE_ALL)
-    void testAggregateByWeekForProject() throws Exception {
+    void testAggregateByWeekForProject() {
         Calendar calendar = new GregorianCalendar(2016, 1, 1);
         Date startDate = calendar.getTime();
         List<WeeklyAggregatedRecordBean> records = manualRecordRepository.aggregateByWeekForProject(1L, startDate);
@@ -54,7 +46,7 @@ public class ManualRecordRepositoryTest extends IntegrationTestTemplate {
     @Test
     @DatabaseSetup("aggregateByMonthForBudgetsWithTax.xml")
     @DatabaseTearDown(value = "aggregateByMonthForBudgetsWithTax.xml", type = DatabaseOperation.DELETE_ALL)
-    void testAggregateByMonthForBudgetsWithTax() throws Exception {
+    void testAggregateByMonthForBudgetsWithTax() {
         Calendar calendar = new GregorianCalendar(2016, 1, 1);
         Date startDate = calendar.getTime();
         List<MonthlyAggregatedRecordWithTitleAndTaxBean> records = manualRecordRepository.aggregateByMonthForBudgetsWithTax(1L, startDate);
@@ -79,7 +71,7 @@ public class ManualRecordRepositoryTest extends IntegrationTestTemplate {
     @Test
     @DatabaseSetup("aggregateByMonthForBudgetsWithTax.xml")
     @DatabaseTearDown(value = "aggregateByMonthForBudgetsWithTax.xml", type = DatabaseOperation.DELETE_ALL)
-    void testAggregateByMonthForBudgetsWithTaxWithTags() throws Exception {
+    void testAggregateByMonthForBudgetsWithTaxWithTags() {
         List<String> tags = new ArrayList<>();
         tags.add("Tag 1");
         Calendar calendar = new GregorianCalendar(2016, 1, 1);
@@ -99,7 +91,7 @@ public class ManualRecordRepositoryTest extends IntegrationTestTemplate {
     @Test
     @DatabaseSetup("aggregateByMonthForBudgetWithTax.xml")
     @DatabaseTearDown(value = "aggregateByMonthForBudgetWithTax.xml", type = DatabaseOperation.DELETE_ALL)
-    void testAggregateByMonthForBudgetWithTax() throws Exception {
+    void testAggregateByMonthForBudgetWithTax() {
         Calendar calendar = new GregorianCalendar(2016, 1, 1);
         Date startDate = calendar.getTime();
         List<MonthlyAggregatedRecordWithTitleAndTaxBean> records = manualRecordRepository.aggregateByMonthForBudgetWithTax(1L, startDate);
@@ -117,7 +109,7 @@ public class ManualRecordRepositoryTest extends IntegrationTestTemplate {
     @Test
     @DatabaseSetup("aggregateByMonthAndBudgetWithTax.xml")
     @DatabaseTearDown(value = "aggregateByMonthAndBudgetWithTax.xml", type = DatabaseOperation.DELETE_ALL)
-    void testAggregateByMonthAndBudgetWithTax() throws Exception {
+    void testAggregateByMonthAndBudgetWithTax() {
         List<MonthlyAggregatedRecordWithTaxBean> records = manualRecordRepository.aggregateByMonthAndBudgetWithTax(1L);
         BigDecimal taxRate = new BigDecimal(10);
 
@@ -137,7 +129,7 @@ public class ManualRecordRepositoryTest extends IntegrationTestTemplate {
     @Test
     @DatabaseSetup("aggregateByMonthWithTax.xml")
     @DatabaseTearDown(value = "aggregateByMonthWithTax.xml", type = DatabaseOperation.DELETE_ALL)
-    void testAggregateByMonthWithTax() throws Exception {
+    void testAggregateByMonthWithTax() {
         List<MonthlyAggregatedRecordWithTaxBean> records = manualRecordRepository.aggregateByMonthWithTax(1L);
 
         BigDecimal taxRate = new BigDecimal(10);
@@ -158,7 +150,7 @@ public class ManualRecordRepositoryTest extends IntegrationTestTemplate {
     @Test
     @DatabaseSetup("aggregateByMonthAndBudgetTagsWithTax.xml")
     @DatabaseTearDown(value = "aggregateByMonthAndBudgetTagsWithTax.xml", type = DatabaseOperation.DELETE_ALL)
-    void testAggregateByMonthAndBudgetTagsWithTax() throws Exception {
+    void testAggregateByMonthAndBudgetTagsWithTax() {
         List<String> tags = new ArrayList<>();
         tags.add("Tag 1");
         Calendar calendar = new GregorianCalendar(2016, 1, 1);
@@ -183,7 +175,7 @@ public class ManualRecordRepositoryTest extends IntegrationTestTemplate {
     @Test
     @DatabaseSetup("aggregateByWeekForBudgetsWithTax.xml")
     @DatabaseTearDown(value = "aggregateByWeekForBudgetsWithTax.xml", type = DatabaseOperation.DELETE_ALL)
-    void testAggregateByWeekForBudgetsWithTax() throws Exception {
+    void testAggregateByWeekForBudgetsWithTax() {
         List<String> tags = new ArrayList<>();
         tags.add("Tag 1");
 
@@ -225,7 +217,7 @@ public class ManualRecordRepositoryTest extends IntegrationTestTemplate {
     @Test
     @DatabaseSetup("aggregateByWeekForBudgetsWithTax.xml")
     @DatabaseTearDown(value = "aggregateByWeekForBudgetsWithTax.xml", type = DatabaseOperation.DELETE_ALL)
-    void testAggregateByWeekForBudgetsWithTaxWithTagsAndStartDate() throws Exception {
+    void testAggregateByWeekForBudgetsWithTaxWithTagsAndStartDate() {
         List<String> tags = new ArrayList<>();
         tags.add("Tag 1");
 
@@ -248,7 +240,7 @@ public class ManualRecordRepositoryTest extends IntegrationTestTemplate {
     @Test
     @DatabaseSetup("aggregateByWeekForBudgetsWithTax.xml")
     @DatabaseTearDown(value = "aggregateByWeekForBudgetsWithTax.xml", type = DatabaseOperation.DELETE_ALL)
-    void testAggregateByWeekForBudgetsWithTaxWithStartDate() throws Exception {
+    void testAggregateByWeekForBudgetsWithTaxWithStartDate() {
         Calendar calendar = new GregorianCalendar(2016, 1, 1);
         Date startDate = calendar.getTime();
 
@@ -273,7 +265,7 @@ public class ManualRecordRepositoryTest extends IntegrationTestTemplate {
     @Test
     @DatabaseSetup("aggregateByWeekForBudgetsWithTax.xml")
     @DatabaseTearDown(value = "aggregateByWeekForBudgetsWithTax.xml", type = DatabaseOperation.DELETE_ALL)
-    void testAggregateByWeekForBudgetsWithTaxWithTags() throws Exception {
+    void testAggregateByWeekForBudgetsWithTaxWithTags() {
         List<String> tags = new ArrayList<>();
         tags.add("Tag 1");
 
@@ -299,7 +291,7 @@ public class ManualRecordRepositoryTest extends IntegrationTestTemplate {
     @Test
     @DatabaseSetup("aggregateByWeekForBudgetWithTax.xml")
     @DatabaseTearDown(value = "aggregateByWeekForBudgetWithTax.xml", type = DatabaseOperation.DELETE_ALL)
-    void testAggregateByWeekForBudgetWithTax() throws Exception {
+    void testAggregateByWeekForBudgetWithTax() {
         List<WeeklyAggregatedRecordWithTitleAndTaxBean> records = manualRecordRepository.aggregateByWeekForBudgetWithTax(1L);
 
         BigDecimal taxRate = new BigDecimal(10);
@@ -322,7 +314,7 @@ public class ManualRecordRepositoryTest extends IntegrationTestTemplate {
     @Test
     @DatabaseSetup("aggregateByWeekForBudgetWithTax.xml")
     @DatabaseTearDown(value = "aggregateByWeekForBudgetWithTax.xml", type = DatabaseOperation.DELETE_ALL)
-    void testAggregateByWeekForBudgetWithTaxWithStartDate() throws Exception {
+    void testAggregateByWeekForBudgetWithTaxWithStartDate() {
         Calendar calendar = new GregorianCalendar(2016, 1, 1);
         Date startDate = calendar.getTime();
         List<WeeklyAggregatedRecordWithTitleAndTaxBean> records = manualRecordRepository.aggregateByWeekForBudgetWithTax(1L, startDate);
@@ -340,7 +332,7 @@ public class ManualRecordRepositoryTest extends IntegrationTestTemplate {
     @Test
     @DatabaseSetup("getManualRecordByBudgetId.xml")
     @DatabaseTearDown(value = "getManualRecordByBudgetId.xml", type = DatabaseOperation.DELETE_ALL)
-    void testGetManualRecordByBudgetId() throws Exception {
+    void testGetManualRecordByBudgetId() {
         List<ManualRecordEntity> records = manualRecordRepository.getManualRecordByBudgetId(1L);
         Assertions.assertEquals(2, records.size());
 
@@ -373,7 +365,7 @@ public class ManualRecordRepositoryTest extends IntegrationTestTemplate {
     @Test
     @DatabaseSetup("getSpentMoneyOfContract.xml")
     @DatabaseTearDown(value = "getSpentMoneyOfContract.xml", type = DatabaseOperation.DELETE_ALL)
-    void testGetSpentMoneyOfContract() throws Exception {
+    void testGetSpentMoneyOfContract() {
         double spent = manualRecordRepository.getSpentMoneyOfContract(1L);
         Assertions.assertEquals(1400, spent);
     }
