@@ -38,12 +38,12 @@ public class TemplateEntity implements Serializable {
     @Column(name="TYPE", length = 128)
     private ReportType type;
 
-    @Column(name="ISDEFAULT", nullable = true)
+    @Column(name="ISDEFAULT")
     private Boolean isDefault;
 
     //Transient because Hibernate cannot save the Workbook directly in the db
     @Transient
-    private XSSFWorkbook wbXSSF;
+    private transient XSSFWorkbook wbXSSF;
 
     //So we get the internal data and store it in a byte array.
     @Column(name="TEMPLATE", length = 2 * 1024 * 1024)
@@ -57,13 +57,17 @@ public class TemplateEntity implements Serializable {
         this.wbXSSF = workbook;
         this.projectId = projectID;
         this.isDefault = isDefault;
-        try{
-            //Write the workbook to an OutputStream and then get the byteArray of it.
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            wbXSSF.write(out);
-            wbArr = out.toByteArray();
-        }catch (IOException e){
-            e.printStackTrace();
+        if (this.wbXSSF == null) {
+            this.wbArr = null;
+        } else {
+            try {
+                //Write the workbook to an OutputStream and then get the byteArray of it.
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
+                wbXSSF.write(out);
+                wbArr = out.toByteArray();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -75,13 +79,17 @@ public class TemplateEntity implements Serializable {
         this.wbXSSF = workbook;
         this.projectId = projectID;
         this.isDefault = isDefault;
-        try{
-            //Write the workbook to an OutputStream and then get the byteArray of it.
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            wbXSSF.write(out);
-            wbArr = out.toByteArray();
-        }catch (IOException e){
-            e.printStackTrace();
+        if (this.wbXSSF == null) {
+            this.wbArr = null;
+        } else {
+            try {
+                //Write the workbook to an OutputStream and then get the byteArray of it.
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
+                wbXSSF.write(out);
+                wbArr = out.toByteArray();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -90,7 +98,7 @@ public class TemplateEntity implements Serializable {
      * @return A new Template from this TemplateEntity
      */
     public Template getTemplate(){
-        return new Template(id, name, description, type ,wbXSSF, isDefault, projectId);
+        return new Template(id, name, description, type ,getWb(), isDefault, projectId);
     }
 
     /**

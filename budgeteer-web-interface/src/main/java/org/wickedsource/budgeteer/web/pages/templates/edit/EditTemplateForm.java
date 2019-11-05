@@ -65,8 +65,8 @@ public class EditTemplateForm extends Form<TemplateFormInputDto> {
 
         add(fileUpload);
         add(createCancelButton("backlink2"));
-        add(DeleteTemplateButton("deleteButton"));
-        add(DownloadFileButton("downloadFileButton"));
+        add(deleteTemplateButton("deleteButton"));
+        add(downloadFileButton("downloadFileButton"));
 
         add(new AjaxButton("save") {
             @Override
@@ -169,7 +169,7 @@ public class EditTemplateForm extends Form<TemplateFormInputDto> {
     /**
      * Creates a button to download the template that is being edited.
      */
-    private Link DownloadFileButton(String wicketId) {
+    private Link downloadFileButton(String wicketId) {
         return new Link<Void>(wicketId) {
             @Override
             public void onClick() {
@@ -204,7 +204,7 @@ public class EditTemplateForm extends Form<TemplateFormInputDto> {
     /**
      * Creates a button to delete the template that is being edited.
      */
-    private Link DeleteTemplateButton(String wicketId) {
+    private Link deleteTemplateButton(String wicketId) {
         return new Link<Void>(wicketId) {
             @Override
             public void onClick() {

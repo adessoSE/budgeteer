@@ -10,9 +10,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.*;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 public class UBWWorkRecordsImporter implements WorkRecordsImporter {
 
-    private static final int SHEET_INDEX = 6;
+    private int sheetIndex = -1;
+
+    private static final String SHEET_NAME = "Aufwände gesamt";
 
     private static final int COLUMN_INVOICEABLE = 11;
 
@@ -24,23 +28,23 @@ public class UBWWorkRecordsImporter implements WorkRecordsImporter {
 
     private static final int COLUMN_HOURS = 10;
 
-    private List<List<String>> skippedRecords = new LinkedList<List<String>>();
+    private List<List<String>> skippedRecords = new LinkedList<>();
 
     @Override
     public List<ImportedWorkRecord> importFile(ImportFile file) throws ImportException, InvalidFileFormatException {
         try {
-            skippedRecords.add(new LinkedList<String>());
+            skippedRecords.add(new LinkedList<>());
             //Adds the name of the imported file at the beginning of the list of skipped data sets..
-            List<String> fileName = new LinkedList<String>();
+            List<String> fileName = new LinkedList<>();
             fileName.add(file.getFilename());
             skippedRecords.add(fileName);
 
-            List<ImportedWorkRecord> resultList = new ArrayList<ImportedWorkRecord>();
+            List<ImportedWorkRecord> resultList = new ArrayList<>();
             Workbook workbook = new XSSFWorkbook(file.getInputStream());
             if (!checkValidity(workbook)) {
                 throw new InvalidFileFormatException("Invalid file", file.getFilename());
             }
-            Sheet sheet = workbook.getSheetAt(SHEET_INDEX);
+            Sheet sheet = workbook.getSheetAt(sheetIndex);
             int i = 3;
             Row row = sheet.getRow(i);
             while (row != null && row.getCell(0) != null && row.getCell(0).getStringCellValue() != null) {
@@ -59,6 +63,10 @@ public class UBWWorkRecordsImporter implements WorkRecordsImporter {
         } catch (IOException e) {
             throw new ImportException(e);
         }
+    }
+
+    private int findSheetIndex(Workbook workbook) {
+        return workbook.getSheetIndex(new String(SHEET_NAME.getBytes(), UTF_8));
     }
 
     private boolean isCompletelyEmpty(Row row) {
@@ -82,7 +90,7 @@ public class UBWWorkRecordsImporter implements WorkRecordsImporter {
 
     @Override
     public List<String> getSupportedFileExtensions() {
-        return Arrays.asList(".xlsx");
+        return Collections.singletonList(".xlsx");
     }
 
     @Override
@@ -96,11 +104,12 @@ public class UBWWorkRecordsImporter implements WorkRecordsImporter {
             Calendar maxCalendar = Calendar.getInstance();
             Calendar maxineCalendar = Calendar.getInstance();
             XSSFWorkbook workbook = new XSSFWorkbook(getClass().getResourceAsStream("/example_ubw_report.xlsx"));
-            XSSFSheet sheet = workbook.getSheetAt(SHEET_INDEX);
+            sheetIndex = findSheetIndex(workbook);
+            XSSFSheet sheet = workbook.getSheetAt(sheetIndex);
             XSSFRow row;
             XSSFCell cell;
             int col = 3;
-            int i = sheet.getLastRowNum()-2;
+            int i = sheet.getLastRowNum();
 
             XSSFCellStyle style = workbook.createCellStyle();
             style.setBorderBottom(BorderStyle.THIN);
@@ -158,16 +167,16 @@ public class UBWWorkRecordsImporter implements WorkRecordsImporter {
     public List<List<String>> getSkippedRecords() {
         //if just an empty row at the beginning and the filename is in the List of skipped records, return an empty List
         if (skippedRecords != null && skippedRecords.size() == 2) {
-            skippedRecords = new LinkedList<List<String>>();
+            skippedRecords = new LinkedList<>();
         }
         return skippedRecords;
     }
 
-
     boolean checkValidity(Workbook workbook) {
-        boolean isValid = workbook.getNumberOfSheets() >= SHEET_INDEX;
+        sheetIndex = findSheetIndex(workbook);
+        boolean isValid = sheetIndex != -1 && workbook.getNumberOfSheets() >= sheetIndex;
         if (isValid) {
-            Sheet sheet = workbook.getSheetAt(SHEET_INDEX);
+            Sheet sheet = workbook.getSheetAt(sheetIndex);
             int headerRowIndex = 2;
             if (sheet.getRow(headerRowIndex) == null) {
                 isValid = false;
@@ -188,7 +197,7 @@ public class UBWWorkRecordsImporter implements WorkRecordsImporter {
     }
 
     private List<String> getRowAsStrings(Row row, int index) {
-        List<String> result = new LinkedList<String>();
+        List<String> result = new LinkedList<>();
         for (short i = row.getFirstCellNum(); i < row.getLastCellNum(); i++) {
             Cell cell = row.getCell(i);
             if (cell == null) {

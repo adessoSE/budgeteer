@@ -34,6 +34,18 @@ class UBWWorkRecordsImporterTest {
     }
 
     @Test
+    void testReadOldFormat() throws Exception {
+        UBWWorkRecordsImporter importer = new UBWWorkRecordsImporter();
+        InputStream in = getClass().getResourceAsStream("/demo_ubw_report_old.xlsx");
+        List<ImportedWorkRecord> records = importer.importFile(new ImportFile("file.xslx", in));
+        assertEquals(1225, records.size());
+        assertEquals("Archie, Holmes", records.get(0).getPersonName());
+        assertEquals("Collecting Requirements", records.get(0).getBudgetName());
+        assertEquals(570d, records.get(0).getMinutesWorked(), 1d);
+        assertEquals(format.parse("09.01.2017"), records.get(0).getDate());
+    }
+
+    @Test
     void testGetSkippedDataSets() throws Exception {
         UBWWorkRecordsImporter importer = new UBWWorkRecordsImporter();
         importer.importFile(new ImportFile("file.xslx", importer.getExampleFile().getInputStream()));
