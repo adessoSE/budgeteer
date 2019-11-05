@@ -68,10 +68,10 @@ public class TemplateService {
      */
     public List<Template> getFilteredTemplatesInProject(@NotNull TemplateFilter filter){
         List<Template> result = new ArrayList<>();
-        for(TemplateEntity E : templateRepository.findByProjectId(filter.getProjectId())){
+        for(TemplateEntity e : templateRepository.findByProjectId(filter.getProjectId())){
             for(ReportType type : filter.getTypesList()){
-                if(type == E.getType()){
-                    result.add(new Template(E.getId(), E.getName(), E.getDescription(), E.getType(), E.getWb(), E.isDefault(), E.getProjectId()));
+                if(type == e.getType()){
+                    result.add(new Template(e.getId(), e.getName(), e.getDescription(), e.getType(), e.getWb(), e.isDefault(), e.getProjectId()));
                 }
             }
         }
@@ -84,11 +84,11 @@ public class TemplateService {
      * @return A new Template object.
      */
     public Template getById(long templateID){
-        TemplateEntity templateEntity = templateRepository.findOne(templateID);
-        if(templateEntity == null){
+        TemplateEntity e = templateRepository.findOne(templateID);
+        if(e == null){
             return null;
         } else {
-            return templateEntity.getTemplate();
+            return new Template(e.getId(), e.getName(), e.getDescription(), e.getType(), e.getWb(), e.isDefault(), e.getProjectId());
         }
     }
 
