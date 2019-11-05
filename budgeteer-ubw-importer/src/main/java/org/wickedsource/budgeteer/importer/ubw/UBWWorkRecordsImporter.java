@@ -12,9 +12,9 @@ import java.util.*;
 
 public class UBWWorkRecordsImporter implements WorkRecordsImporter {
 
-    private static final int SHEET_INDEX = 2;
+    private static final int SHEET_INDEX = 6;
 
-    private static final int COLUMN_INVOICABLE = 11;
+    private static final int COLUMN_INVOICEABLE = 11;
 
     private static final int COLUMN_DATE = 3;
 
@@ -96,11 +96,11 @@ public class UBWWorkRecordsImporter implements WorkRecordsImporter {
             Calendar maxCalendar = Calendar.getInstance();
             Calendar maxineCalendar = Calendar.getInstance();
             XSSFWorkbook workbook = new XSSFWorkbook(getClass().getResourceAsStream("/example_ubw_report.xlsx"));
-            XSSFSheet sheet = workbook.getSheetAt(2);
+            XSSFSheet sheet = workbook.getSheetAt(SHEET_INDEX);
             XSSFRow row;
             XSSFCell cell;
             int col = 3;
-            int i = sheet.getLastRowNum();
+            int i = sheet.getLastRowNum()-2;
 
             XSSFCellStyle style = workbook.createCellStyle();
             style.setBorderBottom(BorderStyle.THIN);
@@ -178,7 +178,7 @@ public class UBWWorkRecordsImporter implements WorkRecordsImporter {
                             r.getCell(COLUMN_DATE).getStringCellValue().equals("Tag") &&
                             r.getCell(COLUMN_BUDGET).getStringCellValue().equals("Subgruppe") &&
                             r.getCell(COLUMN_HOURS).getStringCellValue().equals("Aufwand [h]") &&
-                            r.getCell(COLUMN_INVOICABLE).getStringCellValue().equals("KV");
+                            r.getCell(COLUMN_INVOICEABLE).getStringCellValue().equals("KV");
                 } catch (Exception e) {
                     isValid = false;
                 }
@@ -229,7 +229,7 @@ public class UBWWorkRecordsImporter implements WorkRecordsImporter {
     }
 
     private boolean isImportable(Row row) {
-        return row != null && ("ja".equalsIgnoreCase(row.getCell(COLUMN_INVOICABLE).getStringCellValue()))
+        return row != null && ("ja".equalsIgnoreCase(row.getCell(COLUMN_INVOICEABLE).getStringCellValue()))
                 && (row.getCell(COLUMN_BUDGET).getStringCellValue() != null)
                 && (!"".equals(row.getCell(COLUMN_BUDGET).getStringCellValue().trim()))
                 && (row.getCell(COLUMN_PERSON).getStringCellValue() != null)
