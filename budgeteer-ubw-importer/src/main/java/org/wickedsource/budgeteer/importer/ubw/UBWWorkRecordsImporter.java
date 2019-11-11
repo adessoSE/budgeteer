@@ -8,6 +8,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -66,7 +68,7 @@ public class UBWWorkRecordsImporter implements WorkRecordsImporter {
     }
 
     private int findSheetIndex(Workbook workbook) {
-        return workbook.getSheetIndex(new String(SHEET_NAME.getBytes(), UTF_8));
+        return workbook.getSheetIndex(new String(SHEET_NAME.getBytes(Charset.defaultCharset()), UTF_8));
     }
 
     private boolean isCompletelyEmpty(Row row) {
