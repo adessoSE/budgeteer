@@ -8,17 +8,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
-
-import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class UBWWorkRecordsImporter implements WorkRecordsImporter {
 
     private int sheetIndex = -1;
-
-    private static final String SHEET_NAME = "Aufwände gesamt";
 
     private static final int COLUMN_INVOICEABLE = 11;
 
@@ -43,7 +37,7 @@ public class UBWWorkRecordsImporter implements WorkRecordsImporter {
 
             List<ImportedWorkRecord> resultList = new ArrayList<>();
             Workbook workbook = new XSSFWorkbook(file.getInputStream());
-            if (!checkValidity(workbook)) {
+            if (!checkValidityAndSetSheetIndex(workbook)) {
                 throw new InvalidFileFormatException("Invalid file", file.getFilename());
             }
             Sheet sheet = workbook.getSheetAt(sheetIndex);
@@ -65,10 +59,6 @@ public class UBWWorkRecordsImporter implements WorkRecordsImporter {
         } catch (IOException e) {
             throw new ImportException(e);
         }
-    }
-
-    private int findSheetIndex(Workbook workbook) {
-        return workbook.getSheetIndex(new String(SHEET_NAME.getBytes(Charset.defaultCharset()), UTF_8));
     }
 
     private boolean isCompletelyEmpty(Row row) {
@@ -106,7 +96,7 @@ public class UBWWorkRecordsImporter implements WorkRecordsImporter {
             Calendar maxCalendar = Calendar.getInstance();
             Calendar maxineCalendar = Calendar.getInstance();
             XSSFWorkbook workbook = new XSSFWorkbook(getClass().getResourceAsStream("/example_ubw_report.xlsx"));
-            sheetIndex = findSheetIndex(workbook);
+            checkValidityAndSetSheetIndex(workbook);
             XSSFSheet sheet = workbook.getSheetAt(sheetIndex);
             XSSFRow row;
             XSSFCell cell;
@@ -147,7 +137,6 @@ public class UBWWorkRecordsImporter implements WorkRecordsImporter {
                     cell.setCellStyle(style);
                     maxineCalendar.add(Calendar.DATE, -1);
                 }
-
                 i--;
             }
 
@@ -174,11 +163,10 @@ public class UBWWorkRecordsImporter implements WorkRecordsImporter {
         return skippedRecords;
     }
 
-    boolean checkValidity(Workbook workbook) {
-        sheetIndex = findSheetIndex(workbook);
-        boolean isValid = sheetIndex != -1 && workbook.getNumberOfSheets() >= sheetIndex;
-        if (isValid) {
-            Sheet sheet = workbook.getSheetAt(sheetIndex);
+    boolean checkValidityAndSetSheetIndex(Workbook workbook) {
+        boolean isValid = false;
+        for(int i = 0; i < workbook.getNumberOfSheets() && !isValid; i++){
+            Sheet sheet = workbook.getSheetAt(i);
             int headerRowIndex = 2;
             if (sheet.getRow(headerRowIndex) == null) {
                 isValid = false;
@@ -190,6 +178,7 @@ public class UBWWorkRecordsImporter implements WorkRecordsImporter {
                             r.getCell(COLUMN_BUDGET).getStringCellValue().equals("Subgruppe") &&
                             r.getCell(COLUMN_HOURS).getStringCellValue().equals("Aufwand [h]") &&
                             r.getCell(COLUMN_INVOICEABLE).getStringCellValue().equals("KV");
+                    sheetIndex = i;
                 } catch (Exception e) {
                     isValid = false;
                 }
