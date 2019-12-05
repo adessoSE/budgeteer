@@ -1,8 +1,8 @@
 package org.wickedsource.budgeteer.web.pages.monitoring;
 
-        import org.apache.wicket.markup.MarkupType;
-        import org.apache.wicket.markup.html.WebPage;
-        import org.wickedsource.budgeteer.web.Mount;
+import org.apache.wicket.markup.MarkupType;
+import org.apache.wicket.markup.html.WebPage;
+import org.wickedsource.budgeteer.web.Mount;
 
 /**
  * A dedicated page to display the current version of the application.

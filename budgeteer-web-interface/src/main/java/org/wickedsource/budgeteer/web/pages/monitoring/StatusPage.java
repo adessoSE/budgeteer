@@ -1,17 +1,17 @@
 package org.wickedsource.budgeteer.web.pages.monitoring;
 
-        import org.apache.wicket.markup.MarkupType;
-        import org.apache.wicket.markup.html.WebPage;
-        import org.wickedsource.budgeteer.web.Mount;
+import org.apache.wicket.markup.MarkupType;
+import org.apache.wicket.markup.html.WebPage;
+import org.wickedsource.budgeteer.web.Mount;
 
 /**
- * A dedicated page to display the current version of the application.
+ * A dedicated page to display the current status of the application.
  *
- * <p>This page is primarily used for monitoring purposes. Currently we do not check any further resources, so that the
- * version is displayed if at least the Spring container is up and running.</p>
+ * <p>This page is solely used for monitoring purposes. Currently we do not check any further resources, so that the
+ * status is “operable” whenever the Spring container is up and running.</p>
  */
-@Mount("/version")
-public class VersionPage extends WebPage {
+@Mount("/status")
+public class StatusPage extends WebPage {
 
     /**
      * @return The plain text markup type.
