@@ -1,5 +1,5 @@
-task wrapper(type: Wrapper) {
-    gradleVersion '4.7'
+wrapper {
+    distributionType = Wrapper.DistributionType.ALL
 }
 
 // alle Skripte aus ./gradle.d in sortierter Reihenfolge einbinden
@@ -53,7 +53,7 @@ subprojects {
         reports {
             xml.enabled false
             csv.enabled false
-            html.destination "${buildDir}/jacocoHtml"
+            html.destination file("${buildDir}/jacocoHtml")
         }
     }
 
