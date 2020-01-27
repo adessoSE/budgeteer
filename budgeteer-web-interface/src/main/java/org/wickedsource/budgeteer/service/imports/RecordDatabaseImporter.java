@@ -89,6 +89,14 @@ public abstract class RecordDatabaseImporter {
         return person;
     }
 
+    /**
+     * Fetches the budget by its import key.
+     *
+     * As a side effect, creates any nonexistent budget and associates it with the current project.
+     *
+     * @param budgetName The technical budget name.
+     * @return The budget database record.
+     */
     protected BudgetEntity getBudget(String budgetName) {
         BudgetEntity budget = budgetsByImportKey.get(budgetName);
         if (budget == null) {
@@ -96,7 +104,7 @@ public abstract class RecordDatabaseImporter {
             newBudget.setImportKey(budgetName);
             newBudget.setName(budgetName);
             newBudget.setProject(project);
-            newBudget.setTotal(MoneyUtil.createMoneyFromCents(0l));
+            newBudget.setTotal(MoneyUtil.createMoneyFromCents(0L));
             budgetRepository.save(newBudget);
             budgetsByImportKey.put(newBudget.getImportKey(), newBudget);
             budget = newBudget;
