@@ -174,9 +174,13 @@ public class UBWWorkRecordsImporter implements WorkRecordsImporter {
                 Row r = sheet.getRow(headerRowIndex);
                 try {
                     if(r.getCell(5).getStringCellValue().equals("AA-Nr")){
-                        columnBudget++;
-                        columnHours++;
-                        columnInvoiceable++;
+                        columnBudget = 9;
+                        columnHours = 11;
+                        columnInvoiceable = 12;
+                    } else {
+                        columnBudget = 8;
+                        columnHours = 10;
+                        columnInvoiceable = 11;
                     }
                     isValid = r.getCell(columnPerson).getStringCellValue().equals("Name") &&
                             r.getCell(columnDate).getStringCellValue().equals("Tag") &&
