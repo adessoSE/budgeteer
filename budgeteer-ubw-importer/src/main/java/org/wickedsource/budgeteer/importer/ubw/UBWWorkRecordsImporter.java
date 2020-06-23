@@ -37,7 +37,7 @@ public class UBWWorkRecordsImporter implements WorkRecordsImporter {
 
             List<ImportedWorkRecord> resultList = new ArrayList<>();
             Workbook workbook = new XSSFWorkbook(file.getInputStream());
-            if (!checkValidityAndSetSheetAndColumnIndicies(workbook)) {
+            if (!checkValidityAndSetSheetAndColumnIndices(workbook)) {
                 throw new InvalidFileFormatException("Invalid file", file.getFilename());
             }
             Sheet sheet = workbook.getSheetAt(sheetIndex);
@@ -96,7 +96,7 @@ public class UBWWorkRecordsImporter implements WorkRecordsImporter {
             Calendar maxCalendar = Calendar.getInstance();
             Calendar maxineCalendar = Calendar.getInstance();
             XSSFWorkbook workbook = new XSSFWorkbook(getClass().getResourceAsStream("/example_ubw_report.xlsx"));
-            checkValidityAndSetSheetAndColumnIndicies(workbook);
+            checkValidityAndSetSheetAndColumnIndices(workbook);
             XSSFSheet sheet = workbook.getSheetAt(sheetIndex);
             XSSFRow row;
             XSSFCell cell;
@@ -163,7 +163,7 @@ public class UBWWorkRecordsImporter implements WorkRecordsImporter {
         return skippedRecords;
     }
 
-    boolean checkValidityAndSetSheetAndColumnIndicies(Workbook workbook) {
+    boolean checkValidityAndSetSheetAndColumnIndices(Workbook workbook) {
         boolean isValid = false;
         for(int i = 0; i < workbook.getNumberOfSheets() && !isValid; i++){
             Sheet sheet = workbook.getSheetAt(i);
