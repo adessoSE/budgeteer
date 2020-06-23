@@ -22,6 +22,18 @@ class UBWWorkRecordsImporterTest {
     private DateFormat format = new SimpleDateFormat("dd.MM.yyyy");
 
     @Test
+    void testReadWithAANrColumn() throws Exception {
+        UBWWorkRecordsImporter importer = new UBWWorkRecordsImporter();
+        InputStream in = getClass().getResourceAsStream("/demo_ubw_report2.xlsx");
+        List<ImportedWorkRecord> records = importer.importFile(new ImportFile("file.xslx", in));
+        assertEquals(1225, records.size());
+        assertEquals("Archie, Holmes", records.get(0).getPersonName());
+        assertEquals("Collecting Requirements", records.get(0).getBudgetName());
+        assertEquals(570d, records.get(0).getMinutesWorked(), 1d);
+        assertEquals(format.parse("09.01.2017"), records.get(0).getDate());
+    }
+
+    @Test
     void testRead() throws Exception {
         UBWWorkRecordsImporter importer = new UBWWorkRecordsImporter();
         InputStream in = getClass().getResourceAsStream("/demo_ubw_report.xlsx");
@@ -68,7 +80,7 @@ class UBWWorkRecordsImporterTest {
     void testValidity() throws IOException {
         UBWWorkRecordsImporter importer = new UBWWorkRecordsImporter();
         Workbook workbook = new XSSFWorkbook(importer.getExampleFile().getInputStream());
-        assertTrue(importer.checkValidityAndSetSheetIndex(workbook));
+        assertTrue(importer.checkValidityAndSetSheetAndColumnIndices(workbook));
     }
 
     @Test

@@ -14,15 +14,15 @@ public class UBWWorkRecordsImporter implements WorkRecordsImporter {
 
     private int sheetIndex = -1;
 
-    private static final int COLUMN_INVOICEABLE = 11;
+    private int columnInvoiceable = 11;
 
-    private static final int COLUMN_DATE = 3;
+    private int columnDate = 3;
 
-    private static final int COLUMN_PERSON = 2;
+    private int columnPerson = 2;
 
-    private static final int COLUMN_BUDGET = 8;
+    private int columnBudget = 8;
 
-    private static final int COLUMN_HOURS = 10;
+    private int columnHours = 10;
 
     private List<List<String>> skippedRecords = new LinkedList<>();
 
@@ -37,7 +37,7 @@ public class UBWWorkRecordsImporter implements WorkRecordsImporter {
 
             List<ImportedWorkRecord> resultList = new ArrayList<>();
             Workbook workbook = new XSSFWorkbook(file.getInputStream());
-            if (!checkValidityAndSetSheetIndex(workbook)) {
+            if (!checkValidityAndSetSheetAndColumnIndices(workbook)) {
                 throw new InvalidFileFormatException("Invalid file", file.getFilename());
             }
             Sheet sheet = workbook.getSheetAt(sheetIndex);
@@ -96,7 +96,7 @@ public class UBWWorkRecordsImporter implements WorkRecordsImporter {
             Calendar maxCalendar = Calendar.getInstance();
             Calendar maxineCalendar = Calendar.getInstance();
             XSSFWorkbook workbook = new XSSFWorkbook(getClass().getResourceAsStream("/example_ubw_report.xlsx"));
-            checkValidityAndSetSheetIndex(workbook);
+            checkValidityAndSetSheetAndColumnIndices(workbook);
             XSSFSheet sheet = workbook.getSheetAt(sheetIndex);
             XSSFRow row;
             XSSFCell cell;
@@ -163,7 +163,7 @@ public class UBWWorkRecordsImporter implements WorkRecordsImporter {
         return skippedRecords;
     }
 
-    boolean checkValidityAndSetSheetIndex(Workbook workbook) {
+    boolean checkValidityAndSetSheetAndColumnIndices(Workbook workbook) {
         boolean isValid = false;
         for(int i = 0; i < workbook.getNumberOfSheets() && !isValid; i++){
             Sheet sheet = workbook.getSheetAt(i);
@@ -173,11 +173,16 @@ public class UBWWorkRecordsImporter implements WorkRecordsImporter {
             } else {
                 Row r = sheet.getRow(headerRowIndex);
                 try {
-                    isValid = r.getCell(COLUMN_PERSON).getStringCellValue().equals("Name") &&
-                            r.getCell(COLUMN_DATE).getStringCellValue().equals("Tag") &&
-                            r.getCell(COLUMN_BUDGET).getStringCellValue().equals("Subgruppe") &&
-                            r.getCell(COLUMN_HOURS).getStringCellValue().equals("Aufwand [h]") &&
-                            r.getCell(COLUMN_INVOICEABLE).getStringCellValue().equals("KV");
+                    if(r.getCell(5).getStringCellValue().equals("AA-Nr")){
+                        columnBudget++;
+                        columnHours++;
+                        columnInvoiceable++;
+                    }
+                    isValid = r.getCell(columnPerson).getStringCellValue().equals("Name") &&
+                            r.getCell(columnDate).getStringCellValue().equals("Tag") &&
+                            r.getCell(columnBudget).getStringCellValue().equals("Subgruppe") &&
+                            r.getCell(columnHours).getStringCellValue().equals("Aufwand [h]") &&
+                            r.getCell(columnInvoiceable).getStringCellValue().equals("KV");
                     sheetIndex = i;
                 } catch (Exception e) {
                     isValid = false;
@@ -205,10 +210,10 @@ public class UBWWorkRecordsImporter implements WorkRecordsImporter {
 
     private ImportedWorkRecord parseRow(Row row, ImportFile file) throws ImportException {
         try {
-            String personName = row.getCell(COLUMN_PERSON).getStringCellValue();
-            Date date = row.getCell(COLUMN_DATE).getDateCellValue();
-            String budgetName = row.getCell(COLUMN_BUDGET).getStringCellValue();
-            double hours = row.getCell(COLUMN_HOURS).getNumericCellValue();
+            String personName = row.getCell(columnPerson).getStringCellValue();
+            Date date = row.getCell(columnDate).getDateCellValue();
+            String budgetName = row.getCell(columnBudget).getStringCellValue();
+            double hours = row.getCell(columnHours).getNumericCellValue();
 
             ImportedWorkRecord record = new ImportedWorkRecord();
             record.setDate(date);
@@ -217,7 +222,7 @@ public class UBWWorkRecordsImporter implements WorkRecordsImporter {
             record.setMinutesWorked((int) Math.round(hours * 60));
 
             if (record.getDate() == null) {
-                throw new ImportException(String.format("Missing date in row %d and column %d of file %s", row.getRowNum() + 1, COLUMN_DATE + 1, file.getFilename()));
+                throw new ImportException(String.format("Missing date in row %d and column %d of file %s", row.getRowNum() + 1, columnDate + 1, file.getFilename()));
             }
 
             return record;
@@ -229,10 +234,10 @@ public class UBWWorkRecordsImporter implements WorkRecordsImporter {
     }
 
     private boolean isImportable(Row row) {
-        return row != null && ("ja".equalsIgnoreCase(row.getCell(COLUMN_INVOICEABLE).getStringCellValue()))
-                && (row.getCell(COLUMN_BUDGET).getStringCellValue() != null)
-                && (!"".equals(row.getCell(COLUMN_BUDGET).getStringCellValue().trim()))
-                && (row.getCell(COLUMN_PERSON).getStringCellValue() != null)
-                && (!"".equals(row.getCell(COLUMN_PERSON).getStringCellValue().trim()));
+        return row != null && ("ja".equalsIgnoreCase(row.getCell(columnInvoiceable).getStringCellValue()))
+                && (row.getCell(columnBudget).getStringCellValue() != null)
+                && (!"".equals(row.getCell(columnBudget).getStringCellValue().trim()))
+                && (row.getCell(columnPerson).getStringCellValue() != null)
+                && (!"".equals(row.getCell(columnPerson).getStringCellValue().trim()));
     }
 }
