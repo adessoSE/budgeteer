@@ -2,7 +2,6 @@ package org.wickedsource.budgeteer.persistence.manualRecord;
 
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.querydsl.QueryDslPredicateExecutor;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.wickedsource.budgeteer.persistence.record.MonthlyAggregatedRecordWithTaxBean;
@@ -14,8 +13,7 @@ import java.util.Date;
 import java.util.List;
 
 
-public interface ManualRecordRepository extends CrudRepository<ManualRecordEntity, Long>,
-        QueryDslPredicateExecutor<ManualRecordEntity>, JpaSpecificationExecutor {
+public interface ManualRecordRepository extends CrudRepository<ManualRecordEntity, Long>, JpaSpecificationExecutor<ManualRecordEntity> {
 
     @Query("select coalesce(sum(record.moneyAmount),0) from ManualRecordEntity record where record.budget.id = :budgetId")
     Double getManualRecordSumForBudget(@Param("budgetId") long budgetId);
