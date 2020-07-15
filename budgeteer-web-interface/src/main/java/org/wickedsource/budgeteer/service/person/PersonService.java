@@ -103,7 +103,7 @@ public class PersonService {
      * @param person the data to save in the database.
      */
     public void savePersonWithRates(PersonWithRates person) {
-        PersonEntity personEntity = personRepository.findOne(person.getPersonId());
+        PersonEntity personEntity = personRepository.findById(person.getPersonId()).orElseThrow(RuntimeException::new);
         personEntity.setName(person.getName());
         personEntity.setImportKey(person.getImportKey());
 
@@ -117,7 +117,7 @@ public class PersonService {
         for (PersonRate rate : person.getRates()) {
             DailyRateEntity rateEntity = new DailyRateEntity();
             rateEntity.setRate(rate.getRate());
-            rateEntity.setBudget(budgetRepository.findOne(rate.getBudget().getId()));
+            rateEntity.setBudget(budgetRepository.findById(rate.getBudget().getId()).orElseThrow(RuntimeException::new));
             rateEntity.setPerson(personEntity);
             rateEntity.setDateStart(rate.getDateRange().getStartDate());
             rateEntity.setDateEnd(rate.getDateRange().getEndDate());
@@ -168,7 +168,7 @@ public class PersonService {
 
     @PreAuthorize("canReadPerson(#personId)")
     public void deletePerson(long personId) {
-        personRepository.delete(personId);
+        personRepository.deleteById(personId);
     }
 
     @PreAuthorize("canReadBudget(#budgetId)")

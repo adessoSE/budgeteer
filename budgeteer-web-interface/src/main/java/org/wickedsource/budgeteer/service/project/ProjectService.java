@@ -22,6 +22,7 @@ import org.wickedsource.budgeteer.web.pages.administration.Project;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -130,8 +131,9 @@ public class ProjectService {
         contractSortingRepository.deleteByProjectId(projectId);
         contractRepository.deleteContractFieldByProjectId(projectId);
         contractRepository.deleteByProjectId(projectId);
-        if(projectRepository.findOne(projectId) != null) {
-            List<UserEntity> userList = projectRepository.findOne(projectId).getAuthorizedUsers();
+        ProjectEntity projectEntity = projectRepository.findById(projectId).orElse(null);
+        if(projectEntity != null) {
+            List<UserEntity> userList = projectEntity.getAuthorizedUsers();
             if (userList != null) {
                 for (UserEntity u : userList) {
                     if (u.getDefaultProject() != null && u.getDefaultProject().getId() == projectId) {
@@ -141,7 +143,7 @@ public class ProjectService {
                 }
             }
         }
-        projectRepository.delete(projectId);
+        projectRepository.deleteById(projectId);
     }
 
     /**
@@ -150,19 +152,19 @@ public class ProjectService {
      * @param projectId ID of the project that should become the default-project
      */
     public void setDefaultProject(long userId, long projectId){
-        ProjectEntity project = projectRepository.findOne(projectId);
+        ProjectEntity project = projectRepository.findById(projectId).orElseThrow(RuntimeException::new);
         UserEntity user = userRepository.findById(userId);
         user.setDefaultProject(project);
         userRepository.save(user);
     }
 
     public Project findProjectById(long projectId){
-        ProjectEntity entity = projectRepository.findOne(projectId);
-        return new Project(entity.getId(), entity.getProjectStart(), entity.getProjectEnd(), entity.getName());
+        Optional<ProjectEntity> projectEntity = projectRepository.findById(projectId);
+        return projectEntity.map(entity -> new Project(entity.getId(), entity.getProjectStart(), entity.getProjectEnd(), entity.getName())).orElse(null);
     }
 
     public void save(Project project) {
-        ProjectEntity projectEntity = projectRepository.findOne(project.getProjectId());
+        ProjectEntity projectEntity = projectRepository.findById(project.getProjectId()).orElseThrow(RuntimeException::new);
         projectEntity.setName(project.getName());
         DateRange dateRange = project.getDateRange();
         projectEntity.setProjectStart(dateRange == null ? null : dateRange.getStartDate());

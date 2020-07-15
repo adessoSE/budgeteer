@@ -106,7 +106,7 @@ public class BudgeteerMethodSecurityExpressionRoot extends SecurityExpressionRoo
      * @see BudgeteerSession#getProjectId()
      */
     public boolean canReadBudget(Long budgetId) {
-        BudgetEntity entity = budgetRepository.findOne(budgetId);
+        BudgetEntity entity = budgetRepository.findById(budgetId).orElseThrow(RuntimeException::new);
 
         if(entity != null) {
             long budgetProjectId = entity.getProject().getId();
@@ -145,7 +145,7 @@ public class BudgeteerMethodSecurityExpressionRoot extends SecurityExpressionRoo
      * @see BudgeteerSession#getProjectId()
      */
     public boolean canReadContract(Long contractId) {
-        ContractEntity entity = contractRepository.findOne(contractId);
+        ContractEntity entity = contractRepository.findById(contractId).orElse(null);
 
         if(entity != null) {
             long contractProjectId = entity.getProject().getId();
@@ -169,7 +169,7 @@ public class BudgeteerMethodSecurityExpressionRoot extends SecurityExpressionRoo
      * @see BudgeteerSession#getProjectId()
      */
     public boolean canReadInvoice(Long invoiceId) {
-        InvoiceEntity entity = invoiceRepository.findOne(invoiceId);
+        InvoiceEntity entity = invoiceRepository.findById(invoiceId).orElseThrow(RuntimeException::new);
 
         if(entity != null) {
             long contractProjectId = entity.getContract().getProject().getId();
@@ -192,7 +192,7 @@ public class BudgeteerMethodSecurityExpressionRoot extends SecurityExpressionRoo
      * @see BudgeteerSession#getProjectId()
      */
     public boolean canReadPerson(Long personId) {
-        PersonEntity entity = personRepository.findOne(personId);
+        PersonEntity entity = personRepository.findById(personId).orElseThrow(RuntimeException::new);
 
         if(entity != null) {
             long personProjectId = entity.getProject().getId();

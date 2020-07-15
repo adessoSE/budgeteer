@@ -32,7 +32,7 @@ class ContractDataMapperTest extends IntegrationTestTemplate {
     @DatabaseSetup("contractMapperTest.xml")
     @DatabaseTearDown(value = "contractMapperTest.xml", type = DatabaseOperation.DELETE_ALL)
     void whenTaxrateIsNull() {
-        ContractEntity contractEntity = contractRepository.findOne(3L);
+        ContractEntity contractEntity = contractRepository.findById(3L).orElse(null);
         ContractBaseData contractBaseData = testSubject.map(contractEntity);
         Assertions.assertThat(contractBaseData.getTaxRate()).isCloseTo(0.00, Percentage.withPercentage(10e-8));
     }
@@ -41,7 +41,7 @@ class ContractDataMapperTest extends IntegrationTestTemplate {
     @DatabaseSetup("contractMapperTest.xml")
     @DatabaseTearDown(value = "contractMapperTest.xml", type = DatabaseOperation.DELETE_ALL)
     void whenTaxrateIsNotNull() {
-        ContractEntity contractEntity = contractRepository.findOne(4L);
+        ContractEntity contractEntity = contractRepository.findById(4L).orElse(null);
         ContractBaseData contractBaseData = testSubject.map(contractEntity);
         Assertions.assertThat(contractBaseData.getTaxRate()).isCloseTo(100, Percentage.withPercentage(10e-8));
     }

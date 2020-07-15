@@ -34,7 +34,7 @@ public class ContractSortingService {
                 // Create a new ContractSortingEntity if the contract has none for this user
                 ContractSortingEntity sortingEntity = new ContractSortingEntity();
                 sortingEntity.setSortingIndex(0);
-                sortingEntity.setContract(contractRepository.findOne(e.getContractId()));
+                sortingEntity.setContract(contractRepository.findById(e.getContractId()).orElseThrow(RuntimeException::new));
                 sortingEntity.setUser(userRepository.findById(userId));
                 contractSortingRepository.save(sortingEntity);
                 sortingIndex = 0;

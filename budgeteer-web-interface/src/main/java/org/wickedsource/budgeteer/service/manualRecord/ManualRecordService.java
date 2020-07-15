@@ -34,7 +34,7 @@ public class ManualRecordService {
     }
 
     public ManualRecord loadManualRecord(long manualRecordId) {
-        ManualRecordEntity entity = manualRecordRepository.findOne(manualRecordId);
+        ManualRecordEntity entity = manualRecordRepository.findById(manualRecordId).orElse(null);
         if (entity != null) {
             return new ManualRecord(entity);
         }
@@ -56,7 +56,7 @@ public class ManualRecordService {
         }
 
         record.setBillingDate(data.getBillingDate());
-        BudgetEntity budgetEntity = budgetRepository.findOne(data.getBudgetId());
+        BudgetEntity budgetEntity = budgetRepository.findById(data.getBudgetId()).orElseThrow(RuntimeException::new);
         record.setBudget(budgetEntity);
 
         manualRecordRepository.save(record);
@@ -65,6 +65,6 @@ public class ManualRecordService {
     }
 
     public void deleteRecord(long id) {
-        manualRecordRepository.delete(id);
+        manualRecordRepository.deleteById(id);
     }
 }

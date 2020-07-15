@@ -72,7 +72,7 @@ public class UserService {
      */
     @PreAuthorize("canReadProject(#projectId)")
     public void removeUserFromProject(long projectId, long userId) {
-        ProjectEntity project = projectRepository.findOne(projectId);
+        ProjectEntity project = projectRepository.findById(projectId).orElse(null);
         if (project == null) {
             throw new UnknownEntityException(ProjectEntity.class, projectId);
         }
@@ -92,7 +92,7 @@ public class UserService {
      */
     @PreAuthorize("canReadProject(#projectId)")
     public void addUserToProject(long projectId, long userId) {
-        ProjectEntity project = projectRepository.findOne(projectId);
+        ProjectEntity project = projectRepository.findById(projectId).orElse(null);
         if (project == null) {
             throw new UnknownEntityException(ProjectEntity.class, projectId);
         }

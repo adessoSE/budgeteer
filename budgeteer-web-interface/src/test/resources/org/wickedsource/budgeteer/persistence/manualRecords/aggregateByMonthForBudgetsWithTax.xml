@@ -15,16 +15,16 @@
               CONTRACT_TYPE="0" TAXRATE="20.0"/>
 
     <BUDGET id="1" name="Budget 1" total="100000" import_key="budget1" project_id="1" CONTRACT_ID="1"/>
-    <BUDGET_TAG budget_id="1" tag="Tag 1"/>
-    <BUDGET_TAG budget_id="1" tag="Tag 2"/>
+    <BUDGET_TAG id="1" budget_id="1" tag="Tag 1"/>
+    <BUDGET_TAG id="2" budget_id="1" tag="Tag 2"/>
 
     <BUDGET id="2" name="Budget 2" total="100000" import_key="budget2" project_id="2" CONTRACT_ID="2"/>
-    <BUDGET_TAG budget_id="2" tag="Tag 1"/>
-    <BUDGET_TAG budget_id="2" tag="Tag 2"/>
-    <BUDGET_TAG budget_id="2" tag="Tag 3"/>
+    <BUDGET_TAG id="3" budget_id="2" tag="Tag 1"/>
+    <BUDGET_TAG id="4" budget_id="2" tag="Tag 2"/>
+    <BUDGET_TAG id="5" budget_id="2" tag="Tag 3"/>
 
     <BUDGET id="3" name="Budget 3" total="100000" import_key="budget3" project_id="1" CONTRACT_ID="3"/>
-    <BUDGET_TAG budget_id="3" tag="Tag 2"/>
+    <BUDGET_TAG id="6" budget_id="3" tag="Tag 2"/>
 
     <MANUAL_RECORD_ENTITY id="1" description="manual 1" MONEY_AMOUNT="800" BUDGET_ID="1" CREATION_DATE="2016-02-3"
                           BILLING_DATE="2016-02-3" RECORD_YEAR="2016" RECORD_MONTH="1" RECORD_DAY="3" RECORD_WEEK="5"/>

@@ -84,7 +84,7 @@ public class TemplateService {
      * @return A new Template object.
      */
     public Template getById(long templateID){
-        TemplateEntity templateEntity = templateRepository.findOne(templateID);
+        TemplateEntity templateEntity = templateRepository.findById(templateID).orElse(null);
         if(templateEntity == null){
             return null;
         } else {
@@ -97,7 +97,7 @@ public class TemplateService {
      * @param templateID The ID of the template.
      */
     public void deleteTemplate(long templateID){
-        templateRepository.delete(templateID);
+        templateRepository.deleteById(templateID);
     }
 
     public void resolveDefaults(long templateId, IModel<TemplateFormInputDto> temModel){

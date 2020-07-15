@@ -60,6 +60,6 @@ class ProjectServiceTest extends ServiceTestTemplate {
     @Test
     void testDeleteProject() throws Exception {
         projectService.deleteProject(1L);
-        verify(projectRepository, times(1)).delete(1L);
+        verify(projectRepository, times(1)).deleteById(1L);
     }
 }
