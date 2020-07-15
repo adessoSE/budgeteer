@@ -167,7 +167,7 @@ public class ContractService {
     @PreAuthorize("canReadContract(#contractId)")
     public List<Date> getMonthList(long contractId) {
         List<Date> months = new ArrayList<>();
-        ContractEntity contract = contractRepository.findById(contractId);
+        ContractEntity contract = contractRepository.findByInvoiceFieldsId(contractId);
         Calendar cal = Calendar.getInstance();
         cal.setTime(contract.getStartDate());
         Calendar currentDate = Calendar.getInstance();

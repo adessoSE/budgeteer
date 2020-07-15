@@ -76,7 +76,7 @@ public class UserService {
         if (project == null) {
             throw new UnknownEntityException(ProjectEntity.class, projectId);
         }
-        UserEntity user = userRepository.findOne(userId);
+        UserEntity user = userRepository.findById(userId);
         if (user == null) {
             throw new UnknownEntityException(UserEntity.class, userId);
         }
@@ -96,7 +96,7 @@ public class UserService {
         if (project == null) {
             throw new UnknownEntityException(ProjectEntity.class, projectId);
         }
-        UserEntity user = userRepository.findOne(userId);
+        UserEntity user = userRepository.findById(userId);
         if (user == null) {
             throw new UnknownEntityException(UserEntity.class, userId);
         }
@@ -180,7 +180,7 @@ public class UserService {
      * @return true if the password matches the user, false if not
      */
     public boolean checkPassword(long id, String password) {
-        UserEntity entity = userRepository.findOne(id);
+        UserEntity entity = userRepository.findById(id);
         return entity.getPassword().equals(passwordHasher.hash(password));
     }
 
@@ -210,7 +210,7 @@ public class UserService {
      * @return EditUserData for editing the user
      */
     public EditUserData loadUserToEdit(long id) {
-        UserEntity userEntity = userRepository.findOne(id);
+        UserEntity userEntity = userRepository.findById(id);
 
         if (userEntity == null)
             throw new UnknownEntityException(UserEntity.class, id);
@@ -252,9 +252,9 @@ public class UserService {
             if (testEntity.getId() != data.getId())
                 throw new MailAlreadyInUseException();
 
-        userEntity = userRepository.findOne(data.getId());
+        userEntity = userRepository.findById(data.getId());
 
-        testEntity = userRepository.findOne(data.getId());
+        testEntity = userRepository.findById(data.getId());
         if (testEntity != null)
             if (testEntity.getMail() == null)
                 userEntity.setMailVerified(false);
@@ -357,7 +357,7 @@ public class UserService {
      * @throws UserIdNotFoundException
      */
     public UserEntity getUserById(long id) throws UserIdNotFoundException {
-        UserEntity userEntity = userRepository.findOne(id);
+        UserEntity userEntity = userRepository.findById(id);
 
         if (userEntity == null)
             throw new UserIdNotFoundException();

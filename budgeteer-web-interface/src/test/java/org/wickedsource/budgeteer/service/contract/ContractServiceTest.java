@@ -77,7 +77,7 @@ class ContractServiceTest extends ServiceIntegrationTestTemplate {
         assertTrue(savedContract.getContractId() > 0);
         assertEquals(5, savedContract.getContractAttributes().size());
 
-        assertEquals(5, projectRepository.findById(savedContract.getProjectId()).getContractFields().size());
+        assertEquals(5, projectRepository.findByContractFieldsId(savedContract.getProjectId()).getContractFields().size());
     }
 
     /**
@@ -103,7 +103,7 @@ class ContractServiceTest extends ServiceIntegrationTestTemplate {
         assertTrue(savedContract.getContractId() > 0);
         assertEquals(5, savedContract.getContractAttributes().size());
 
-        assertEquals(5, projectRepository.findById(savedContract.getProjectId()).getContractFields().size());
+        assertEquals(5, projectRepository.findByContractFieldsId(savedContract.getProjectId()).getContractFields().size());
     }
 
     /**
@@ -146,7 +146,7 @@ class ContractServiceTest extends ServiceIntegrationTestTemplate {
             assertTrue(found);
         }
         assertEquals(1, savedContract.getBelongingBudgets().size());
-        assertEquals(6, projectRepository.findById(savedContract.getProjectId()).getContractFields().size());
+        assertEquals(6, projectRepository.findByContractFieldsId(savedContract.getProjectId()).getContractFields().size());
     }
 
     /**
@@ -190,7 +190,7 @@ class ContractServiceTest extends ServiceIntegrationTestTemplate {
             assertTrue(found);
         }
         assertEquals(0, savedContract.getBelongingBudgets().size());
-        assertEquals(7, projectRepository.findById(savedContract.getProjectId()).getContractFields().size());
+        assertEquals(7, projectRepository.findByContractFieldsId(savedContract.getProjectId()).getContractFields().size());
     }
 
     @Test

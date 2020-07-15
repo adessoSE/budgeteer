@@ -70,7 +70,7 @@ public class ProjectService {
      * @return the base data of the newly create project.
      */
     public ProjectBaseData createProject(String projectName, long initialUserId) throws ProjectNameAlreadyInUseException {
-        UserEntity user = userRepository.findOne(initialUserId);
+        UserEntity user = userRepository.findById(initialUserId);
         ProjectEntity project = new ProjectEntity();
         for(ProjectEntity e : projectRepository.findAll()){
             if(e.getName().equals(projectName)){
@@ -93,7 +93,7 @@ public class ProjectService {
      * @return list of all projects the user has access to.
      */
     public List<ProjectBaseData> getProjectsForUser(long userId) {
-        UserEntity user = userRepository.findOne(userId);
+        UserEntity user = userRepository.findById(userId);
         return mapper.map(user.getAuthorizedProjects());
     }
 
@@ -103,7 +103,7 @@ public class ProjectService {
      * @return the default project respectively null if no project is set as default
      */
     public ProjectBaseData getDefaultProjectForUser(long userId){
-        UserEntity user = userRepository.findOne(userId);
+        UserEntity user = userRepository.findById(userId);
         ProjectEntity defaultProject = user.getDefaultProject();
         if(defaultProject == null){
             return null;
@@ -151,7 +151,7 @@ public class ProjectService {
      */
     public void setDefaultProject(long userId, long projectId){
         ProjectEntity project = projectRepository.findOne(projectId);
-        UserEntity user = userRepository.findOne(userId);
+        UserEntity user = userRepository.findById(userId);
         user.setDefaultProject(project);
         userRepository.save(user);
     }

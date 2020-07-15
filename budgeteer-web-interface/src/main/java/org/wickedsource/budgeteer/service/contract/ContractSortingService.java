@@ -35,7 +35,7 @@ public class ContractSortingService {
                 ContractSortingEntity sortingEntity = new ContractSortingEntity();
                 sortingEntity.setSortingIndex(0);
                 sortingEntity.setContract(contractRepository.findOne(e.getContractId()));
-                sortingEntity.setUser(userRepository.findOne(userId));
+                sortingEntity.setUser(userRepository.findById(userId));
                 contractSortingRepository.save(sortingEntity);
                 sortingIndex = 0;
             }
