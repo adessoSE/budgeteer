@@ -149,7 +149,7 @@ public class EditPersonForm extends Form<PersonWithRates> {
                     }
                 }
             }
-            RequestCycle.get().find(AjaxRequestTarget.class).add(this);
+            RequestCycle.get().find(AjaxRequestTarget.class).ifPresent(target -> target.add(this));
         }
     }
 
