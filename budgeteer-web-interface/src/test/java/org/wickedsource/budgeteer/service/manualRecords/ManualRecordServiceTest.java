@@ -54,14 +54,14 @@ public class ManualRecordServiceTest extends ServiceIntegrationTestTemplate {
 
         Assertions.assertEquals("manual 1", records.get(0).getDescription());
         Assertions.assertEquals(date2, records.get(0).getBillingDate());
-        Assertions.assertEquals(1, records.get(0).getId());
+        Assertions.assertEquals(100, records.get(0).getId());
         Assertions.assertEquals(date2, records.get(0).getCreationDate());
         Assertions.assertEquals(1, records.get(0).getBudgetId());
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(800), records.get(0).getMoneyAmount());
 
         Assertions.assertEquals("manual 2", records.get(1).getDescription());
         Assertions.assertEquals(date1, records.get(1).getBillingDate());
-        Assertions.assertEquals(2, records.get(1).getId());
+        Assertions.assertEquals(200, records.get(1).getId());
         Assertions.assertEquals(date1, records.get(1).getCreationDate());
         Assertions.assertEquals(1, records.get(1).getBudgetId());
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(400), records.get(1).getMoneyAmount());
@@ -71,14 +71,14 @@ public class ManualRecordServiceTest extends ServiceIntegrationTestTemplate {
     @DatabaseSetup("manualRecords.xml")
     @DatabaseTearDown(value = "manualRecords.xml", type = DatabaseOperation.DELETE_ALL)
     void testLoadManualRecord() {
-        ManualRecord record = manualRecordService.loadManualRecord(1L);
+        ManualRecord record = manualRecordService.loadManualRecord(100L);
 
         Calendar calendar = new GregorianCalendar(2016, 1, 3);
         Date date = calendar.getTime();
 
         Assertions.assertEquals("manual 1", record.getDescription());
         Assertions.assertEquals(date, record.getBillingDate());
-        Assertions.assertEquals(1, record.getId());
+        Assertions.assertEquals(100, record.getId());
         Assertions.assertEquals(date, record.getCreationDate());
         Assertions.assertEquals(1, record.getBudgetId());
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(800), record.getMoneyAmount());
@@ -120,8 +120,8 @@ public class ManualRecordServiceTest extends ServiceIntegrationTestTemplate {
     @DatabaseSetup("manualRecords.xml")
     @DatabaseTearDown(value = "manualRecords.xml", type = DatabaseOperation.DELETE_ALL)
     void testDeleteRecord() {
-        assertNotNull(manualRecordService.loadManualRecord(1L));
-        manualRecordService.deleteRecord(1L);
-        assertNull(manualRecordService.loadManualRecord(1L));
+        assertNotNull(manualRecordService.loadManualRecord(100L));
+        manualRecordService.deleteRecord(100L);
+        assertNull(manualRecordService.loadManualRecord(100L));
     }
 }
