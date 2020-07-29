@@ -72,7 +72,6 @@ public class BudgetReportService {
 		writeSummary(wb.getSheetAt(0), overallSummary);
 		writeSummary(wb.getSheetAt(1), monthlySummary);
 
-		XSSFFormulaEvaluator.evaluateAllFormulaCells(wb);
 		return createOutputFile(wb);
 	}
 
