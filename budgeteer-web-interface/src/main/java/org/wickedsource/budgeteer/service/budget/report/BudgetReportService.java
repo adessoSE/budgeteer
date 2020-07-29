@@ -1,5 +1,7 @@
 package org.wickedsource.budgeteer.service.budget.report;
 
+import org.apache.poi.ss.formula.eval.NotImplementedException;
+import org.apache.poi.ss.formula.eval.NotImplementedFunctionException;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFFormulaEvaluator;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -72,7 +74,11 @@ public class BudgetReportService {
 		writeSummary(wb.getSheetAt(0), overallSummary);
 		writeSummary(wb.getSheetAt(1), monthlySummary);
 
-		XSSFFormulaEvaluator.evaluateAllFormulaCells(wb);
+		try {
+			XSSFFormulaEvaluator.evaluateAllFormulaCells(wb);
+		} catch (NotImplementedException e) {
+			wb.setForceFormulaRecalculation(true);
+		}
 		return createOutputFile(wb);
 	}
 
