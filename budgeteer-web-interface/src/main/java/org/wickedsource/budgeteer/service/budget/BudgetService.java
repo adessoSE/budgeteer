@@ -138,27 +138,19 @@ public class BudgetService {
         data.setDescription(entity.getDescription());
         data.setTags(mapEntitiesToTags(entity.getTags()));
         // Money
-        data.setSpent(toMoneyNullsafe(spentBudgetInCents));
+        data.setSpent(MoneyUtil.toMoneyNullsafe(spentBudgetInCents));
         data.setSpent_gross(data.getSpent().multipliedBy(taxCoefficient, RoundingMode.FLOOR));
         data.setTotal(entity.getTotal());
         data.setTotal_gross(data.getTotal().multipliedBy(taxCoefficient, RoundingMode.FLOOR));
-        data.setAvgDailyRate(toMoneyNullsafe(avgDailyRateInCents));
+        data.setAvgDailyRate(MoneyUtil.toMoneyNullsafe(avgDailyRateInCents));
         data.setAvgDailyRate_gross(data.getAvgDailyRate().multipliedBy(taxCoefficient, RoundingMode.FLOOR));
-        data.setUnplanned(entity.getTotal().minus(toMoneyNullsafe(plannedBudgetInCents)));
+        data.setUnplanned(entity.getTotal().minus(MoneyUtil.toMoneyNullsafe(plannedBudgetInCents)));
         data.setUnplanned_gross(data.getUnplanned().multipliedBy(taxCoefficient, RoundingMode.FLOOR));
-        data.setLimit(entity.getLimit());
+        data.setLimit(MoneyUtil.getMoneyNullsafe(entity.getLimit()));
         // Money end
         data.setContractName(entity.getContract() == null ? null : entity.getContract().getName());
         data.setContractId(entity.getContract() == null ? 0 : entity.getContract().getId());
         return data;
-    }
-
-    private Money toMoneyNullsafe(Double cents) {
-        if (cents == null) {
-            return MoneyUtil.createMoneyFromCents(0L);
-        } else {
-            return MoneyUtil.createMoneyFromCents(Math.round(cents));
-        }
     }
 
     private List<String> mapEntitiesToTags(List<BudgetTagEntity> tagEntities) {
@@ -244,7 +236,7 @@ public class BudgetService {
         data.setId(budget.getId());
         data.setDescription(budget.getDescription());
         data.setTotal(budget.getTotal());
-        data.setLimit(budget.getLimit());
+        data.setLimit(MoneyUtil.getMoneyNullsafe(budget.getLimit()));
         data.setTitle(budget.getName());
         data.setNote(budget.getNote());
         data.setTags(mapEntitiesToTags(budget.getTags()));
