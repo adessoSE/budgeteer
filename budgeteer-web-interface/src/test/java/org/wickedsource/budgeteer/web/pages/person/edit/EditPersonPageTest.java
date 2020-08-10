@@ -2,9 +2,11 @@ package org.wickedsource.budgeteer.web.pages.person.edit;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.tester.WicketTester;
+import org.joda.money.Money;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.service.person.PersonRate;
 import org.wickedsource.budgeteer.service.person.PersonService;
 import org.wickedsource.budgeteer.service.person.PersonWithRates;
@@ -24,7 +26,7 @@ public class EditPersonPageTest extends AbstractWebTestTemplate {
 
     @BeforeEach
     void setUpMocks(){
-        when(personService.loadPersonWithRates(anyLong())).thenReturn(new PersonWithRates(123L, "name", "key", new ArrayList<>()));
+        when(personService.loadPersonWithRates(anyLong())).thenReturn(new PersonWithRates(123L, "name", "key", MoneyUtil.ZERO, new ArrayList<>()));
 
     }
 

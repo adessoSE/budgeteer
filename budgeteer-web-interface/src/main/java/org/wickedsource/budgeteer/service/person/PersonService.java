@@ -1,5 +1,6 @@
 package org.wickedsource.budgeteer.service.person;
 
+import org.hibernate.Hibernate;
 import org.joda.money.CurrencyUnit;
 import org.joda.money.Money;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
 import org.wickedsource.budgeteer.service.DateRange;
 import org.wickedsource.budgeteer.service.DateUtil;
 import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
+import org.wickedsource.budgeteer.web.planning.Person;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
@@ -76,6 +78,7 @@ public class PersonService {
         person.setName(personEntity.getName());
         person.setPersonId(personEntity.getId());
         person.setImportKey(personEntity.getImportKey());
+        person.setDefaultDailyRate(personEntity.getDefaultDailyRate());
 
         for (DailyRateEntity rateEntity : personEntity.getDailyRates()) {
             BudgetBaseData budget = new BudgetBaseData();
@@ -102,6 +105,7 @@ public class PersonService {
         PersonEntity personEntity = personRepository.findOne(person.getPersonId());
         personEntity.setName(person.getName());
         personEntity.setImportKey(person.getImportKey());
+        personEntity.setDefaultDailyRate(person.getDefaultDailyRate());
 
         List<DailyRateEntity> dailyRates = new ArrayList<>();
 
