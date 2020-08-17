@@ -94,8 +94,10 @@ public class ContractService {
             contractEntity.setTaxRate(new BigDecimal(contractBaseData.getTaxRate()));
         }
 
+        // Use LinkedHashMap as backing map implementation to ensure insertion order
         Map<String, ContractFieldEntity> contractFields = contractEntity.getContractFields().stream()
-                .collect(Collectors.toMap(field -> field.getField().getFieldName(), Function.identity()));
+                .collect(Collectors.toMap(field -> field.getField().getFieldName(), Function.identity(), (a, b) -> a,
+                        LinkedHashMap::new));
 
         for (DynamicAttributeField dynamicAttribute : contractBaseData.getContractAttributes()) {
             ContractFieldEntity fieldEntity = contractFields.get(dynamicAttribute.getName().trim());
