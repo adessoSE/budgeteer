@@ -11,7 +11,9 @@ import org.wickedsource.budgeteer.service.budget.BudgetService;
 import org.wickedsource.budgeteer.service.budget.EditBudgetData;
 import org.wickedsource.budgeteer.web.AbstractWebTestTemplate;
 import org.wickedsource.budgeteer.web.pages.budgets.edit.EditBudgetPage;
+import org.wickedsource.budgeteer.web.pages.budgets.exception.InvalidBudgetImportKeyAndNameException;
 import org.wickedsource.budgeteer.web.pages.budgets.exception.InvalidBudgetImportKeyException;
+import org.wickedsource.budgeteer.web.pages.budgets.exception.InvalidBudgetNameException;
 import org.wickedsource.budgeteer.web.pages.budgets.overview.BudgetsOverviewPage;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
@@ -73,6 +75,34 @@ public class EditBudgetFormTest extends AbstractWebTestTemplate {
     }
 
     @Test
+    void testDuplicateName() {
+        FormTester formTester = tester.newFormTester("form", false);
+        doThrow(new InvalidBudgetNameException()).when(budgetServiceMock).saveBudget(any());
+
+        fillName(formTester);
+        fillImportKey(formTester);
+        fillBudget(formTester);
+        formTester.submit();
+
+        tester.assertErrorMessages("The name is already used in another budget.");
+        verify(budgetServiceMock, times(1)).saveBudget(any());
+    }
+
+    @Test
+    void testDuplicateNameAndImportKey() {
+        FormTester formTester = tester.newFormTester("form", false);
+        doThrow(new InvalidBudgetImportKeyAndNameException()).when(budgetServiceMock).saveBudget(any());
+
+        fillName(formTester);
+        fillImportKey(formTester);
+        fillBudget(formTester);
+        formTester.submit();
+
+        tester.assertErrorMessages("The name is already used in another budget.", "The import key is already used in another budget.");
+        verify(budgetServiceMock, times(1)).saveBudget(any());
+    }
+
+    @Test
     void testDuplicateImportKey() {
         FormTester formTester = tester.newFormTester("form", false);
         doThrow(new InvalidBudgetImportKeyException()).when(budgetServiceMock).saveBudget(any());
@@ -85,7 +115,6 @@ public class EditBudgetFormTest extends AbstractWebTestTemplate {
         tester.assertErrorMessages("The import key is already used in another budget.");
         verify(budgetServiceMock, times(1)).saveBudget(any());
     }
-
 
     private void fillImportKey(FormTester formTester) {
         formTester.setValue("importKey", "importkey");
