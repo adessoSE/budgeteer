@@ -20,6 +20,9 @@ import org.wickedsource.budgeteer.service.UnknownEntityException;
 import org.wickedsource.budgeteer.service.contract.ContractDataMapper;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.components.listMultipleChoiceWithGroups.OptionGroup;
+import org.wickedsource.budgeteer.web.pages.budgets.exception.InvalidBudgetImportKeyAndNameException;
+import org.wickedsource.budgeteer.web.pages.budgets.exception.InvalidBudgetImportKeyException;
+import org.wickedsource.budgeteer.web.pages.budgets.exception.InvalidBudgetNameException;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
@@ -260,7 +263,19 @@ public class BudgetService {
      * @return the
      */
     public long saveBudget(EditBudgetData data) {
-        assert data != null;
+        boolean duplicateImportKey = budgetRepository.existsByImportKey(data.getImportKey());
+        boolean duplicateName = budgetRepository.existsByName(data.getTitle());
+
+        if (duplicateImportKey && duplicateName) {
+            throw new InvalidBudgetImportKeyAndNameException();
+        }
+        if (duplicateImportKey) {
+            throw new InvalidBudgetImportKeyException();
+        }
+        if (duplicateName) {
+            throw new InvalidBudgetNameException();
+        }
+
         BudgetEntity budget = new BudgetEntity();
         if (data.getId() != 0) {
             budget = budgetRepository.findOne(data.getId());

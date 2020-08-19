@@ -11,6 +11,7 @@ import org.wickedsource.budgeteer.service.budget.BudgetService;
 import org.wickedsource.budgeteer.service.budget.EditBudgetData;
 import org.wickedsource.budgeteer.web.AbstractWebTestTemplate;
 import org.wickedsource.budgeteer.web.pages.budgets.edit.EditBudgetPage;
+import org.wickedsource.budgeteer.web.pages.budgets.exception.InvalidBudgetImportKeyException;
 import org.wickedsource.budgeteer.web.pages.budgets.overview.BudgetsOverviewPage;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
@@ -74,7 +75,7 @@ public class EditBudgetFormTest extends AbstractWebTestTemplate {
     @Test
     void testDuplicateImportKey() {
         FormTester formTester = tester.newFormTester("form", false);
-        doThrow(new DataIntegrityViolationException("contraints!")).when(budgetServiceMock).saveBudget(any());
+        doThrow(new InvalidBudgetImportKeyException()).when(budgetServiceMock).saveBudget(any());
 
         fillName(formTester);
         fillImportKey(formTester);
