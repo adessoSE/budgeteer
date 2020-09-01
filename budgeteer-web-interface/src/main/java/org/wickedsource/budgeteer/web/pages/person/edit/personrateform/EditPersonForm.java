@@ -167,7 +167,7 @@ public class EditPersonForm extends Form<PersonWithRates> {
         add(table);
     }
 
-    private ListView<MissingDailyRateForBudgetBean> createMissingDailyRateTable(){
+    private ListView<MissingDailyRateForBudgetBean> createMissingDailyRateTable() {
         ListView<MissingDailyRateForBudgetBean> missingDailyRatesListView = new ListView<MissingDailyRateForBudgetBean>
                 ("missingDailyRates", missingDailyRateForBudgetBeans) {
             public void populateItem(final ListItem<MissingDailyRateForBudgetBean> item) {
@@ -182,7 +182,7 @@ public class EditPersonForm extends Form<PersonWithRates> {
         return missingDailyRatesListView;
     }
 
-    private Button createMissingDailyRateSubmitButton(){
+    private Button createMissingDailyRateSubmitButton() {
         return new Button("fixRates") {
             @Override
             public void onSubmit() {
@@ -194,7 +194,7 @@ public class EditPersonForm extends Form<PersonWithRates> {
 
                 List<PersonRate> missingRates = missingDailyRateForBudgetBeans.stream()
                         .map(missingDailyRate -> new PersonRate()
-                                .setBudget(budgetService.findBudgetByName(missingDailyRate.getBudgetName()))
+                                .setBudget(budgetService.loadBudgetBaseData(missingDailyRate.getBudgetId()))
                                 .setRate(currentDefaultDailyRate)
                                 .setDateRange(new DateRange(missingDailyRate.getStartDate(), missingDailyRate.getEndDate())))
                         .collect(Collectors.toList());

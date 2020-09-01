@@ -10,9 +10,12 @@ public class MissingDailyRateForBudgetBean extends MissingDailyRateBean implemen
 
     @Getter @Setter
     private String budgetName;
+    @Getter @Setter
+    private long budgetId;
 
-    public MissingDailyRateForBudgetBean(long personId, String personName, Date startDate, Date endDate, String budgetName) {
+    public MissingDailyRateForBudgetBean(long personId, String personName, Date startDate, Date endDate, String budgetName, long budgetId) {
         super(personId, personName, startDate, endDate);
         this.budgetName = budgetName;
+        this.budgetId = budgetId;
     }
 }

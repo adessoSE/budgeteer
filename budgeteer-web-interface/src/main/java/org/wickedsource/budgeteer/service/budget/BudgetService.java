@@ -342,8 +342,4 @@ public class BudgetService {
         List<BudgetEntity> budgets = budgetRepository.findByProjectIdOrderByNameAsc(projectId);
         return (budgets != null && !budgets.isEmpty());
     }
-
-    public BudgetBaseData findBudgetByName(String name) {
-        return budgetBaseDataMapper.map(budgetRepository.findByName(name));
-    }
 }
