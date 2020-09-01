@@ -3,9 +3,10 @@ package org.wickedsource.budgeteer.persistence.record;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class MissingDailyRateForBudgetBean extends MissingDailyRateBean {
+public class MissingDailyRateForBudgetBean extends MissingDailyRateBean implements Serializable {
 
     @Getter @Setter
     private String budgetName;
