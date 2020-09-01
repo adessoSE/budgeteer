@@ -263,8 +263,17 @@ public class BudgetService {
      * @return the
      */
     public long saveBudget(EditBudgetData data) {
-        boolean duplicateImportKey = budgetRepository.existsByImportKey(data.getImportKey());
-        boolean duplicateName = budgetRepository.existsByName(data.getTitle());
+
+        BudgetEntity budget = new BudgetEntity();
+        if (data.getId() != 0) {
+            budget = budgetRepository.findOne(data.getId());
+        } else {
+            ProjectEntity project = projectRepository.findOne(data.getProjectId());
+            budget.setProject(project);
+        }
+
+        boolean duplicateImportKey = !Objects.equals(budget.getImportKey(), data.getImportKey()) && budgetRepository.existsByImportKeyAndProjectId(data.getImportKey(), data.getProjectId());
+        boolean duplicateName = !Objects.equals(budget.getName(), data.getTitle()) && budgetRepository.existsByNameAndProjectId(data.getTitle(), data.getProjectId());
 
         if (duplicateImportKey && duplicateName) {
             throw new InvalidBudgetImportKeyAndNameException();
@@ -274,14 +283,6 @@ public class BudgetService {
         }
         if (duplicateName) {
             throw new InvalidBudgetNameException();
-        }
-
-        BudgetEntity budget = new BudgetEntity();
-        if (data.getId() != 0) {
-            budget = budgetRepository.findOne(data.getId());
-        } else {
-            ProjectEntity project = projectRepository.findOne(data.getProjectId());
-            budget.setProject(project);
         }
         budget.setImportKey(data.getImportKey());
         budget.setDescription(data.getDescription());
