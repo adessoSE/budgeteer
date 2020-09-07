@@ -12,6 +12,7 @@ import org.wickedsource.budgeteer.persistence.budget.BudgetTagEntity;
 import org.wickedsource.budgeteer.persistence.contract.ContractEntity;
 import org.wickedsource.budgeteer.persistence.contract.ContractRepository;
 import org.wickedsource.budgeteer.persistence.person.DailyRateRepository;
+import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
 import org.wickedsource.budgeteer.persistence.record.PlanRecordRepository;
 import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
 import org.wickedsource.budgeteer.service.ServiceTestTemplate;
@@ -116,6 +117,7 @@ class BudgetServiceTest extends ServiceTestTemplate {
         Assertions.assertEquals(budget.getLimit(), data.getLimit());
         Assertions.assertEquals(budget.getLimit(), data.getLimit());
         Assertions.assertEquals(budget.getNote(), data.getNote());
+        Assertions.assertEquals(budget.getProject().getId(), data.getProjectId());
     }
 
     @Test
@@ -202,6 +204,9 @@ class BudgetServiceTest extends ServiceTestTemplate {
         budget.getTags().add(new BudgetTagEntity("Tag1"));
         budget.getTags().add(new BudgetTagEntity("Tag2"));
         budget.getTags().add(new BudgetTagEntity("Tag3"));
+        ProjectEntity project = new ProjectEntity();
+        project.setId(1);
+        budget.setProject(project);
         budget.setImportKey("budget123");
         return budget;
     }

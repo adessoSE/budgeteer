@@ -252,6 +252,7 @@ public class BudgetService {
         data.setNote(budget.getNote());
         data.setTags(mapEntitiesToTags(budget.getTags()));
         data.setImportKey(budget.getImportKey());
+        data.setProjectId(budget.getProject().getId());
         data.setContract(contractDataMapper.map(budget.getContract()));
         return data;
     }
