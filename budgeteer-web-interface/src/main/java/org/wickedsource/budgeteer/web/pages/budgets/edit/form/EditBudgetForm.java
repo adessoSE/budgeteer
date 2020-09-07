@@ -30,6 +30,9 @@ import org.wickedsource.budgeteer.web.pages.base.AbstractChoiceRenderer;
 import org.wickedsource.budgeteer.web.pages.budgets.BudgetTagsModel;
 import org.wickedsource.budgeteer.web.pages.budgets.edit.EditBudgetPage;
 import org.wickedsource.budgeteer.web.pages.budgets.edit.tagsfield.TagsTextField;
+import org.wickedsource.budgeteer.web.pages.budgets.exception.InvalidBudgetImportKeyAndNameException;
+import org.wickedsource.budgeteer.web.pages.budgets.exception.InvalidBudgetImportKeyException;
+import org.wickedsource.budgeteer.web.pages.budgets.exception.InvalidBudgetNameException;
 import org.wickedsource.budgeteer.web.pages.budgets.overview.BudgetsOverviewPage;
 
 import java.util.List;
@@ -143,11 +146,16 @@ public class EditBudgetForm extends Form<EditBudgetData> {
                 setResponsePage(new EditBudgetPage(EditBudgetPage.createParameters(
                         newID), BudgetsOverviewPage.class, new PageParameters(), true));
             } else {
-                this.success(getString("feedback.success"));
                 service.saveBudget(getModelObject());
+                this.success(getString("feedback.success"));
             }
-        } catch (DataIntegrityViolationException e) {
-            this.error(getString("feedback.error.constraint"));
+        } catch (InvalidBudgetImportKeyAndNameException e) {
+            this.error(getString("feedback.error.duplicateImportKey"));
+            this.error(getString("feedback.error.duplicateName"));
+        } catch (InvalidBudgetImportKeyException e) {
+            this.error(getString("feedback.error.duplicateImportKey"));
+        } catch (InvalidBudgetNameException e) {
+            this.error(getString("feedback.error.duplicateName"));
         }
     }
 }
