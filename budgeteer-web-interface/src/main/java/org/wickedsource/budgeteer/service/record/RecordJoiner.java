@@ -140,7 +140,7 @@ public class RecordJoiner {
                 record.setAggregationPeriodStart(c.getTime());
                 c.add(Calendar.DAY_OF_YEAR, 6);
                 record.setAggregationPeriodEnd(c.getTime());
-                record.setAggregationPeriodTitle(String.format("Week #%d", recordBean.getWeek()));
+                record.setAggregationPeriodTitle(String.format("Week %d-%d", recordBean.getYear(), recordBean.getWeek()));
                 put(getKey(recordBean), record);
             }
             return record;
@@ -158,7 +158,7 @@ public class RecordJoiner {
                 c.add(Calendar.MONTH, 1);
                 c.add(Calendar.DAY_OF_YEAR, -1);
                 record.setAggregationPeriodEnd(c.getTime());
-                record.setAggregationPeriodTitle(String.format("%d/%02d", recordBean.getYear(), recordBean.getMonth() + 1));
+                record.setAggregationPeriodTitle(String.format("Month %d-%02d", recordBean.getYear(), recordBean.getMonth() + 1));
                 put(getKey(recordBean), record);
             }
             return record;

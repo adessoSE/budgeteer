@@ -28,21 +28,21 @@ class RecordJoinerTest extends ServiceTestTemplate {
 
         Assertions.assertEquals(format.parse("03.03.2014"), records.get(0).getAggregationPeriodStart());
         Assertions.assertEquals(format.parse("09.03.2014"), records.get(0).getAggregationPeriodEnd());
-        Assertions.assertEquals("Week #10", records.get(0).getAggregationPeriodTitle());
+        Assertions.assertEquals("Week 2014-10", records.get(0).getAggregationPeriodTitle());
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(50000), records.get(0).getBudgetBurned_net());
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(12300), records.get(0).getBudgetPlanned_net());
         Assertions.assertEquals(5d, records.get(0).getHours(), 0.1d);
 
         Assertions.assertEquals(format.parse("06.04.2015"), records.get(1).getAggregationPeriodStart());
         Assertions.assertEquals(format.parse("12.04.2015"), records.get(1).getAggregationPeriodEnd());
-        Assertions.assertEquals("Week #15", records.get(1).getAggregationPeriodTitle());
+        Assertions.assertEquals("Week 2015-15", records.get(1).getAggregationPeriodTitle());
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(50000), records.get(1).getBudgetBurned_net());
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(12300), records.get(1).getBudgetPlanned_net());
         Assertions.assertEquals(5d, records.get(1).getHours(), 0.1d);
 
         Assertions.assertEquals(format.parse("13.04.2015"), records.get(2).getAggregationPeriodStart());
         Assertions.assertEquals(format.parse("19.04.2015"), records.get(2).getAggregationPeriodEnd());
-        Assertions.assertEquals("Week #16", records.get(2).getAggregationPeriodTitle());
+        Assertions.assertEquals("Week 2015-16", records.get(2).getAggregationPeriodTitle());
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(60000), records.get(2).getBudgetBurned_net());
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(32100), records.get(2).getBudgetPlanned_net());
         Assertions.assertEquals(6d, records.get(2).getHours(), 0.1d);
@@ -55,7 +55,7 @@ class RecordJoinerTest extends ServiceTestTemplate {
 
         Assertions.assertEquals(format.parse("26.03.2018"), recordsWithTax.get(0).getAggregationPeriodStart());
         Assertions.assertEquals(format.parse("1.04.2018"), recordsWithTax.get(0).getAggregationPeriodEnd());
-        Assertions.assertEquals("Week #13", recordsWithTax.get(0).getAggregationPeriodTitle());
+        Assertions.assertEquals("Week 2018-13", recordsWithTax.get(0).getAggregationPeriodTitle());
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(16250), recordsWithTax.get(0).getBudgetBurned_net());
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(18750), recordsWithTax.get(0).getBudgetPlanned_net());
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(17625), recordsWithTax.get(0).getBudgetBurned_gross());
@@ -64,7 +64,7 @@ class RecordJoinerTest extends ServiceTestTemplate {
 
         Assertions.assertEquals(format.parse("02.04.2018"), recordsWithTax.get(1).getAggregationPeriodStart());
         Assertions.assertEquals(format.parse("08.04.2018"), recordsWithTax.get(1).getAggregationPeriodEnd());
-        Assertions.assertEquals("Week #14", recordsWithTax.get(1).getAggregationPeriodTitle());
+        Assertions.assertEquals("Week 2018-14", recordsWithTax.get(1).getAggregationPeriodTitle());
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(3750), recordsWithTax.get(1).getBudgetBurned_net());
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(5000), recordsWithTax.get(1).getBudgetPlanned_net());
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(4125), recordsWithTax.get(1).getBudgetBurned_gross());
@@ -79,21 +79,21 @@ class RecordJoinerTest extends ServiceTestTemplate {
 
         Assertions.assertEquals(format.parse("01.01.2014"), records.get(0).getAggregationPeriodStart());
         Assertions.assertEquals(format.parse("31.01.2014"), records.get(0).getAggregationPeriodEnd());
-        Assertions.assertEquals("2014/01", records.get(0).getAggregationPeriodTitle());
+        Assertions.assertEquals("Month 2014-01", records.get(0).getAggregationPeriodTitle());
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(50000), records.get(0).getBudgetBurned_net());
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(12300), records.get(0).getBudgetPlanned_net());
         Assertions.assertEquals(5d, records.get(0).getHours(), 0.1d);
 
         Assertions.assertEquals(format.parse("01.06.2015"), records.get(1).getAggregationPeriodStart());
         Assertions.assertEquals(format.parse("30.06.2015"), records.get(1).getAggregationPeriodEnd());
-        Assertions.assertEquals("2015/06", records.get(1).getAggregationPeriodTitle());
+        Assertions.assertEquals("Month 2015-06", records.get(1).getAggregationPeriodTitle());
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(50000), records.get(1).getBudgetBurned_net());
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(12300), records.get(1).getBudgetPlanned_net());
         Assertions.assertEquals(5d, records.get(1).getHours(), 0.1d);
 
         Assertions.assertEquals(format.parse("01.07.2015"), records.get(2).getAggregationPeriodStart());
         Assertions.assertEquals(format.parse("31.07.2015"), records.get(2).getAggregationPeriodEnd());
-        Assertions.assertEquals("2015/07", records.get(2).getAggregationPeriodTitle());
+        Assertions.assertEquals("Month 2015-07", records.get(2).getAggregationPeriodTitle());
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(60000), records.get(2).getBudgetBurned_net());
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(32100), records.get(2).getBudgetPlanned_net());
         Assertions.assertEquals(6d, records.get(2).getHours(), 0.1d);
@@ -107,7 +107,7 @@ class RecordJoinerTest extends ServiceTestTemplate {
 
         Assertions.assertEquals(format.parse("01.01.2014"), records.get(0).getAggregationPeriodStart());
         Assertions.assertEquals(format.parse("31.01.2014"), records.get(0).getAggregationPeriodEnd());
-        Assertions.assertEquals("2014/01", records.get(0).getAggregationPeriodTitle());
+        Assertions.assertEquals("Month 2014-01", records.get(0).getAggregationPeriodTitle());
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(100000), records.get(0).getBudgetBurned_net());
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(12300), records.get(0).getBudgetPlanned_net());
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(107500), records.get(0).getBudgetBurned_gross());
@@ -116,7 +116,7 @@ class RecordJoinerTest extends ServiceTestTemplate {
 
         Assertions.assertEquals(format.parse("01.06.2015"), records.get(1).getAggregationPeriodStart());
         Assertions.assertEquals(format.parse("30.06.2015"), records.get(1).getAggregationPeriodEnd());
-        Assertions.assertEquals("2015/06", records.get(1).getAggregationPeriodTitle());
+        Assertions.assertEquals("Month 2015-06", records.get(1).getAggregationPeriodTitle());
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(50000), records.get(1).getBudgetBurned_net());
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(12300), records.get(1).getBudgetPlanned_net());
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(55000), records.get(1).getBudgetBurned_gross());
@@ -125,7 +125,7 @@ class RecordJoinerTest extends ServiceTestTemplate {
 
         Assertions.assertEquals(format.parse("01.07.2015"), records.get(2).getAggregationPeriodStart());
         Assertions.assertEquals(format.parse("31.07.2015"), records.get(2).getAggregationPeriodEnd());
-        Assertions.assertEquals("2015/07", records.get(2).getAggregationPeriodTitle());
+        Assertions.assertEquals("Month 2015-07", records.get(2).getAggregationPeriodTitle());
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(60000), records.get(2).getBudgetBurned_net());
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(20000), records.get(2).getBudgetPlanned_net());
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(66000), records.get(2).getBudgetBurned_gross());
@@ -134,7 +134,7 @@ class RecordJoinerTest extends ServiceTestTemplate {
 
         Assertions.assertEquals(format.parse("01.01.2016"), records.get(3).getAggregationPeriodStart());
         Assertions.assertEquals(format.parse("31.01.2016"), records.get(3).getAggregationPeriodEnd());
-        Assertions.assertEquals("2016/01", records.get(3).getAggregationPeriodTitle());
+        Assertions.assertEquals("Month 2016-01", records.get(3).getAggregationPeriodTitle());
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(143750), records.get(3).getBudgetBurned_net());
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(156250), records.get(3).getBudgetPlanned_net());
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(152219), records.get(3).getBudgetBurned_gross());
@@ -143,7 +143,7 @@ class RecordJoinerTest extends ServiceTestTemplate {
 
         Assertions.assertEquals(format.parse("01.06.2016"), records.get(4).getAggregationPeriodStart());
         Assertions.assertEquals(format.parse("30.06.2016"), records.get(4).getAggregationPeriodEnd());
-        Assertions.assertEquals("2016/06", records.get(4).getAggregationPeriodTitle());
+        Assertions.assertEquals("Month 2016-06", records.get(4).getAggregationPeriodTitle());
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(201250), records.get(4).getBudgetBurned_net());
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(208125), records.get(4).getBudgetPlanned_net());
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(221375), records.get(4).getBudgetBurned_gross());
@@ -152,7 +152,7 @@ class RecordJoinerTest extends ServiceTestTemplate {
 
         Assertions.assertEquals(format.parse("01.07.2016"), records.get(5).getAggregationPeriodStart());
         Assertions.assertEquals(format.parse("31.07.2016"), records.get(5).getAggregationPeriodEnd());
-        Assertions.assertEquals("2016/07", records.get(5).getAggregationPeriodTitle());
+        Assertions.assertEquals("Month 2016-07", records.get(5).getAggregationPeriodTitle());
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(200000), records.get(5).getBudgetBurned_net());
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(208125), records.get(5).getBudgetPlanned_net());
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(220000), records.get(5).getBudgetBurned_gross());
