@@ -22,6 +22,7 @@ import org.wickedsource.budgeteer.persistence.contract.ContractEntity;
 import org.wickedsource.budgeteer.persistence.contract.ContractRepository;
 import org.wickedsource.budgeteer.persistence.project.ProjectRepository;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 import static org.junit.Assert.*;
@@ -60,6 +61,7 @@ class ContractServiceTest extends ServiceIntegrationTestTemplate {
         testObject.setContractName("Test Contract");
         testObject.setContractAttributes(getListOfContractFields());
         testObject.getContractAttributes().add(new DynamicAttributeField("test4", "test4"));
+        testObject.setTaxRate(BigDecimal.ZERO);
 
         long newContractId = service.save(testObject);
 
@@ -86,6 +88,7 @@ class ContractServiceTest extends ServiceIntegrationTestTemplate {
         testObject.setContractName("Test Contract");
         testObject.setContractAttributes(getListOfContractFields());
         testObject.getContractAttributes().add(new DynamicAttributeField("test4", "test4"));
+        testObject.setTaxRate(BigDecimal.ZERO);
 
         long newContractId = service.save(testObject);
 
