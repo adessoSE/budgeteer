@@ -26,6 +26,8 @@ import org.wickedsource.budgeteer.web.BudgeteerSession;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
@@ -171,7 +173,7 @@ public class BudgetReportService {
     private BudgetReportData enrichReportData(BudgetDetailData budget, DateRange dateRange) {
         ContractBaseData contract;
 		List<? extends SheetTemplateSerializable> attributes = null;
-		double taxRate = 0.0;
+		BigDecimal taxRate = BigDecimal.ZERO;
 		if (budget.getContractId() != 0L) {
 			contract = contractService.getContractById(budget.getContractId());
 			taxRate = contract.getTaxRate();
@@ -183,7 +185,7 @@ public class BudgetReportService {
 		double spentMoneyInPeriod = toMoneyNullsafe(spentMoneyInPeriodInCents).getAmount().doubleValue();
 		Double spentMoneyInCents = workRecordRepository.getSpentBudgetUntilDate(budget.getId(), dateRange.getEndDate());
 		double spentMoney = toMoneyNullsafe(spentMoneyInCents).getAmount().doubleValue();
-		double taxCoefficient = 1.0 + taxRate / 100;
+		BigDecimal taxCoefficient = BigDecimal.ONE.add(taxRate.divide(BigDecimal.valueOf(100), 4, RoundingMode.HALF_DOWN));
 		double totalMoney = budget.getTotal().getAmount().doubleValue();
         Double progress = (Math.abs(totalMoney) < Math.ulp(1.0) && Math.abs(spentMoney) < Math.ulp(1.0)) ? null : spentMoney / totalMoney;
 		double totalHours = workRecordRepository.getTotalHoursInTimeRange(budget.getId(), dateRange.getStartDate(),
@@ -195,9 +197,9 @@ public class BudgetReportService {
 		data.setUntil(dateRange.getEndDate());
 		data.setAttributes(attributes);
 		data.setSpent_net(spentMoneyInPeriod);
-		data.setSpent_gross(spentMoneyInPeriod * taxCoefficient);
+		data.setSpent_gross(spentMoneyInPeriod * taxCoefficient.doubleValue());
 		data.setBudgetRemaining_net(totalMoney - spentMoney);
-		data.setBudgetRemaining_gross((totalMoney - spentMoney) * taxCoefficient);
+		data.setBudgetRemaining_gross((totalMoney - spentMoney) * taxCoefficient.doubleValue());
 		data.setHoursAggregated(totalHours);
 		data.setProgress(progress);
 		return data;

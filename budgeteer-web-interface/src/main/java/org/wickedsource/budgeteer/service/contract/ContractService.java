@@ -88,10 +88,10 @@ public class ContractService {
         contractEntity.setLink(contractBaseData.getFileModel().getLink());
         contractEntity.setFileName(contractBaseData.getFileModel().getFileName());
         contractEntity.setFile(contractBaseData.getFileModel().getFile());
-        if (contractBaseData.getTaxRate() < 0) {
+        if(contractBaseData.getTaxRate().compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException("Taxrate must be positive.");
         } else {
-            contractEntity.setTaxRate(new BigDecimal(contractBaseData.getTaxRate()));
+            contractEntity.setTaxRate(contractBaseData.getTaxRate());
         }
 
         // Use LinkedHashMap as backing map implementation to ensure insertion order

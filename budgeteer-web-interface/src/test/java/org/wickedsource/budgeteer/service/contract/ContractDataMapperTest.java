@@ -11,6 +11,8 @@ import org.wickedsource.budgeteer.IntegrationTestTemplate;
 import org.wickedsource.budgeteer.persistence.contract.ContractEntity;
 import org.wickedsource.budgeteer.persistence.contract.ContractRepository;
 
+import java.math.BigDecimal;
+
 class ContractDataMapperTest extends IntegrationTestTemplate {
 
     @Autowired
@@ -25,7 +27,7 @@ class ContractDataMapperTest extends IntegrationTestTemplate {
     void whenTaxrateIsNotNull() {
         ContractEntity contractEntity = contractRepository.findOne(4L);
         ContractBaseData contractBaseData = testSubject.map(contractEntity);
-        Assertions.assertThat(contractBaseData.getTaxRate()).isCloseTo(100, Percentage.withPercentage(10e-8));
+        Assertions.assertThat(contractBaseData.getTaxRate()).isCloseTo(BigDecimal.valueOf(100), Percentage.withPercentage(10e-8));
     }
 
 }
