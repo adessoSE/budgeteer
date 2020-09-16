@@ -80,6 +80,7 @@ public class EditContractForm extends Form<ContractBaseData> {
         add(budgetTextfield);
         
         TextField<BigDecimal> taxrateTextfield = new TextField<>("taxrate", model(from(getModelObject()).getTaxRate()));
+        taxrateTextfield.setRequired(true);
         add(taxrateTextfield);
 
         if(getModelObject().getStartDate() == null){
