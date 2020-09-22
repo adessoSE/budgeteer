@@ -19,7 +19,8 @@ import java.util.List;
 @Entity
 @Table(name = "BUDGET",
         uniqueConstraints = {
-                @UniqueConstraint(name = "UNIQUE_IMPORT_KEY_PER_PROJECT", columnNames = {"PROJECT_ID", "IMPORT_KEY"})
+                @UniqueConstraint(name = "UNIQUE_IMPORT_KEY_PER_PROJECT", columnNames = {"PROJECT_ID", "IMPORT_KEY"}),
+                @UniqueConstraint(name = "UNIQUE_NAME_PER_PROJECT", columnNames = {"PROJECT_ID", "NAME"})
         })
 @Getter
 @Setter
@@ -31,7 +32,7 @@ public class BudgetEntity implements Comparable<BudgetEntity> {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_BUDGET_ID")
     private long id;
 
-    @Column(nullable = false, length = 255)
+    @Column(name="NAME", nullable = false, length = 255)
     private String name;
 
     @Column(length = 255)

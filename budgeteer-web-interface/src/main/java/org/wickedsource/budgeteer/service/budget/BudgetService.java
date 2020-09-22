@@ -20,6 +20,9 @@ import org.wickedsource.budgeteer.service.UnknownEntityException;
 import org.wickedsource.budgeteer.service.contract.ContractDataMapper;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.components.listMultipleChoiceWithGroups.OptionGroup;
+import org.wickedsource.budgeteer.web.pages.budgets.exception.InvalidBudgetImportKeyAndNameException;
+import org.wickedsource.budgeteer.web.pages.budgets.exception.InvalidBudgetImportKeyException;
+import org.wickedsource.budgeteer.web.pages.budgets.exception.InvalidBudgetNameException;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
@@ -241,6 +244,7 @@ public class BudgetService {
         data.setNote(budget.getNote());
         data.setTags(mapEntitiesToTags(budget.getTags()));
         data.setImportKey(budget.getImportKey());
+        data.setProjectId(budget.getProject().getId());
         data.setContract(contractDataMapper.map(budget.getContract()));
         return data;
     }
@@ -252,13 +256,26 @@ public class BudgetService {
      * @return the
      */
     public long saveBudget(EditBudgetData data) {
-        assert data != null;
+
         BudgetEntity budget = new BudgetEntity();
         if (data.getId() != 0) {
             budget = budgetRepository.findOne(data.getId());
         } else {
             ProjectEntity project = projectRepository.findOne(data.getProjectId());
             budget.setProject(project);
+        }
+
+        boolean duplicateImportKey = !Objects.equals(budget.getImportKey(), data.getImportKey()) && budgetRepository.existsByImportKeyAndProjectId(data.getImportKey(), data.getProjectId());
+        boolean duplicateName = !Objects.equals(budget.getName(), data.getTitle()) && budgetRepository.existsByNameAndProjectId(data.getTitle(), data.getProjectId());
+
+        if (duplicateImportKey && duplicateName) {
+            throw new InvalidBudgetImportKeyAndNameException();
+        }
+        if (duplicateImportKey) {
+            throw new InvalidBudgetImportKeyException();
+        }
+        if (duplicateName) {
+            throw new InvalidBudgetNameException();
         }
         budget.setImportKey(data.getImportKey());
         budget.setDescription(data.getDescription());

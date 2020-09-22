@@ -11,6 +11,10 @@ import java.util.List;
 
 public interface BudgetRepository extends CrudRepository<BudgetEntity, Long> {
 
+    boolean existsByImportKeyAndProjectId(String importKey, long projectId);
+
+    boolean existsByNameAndProjectId(String name, long projectId);
+
     @Query("select distinct t.tag from BudgetTagEntity t where t.budget.project.id = :projectId")
     List<String> getAllTagsInProject(@Param("projectId") long projectId);
 
