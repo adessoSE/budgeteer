@@ -118,7 +118,7 @@ public class EditPersonForm extends Form<PersonWithRates> {
                                 missingDailyRateForBudgetBean.getStartDate().compareTo(rate.getDateRange().getStartDate()) == 0 &&
                                 missingDailyRateForBudgetBean.getEndDate().compareTo(rate.getDateRange().getEndDate()) == 0)
                 );
-                showMissingDailyRateContainer();
+                missingDailyRateTableContainer.setVisible(false);
             }
 
             @Override
