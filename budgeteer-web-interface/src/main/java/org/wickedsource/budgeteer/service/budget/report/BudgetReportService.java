@@ -1,7 +1,6 @@
 package org.wickedsource.budgeteer.service.budget.report;
 
 import org.apache.poi.ss.formula.eval.NotImplementedException;
-import org.apache.poi.ss.formula.eval.NotImplementedFunctionException;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFFormulaEvaluator;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -29,10 +28,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -113,7 +109,7 @@ public class BudgetReportService {
 	private List<BudgetSummary> createBudgetSummary(List<BudgetReportData> budgetList) {
         Set<String> recipients = new HashSet<>();
         budgetList.forEach(
-				budget -> recipients.add(getAttribute("rechnungsempfaenger", budget.getAttributes())));
+				budget -> recipients.add(SheetTemplateSerializable.getAttribute("rechnungsempfaenger", budget.getAttributes())));
 
 		List<BudgetSummary> summary = recipients.stream().map(description -> new BudgetSummary(description))
 				.collect(Collectors.toList());
@@ -122,18 +118,6 @@ public class BudgetReportService {
 
 	private XSSFWorkbook getSheetWorkbook(long id) {
     	return templateService.getById(id).getWb();
-	}
-
-	private String getAttribute(String string, List<? extends SheetTemplateSerializable> list) {
-		if (null == list) {
-			return "";
-		}
-		for (SheetTemplateSerializable listEntry : list) {
-			if (listEntry.getName().equals(string)) {
-				return listEntry.getValue().toString();
-			}
-		}
-		return "";
 	}
 
 	private File createOutputFile(XSSFWorkbook wb) {
