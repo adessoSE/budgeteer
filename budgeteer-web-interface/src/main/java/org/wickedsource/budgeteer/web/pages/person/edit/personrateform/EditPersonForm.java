@@ -150,12 +150,15 @@ public class EditPersonForm extends Form<PersonWithRates> {
                     EditPersonForm.this.getModelObject().setName(nameTextField.getInput());
                     EditPersonForm.this.getModelObject().setImportKey(importKeyTextField.getInput());
                     EditPersonForm.this.getModelObject().setDefaultDailyRate(defaultDailyRate);
-                    personService.savePersonWithRates(EditPersonForm.this.getModelObject());
+                    List<String> errors = personService.savePersonWithRates(EditPersonForm.this.getModelObject());
                     List<String> warnings = personService.getOverlapWithManuallyEditedRecords(EditPersonForm.this.getModelObject(),
                             BudgeteerSession.get().getProjectId());
                     this.success(getString("form.success"));
-                    for (String e : warnings) {
-                        this.info(e);
+                    for (String warning : warnings) {
+                        this.info(warning);
+                    }
+                    for (String error : errors) {
+                        this.error(error);
                     }
                 }
                 showMissingDailyRateContainer();
@@ -193,10 +196,10 @@ public class EditPersonForm extends Form<PersonWithRates> {
                 }
 
                 List<PersonRate> missingRates = missingDailyRateForBudgetBeans.stream()
-                        .map(missingDailyRate -> new PersonRate()
-                                .setBudget(budgetService.loadBudgetBaseData(missingDailyRate.getBudgetId()))
-                                .setRate(currentDefaultDailyRate)
-                                .setDateRange(new DateRange(missingDailyRate.getStartDate(), missingDailyRate.getEndDate())))
+                        .map(missingDailyRate -> new PersonRate(currentDefaultDailyRate,
+                                budgetService.loadBudgetBaseData(missingDailyRate.getBudgetId()),
+                                new DateRange(missingDailyRate.getStartDate(), missingDailyRate.getEndDate())
+                        ))
                         .collect(Collectors.toList());
 
                 EditPersonForm.this.getModelObject().getRates().addAll(missingRates);
