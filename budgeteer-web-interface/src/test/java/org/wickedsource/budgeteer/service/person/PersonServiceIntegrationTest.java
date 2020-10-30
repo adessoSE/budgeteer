@@ -56,15 +56,13 @@ class PersonServiceIntegrationTest extends IntegrationTestTemplate {
         person.setPersonId(1L);
         person.setName("name");
         person.setImportKey("name");
-        PersonRate rate1 = new PersonRate();
-        rate1.setRate(MoneyUtil.createMoneyFromCents(12300L));
-        rate1.setDateRange(new DateRange(format.parse("01.01.2014"), format.parse("15.08.2014")));
-        rate1.setBudget(new BudgetBaseData(1L, "budget1"));
+        PersonRate rate1 = new PersonRate(MoneyUtil.createMoneyFromCents(12300L),
+                new BudgetBaseData(1L, "budget1"),
+                new DateRange(format.parse("01.01.2014"), format.parse("15.08.2014")));
         person.getRates().add(rate1);
-        PersonRate rate2 = new PersonRate();
-        rate2.setRate(MoneyUtil.createMoneyFromCents(32100L));
-        rate2.setDateRange(new DateRange(format.parse("01.01.2015"), format.parse("15.08.2015")));
-        rate2.setBudget(new BudgetBaseData(1L, "budget1"));
+        PersonRate rate2 = new PersonRate(MoneyUtil.createMoneyFromCents(32100L),
+                new BudgetBaseData(1L, "budget1"),
+                new DateRange(format.parse("01.01.2015"), format.parse("15.08.2015")));
         person.getRates().add(rate2);
         service.savePersonWithRates(person);
 

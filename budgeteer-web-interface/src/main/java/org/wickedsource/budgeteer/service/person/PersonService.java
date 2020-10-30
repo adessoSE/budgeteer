@@ -85,10 +85,9 @@ public class PersonService {
             budget.setId(rateEntity.getBudget().getId());
             budget.setName(rateEntity.getBudget().getName());
 
-            PersonRate rate = new PersonRate();
-            rate.setBudget(budget);
-            rate.setDateRange(new DateRange(rateEntity.getDateStart(), rateEntity.getDateEnd()));
-            rate.setRate(rateEntity.getRate());
+            PersonRate rate = new PersonRate(rateEntity.getRate(),
+                    budget,
+                    new DateRange(rateEntity.getDateStart(), rateEntity.getDateEnd()));
 
             person.getRates().add(rate);
         }
