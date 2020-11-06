@@ -15,6 +15,7 @@ public class PersonBaseData implements Serializable {
     private String name;
     private Money averageDailyRate;
     private Date lastBooked;
+    private Money defaultDailyRate;
 
     public PersonBaseData(Long id) {
         this.id = id;
