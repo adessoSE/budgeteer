@@ -18,6 +18,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Transactional
 @Service
@@ -69,23 +70,11 @@ public class ContractReportService {
 	private List<ContractReportSummary> createSummary(List<ContractReportData> contractReportList) {
 		Set<String> recipients = new HashSet<>();
 		contractReportList.forEach(
-				contract -> recipients.add(getAttribute("rechnungsempfaenger", contract.getAttributes())));
+				contract -> recipients.add(SheetTemplateSerializable.getAttribute("rechnungsempfaenger", contract.getAttributes())));
 
 		List<ContractReportSummary> summary = recipients.stream().map(description -> new ContractReportSummary(description))
 				.collect(Collectors.toList());
 		return summary;
-	}
-
-	private String getAttribute(String string, List<? extends SheetTemplateSerializable> list) {
-		if (null == list) {
-			return "";
-		}
-		for (SheetTemplateSerializable listEntry : list) {
-			if (listEntry.getName().equals(string)) {
-				return listEntry.getValue().toString();
-			}
-		}
-		return "";
 	}
 
 	private File outputfile(XSSFWorkbook wb) {
