@@ -1,9 +1,14 @@
 package org.wickedsource.budgeteer.service;
 
+import org.apache.wicket.markup.html.basic.Label;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
+
+import static org.wicketstuff.lazymodel.LazyModel.from;
+import static org.wicketstuff.lazymodel.LazyModel.model;
 
 @Component
 public class DateUtil {
@@ -88,5 +93,10 @@ public class DateUtil {
             result.add(currentYear - range + i);
         }
         return result;
+    }
+
+    public static String formatDate(Date date) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        return dateFormat.format(date);
     }
 }

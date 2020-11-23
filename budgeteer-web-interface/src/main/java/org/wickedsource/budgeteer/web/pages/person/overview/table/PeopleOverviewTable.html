@@ -3,18 +3,18 @@
         <thead>
         <tr>
             <th>Name</th>
-            <th>Avg. Daily Rate</th>
-            <th>Default Daily Rate</th>
-            <th>Last booked</th>
+            <th class="text-right" style="padding-right: 2em">Avg. Daily Rate</th>
+            <th class="text-right" style="padding-right: 2em">Default Daily Rate</th>
+            <th class="text-right" style="padding-right: 2em">Last booked</th>
             <th> </th>
         </tr>
         </thead>
         <tbody>
         <tr wicket:id="personList">
             <td><a wicket:id="personLink"><span wicket:id="personName"></span></a></td>
-            <td wicket:id="dailyRate">€1200</td>
-            <td wicket:id="defaultDailyRate">€100</td>
-            <td wicket:id="lastBookedDate">28.09.2014</td>
+            <td wicket:id="dailyRate" class="text-right" >€1200</td>
+            <td wicket:id="defaultDailyRate" class="text-right" >€100</td>
+            <td wicket:id="lastBookedDate" class="text-right" >28.09.2014</td>
             <td> <button class="btn btn-default btn-sm fa fa-edit" wicket:id="editPage"> </button></td>
         </tr>
         </tbody>

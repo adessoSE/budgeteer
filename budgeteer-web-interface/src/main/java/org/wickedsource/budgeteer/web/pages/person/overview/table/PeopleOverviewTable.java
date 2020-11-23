@@ -11,8 +11,10 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.wickedsource.budgeteer.MoneyUtil;
+import org.wickedsource.budgeteer.service.DateUtil;
 import org.wickedsource.budgeteer.service.person.PersonBaseData;
 import org.wickedsource.budgeteer.web.components.dataTable.DataTableBehavior;
+import org.wickedsource.budgeteer.web.components.datelabel.DateLabel;
 import org.wickedsource.budgeteer.web.components.money.MoneyLabel;
 import org.wickedsource.budgeteer.web.pages.person.details.PersonDetailsPage;
 import org.wickedsource.budgeteer.web.pages.person.edit.EditPersonPage;
@@ -46,10 +48,10 @@ public class PeopleOverviewTable extends Panel {
                 link.add(new Label("personName", modelObject.getName()));
                 item.add(link);
                 item.add(new MoneyLabel("dailyRate", model(from(modelObject).getAverageDailyRate())));
-                item.add(new Label("defaultDailyRate", modelObject.getDefaultDailyRate() == null ?
-                        null :
-                        String.format("%1$,.2f", MoneyUtil.toDouble(modelObject.getDefaultDailyRate()))));
-                item.add(new Label("lastBookedDate", modelObject.getLastBooked()));
+                item.add(modelObject.getDefaultDailyRate() == null ?
+                        new Label("defaultDailyRate", getString("nullString")) 
+                        : new MoneyLabel("defaultDailyRate", model(from(modelObject).getDefaultDailyRate())));
+                item.add(new DateLabel("lastBookedDate", model(from(modelObject).getLastBooked()), true));
 
                 Link editPersonLink = new Link("editPage") {
                     @Override
