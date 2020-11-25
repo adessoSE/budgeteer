@@ -110,6 +110,8 @@ dependencies {
             files("lib/ojdbc7.jar", "lib/orai18n.jar")
     )
 
+    runtime 'org.postgresql:postgresql'
+
     testCompile(
             [group: 'org.kubek2k', name: 'springockito', version: "${springockito_version}"],
             [group: 'org.kubek2k', name: 'springockito-annotations', version: "${springockito_version}"],
