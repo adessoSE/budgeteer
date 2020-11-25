@@ -6,8 +6,6 @@ RUN gradle bootRepackage --no-daemon
 FROM openjdk:8-jre-slim
 EXPOSE 8080
 
-RUN mkdir /app
+COPY --from=build /home/gradle/src/budgeteer-web-interface/build/libs/*.war /budgeteer.war
 
-COPY --from=build /home/gradle/src/budgeteer-web-interface/build/libs/*.war /app/budgeteer.war
-
-ENTRYPOINT ["java","-jar","/app/budgeteer.war"]
+ENTRYPOINT ["java","-jar","/budgeteer.war"]
