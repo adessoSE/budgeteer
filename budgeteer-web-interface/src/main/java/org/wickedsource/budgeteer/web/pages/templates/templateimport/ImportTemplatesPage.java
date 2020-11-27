@@ -93,11 +93,18 @@ public class ImportTemplatesPage extends DialogPageWithBacklink {
                     if(model(from(templateFormInputDto)).getObject().getType() == null){
                         error(getString("message.error.no.type"));
                     }
+
                     ImportFile file = new ImportFile(fileUploads.get(0).getClientFileName(), fileUploads.get(0).getInputStream());
-                    if(model(from(templateFormInputDto)).getObject().getName() != null && model(from(templateFormInputDto)).getObject().getType() != null){
+
+                    if (!(file.getFilename().endsWith("xlsx") || file.getFilename().endsWith("xls"))) {
+                        error(getString("message.invalidFormatException"));
+                    }
+
+                    if (!hasErrorMessage()) {
                         service.doImport(BudgeteerSession.get().getProjectId(), file, model(from(templateFormInputDto)));
                         success(getString("message.success"));
                     }
+
                 }  catch (IOException e) {
                     error(String.format(getString("message.ioError"), e.getMessage()));
                 }  catch (IllegalArgumentException e) {
