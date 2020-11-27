@@ -122,6 +122,33 @@ public class ImportTemplatesPageTest extends AbstractWebTestTemplate {
         assertThat(tester.getFeedbackMessages(null)).hasSize(1);
     }
 
+    @Test
+    void incorrectFileExtension(){
+        WicketTester tester = getTester();
+        ImportTemplatesPage testPage = new ImportTemplatesPage(TemplatesPage.class, new PageParameters());
+        tester.startPage(testPage);
+        Assertions.assertNotNull(testPage.get("importForm"));
+        FormTester formTester = tester.newFormTester("importForm", true);
+        formTester.setClearFeedbackMessagesBeforeSubmit(true);
+        formTester.setFile("fileUpload", getIncorrectTemplateFile(), "txt");
+        formTester.setValue("name", "TEST_N");
+        formTester.setValue("description", "TEST_D");
+        formTester.select("type", 1);
+        tester.executeAjaxEvent("importForm:save", "onclick");
+        tester.assertRenderedPage(ImportTemplatesPage.class);
+        tester.assertErrorMessages( "The file did not match the expected file format. Please choose a .xls- or a .xlsx-file.");
+        assertThat(tester.getFeedbackMessages(null)).hasSize(1);
+    }
+
+    private File getIncorrectTemplateFile(){
+        try {
+            return new File(getClass().getResource("incorrectTemplateFile.txt").toURI());
+        }catch (URISyntaxException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     private File getExampleTemplate(){
         try {
             return new File(getClass().getResource("exampleTemplate1.xlsx").toURI());
