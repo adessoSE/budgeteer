@@ -33,12 +33,12 @@ public class AggregatedRecord {
             aggregationPeriodStart = c.getTime();
             c.add(Calendar.MONTH, 1);
             c.add(Calendar.DAY_OF_YEAR, -1);
-            aggregationPeriodTitle = String.format("%d/%02d", planAndWorkRecord.getYear(), planAndWorkRecord.getMonth() + 1);
+            aggregationPeriodTitle = String.format("Month %d-%02d", planAndWorkRecord.getYear(), planAndWorkRecord.getMonth() + 1);
         } else {
             c.set(Calendar.WEEK_OF_YEAR, planAndWorkRecord.getWeek());
             aggregationPeriodStart = c.getTime();
             c.add(Calendar.DAY_OF_YEAR, 6);
-            aggregationPeriodTitle = String.format("Week #%d", planAndWorkRecord.getWeek());
+            aggregationPeriodTitle = String.format("Week %d-%d", planAndWorkRecord.getYear(), planAndWorkRecord.getWeek());
         }
 
         aggregationPeriodEnd = c.getTime();
