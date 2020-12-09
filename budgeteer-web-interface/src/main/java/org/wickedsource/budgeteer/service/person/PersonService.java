@@ -20,7 +20,9 @@ import org.wickedsource.budgeteer.web.planning.Person;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -85,10 +87,9 @@ public class PersonService {
             budget.setId(rateEntity.getBudget().getId());
             budget.setName(rateEntity.getBudget().getName());
 
-            PersonRate rate = new PersonRate();
-            rate.setBudget(budget);
-            rate.setDateRange(new DateRange(rateEntity.getDateStart(), rateEntity.getDateEnd()));
-            rate.setRate(rateEntity.getRate());
+            PersonRate rate = new PersonRate(rateEntity.getRate(),
+                    budget,
+                    new DateRange(rateEntity.getDateStart(), rateEntity.getDateEnd()));
 
             person.getRates().add(rate);
         }
@@ -101,15 +102,24 @@ public class PersonService {
      *
      * @param person the data to save in the database.
      */
-    public void savePersonWithRates(PersonWithRates person) {
+    public List<String> savePersonWithRates(PersonWithRates person) {
         PersonEntity personEntity = personRepository.findOne(person.getPersonId());
         personEntity.setName(person.getName());
         personEntity.setImportKey(person.getImportKey());
         personEntity.setDefaultDailyRate(person.getDefaultDailyRate());
 
         List<DailyRateEntity> dailyRates = new ArrayList<>();
-
+        List<String> errors = new ArrayList<>();
         for (PersonRate rate : person.getRates()) {
+            List<String> errorList = this.updateDailyRates(rate.getBudget(),
+                    person,
+                    rate.getDateRange(),
+                    rate.getRate());
+
+            if (!errorList.isEmpty()) {
+                errors.addAll(errorList);
+                continue;
+            }
 
             DailyRateEntity rateEntity = new DailyRateEntity();
             rateEntity.setRate(rate.getRate());
@@ -118,14 +128,12 @@ public class PersonService {
             rateEntity.setDateStart(rate.getDateRange().getStartDate());
             rateEntity.setDateEnd(rate.getDateRange().getEndDate());
             dailyRates.add(rateEntity);
-            workRecordRepository.updateDailyRates(rate.getBudget().getId(), person.getPersonId(),
-                    rate.getDateRange().getStartDate(), rate.getDateRange().getEndDate(), rate.getRate());
-
 
         }
         personEntity.getDailyRates().clear();
         personEntity.getDailyRates().addAll(dailyRates);
         personRepository.save(personEntity);
+        return errors;
     }
 
     public List<String> getOverlapWithManuallyEditedRecords(PersonWithRates person, long projectId){
@@ -178,7 +186,33 @@ public class PersonService {
     }
 
     public void removeDailyRateFromPerson(PersonWithRates personWithRates, PersonRate rate) {
-        workRecordRepository.updateDailyRates(rate.getBudget().getId(), personWithRates.getPersonId(),
-                rate.getDateRange().getStartDate(), rate.getDateRange().getEndDate(), Money.zero(CurrencyUnit.EUR));
+        this.updateDailyRates(rate.getBudget(), personWithRates, rate.getDateRange(), Money.zero(CurrencyUnit.EUR));
+    }
+
+    private List<String> updateDailyRates(BudgetBaseData budget, PersonWithRates person, DateRange dateRange, Money dailyRate) {
+        List<String> errorMessages = new ArrayList<>();
+        if (budget == null) {
+            errorMessages.add("Budget shouldn't be null!");
+        }
+        if (person == null){
+            errorMessages.add("Person shouldn't be null!");
+        }
+        if (dailyRate == null) {
+            errorMessages.add("Daily Rate shouldn't be null!");
+        }
+        if (dateRange == null || dateRange.getStartDate() == null || dateRange.getEndDate() == null) {
+            errorMessages.add("Date Range shouldn't be null!");
+        }
+
+        if (!errorMessages.isEmpty()) {
+            errorMessages.add("The Daily Rate wasn't updated because of invalid values");
+            return errorMessages;
+        }
+        workRecordRepository.updateDailyRates(budget.getId(),
+                person.getPersonId(),
+                dateRange.getStartDate(),
+                dateRange.getEndDate(),
+                dailyRate);
+        return Collections.emptyList();
     }
 }
