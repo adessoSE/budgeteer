@@ -7,6 +7,7 @@ import org.wickedsource.budgeteer.persistence.invoice.InvoiceEntity;
 import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -43,6 +44,7 @@ public class ContractEntity implements Serializable {
     @Column(name="BUDGET")
     private Money budget;
 
+    @NotNull
     @Column(name = "TAXRATE", precision = 10, scale = 4)
     private BigDecimal taxRate;
 

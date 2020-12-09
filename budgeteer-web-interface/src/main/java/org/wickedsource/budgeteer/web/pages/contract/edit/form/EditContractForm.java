@@ -12,6 +12,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.validation.validator.RangeValidator;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.wickedsource.budgeteer.persistence.contract.ContractEntity;
 import org.wickedsource.budgeteer.service.DateUtil;
@@ -24,6 +25,7 @@ import org.wickedsource.budgeteer.web.components.daterange.DateInputField;
 import org.wickedsource.budgeteer.web.components.fileUpload.CustomFileUpload;
 import org.wickedsource.budgeteer.web.components.money.MoneyTextField;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 
 import static org.wicketstuff.lazymodel.LazyModel.from;
@@ -78,7 +80,9 @@ public class EditContractForm extends Form<ContractBaseData> {
         budgetTextfield.setRequired(true);
         add(budgetTextfield);
         
-        NumberTextField<Double> taxrateTextfield = new NumberTextField<>("taxrate", model(from(getModelObject()).getTaxRate()));
+        TextField<BigDecimal> taxrateTextfield = new TextField<>("taxrate", model(from(getModelObject()).getTaxRate()));
+        taxrateTextfield.setRequired(true);
+        taxrateTextfield.add(RangeValidator.minimum(BigDecimal.ZERO));
         add(taxrateTextfield);
 
         if(getModelObject().getStartDate() == null){

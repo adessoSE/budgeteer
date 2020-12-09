@@ -60,9 +60,9 @@ public class TotalContractDetailsModel extends LoadableDetachableModel<ContractT
             totalData.setBudget(totalData.getBudget().plus(single.getBudget()));
             totalData.setBudgetLeft(totalData.getBudgetLeft().plus(single.getBudgetLeft()));
 
-            totalData.setBudgetGross(totalData.getBudgetGross().plus(MoneyUtil.getMoneyWithTaxes(single.getBudget(), BigDecimal.valueOf(single.getTaxRate()))));
-            totalData.setBudgetLeftGross(totalData.getBudgetLeftGross().plus(MoneyUtil.getMoneyWithTaxes(single.getBudgetLeft(), BigDecimal.valueOf(single.getTaxRate()))));
-            totalData.setBudgetSpentGross(totalData.getBudgetSpentGross().plus(MoneyUtil.getMoneyWithTaxes(single.getBudgetSpent(), BigDecimal.valueOf(single.getTaxRate()))));
+            totalData.setBudgetGross(totalData.getBudgetGross().plus(MoneyUtil.getMoneyWithTaxes(single.getBudget(), single.getTaxRate())));
+            totalData.setBudgetLeftGross(totalData.getBudgetLeftGross().plus(MoneyUtil.getMoneyWithTaxes(single.getBudgetLeft(), single.getTaxRate())));
+            totalData.setBudgetSpentGross(totalData.getBudgetSpentGross().plus(MoneyUtil.getMoneyWithTaxes(single.getBudgetSpent(), single.getTaxRate())));
         }
 
         return totalData;
