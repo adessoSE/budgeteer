@@ -17,6 +17,7 @@ public class PersonBaseDataMapper extends AbstractMapper<PersonBaseDataBean, Per
         }
         data.setLastBooked(sourceObject.getLastBookedDate());
         data.setName(sourceObject.getName());
+        data.setDefaultDailyRate(sourceObject.getDefaultDailyRate());
         return data;
     }
 }

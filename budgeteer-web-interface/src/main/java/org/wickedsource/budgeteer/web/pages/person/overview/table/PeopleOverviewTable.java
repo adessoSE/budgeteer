@@ -10,6 +10,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.wickedsource.budgeteer.MoneyUtil;
 import org.wickedsource.budgeteer.service.person.PersonBaseData;
 import org.wickedsource.budgeteer.web.components.dataTable.DataTableBehavior;
 import org.wickedsource.budgeteer.web.components.money.MoneyLabel;
@@ -45,6 +46,9 @@ public class PeopleOverviewTable extends Panel {
                 link.add(new Label("personName", modelObject.getName()));
                 item.add(link);
                 item.add(new MoneyLabel("dailyRate", model(from(modelObject).getAverageDailyRate())));
+                item.add(new Label("defaultDailyRate", modelObject.getDefaultDailyRate() == null ?
+                        null :
+                        String.format("%1$,.2f", MoneyUtil.toDouble(modelObject.getDefaultDailyRate()))));
                 item.add(new Label("lastBookedDate", modelObject.getLastBooked()));
 
                 Link editPersonLink = new Link("editPage") {

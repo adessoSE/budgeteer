@@ -1,5 +1,6 @@
 package org.wickedsource.budgeteer.service.person;
 
+import org.joda.money.Money;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,7 @@ class PersonServiceTest extends ServiceTestTemplate {
         Assertions.assertEquals("person1", data.get(0).getName());
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(10000L), data.get(0).getAverageDailyRate());
         Assertions.assertEquals(fixedDate, data.get(0).getLastBooked());
+        Assertions.assertEquals(MoneyUtil.createMoney(10), data.get(0).getDefaultDailyRate());
     }
 
 
@@ -58,10 +60,11 @@ class PersonServiceTest extends ServiceTestTemplate {
         Assertions.assertEquals("person1", bean.getName());
         Assertions.assertEquals(MoneyUtil.createMoneyFromCents(10000L), bean.getAverageDailyRate());
         Assertions.assertEquals(fixedDate, bean.getLastBooked());
+        Assertions.assertEquals(MoneyUtil.createMoney(10), bean.getDefaultDailyRate());
     }
 
     private PersonBaseDataBean createPersonBaseDataBean() {
-        return new PersonBaseDataBean(1L, "person1", 500000000L, 50000L, fixedDate);
+        return new PersonBaseDataBean(1L, "person1", 500000000L, 50000L, fixedDate, MoneyUtil.createMoney(10));
     }
 
     private PersonDetailDataBean createPersonDetailDataBean() {
