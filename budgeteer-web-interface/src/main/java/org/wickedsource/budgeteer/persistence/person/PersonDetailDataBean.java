@@ -21,7 +21,7 @@ public class PersonDetailDataBean {
     public PersonDetailDataBean(Long id, String name, Long valuedMinutes, Long valuedRate, Date firstBookedDate, Date lastBookedDate, Double hoursBooked, Long budgetBurnedInCents) {
         this.id = id;
         this.name = name;
-        if (valuedRate == 0L)
+        if (valuedRate == null || valuedRate == 0L)
             this.averageDailyRateInCents = 0L;
         else
             this.averageDailyRateInCents = valuedMinutes / valuedRate;
