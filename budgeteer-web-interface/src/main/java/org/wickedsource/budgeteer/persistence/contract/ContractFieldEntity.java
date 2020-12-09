@@ -1,6 +1,8 @@
 package org.wickedsource.budgeteer.persistence.contract;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.wickedsource.budgeteer.persistence.project.ProjectContractField;
 
 import javax.persistence.*;
@@ -8,6 +10,7 @@ import java.io.Serializable;
 
 @Data
 @Entity
+@NoArgsConstructor
 @Table(name="CONTRACT_FIELD")
 public class ContractFieldEntity implements Serializable{
 
@@ -26,5 +29,10 @@ public class ContractFieldEntity implements Serializable{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CONTRACT_ID")
     private ContractEntity contract;
+
+    public ContractFieldEntity(ProjectContractField field, String value) {
+        this.field = field;
+        this.value = value;
+    }
 
 }
