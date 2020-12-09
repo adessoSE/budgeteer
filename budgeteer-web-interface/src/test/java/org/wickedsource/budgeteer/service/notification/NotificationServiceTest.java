@@ -68,7 +68,7 @@ class NotificationServiceTest extends ServiceTestTemplate {
     }
 
     private MissingDailyRateForBudgetBean createMissingDailyRateForBudget() {
-        return new MissingDailyRateForBudgetBean(1L, "person1", fixedDate, fixedDate, "Budget1");
+        return new MissingDailyRateForBudgetBean(1L, "person1", fixedDate, fixedDate, "Budget1", 1L);
     }
 
     private MissingBudgetTotalBean createMissingBudgetTotal() {

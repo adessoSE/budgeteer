@@ -16,6 +16,6 @@ public class MoneyAttributeConverter implements AttributeConverter<Money, Long> 
 
     @Override
     public Money convertToEntityAttribute(Long cents) {
-        return MoneyUtil.createMoneyFromCents(cents == null ? 0 : cents);
+        return cents == null ? null : MoneyUtil.createMoneyFromCents(cents);
     }
 }
