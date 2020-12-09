@@ -65,12 +65,11 @@ public class WorkRecordDatabaseImporter extends RecordDatabaseImporter {
             // trimming import keys
             record.setPersonName(record.getPersonName().trim());
             record.setBudgetName(record.getBudgetName().trim());
-            BudgetEntity budget = getBudget(record.getBudgetName());
-            ProjectEntity project = budget.getProject();
+            String budgetName = record.getBudgetName();
+            ProjectEntity project = getProject();
 
             WorkRecordEntity entity = new WorkRecordEntity();
             entity.setPerson(getPerson(record.getPersonName()));
-            entity.setBudget(budget);
             entity.setMinutes(record.getMinutesWorked());
             entity.setDate(record.getDate());
             entity.setDailyRate(getDailyRateForRecord(record));
@@ -78,9 +77,14 @@ public class WorkRecordDatabaseImporter extends RecordDatabaseImporter {
             entity.setEditedManually(false);
 
             if((project.getProjectEnd() != null && record.getDate().after(project.getProjectEnd())) ||
-                    (project.getProjectStart() != null && record.getDate().before(project.getProjectStart()))){
-                skippedRecords.add(getRecordAsString(entity));
-            }else {
+                    (project.getProjectStart() != null && record.getDate().before(project.getProjectStart()))) {
+
+                skippedRecords.add(getRecordAsString(budgetName, entity));
+
+            } else {
+                BudgetEntity budget = getBudget(budgetName);
+                entity.setBudget(budget);
+
                 if (record.getDate().before(earliestRecordDate)) {
                     earliestRecordDate = record.getDate();
                 }
@@ -146,14 +150,19 @@ public class WorkRecordDatabaseImporter extends RecordDatabaseImporter {
         return deletedRecordList;
     }
 
-    private List<String> getRecordAsString(WorkRecordEntity entity){
-        return getRecordAsString(entity, "Record is out of project-date-range");
+    private List<String> getRecordAsString(String budgetName, WorkRecordEntity entity){
+        return getRecordAsString(budgetName, entity, "Record is out of project-date-range");
     }
 
     private List<String> getRecordAsString(WorkRecordEntity entity, String reason) {
+        String budgetName = entity.getBudget().getName();
+        return getRecordAsString(budgetName, entity, reason);
+    }
+
+    private List<String> getRecordAsString(String budgetName, WorkRecordEntity entity, String reason) {
         LinkedList<String> result = new LinkedList<String>();
         result.add(entity.getPerson().getName());
-        result.add(entity.getBudget().getName());
+        result.add(budgetName);
         result.add("" + entity.getMinutes());
         result.add(format.format(entity.getDate()));
         result.add(entity.getDailyRate().toString());
