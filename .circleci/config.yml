@@ -6,9 +6,6 @@ jobs:
     steps:
       - checkout
       - run:
-          name: gradleDependencies
-          command: ./gradlew --stacktrace --console=plain resolveDependencies
-      - run:
           name: build
           command: ./gradlew --stacktrace --console=plain assemble
       - run:
