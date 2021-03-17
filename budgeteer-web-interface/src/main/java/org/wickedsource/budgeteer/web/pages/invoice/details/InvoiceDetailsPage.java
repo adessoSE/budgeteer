@@ -51,6 +51,7 @@ public class InvoiceDetailsPage extends BasePage {
         AjaxLink<Void> taxLink = new AjaxLink<Void>("taxLink") {
             @Override
             protected void onConfigure() {
+                super.onConfigure();
                 highlights.setTaxInformationVisible(taxVisible);
             }
 
