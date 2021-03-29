@@ -1,5 +1,6 @@
 package org.wickedsource.budgeteer.web.components.burntable.table;
 
+import org.apache.poi.poifs.crypt.temp.SXSSFWorkbookWithCustomZipEntrySource;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -25,6 +26,8 @@ import org.wickedsource.budgeteer.web.components.dataTable.DataTableBehavior;
 import org.wickedsource.budgeteer.web.components.money.BudgetUnitMoneyModel;
 import org.wickedsource.budgeteer.web.components.money.MoneyLabel;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -91,6 +94,21 @@ public class BurnTable extends Panel {
         });
         pageLabel.setOutputMarkupId(true);
         return pageLabel;
+    }
+
+    private Component createCurrentPageMoneyLabel() {
+        IModel<Money> spentCurrentPage = new AbstractReadOnlyModel<Money>() {
+
+            @Override
+            public Money getObject() {
+                long total = rows.getItemCount();
+                long start = rows.getFirstItemOffset();
+                long itemsOnPage = rows.getCurrentPage() == rows.getPageCount() - 1 ? total % rows.getItemsPerPage() : rows.getItemsPerPage();
+                List<WorkRecord> recordsOnPage = total == 0 ? Collections.emptyList() : model.getObject().subList((int) start, (int) (start + itemsOnPage));
+                return recordsOnPage.stream().map(WorkRecord::getBudgetBurned).reduce(MoneyUtil.ZERO, Money::plus);
+            }
+        };
+        return new MoneyLabel("spentCurrentPage", new BudgetUnitMoneyModel(spentCurrentPage));
     }
 
     private Component createMoneyLabel() {
