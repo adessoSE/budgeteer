@@ -1,6 +1,8 @@
 package org.wickedsource.budgeteer.web.components.burntable.filter;
 
 import org.apache.wicket.Page;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -10,6 +12,8 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.wickedsource.budgeteer.service.DateRange;
+import org.wickedsource.budgeteer.service.DateUtil;
 import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
 import org.wickedsource.budgeteer.service.budget.BudgetService;
 import org.wickedsource.budgeteer.service.person.PersonBaseData;
@@ -40,6 +44,7 @@ public class FilterPanel extends Panel {
 
     private boolean sortingFilterEnabled = true;
 
+    private final IModel<WorkRecordFilter> model;
 
     @SpringBean
     private PersonService personService;
@@ -50,7 +55,7 @@ public class FilterPanel extends Panel {
     @SuppressWarnings("unchecked")
     public FilterPanel(String id, WorkRecordFilter filter, Page page, PageParameters pageParameters) {
         super(id, model(from(filter)));
-        IModel<WorkRecordFilter> model = (IModel<WorkRecordFilter>) getDefaultModel();
+        this.model = (IModel<WorkRecordFilter>) getDefaultModel();
         Form<WorkRecordFilter> form = new Form<WorkRecordFilter>("filterForm", model) {
             @Override
             protected void onSubmit() {
@@ -152,7 +157,13 @@ public class FilterPanel extends Panel {
         };
         DateRangeInputField field = new DateRangeInputField("daterangeInput", model(from(form.getModel()).getDateRange()));
         field.setRequired(false);
+        AjaxLink<Void> allTimeFilter = createDateRangeFilterLink("dateRangeAllTime", null, field);
+        AjaxLink<Void> currentMonthFilter = createDateRangeFilterLink("dateRangeCurrentMonth", DateUtil.dateRangeForCurrentMonth(), field);
+        AjaxLink<Void> lastMonthFilter = createDateRangeFilterLink("dateRangeLastMonth", DateUtil.dateRangeForLastMonth(), field);
         container.add(field);
+        container.add(allTimeFilter);
+        container.add(currentMonthFilter);
+        container.add(lastMonthFilter);
         return container;
     }
 
@@ -182,5 +193,15 @@ public class FilterPanel extends Panel {
 
     public void setDaterangeFilterEnabled(boolean daterangeFilterEnabled) {
         this.daterangeFilterEnabled = daterangeFilterEnabled;
+    }
+
+    private AjaxLink<Void> createDateRangeFilterLink(String id, DateRange dateRange, DateRangeInputField field) {
+        return new AjaxLink<Void>(id) {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                model.getObject().setDateRange(dateRange);
+                target.add(field);
+            }
+        };
     }
 }
