@@ -8,7 +8,7 @@ gradle-app.setting
 build
 bin
 target
-out
+./out/**
 *.class
 *.jar
 *.war
