@@ -6,7 +6,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 @Entity
-public class ForgotPasswordToken {
+public class ForgotPasswordTokenEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
@@ -19,11 +19,11 @@ public class ForgotPasswordToken {
 
     private Date expiryDate;
 
-    public ForgotPasswordToken() {
+    public ForgotPasswordTokenEntity() {
         super();
     }
 
-    public ForgotPasswordToken(UserEntity userEntity, String token) {
+    public ForgotPasswordTokenEntity(UserEntity userEntity, String token) {
         super();
 
         this.userEntity = userEntity;

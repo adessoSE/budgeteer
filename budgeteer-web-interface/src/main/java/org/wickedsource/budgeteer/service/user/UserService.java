@@ -329,14 +329,14 @@ public class UserService {
      * @param userEntity the specific user
      * @param token      a token, which usually contains a random UUID
      */
-    public ForgotPasswordToken createForgotPasswordTokenForUser(UserEntity userEntity, String token) {
-        ForgotPasswordToken oldForgotPasswordToken = forgotPasswordTokenRepository.findByUser(userEntity);
-        if (oldForgotPasswordToken != null)
-            forgotPasswordTokenRepository.delete(oldForgotPasswordToken);
+    public ForgotPasswordTokenEntity createForgotPasswordTokenForUser(UserEntity userEntity, String token) {
+        ForgotPasswordTokenEntity oldForgotPasswordTokenEntity = forgotPasswordTokenRepository.findByUser(userEntity);
+        if (oldForgotPasswordTokenEntity != null)
+            forgotPasswordTokenRepository.delete(oldForgotPasswordTokenEntity);
 
-        ForgotPasswordToken forgotPasswordToken = new ForgotPasswordToken(userEntity, token);
-        forgotPasswordTokenRepository.save(forgotPasswordToken);
-        return forgotPasswordToken;
+        ForgotPasswordTokenEntity forgotPasswordTokenEntity = new ForgotPasswordTokenEntity(userEntity, token);
+        forgotPasswordTokenRepository.save(forgotPasswordTokenEntity);
+        return forgotPasswordTokenEntity;
     }
 
     /**
@@ -351,14 +351,14 @@ public class UserService {
      * @return returns a status code (INVALID, EXPIRED, VALID)
      */
     public int validateForgotPasswordToken(String token) {
-        ForgotPasswordToken forgotPasswordToken = forgotPasswordTokenRepository.findByToken(token);
+        ForgotPasswordTokenEntity forgotPasswordTokenEntity = forgotPasswordTokenRepository.findByToken(token);
 
-        if (forgotPasswordToken == null)
+        if (forgotPasswordTokenEntity == null)
             return TokenStatus.INVALID.statusCode();
 
         Calendar calendar = Calendar.getInstance();
 
-        if ((forgotPasswordToken.getExpiryDate().getTime() - calendar.getTime().getTime()) <= 0) {
+        if ((forgotPasswordTokenEntity.getExpiryDate().getTime() - calendar.getTime().getTime()) <= 0) {
             return TokenStatus.EXPIRED.statusCode();
         }
 
@@ -373,9 +373,9 @@ public class UserService {
      * @return returns the user found with the ForgotPasswordToken
      */
     public UserEntity getUserByForgotPasswordToken(String forgotPasswordTokenString) {
-        ForgotPasswordToken forgotPasswordToken = forgotPasswordTokenRepository.findByToken(forgotPasswordTokenString);
-        if (forgotPasswordToken != null)
-            return forgotPasswordToken.getUserEntity();
+        ForgotPasswordTokenEntity forgotPasswordTokenEntity = forgotPasswordTokenRepository.findByToken(forgotPasswordTokenString);
+        if (forgotPasswordTokenEntity != null)
+            return forgotPasswordTokenEntity.getUserEntity();
         else
             return null;
     }
@@ -386,9 +386,9 @@ public class UserService {
      * @param token the token to be deleted
      */
     public void deleteForgotPasswordToken(String token) {
-        ForgotPasswordToken forgotPasswordToken = forgotPasswordTokenRepository.findByToken(token);
+        ForgotPasswordTokenEntity forgotPasswordTokenEntity = forgotPasswordTokenRepository.findByToken(token);
 
-        if (forgotPasswordToken != null)
-            forgotPasswordTokenRepository.delete(forgotPasswordToken);
+        if (forgotPasswordTokenEntity != null)
+            forgotPasswordTokenRepository.delete(forgotPasswordTokenEntity);
     }
 }
