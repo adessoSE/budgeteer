@@ -6,7 +6,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 @Entity
-public class VerificationToken {
+public class VerificationTokenEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
@@ -19,11 +19,11 @@ public class VerificationToken {
 
     private Date expiryDate;
 
-    public VerificationToken() {
+    public VerificationTokenEntity() {
         super();
     }
 
-    public VerificationToken(UserEntity userEntity, String token) {
+    public VerificationTokenEntity(UserEntity userEntity, String token) {
         super();
 
         this.userEntity = userEntity;

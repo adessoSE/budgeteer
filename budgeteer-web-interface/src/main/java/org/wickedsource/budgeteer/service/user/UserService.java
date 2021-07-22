@@ -243,10 +243,10 @@ public class UserService {
      * @param userEntity the specific user
      * @param token      a token, which usually contains a random UUID
      */
-    public VerificationToken createVerificationTokenForUser(UserEntity userEntity, String token) {
-        VerificationToken verificationToken = new VerificationToken(userEntity, token);
-        verificationTokenRepository.save(verificationToken);
-        return verificationToken;
+    public VerificationTokenEntity createVerificationTokenForUser(UserEntity userEntity, String token) {
+        VerificationTokenEntity verificationTokenEntity = new VerificationTokenEntity(userEntity, token);
+        verificationTokenRepository.save(verificationTokenEntity);
+        return verificationTokenEntity;
     }
 
     /**
@@ -256,9 +256,9 @@ public class UserService {
      * @param userEntity the specific user
      */
     public void createNewVerificationTokenForUser(UserEntity userEntity) {
-        VerificationToken verificationToken = verificationTokenRepository.findByUser(userEntity);
-        if (verificationToken != null)
-            verificationTokenRepository.delete(verificationToken);
+        VerificationTokenEntity verificationTokenEntity = verificationTokenRepository.findByUser(userEntity);
+        if (verificationTokenEntity != null)
+            verificationTokenRepository.delete(verificationTokenEntity);
         if (Boolean.valueOf(mailActivated))
             applicationEventPublisher.publishEvent(new OnRegistrationCompleteEvent(userEntity));
     }
@@ -275,7 +275,7 @@ public class UserService {
      * @return returns a status code (INVALID, EXPIRED, VALID)
      */
     public int validateVerificationToken(String token) {
-        VerificationToken verificationToken = verificationTokenRepository.findByToken(token);
+        VerificationTokenEntity verificationToken = verificationTokenRepository.findByToken(token);
 
         if (verificationToken == null)
             return TokenStatus.INVALID.statusCode();

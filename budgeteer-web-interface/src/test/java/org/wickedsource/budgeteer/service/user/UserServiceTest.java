@@ -214,8 +214,8 @@ class UserServiceTest extends ServiceTestTemplate{
     void testCreateVerificationTokenForUser() {
         UserEntity user = createUserEntity();
         String uuid = UUID.randomUUID().toString();
-        VerificationToken verificationToken = service.createVerificationTokenForUser(user, uuid);
-        verify(verificationTokenRepository, times(1)).save(verificationToken);
+        VerificationTokenEntity verificationTokenEntity = service.createVerificationTokenForUser(user, uuid);
+        verify(verificationTokenRepository, times(1)).save(verificationTokenEntity);
     }
 
     @Test
@@ -228,11 +228,11 @@ class UserServiceTest extends ServiceTestTemplate{
     void testValidateVerificationTokenExpired() {
         UserEntity user = createUserEntity();
         String uuid = UUID.randomUUID().toString();
-        VerificationToken verificationToken = new VerificationToken(user, uuid);
+        VerificationTokenEntity verificationTokenEntity = new VerificationTokenEntity(user, uuid);
         Date date = new Date();
-        date.setTime(verificationToken.getExpiryDate().getTime() - 90000000); // 25 hours
-        verificationToken.setExpiryDate(date);
-        when(verificationTokenRepository.findByToken(uuid)).thenReturn(verificationToken);
+        date.setTime(verificationTokenEntity.getExpiryDate().getTime() - 90000000); // 25 hours
+        verificationTokenEntity.setExpiryDate(date);
+        when(verificationTokenRepository.findByToken(uuid)).thenReturn(verificationTokenEntity);
         Assertions.assertEquals(-2, service.validateVerificationToken(uuid));
     }
 
@@ -240,8 +240,8 @@ class UserServiceTest extends ServiceTestTemplate{
     void testValidateVerificationTokenValid() {
         UserEntity user = createUserEntity();
         String uuid = UUID.randomUUID().toString();
-        VerificationToken verificationToken = new VerificationToken(user, uuid);
-        when(verificationTokenRepository.findByToken(uuid)).thenReturn(verificationToken);
+        VerificationTokenEntity verificationTokenEntity = new VerificationTokenEntity(user, uuid);
+        when(verificationTokenRepository.findByToken(uuid)).thenReturn(verificationTokenEntity);
         Assertions.assertEquals(0, service.validateVerificationToken(uuid));
     }
 
