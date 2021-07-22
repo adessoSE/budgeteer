@@ -5,9 +5,11 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
 public interface ForgotPasswordTokenRepository extends CrudRepository<ForgotPasswordTokenEntity, Long> {
+    boolean existsByToken(String token);
 
-    @Query("select t from ForgotPasswordTokenEntity t where t.token = :token")
-    public ForgotPasswordTokenEntity findByToken(@Param("token") String token);
+    ForgotPasswordTokenEntity findByToken(String token);
+
+    void deleteByToken(String token);
 
     @Query("select t from ForgotPasswordTokenEntity t where t.userEntity = :user")
     public ForgotPasswordTokenEntity findByUser(@Param("user") UserEntity user);

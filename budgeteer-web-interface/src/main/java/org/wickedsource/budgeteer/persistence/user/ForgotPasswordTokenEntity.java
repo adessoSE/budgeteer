@@ -1,11 +1,13 @@
 package org.wickedsource.budgeteer.persistence.user;
 
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
-import java.sql.Timestamp;
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
+@NoArgsConstructor
+@Table(name = "FORGOT_PASSWORD_TOKEN")
 public class ForgotPasswordTokenEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -17,31 +19,12 @@ public class ForgotPasswordTokenEntity {
     @JoinColumn(nullable = false, name = "user_id")
     private UserEntity userEntity;
 
-    private Date expiryDate;
-
-    public ForgotPasswordTokenEntity() {
-        super();
-    }
+    private LocalDateTime expiryDate;
 
     public ForgotPasswordTokenEntity(UserEntity userEntity, String token) {
-        super();
-
         this.userEntity = userEntity;
         this.token = token;
-        this.expiryDate = calculateExpiryDate(24 * 60);
-    }
-
-    /**
-     * Calculates expiryTimeInMinutes on the current date.
-     *
-     * @param expiryTimeInMinutes after how many minutes the token should expire
-     * @return new date with current date + expiryTimeInMinutes
-     */
-    private Date calculateExpiryDate(int expiryTimeInMinutes) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Timestamp(calendar.getTime().getTime()));
-        calendar.add(Calendar.MINUTE, expiryTimeInMinutes);
-        return new Date(calendar.getTime().getTime());
+        this.expiryDate = LocalDateTime.now().plusHours(24);
     }
 
     public UserEntity getUserEntity() {
@@ -52,11 +35,12 @@ public class ForgotPasswordTokenEntity {
         this.userEntity = userEntity;
     }
 
-    public Date getExpiryDate() {
+
+    public LocalDateTime getExpiryDate() {
         return expiryDate;
     }
 
-    public void setExpiryDate(Date expiryDate) {
+    public void setExpiryDate(LocalDateTime expiryDate) {
         this.expiryDate = expiryDate;
     }
 

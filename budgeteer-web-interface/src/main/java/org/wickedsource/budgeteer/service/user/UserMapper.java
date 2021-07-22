@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 import org.wickedsource.budgeteer.persistence.user.UserEntity;
 import org.wickedsource.budgeteer.service.AbstractMapper;
 
-@Component
+@Component("oldUserMapper")
 public class UserMapper extends AbstractMapper<UserEntity, User>{
 
     @Override

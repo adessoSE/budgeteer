@@ -229,9 +229,7 @@ class UserServiceTest extends ServiceTestTemplate{
         UserEntity user = createUserEntity();
         String uuid = UUID.randomUUID().toString();
         VerificationTokenEntity verificationTokenEntity = new VerificationTokenEntity(user, uuid);
-        Date date = new Date();
-        date.setTime(verificationTokenEntity.getExpiryDate().getTime() - 90000000); // 25 hours
-        verificationTokenEntity.setExpiryDate(date);
+        verificationTokenEntity.setExpiryDate(verificationTokenEntity.getExpiryDate().minusHours(25));
         when(verificationTokenRepository.findByToken(uuid)).thenReturn(verificationTokenEntity);
         Assertions.assertEquals(-2, service.validateVerificationToken(uuid));
     }
@@ -297,8 +295,7 @@ class UserServiceTest extends ServiceTestTemplate{
         UserEntity user = createUserEntity();
         String uuid = UUID.randomUUID().toString();
         ForgotPasswordTokenEntity forgotPasswordTokenEntity = new ForgotPasswordTokenEntity(user, uuid);
-        Date date = new Date();
-        date.setTime(forgotPasswordTokenEntity.getExpiryDate().getTime() - 90000000); // 25 hours
+        var date = forgotPasswordTokenEntity.getExpiryDate().minusHours(25);
         forgotPasswordTokenEntity.setExpiryDate(date);
         when(forgotPasswordTokenRepository.findByToken(uuid)).thenReturn(forgotPasswordTokenEntity);
         Assertions.assertEquals(-2, service.validateForgotPasswordToken(uuid));

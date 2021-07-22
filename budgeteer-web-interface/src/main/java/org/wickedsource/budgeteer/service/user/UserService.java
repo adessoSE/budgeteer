@@ -11,7 +11,9 @@ import org.wickedsource.budgeteer.persistence.user.*;
 import org.wickedsource.budgeteer.service.UnknownEntityException;
 
 import javax.transaction.Transactional;
+import java.time.ZoneId;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -283,7 +285,7 @@ public class UserService {
         UserEntity userEntity = verificationToken.getUserEntity();
         Calendar calendar = Calendar.getInstance();
 
-        if ((verificationToken.getExpiryDate().getTime() - calendar.getTime().getTime()) <= 0) {
+        if ((Date.from(verificationToken.getExpiryDate().atZone(ZoneId.systemDefault()).toInstant()).getTime() - calendar.getTime().getTime()) <= 0) {
             return TokenStatus.EXPIRED.statusCode();
         }
 
@@ -358,7 +360,7 @@ public class UserService {
 
         Calendar calendar = Calendar.getInstance();
 
-        if ((forgotPasswordTokenEntity.getExpiryDate().getTime() - calendar.getTime().getTime()) <= 0) {
+        if ((Date.from(forgotPasswordTokenEntity.getExpiryDate().atZone(ZoneId.systemDefault()).toInstant()).getTime() - calendar.getTime().getTime()) <= 0) {
             return TokenStatus.EXPIRED.statusCode();
         }
 
