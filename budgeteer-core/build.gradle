@@ -1,17 +1,7 @@
 plugins {
-    id 'org.springframework.boot' version '2.4.5'
-    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-    id "io.freefair.lombok" version "6.0.0-m2"
-    id 'java'
-}
-
-group = 'com.example'
-version = '0.0.1-SNAPSHOT'
-
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
+    id 'org.springframework.boot'
+    id 'io.spring.dependency-management'
+    id "io.freefair.lombok"
 }
 
 repositories {
@@ -19,8 +9,12 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter'
-    implementation 'org.joda:joda-money:1.0.1'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail'
+    implementation group: 'commons-codec', name: 'commons-codec', version: commons_codec_version
+    implementation group: 'org.joda', name: 'joda-money', version: joda_money_version
+
+    testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
 }
 
 bootRun {

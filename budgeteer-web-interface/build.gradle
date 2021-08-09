@@ -1,44 +1,10 @@
 import org.apache.tools.ant.filters.ReplaceTokens
 
-buildscript {
-    repositories {
-        jcenter()
-    }
-
-    dependencies {
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.5'
-        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.16.0"
-        classpath group: 'org.springframework.boot', name: 'spring-boot-gradle-plugin', version: "${spring_boot_version}"
-    }
-}
-
 plugins {
-    id "io.freefair.lombok" version "5.3.0"
-}
-
-apply plugin: 'war'
-apply plugin: 'org.springframework.boot'
-apply plugin: "com.jfrog.artifactory"
-apply plugin: 'com.jfrog.bintray'
-apply plugin: 'maven-publish'
-
-
-configurations {
-    provided.all*.exclude group: 'org.slf4j', module: 'slf4j-log4j12'
-    provided.all*.exclude group: 'log4j', module: 'log4j'
-    provided.all*.exclude group: 'org.slf4j', module: 'log4j-over-slf4j'
-    provided.all*.exclude group: 'org.apache.wicket', module: 'wicket'
-    provided.all*.exclude group: 'javax.servlet'
-}
-
-sourceSets {
-    main {
-        java {
-            srcDir 'src/main/java'
-        }
-        /* all .java files are added to war */
-        resources.srcDirs = ['src/main/java', 'src/main/resources']
-    }
+    id 'io.freefair.lombok'
+    id 'org.springframework.boot'
+    id 'io.spring.dependency-management'
+    id 'war'
 }
 
 processResources {
@@ -50,82 +16,54 @@ processResources {
     }
 }
 
-repositories {
-    mavenCentral()
-    maven { url 'https://jitpack.io' }
-}
-
 dependencies {
     implementation project(':budgeteer-importer-api')
     implementation project(':budgeteer-aproda-importer')
     implementation project(':budgeteer-ubw-importer')
     implementation project(':budgeteer-resourceplan-importer')
     implementation project(':budgeteer-report-exporter')
+    implementation project(':budgeteer-core')
 
-    implementation group: 'org.apache.poi', name: 'poi-ooxml', version: "${poi_version}"
+    implementation group: 'org.apache.poi', name: 'poi-ooxml', version: poi_version
 
     implementation(
-            [group: 'org.apache.wicket', name: 'wicket-spring', version: "${wicket_spring_version}"],
-            [group: 'org.apache.wicket', name: 'wicket-extensions', version: "${wicket_spring_version}"],
-            [group: 'org.wicketstuff', name: 'wicketstuff-lazymodel', version: "${wicketstuff_lazymodel_version}"],
-            [group: 'org.wicketstuff', name: 'wicketstuff-tinymce4', version: "${wicketstuff_tinymce4_version}"],
-            [group: 'org.wicketstuff', name: 'wicketstuff-lambda-components', version: "${wicketstuff_tinymce4_version}"],
-            [group: 'de.adesso.wicked-charts', name: 'wicked-charts-wicket8', version: "${wickedcharts_version}"]
+            [group: 'org.apache.wicket', name: 'wicket-spring', version: wicket_version],
+            [group: 'org.apache.wicket', name: 'wicket-extensions', version: wicket_version],
+            [group: 'org.wicketstuff', name: 'wicketstuff-lazymodel', version: wicket_version],
+            [group: 'org.wicketstuff', name: 'wicketstuff-tinymce4', version: wicket_version],
+            [group: 'org.wicketstuff', name: 'wicketstuff-lambda-components', version: wicket_version],
+            [group: 'de.adesso.wicked-charts', name: 'wicked-charts-wicket8', version: wickedcharts_version]
     )
 
     implementation(
-            [group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: "${spring_boot_version}"],
-            [group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: "${spring_boot_version}"],
-            [group: 'org.springframework.boot', name: 'spring-boot-starter-logging', version: "${spring_boot_version}"],
-            [group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: "${spring_boot_version}"],
-            [group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: "${spring_boot_version}"],
-            [group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: "${spring_boot_version}"],
+            [group: 'org.springframework.boot', name: 'spring-boot-starter-security'],
+            [group: 'org.springframework.boot', name: 'spring-boot-starter-web'],
+            [group: 'org.springframework.boot', name: 'spring-boot-starter-logging'],
+            [group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa'],
+            [group: 'org.springframework.boot', name: 'spring-boot-starter-mail'],
+            [group: 'org.springframework.boot', name: 'spring-boot-starter-validation'],
     )
 
-    implementation group: 'org.slf4j', name: 'slf4j-api', version: "${slf4j_version}"
-    implementation group: 'ch.qos.logback', name: 'logback-classic', version: "${logback_version}"
-    implementation group: 'ch.qos.logback', name: 'logback-core', version: "${logback_version}"
+    implementation group: 'org.reflections', name: 'reflections', version: reflections_version
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: commons_lang_version
+    implementation group: 'commons-codec', name: 'commons-codec', version: commons_codec_version
 
-    implementation group: 'org.reflections', name: 'reflections', version: "${reflections_version}"
-    implementation group: 'org.apache.commons', name: 'commons-lang3', version: "${commons_lang_version}"
-    implementation group: 'commons-codec', name: 'commons-codec', version: "${commons_codec_version}"
-
-    implementation group: 'org.joda', name: 'joda-money', version: "${joda_money_version}"
-    implementation group: 'de.jollyday', name: 'jollyday', version: "${jollyday_version}"
+    implementation group: 'org.joda', name: 'joda-money', version: joda_money_version
+    implementation group: 'de.jollyday', name: 'jollyday', version: jollyday_version
 
     runtimeOnly(
-            [group: 'org.hsqldb', name: 'hsqldb', version: "${hsqldb_version}"],
-            [group: 'mysql', name: 'mysql-connector-java', version: "${mysql_version}"],
-            [group: 'com.oracle.database.jdbc', name: 'ojdbc10', version: "${oracle_database_version}"],
-            [group: 'com.oracle.database.nls', name: 'orai18n', version: "${oracle_database_version}"]
+            [group: 'org.hsqldb', name: 'hsqldb', version: hsqldb_version],
+            [group: 'mysql', name: 'mysql-connector-java', version: mysql_version],
+            [group: 'com.oracle.database.jdbc', name: 'ojdbc10', version: oracle_database_version],
+            [group: 'com.oracle.database.nls', name: 'orai18n', version: oracle_database_version],
     )
 
     testImplementation(
-            [group: 'org.kubek2k', name: 'springockito', version: "${springockito_version}"],
-            [group: 'org.kubek2k', name: 'springockito-annotations', version: "${springockito_version}"],
-            [group: 'com.github.springtestdbunit', name: 'spring-test-dbunit', version: "${spring_dbunit_version}"],
-            [group: 'org.dbunit', name: 'dbunit', version: "${dbunit_version}"],
+            [group: 'org.kubek2k', name: 'springockito', version: springockito_version],
+            [group: 'org.kubek2k', name: 'springockito-annotations', version: springockito_version],
+            [group: 'com.github.springtestdbunit', name: 'spring-test-dbunit', version: spring_dbunit_version],
+            [group: 'org.dbunit', name: 'dbunit', version: dbunit_version],
     )
 
-    testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: "${spring_boot_version}"
-    testImplementation group: 'org.springframework.security', name: 'spring-security-test', version: "${spring_security_test_version}"
-
-    testImplementation('org.junit.platform:junit-platform-launcher:1.0.3')
-    testImplementation('com.github.sbrannen:spring-test-junit5:1.0.3')
-    testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.18.1'
+    testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
 }
-
-sourceSets {
-    generated {
-        java {
-            srcDirs = ['src/generated/java']
-        }
-    }
-}
-
-test {
-    systemProperties = [
-            'spring.flyway.enabled': 'false'
-    ]
-}
-

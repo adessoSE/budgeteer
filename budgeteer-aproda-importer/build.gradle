@@ -1,5 +1,5 @@
 dependencies {
     implementation project(':budgeteer-importer-api')
-    implementation group: 'org.apache.poi', name: 'poi-ooxml', version: "${poi_version}"
-    runtimeOnly group: 'commons-codec', name: 'commons-codec', version: "${commons_codec_version}"
+    implementation group: 'org.apache.poi', name: 'poi-ooxml', version: poi_version
+    runtimeOnly group: 'commons-codec', name: 'commons-codec', version: commons_codec_version
 }
