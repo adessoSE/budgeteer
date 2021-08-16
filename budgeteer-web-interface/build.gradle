@@ -23,6 +23,7 @@ dependencies {
     implementation project(':budgeteer-resourceplan-importer')
     implementation project(':budgeteer-report-exporter')
     implementation project(':budgeteer-core')
+    implementation project(':budgeteer-common')
 
     implementation group: 'org.apache.poi', name: 'poi-ooxml', version: poi_version
 

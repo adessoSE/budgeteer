@@ -73,7 +73,7 @@ public class ProjectService {
             }
         }
         project.setName(projectName);
-        project.getAuthorizedUsers().add(user);
+        project.setAuthorizedUsers(List.of(user));
         ProjectEntity savedProject = projectRepository.save(project);
         user.getAuthorizedProjects().add(savedProject);
         return mapper.map(savedProject);

@@ -63,7 +63,7 @@ public class ContractService {
     public ContractBaseData getEmptyContractModel(long projectId) {
         ProjectEntity project = projectRepository.findById(projectId).orElseThrow(RuntimeException::new);
         ContractBaseData model = new ContractBaseData(projectId);
-        Set<ProjectContractField> fields = project.getContractFields();
+        var fields = project.getContractFields();
         for (ProjectContractField field : fields) {
             model.getContractAttributes().add(new DynamicAttributeField(field.getFieldName(), ""));
         }
@@ -176,7 +176,7 @@ public class ContractService {
                                                        ProjectEntity project) {
         ProjectContractField projectContractField = Optional
                 .ofNullable(projectRepository.findContractFieldByName(contractBaseData.getProjectId(), dynamicAttribute.getName().trim()))
-                .orElse(new ProjectContractField(0, dynamicAttribute.getName().trim(), project));
+                .orElse(new ProjectContractField(dynamicAttribute.getName().trim(), project));
         return new ContractFieldEntity(projectContractField, StringUtils.trimToEmpty(dynamicAttribute.getValue()));
     }
 }
