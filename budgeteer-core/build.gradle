@@ -9,6 +9,8 @@ repositories {
 }
 
 dependencies {
+    implementation project(':budgeteer-common')
+
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail'
     implementation group: 'commons-codec', name: 'commons-codec', version: commons_codec_version
