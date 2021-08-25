@@ -9,6 +9,7 @@ import org.wickedsource.budgeteer.persistence.imports.ImportEntity;
 import org.wickedsource.budgeteer.persistence.person.PersonEntity;
 
 import javax.persistence.*;
+import java.math.RoundingMode;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -54,6 +55,9 @@ public abstract class RecordEntity {
     @JoinColumn(name = "IMPORT_ID")
     private ImportEntity importRecord;
 
+    public Money getActualRate() {
+        return getDailyRate().multipliedBy(getMinutes() / (60.0 * 8.0), RoundingMode.HALF_DOWN);
+    }
 
     public void setDate(Date date) {
         Calendar c = Calendar.getInstance();

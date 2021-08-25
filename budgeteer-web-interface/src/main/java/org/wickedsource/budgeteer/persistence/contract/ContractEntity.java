@@ -10,7 +10,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -52,8 +52,7 @@ public class ContractEntity implements Serializable {
     private String internalNumber;
 
     @Column(name="START_DATE")
-    @Temporal(TemporalType.DATE)
-    private Date startDate;
+    private LocalDate startDate;
 
     @Column(name = "CONTRACT_TYPE")
     @Enumerated(EnumType.ORDINAL)

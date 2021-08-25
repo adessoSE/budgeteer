@@ -38,5 +38,5 @@ public class PersonEntity {
     private List<WorkRecordEntity> workRecords = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "person", orphanRemoval = true, cascade = CascadeType.ALL)
-    private List<PlanRecordEntity> planRecords= new ArrayList<>();
+    private List<PlanRecordEntity> planRecords = new ArrayList<>();
 }

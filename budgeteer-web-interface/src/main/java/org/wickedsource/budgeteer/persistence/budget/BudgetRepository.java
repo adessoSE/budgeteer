@@ -15,6 +15,10 @@ public interface BudgetRepository extends CrudRepository<BudgetEntity, Long> {
 
     boolean existsByNameAndProjectId(String name, long projectId);
 
+    @Modifying
+    @Query("UPDATE BudgetEntity budget SET budget.contract = null WHERE budget.contract.id = :contractId")
+    void removeReferencesToContract(@Param("contractId") long contractId);
+
     @Query("select distinct t.tag from BudgetTagEntity t where t.budget.project.id = :projectId")
     List<String> getAllTagsInProject(@Param("projectId") long projectId);
 
