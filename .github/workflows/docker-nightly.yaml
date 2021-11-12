@@ -1,0 +1,36 @@
+name: Prepare building and publishing nightly to DockerHub
+
+on:
+  schedule:
+    - cron: '24 3 * * *'
+
+jobs:
+  nightly-prepare-version-info:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get git
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
+      - name: Create docker tags
+        id: prep
+        run: |
+          DOCKER_IMAGE=budgeteerorg/budgeteer
+          VERSION=$(git describe --tags)
+          TAGS="${DOCKER_IMAGE}:${VERSION},${DOCKER_IMAGE}:nightly"
+          echo ::set-output name=tags::${TAGS}
+          echo ::set-output name=sha::${GITHUB_SHA}
+    outputs:
+      tags: ${{ steps.prep.outputs.tags }}
+      sha: ${{ steps.prep.outputs.sha }}
+
+  nightly-call-build-and-publish:
+    needs: nightly-prepare-version-info
+    uses: adessoAG/budgeteer/.github/workflows/build-publish-docker.yaml@main
+    with:
+      tags: ${{ needs.nightly-prepare-version-info.outputs.tags }}
+      repository: adessoAG/budgeteer
+      sha: ${{ needs.nightly-prepare-version-info.outputs.sha }}
+    secrets:
+      dockerhub_username: ${{ secrets.DOCKERHUB_USERNAME }}
+      dockerhub_token: ${{ secrets.DOCKERHUB_TOKEN }}
