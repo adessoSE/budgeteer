@@ -26,6 +26,13 @@ public interface BudgetRepository extends CrudRepository<BudgetEntity, Long> {
 
     List<BudgetEntity> findByProjectIdOrderByNameAsc(long projectId);
 
+    @Query("SELECT budget.note FROM BudgetEntity budget WHERE budget.id = :budgetId")
+    String getNoteForBudget(@Param("budgetId") long budgetId);
+
+    @Modifying
+    @Query("UPDATE BudgetEntity  budget SET budget.note = :note WHERE budget.id = :budgetId")
+    void updateNoteForBudget(@Param("budgetId") long budgetId, @Param("note") String note);
+
     /**
      * Searches for Budgets that are tagged with AT LEAST ONE of the given tags.
      *
