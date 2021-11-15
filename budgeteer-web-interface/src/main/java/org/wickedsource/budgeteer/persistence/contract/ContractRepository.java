@@ -17,6 +17,7 @@ public interface ContractRepository extends CrudRepository<ContractEntity, Long>
     @Query("select cif from ContractInvoiceField cif where cif.contract.id = :contractId AND cif.fieldName = :fieldName")
     ContractInvoiceField findInvoiceFieldByName(@Param("contractId") long contractID, @Param("fieldName") String fieldName);
 
+    boolean existsByIdAndProjectId(long contractId, long projectId);
 
     /**
      * returns a ContractStatisticBean for a given contract till the given month and year.

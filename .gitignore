@@ -33,4 +33,4 @@ target
 .project
 .settings/
 
-application-local.properties
+**/application-local.properties
