@@ -1,0 +1,38 @@
+plugins {
+    id 'org.springframework.boot'
+    id 'io.spring.dependency-management'
+    id "io.freefair.lombok"
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation project(':budgeteer-common')
+    implementation project(':budgeteer-core')
+
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation group: 'org.joda', name: 'joda-money', version: joda_money_version
+
+    testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+}
+
+bootRun {
+    enabled = false
+}
+
+bootJar {
+    enabled = false
+}
+
+jar {
+    enabled = true
+}
+
+test {
+    useJUnitPlatform()
+}

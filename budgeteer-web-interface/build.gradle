@@ -68,3 +68,7 @@ dependencies {
 
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
 }
+
+jar {
+    enabled = true
+}
