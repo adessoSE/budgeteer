@@ -59,6 +59,10 @@ public abstract class RecordEntity {
         return getDailyRate().multipliedBy(getMinutes() / (60.0 * 8.0), RoundingMode.HALF_DOWN);
     }
 
+    public Double getHours() {
+        return minutes / 60.0;
+    }
+
     public void setDate(Date date) {
         Calendar c = Calendar.getInstance();
         c.setTime(date);
