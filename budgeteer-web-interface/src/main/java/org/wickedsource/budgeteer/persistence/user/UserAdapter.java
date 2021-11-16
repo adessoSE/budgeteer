@@ -1,5 +1,7 @@
 package org.wickedsource.budgeteer.persistence.user;
 
+import de.adesso.budgeteer.core.security.domain.AuthenticationUser;
+import de.adesso.budgeteer.core.security.port.out.GetAuthenticationUserPort;
 import de.adesso.budgeteer.core.user.domain.User;
 import de.adesso.budgeteer.core.user.domain.UserWithEmail;
 import de.adesso.budgeteer.core.user.port.out.*;
@@ -33,7 +35,8 @@ public class UserAdapter implements GetUsersInProjectPort,
         DeleteVerificationTokenByUserIdPort,
         VerificationTokenExistsPort,
         GetVerificationTokenExpirationDatePort,
-        VerifyEmailPort {
+        VerifyEmailPort,
+        GetAuthenticationUserPort {
 
     private final VerificationTokenRepository verificationTokenRepository;
     private final ForgotPasswordTokenRepository forgotPasswordTokenRepository;
@@ -172,5 +175,10 @@ public class UserAdapter implements GetUsersInProjectPort,
     public void verifyEmail(String token) {
         userRepository.verifyEmail(token);
         verificationTokenRepository.deleteByToken(token);
+    }
+
+    @Override
+    public Optional<AuthenticationUser> getAuthenticationUser(String username) {
+        return Optional.ofNullable(userRepository.findByName(username)).map(userMapper::mapToAuthenticationUser);
     }
 }
