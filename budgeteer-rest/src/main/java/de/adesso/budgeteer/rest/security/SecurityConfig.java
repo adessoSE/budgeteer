@@ -1,10 +1,10 @@
 package de.adesso.budgeteer.rest.security;
 
+import de.adesso.budgeteer.rest.security.cors.CorsConfiguration;
 import de.adesso.budgeteer.rest.security.jwt.JwtAuthorizationFilter;
 import de.adesso.budgeteer.rest.security.jwt.configuration.JwtProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -15,12 +15,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 
 @RequiredArgsConstructor
 @EnableWebSecurity
@@ -28,6 +24,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsService userDetailsService;
     private final JwtProperties jwtProperties;
+    private final CorsConfiguration corsConfiguration;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -43,6 +40,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .cors().configurationSource(corsConfiguration.corsConfigurationSource())
+                .and()
                 .csrf().disable()
                 .authorizeRequests().antMatchers("/register", "/authenticate", "/").permitAll()
                 .anyRequest().authenticated()
