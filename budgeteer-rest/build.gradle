@@ -16,6 +16,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation group: 'org.joda', name: 'joda-money', version: joda_money_version
+    implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
 
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
