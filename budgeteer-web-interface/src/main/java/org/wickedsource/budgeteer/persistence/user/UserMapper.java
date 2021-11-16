@@ -1,5 +1,6 @@
 package org.wickedsource.budgeteer.persistence.user;
 
+import de.adesso.budgeteer.core.security.domain.AuthenticationUser;
 import de.adesso.budgeteer.core.user.domain.User;
 import de.adesso.budgeteer.core.user.domain.UserWithEmail;
 import org.springframework.stereotype.Component;
@@ -19,5 +20,9 @@ public class UserMapper {
 
     public List<User> mapToDomain(List<UserEntity> userEntities) {
         return userEntities.stream().map(this::mapToDomain).collect(Collectors.toList());
+    }
+
+    public AuthenticationUser mapToAuthenticationUser(UserEntity userEntity) {
+        return new AuthenticationUser(userEntity.getId(), userEntity.getName(), userEntity.getPassword());
     }
 }
