@@ -36,4 +36,3 @@ So put any spring configurations into that folder.
 Since the provided `docker-compose.yaml` uses Postgres as a database you can configure it using the available
 [environment variables](https://github.com/docker-library/docs/blob/master/postgres/README.md#environment-variables).
 If you change the username, password, or database, don't forget to make the necessary changes to the spring config.
-
