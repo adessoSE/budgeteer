@@ -27,7 +27,8 @@ public class ContractAdapter implements
         GetContractByIdPort,
         UpdateContractEntityPort,
         DeleteContractPort,
-        GetContractSummariesInRangePort {
+        GetContractSummariesInRangePort,
+        IsContractInProjectPort {
 
     private final ContractRepository contractRepository;
     private final ProjectRepository projectRepository;
@@ -106,6 +107,11 @@ public class ContractAdapter implements
         invoiceRepository.deleteInvoiceFieldsByContractId(contractId);
         invoiceRepository.deleteInvoicesByContractId(contractId);
         contractRepository.deleteById(contractId);
+    }
+
+    @Override
+    public boolean isContractInProject(long projectId, long contractId) {
+        return contractRepository.existsByIdAndProjectId(contractId, projectId);
     }
 
     private List<ContractFieldEntity> addContractFieldsOrCreateProjectContractPairs(long projectId, Map<String, String> attributes, ProjectEntity projectEntity) {

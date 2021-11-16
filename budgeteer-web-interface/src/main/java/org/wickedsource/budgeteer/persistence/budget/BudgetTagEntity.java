@@ -1,6 +1,7 @@
 package org.wickedsource.budgeteer.persistence.budget;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -21,6 +22,10 @@ public class BudgetTagEntity {
 
     private String tag;
 
+    public BudgetTagEntity(BudgetEntity budget, String tag) {
+        this.budget = budget;
+        this.tag = tag;
+    }
 
     public BudgetTagEntity(String tag) {
         this.tag = tag;

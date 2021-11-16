@@ -1,86 +1,100 @@
 package org.wickedsource.budgeteer.persistence.budget;
 
-import com.github.springtestdbunit.annotation.DatabaseOperation;
-import com.github.springtestdbunit.annotation.DatabaseSetup;
-import com.github.springtestdbunit.annotation.DatabaseTearDown;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.wickedsource.budgeteer.IntegrationTestTemplate;
+import org.wickedsource.budgeteer.persistence.DataJpaTestBase;
+import org.wickedsource.budgeteer.persistence.contract.ContractEntity;
+import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
 
-import java.util.Arrays;
-import java.util.Collection;
+import java.math.BigDecimal;
 import java.util.List;
-import java.util.TreeSet;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
-class BudgetRepositoryTest extends IntegrationTestTemplate {
+import static org.assertj.core.api.Assertions.assertThat;
+
+class BudgetRepositoryTest extends DataJpaTestBase {
 
     @Autowired
     private BudgetRepository budgetRepository;
 
-    @Test
-    @DatabaseSetup("getAllTagsInProject.xml")
-    @DatabaseTearDown(value = "getAllTagsInProject.xml", type = DatabaseOperation.DELETE_ALL)
-    void testGetAllTagsInProject() {
-        List<String> tags = budgetRepository.getAllTagsInProject(1L);
-        Assertions.assertEquals(4, tags.size());
-        Assertions.assertTrue(tags.contains("Tag 1"));
-        Assertions.assertTrue(tags.contains("Tag 2"));
-        Assertions.assertTrue(tags.contains("Tag 3"));
-        Assertions.assertTrue(tags.contains("Tag 4"));
+    private static final Consumer<ProjectEntity> DEFAULT_PROJECT = projectEntity -> projectEntity.setName("project");
+
+    private static final Consumer<ContractEntity> DEFAULT_CONTRACT = contractEntity -> {
+        contractEntity.setName("contract");
+        contractEntity.setTaxRate(BigDecimal.ZERO);
+    };
+    private static final Consumer<BudgetEntity> DEFAULT_BUDGET = budgetEntity -> {
+        budgetEntity.setName("budget");
+        budgetEntity.setImportKey("importKey");
+    };
+    private static final Consumer<BudgetEntity> ALTERNATIVE_BUDGET = budgetEntity -> {
+        budgetEntity.setName("alternative-budget");
+        budgetEntity.setImportKey("alternative-importKey");
+    };
+
+    private Consumer<BudgetEntity> setProject(ProjectEntity projectEntity) {
+        return budgetEntity -> budgetEntity.setProject(projectEntity);
+    }
+
+    private Consumer<BudgetEntity> setContract(ContractEntity contractEntity) {
+        return budgetEntity -> budgetEntity.setContract(contractEntity);
     }
 
     @Test
-    @DatabaseSetup("findByProjectId.xml")
-    @DatabaseTearDown(value = "findByProjectId.xml", type = DatabaseOperation.DELETE_ALL)
-    void testFindByProjectId() {
-        List<BudgetEntity> budgets = budgetRepository.findByProjectIdOrderByNameAsc(1L);
-        Assertions.assertEquals(1, budgets.size());
-        Assertions.assertEquals("Budget 1", budgets.get(0).getName());
+    void shouldRemoveReferencesToContract() {
+        var project = persistEntity(new ProjectEntity(), DEFAULT_PROJECT);
+        var contract = persistEntity(new ContractEntity(), DEFAULT_CONTRACT.andThen(contractEntity -> contractEntity.setProject(project)));
+        var budgets = List.of(persistEntity(new BudgetEntity(), DEFAULT_BUDGET.andThen(setProject(project)).andThen(setContract(contract))),
+                persistEntity(new BudgetEntity(), ALTERNATIVE_BUDGET.andThen(setProject(project)).andThen(setContract(contract))));
+
+        budgetRepository.removeReferencesToContract(contract.getId());
+        entityManager.clear();
+
+        var updatedBudgets = budgets.stream().map(budget -> entityManager.find(BudgetEntity.class, budget.getId()));
+        assertThat(updatedBudgets).map(BudgetEntity::getContract).containsOnlyNulls();
     }
 
     @Test
-    @DatabaseSetup("findByAtLeastOneTag.xml")
-    @DatabaseTearDown(value = "findByAtLeastOneTag.xml", type = DatabaseOperation.DELETE_ALL)
-    void testFindByAtLeastOneTag() {
-        Collection<BudgetEntity> budgets = new TreeSet<>(budgetRepository.findByAtLeastOneTag(1L, Arrays.asList("Tag 1", "Tag 3")));
-        Assertions.assertEquals(2, budgets.size());
-        Collection<BudgetEntity> budgets2 = new TreeSet<>(budgetRepository.findByAtLeastOneTag(1L, Arrays.asList("Tag 3")));
-        Assertions.assertEquals(1, budgets2.size());
+    void shouldReturnAllTags() {
+        var project = persistEntity(new ProjectEntity(), DEFAULT_PROJECT);
+        var budget = persistEntity(new BudgetEntity(), DEFAULT_BUDGET.andThen(setProject(project)));
+        var budgetTags = List.of(persistEntity(new BudgetTagEntity(), budgetTagEntity -> {
+            budgetTagEntity.setBudget(budget);
+            budgetTagEntity.setTag("tag1");
+        }), persistEntity(new BudgetTagEntity(), budgetTagEntity -> {
+            budgetTagEntity.setBudget(budget);
+            budgetTagEntity.setTag("tag2");
+        }));
+        persistEntity(budget, budgetEntity -> budgetEntity.getTags().addAll(budgetTags));
+
+        var foundTags = budgetRepository.getAllTagsInProject(project.getId());
+
+        assertThat(foundTags).containsAll(budgetTags.stream().map(BudgetTagEntity::getTag).collect(Collectors.toList()));
     }
 
     @Test
-    @DatabaseSetup("getMissingBudgetTotals.xml")
-    @DatabaseTearDown(value = "getMissingBudgetTotals.xml", type = DatabaseOperation.DELETE_ALL)
-    void testGetMissingBudgetTotalsForProject() {
-        List<MissingBudgetTotalBean> missingTotals = budgetRepository.getMissingBudgetTotalsForProject(1L);
-        Assertions.assertEquals(1, missingTotals.size());
-        Assertions.assertEquals(1L, missingTotals.get(0).getBudgetId());
-        Assertions.assertEquals("Budget 1", missingTotals.get(0).getBudgetName());
+    void shouldReturnBudgetNote() {
+        var expected = "note";
+        var project = persistEntity(new ProjectEntity(), DEFAULT_PROJECT);
+        var budget = persistEntity(new BudgetEntity(), DEFAULT_BUDGET.andThen(setProject(project)).andThen(budgetEntity -> budgetEntity.setNote(expected)));
+
+        var note = budgetRepository.getNoteForBudget(budget.getId());
+
+        assertThat(note).isEqualTo(expected);
     }
 
     @Test
-    @DatabaseSetup("getMissingBudgetTotals.xml")
-    @DatabaseTearDown(value = "getMissingBudgetTotals.xml", type = DatabaseOperation.DELETE_ALL)
-    void testGetMissingBudgetTotalForBudget() {
-        MissingBudgetTotalBean missingTotal = budgetRepository.getMissingBudgetTotalForBudget(1L);
-        Assertions.assertEquals(1L, missingTotal.getBudgetId());
-        Assertions.assertEquals("Budget 1", missingTotal.getBudgetName());
-        Assertions.assertNull(budgetRepository.getMissingBudgetTotalForBudget(2L));
-    }
+    void shouldUpdateBudgetNote() {
+        var newNote = "new-note";
+        var project = persistEntity(new ProjectEntity(), DEFAULT_PROJECT);
+        var budget = persistEntity(new BudgetEntity(), DEFAULT_BUDGET.andThen(setProject(project)).andThen(budgetEntity -> budgetEntity.setNote(newNote)));
 
-    @Test
-    @DatabaseSetup("getTaxCoefficient.xml")
-    @DatabaseTearDown(value = "getTaxCoefficient.xml", type = DatabaseOperation.DELETE_ALL)
-    void testGetTaxCoefficientForBudget() {
-        Double taxCoefficient1 = budgetRepository.getTaxCoefficientByBudget(1L);
-        Double taxCoefficient2 = budgetRepository.getTaxCoefficientByBudget(2L);
-        Double taxCoefficient3 = budgetRepository.getTaxCoefficientByBudget(3L);
-        Double taxCoefficient4 = budgetRepository.getTaxCoefficientByBudget(4L);
-        Assertions.assertEquals(2.0, taxCoefficient1, 10e-8);
-        Assertions.assertEquals(1.0, taxCoefficient2, 10e-8);
-        Assertions.assertEquals(1.19, taxCoefficient3, 10e-8);
-        Assertions.assertEquals(1.0, taxCoefficient4, 10e-8);
+        budgetRepository.updateNoteForBudget(budget.getId(), newNote);
+        entityManager.clear();
+
+        var foundBudget = entityManager.find(BudgetEntity.class, budget.getId());
+        assertThat(foundBudget.getNote()).isEqualTo(newNote);
     }
 
 }
