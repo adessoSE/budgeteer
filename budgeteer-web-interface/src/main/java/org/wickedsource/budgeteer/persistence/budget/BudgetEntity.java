@@ -46,6 +46,7 @@ public class BudgetEntity implements Comparable<BudgetEntity> {
 
     private Money total;
 
+    @Column(name = "\"limit\"")
     private Money limit;
 
     @ManyToOne(optional = false)

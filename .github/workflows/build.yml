@@ -1,0 +1,19 @@
+name: Build and test project
+
+on: 
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Java JDK
+        uses: actions/setup-java@v1.4.3
+        with:
+          java-version: '11'
+      - name: Build with gradle
+        run: ./gradlew build
