@@ -71,8 +71,9 @@ public class ProjectAdapter implements GetProjectPort,
 
     @Override
     @Transactional
-    public void updateDefaultProject(long userId, long projectId) {
+    public Project updateDefaultProject(long userId, long projectId) {
         projectRepository.updateDefaultProject(userId, projectId);
+        return projectRepository.findById(projectId).map(projectMapper::mapToDomain).orElseThrow(IllegalArgumentException::new);
     }
 
     @Override
