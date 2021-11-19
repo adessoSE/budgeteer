@@ -2,44 +2,40 @@ package org.wickedsource.budgeteer.service.user;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.test.context.TestPropertySource;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
 import org.wickedsource.budgeteer.persistence.project.ProjectRepository;
 import org.wickedsource.budgeteer.persistence.user.*;
-import org.wickedsource.budgeteer.service.ServiceTestTemplate;
 import org.wickedsource.budgeteer.service.UnknownEntityException;
 
 import java.util.*;
 
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
-@TestPropertySource(locations="classpath:application.properties")
-@EnableAutoConfiguration
-class UserServiceTest extends ServiceTestTemplate{
+@ExtendWith(MockitoExtension.class)
+class UserServiceTest {
 
-    @Autowired
+    @Mock
     private UserRepository userRepository;
-
-    @Autowired
+    @Mock
     private ProjectRepository projectRepository;
-
-    @Autowired
+    @Mock
     private VerificationTokenRepository verificationTokenRepository;
-
-    @Autowired
+    @Mock
     private ForgotPasswordTokenRepository forgotPasswordTokenRepository;
-
-    @Autowired
+    @Mock
+    private PasswordHasher passwordHasher;
+    @Mock
+    UserMapper userMapper;
+    @InjectMocks
     private UserService service;
 
-    @Autowired
-    private PasswordHasher passwordHasher;
-
-
     @Test
-    void testRegisterUser() throws Exception{
+    void testRegisterUser() throws Exception {
         service.registerUser("User", "", "Password");
         verify(userRepository, times(1)).save(any(UserEntity.class));
     }
@@ -55,17 +51,27 @@ class UserServiceTest extends ServiceTestTemplate{
 
     @Test
     void testLoginSuccess() throws Exception {
-        when(userRepository.findByNameOrMailAndPassword("user", passwordHasher.hash("password"))).thenReturn(createUserEntity());
-        User user = service.login("user", "password");
+        var username = "username";
+        var password = "password";
+        var hashedPassword = "hashed-password";
+        var userEntity = createUserEntity();
+        given(passwordHasher.hash(password)).willReturn(hashedPassword);
+        given(userRepository.findByNameOrMailAndPassword(username, hashedPassword)).willReturn(userEntity);
+        given(userMapper.map(userEntity)).willReturn(new User());
+
+        User user = service.login(username, password);
+
         Assertions.assertNotNull(user);
     }
 
     @Test
     void testLoginFail() {
-        Assertions.assertThrows(InvalidLoginCredentialsException.class, () -> {
-            when(userRepository.findByNameAndPassword("user", passwordHasher.hash("password"))).thenReturn(null);
-            service.login("user", "password");
-        });
+        var user = "username";
+        var password = "password";
+        var hashedPassword = "hashed-password";
+        when(passwordHasher.hash(password)).thenReturn(hashedPassword);
+        when(userRepository.findByNameOrMailAndPassword(user, hashedPassword)).thenReturn(null);
+        Assertions.assertThrows(InvalidLoginCredentialsException.class, () -> service.login(user, password));
     }
 
     @Test
@@ -78,10 +84,10 @@ class UserServiceTest extends ServiceTestTemplate{
 
     @Test
     void testAddUserToProjectFailProjectNotFound() {
-        Assertions.assertThrows(UnknownEntityException.class, () -> {
-            when(userRepository.findById(1L)).thenReturn(createUserEntityOptional());
-            service.addUserToProject(1L, 1L);
-        });
+        var projectId = 1L;
+        var userId = 2L;
+        when(projectRepository.findById(projectId)).thenReturn(Optional.empty());
+        Assertions.assertThrows(UnknownEntityException.class, () -> service.addUserToProject(projectId, userId));
     }
 
     @Test
@@ -102,10 +108,10 @@ class UserServiceTest extends ServiceTestTemplate{
 
     @Test
     void testRemoveUserFromProjectFailProjectNotFound() {
-        Assertions.assertThrows(UnknownEntityException.class, () -> {
-            when(userRepository.findById(1L)).thenReturn(createUserEntityOptional());
-            service.removeUserFromProject(1L, 1L);
-        });
+        var projectId = 1L;
+        var userId = 2L;
+        when(projectRepository.findById(1L)).thenReturn(Optional.empty());
+        Assertions.assertThrows(UnknownEntityException.class, () -> service.removeUserFromProject(projectId, userId));
     }
 
     @Test
@@ -118,15 +124,26 @@ class UserServiceTest extends ServiceTestTemplate{
 
     @Test
     void testGetUsersNotInProject() {
-        when(userRepository.findNotInProject(1L)).thenReturn(Arrays.asList(createUserEntity()));
+        var userEntities = List.of(createUserEntity());
+        var name = "user";
+        var user = new User();
+        user.setName(name);
+        List<User> expectedUsers = List.of(user);
+        when(userRepository.findNotInProject(1L)).thenReturn(userEntities);
+        when(userMapper.map(userEntities)).thenReturn(expectedUsers);
         List<User> users = service.getUsersNotInProject(1L);
         Assertions.assertEquals(1, users.size());
-        Assertions.assertEquals("user", users.get(0).getName());
+        Assertions.assertEquals(name, users.get(0).getName());
     }
 
     @Test
     void testGetUsersInProject() {
-        when(userRepository.findInProject(1L)).thenReturn(Arrays.asList(createUserEntity()));
+        var name = "user";
+        var userEntities = List.of(createUserEntity());
+        var expectedUser = new User();
+        expectedUser.setName(name);
+        when(userRepository.findInProject(1L)).thenReturn(userEntities);
+        when(userMapper.map(userEntities)).thenReturn(List.of(expectedUser));
         List<User> users = service.getUsersInProject(1L);
         Assertions.assertEquals(1, users.size());
         Assertions.assertEquals("user", users.get(0).getName());
@@ -134,17 +151,21 @@ class UserServiceTest extends ServiceTestTemplate{
 
     @Test
     void testCheckPassword() {
-        when(userRepository.findById(1L)).thenReturn(createUserEntityOptional());
+        var correctPassword = "password";
+        var incorrectPassword = "PASSWORD";
+        var userEntity = createUserEntityOptional();
+        when(passwordHasher.hash(correctPassword)).thenReturn(correctPassword);
+        when(passwordHasher.hash(incorrectPassword)).thenReturn(incorrectPassword);
+        when(userRepository.findById(1L)).thenReturn(userEntity);
         Assertions.assertTrue(service.checkPassword(1L, "password"));
         Assertions.assertFalse(service.checkPassword(1L, "PASSWORD"));
     }
 
     @Test
     void testResetPasswordMailNotFoundException() {
-        Assertions.assertThrows(MailNotFoundException.class, () -> {
-            when(userRepository.findByMail("nonuser@budgeteer.local")).thenReturn(createUserEntity());
-            service.resetPassword("user@budgeteer.local");
-        });
+        var email = "nonuser@budgeteer.local";
+        when(userRepository.findByMail(email)).thenReturn(null);
+        Assertions.assertThrows(MailNotFoundException.class, () -> service.resetPassword(email));
     }
 
     @Test
@@ -206,7 +227,6 @@ class UserServiceTest extends ServiceTestTemplate{
         EditUserData editUserData = service.loadUserToEdit(1L);
         editUserData.setName("user2");
         service.saveUser(editUserData, false);
-        when(userRepository.findById(1L)).thenReturn(user);
         Assertions.assertEquals(editUserData.getName(), user.get().getName());
     }
 
@@ -245,10 +265,9 @@ class UserServiceTest extends ServiceTestTemplate{
 
     @Test
     void getUserByMailMailNotFoundException() {
-        Assertions.assertThrows(MailNotFoundException.class, () -> {
-            when(userRepository.findByMail("nonuser@budgeteer.local")).thenReturn(createUserEntity());
-            service.getUserByMail("user@budgeteer.local");
-        });
+        var email = "nonuser@budgeteer.local";
+        when(userRepository.findByMail(email)).thenReturn(null);
+        Assertions.assertThrows(MailNotFoundException.class, () -> service.getUserByMail(email));
     }
 
     @Test
@@ -260,10 +279,9 @@ class UserServiceTest extends ServiceTestTemplate{
 
     @Test
     void getUserByIdUserIdNotFoundException() {
-        Assertions.assertThrows(UserIdNotFoundException.class, () -> {
-            when(userRepository.findById(2L)).thenReturn(createUserEntityOptional());
-            service.getUserById(1L);
-        });
+        var userId = 1L;
+        when(userRepository.findById(userId)).thenReturn(Optional.empty());
+        Assertions.assertThrows(UserIdNotFoundException.class, () -> service.getUserById(userId));
     }
 
     @Test
@@ -343,8 +361,8 @@ class UserServiceTest extends ServiceTestTemplate{
         user.setName("user");
         user.setMail("user@budgeteer.local");
         user.setMailVerified(true);
-        user.setPassword(passwordHasher.hash("password"));
-        user.setAuthorizedProjects(new ArrayList<ProjectEntity>());
+        user.setPassword("password");
+        user.setAuthorizedProjects(new ArrayList<>());
         return user;
     }
 
@@ -354,8 +372,8 @@ class UserServiceTest extends ServiceTestTemplate{
         user.setName("user");
         user.setMail("user@budgeteer.local");
         user.setMailVerified(true);
-        user.setPassword(passwordHasher.hash("password"));
-        user.setAuthorizedProjects(new ArrayList<ProjectEntity>());
+        user.setPassword("password");
+        user.setAuthorizedProjects(new ArrayList<>());
         return Optional.of(user);
     }
 
@@ -363,7 +381,7 @@ class UserServiceTest extends ServiceTestTemplate{
         ProjectEntity project = new ProjectEntity();
         project.setId(1L);
         project.setName("name");
-        project.setAuthorizedUsers(new ArrayList<UserEntity>());
+        project.setAuthorizedUsers(new ArrayList<>());
         return project;
     }
 }
