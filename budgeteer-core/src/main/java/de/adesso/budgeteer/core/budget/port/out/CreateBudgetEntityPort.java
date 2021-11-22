@@ -12,6 +12,7 @@ public interface CreateBudgetEntityPort {
 
     @Value
     class CreateBudgetCommandEntity {
+        long projectId;
         Long contractId;
         String name;
         String description;

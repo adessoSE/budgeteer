@@ -30,6 +30,7 @@ public class CreateBudgetService implements CreateBudgetUseCase {
             throw new IllegalArgumentException(); // TODO: Proper error handling
         }
         return createBudgetEntityPort.createBudgetEntity(new CreateBudgetEntityPort.CreateBudgetCommandEntity(
+                command.getProjectId(),
                 command.getContractId(),
                 command.getName(),
                 command.getDescription(),

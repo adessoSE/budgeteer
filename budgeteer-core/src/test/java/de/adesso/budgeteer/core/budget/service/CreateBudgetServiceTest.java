@@ -42,6 +42,7 @@ class CreateBudgetServiceTest {
         );
 
         var expected = new CreateBudgetEntityPort.CreateBudgetCommandEntity(
+                command.getProjectId(),
                 command.getContractId(),
                 command.getName(),
                 command.getDescription(),

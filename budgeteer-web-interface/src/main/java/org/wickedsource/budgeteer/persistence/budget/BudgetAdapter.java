@@ -5,6 +5,7 @@ import de.adesso.budgeteer.core.budget.port.out.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.wickedsource.budgeteer.persistence.contract.ContractRepository;
+import org.wickedsource.budgeteer.persistence.project.ProjectRepository;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -25,8 +26,9 @@ public class BudgetAdapter implements
         IsUniqueImportKeyInProjectPort,
         IsUniqueNameInProjectPort {
 
-    private final ContractRepository contractRepository;
     private final BudgetRepository budgetRepository;
+    private final ProjectRepository projectRepository;
+    private final ContractRepository contractRepository;
     private final BudgetMapper budgetMapper;
 
     @Transactional
@@ -45,7 +47,9 @@ public class BudgetAdapter implements
     @Override
     public Budget createBudgetEntity(CreateBudgetCommandEntity command) {
         var budgetEntity = new BudgetEntity();
+        var projectEntity = projectRepository.findById(command.getProjectId()).orElseThrow();
         var contractEntity = command.getContractId().flatMap(contractRepository::findById).orElse(null);
+        budgetEntity.setProject(projectEntity);
         budgetEntity.setContract(contractEntity);
         budgetEntity.setName(command.getName());
         budgetEntity.setDescription(command.getDescription());
