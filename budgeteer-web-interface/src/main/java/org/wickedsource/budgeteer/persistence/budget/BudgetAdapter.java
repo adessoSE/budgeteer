@@ -86,11 +86,13 @@ public class BudgetAdapter implements
     }
 
     @Override
+    @Transactional
     public String getBudgetNote(long budgetId) {
         return budgetRepository.getNoteForBudget(budgetId);
     }
 
     @Override
+    @Transactional
     public void updateBudgetNote(long budgetId, String note) {
         budgetRepository.updateNoteForBudget(budgetId, note);
     }
