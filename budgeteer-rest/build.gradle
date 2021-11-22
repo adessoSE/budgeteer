@@ -20,6 +20,8 @@ dependencies {
 
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
+
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 }
 
 bootRun {
