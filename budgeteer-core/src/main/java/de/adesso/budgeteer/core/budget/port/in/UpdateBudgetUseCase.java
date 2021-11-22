@@ -12,7 +12,6 @@ public interface UpdateBudgetUseCase {
     @Value
     class UpdateBudgetCommand {
         long budgetId;
-        long projectId;
         long contractId;
         String name;
         String description;

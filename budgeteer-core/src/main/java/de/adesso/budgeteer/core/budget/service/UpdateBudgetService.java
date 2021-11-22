@@ -22,10 +22,10 @@ public class UpdateBudgetService implements UpdateBudgetUseCase {
     @Override
     public Budget updateBudget(UpdateBudgetCommand command) {
         var budget = getBudgetByIdPort.getBudgetById(command.getBudgetId()).orElseThrow(IllegalArgumentException::new);
-        if (!command.getName().equals(budget.getName()) && !isUniqueNameInProjectPort.isUniqueNameInProject(command.getProjectId(), command.getName())) {
+        if (!command.getName().equals(budget.getName()) && !isUniqueNameInProjectPort.isUniqueNameInProjectByBudgetId(command.getBudgetId(), command.getName())) {
             throw new IllegalArgumentException();
         }
-        if (!command.getName().equals(budget.getName()) && !isUniqueImportKeyInProjectPort.isUniqueImportKeyInProject(command.getProjectId(), command.getImportKey())) {
+        if (!command.getName().equals(budget.getName()) && !isUniqueImportKeyInProjectPort.isUniqueImportKeyInProjectByBudgetId(command.getBudgetId(), command.getImportKey())) {
             throw new IllegalArgumentException();
         }
         return updateBudgetEntityPort.updateBudgetEntity(new UpdateBudgetEntityPort.UpdateBudgetEntityCommand(

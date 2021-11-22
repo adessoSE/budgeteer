@@ -38,7 +38,6 @@ class UpdateBudgetServiceTest {
         var budget = new Budget(budgetId, 5L, "name", "contractName", "description", null, null, null, null, null, null, new Date(), new ArrayList<>());
         var command = new UpdateBudgetUseCase.UpdateBudgetCommand(
                 budgetId,
-                2L,
                 3L,
                 "new-name",
                 "new-description",
@@ -58,8 +57,8 @@ class UpdateBudgetServiceTest {
                 command.getTags()
         );
         given(getBudgetByIdPort.getBudgetById(budgetId)).willReturn(Optional.of(budget));
-        given((isUniqueImportKeyInProjectPort.isUniqueImportKeyInProject(command.getProjectId(), command.getImportKey()))).willReturn(true);
-        given((isUniqueNameInProjectPort.isUniqueNameInProject(command.getProjectId(), command.getName()))).willReturn(true);
+        given((isUniqueImportKeyInProjectPort.isUniqueImportKeyInProjectByBudgetId(command.getBudgetId(), command.getImportKey()))).willReturn(true);
+        given((isUniqueNameInProjectPort.isUniqueNameInProjectByBudgetId(command.getBudgetId(), command.getName()))).willReturn(true);
 
         updateBudgetService.updateBudget(command);
 
@@ -72,7 +71,6 @@ class UpdateBudgetServiceTest {
         var budget = new Budget(budgetId, 5L, "name", "contractName", "description", null, null, null, null, null, null, new Date(), new ArrayList<>());
         var command = new UpdateBudgetUseCase.UpdateBudgetCommand(
                 budgetId,
-                2L,
                 3L,
                 "new-name",
                 "new-description",
@@ -93,8 +91,8 @@ class UpdateBudgetServiceTest {
         );
         var expected = new Budget(budgetId, command.getContractId(), command.getName(), "new-contract", command.getDescription(), command.getTotal(), Money.of(CurrencyUnit.EUR, 0), command.getTotal(), null, null, command.getLimit(), new Date(), new ArrayList<>());
         given(getBudgetByIdPort.getBudgetById(budgetId)).willReturn(Optional.of(budget));
-        given(isUniqueImportKeyInProjectPort.isUniqueImportKeyInProject(command.getProjectId(), command.getImportKey())).willReturn(true);
-        given(isUniqueNameInProjectPort.isUniqueNameInProject(command.getProjectId(), command.getName())).willReturn(true);
+        given(isUniqueImportKeyInProjectPort.isUniqueImportKeyInProjectByBudgetId(command.getBudgetId(), command.getImportKey())).willReturn(true);
+        given(isUniqueNameInProjectPort.isUniqueNameInProjectByBudgetId(command.getBudgetId(), command.getName())).willReturn(true);
         given(updateBudgetEntityPort.updateBudgetEntity(updateEntityCommand)).willReturn(expected);
 
         var result = updateBudgetService.updateBudget(command);
@@ -108,7 +106,6 @@ class UpdateBudgetServiceTest {
         var budget = new Budget(budgetId, 5L, "name", "contractName", "description", null, null, null, null, null, null, new Date(), new ArrayList<>());
         var command = new UpdateBudgetUseCase.UpdateBudgetCommand(
                 budgetId,
-                2L,
                 3L,
                 "new-name",
                 "new-description",
@@ -118,7 +115,7 @@ class UpdateBudgetServiceTest {
                 new ArrayList<>()
         );
         given(getBudgetByIdPort.getBudgetById(budgetId)).willReturn(Optional.of(budget));
-        given(isUniqueNameInProjectPort.isUniqueNameInProject(command.getProjectId(), command.getName())).willReturn(false);
+        given(isUniqueNameInProjectPort.isUniqueNameInProjectByBudgetId(command.getBudgetId(), command.getName())).willReturn(false);
 
         assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(() -> updateBudgetService.updateBudget(command));
     }
@@ -129,7 +126,6 @@ class UpdateBudgetServiceTest {
         var budget = new Budget(budgetId, 5L, "name", "contractName", "description", null, null, null, null, null, null, new Date(), new ArrayList<>());
         var command = new UpdateBudgetUseCase.UpdateBudgetCommand(
                 budgetId,
-                2L,
                 3L,
                 "new-name",
                 "new-description",
@@ -139,8 +135,8 @@ class UpdateBudgetServiceTest {
                 new ArrayList<>()
         );
         given(getBudgetByIdPort.getBudgetById(budgetId)).willReturn(Optional.of(budget));
-        given(isUniqueNameInProjectPort.isUniqueNameInProject(command.getProjectId(), command.getName())).willReturn(true);
-        given(isUniqueImportKeyInProjectPort.isUniqueImportKeyInProject(command.getProjectId(), command.getImportKey())).willReturn(false);
+        given(isUniqueNameInProjectPort.isUniqueNameInProjectByBudgetId(command.getBudgetId(), command.getName())).willReturn(true);
+        given(isUniqueImportKeyInProjectPort.isUniqueImportKeyInProjectByBudgetId(command.getBudgetId(), command.getImportKey())).willReturn(false);
 
         assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(() -> updateBudgetService.updateBudget(command));
     }
