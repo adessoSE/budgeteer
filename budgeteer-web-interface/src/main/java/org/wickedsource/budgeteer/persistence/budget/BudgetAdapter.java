@@ -45,7 +45,7 @@ public class BudgetAdapter implements
     @Override
     public Budget createBudgetEntity(CreateBudgetCommandEntity command) {
         var budgetEntity = new BudgetEntity();
-        var contractEntity = contractRepository.findById(command.getContractId()).orElseThrow();
+        var contractEntity = command.getContractId().flatMap(contractRepository::findById).orElse(null);
         budgetEntity.setContract(contractEntity);
         budgetEntity.setName(command.getName());
         budgetEntity.setDescription(command.getDescription());

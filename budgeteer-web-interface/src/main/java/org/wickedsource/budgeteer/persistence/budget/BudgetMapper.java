@@ -24,9 +24,9 @@ public class BudgetMapper {
         var planned = MoneyUtil.total(budgetEntity.getPlanRecords(), RecordEntity::getActualRate, CurrencyUnit.EUR);
         return new Budget(
                 budgetEntity.getId(),
-                budgetEntity.getContract().getId(),
+                budgetEntity.getContract() == null ? null : budgetEntity.getContract().getId(),
                 budgetEntity.getName(),
-                budgetEntity.getContract().getName(),
+                budgetEntity.getContract() == null ? null : budgetEntity.getContract().getName(),
                 budgetEntity.getDescription(),
                 budgetEntity.getTotal(),
                 spent,

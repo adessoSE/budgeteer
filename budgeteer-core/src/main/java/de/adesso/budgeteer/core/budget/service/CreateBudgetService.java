@@ -20,7 +20,7 @@ public class CreateBudgetService implements CreateBudgetUseCase {
 
     @Override
     public Budget createBudget(CreateBudgetCommand command) {
-        if (!isContractInProjectPort.isContractInProject(command.getProjectId(), command.getContractId())) {
+        if (command.getContractId() != null && !isContractInProjectPort.isContractInProject(command.getProjectId(), command.getContractId())) {
             throw new IllegalArgumentException(); // TODO: Proper error handling
         }
         if (!isUniqueNameInProjectPort.isUniqueNameInProject(command.getProjectId(), command.getName())) {
