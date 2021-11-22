@@ -107,8 +107,18 @@ public class BudgetAdapter implements
     }
 
     @Override
+    public boolean isUniqueImportKeyInProjectByBudgetId(long budgetId, String importKey) {
+        return !budgetRepository.existsWithImportKeyInProjectByBudgetId(budgetId, importKey);
+    }
+
+    @Override
     public boolean isUniqueNameInProject(long projectId, String name) {
         return !budgetRepository.existsByNameAndProjectId(name, projectId);
+    }
+
+    @Override
+    public boolean isUniqueNameInProjectByBudgetId(long budgetId, String name) {
+        return !budgetRepository.existsWithNameInProjectByBudgetId(budgetId, name);
     }
 
     private List<BudgetTagEntity> mapToTagEntities(List<String> tags, BudgetEntity budgetEntity) {

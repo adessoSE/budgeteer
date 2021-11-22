@@ -15,7 +15,17 @@ public interface BudgetRepository extends CrudRepository<BudgetEntity, Long> {
 
     boolean existsByImportKeyAndProjectId(String importKey, long projectId);
 
+    @Query("SELECT (count(budget) > 0) FROM BudgetEntity budget WHERE budget.project.id = " +
+            "(SELECT budget.project.id FROM BudgetEntity budget where budget.id = :budgetId)" +
+            "AND budget.importKey = :importKey")
+    boolean existsWithImportKeyInProjectByBudgetId(@Param("budgetId") long budgetId, @Param("importKey") String importKey);
+
     boolean existsByNameAndProjectId(String name, long projectId);
+
+    @Query("SELECT (count(budget) > 0) FROM BudgetEntity budget WHERE budget.project.id = " +
+            "(SELECT budget.project.id FROM BudgetEntity budget where budget.id = :budgetId)" +
+            "AND budget.name = :name")
+    boolean existsWithNameInProjectByBudgetId(@Param("budgetId") long budgetId, @Param("name") String name);
 
     @Modifying
     @Query("UPDATE BudgetEntity budget SET budget.contract = null WHERE budget.contract.id = :contractId")
