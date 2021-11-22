@@ -12,7 +12,7 @@ public interface UpdateBudgetEntityPort {
     @Value
     class UpdateBudgetEntityCommand {
         long budgetId;
-        long contractId;
+        Long contractId;
         String name;
         String description;
         String importKey;

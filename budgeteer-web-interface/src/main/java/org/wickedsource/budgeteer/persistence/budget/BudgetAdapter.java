@@ -71,7 +71,7 @@ public class BudgetAdapter implements
     public Budget updateBudgetEntity(UpdateBudgetEntityCommand command) {
         var budgetEntity = budgetRepository.findById(command.getBudgetId()).orElseThrow();
         var tags = mapToTagEntities(command.getTags(), budgetEntity);
-        if (budgetEntity.getContract().getId() != command.getContractId()) {
+        if (command.getContractId() != null && budgetEntity.getContract().getId() != command.getContractId()) {
             budgetEntity.setContract(contractRepository.findById(command.getContractId()).orElseThrow());
         }
         budgetEntity.setName(command.getName());
