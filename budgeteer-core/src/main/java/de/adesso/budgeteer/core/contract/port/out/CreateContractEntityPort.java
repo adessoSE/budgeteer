@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import java.util.Map;
 
 public interface CreateContractEntityPort {
-    void createContractEntity(CreateContractEntityCommand command);
+    Contract createContractEntity(CreateContractEntityCommand command);
 
     @Value
     class CreateContractEntityCommand {

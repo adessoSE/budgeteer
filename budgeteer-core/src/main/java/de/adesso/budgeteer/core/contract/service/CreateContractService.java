@@ -1,5 +1,6 @@
 package de.adesso.budgeteer.core.contract.service;
 
+import de.adesso.budgeteer.core.contract.domain.Contract;
 import de.adesso.budgeteer.core.contract.port.in.CreateContractUseCase;
 import de.adesso.budgeteer.core.contract.port.out.CreateContractEntityPort;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +13,7 @@ public class CreateContractService implements CreateContractUseCase {
     private final CreateContractEntityPort createContractEntityPort;
 
     @Override
-    public void createContract(CreateContractCommand command) {
+    public Contract createContract(CreateContractCommand command) {
         var createContractEntityCommand = new CreateContractEntityPort.CreateContractEntityCommand(
                 command.getProjectId(),
                 command.getName(),
@@ -26,6 +27,6 @@ public class CreateContractService implements CreateContractUseCase {
                 command.getFileName(),
                 command.getFile()
         );
-        createContractEntityPort.createContractEntity(createContractEntityCommand);
+        return createContractEntityPort.createContractEntity(createContractEntityCommand);
     }
 }

@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import java.util.Map;
 
 public interface UpdateContractUseCase {
-    void updateContract(UpdateContractCommand command);
+    Contract updateContract(UpdateContractCommand command);
 
     @Value
     class UpdateContractCommand {
