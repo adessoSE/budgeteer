@@ -1,5 +1,6 @@
 package de.adesso.budgeteer.core.contract.service;
 
+import de.adesso.budgeteer.core.common.Attachment;
 import de.adesso.budgeteer.core.contract.domain.Contract;
 import de.adesso.budgeteer.core.contract.port.in.UpdateContractUseCase;
 import de.adesso.budgeteer.core.contract.port.out.UpdateContractEntityPort;
@@ -15,14 +16,16 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Map;
 
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.verify;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class UpdateContractServiceTest {
 
-    @InjectMocks private UpdateContractService updateContractService;
-    @Mock private UpdateContractEntityPort updateContractEntityPort;
+    @InjectMocks
+    private UpdateContractService updateContractService;
+    @Mock
+    private UpdateContractEntityPort updateContractEntityPort;
 
     @Test
     void shouldUpdateContract() {
@@ -52,10 +55,28 @@ class UpdateContractServiceTest {
                 command.getFileName(),
                 command.getFile()
         );
-        doNothing().when(updateContractEntityPort).updateContractEntity(expectedCommand);
+        var expected = new Contract(
+                command.getContractId(),
+                15L,
+                command.getInternalNumber(),
+                command.getName(),
+                command.getType(),
+                command.getStartDate(),
+                command.getBudget(),
+                Money.zero(CurrencyUnit.EUR),
+                command.getBudget(),
+                command.getTaxRate(),
+                command.getAttributes(),
+                new Attachment(
+                        command.getFileName(),
+                        command.getLink(),
+                        command.getFile()
+                )
+        );
+        when(updateContractEntityPort.updateContractEntity(expectedCommand)).thenReturn(expected);
 
-        updateContractService.updateContract(command);
+        var returned = updateContractService.updateContract(command);
 
-        verify(updateContractEntityPort).updateContractEntity(expectedCommand);
+        assertThat(returned).isEqualTo(expected);
     }
 }
