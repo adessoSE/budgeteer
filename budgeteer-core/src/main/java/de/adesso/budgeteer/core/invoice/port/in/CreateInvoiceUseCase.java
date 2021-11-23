@@ -11,11 +11,10 @@ import java.time.YearMonth;
 import java.util.Map;
 
 public interface CreateInvoiceUseCase {
-    void createInvoice(CreateInvoiceCommand command);
+    Invoice createInvoice(CreateInvoiceCommand command);
 
     @Value
     class CreateInvoiceCommand {
-        long invoiceId;
         long contractId;
         String invoiceName;
         Money amountOwed;

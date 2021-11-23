@@ -54,7 +54,7 @@ public class InvoiceEntityAdapter implements
 
     @Override
     @Transactional
-    public void createInvoiceEntity(CreateInvoiceEntityCommand command) {
+    public Invoice createInvoiceEntity(CreateInvoiceEntityCommand command) {
         var contractEntity = contractRepository.findById(command.getContractId()).orElseThrow(RuntimeException::new);
         var invoiceEntity = new InvoiceEntity();
 
@@ -65,20 +65,22 @@ public class InvoiceEntityAdapter implements
         invoiceEntity.setYear(command.getYearMonth().getYear());
         invoiceEntity.setMonth(command.getYearMonth().getMonthValue());
         invoiceEntity.setDate(Date.valueOf(LocalDate.of(invoiceEntity.getYear(), invoiceEntity.getMonth(), 1)));
-        invoiceEntity.setPaidDate(Date.valueOf(command.getPaidDate()));
-        invoiceEntity.setDueDate(Date.valueOf(command.getDueDate()));
-        invoiceEntity.setFileName(command.getFile().getFileName());
-        invoiceEntity.setFile(command.getFile().getFile());
+        if(command.getPaidDate() != null) invoiceEntity.setPaidDate(Date.valueOf(command.getPaidDate()));
+        if(command.getDueDate() != null) invoiceEntity.setDueDate(Date.valueOf(command.getDueDate()));
+        if(command.getFile() != null) {
+            invoiceEntity.setFileName(command.getFile().getFileName());
+            invoiceEntity.setFile(command.getFile().getFile());
+        }
         invoiceEntity.setLink(command.getLink());
 
         addDynamicFields(command.getAttributes(), contractEntity, invoiceEntity);
 
-        invoiceRepository.save(invoiceEntity);
+        return invoiceMapper.mapToDomain(invoiceRepository.save(invoiceEntity));
     }
 
     @Override
     @Transactional
-    public void updateInvoice(UpdateInvoiceEntityCommand command) {
+    public Invoice updateInvoice(UpdateInvoiceEntityCommand command) {
         var invoiceEntity = invoiceRepository.findById(command.getInvoiceId()).orElseThrow(RuntimeException::new);
         var contractEntity = contractRepository.findById(command.getContractId()).orElseThrow(RuntimeException::new);
 
@@ -89,10 +91,12 @@ public class InvoiceEntityAdapter implements
         invoiceEntity.setYear(command.getYearMonth().getYear());
         invoiceEntity.setMonth(command.getYearMonth().getMonthValue());
         invoiceEntity.setDate(Date.valueOf(LocalDate.of(invoiceEntity.getYear(), invoiceEntity.getMonth(), 1)));
-        invoiceEntity.setPaidDate(Date.valueOf(command.getPaidDate()));
-        invoiceEntity.setDueDate(Date.valueOf(command.getDueDate()));
-        invoiceEntity.setFileName(command.getFile().getFileName());
-        invoiceEntity.setFile(command.getFile().getFile());
+        if(command.getPaidDate() != null) invoiceEntity.setPaidDate(Date.valueOf(command.getPaidDate()));
+        if(command.getDueDate() != null) invoiceEntity.setDueDate(Date.valueOf(command.getDueDate()));
+        if(command.getFile() != null) {
+            invoiceEntity.setFileName(command.getFile().getFileName());
+            invoiceEntity.setFile(command.getFile().getFile());
+        }
         invoiceEntity.setLink(command.getLink());
 
         // update values for fields with equal name
@@ -106,7 +110,7 @@ public class InvoiceEntityAdapter implements
                 forEach(field -> command.getAttributes().remove(field.getField().getFieldName()));
         addDynamicFields(command.getAttributes(), contractEntity, invoiceEntity);
 
-        invoiceRepository.save(invoiceEntity);
+        return invoiceMapper.mapToDomain(invoiceRepository.save(invoiceEntity));
     }
 
     private void addDynamicFields(Map<String, String> attributes, ContractEntity contractEntity, InvoiceEntity invoiceEntity) {

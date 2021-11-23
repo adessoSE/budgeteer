@@ -11,11 +11,10 @@ import java.time.YearMonth;
 import java.util.Map;
 
 public interface CreateInvoiceEntityPort {
-    void createInvoiceEntity(CreateInvoiceEntityCommand command);
+    Invoice createInvoiceEntity(CreateInvoiceEntityCommand command);
 
     @Value
     class CreateInvoiceEntityCommand{
-        long invoiceId;
         long contractId;
         String invoiceName;
         Money amountOwed;
