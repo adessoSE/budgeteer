@@ -15,11 +15,21 @@ public class InvoiceMapper {
         var attributes = invoiceEntity.getDynamicFields().stream().collect(Collectors.toMap(invoiceFieldEntity
                 -> invoiceFieldEntity.getField().getFieldName(), InvoiceFieldEntity::getValue));
 
-        return new Invoice(invoiceEntity.getId(), invoiceEntity.getContract().getId(), invoiceEntity.getContract().getName(),
-                invoiceEntity.getName(), invoiceEntity.getInvoiceSum(), invoiceEntity.getContract().getTaxRate(),
-                invoiceEntity.getInternalNumber(), YearMonth.of(invoiceEntity.getYear(), invoiceEntity.getMonth()),
-                Date.valueOf(invoiceEntity.getPaidDate().toString()).toLocalDate(), Date.valueOf(invoiceEntity.getDueDate().toString()).toLocalDate(),
-                attributes, invoiceEntity.getLink(), new FileAttachment(invoiceEntity.getFileName(), invoiceEntity.getFile()));
+        return new Invoice(
+                invoiceEntity.getId(),
+                invoiceEntity.getContract().getId(),
+                invoiceEntity.getContract().getName(),
+                invoiceEntity.getName(),
+                invoiceEntity.getInvoiceSum(),
+                invoiceEntity.getContract().getTaxRate(),
+                invoiceEntity.getInternalNumber(),
+                YearMonth.of(invoiceEntity.getYear(), invoiceEntity.getMonth()),
+                invoiceEntity.getPaidDate() == null ? null : Date.valueOf(invoiceEntity.getPaidDate().toString()).toLocalDate(),
+                invoiceEntity.getDueDate() == null ? null : Date.valueOf(invoiceEntity.getDueDate().toString()).toLocalDate(),
+                attributes,
+                invoiceEntity.getLink(),
+                invoiceEntity.getFileName() != null && invoiceEntity.getFile() != null ? new FileAttachment(invoiceEntity.getFileName(), invoiceEntity.getFile()): null
+        );
     }
 
     public List<Invoice> mapToDomain(List<InvoiceEntity> invoiceEntities) {
