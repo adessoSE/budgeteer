@@ -1,0 +1,32 @@
+name: Prepare building and publishing release to DockerHub
+
+on:
+  push:
+    tags: '**'
+
+jobs:
+  release-prepare-version-info:
+    runs-on: ubuntu-latest
+    steps:
+    - id: prep
+      name: Create docker tags
+      run: |
+        DOCKER_IMAGE=budgeteerorg/budgeteer
+        VERSION=${GITHUB_REF#refs/tags/}
+        TAGS="${DOCKER_IMAGE}:${VERSION},${DOCKER_IMAGE}:latest"
+        echo ::set-output name=tags::${TAGS}
+        echo ::set-output name=sha::${GITHUB_SHA}
+    outputs:
+        tags: ${{ steps.prep.outputs.tags }}
+        sha: ${{ steps.prep.outputs.sha }}
+
+  release-call-build-and-publish:
+    needs: release-prepare-version-info
+    uses: adessoAG/budgeteer/.github/workflows/build-publish-docker.yaml@main
+    with:
+      tags: ${{ needs.release-prepare-version-info.outputs.tags }}
+      repository: adessoAG/budgeteer
+      sha: ${{ needs.release-prepare-version-info.outputs.sha }}
+    secrets:
+      dockerhub_username: ${{ secrets.DOCKERHUB_USERNAME }}
+      dockerhub_token: ${{ secrets.DOCKERHUB_TOKEN }}
