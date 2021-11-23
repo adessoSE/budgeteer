@@ -44,7 +44,7 @@ public class ContractAdapter implements
 
     @Override
     @Transactional
-    public void createContractEntity(CreateContractEntityCommand command) {
+    public Contract createContractEntity(CreateContractEntityCommand command) {
         var contractEntity = new ContractEntity();
         var projectEntity = projectRepository.findById(command.getProjectId()).orElseThrow();
 
@@ -60,7 +60,7 @@ public class ContractAdapter implements
         contractEntity.setFileName(command.getFileName());
         contractEntity.setFile(command.getFile());
 
-        contractRepository.save(contractEntity);
+        return contractMapper.mapToDomain(contractRepository.save(contractEntity));
     }
 
     @Override
@@ -71,7 +71,7 @@ public class ContractAdapter implements
 
     @Override
     @Transactional
-    public void updateContractEntity(UpdateContractEntityCommand command) {
+    public Contract updateContractEntity(UpdateContractEntityCommand command) {
         var contractEntity = contractRepository.findById(command.getContractId()).orElseThrow();
         contractEntity.setName(command.getName());
         contractEntity.setInternalNumber(command.getInternalNumber());
@@ -91,7 +91,7 @@ public class ContractAdapter implements
         contractEntity.setLink(command.getLink());
         contractEntity.setFileName(command.getFileName());
         contractEntity.setFile(command.getFile());
-        contractRepository.save(contractEntity);
+        return contractMapper.mapToDomain(contractRepository.save(contractEntity));
     }
 
     @Override

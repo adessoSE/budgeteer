@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import java.util.Map;
 
 public interface CreateContractUseCase {
-    void createContract(CreateContractCommand command);
+    Contract createContract(CreateContractCommand command);
 
     @Value
     class CreateContractCommand {
