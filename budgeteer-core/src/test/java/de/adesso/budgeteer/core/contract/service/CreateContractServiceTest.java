@@ -1,5 +1,6 @@
 package de.adesso.budgeteer.core.contract.service;
 
+import de.adesso.budgeteer.core.common.Attachment;
 import de.adesso.budgeteer.core.contract.domain.Contract;
 import de.adesso.budgeteer.core.contract.port.in.CreateContractUseCase;
 import de.adesso.budgeteer.core.contract.port.out.CreateContractEntityPort;
@@ -15,8 +16,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Collections;
 
-import static org.mockito.Mockito.doNothing;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class CreateContractServiceTest {
@@ -41,7 +43,7 @@ class CreateContractServiceTest {
                 "",
                 new byte[]{}
         );
-        var expected = new CreateContractEntityPort.CreateContractEntityCommand(
+        var expectedCommand = new CreateContractEntityPort.CreateContractEntityCommand(
                 command.getProjectId(),
                 command.getName(),
                 command.getInternalNumber(),
@@ -54,10 +56,28 @@ class CreateContractServiceTest {
                 command.getFileName(),
                 command.getFile()
         );
-        doNothing().when(createContractEntityPort).createContractEntity(expected);
+        var expected = new Contract(
+                12L,
+                command.getProjectId(),
+                command.getInternalNumber(),
+                command.getName(),
+                command.getType(),
+                command.getStartDate(),
+                command.getBudget(),
+                Money.zero(CurrencyUnit.EUR),
+                command.getBudget(),
+                command.getTaxRate(),
+                command.getAttributes(),
+                new Attachment(
+                        command.getFileName(),
+                        command.getLink(),
+                        command.getFile()
+                )
+        );
+        when(createContractEntityPort.createContractEntity(expectedCommand)).thenReturn(expected);
 
-        createContractService.createContract(command);
+        var returned = createContractService.createContract(command);
 
-        verify(createContractEntityPort).createContractEntity(expected);
+        assertThat(returned).isEqualTo(expected);
     }
 }
