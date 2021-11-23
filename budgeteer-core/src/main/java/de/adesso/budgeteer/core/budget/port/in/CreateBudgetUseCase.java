@@ -12,7 +12,7 @@ public interface CreateBudgetUseCase {
     @Value
     class CreateBudgetCommand {
         long projectId;
-        long contractId;
+        Long contractId;
         String name;
         String description;
         String importKey;

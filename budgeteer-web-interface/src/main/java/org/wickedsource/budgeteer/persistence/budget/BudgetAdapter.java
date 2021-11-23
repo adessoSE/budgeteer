@@ -5,6 +5,7 @@ import de.adesso.budgeteer.core.budget.port.out.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.wickedsource.budgeteer.persistence.contract.ContractRepository;
+import org.wickedsource.budgeteer.persistence.project.ProjectRepository;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -25,8 +26,9 @@ public class BudgetAdapter implements
         IsUniqueImportKeyInProjectPort,
         IsUniqueNameInProjectPort {
 
-    private final ContractRepository contractRepository;
     private final BudgetRepository budgetRepository;
+    private final ProjectRepository projectRepository;
+    private final ContractRepository contractRepository;
     private final BudgetMapper budgetMapper;
 
     @Transactional
@@ -45,7 +47,9 @@ public class BudgetAdapter implements
     @Override
     public Budget createBudgetEntity(CreateBudgetCommandEntity command) {
         var budgetEntity = new BudgetEntity();
-        var contractEntity = contractRepository.findById(command.getContractId()).orElseThrow();
+        var projectEntity = projectRepository.findById(command.getProjectId()).orElseThrow();
+        var contractEntity = command.getContractId().flatMap(contractRepository::findById).orElse(null);
+        budgetEntity.setProject(projectEntity);
         budgetEntity.setContract(contractEntity);
         budgetEntity.setName(command.getName());
         budgetEntity.setDescription(command.getDescription());
@@ -67,7 +71,7 @@ public class BudgetAdapter implements
     public Budget updateBudgetEntity(UpdateBudgetEntityCommand command) {
         var budgetEntity = budgetRepository.findById(command.getBudgetId()).orElseThrow();
         var tags = mapToTagEntities(command.getTags(), budgetEntity);
-        if (budgetEntity.getContract().getId() != command.getContractId()) {
+        if (command.getContractId() != null && budgetEntity.getContract().getId() != command.getContractId()) {
             budgetEntity.setContract(contractRepository.findById(command.getContractId()).orElseThrow());
         }
         budgetEntity.setName(command.getName());
@@ -86,23 +90,35 @@ public class BudgetAdapter implements
     }
 
     @Override
+    @Transactional
     public String getBudgetNote(long budgetId) {
         return budgetRepository.getNoteForBudget(budgetId);
     }
 
     @Override
+    @Transactional
     public void updateBudgetNote(long budgetId, String note) {
         budgetRepository.updateNoteForBudget(budgetId, note);
     }
 
     @Override
     public boolean isUniqueImportKeyInProject(long projectId, String importKey) {
-        return budgetRepository.existsByImportKeyAndProjectId(importKey, projectId);
+        return !budgetRepository.existsByImportKeyAndProjectId(importKey, projectId);
+    }
+
+    @Override
+    public boolean isUniqueImportKeyInProjectByBudgetId(long budgetId, String importKey) {
+        return !budgetRepository.existsWithImportKeyInProjectByBudgetId(budgetId, importKey);
     }
 
     @Override
     public boolean isUniqueNameInProject(long projectId, String name) {
-        return budgetRepository.existsByNameAndProjectId(name, projectId);
+        return !budgetRepository.existsByNameAndProjectId(name, projectId);
+    }
+
+    @Override
+    public boolean isUniqueNameInProjectByBudgetId(long budgetId, String name) {
+        return !budgetRepository.existsWithNameInProjectByBudgetId(budgetId, name);
     }
 
     private List<BudgetTagEntity> mapToTagEntities(List<String> tags, BudgetEntity budgetEntity) {

@@ -9,7 +9,7 @@ import java.util.List;
 @Value
 public class Budget {
     long id;
-    long contractId;
+    Long contractId;
     String name;
     String contractName;
     String description;

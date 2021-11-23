@@ -20,7 +20,7 @@ public class CreateBudgetService implements CreateBudgetUseCase {
 
     @Override
     public Budget createBudget(CreateBudgetCommand command) {
-        if (!isContractInProjectPort.isContractInProject(command.getProjectId(), command.getContractId())) {
+        if (command.getContractId() != null && !isContractInProjectPort.isContractInProject(command.getProjectId(), command.getContractId())) {
             throw new IllegalArgumentException(); // TODO: Proper error handling
         }
         if (!isUniqueNameInProjectPort.isUniqueNameInProject(command.getProjectId(), command.getName())) {
@@ -30,6 +30,7 @@ public class CreateBudgetService implements CreateBudgetUseCase {
             throw new IllegalArgumentException(); // TODO: Proper error handling
         }
         return createBudgetEntityPort.createBudgetEntity(new CreateBudgetEntityPort.CreateBudgetCommandEntity(
+                command.getProjectId(),
                 command.getContractId(),
                 command.getName(),
                 command.getDescription(),

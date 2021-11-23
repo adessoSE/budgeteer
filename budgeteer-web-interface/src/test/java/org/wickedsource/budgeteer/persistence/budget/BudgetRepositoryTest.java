@@ -97,4 +97,71 @@ class BudgetRepositoryTest extends DataJpaTestBase {
         assertThat(foundBudget.getNote()).isEqualTo(newNote);
     }
 
+    @Test
+    void shouldReturnTrueIfBudgetWithNameExistsInProject() {
+        var project = persistEntity(new ProjectEntity(), DEFAULT_PROJECT);
+        var budget1 = persistEntity(new BudgetEntity(), DEFAULT_BUDGET.andThen(setProject(project)));
+        var budget2 = persistEntity(new BudgetEntity(), ALTERNATIVE_BUDGET.andThen(setProject(project)));
+
+        var returned = budgetRepository.existsWithNameInProjectByBudgetId(budget2.getId(), budget1.getName());
+
+        assertThat(returned).isTrue();
+    }
+
+    @Test
+    void shouldReturnFalseIfBudgetWithNameExitsInDifferentProject() {
+        var project1 = persistEntity(new ProjectEntity(), DEFAULT_PROJECT);
+        var project2 = persistEntity(new ProjectEntity(), projectEntity -> projectEntity.setName("alt-project"));
+        var budget1 = persistEntity(new BudgetEntity(), DEFAULT_BUDGET.andThen(setProject(project1)));
+        var budget2 = persistEntity(new BudgetEntity(), ALTERNATIVE_BUDGET.andThen(setProject(project2)));
+
+        var returned = budgetRepository.existsWithNameInProjectByBudgetId(budget2.getId(), budget1.getName());
+
+        assertThat(returned).isFalse();
+    }
+
+    @Test
+    void shouldReturnFalseIfNoBudgetWithNameExitsInProject() {
+        var project = persistEntity(new ProjectEntity(), DEFAULT_PROJECT);
+        persistEntity(new BudgetEntity(), DEFAULT_BUDGET.andThen(setProject(project)));
+        var budget2 = persistEntity(new BudgetEntity(), ALTERNATIVE_BUDGET.andThen(setProject(project)));
+
+        var returned = budgetRepository.existsWithNameInProjectByBudgetId(budget2.getId(), "a-different-name");
+
+        assertThat(returned).isFalse();
+    }
+
+    @Test
+    void shouldReturnTrueIfBudgetWithImportKeyExistsInProject() {
+        var project = persistEntity(new ProjectEntity(), DEFAULT_PROJECT);
+        var budget1 = persistEntity(new BudgetEntity(), DEFAULT_BUDGET.andThen(setProject(project)));
+        var budget2 = persistEntity(new BudgetEntity(), ALTERNATIVE_BUDGET.andThen(setProject(project)));
+
+        var returned = budgetRepository.existsWithImportKeyInProjectByBudgetId(budget2.getId(), budget1.getImportKey());
+
+        assertThat(returned).isTrue();
+    }
+
+    @Test
+    void shouldReturnFalseIfBudgetWithImportKeyExitsInDifferentProject() {
+        var project1 = persistEntity(new ProjectEntity(), DEFAULT_PROJECT);
+        var project2 = persistEntity(new ProjectEntity(), projectEntity -> projectEntity.setName("alt-project"));
+        var budget1 = persistEntity(new BudgetEntity(), DEFAULT_BUDGET.andThen(setProject(project1)));
+        var budget2 = persistEntity(new BudgetEntity(), ALTERNATIVE_BUDGET.andThen(setProject(project2)));
+
+        var returned = budgetRepository.existsWithImportKeyInProjectByBudgetId(budget2.getId(), budget1.getImportKey());
+
+        assertThat(returned).isFalse();
+    }
+
+    @Test
+    void shouldReturnFalseIfNoBudgetWithImportKeyExitsInProject() {
+        var project = persistEntity(new ProjectEntity(), DEFAULT_PROJECT);
+        persistEntity(new BudgetEntity(), DEFAULT_BUDGET.andThen(setProject(project)));
+        var budget2 = persistEntity(new BudgetEntity(), ALTERNATIVE_BUDGET.andThen(setProject(project)));
+
+        var returned = budgetRepository.existsWithImportKeyInProjectByBudgetId(budget2.getId(), "a-different-importKey");
+
+        assertThat(returned).isFalse();
+    }
 }
