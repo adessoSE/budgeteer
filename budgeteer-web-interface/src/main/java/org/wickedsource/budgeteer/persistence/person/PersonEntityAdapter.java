@@ -71,7 +71,7 @@ public class PersonEntityAdapter implements
         personEntity.setName(command.getPersonName());
         personEntity.setImportKey(command.getImportKey());
         personEntity.setDefaultDailyRate(command.getDefaultDailyRate());
-        personEntity.setProject(projectRepository.findById(command.getProjectId()).orElse(null));
+        personEntity.setProject(projectRepository.findById(command.getProjectId()).orElseThrow());
         addDailyRates(personEntity, command.getRates());
 
         return personMapper.mapToPerson(personRepository.save(personEntity));
