@@ -7,7 +7,8 @@ on:
       - main
 
 jobs:
-  build:
+  build-pr:
+    name: Build PR
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -17,3 +18,19 @@ jobs:
           java-version: '11'
       - name: Build with gradle
         run: ./gradlew build
+
+  build-merge-result:
+    name: Build merge result
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'pull_request' }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
+      - name: Setup Java JDK
+        uses: actions/setup-java@v1.4.3
+        with:
+          java-version: '11'
+      - name: Build with gradle
+        run: ./gradlew build
+
