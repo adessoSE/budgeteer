@@ -1,5 +1,6 @@
 package de.adesso.budgeteer.core.person.service;
 
+import de.adesso.budgeteer.core.person.domain.Person;
 import de.adesso.budgeteer.core.person.port.in.CreatePersonUseCase;
 import de.adesso.budgeteer.core.person.port.out.CreatePersonEntityPort;
 import org.joda.money.CurrencyUnit;
@@ -10,10 +11,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDate;
 import java.util.Collections;
 
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.verify;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class CreatePersonServiceTest {
@@ -25,8 +27,7 @@ class CreatePersonServiceTest {
 
     @Test
     void shouldCreatePerson() {
-        var command = new CreatePersonUseCase.CreatePersonCommand(
-                1L,
+        var command = new CreatePersonEntityPort.CreatePersonEntityCommand(
                 "name",
                 "importKey",
                 Money.of(CurrencyUnit.EUR, 1),
@@ -34,19 +35,27 @@ class CreatePersonServiceTest {
                 Collections.emptyList()
         );
 
-        var expected = new CreatePersonEntityPort.CreatePersonEntityCommand(
-                command.getPersonId(),
+        var expected = new Person(
+                1L,
                 command.getPersonName(),
-                command.getImportKey(),
+                Money.zero(CurrencyUnit.EUR),
+                LocalDate.of(2021, 11, 29),
+                LocalDate.of(2021, 11, 29),
                 command.getDefaultDailyRate(),
-                command.getProjectId(),
-                command.getRates()
+                0.0,
+                Money.zero(CurrencyUnit.EUR)
         );
 
-        doNothing().when(createPersonEntityPort).createPersonEntity(expected);
+        when(createPersonEntityPort.createPersonEntity(command)).thenReturn(expected);
 
-        createPersonService.createPerson(command);
+        var returnedPerson = createPersonService.createPerson(new CreatePersonUseCase.CreatePersonCommand(
+           command.getPersonName(),
+           command.getImportKey(),
+           command.getDefaultDailyRate(),
+           command.getProjectId(),
+           command.getRates()
+        ));
 
-        verify(createPersonEntityPort).createPersonEntity(expected);
+        assertThat(returnedPerson).isEqualTo(expected);
     }
 }
