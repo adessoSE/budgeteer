@@ -65,21 +65,21 @@ public class PersonEntityAdapter implements
 
     @Override
     @Transactional
-    public void createPersonEntity(CreatePersonEntityCommand command) {
+    public Person createPersonEntity(CreatePersonEntityCommand command) {
         var personEntity = new PersonEntity();
 
         personEntity.setName(command.getPersonName());
         personEntity.setImportKey(command.getImportKey());
         personEntity.setDefaultDailyRate(command.getDefaultDailyRate());
-        personEntity.setProject(projectRepository.findById(command.getProjectId()).orElse(null));
+        personEntity.setProject(projectRepository.findById(command.getProjectId()).orElseThrow());
         addDailyRates(personEntity, command.getRates());
 
-        personRepository.save(personEntity);
+        return personMapper.mapToPerson(personRepository.save(personEntity));
     }
 
     @Override
     @Transactional
-    public void updatePerson(UpdatePersonEntityCommand command) {
+    public Person updatePerson(UpdatePersonEntityCommand command) {
         var personEntity = personRepository.findById(command.getPersonId()).orElseThrow(RuntimeException::new);
         
         personEntity.setName(command.getPersonName());
@@ -87,7 +87,7 @@ public class PersonEntityAdapter implements
         personEntity.setDefaultDailyRate(personEntity.getDefaultDailyRate());
         addDailyRates(personEntity, command.getRates());
 
-        personRepository.save(personEntity);
+        return personMapper.mapToPerson(personRepository.save(personEntity));
     }
 
     private void addDailyRates(PersonEntity personEntity, List<PersonRate> rates) {

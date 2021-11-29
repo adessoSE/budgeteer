@@ -1,5 +1,6 @@
 package de.adesso.budgeteer.core.person.service;
 
+import de.adesso.budgeteer.core.person.domain.Person;
 import de.adesso.budgeteer.core.person.port.in.CreatePersonUseCase;
 import de.adesso.budgeteer.core.person.port.out.CreatePersonEntityPort;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +12,7 @@ public class CreatePersonService implements CreatePersonUseCase {
     private final CreatePersonEntityPort createPersonEntityPort;
 
     @Override
-    public void createPerson(CreatePersonCommand command) {
-        createPersonEntityPort.createPersonEntity(new CreatePersonEntityPort.CreatePersonEntityCommand(command.getPersonId(), command.getPersonName(), command.getImportKey(), command.getDefaultDailyRate(), command.getProjectId(), command.getRates()));
+    public Person createPerson(CreatePersonCommand command) {
+        return createPersonEntityPort.createPersonEntity(new CreatePersonEntityPort.CreatePersonEntityCommand(command.getPersonName(), command.getImportKey(), command.getDefaultDailyRate(), command.getProjectId(), command.getRates()));
     }
 }

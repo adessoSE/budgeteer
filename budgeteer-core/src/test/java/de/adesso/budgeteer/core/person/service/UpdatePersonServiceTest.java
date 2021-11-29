@@ -1,6 +1,6 @@
 package de.adesso.budgeteer.core.person.service;
 
-import de.adesso.budgeteer.core.invoice.port.out.UpdateInvoiceEntityPort;
+import de.adesso.budgeteer.core.person.domain.Person;
 import de.adesso.budgeteer.core.person.port.in.UpdatePersonUseCase;
 import de.adesso.budgeteer.core.person.port.out.UpdatePersonEntityPort;
 import org.joda.money.CurrencyUnit;
@@ -11,10 +11,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDate;
 import java.util.Collections;
 
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.verify;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class UpdatePersonServiceTest {
@@ -23,7 +24,7 @@ class UpdatePersonServiceTest {
 
     @Test
     void shouldUpdateService() {
-        var command = new UpdatePersonUseCase.UpdatePersonCommand(
+        var command = new UpdatePersonEntityPort.UpdatePersonEntityCommand(
                 1L,
                 "name",
                 "importKey",
@@ -31,18 +32,27 @@ class UpdatePersonServiceTest {
                 Collections.emptyList()
         );
 
-        var expectedCommand = new UpdatePersonEntityPort.UpdatePersonEntityCommand(
-                command.getPersonId(),
+        var expected = new Person(
+                1L,
                 command.getPersonName(),
-                command.getImportKey(),
+                Money.zero(CurrencyUnit.EUR),
+                LocalDate.of(2021, 11, 29),
+                LocalDate.of(2021, 11, 29),
                 command.getDefaultDailyRate(),
-                command.getRates()
+                0.0,
+                Money.zero(CurrencyUnit.EUR)
         );
 
-        doNothing().when(updatePersonEntityPort).updatePerson(expectedCommand);
+        when(updatePersonEntityPort.updatePerson(command)).thenReturn(expected);
 
-        updatePersonService.updatePerson(command);
+        var returnedPerson = updatePersonService.updatePerson(new UpdatePersonUseCase.UpdatePersonCommand(
+           command.getPersonId(),
+           command.getPersonName(),
+           command.getImportKey(),
+           command.getDefaultDailyRate(),
+           command.getRates()
+        ));
 
-        verify(updatePersonEntityPort).updatePerson(expectedCommand);
+        assertThat(returnedPerson).isEqualTo(expected);
     }
 }

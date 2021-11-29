@@ -40,6 +40,11 @@ public class PersonMapper {
 
     private Money calculateAvarageDailyRate(List<WorkRecordEntity> workRecords) {
        int totalMinutes = workRecords.stream().mapToInt(RecordEntity::getMinutes).sum();
+
+       if(totalMinutes == 0) {
+           return Money.zero(CurrencyUnit.EUR);
+       }
+
        return workRecords.stream()
                .map(workRecordEntity -> workRecordEntity.getDailyRate().multipliedBy(workRecordEntity.getMinutes()))
                .reduce(Money.zero(CurrencyUnit.EUR), Money::plus)
