@@ -1,6 +1,7 @@
 package de.adesso.budgeteer.core.invoice.port.out;
 
 import de.adesso.budgeteer.core.common.FileAttachment;
+import de.adesso.budgeteer.core.invoice.domain.Invoice;
 import lombok.Value;
 import org.joda.money.Money;
 
@@ -10,7 +11,7 @@ import java.time.YearMonth;
 import java.util.Map;
 
 public interface UpdateInvoiceEntityPort {
-    void updateInvoice(UpdateInvoiceEntityCommand command);
+    Invoice updateInvoice(UpdateInvoiceEntityCommand command);
 
     @Value
     class UpdateInvoiceEntityCommand {

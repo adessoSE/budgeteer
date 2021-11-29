@@ -12,8 +12,8 @@ public class UpdateInvoiceService implements UpdateInvoiceUseCase {
     private final UpdateInvoiceEntityPort updateInvoicePort;
 
     @Override
-    public void updateInvoice(UpdateInvoiceCommand command) {
-        updateInvoicePort.updateInvoice(new UpdateInvoiceEntityPort.UpdateInvoiceEntityCommand(command.getInvoiceId(),
+    public Invoice updateInvoice(UpdateInvoiceCommand command) {
+        return updateInvoicePort.updateInvoice(new UpdateInvoiceEntityPort.UpdateInvoiceEntityCommand(command.getInvoiceId(),
                 command.getContractId(), command.getInvoiceName(), command.getAmountOwed(), command.getTaxRate(),
                 command.getInternalNumber(), command.getYearMonth(), command.getPaidDate(), command.getDueDate(),
                 command.getAttributes(), command.getLink(), command.getFile()));

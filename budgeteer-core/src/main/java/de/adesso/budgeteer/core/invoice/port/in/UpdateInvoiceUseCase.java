@@ -11,7 +11,7 @@ import java.time.YearMonth;
 import java.util.Map;
 
 public interface UpdateInvoiceUseCase {
-    void updateInvoice(UpdateInvoiceCommand command);
+    Invoice updateInvoice(UpdateInvoiceCommand command);
 
     @Value
     class UpdateInvoiceCommand{
