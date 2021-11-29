@@ -27,13 +27,13 @@ public class InvoiceController {
         return getInvoiceByIdUseCase.getInvoiceById(invoiceId).map(invoiceModelMapper::toModel);
     }
 
-    @GetMapping
-    public List<InvoiceModel> getInvoicesInContract(@RequestParam("contractId") long contractId) {
+    @GetMapping("/byContract/{contractId}")
+    public List<InvoiceModel> getInvoicesInContract(@PathVariable long contractId) {
         return invoiceModelMapper.toModel(getInvoicesInContractUseCase.getInvoicesInContract(contractId));
     }
 
-    @GetMapping
-    public List<InvoiceModel> getInvoicesInProject(@RequestParam("projectId") long projectId) {
+    @GetMapping("/byProject/{projectId}")
+    public List<InvoiceModel> getInvoicesInProject(@PathVariable long projectId) {
         return invoiceModelMapper.toModel(getInvoicesInProjectUseCase.getInvoicesInProject(projectId));
     }
 
