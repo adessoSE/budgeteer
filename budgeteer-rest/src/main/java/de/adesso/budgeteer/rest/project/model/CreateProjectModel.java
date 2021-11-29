@@ -7,5 +7,5 @@ import javax.validation.constraints.NotEmpty;
 @Data
 public class CreateProjectModel {
     @NotEmpty
-    private final String name;
+    private String name;
 }

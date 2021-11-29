@@ -7,3 +7,7 @@ budgeteer:
       - 'POST'
       - 'PUT'
       - 'DELETE'
+  jwt:
+    issuer: budgeteer
+    secret: budgeteer
+    max-age: 3600
