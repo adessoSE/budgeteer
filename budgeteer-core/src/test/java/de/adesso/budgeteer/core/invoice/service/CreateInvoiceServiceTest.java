@@ -1,6 +1,7 @@
 package de.adesso.budgeteer.core.invoice.service;
 
 import de.adesso.budgeteer.core.common.FileAttachment;
+import de.adesso.budgeteer.core.invoice.domain.Invoice;
 import de.adesso.budgeteer.core.invoice.port.in.CreateInvoiceUseCase;
 import de.adesso.budgeteer.core.invoice.port.out.CreateInvoiceEntityPort;
 import org.joda.money.CurrencyUnit;
@@ -17,9 +18,8 @@ import java.time.Month;
 import java.time.YearMonth;
 import java.util.HashMap;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.verify;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class CreateInvoiceServiceTest {
@@ -31,21 +31,52 @@ class CreateInvoiceServiceTest {
 
     @Test
     void shouldCreateInvoice() {
-        var command = new CreateInvoiceUseCase.CreateInvoiceCommand(1, 1, "invoiceName",
-                Money.of(CurrencyUnit.EUR, 1), BigDecimal.ONE, "internalNumber",
-                YearMonth.of(2021, Month.JANUARY), LocalDate.of(2021, 10, 29),
-                LocalDate.of(2021, 10, 29), new HashMap<>(), "link",
-                new FileAttachment("fileName", new byte[]{}));
+        var command = new CreateInvoiceEntityPort.CreateInvoiceEntityCommand(
+                1,
+                "invoiceName",
+                Money.of(CurrencyUnit.EUR, 1),
+                BigDecimal.ONE,
+                "internalNumber",
+                YearMonth.of(2021, Month.JANUARY),
+                LocalDate.of(2021, 10, 29),
+                LocalDate.of(2021, 10, 29),
+                new HashMap<>(),
+                "link",
+                new FileAttachment("fileName", new byte[]{})
+        );
 
-        var expected = new CreateInvoiceEntityPort.CreateInvoiceEntityCommand(command.getInvoiceId(), command.getContractId(),
-                command.getInvoiceName(), command.getAmountOwed(), command.getTaxRate(), command.getInternalNumber(),
-                command.getYearMonth(), command.getPaidDate(), command.getDueDate(), command.getAttributes(),
-                command.getLink(), command.getFile());
+        var expected = new Invoice(
+                1L,
+                command.getContractId(),
+                "contract",
+                command.getInvoiceName(),
+                command.getAmountOwed(),
+                command.getTaxRate(),
+                command.getInternalNumber(),
+                command.getYearMonth(),
+                command.getPaidDate(),
+                command.getDueDate(),
+                command.getAttributes(),
+                command.getLink(),
+                command.getFile()
+        );
 
-        doNothing().when(createInvoiceEntityPort).createInvoiceEntity(expected);
+        when(createInvoiceEntityPort.createInvoiceEntity(command)).thenReturn(expected);
 
-        createInvoiceService.createInvoice(command);
+        var returnedInvoice = createInvoiceService.createInvoice(new CreateInvoiceUseCase.CreateInvoiceCommand(
+           command.getContractId(),
+           command.getInvoiceName(),
+           command.getAmountOwed(),
+           command.getTaxRate(),
+           command.getInternalNumber(),
+           command.getYearMonth(),
+           command.getPaidDate(),
+           command.getDueDate(),
+           command.getAttributes(),
+           command.getLink(),
+           command.getFile()
+        ));
 
-        verify(createInvoiceEntityPort).createInvoiceEntity(expected);
+        assertThat(returnedInvoice).isEqualTo(expected);
     }
 }

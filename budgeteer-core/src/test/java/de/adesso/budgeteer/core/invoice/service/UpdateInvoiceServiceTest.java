@@ -1,6 +1,7 @@
 package de.adesso.budgeteer.core.invoice.service;
 
 import de.adesso.budgeteer.core.common.FileAttachment;
+import de.adesso.budgeteer.core.invoice.domain.Invoice;
 import de.adesso.budgeteer.core.invoice.port.in.UpdateInvoiceUseCase;
 import de.adesso.budgeteer.core.invoice.port.out.UpdateInvoiceEntityPort;
 import org.joda.money.CurrencyUnit;
@@ -16,8 +17,8 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.HashMap;
 
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.verify;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class UpdateInvoiceServiceTest {
@@ -27,7 +28,7 @@ class UpdateInvoiceServiceTest {
 
     @Test
     void shouldUpdateInvoice() {
-        var command = new UpdateInvoiceUseCase.UpdateInvoiceCommand(
+        var command = new UpdateInvoiceEntityPort.UpdateInvoiceEntityCommand(
                 1L,
                 1L,
                 "invoiceName",
@@ -42,9 +43,10 @@ class UpdateInvoiceServiceTest {
                 new FileAttachment("filename", new byte[]{})
         );
 
-        var expectedCommand = new UpdateInvoiceEntityPort.UpdateInvoiceEntityCommand(
-                command.getInvoiceId(),
+        var expected = new Invoice(
+                1L,
                 command.getContractId(),
+                "contract",
                 command.getInvoiceName(),
                 command.getAmountOwed(),
                 command.getTaxRate(),
@@ -57,11 +59,24 @@ class UpdateInvoiceServiceTest {
                 command.getFile()
         );
 
-        doNothing().when(updateInvoiceEntityPort).updateInvoice(expectedCommand);
+        when(updateInvoiceEntityPort.updateInvoice(command)).thenReturn(expected);
 
-        updateInvoiceService.updateInvoice(command);
+        var returnedInvoice = updateInvoiceService.updateInvoice(new UpdateInvoiceUseCase.UpdateInvoiceCommand(
+           command.getInvoiceId(),
+           command.getContractId(),
+           command.getInvoiceName(),
+           command.getAmountOwed(),
+           command.getTaxRate(),
+           command.getInternalNumber(),
+           command.getYearMonth(),
+           command.getPaidDate(),
+           command.getDueDate(),
+           command.getAttributes(),
+           command.getLink(),
+           command.getFile()
+        ));
 
-        verify(updateInvoiceEntityPort).updateInvoice(expectedCommand);
+        assertThat(returnedInvoice).isEqualTo(expected);
     }
 
 }
