@@ -2,6 +2,7 @@ package de.adesso.budgeteer.core.project.service;
 
 import de.adesso.budgeteer.core.project.ProjectNameAlreadyInUseException;
 import de.adesso.budgeteer.core.project.ProjectNotFoundException;
+import de.adesso.budgeteer.core.project.domain.Project;
 import de.adesso.budgeteer.core.project.port.in.UpdateProjectUseCase;
 import de.adesso.budgeteer.core.project.port.out.GetProjectPort;
 import de.adesso.budgeteer.core.project.port.out.ProjectExistsWithNamePort;
@@ -18,7 +19,7 @@ public class UpdateProjectService implements UpdateProjectUseCase {
     private final GetProjectPort getProjectPort;
 
     @Override
-    public void updateProject(UpdateProjectCommand command) throws ProjectNameAlreadyInUseException, ProjectNotFoundException {
+    public Project updateProject(UpdateProjectCommand command) throws ProjectNameAlreadyInUseException, ProjectNotFoundException {
         if (command.getName() == null || command.getName().isBlank()) {
             throw new IllegalArgumentException("name may not be null or blank");
         }
@@ -32,6 +33,6 @@ public class UpdateProjectService implements UpdateProjectUseCase {
         if (!command.getName().equals(project.getName()) && projectExistsWithNamePort.projectExistsWithName(command.getName())) {
             throw new ProjectNameAlreadyInUseException();
         }
-        updateProjectPort.updateProject(command.getId(), command.getName(), command.getDateRange());
+        return updateProjectPort.updateProject(command.getId(), command.getName(), command.getDateRange());
     }
 }

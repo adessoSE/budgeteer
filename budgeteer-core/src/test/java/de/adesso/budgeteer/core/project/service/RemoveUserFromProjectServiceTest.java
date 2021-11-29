@@ -1,6 +1,6 @@
 package de.adesso.budgeteer.core.project.service;
 
-import de.adesso.budgeteer.core.project.port.in.RemoveUserFromProjectPort;
+import de.adesso.budgeteer.core.project.port.out.RemoveUserFromProjectPort;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

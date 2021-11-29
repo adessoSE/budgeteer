@@ -1,6 +1,6 @@
 package de.adesso.budgeteer.core.project.service;
 
-import de.adesso.budgeteer.core.project.port.in.RemoveUserFromProjectPort;
+import de.adesso.budgeteer.core.project.port.out.RemoveUserFromProjectPort;
 import de.adesso.budgeteer.core.project.port.in.RemoveUserFromProjectUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
