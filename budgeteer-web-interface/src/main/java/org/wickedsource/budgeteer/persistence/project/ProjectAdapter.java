@@ -40,7 +40,8 @@ public class ProjectAdapter implements GetProjectPort,
         RemoveUserFromProjectPort,
         ProjectExistsWithIdPort,
         GetProjectAttributesPort,
-        ProjectHasContractsPort {
+        ProjectHasContractsPort,
+        UserHasAccessToProjectPort {
 
     private final ProjectMapper projectMapper;
     private final ProjectRepository projectRepository;
@@ -172,5 +173,10 @@ public class ProjectAdapter implements GetProjectPort,
     @Override
     public boolean projectHasContracts(long projectId) {
         return projectRepository.hasContracts(projectId);
+    }
+
+    @Override
+    public boolean userHasAccessToProject(String username, long projectId) {
+        return projectRepository.userInAuthorizedUsers(username, projectId);
     }
 }

@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.budgeteer.persistence.DataJpaTestBase;
 import org.wickedsource.budgeteer.persistence.contract.ContractEntity;
 import org.wickedsource.budgeteer.persistence.user.UserEntity;
-import org.wickedsource.budgeteer.persistence.user.UserRepository;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -15,7 +14,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class ProjectRepositoryTest extends DataJpaTestBase {
 
-    @Autowired private ProjectRepository projectRepository;
+    @Autowired
+    private ProjectRepository projectRepository;
 
     private static final Consumer<ProjectEntity> DEFAULT_PROJECT = projectEntity -> projectEntity.setName("project");
     private static final Consumer<UserEntity> DEFAULT_USER = userEntity -> {
@@ -106,5 +106,26 @@ class ProjectRepositoryTest extends DataJpaTestBase {
         var returnedProjects = projectRepository.getUsersProjects(user.getId());
 
         assertThat(returnedProjects).isEmpty();
+    }
+
+    @Test
+    void shouldReturnTrueIfUserIsInAuthorizedUsers() {
+        var user = persistEntity(new UserEntity(), DEFAULT_USER);
+        var project = persistEntity(new ProjectEntity(), DEFAULT_PROJECT.andThen(projectEntity -> projectEntity.setAuthorizedUsers(List.of(user))));
+
+        var returned = projectRepository.userInAuthorizedUsers(user.getName(), project.getId());
+
+        assertThat(returned).isTrue();
+    }
+
+    @Test
+    void shouldReturnFalseIfUserIsNotInAuthorizedUsers() {
+        var user = persistEntity(new UserEntity(), DEFAULT_USER);
+        var unauthorizedUser = persistEntity(new UserEntity(), DEFAULT_USER.andThen(userEntity -> userEntity.setName("name2")));
+        var project = persistEntity(new ProjectEntity(), DEFAULT_PROJECT.andThen(projectEntity -> projectEntity.setAuthorizedUsers(List.of(user))));
+
+        var returned = projectRepository.userInAuthorizedUsers(unauthorizedUser.getName(), project.getId());
+
+        assertThat(returned).isFalse();
     }
 }
