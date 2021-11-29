@@ -12,6 +12,9 @@ import java.util.Optional;
 @Repository
 public interface ProjectRepository extends CrudRepository<ProjectEntity, Long> {
 
+    @Query("SELECT (count(project) > 0) FROM ProjectEntity project WHERE project.id = :projectId AND :username IN (SELECT user.name FROM project.authorizedUsers user)")
+    boolean userInAuthorizedUsers(@Param("username") String username, @Param("projectId") long projectId);
+
     @Query("select pcf from ProjectContractField pcf where pcf.project.id = :projectId AND pcf.fieldName = :fieldName")
     ProjectContractField findContractFieldByName(@Param("projectId") long projectId, @Param("fieldName") String fieldName);
 

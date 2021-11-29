@@ -7,6 +7,7 @@ import de.adesso.budgeteer.rest.project.model.ProjectModel;
 import de.adesso.budgeteer.rest.project.model.UpdateDefaultProjectModel;
 import de.adesso.budgeteer.rest.security.userdetails.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,6 +35,7 @@ public class ProjectController {
     }
 
     @GetMapping("/{projectId}")
+    @PreAuthorize("userHasAccessToProject(principal.username, #projectId)")
     public Optional<ProjectModel> getProject(@PathVariable("projectId") long projectId) {
         return Optional.ofNullable(getProjectUseCase.getProject(projectId)).map(projectModelMapper::toModel);
     }
