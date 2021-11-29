@@ -2,7 +2,6 @@ package de.adesso.budgeteer.core.user.service;
 
 import de.adesso.budgeteer.core.user.MailAlreadyInUseException;
 import de.adesso.budgeteer.core.user.OnEmailChangedEvent;
-import de.adesso.budgeteer.core.user.PasswordHasher;
 import de.adesso.budgeteer.core.user.UsernameAlreadyInUseException;
 import de.adesso.budgeteer.core.user.port.in.RegisterUseCase;
 import de.adesso.budgeteer.core.user.port.out.CreateUserPort;
@@ -25,7 +24,6 @@ class RegisterServiceTest {
     @Mock private UserWithNameExistsPort userWithNameExistsPort;
     @Mock private UserWithEmailExistsPort userWithEmailExistsPort;
     @Mock private CreateUserPort createUserPort;
-    @Mock private PasswordHasher passwordHasher;
     @Mock private ApplicationEventPublisher eventPublisher;
 
     @Test
@@ -49,31 +47,16 @@ class RegisterServiceTest {
     }
 
     @Test
-    void shouldHashPasswordWhenRegisteringUser() throws UsernameAlreadyInUseException, MailAlreadyInUseException {
-        var command = new RegisterUseCase.RegisterCommand("test", "test@mail", "t3st");
-        when(userWithNameExistsPort.userWithNameExists("test")).thenReturn(false);
-        when(userWithEmailExistsPort.userWithEmailExists("test@mail")).thenReturn(false);
-        when(passwordHasher.hash(anyString())).thenReturn("t35t");
-        when(createUserPort.createUser(anyString(), anyString(), anyString())).thenReturn(1L);
-        doNothing().when(eventPublisher).publishEvent(any());
-
-        registerService.register(command);
-
-        verify(passwordHasher).hash("t3st");
-    }
-
-    @Test
     void shouldCallCreateUserWhenUserIsValid() throws UsernameAlreadyInUseException, MailAlreadyInUseException {
         var command = new RegisterUseCase.RegisterCommand("test", "test@mail", "t3st");
         when(userWithNameExistsPort.userWithNameExists("test")).thenReturn(false);
         when(userWithEmailExistsPort.userWithEmailExists("test@mail")).thenReturn(false);
-        when(passwordHasher.hash(anyString())).thenReturn("t35t");
         when(createUserPort.createUser(anyString(), anyString(), anyString())).thenReturn(1L);
         doNothing().when(eventPublisher).publishEvent(any());
 
         registerService.register(command);
 
-        verify(createUserPort).createUser("test", "test@mail", "t35t");
+        verify(createUserPort).createUser(command.getUsername(), command.getMail(), command.getPassword());
     }
 
     @Test
@@ -81,7 +64,6 @@ class RegisterServiceTest {
         var command = new RegisterUseCase.RegisterCommand("test", "test@mail", "t3st");
         when(userWithNameExistsPort.userWithNameExists("test")).thenReturn(false);
         when(userWithEmailExistsPort.userWithEmailExists("test@mail")).thenReturn(false);
-        when(passwordHasher.hash(anyString())).thenReturn("t35t");
         when(createUserPort.createUser(anyString(), anyString(), anyString())).thenReturn(1L);
         doNothing().when(eventPublisher).publishEvent(any());
 
