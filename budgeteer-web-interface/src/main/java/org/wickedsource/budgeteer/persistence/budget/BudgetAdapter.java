@@ -4,6 +4,8 @@ import de.adesso.budgeteer.core.budget.domain.Budget;
 import de.adesso.budgeteer.core.budget.port.out.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.wickedsource.budgeteer.persistence.contract.ContractAdapter;
+import org.wickedsource.budgeteer.persistence.contract.ContractEntity;
 import org.wickedsource.budgeteer.persistence.contract.ContractRepository;
 import org.wickedsource.budgeteer.persistence.project.ProjectRepository;
 
@@ -24,11 +26,13 @@ public class BudgetAdapter implements
         GetBudgetNotePort,
         UpdateBudgetNotePort,
         IsUniqueImportKeyInProjectPort,
-        IsUniqueNameInProjectPort {
+        IsUniqueNameInProjectPort,
+        UserHasAccessToBudgetPort {
 
     private final BudgetRepository budgetRepository;
     private final ProjectRepository projectRepository;
     private final ContractRepository contractRepository;
+    private final ContractAdapter contractAdapter;
     private final BudgetMapper budgetMapper;
 
     @Transactional
@@ -123,5 +127,10 @@ public class BudgetAdapter implements
 
     private List<BudgetTagEntity> mapToTagEntities(List<String> tags, BudgetEntity budgetEntity) {
         return tags.stream().map(tag -> new BudgetTagEntity(budgetEntity, tag)).collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean userHasAccessToBudget(String username, long budgetId) {
+        return contractAdapter.userHasAccessToContract(username, budgetRepository.findById(budgetId).map(BudgetEntity::getContract).map(ContractEntity::getId).orElseThrow());
     }
 }
