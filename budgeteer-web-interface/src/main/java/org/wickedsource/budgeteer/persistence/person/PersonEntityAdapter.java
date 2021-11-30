@@ -7,6 +7,8 @@ import de.adesso.budgeteer.core.person.port.out.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.wickedsource.budgeteer.persistence.budget.BudgetRepository;
+import org.wickedsource.budgeteer.persistence.project.ProjectAdapter;
+import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
 import org.wickedsource.budgeteer.persistence.project.ProjectRepository;
 import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
 
@@ -26,11 +28,13 @@ public class PersonEntityAdapter implements
         DeletePersonByIdPort,
         GetPeopleInBudgetPort,
         CreatePersonEntityPort,
-        UpdatePersonEntityPort {
+        UpdatePersonEntityPort,
+        UserHasAccessToPersonPort {
     private final PersonRepository personRepository;
     private final BudgetRepository budgetRepository;
     private final ProjectRepository projectRepository;
     private final WorkRecordRepository workRecordRepository;
+    private final ProjectAdapter projectAdapter;
     private final PersonMapper personMapper;
 
     @Override
@@ -108,5 +112,10 @@ public class PersonEntityAdapter implements
                     return rateEntity;
                 })
                 .forEach(rateEntity -> personEntity.getDailyRates().add(rateEntity));
+    }
+
+    @Override
+    public boolean userHasAccessToPerson(String username, long personId) {
+        return projectAdapter.userHasAccessToProject(username, personRepository.findById(personId).map(PersonEntity::getProject).map(ProjectEntity::getId).orElseThrow());
     }
 }
