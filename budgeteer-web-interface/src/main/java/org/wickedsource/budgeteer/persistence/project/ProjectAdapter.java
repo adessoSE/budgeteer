@@ -3,7 +3,7 @@ package org.wickedsource.budgeteer.persistence.project;
 import de.adesso.budgeteer.common.date.DateRange;
 import de.adesso.budgeteer.core.project.domain.Project;
 import de.adesso.budgeteer.core.project.domain.ProjectWithDate;
-import de.adesso.budgeteer.core.project.port.in.RemoveUserFromProjectPort;
+import de.adesso.budgeteer.core.project.port.out.RemoveUserFromProjectPort;
 import de.adesso.budgeteer.core.project.port.out.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -99,12 +99,12 @@ public class ProjectAdapter implements GetProjectPort,
 
     @Override
     @Transactional
-    public void updateProject(long projectId, String name, DateRange dateRange) {
+    public Project updateProject(long projectId, String name, DateRange dateRange) {
         var projectEntity = projectRepository.findById(projectId).orElseThrow();
         projectEntity.setName(name);
         projectEntity.setProjectStart(Date.valueOf(dateRange.getStartDate()));
         projectEntity.setProjectEnd(Date.valueOf(dateRange.getEndDate()));
-        projectRepository.save(projectEntity);
+        return projectMapper.mapToDomain(projectRepository.save(projectEntity));
     }
 
     @Override

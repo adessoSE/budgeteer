@@ -19,6 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.Mockito.*;
 
@@ -32,14 +33,21 @@ class UpdateProjectServiceTest {
 
     @Test
     void shouldUpdateProjectIfEverythingIsValid() throws ProjectNameAlreadyInUseException, ProjectNotFoundException {
-        var command = new UpdateProjectUseCase.UpdateProjectCommand(1L, "new-name", new DateRange(LocalDate.now(), LocalDate.now().plusDays(5)));
-        doNothing().when(updateProjectPort).updateProject(command.getId(), command.getName(), command.getDateRange());
-        when(getProjectPort.getProject(command.getId())).thenReturn(new Project(command.getId(), "old-name"));
+        var command = new UpdateProjectUseCase.UpdateProjectCommand(
+                1L,
+                "new-name",
+                new DateRange(LocalDate.now(), LocalDate.now().plusDays(5))
+        );
+
+        var expected = new Project(command.getId(), command.getName());
+
         when(projectExistsWithNamePort.projectExistsWithName(command.getName())).thenReturn(false);
+        when(getProjectPort.getProject(command.getId())).thenReturn(new Project(command.getId(), "old-name"));
+        when(updateProjectPort.updateProject(command.getId(), command.getName(), command.getDateRange())).thenReturn(expected);
 
-        updateProjectService.updateProject(command);
+        var returnedProject = updateProjectService.updateProject(command);
 
-        verify(updateProjectPort).updateProject(command.getId(), command.getName(), command.getDateRange());
+        assertThat(returnedProject).isEqualTo(expected);
     }
 
     @Test

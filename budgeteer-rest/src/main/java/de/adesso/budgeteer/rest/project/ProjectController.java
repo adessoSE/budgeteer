@@ -1,10 +1,9 @@
 package de.adesso.budgeteer.rest.project;
 
 import de.adesso.budgeteer.core.project.ProjectNameAlreadyInUseException;
+import de.adesso.budgeteer.core.project.ProjectNotFoundException;
 import de.adesso.budgeteer.core.project.port.in.*;
-import de.adesso.budgeteer.rest.project.model.CreateProjectModel;
-import de.adesso.budgeteer.rest.project.model.ProjectModel;
-import de.adesso.budgeteer.rest.project.model.UpdateDefaultProjectModel;
+import de.adesso.budgeteer.rest.project.model.*;
 import de.adesso.budgeteer.rest.security.userdetails.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,6 +25,12 @@ public class ProjectController {
     private final GetUsersProjectsUseCase getUsersProjectsUseCase;
     private final GetDefaultProjectUseCase getDefaultProjectUseCase;
     private final UpdateDefaultProjectUseCase updateDefaultProjectUseCase;
+    private final AddUserToProjectUseCase addUserToProjectUseCase;
+    private final RemoveUserFromProjectUseCase removeUserFromProjectUseCase;
+    private final DeleteProjectUseCase deleteProjectUseCase;
+    private final UpdateProjectUseCase updateProjectUseCase;
+    private final GetProjectAttributesUseCase getProjectAttributesUseCase;
+    private final GetProjectWithDateUseCase getProjectWithDateUseCase;
     private final ProjectModelMapper projectModelMapper;
 
     @PostMapping
@@ -59,5 +64,41 @@ public class ProjectController {
         var user = (UserDetailsImpl) authentication.getPrincipal();
         return updateDefaultProjectUseCase.updateDefaultProject(user.getId(), updateDefaultProjectModel.getNewDefaultProjectId())
                 .map(projectModelMapper::toModel);
+    }
+
+    @PostMapping("/{projectId}/user")
+    public void addUserToProject(@PathVariable long projectId, Authentication authentication) {
+        var user = (UserDetailsImpl) authentication.getPrincipal();
+        addUserToProjectUseCase.addUserToProject(user.getId(), projectId);
+    }
+
+    @DeleteMapping("/{projectId}/user")
+    public void removeUserFromProject(@PathVariable long projectId, Authentication authentication) {
+        var user = (UserDetailsImpl) authentication.getPrincipal();
+        removeUserFromProjectUseCase.removeUserFromProject(user.getId(), projectId);
+    }
+
+    @DeleteMapping("/{projectId}")
+    public void deleteProject(@PathVariable long projectId) {
+        deleteProjectUseCase.deleteProject(projectId);
+    }
+
+    @PutMapping("/{projectId}")
+    public ProjectModel updateProject(@Valid @RequestBody UpdateProjectModel updateProjectModel, @PathVariable long projectId) throws ProjectNameAlreadyInUseException, ProjectNotFoundException {
+        return projectModelMapper.toModel(updateProjectUseCase.updateProject(new UpdateProjectUseCase.UpdateProjectCommand(
+                projectId,
+                updateProjectModel.getName(),
+                updateProjectModel.getDateRange()
+        )));
+    }
+
+    @GetMapping("/{projectId}/attributes")
+    public List<String> getProjectAttributes(@PathVariable long projectId) {
+        return getProjectAttributesUseCase.getProjectAttributes(projectId);
+    }
+
+    @GetMapping("/{projectId}/withDate")
+    public ProjectWithDateModel getProjectWithDate(@PathVariable long projectId) {
+        return projectModelMapper.toModel(getProjectWithDateUseCase.getProjectWithDate(projectId));
     }
 }
