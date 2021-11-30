@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import org.wickedsource.budgeteer.persistence.budget.BudgetRepository;
 import org.wickedsource.budgeteer.persistence.invoice.InvoiceRepository;
+import org.wickedsource.budgeteer.persistence.project.ProjectAdapter;
 import org.wickedsource.budgeteer.persistence.project.ProjectContractField;
 import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
 import org.wickedsource.budgeteer.persistence.project.ProjectRepository;
@@ -28,13 +29,15 @@ public class ContractAdapter implements
         UpdateContractEntityPort,
         DeleteContractPort,
         GetContractSummariesInRangePort,
-        IsContractInProjectPort {
+        IsContractInProjectPort,
+        UserHasAccessToContractPort {
 
     private final ContractRepository contractRepository;
     private final ProjectRepository projectRepository;
     private final InvoiceRepository invoiceRepository;
     private final BudgetRepository budgetRepository;
     private final ContractMapper contractMapper;
+    private final ProjectAdapter projectAdapter;
 
     @Override
     @Transactional
@@ -124,5 +127,10 @@ public class ContractAdapter implements
         var projectContractField = Optional.ofNullable(projectRepository.findContractFieldByName(projectId, attribute.getKey().trim()))
                 .orElse(new ProjectContractField(attribute.getKey().trim(), project));
         return new ContractFieldEntity(projectContractField, StringUtils.trimToEmpty(attribute.getValue()));
+    }
+
+    @Override
+    public boolean userHasAccessToContract(String username, long contractId) {
+        return projectAdapter.userHasAccessToProject(username, contractRepository.findById(contractId).map(ContractEntity::getProject).map(ProjectEntity::getId).orElseThrow());
     }
 }
