@@ -40,7 +40,7 @@ public class ProjectController {
     }
 
     @GetMapping("/{projectId}")
-    @PreAuthorize("userHasAccessToProject(principal.username, #projectId)")
+    @PreAuthorize("userHasAccessToProject(#projectId)")
     public Optional<ProjectModel> getProject(@PathVariable("projectId") long projectId) {
         return Optional.ofNullable(getProjectUseCase.getProject(projectId)).map(projectModelMapper::toModel);
     }
@@ -67,23 +67,27 @@ public class ProjectController {
     }
 
     @PostMapping("/{projectId}/user")
+    @PreAuthorize("userHasAccessToProject(#projectId)")
     public void addUserToProject(@PathVariable long projectId, Authentication authentication) {
         var user = (UserDetailsImpl) authentication.getPrincipal();
         addUserToProjectUseCase.addUserToProject(user.getId(), projectId);
     }
 
     @DeleteMapping("/{projectId}/user")
+    @PreAuthorize("userHasAccessToProject(#projectId)")
     public void removeUserFromProject(@PathVariable long projectId, Authentication authentication) {
         var user = (UserDetailsImpl) authentication.getPrincipal();
         removeUserFromProjectUseCase.removeUserFromProject(user.getId(), projectId);
     }
 
     @DeleteMapping("/{projectId}")
+    @PreAuthorize("userHasAccessToProject(#projectId)")
     public void deleteProject(@PathVariable long projectId) {
         deleteProjectUseCase.deleteProject(projectId);
     }
 
     @PutMapping("/{projectId}")
+    @PreAuthorize("userHasAccessToProject(#projectId)")
     public ProjectModel updateProject(@Valid @RequestBody UpdateProjectModel updateProjectModel, @PathVariable long projectId) throws ProjectNameAlreadyInUseException, ProjectNotFoundException {
         return projectModelMapper.toModel(updateProjectUseCase.updateProject(new UpdateProjectUseCase.UpdateProjectCommand(
                 projectId,
@@ -93,11 +97,13 @@ public class ProjectController {
     }
 
     @GetMapping("/{projectId}/attributes")
+    @PreAuthorize("userHasAccessToProject(#projectId)")
     public List<String> getProjectAttributes(@PathVariable long projectId) {
         return getProjectAttributesUseCase.getProjectAttributes(projectId);
     }
 
     @GetMapping("/{projectId}/withDate")
+    @PreAuthorize("userHasAccessToProject(#projectId)")
     public ProjectWithDateModel getProjectWithDate(@PathVariable long projectId) {
         return projectModelMapper.toModel(getProjectWithDateUseCase.getProjectWithDate(projectId));
     }
