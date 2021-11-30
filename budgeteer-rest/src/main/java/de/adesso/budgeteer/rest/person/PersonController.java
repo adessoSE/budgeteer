@@ -5,6 +5,7 @@ import de.adesso.budgeteer.rest.person.model.CreatePersonModel;
 import de.adesso.budgeteer.rest.person.model.PersonModel;
 import de.adesso.budgeteer.rest.person.model.PersonWithRatesModel;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -25,31 +26,37 @@ public class PersonController {
     private final PersonModelMapper personModelMapper;
 
     @GetMapping("/inBudget/{budgetId}")
+    @PreAuthorize("userHasAccessToBudget(#budgetId)")
     public List<PersonModel> getPeopleInBudget(@PathVariable long budgetId) {
         return personModelMapper.toPersonModel(getPeopleInBudgetUseCase.getPeopleInBudget(budgetId));
     }
 
     @GetMapping("/inProject/{projectId}")
+    @PreAuthorize("userHasAccessToProject(#projectId)")
     public List<PersonModel> getPeopleInProject(@PathVariable long projectId) {
         return personModelMapper.toPersonModel(getPeopleInProjectUseCase.getPeopleInProject(projectId));
     }
 
     @GetMapping("/{personId}")
+    @PreAuthorize("userHasAccessToPerson(#personId)")
     public Optional<PersonModel> getPerson(@PathVariable long personId) {
         return getPersonByIdUseCase.getPersonById(personId).map(personModelMapper::toPersonModel);
     }
 
     @GetMapping("/withRates/{personId}")
+    @PreAuthorize("userHasAccessToPerson(#personId)")
     public Optional<PersonWithRatesModel> getPersonWithRates(@PathVariable long personId) {
         return Optional.ofNullable( personModelMapper.toPersonWithRatesModel(getPersonWithRatesByPersonIdUseCase.getPersonWithRatesByPersonId(personId)));
     }
 
     @DeleteMapping("/{personId}")
+    @PreAuthorize("userHasAccessToPerson(#personId)")
     public void deletePerson(@PathVariable long personId) {
         deletePersonByIdUseCase.deletePersonById(personId);
     }
 
     @PostMapping
+    @PreAuthorize("userHasAccessToProject(#createPersonModel.projectId)")
     public PersonModel createPerson(@Valid @RequestBody CreatePersonModel createPersonModel) {
         return personModelMapper.toPersonModel(createPersonUseCase.createPerson(new CreatePersonUseCase.CreatePersonCommand(
                 createPersonModel.getPersonName(),
@@ -61,6 +68,7 @@ public class PersonController {
     }
 
     @PutMapping("/{personId}")
+    @PreAuthorize("userHasAccessToPerson(#personId)")
     public PersonModel updatePerson(@Valid @RequestBody CreatePersonModel createPersonModel, @PathVariable long personId) {
         return personModelMapper.toPersonModel(updatePersonUseCase.updatePerson(new UpdatePersonUseCase.UpdatePersonCommand(
                 personId,
