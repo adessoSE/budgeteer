@@ -4,9 +4,11 @@ import de.adesso.budgeteer.core.invoice.domain.Invoice;
 import de.adesso.budgeteer.core.invoice.port.out.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.wickedsource.budgeteer.persistence.contract.ContractAdapter;
 import org.wickedsource.budgeteer.persistence.contract.ContractEntity;
 import org.wickedsource.budgeteer.persistence.contract.ContractInvoiceField;
 import org.wickedsource.budgeteer.persistence.contract.ContractRepository;
+import org.wickedsource.budgeteer.persistence.project.ProjectRepository;
 
 import javax.transaction.Transactional;
 import java.sql.Date;
@@ -23,10 +25,13 @@ public class InvoiceEntityAdapter implements
         GetInvoiceByIdPort,
         DeleteInvoiceByIdPort,
         CreateInvoiceEntityPort,
-        UpdateInvoiceEntityPort {
+        UpdateInvoiceEntityPort,
+        UserHasAccessToInvoicePort{
     private final InvoiceRepository invoiceRepository;
     private final InvoiceMapper invoiceMapper;
     private final ContractRepository contractRepository;
+    private final ProjectRepository projectRepository;
+    private final ContractAdapter contractAdapter;
 
     @Override
     @Transactional
@@ -125,5 +130,10 @@ public class InvoiceEntityAdapter implements
 
             invoiceEntity.getDynamicFields().add(invoiceFieldEntity);
         });
+    }
+
+    @Override
+    public boolean userHasAccessToInvoice(String username, long invoiceId) {
+        return contractAdapter.userHasAccessToContract(username, invoiceRepository.findById(invoiceId).map(InvoiceEntity::getContract).map(ContractEntity::getId).orElseThrow());
     }
 }
