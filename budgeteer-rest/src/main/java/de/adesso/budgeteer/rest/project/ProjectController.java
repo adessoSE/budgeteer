@@ -67,15 +67,13 @@ public class ProjectController {
     }
 
     @PostMapping("/{projectId}/user")
-    public void addUserToProject(@PathVariable long projectId, Authentication authentication) {
-        var user = (UserDetailsImpl) authentication.getPrincipal();
-        addUserToProjectUseCase.addUserToProject(user.getId(), projectId);
+    public void addUserToProject(@PathVariable long projectId, @RequestParam long userId) {
+        addUserToProjectUseCase.addUserToProject(userId, projectId);
     }
 
     @DeleteMapping("/{projectId}/user")
-    public void removeUserFromProject(@PathVariable long projectId, Authentication authentication) {
-        var user = (UserDetailsImpl) authentication.getPrincipal();
-        removeUserFromProjectUseCase.removeUserFromProject(user.getId(), projectId);
+    public void removeUserFromProject(@PathVariable long projectId, @RequestParam long userId) {
+        removeUserFromProjectUseCase.removeUserFromProject(userId, projectId);
     }
 
     @DeleteMapping("/{projectId}")
