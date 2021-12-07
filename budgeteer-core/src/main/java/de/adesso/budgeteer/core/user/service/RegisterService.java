@@ -1,7 +1,9 @@
 package de.adesso.budgeteer.core.user.service;
 
+import de.adesso.budgeteer.core.common.Causes;
 import de.adesso.budgeteer.core.user.MailAlreadyInUseException;
 import de.adesso.budgeteer.core.user.OnEmailChangedEvent;
+import de.adesso.budgeteer.core.user.UserException;
 import de.adesso.budgeteer.core.user.UsernameAlreadyInUseException;
 import de.adesso.budgeteer.core.user.port.in.RegisterUseCase;
 import de.adesso.budgeteer.core.user.port.out.CreateUserPort;
@@ -21,13 +23,20 @@ public class RegisterService implements RegisterUseCase {
     private final ApplicationEventPublisher eventPublisher;
 
     @Override
-    public void register(RegisterCommand command) throws UsernameAlreadyInUseException, MailAlreadyInUseException {
+    public void register(RegisterCommand command) throws UserException {
+        var causes = new Causes<UserException.UserErrors>();
+
         if (userWithNameExistsPort.userWithNameExists(command.getUsername())) {
-            throw new UsernameAlreadyInUseException();
+            causes.addCause(UserException.UserErrors.USERNAME_ALREADY_IN_USE);
         }
         if (!command.getMail().isBlank() && userWithEmailExistsPort.userWithEmailExists(command.getMail())) {
-            throw new MailAlreadyInUseException();
+            causes.addCause(UserException.UserErrors.MAIL_ALREADY_IN_USE);
         }
+
+        if(causes.hasCause()) {
+            throw new UserException(causes);
+        }
+
         var userId = createUserPort.createUser(command.getUsername(), command.getMail(), command.getPassword());
         eventPublisher.publishEvent(new OnEmailChangedEvent(userId, command.getUsername(), command.getMail()));
     }

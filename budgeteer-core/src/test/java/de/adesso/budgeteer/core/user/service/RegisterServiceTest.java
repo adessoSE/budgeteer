@@ -1,8 +1,7 @@
 package de.adesso.budgeteer.core.user.service;
 
-import de.adesso.budgeteer.core.user.MailAlreadyInUseException;
 import de.adesso.budgeteer.core.user.OnEmailChangedEvent;
-import de.adesso.budgeteer.core.user.UsernameAlreadyInUseException;
+import de.adesso.budgeteer.core.user.UserException;
 import de.adesso.budgeteer.core.user.port.in.RegisterUseCase;
 import de.adesso.budgeteer.core.user.port.out.CreateUserPort;
 import de.adesso.budgeteer.core.user.port.out.UserWithEmailExistsPort;
@@ -31,8 +30,9 @@ class RegisterServiceTest {
         var command = new RegisterUseCase.RegisterCommand("test", "test@mail", "test");
         when(userWithNameExistsPort.userWithNameExists("test")).thenReturn(true);
 
-        assertThatExceptionOfType(UsernameAlreadyInUseException.class)
-                .isThrownBy(() -> registerService.register(command));
+        assertThatExceptionOfType(UserException.class)
+                .isThrownBy(() -> registerService.register(command))
+                .matches(e -> e.getCauses().contains(UserException.UserErrors.USERNAME_ALREADY_IN_USE));
 
     }
 
@@ -42,12 +42,13 @@ class RegisterServiceTest {
         when(userWithNameExistsPort.userWithNameExists("test")).thenReturn(false);
         when(userWithEmailExistsPort.userWithEmailExists("test@mail")).thenReturn(true);
 
-        assertThatExceptionOfType(MailAlreadyInUseException.class)
-                .isThrownBy(() -> registerService.register(command));
+        assertThatExceptionOfType(UserException.class)
+                .isThrownBy(() -> registerService.register(command))
+                .matches(e -> e.getCauses().contains(UserException.UserErrors.MAIL_ALREADY_IN_USE));
     }
 
     @Test
-    void shouldCallCreateUserWhenUserIsValid() throws UsernameAlreadyInUseException, MailAlreadyInUseException {
+    void shouldCallCreateUserWhenUserIsValid() throws UserException {
         var command = new RegisterUseCase.RegisterCommand("test", "test@mail", "t3st");
         when(userWithNameExistsPort.userWithNameExists("test")).thenReturn(false);
         when(userWithEmailExistsPort.userWithEmailExists("test@mail")).thenReturn(false);
@@ -60,7 +61,7 @@ class RegisterServiceTest {
     }
 
     @Test
-    void shouldPublishOnEmailChangedEventWhenUserIsCreated() throws UsernameAlreadyInUseException, MailAlreadyInUseException {
+    void shouldPublishOnEmailChangedEventWhenUserIsCreated() throws UserException {
         var command = new RegisterUseCase.RegisterCommand("test", "test@mail", "t3st");
         when(userWithNameExistsPort.userWithNameExists("test")).thenReturn(false);
         when(userWithEmailExistsPort.userWithEmailExists("test@mail")).thenReturn(false);

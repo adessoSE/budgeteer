@@ -1,8 +1,7 @@
 package de.adesso.budgeteer.core.project.service;
 
 import de.adesso.budgeteer.common.date.DateRange;
-import de.adesso.budgeteer.core.project.ProjectNameAlreadyInUseException;
-import de.adesso.budgeteer.core.project.ProjectNotFoundException;
+import de.adesso.budgeteer.core.project.ProjectException;
 import de.adesso.budgeteer.core.project.domain.Project;
 import de.adesso.budgeteer.core.project.port.in.UpdateProjectUseCase;
 import de.adesso.budgeteer.core.project.port.out.GetProjectPort;
@@ -32,7 +31,7 @@ class UpdateProjectServiceTest {
     @Mock private GetProjectPort getProjectPort;
 
     @Test
-    void shouldUpdateProjectIfEverythingIsValid() throws ProjectNameAlreadyInUseException, ProjectNotFoundException {
+    void shouldUpdateProjectIfEverythingIsValid() throws ProjectException {
         var command = new UpdateProjectUseCase.UpdateProjectCommand(
                 1L,
                 "new-name",
@@ -56,12 +55,13 @@ class UpdateProjectServiceTest {
         when(getProjectPort.getProject(command.getId())).thenReturn(new Project(command.getId(), "old-name"));
         when(projectExistsWithNamePort.projectExistsWithName(command.getName())).thenReturn(true);
 
-        assertThatExceptionOfType(ProjectNameAlreadyInUseException.class)
-                .isThrownBy(() -> updateProjectService.updateProject(command));
+        assertThatExceptionOfType(ProjectException.class)
+                .isThrownBy(() -> updateProjectService.updateProject(command))
+                .matches(e -> e.getCauses().contains(ProjectException.ProjectErrors.NAME_ALREADY_IN_USE));
     }
 
     @Test
-    void shouldNotThrowProjectNameAlreadyInUseExceptionIfNewProjectNameIsTheSameAsTheOldOne() throws ProjectNameAlreadyInUseException, ProjectNotFoundException {
+    void shouldNotThrowProjectNameAlreadyInUseExceptionIfNewProjectNameIsTheSameAsTheOldOne() throws ProjectException{
         var command = new UpdateProjectUseCase.UpdateProjectCommand(1L, "old-name", new DateRange(LocalDate.now(), LocalDate.now().plusDays(5)));
         when(getProjectPort.getProject(command.getId())).thenReturn(new Project(command.getId(), "old-name"));
 
@@ -75,8 +75,9 @@ class UpdateProjectServiceTest {
         var command = new UpdateProjectUseCase.UpdateProjectCommand(1L, "new-name", new DateRange(LocalDate.now(), LocalDate.now().plusDays(5)));
         when(getProjectPort.getProject(command.getId())).thenReturn(null);
 
-        assertThatExceptionOfType(ProjectNotFoundException.class)
-                .isThrownBy(() -> updateProjectService.updateProject(command));
+        assertThatExceptionOfType(ProjectException.class)
+                .isThrownBy(() -> updateProjectService.updateProject(command))
+                .matches(e -> e.getCauses().contains(ProjectException.ProjectErrors.PROJECT_NOT_FOUND));
     }
 
     @ParameterizedTest
