@@ -8,6 +8,7 @@ import org.wickedsource.budgeteer.persistence.contract.ContractFieldEntity;
 import org.wickedsource.budgeteer.persistence.contract.ContractRepository;
 import org.wickedsource.budgeteer.persistence.contract.ContractStatisticBean;
 import org.wickedsource.budgeteer.service.DateRange;
+import org.wickedsource.budgeteer.service.DateUtil;
 import org.wickedsource.budgeteer.service.contract.DynamicAttributeField;
 
 import java.time.LocalDate;
@@ -21,9 +22,9 @@ public class ContractReportDataMapper {
 	private ContractRepository contractRepository;
 	
 	public ContractReportData map(ContractEntity contract, Date endDate) {
-		LocalDate end = endDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+		LocalDate end = DateUtil.toLocalDate(endDate);
 		ContractStatisticBean statistics = contractRepository.getContractStatisticAggregatedByMonthAndYear(contract.getId(), end.getMonthValue()-1, end.getYear());
-		DateRange dateRange = new DateRange(contract.getStartDate(), endDate);
+		DateRange dateRange = new DateRange(DateUtil.toDate(contract.getStartDate()), endDate);
 		
 		ContractReportData report = new ContractReportData();
 		report.setContract(contract.getName());

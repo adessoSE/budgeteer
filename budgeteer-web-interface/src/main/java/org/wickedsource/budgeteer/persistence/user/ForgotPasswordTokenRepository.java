@@ -3,12 +3,16 @@ package org.wickedsource.budgeteer.persistence.user;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
-public interface ForgotPasswordTokenRepository extends CrudRepository<ForgotPasswordToken, Long> {
+@Repository
+public interface ForgotPasswordTokenRepository extends CrudRepository<ForgotPasswordTokenEntity, Long> {
+    boolean existsByToken(String token);
 
-    @Query("select t from ForgotPasswordToken t where t.token = :token")
-    public ForgotPasswordToken findByToken(@Param("token") String token);
+    ForgotPasswordTokenEntity findByToken(String token);
 
-    @Query("select t from ForgotPasswordToken t where t.userEntity = :user")
-    public ForgotPasswordToken findByUser(@Param("user") UserEntity user);
+    void deleteByToken(String token);
+
+    @Query("select t from ForgotPasswordTokenEntity t where t.userEntity = :user")
+    public ForgotPasswordTokenEntity findByUser(@Param("user") UserEntity user);
 }

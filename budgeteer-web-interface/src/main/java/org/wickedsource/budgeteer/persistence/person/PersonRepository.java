@@ -4,9 +4,11 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface PersonRepository extends CrudRepository<PersonEntity, Long> {
 
     List<PersonEntity> findByProjectIdOrderByNameAsc(long projectId);
@@ -29,4 +31,7 @@ public interface PersonRepository extends CrudRepository<PersonEntity, Long> {
 
     @Query("select new org.wickedsource.budgeteer.persistence.person.PersonBaseDataBean(p.id, p.name, sum(r.minutes * r.dailyRate), sum(r.minutes), max(r.date), p.defaultDailyRate) from PersonEntity p left join p.workRecords r where r.budget.id = :budgetId group by p.id, p.name, p.defaultDailyRate order by p.name")
     List<PersonBaseDataBean> findBaseDataByBudgetId(@Param("budgetId") long budgetId);
+
+    @Query("select person from PersonEntity person left join person.workRecords r where r.budget.id = :budgetId")
+    List<PersonEntity> findByBudgetId(@Param("budgetId") long budgetId);
 }

@@ -8,7 +8,7 @@ gradle-app.setting
 build
 bin
 target
-out
+./out/**
 *.class
 *.jar
 *.war
@@ -32,3 +32,5 @@ out
 .classpath
 .project
 .settings/
+
+**/application-local.properties

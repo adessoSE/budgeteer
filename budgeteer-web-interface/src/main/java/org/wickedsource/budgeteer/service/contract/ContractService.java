@@ -13,10 +13,12 @@ import org.wickedsource.budgeteer.persistence.invoice.InvoiceRepository;
 import org.wickedsource.budgeteer.persistence.project.ProjectContractField;
 import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
 import org.wickedsource.budgeteer.persistence.project.ProjectRepository;
+import org.wickedsource.budgeteer.service.DateUtil;
 import org.wickedsource.budgeteer.web.pages.contract.overview.table.ContractOverviewTableModel;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -49,7 +51,7 @@ public class ContractService {
 
     @PreAuthorize("canReadContract(#contractId)")
     public ContractBaseData getContractById(long contractId) {
-        return mapper.map(contractRepository.findOne(contractId));
+        return mapper.map(contractRepository.findById(contractId).orElse(null));
     }
 
     @PreAuthorize("canReadProject(#projectId)")
@@ -61,9 +63,9 @@ public class ContractService {
 
     @PreAuthorize("canReadProject(#projectId)")
     public ContractBaseData getEmptyContractModel(long projectId) {
-        ProjectEntity project = projectRepository.findOne(projectId);
+        ProjectEntity project = projectRepository.findById(projectId).orElseThrow(RuntimeException::new);
         ContractBaseData model = new ContractBaseData(projectId);
-        Set<ProjectContractField> fields = project.getContractFields();
+        var fields = project.getContractFields();
         for (ProjectContractField field : fields) {
             model.getContractAttributes().add(new DynamicAttributeField(field.getFieldName(), ""));
         }
@@ -71,19 +73,19 @@ public class ContractService {
     }
 
     public long save(ContractBaseData contractBaseData) {
-        ProjectEntity project = projectRepository.findOne(contractBaseData.getProjectId());
+        ProjectEntity project = projectRepository.findById(contractBaseData.getProjectId()).orElseThrow(RuntimeException::new);
         ContractEntity contractEntity = new ContractEntity();
         contractEntity.setId(0);
         contractEntity.setProject(project);
 
         if (contractBaseData.getContractId() != 0) {
-            contractEntity = contractRepository.findOne(contractBaseData.getContractId());
+            contractEntity = contractRepository.findById(contractBaseData.getContractId()).orElseThrow(RuntimeException::new);
         }
         //Update basic information
         contractEntity.setName(contractBaseData.getContractName());
         contractEntity.setBudget(contractBaseData.getBudget());
         contractEntity.setInternalNumber(contractBaseData.getInternalNumber());
-        contractEntity.setStartDate(contractBaseData.getStartDate());
+        contractEntity.setStartDate(DateUtil.toLocalDate(contractBaseData.getStartDate()));
         contractEntity.setType(contractBaseData.getType());
         contractEntity.setLink(contractBaseData.getFileModel().getLink());
         contractEntity.setFileName(contractBaseData.getFileModel().getFileName());
@@ -120,20 +122,20 @@ public class ContractService {
         for (BudgetEntity budgetEntity : budgets) {
             budgetEntity.setContract(null);
         }
-        budgetRepository.save(budgets);
+        budgetRepository.saveAll(budgets);
 
         invoiceRepository.deleteInvoiceFieldsByContractId(contractId);
         invoiceRepository.deleteInvoicesByContractId(contractId);
 
-        contractRepository.delete(contractId);
+        contractRepository.deleteById(contractId);
     }
 
     @PreAuthorize("canReadContract(#contractId)")
     public List<Date> getMonthList(long contractId) {
         List<Date> months = new ArrayList<Date>();
-        ContractEntity contract = contractRepository.findById(contractId);
+        ContractEntity contract = contractRepository.findByIdAndFetchInvoiceFields(contractId);
         Calendar cal = Calendar.getInstance();
-        cal.setTime(contract.getStartDate());
+        cal.setTime(DateUtil.toDate(contract.getStartDate()));
         Calendar currentDate = Calendar.getInstance();
         currentDate.setTime(new Date());
         while (cal.before(currentDate)) {
@@ -146,21 +148,18 @@ public class ContractService {
     @PreAuthorize("canReadProject(#projectId)")
     public List<Date> getMonthListForProjectId(long projectId) {
         List<ContractEntity> contracts = contractRepository.findByProjectId(projectId);
-        Date startDate = new Date();
+        var startDate = LocalDate.now();
         for (ContractEntity contract : contracts) {
-            if (contract.getStartDate().before(startDate)) {
+            if (contract.getStartDate().isBefore(startDate)) {
                 startDate = contract.getStartDate();
             }
         }
 
-        List<Date> months = new ArrayList<Date>();
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(startDate);
-        Calendar currentDate = Calendar.getInstance();
-        currentDate.setTime(new Date());
-        while (cal.before(currentDate)) {
-            months.add(cal.getTime());
-            cal.add(Calendar.MONTH, 1);
+        var currentDate = LocalDate.now();
+        var months = new ArrayList<Date>();
+        for (var date = startDate.withDayOfMonth(1); date.isBefore(currentDate); date = date.plusMonths(1)) {
+            months.add(DateUtil.toDate(date));
+
         }
         return months;
     }
@@ -176,7 +175,7 @@ public class ContractService {
                                                        ProjectEntity project) {
         ProjectContractField projectContractField = Optional
                 .ofNullable(projectRepository.findContractFieldByName(contractBaseData.getProjectId(), dynamicAttribute.getName().trim()))
-                .orElse(new ProjectContractField(0, dynamicAttribute.getName().trim(), project));
+                .orElse(new ProjectContractField(dynamicAttribute.getName().trim(), project));
         return new ContractFieldEntity(projectContractField, StringUtils.trimToEmpty(dynamicAttribute.getValue()));
     }
 }

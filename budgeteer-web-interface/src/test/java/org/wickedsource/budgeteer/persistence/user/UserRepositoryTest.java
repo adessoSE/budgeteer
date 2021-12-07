@@ -1,68 +1,177 @@
 package org.wickedsource.budgeteer.persistence.user;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.wickedsource.budgeteer.IntegrationTestTemplate;
+import org.wickedsource.budgeteer.persistence.DataJpaTestBase;
 import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
-import org.wickedsource.budgeteer.persistence.project.ProjectRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.function.Consumer;
 
-class UserRepositoryTest extends IntegrationTestTemplate {
+import static org.assertj.core.api.Assertions.assertThat;
 
-    @Autowired
-    private UserRepository userRepository;
+class UserRepositoryTest extends DataJpaTestBase {
 
-    @Autowired
-    private ProjectRepository projectRepository;
+    @Autowired private UserRepository userRepository;
 
-    @Test
-    void testFindByNameAndPassword() {
-        UserEntity user = new UserEntity();
-        user.setName("name");
-        user.setPassword("password");
-        this.userRepository.save(user);
+    private static final Consumer<UserEntity> DEFAULT_USER = userEntity -> {
+        userEntity.setName("name");
+        userEntity.setMail("e@mail");
+        userEntity.setPassword("password");
+    };
 
-        UserEntity result = this.userRepository.findByNameAndPassword("name", "password");
-        Assertions.assertNotNull(result);
-    }
+    private static final Consumer<UserEntity> ALTERNATIVE_USER1 = userEntity -> {
+        userEntity.setName("alt1-name");
+        userEntity.setMail("alt1@mail");
+        userEntity.setPassword("password");
+    };
 
-    @Test
-    void testFindNotInProject() {
-        ProjectEntity savedProject = createProjectAndUsers();
-
-        List<UserEntity> usersNotInProject = userRepository.findNotInProject(savedProject.getId());
-        Assertions.assertEquals(1, usersNotInProject.size());
-        Assertions.assertEquals("user2", usersNotInProject.get(0).getName());
-    }
+    private static final Consumer<UserEntity> ALTERNATIVE_USER2 = userEntity -> {
+        userEntity.setName("alt2-name");
+        userEntity.setMail("alt2@mail");
+        userEntity.setPassword("password");
+    };
 
     @Test
-    void testFindInProject() {
-        ProjectEntity savedProject = createProjectAndUsers();
+    void shouldReturnUserByNameAndPasswordIfNameAndPasswordMatch() {
+        var expectedUser = persistEntity(new UserEntity(), DEFAULT_USER);
 
-        List<UserEntity> usersInProject = userRepository.findInProject(savedProject.getId());
-        Assertions.assertEquals(1, usersInProject.size());
-        Assertions.assertEquals("user1", usersInProject.get(0).getName());
+        var returnedUser = userRepository.findByNameAndPassword("name", "password");
+
+        assertThat(returnedUser).isEqualTo(expectedUser);
     }
 
-    private ProjectEntity createProjectAndUsers() {
-        ProjectEntity project = new ProjectEntity();
-        project.setName("name");
-        ProjectEntity savedProject = projectRepository.save(project);
+    @Test
+    void shouldReturnNullIfUserWithNameAndPasswordDoesNotExist() {
+        persistEntity(new UserEntity(), DEFAULT_USER);
 
-        UserEntity user1 = new UserEntity();
-        user1.setName("user1");
-        user1.setPassword("password");
-        user1.getAuthorizedProjects().add(project);
-        project.getAuthorizedUsers().add(user1);
-        userRepository.save(user1);
+        var returnedUser = userRepository.findByNameAndPassword("other-name", "other-password");
 
-        UserEntity user2 = new UserEntity();
-        user2.setName("user2");
-        user2.setPassword("password");
-        userRepository.save(user2);
-        return savedProject;
+        assertThat(returnedUser).isNull();
     }
 
+    @Test
+    void shouldReturnUserByNameAndPasswordIfNameOrEmailAndPasswordMatchesNameAndPassword() {
+        var expectedUser = persistEntity(new UserEntity(), DEFAULT_USER);
+
+        var returnedUser = userRepository.findByNameOrMailAndPassword("name", "password");
+
+        assertThat(returnedUser).isEqualTo(expectedUser);
+    }
+
+    @Test
+    void shouldReturnUserByEmailAndPasswordIfNameOrEmailAndPasswordMatchesEmailAndPassword() {
+        var expectedUser = persistEntity(new UserEntity(), DEFAULT_USER);
+
+        var returnedUser = userRepository.findByNameOrMailAndPassword("e@mail", "password");
+
+        assertThat(returnedUser).isEqualTo(expectedUser);
+    }
+
+    @Test
+    void shouldReturnNullIfUserWithNameOrEmailAndPasswordDoesNotExist() {
+        persistEntity(new UserEntity(), DEFAULT_USER);
+
+        var returnedUser = userRepository.findByNameOrMailAndPassword("ether@mail", "other-password");
+
+        assertThat(returnedUser).isNull();
+    }
+
+    @Test
+    void shouldReturnTrueIfUserWithIdAndPasswordExists() {
+        var user = persistEntity(new UserEntity(), DEFAULT_USER);
+
+        var exists = userRepository.passwordMatches(user.getId(), user.getPassword());
+
+        assertThat(exists).isTrue();
+    }
+
+    @Test
+    void shouldReturnFalseIfUserWithIdAndPasswordDoesNotExist() {
+        var user = persistEntity(new UserEntity(), DEFAULT_USER);
+
+        var exists = userRepository.passwordMatches(user.getId(), "other-password");
+
+        assertThat(exists).isFalse();
+    }
+
+    @Test
+    void shouldReturnTrueIfEmailIsVerified() {
+        var user = persistEntity(new UserEntity(), DEFAULT_USER.andThen(userEntity -> userEntity.setMailVerified(true)));
+
+        var verified = userRepository.emailVerified(user.getMail());
+
+        assertThat(verified).isTrue();
+    }
+
+    @Test
+    void shouldReturnFalseIfEmailIsNotVerified() {
+        var user = persistEntity(new UserEntity(), DEFAULT_USER.andThen(userEntity -> userEntity.setMailVerified(false)));
+
+        var verified = userRepository.emailVerified(user.getMail());
+
+        assertThat(verified).isFalse();
+    }
+
+    @Test
+    void shouldChangePasswordIfForgottenPasswordTokenExists() {
+        var newPassword = "new-password";
+        var originalUser = persistEntity(new UserEntity(), DEFAULT_USER);
+        var forgottenPasswordToken = persistEntity(new ForgotPasswordTokenEntity(), token -> {
+            token.setToken("token");
+            token.setExpiryDate(LocalDateTime.now().plusDays(1));
+            token.setUserEntity(originalUser);
+        });
+
+        userRepository.changePasswordWithForgottenPasswordToken(forgottenPasswordToken.getToken(), newPassword);
+        entityManager.clear();
+
+        var updatedUser = entityManager.find(UserEntity.class, originalUser.getId());
+        assertThat(updatedUser.getPassword()).isEqualTo(newPassword);
+    }
+
+    @Test
+    void shouldVerifyEmailIfVerificationTokenExists() {
+        var originalUser = persistEntity(new UserEntity(), DEFAULT_USER.andThen(user -> user.setMailVerified(false)));
+        var verificationToken = persistEntity(new VerificationTokenEntity(), token -> {
+            token.setToken("token");
+            token.setExpiryDate(LocalDateTime.now().plusDays(1));
+            token.setUserEntity(originalUser);
+        });
+
+        userRepository.verifyEmail(verificationToken.getToken());
+        entityManager.clear();
+
+        var updatedUser = entityManager.find(UserEntity.class, originalUser.getId());
+        assertThat(updatedUser.getMailVerified()).isTrue();
+    }
+
+    @Test
+    void shouldReturnAllUsersInProject() {
+        var expectedUsers = List.of(persistEntity(new UserEntity(), DEFAULT_USER), persistEntity(new UserEntity(), ALTERNATIVE_USER1));
+        persistEntity(new UserEntity(), ALTERNATIVE_USER2);
+        var project = persistEntity(new ProjectEntity(), projectEntity -> {
+            projectEntity.setName("project");
+            projectEntity.setAuthorizedUsers(expectedUsers);
+        });
+
+        var returnedUsers = userRepository.findInProject(project.getId());
+
+        assertThat(returnedUsers).isEqualTo(expectedUsers);
+    }
+
+    @Test
+    void shouldReturnAllUsersNotInProject() {
+        var expectedUsers = List.of(persistEntity(new UserEntity(), DEFAULT_USER), persistEntity(new UserEntity(), ALTERNATIVE_USER1));
+        var userInProject = persistEntity(new UserEntity(), ALTERNATIVE_USER2);
+        var project = persistEntity(new ProjectEntity(), projectEntity -> {
+            projectEntity.setName("project");
+            projectEntity.setAuthorizedUsers(List.of(userInProject));
+        });
+
+        var returnedUsers = userRepository.findNotInProject(project.getId());
+
+        assertThat(returnedUsers).isEqualTo(expectedUsers);
+    }
 }

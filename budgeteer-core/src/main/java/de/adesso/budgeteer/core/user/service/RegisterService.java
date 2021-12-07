@@ -1,0 +1,43 @@
+package de.adesso.budgeteer.core.user.service;
+
+import de.adesso.budgeteer.core.common.Causes;
+import de.adesso.budgeteer.core.user.MailAlreadyInUseException;
+import de.adesso.budgeteer.core.user.OnEmailChangedEvent;
+import de.adesso.budgeteer.core.user.UserException;
+import de.adesso.budgeteer.core.user.UsernameAlreadyInUseException;
+import de.adesso.budgeteer.core.user.port.in.RegisterUseCase;
+import de.adesso.budgeteer.core.user.port.out.CreateUserPort;
+import de.adesso.budgeteer.core.user.port.out.UserWithEmailExistsPort;
+import de.adesso.budgeteer.core.user.port.out.UserWithNameExistsPort;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+public class RegisterService implements RegisterUseCase {
+
+    private final UserWithNameExistsPort userWithNameExistsPort;
+    private final UserWithEmailExistsPort userWithEmailExistsPort;
+    private final CreateUserPort createUserPort;
+    private final ApplicationEventPublisher eventPublisher;
+
+    @Override
+    public void register(RegisterCommand command) throws UserException {
+        var causes = new Causes<UserException.UserErrors>();
+
+        if (userWithNameExistsPort.userWithNameExists(command.getUsername())) {
+            causes.addCause(UserException.UserErrors.USERNAME_ALREADY_IN_USE);
+        }
+        if (!command.getMail().isBlank() && userWithEmailExistsPort.userWithEmailExists(command.getMail())) {
+            causes.addCause(UserException.UserErrors.MAIL_ALREADY_IN_USE);
+        }
+
+        if(causes.hasCause()) {
+            throw new UserException(causes);
+        }
+
+        var userId = createUserPort.createUser(command.getUsername(), command.getMail(), command.getPassword());
+        eventPublisher.publishEvent(new OnEmailChangedEvent(userId, command.getUsername(), command.getMail()));
+    }
+}

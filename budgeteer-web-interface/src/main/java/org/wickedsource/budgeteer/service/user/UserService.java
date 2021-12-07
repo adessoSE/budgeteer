@@ -11,7 +11,9 @@ import org.wickedsource.budgeteer.persistence.user.*;
 import org.wickedsource.budgeteer.service.UnknownEntityException;
 
 import javax.transaction.Transactional;
+import java.time.ZoneId;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -72,14 +74,8 @@ public class UserService {
      */
     @PreAuthorize("canReadProject(#projectId)")
     public void removeUserFromProject(long projectId, long userId) {
-        ProjectEntity project = projectRepository.findOne(projectId);
-        if (project == null) {
-            throw new UnknownEntityException(ProjectEntity.class, projectId);
-        }
-        UserEntity user = userRepository.findOne(userId);
-        if (user == null) {
-            throw new UnknownEntityException(UserEntity.class, userId);
-        }
+        ProjectEntity project = projectRepository.findById(projectId).orElseThrow(() -> new UnknownEntityException(ProjectEntity.class, projectId));
+        UserEntity user = userRepository.findById(userId).orElseThrow(() -> new UnknownEntityException(UserEntity.class, userId));
         user.getAuthorizedProjects().remove(project);
         project.getAuthorizedUsers().remove(user);
     }
@@ -92,14 +88,8 @@ public class UserService {
      */
     @PreAuthorize("canReadProject(#projectId)")
     public void addUserToProject(long projectId, long userId) {
-        ProjectEntity project = projectRepository.findOne(projectId);
-        if (project == null) {
-            throw new UnknownEntityException(ProjectEntity.class, projectId);
-        }
-        UserEntity user = userRepository.findOne(userId);
-        if (user == null) {
-            throw new UnknownEntityException(UserEntity.class, userId);
-        }
+        ProjectEntity project = projectRepository.findById(projectId).orElseThrow(() -> new UnknownEntityException(ProjectEntity.class, projectId));
+        UserEntity user = userRepository.findById(userId).orElseThrow(() -> new UnknownEntityException(UserEntity.class, userId));
         user.getAuthorizedProjects().add(project);
         project.getAuthorizedUsers().add(user);
     }
@@ -122,18 +112,6 @@ public class UserService {
             entity.setMailVerified(false);
 
         return mapper.map(entity);
-    }
-
-    /**
-     * Login without password if using Keycloak
-     */
-    public User login(String username) {
-        UserEntity userEntity = userRepository.findByName(username);
-        if (userEntity == null) {
-            registerUser(username);
-            userEntity = userRepository.findByName(username);
-        }
-        return mapper.map(userEntity);
     }
 
     /**
@@ -163,16 +141,6 @@ public class UserService {
     }
 
     /**
-     * Register user without password if using Keycloak
-     */
-    private void registerUser(String username) {
-        UserEntity userEntity = new UserEntity();
-        userEntity.setName(username);
-        userEntity.setPassword("password"); // dummy password
-        userRepository.save(userEntity);
-    }
-
-    /**
      * Checks a password for matching the registered password.
      *
      * @param id       the ID of the user
@@ -180,7 +148,7 @@ public class UserService {
      * @return true if the password matches the user, false if not
      */
     public boolean checkPassword(long id, String password) {
-        UserEntity entity = userRepository.findOne(id);
+        UserEntity entity = userRepository.findById(id).orElseThrow(RuntimeException::new);
         return entity.getPassword().equals(passwordHasher.hash(password));
     }
 
@@ -210,11 +178,7 @@ public class UserService {
      * @return EditUserData for editing the user
      */
     public EditUserData loadUserToEdit(long id) {
-        UserEntity userEntity = userRepository.findOne(id);
-
-        if (userEntity == null)
-            throw new UnknownEntityException(UserEntity.class, id);
-
+        UserEntity userEntity = userRepository.findById(id).orElseThrow(() -> new UnknownEntityException(UserEntity.class, id));
         EditUserData editUserData = new EditUserData();
         editUserData.setId(userEntity.getId());
         editUserData.setName(userEntity.getName());
@@ -252,9 +216,9 @@ public class UserService {
             if (testEntity.getId() != data.getId())
                 throw new MailAlreadyInUseException();
 
-        userEntity = userRepository.findOne(data.getId());
+        userEntity = userRepository.findById(data.getId()).orElseThrow(RuntimeException::new);
 
-        testEntity = userRepository.findOne(data.getId());
+        testEntity = userRepository.findById(data.getId()).orElse(null);
         if (testEntity != null)
             if (testEntity.getMail() == null)
                 userEntity.setMailVerified(false);
@@ -281,10 +245,10 @@ public class UserService {
      * @param userEntity the specific user
      * @param token      a token, which usually contains a random UUID
      */
-    public VerificationToken createVerificationTokenForUser(UserEntity userEntity, String token) {
-        VerificationToken verificationToken = new VerificationToken(userEntity, token);
-        verificationTokenRepository.save(verificationToken);
-        return verificationToken;
+    public VerificationTokenEntity createVerificationTokenForUser(UserEntity userEntity, String token) {
+        VerificationTokenEntity verificationTokenEntity = new VerificationTokenEntity(userEntity, token);
+        verificationTokenRepository.save(verificationTokenEntity);
+        return verificationTokenEntity;
     }
 
     /**
@@ -294,9 +258,9 @@ public class UserService {
      * @param userEntity the specific user
      */
     public void createNewVerificationTokenForUser(UserEntity userEntity) {
-        VerificationToken verificationToken = verificationTokenRepository.findByUser(userEntity);
-        if (verificationToken != null)
-            verificationTokenRepository.delete(verificationToken);
+        VerificationTokenEntity verificationTokenEntity = verificationTokenRepository.findByUser(userEntity);
+        if (verificationTokenEntity != null)
+            verificationTokenRepository.delete(verificationTokenEntity);
         if (Boolean.valueOf(mailActivated))
             applicationEventPublisher.publishEvent(new OnRegistrationCompleteEvent(userEntity));
     }
@@ -313,7 +277,7 @@ public class UserService {
      * @return returns a status code (INVALID, EXPIRED, VALID)
      */
     public int validateVerificationToken(String token) {
-        VerificationToken verificationToken = verificationTokenRepository.findByToken(token);
+        VerificationTokenEntity verificationToken = verificationTokenRepository.findByToken(token);
 
         if (verificationToken == null)
             return TokenStatus.INVALID.statusCode();
@@ -321,7 +285,7 @@ public class UserService {
         UserEntity userEntity = verificationToken.getUserEntity();
         Calendar calendar = Calendar.getInstance();
 
-        if ((verificationToken.getExpiryDate().getTime() - calendar.getTime().getTime()) <= 0) {
+        if ((Date.from(verificationToken.getExpiryDate().atZone(ZoneId.systemDefault()).toInstant()).getTime() - calendar.getTime().getTime()) <= 0) {
             return TokenStatus.EXPIRED.statusCode();
         }
 
@@ -357,12 +321,7 @@ public class UserService {
      * @throws UserIdNotFoundException
      */
     public UserEntity getUserById(long id) throws UserIdNotFoundException {
-        UserEntity userEntity = userRepository.findOne(id);
-
-        if (userEntity == null)
-            throw new UserIdNotFoundException();
-        else
-            return userEntity;
+        return userRepository.findById(id).orElseThrow(UserIdNotFoundException::new);
     }
 
     /**
@@ -372,14 +331,14 @@ public class UserService {
      * @param userEntity the specific user
      * @param token      a token, which usually contains a random UUID
      */
-    public ForgotPasswordToken createForgotPasswordTokenForUser(UserEntity userEntity, String token) {
-        ForgotPasswordToken oldForgotPasswordToken = forgotPasswordTokenRepository.findByUser(userEntity);
-        if (oldForgotPasswordToken != null)
-            forgotPasswordTokenRepository.delete(oldForgotPasswordToken);
+    public ForgotPasswordTokenEntity createForgotPasswordTokenForUser(UserEntity userEntity, String token) {
+        ForgotPasswordTokenEntity oldForgotPasswordTokenEntity = forgotPasswordTokenRepository.findByUser(userEntity);
+        if (oldForgotPasswordTokenEntity != null)
+            forgotPasswordTokenRepository.delete(oldForgotPasswordTokenEntity);
 
-        ForgotPasswordToken forgotPasswordToken = new ForgotPasswordToken(userEntity, token);
-        forgotPasswordTokenRepository.save(forgotPasswordToken);
-        return forgotPasswordToken;
+        ForgotPasswordTokenEntity forgotPasswordTokenEntity = new ForgotPasswordTokenEntity(userEntity, token);
+        forgotPasswordTokenRepository.save(forgotPasswordTokenEntity);
+        return forgotPasswordTokenEntity;
     }
 
     /**
@@ -394,14 +353,14 @@ public class UserService {
      * @return returns a status code (INVALID, EXPIRED, VALID)
      */
     public int validateForgotPasswordToken(String token) {
-        ForgotPasswordToken forgotPasswordToken = forgotPasswordTokenRepository.findByToken(token);
+        ForgotPasswordTokenEntity forgotPasswordTokenEntity = forgotPasswordTokenRepository.findByToken(token);
 
-        if (forgotPasswordToken == null)
+        if (forgotPasswordTokenEntity == null)
             return TokenStatus.INVALID.statusCode();
 
         Calendar calendar = Calendar.getInstance();
 
-        if ((forgotPasswordToken.getExpiryDate().getTime() - calendar.getTime().getTime()) <= 0) {
+        if ((Date.from(forgotPasswordTokenEntity.getExpiryDate().atZone(ZoneId.systemDefault()).toInstant()).getTime() - calendar.getTime().getTime()) <= 0) {
             return TokenStatus.EXPIRED.statusCode();
         }
 
@@ -416,9 +375,9 @@ public class UserService {
      * @return returns the user found with the ForgotPasswordToken
      */
     public UserEntity getUserByForgotPasswordToken(String forgotPasswordTokenString) {
-        ForgotPasswordToken forgotPasswordToken = forgotPasswordTokenRepository.findByToken(forgotPasswordTokenString);
-        if (forgotPasswordToken != null)
-            return forgotPasswordToken.getUserEntity();
+        ForgotPasswordTokenEntity forgotPasswordTokenEntity = forgotPasswordTokenRepository.findByToken(forgotPasswordTokenString);
+        if (forgotPasswordTokenEntity != null)
+            return forgotPasswordTokenEntity.getUserEntity();
         else
             return null;
     }
@@ -429,9 +388,9 @@ public class UserService {
      * @param token the token to be deleted
      */
     public void deleteForgotPasswordToken(String token) {
-        ForgotPasswordToken forgotPasswordToken = forgotPasswordTokenRepository.findByToken(token);
+        ForgotPasswordTokenEntity forgotPasswordTokenEntity = forgotPasswordTokenRepository.findByToken(token);
 
-        if (forgotPasswordToken != null)
-            forgotPasswordTokenRepository.delete(forgotPasswordToken);
+        if (forgotPasswordTokenEntity != null)
+            forgotPasswordTokenRepository.delete(forgotPasswordTokenEntity);
     }
 }

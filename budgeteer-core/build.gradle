@@ -1,0 +1,36 @@
+plugins {
+    id 'org.springframework.boot'
+    id 'io.spring.dependency-management'
+    id "io.freefair.lombok"
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation project(':budgeteer-common')
+
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail'
+    implementation group: 'commons-codec', name: 'commons-codec', version: commons_codec_version
+    implementation group: 'org.joda', name: 'joda-money', version: joda_money_version
+
+    testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
+}
+
+bootRun {
+    enabled = false
+}
+
+bootJar {
+    enabled = false
+}
+
+jar {
+    enabled = true
+}
+
+test {
+    useJUnitPlatform()
+}

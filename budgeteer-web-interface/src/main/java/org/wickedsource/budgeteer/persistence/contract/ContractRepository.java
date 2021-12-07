@@ -5,9 +5,11 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface ContractRepository extends CrudRepository<ContractEntity, Long>{
 
     List<ContractEntity> findByProjectId(long projectId);
@@ -15,6 +17,7 @@ public interface ContractRepository extends CrudRepository<ContractEntity, Long>
     @Query("select cif from ContractInvoiceField cif where cif.contract.id = :contractId AND cif.fieldName = :fieldName")
     ContractInvoiceField findInvoiceFieldByName(@Param("contractId") long contractID, @Param("fieldName") String fieldName);
 
+    boolean existsByIdAndProjectId(long contractId, long projectId);
 
     /**
      * returns a ContractStatisticBean for a given contract till the given month and year.
@@ -77,7 +80,7 @@ public interface ContractRepository extends CrudRepository<ContractEntity, Long>
     void deleteByProjectId(@Param(value = "projectId") long projectId);
 
     @Query("select c from ContractEntity c join fetch c.invoiceFields where c.id = :id")
-    ContractEntity findById(@Param("id") long id);
+    ContractEntity findByIdAndFetchInvoiceFields(@Param("id") long id);
 
     @Modifying
     @Query("delete from ContractFieldEntity c where c.id in (select s.id from ContractFieldEntity s where  s.field.project.id = :projectId)")

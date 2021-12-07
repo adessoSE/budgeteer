@@ -4,11 +4,8 @@ import lombok.Data;
 import org.wickedsource.budgeteer.persistence.user.UserEntity;
 
 import javax.persistence.*;
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "PROJECT",
@@ -16,7 +13,7 @@ import java.util.Set;
                 @UniqueConstraint(name = "UNIQUE_PROJECT_NAME", columnNames = {"NAME"})
         })
 @Data
-public class ProjectEntity implements Serializable {
+public class ProjectEntity {
 
     @Id
     @GeneratedValue
@@ -25,11 +22,11 @@ public class ProjectEntity implements Serializable {
     @Column(nullable = false, length = 255)
     private String name;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "PROJECT_USER",
             joinColumns = {@JoinColumn(name = "PROJECT_ID")},
             inverseJoinColumns = {@JoinColumn(name = "USER_ID")})
-    private List<UserEntity> authorizedUsers = new ArrayList<>();
+    private List<UserEntity> authorizedUsers;
 
     @Column(nullable = true)
     @Temporal(TemporalType.DATE)
@@ -44,7 +41,7 @@ public class ProjectEntity implements Serializable {
      * List of possible dynamic fields that can be used by contracts of this project
      */
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "project", fetch = FetchType.LAZY)
-    private Set<ProjectContractField> contractFields;
+    private List<ProjectContractField> contractFields;
 
     @Override
     public String toString() {

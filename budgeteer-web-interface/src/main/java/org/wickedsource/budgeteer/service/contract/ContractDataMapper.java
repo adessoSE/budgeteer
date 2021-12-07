@@ -12,11 +12,13 @@ import org.wickedsource.budgeteer.persistence.contract.ContractRepository;
 import org.wickedsource.budgeteer.persistence.invoice.InvoiceEntity;
 import org.wickedsource.budgeteer.persistence.project.ProjectContractField;
 import org.wickedsource.budgeteer.service.AbstractMapper;
+import org.wickedsource.budgeteer.service.DateUtil;
 import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
 import org.wickedsource.budgeteer.service.invoice.InvoiceBaseData;
 import org.wickedsource.budgeteer.service.invoice.InvoiceDataMapper;
 import org.wickedsource.budgeteer.web.components.fileUpload.FileUploadModel;
 
+import java.time.ZoneId;
 import java.util.*;
 
 @Component
@@ -41,11 +43,11 @@ public class ContractDataMapper extends AbstractMapper<ContractEntity, ContractB
         result.setInternalNumber(entity.getInternalNumber());
         result.setProjectId(entity.getProject().getId());
         result.setType(entity.getType());
-        result.setStartDate(entity.getStartDate());
+        result.setStartDate(DateUtil.toDate(entity.getStartDate()));
         result.setFileModel(new FileUploadModel(entity.getFileName(), entity.getFile(), entity.getLink()));
         result.setTaxRate(entity.getTaxRate());
 
-        Map<String, DynamicAttributeField> contractAttributes = new HashMap<String, DynamicAttributeField>();
+        Map<String, DynamicAttributeField> contractAttributes = new HashMap<>();
         for(ProjectContractField projectContractField:  entity.getProject().getContractFields()){
             contractAttributes.put(projectContractField.getFieldName(), new DynamicAttributeField(projectContractField.getFieldName(), ""));
         }

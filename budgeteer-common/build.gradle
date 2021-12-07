@@ -1,0 +1,8 @@
+plugins {
+    id 'java'
+    id 'io.freefair.lombok'
+}
+
+dependencies {
+    implementation group: 'org.joda', name: 'joda-money', version: joda_money_version
+}

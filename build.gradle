@@ -1,65 +1,46 @@
-task wrapper(type: Wrapper) {
-    gradleVersion '4.7'
-}
+plugins {
+    id 'org.springframework.boot' version '2.4.9' apply false
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE' apply false
+    id 'io.freefair.lombok' version '6.0.0-m2' apply false
 
-// alle Skripte aus ./gradle.d in sortierter Reihenfolge einbinden
-file('gradle.d').listFiles().sort().each {
-    if (it =~ /.*\.gradle$/) {
-        apply from: relativePath(it)
-    }
 }
 
 allprojects {
     version = '1.1.4.BETA'
-}
-
-buildscript {
-    repositories {
-        mavenLocal()
-        jcenter()
-        maven {
-            url "https://plugins.gradle.org/m2/"
-        }
-    }
+    group = 'de.adesso'
 }
 
 subprojects {
-
     apply plugin: 'java'
-    apply plugin: 'jacoco'
 
     repositories {
-        jcenter()
-        mavenLocal()
-        maven {
-            name "Apache Snapshots"
-            url "https://repository.apache.org/content/repositories/snapshots/"
+        repositories {
+            mavenCentral()
+            jcenter()
         }
-    }
-
-    dependencies {
-        testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: junit5_version
-        testCompile group: 'org.springframework', name: 'spring-test', version: spring_version
-        testCompile group: 'org.mockito', name: 'mockito-core', version: mockito_version
-        testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: junit5_version
     }
 
     compileJava {
-        sourceCompatibility = '1.8'
-        targetCompatibility = '1.8'
-    }
-
-    jacocoTestReport {
-        reports {
-            xml.enabled false
-            csv.enabled false
-            html.destination "${buildDir}/jacocoHtml"
-        }
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
 
     test {
-        // Enable JUnit 5 (Gradle 4.6+).
         useJUnitPlatform()
     }
 }
 
+ext.springSubprojects = subprojects.findAll {
+    it.name in ['budgeteer-web-interface', 'budgeteer-core']
+}
+
+ext.nonSpringSubprojects = subprojects - springSubprojects
+
+configure(nonSpringSubprojects) {
+    dependencies {
+        testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: junit5_version
+        testImplementation group: 'org.mockito', name: 'mockito-core', version: mockito_version
+        testImplementation group: 'org.assertj', name: 'assertj-core', version: assertj_version
+        testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: junit5_version
+    }
+}
