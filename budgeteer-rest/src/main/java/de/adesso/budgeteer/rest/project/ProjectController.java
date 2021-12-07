@@ -2,7 +2,10 @@ package de.adesso.budgeteer.rest.project;
 
 import de.adesso.budgeteer.core.project.ProjectNameAlreadyInUseException;
 import de.adesso.budgeteer.core.project.ProjectNotFoundException;
+import de.adesso.budgeteer.core.project.ProjectException;
 import de.adesso.budgeteer.core.project.port.in.*;
+import de.adesso.budgeteer.rest.project.exceptions.CreateProjectException;
+import de.adesso.budgeteer.rest.project.exceptions.UpdateProjectException;
 import de.adesso.budgeteer.rest.project.model.*;
 import de.adesso.budgeteer.rest.security.userdetails.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
@@ -34,9 +37,13 @@ public class ProjectController {
     private final ProjectModelMapper projectModelMapper;
 
     @PostMapping
-    public ProjectModel createProject(@Valid @RequestBody CreateProjectModel createProjectModel, Authentication authentication) throws ProjectNameAlreadyInUseException {
+    public ProjectModel createProject(@Valid @RequestBody CreateProjectModel createProjectModel, Authentication authentication) {
         var user = (UserDetailsImpl) authentication.getPrincipal();
-        return projectModelMapper.toModel(createProjectUseCase.createProject(new CreateProjectUseCase.CreateProjectCommand(createProjectModel.getName(), user.getId())));
+        try {
+            return projectModelMapper.toModel(createProjectUseCase.createProject(new CreateProjectUseCase.CreateProjectCommand(createProjectModel.getName(), user.getId())));
+        } catch (ProjectException e) {
+            throw new CreateProjectException(e);
+        }
     }
 
     @GetMapping("/{projectId}")
@@ -86,12 +93,16 @@ public class ProjectController {
 
     @PutMapping("/{projectId}")
     @PreAuthorize("userHasAccessToProject(#projectId)")
-    public ProjectModel updateProject(@Valid @RequestBody UpdateProjectModel updateProjectModel, @PathVariable long projectId) throws ProjectNameAlreadyInUseException, ProjectNotFoundException {
-        return projectModelMapper.toModel(updateProjectUseCase.updateProject(new UpdateProjectUseCase.UpdateProjectCommand(
-                projectId,
-                updateProjectModel.getName(),
-                updateProjectModel.getDateRange()
-        )));
+    public ProjectModel updateProject(@Valid @RequestBody UpdateProjectModel updateProjectModel, @PathVariable long projectId) {
+        try {
+            return projectModelMapper.toModel(updateProjectUseCase.updateProject(new UpdateProjectUseCase.UpdateProjectCommand(
+                    projectId,
+                    updateProjectModel.getName(),
+                    updateProjectModel.getDateRange()
+            )));
+        } catch (ProjectException e) {
+            throw new UpdateProjectException(e);
+        }
     }
 
     @GetMapping("/{projectId}/attributes")

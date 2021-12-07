@@ -2,6 +2,7 @@ package de.adesso.budgeteer.core.project.service;
 
 import de.adesso.budgeteer.core.project.ProjectNameAlreadyInUseException;
 import de.adesso.budgeteer.core.project.domain.Project;
+import de.adesso.budgeteer.core.project.ProjectException;
 import de.adesso.budgeteer.core.project.port.in.CreateProjectUseCase;
 import de.adesso.budgeteer.core.project.port.out.CreateProjectPort;
 import de.adesso.budgeteer.core.project.port.out.ProjectExistsWithNamePort;
@@ -27,12 +28,13 @@ class CreateProjectServiceTest {
         var existingProjectName = "name";
         when(projectExistsWithNamePort.projectExistsWithName(existingProjectName)).thenReturn(true);
 
-        assertThatExceptionOfType(ProjectNameAlreadyInUseException.class)
-                .isThrownBy(() -> createProjectService.createProject(new CreateProjectUseCase.CreateProjectCommand(existingProjectName, 1L)));
+        assertThatExceptionOfType(ProjectException.class)
+                .isThrownBy(() -> createProjectService.createProject(new CreateProjectUseCase.CreateProjectCommand(existingProjectName, 1L)))
+                .matches(e -> e.getCauses().contains(ProjectException.ProjectErrors.NAME_ALREADY_IN_USE));
     }
 
     @Test
-    void shouldCreateNewProjectWhenProjectWithNameDoesNotYetExist() throws ProjectNameAlreadyInUseException {
+    void shouldCreateNewProjectWhenProjectWithNameDoesNotYetExist() throws ProjectException {
         var name = "name";
         var userId = 1L;
         var expectedProject = new Project(3L, name);
