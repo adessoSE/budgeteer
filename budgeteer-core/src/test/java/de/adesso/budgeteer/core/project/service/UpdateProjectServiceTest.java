@@ -2,8 +2,6 @@ package de.adesso.budgeteer.core.project.service;
 
 import de.adesso.budgeteer.common.date.DateRange;
 import de.adesso.budgeteer.core.project.ProjectException;
-import de.adesso.budgeteer.core.project.ProjectNameAlreadyInUseException;
-import de.adesso.budgeteer.core.project.ProjectNotFoundException;
 import de.adesso.budgeteer.core.project.domain.Project;
 import de.adesso.budgeteer.core.project.port.in.UpdateProjectUseCase;
 import de.adesso.budgeteer.core.project.port.out.GetProjectPort;

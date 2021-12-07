@@ -1,7 +1,5 @@
 package de.adesso.budgeteer.rest.project;
 
-import de.adesso.budgeteer.core.project.ProjectNameAlreadyInUseException;
-import de.adesso.budgeteer.core.project.ProjectNotFoundException;
 import de.adesso.budgeteer.core.project.ProjectException;
 import de.adesso.budgeteer.core.project.port.in.*;
 import de.adesso.budgeteer.rest.project.exceptions.CreateProjectException;
