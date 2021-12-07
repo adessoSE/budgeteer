@@ -4,9 +4,11 @@ plugins {
     id 'io.freefair.lombok' version '6.0.0-m2' apply false
     id 'jacoco'
     id 'org.sonarqube' version '3.3'
+    id 'com.diffplug.spotless' version '6.0.4'
 }
 
 allprojects {
+
     version = '1.1.4.BETA'
     group = 'de.adesso'
 }
@@ -14,6 +16,7 @@ allprojects {
 subprojects {
     apply plugin: 'java'
     apply plugin: 'jacoco'
+    apply plugin: 'com.diffplug.spotless'
 
     repositories {
         repositories {
@@ -36,6 +39,14 @@ subprojects {
             html.enabled false
             csv.enabled false
             xml.enabled true
+        }
+    }
+
+    spotless {
+        ratchetFrom System.getProperty('mainBranch', 'main')
+
+        java {
+            googleJavaFormat()
         }
     }
 }
