@@ -2,16 +2,21 @@ plugins {
     id 'org.springframework.boot' version '2.4.9' apply false
     id 'io.spring.dependency-management' version '1.0.11.RELEASE' apply false
     id 'io.freefair.lombok' version '6.0.0-m2' apply false
-
+    id 'jacoco'
+    id 'org.sonarqube' version '3.3'
+    id 'com.diffplug.spotless' version '6.0.4'
 }
 
 allprojects {
+
     version = '1.1.4.BETA'
     group = 'de.adesso'
 }
 
 subprojects {
     apply plugin: 'java'
+    apply plugin: 'jacoco'
+    apply plugin: 'com.diffplug.spotless'
 
     repositories {
         repositories {
@@ -28,6 +33,22 @@ subprojects {
     test {
         useJUnitPlatform()
     }
+
+    jacocoTestReport {
+        reports {
+            html.enabled false
+            csv.enabled false
+            xml.enabled true
+        }
+    }
+
+    spotless {
+        ratchetFrom System.getProperty('mainBranch', 'main')
+
+        java {
+            googleJavaFormat()
+        }
+    }
 }
 
 ext.springSubprojects = subprojects.findAll {
@@ -42,5 +63,13 @@ configure(nonSpringSubprojects) {
         testImplementation group: 'org.mockito', name: 'mockito-core', version: mockito_version
         testImplementation group: 'org.assertj', name: 'assertj-core', version: assertj_version
         testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: junit5_version
+    }
+}
+
+sonarqube {
+    properties {
+        property "sonar.projectKey", "adessoAG_budgeteer"
+        property "sonar.organization", "adesso-ag"
+        property "sonar.host.url", "https://sonarcloud.io"
     }
 }
