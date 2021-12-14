@@ -5,7 +5,26 @@ on:
     - cron: '24 3 * * *'
 
 jobs:
+  check-commit-dates:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - id: check-commit-dates
+        run: |
+          if [ -z "$(git log --since='24 hours ago')" ]; then
+            SHOULD_RUN="false"
+          else
+            SHOULD_RUN="true"
+          fi
+          echo ::set-output name=should-run::${SHOULD_RUN}
+
+    outputs:
+      should-run: ${{ steps.should_run.outputs.should_run }}
+
   nightly-prepare-version-info:
+    needs: check-commit-dates
+    if: ${{ needs.check-commit-dates.outputs.should-run }}
     runs-on: ubuntu-latest
     steps:
       - name: Get git
