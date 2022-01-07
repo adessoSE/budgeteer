@@ -3,54 +3,57 @@ package de.adesso.budgeteer.rest.invoice;
 import de.adesso.budgeteer.core.invoice.port.in.*;
 import de.adesso.budgeteer.rest.invoice.model.CreateInvoiceModel;
 import de.adesso.budgeteer.rest.invoice.model.InvoiceModel;
+import de.adesso.budgeteer.rest.invoice.model.UpdateInvoiceModel;
+import java.util.List;
+import java.util.Optional;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
-import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/invoices")
 public class InvoiceController {
-    private final GetInvoiceByIdUseCase getInvoiceByIdUseCase;
-    private final GetInvoicesInContractUseCase getInvoicesInContractUseCase;
-    private final GetInvoicesInProjectUseCase getInvoicesInProjectUseCase;
-    private final DeleteInvoiceByIdUseCase deleteInvoiceByIdUseCase;
-    private final CreateInvoiceUseCase createInvoiceUseCase;
-    private final UpdateInvoiceUseCase updateInvoiceUseCase;
-    private final InvoiceModelMapper invoiceModelMapper;
+  private final GetInvoiceByIdUseCase getInvoiceByIdUseCase;
+  private final GetInvoicesInContractUseCase getInvoicesInContractUseCase;
+  private final GetInvoicesInProjectUseCase getInvoicesInProjectUseCase;
+  private final DeleteInvoiceByIdUseCase deleteInvoiceByIdUseCase;
+  private final CreateInvoiceUseCase createInvoiceUseCase;
+  private final UpdateInvoiceUseCase updateInvoiceUseCase;
+  private final InvoiceModelMapper invoiceModelMapper;
 
-    @GetMapping("/{invoiceId}")
-    @PreAuthorize("userHasAccessToInvoice(#invoiceId)")
-    public Optional<InvoiceModel> getInvoice(@PathVariable long invoiceId) {
-        return getInvoiceByIdUseCase.getInvoiceById(invoiceId).map(invoiceModelMapper::toModel);
-    }
+  @GetMapping("/{invoiceId}")
+  @PreAuthorize("userHasAccessToInvoice(#invoiceId)")
+  public Optional<InvoiceModel> getInvoice(@PathVariable long invoiceId) {
+    return getInvoiceByIdUseCase.getInvoiceById(invoiceId).map(invoiceModelMapper::toModel);
+  }
 
-    @GetMapping("/byContract/{contractId}")
-    @PreAuthorize("userHasAccessToContract(#contractId)")
-    public List<InvoiceModel> getInvoicesInContract(@PathVariable long contractId) {
-        return invoiceModelMapper.toModel(getInvoicesInContractUseCase.getInvoicesInContract(contractId));
-    }
+  @GetMapping("/byContract/{contractId}")
+  @PreAuthorize("userHasAccessToContract(#contractId)")
+  public List<InvoiceModel> getInvoicesInContract(@PathVariable long contractId) {
+    return invoiceModelMapper.toModel(
+        getInvoicesInContractUseCase.getInvoicesInContract(contractId));
+  }
 
-    @GetMapping("/byProject/{projectId}")
-    @PreAuthorize("userHasAccessToProject(#projectId)")
-    public List<InvoiceModel> getInvoicesInProject(@PathVariable long projectId) {
-        return invoiceModelMapper.toModel(getInvoicesInProjectUseCase.getInvoicesInProject(projectId));
-    }
+  @GetMapping("/byProject/{projectId}")
+  @PreAuthorize("userHasAccessToProject(#projectId)")
+  public List<InvoiceModel> getInvoicesInProject(@PathVariable long projectId) {
+    return invoiceModelMapper.toModel(getInvoicesInProjectUseCase.getInvoicesInProject(projectId));
+  }
 
-    @DeleteMapping("/{invoiceId}")
-    @PreAuthorize("userHasAccessToInvoice(#invoiceId)")
-    public void deleteInvoice(@PathVariable long invoiceId) {
-        deleteInvoiceByIdUseCase.deleteInvoiceById(invoiceId);
-    }
+  @DeleteMapping("/{invoiceId}")
+  @PreAuthorize("userHasAccessToInvoice(#invoiceId)")
+  public void deleteInvoice(@PathVariable long invoiceId) {
+    deleteInvoiceByIdUseCase.deleteInvoiceById(invoiceId);
+  }
 
-    @PostMapping
-    @PreAuthorize("userHasAccessToContract(#createInvoiceModel.contractId)")
-    public InvoiceModel createInvoice(@Valid @RequestBody CreateInvoiceModel createInvoiceModel) {
-        return invoiceModelMapper.toModel(createInvoiceUseCase.createInvoice(new CreateInvoiceUseCase.CreateInvoiceCommand(
+  @PostMapping
+  @PreAuthorize("userHasAccessToContract(#createInvoiceModel.contractId)")
+  public InvoiceModel createInvoice(@Valid @RequestBody CreateInvoiceModel createInvoiceModel) {
+    return invoiceModelMapper.toModel(
+        createInvoiceUseCase.createInvoice(
+            new CreateInvoiceUseCase.CreateInvoiceCommand(
                 createInvoiceModel.getContractId(),
                 createInvoiceModel.getName(),
                 createInvoiceModel.getAmountOwed(),
@@ -61,26 +64,27 @@ public class InvoiceController {
                 createInvoiceModel.getDueDate(),
                 createInvoiceModel.getAttributes(),
                 createInvoiceModel.getLink(),
-                createInvoiceModel.getFile()
-        )));
-    }
+                createInvoiceModel.getFile())));
+  }
 
-    @PutMapping("/{invoiceId}")
-    @PreAuthorize("userHasAccessToInvoice(#invoiceId)")
-    public InvoiceModel updateInvoice(@Valid @RequestBody CreateInvoiceModel createInvoiceModel, @PathVariable long invoiceId) {
-        return invoiceModelMapper.toModel(updateInvoiceUseCase.updateInvoice(new UpdateInvoiceUseCase.UpdateInvoiceCommand(
+  @PutMapping("/{invoiceId}")
+  @PreAuthorize("userHasAccessToInvoice(#invoiceId)")
+  public InvoiceModel updateInvoice(
+      @PathVariable long invoiceId, @Valid @RequestBody UpdateInvoiceModel updateInvoiceModel) {
+    return invoiceModelMapper.toModel(
+        updateInvoiceUseCase.updateInvoice(
+            new UpdateInvoiceUseCase.UpdateInvoiceCommand(
                 invoiceId,
-                createInvoiceModel.getContractId(),
-                createInvoiceModel.getName(),
-                createInvoiceModel.getAmountOwed(),
-                createInvoiceModel.getTaxRate(),
-                createInvoiceModel.getInternalNumber(),
-                createInvoiceModel.getYearMonth(),
-                createInvoiceModel.getPaidDate(),
-                createInvoiceModel.getDueDate(),
-                createInvoiceModel.getAttributes(),
-                createInvoiceModel.getLink(),
-                createInvoiceModel.getFile()
-        )));
-    }
+                updateInvoiceModel.getContractId(),
+                updateInvoiceModel.getName(),
+                updateInvoiceModel.getAmountOwed(),
+                updateInvoiceModel.getTaxRate(),
+                updateInvoiceModel.getInternalNumber(),
+                updateInvoiceModel.getYearMonth(),
+                updateInvoiceModel.getPaidDate(),
+                updateInvoiceModel.getDueDate(),
+                updateInvoiceModel.getAttributes(),
+                updateInvoiceModel.getLink(),
+                updateInvoiceModel.getFile())));
+  }
 }
