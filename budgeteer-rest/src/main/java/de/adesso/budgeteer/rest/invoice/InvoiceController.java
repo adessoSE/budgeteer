@@ -1,9 +1,12 @@
 package de.adesso.budgeteer.rest.invoice;
 
 import de.adesso.budgeteer.core.invoice.port.in.*;
+import de.adesso.budgeteer.rest.contract.model.ContractIdModel;
 import de.adesso.budgeteer.rest.invoice.model.CreateInvoiceModel;
+import de.adesso.budgeteer.rest.invoice.model.InvoiceIdModel;
 import de.adesso.budgeteer.rest.invoice.model.InvoiceModel;
 import de.adesso.budgeteer.rest.invoice.model.UpdateInvoiceModel;
+import de.adesso.budgeteer.rest.project.model.ProjectIdModel;
 import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
@@ -24,28 +27,34 @@ public class InvoiceController {
   private final InvoiceModelMapper invoiceModelMapper;
 
   @GetMapping("/{invoiceId}")
-  @PreAuthorize("userHasAccessToInvoice(#invoiceId)")
-  public Optional<InvoiceModel> getInvoice(@PathVariable long invoiceId) {
-    return getInvoiceByIdUseCase.getInvoiceById(invoiceId).map(invoiceModelMapper::toModel);
+  @PreAuthorize("userHasAccessToInvoice(#invoiceIdModel.value)")
+  public Optional<InvoiceModel> getInvoice(
+      @PathVariable("invoiceId") InvoiceIdModel invoiceIdModel) {
+    return getInvoiceByIdUseCase
+        .getInvoiceById(invoiceIdModel.getValue())
+        .map(invoiceModelMapper::toModel);
   }
 
   @GetMapping("/byContract/{contractId}")
-  @PreAuthorize("userHasAccessToContract(#contractId)")
-  public List<InvoiceModel> getInvoicesInContract(@PathVariable long contractId) {
+  @PreAuthorize("userHasAccessToContract(#contractIdModel.value)")
+  public List<InvoiceModel> getInvoicesInContract(
+      @PathVariable("contractId") ContractIdModel contractIdModel) {
     return invoiceModelMapper.toModel(
-        getInvoicesInContractUseCase.getInvoicesInContract(contractId));
+        getInvoicesInContractUseCase.getInvoicesInContract(contractIdModel.getValue()));
   }
 
   @GetMapping("/byProject/{projectId}")
-  @PreAuthorize("userHasAccessToProject(#projectId)")
-  public List<InvoiceModel> getInvoicesInProject(@PathVariable long projectId) {
-    return invoiceModelMapper.toModel(getInvoicesInProjectUseCase.getInvoicesInProject(projectId));
+  @PreAuthorize("userHasAccessToProject(#projectIdModel.value)")
+  public List<InvoiceModel> getInvoicesInProject(
+      @PathVariable("projectId") ProjectIdModel projectIdModel) {
+    return invoiceModelMapper.toModel(
+        getInvoicesInProjectUseCase.getInvoicesInProject(projectIdModel.getValue()));
   }
 
   @DeleteMapping("/{invoiceId}")
-  @PreAuthorize("userHasAccessToInvoice(#invoiceId)")
-  public void deleteInvoice(@PathVariable long invoiceId) {
-    deleteInvoiceByIdUseCase.deleteInvoiceById(invoiceId);
+  @PreAuthorize("userHasAccessToInvoice(#invoiceIdModel.value)")
+  public void deleteInvoice(@PathVariable("invoiceId") InvoiceIdModel invoiceIdModel) {
+    deleteInvoiceByIdUseCase.deleteInvoiceById(invoiceIdModel.getValue());
   }
 
   @PostMapping
@@ -68,13 +77,14 @@ public class InvoiceController {
   }
 
   @PutMapping("/{invoiceId}")
-  @PreAuthorize("userHasAccessToInvoice(#invoiceId)")
+  @PreAuthorize("userHasAccessToInvoice(#invoiceIdModel.value)")
   public InvoiceModel updateInvoice(
-      @PathVariable long invoiceId, @Valid @RequestBody UpdateInvoiceModel updateInvoiceModel) {
+      @PathVariable("invoiceId") InvoiceIdModel invoiceIdModel,
+      @Valid @RequestBody UpdateInvoiceModel updateInvoiceModel) {
     return invoiceModelMapper.toModel(
         updateInvoiceUseCase.updateInvoice(
             new UpdateInvoiceUseCase.UpdateInvoiceCommand(
-                invoiceId,
+                invoiceIdModel.getValue(),
                 updateInvoiceModel.getContractId(),
                 updateInvoiceModel.getName(),
                 updateInvoiceModel.getAmountOwed(),
