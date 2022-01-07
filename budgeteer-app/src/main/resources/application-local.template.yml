@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/budgeteer
+    driver-class-name: org.postgresql.Driver
+    username: budgeteer
+    password: budgeteer
