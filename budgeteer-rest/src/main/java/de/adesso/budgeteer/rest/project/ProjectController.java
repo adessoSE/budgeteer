@@ -5,6 +5,7 @@ import de.adesso.budgeteer.core.project.port.in.*;
 import de.adesso.budgeteer.rest.project.exceptions.CreateProjectException;
 import de.adesso.budgeteer.rest.project.exceptions.UpdateProjectException;
 import de.adesso.budgeteer.rest.project.model.*;
+import de.adesso.budgeteer.rest.security.authorization.aspects.annotations.HasAccessToProject;
 import de.adesso.budgeteer.rest.security.userdetails.UserDetailsImpl;
 import de.adesso.budgeteer.rest.user.model.UserIdModel;
 import java.util.List;
@@ -12,13 +13,13 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/projects")
+@HasAccessToProject
 public class ProjectController {
 
   private final GetProjectUseCase getProjectUseCase;
@@ -49,7 +50,6 @@ public class ProjectController {
   }
 
   @GetMapping("/{projectId}")
-  @PreAuthorize("userHasAccessToProject(#projectIdModel.value)")
   public Optional<ProjectModel> getProject(
       @PathVariable("projectId") ProjectIdModel projectIdModel) {
     return Optional.ofNullable(getProjectUseCase.getProject(projectIdModel.getValue()))
@@ -83,7 +83,6 @@ public class ProjectController {
   }
 
   @PostMapping("/{projectId}/user")
-  @PreAuthorize("userHasAccessToProject(#projectIdModel.value)")
   public void addUserToProject(
       @PathVariable("projectId") ProjectIdModel projectIdModel,
       @RequestParam UserIdModel userIdModel) {
@@ -91,7 +90,6 @@ public class ProjectController {
   }
 
   @DeleteMapping("/{projectId}/user")
-  @PreAuthorize("userHasAccessToProject(#projectIdModel.value)")
   public void removeUserFromProject(
       @PathVariable("projectId") ProjectIdModel projectIdModel,
       @RequestParam UserIdModel userIdModel) {
@@ -100,13 +98,11 @@ public class ProjectController {
   }
 
   @DeleteMapping("/{projectId}")
-  @PreAuthorize("userHasAccessToProject(#projectIdModel.value)")
   public void deleteProject(@PathVariable("projectId") ProjectIdModel projectIdModel) {
     deleteProjectUseCase.deleteProject(projectIdModel.getValue());
   }
 
   @PutMapping("/{projectId}")
-  @PreAuthorize("userHasAccessToProject(#projectIdModel.value)")
   public ProjectModel updateProject(
       @PathVariable("projectId") ProjectIdModel projectIdModel,
       @Valid @RequestBody UpdateProjectModel updateProjectModel) {
@@ -123,14 +119,11 @@ public class ProjectController {
   }
 
   @GetMapping("/{projectId}/attributes")
-  @PreAuthorize("userHasAccessToProject(#projectIdModel.value)")
-  public List<String> getProjectAttributes(
-      @PathVariable("projectId") ProjectIdModel projectIdModel) {
-    return getProjectAttributesUseCase.getProjectAttributes(projectIdModel.getValue());
+  public List<String> getProjectAttributes(@PathVariable("projectId") ProjectIdModel projectId) {
+    return getProjectAttributesUseCase.getProjectAttributes(projectId.getValue());
   }
 
   @GetMapping("/{projectId}/withDate")
-  @PreAuthorize("userHasAccessToProject(#projectIdModel.value)")
   public ProjectWithDateModel getProjectWithDate(
       @PathVariable("projectId") ProjectIdModel projectIdModel) {
     return projectModelMapper.toModel(

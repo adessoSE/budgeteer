@@ -6,15 +6,18 @@ import de.adesso.budgeteer.rest.contract.model.ContractIdModel;
 import de.adesso.budgeteer.rest.contract.model.ContractModel;
 import de.adesso.budgeteer.rest.contract.model.CreateContractModel;
 import de.adesso.budgeteer.rest.project.model.ProjectIdModel;
+import de.adesso.budgeteer.rest.security.authorization.aspects.annotations.HasAccessToContract;
+import de.adesso.budgeteer.rest.security.authorization.aspects.annotations.HasAccessToProject;
 import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
+@HasAccessToContract
+@HasAccessToProject
 @RequestMapping("/contracts")
 public class ContractController {
   private final GetContractByIdUseCase getContractByIdUseCase;
@@ -25,7 +28,6 @@ public class ContractController {
   private final ContractModelMapper contractModelMapper;
 
   @GetMapping("/{contractId}")
-  @PreAuthorize("userHasAccesToContract(#contractIdModel.value)")
   public Optional<ContractModel> getContract(
       @PathVariable("contractId") ContractIdModel contractIdModel) {
     return getContractByIdUseCase
@@ -34,7 +36,6 @@ public class ContractController {
   }
 
   @GetMapping
-  @PreAuthorize("userHasAccessToProject(#projectIdModel.value)")
   public List<ContractModel> getContractsInProject(
       @RequestParam("projectId") ProjectIdModel projectIdModel) {
     return contractModelMapper.toModel(
@@ -42,20 +43,20 @@ public class ContractController {
   }
 
   @DeleteMapping("/{contractId}")
-  @PreAuthorize("userHasAccessToContract(#contractIdModel.value)")
   public void deleteContract(@PathVariable("contractId") ContractIdModel contractIdModel) {
     deleteContractUseCase.deleteContract(contractIdModel.getValue());
   }
 
   @PostMapping
-  @PreAuthorize("userHasAccessToProject(#createContractModel.projectId)")
-  public ContractModel createContract(@Valid @RequestBody CreateContractModel createContractModel) {
+  public ContractModel createContract(
+      @RequestParam("projectId") ProjectIdModel projectIdModel,
+      @Valid @RequestBody CreateContractModel createContractModel) {
     var attachment = Optional.ofNullable(createContractModel.getAttachment());
 
     return contractModelMapper.toModel(
         createContractUseCase.createContract(
             new CreateContractUseCase.CreateContractCommand(
-                createContractModel.getProjectId(),
+                projectIdModel.getValue(),
                 createContractModel.getName(),
                 createContractModel.getInternalNumber(),
                 createContractModel.getStartDate(),
@@ -69,7 +70,6 @@ public class ContractController {
   }
 
   @PutMapping("/{contractId}")
-  @PreAuthorize("userHasAccesToContract(#contractIdModel.value)")
   public ContractModel updateContract(
       @PathVariable("contractId") ContractIdModel contractIdModel,
       @Valid @RequestBody CreateContractModel createContractModel) {

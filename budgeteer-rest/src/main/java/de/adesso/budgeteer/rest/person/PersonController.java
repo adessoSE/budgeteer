@@ -7,15 +7,20 @@ import de.adesso.budgeteer.rest.person.model.PersonIdModel;
 import de.adesso.budgeteer.rest.person.model.PersonModel;
 import de.adesso.budgeteer.rest.person.model.PersonWithRatesModel;
 import de.adesso.budgeteer.rest.project.model.ProjectIdModel;
+import de.adesso.budgeteer.rest.security.authorization.aspects.annotations.HasAccessToBudget;
+import de.adesso.budgeteer.rest.security.authorization.aspects.annotations.HasAccessToPerson;
+import de.adesso.budgeteer.rest.security.authorization.aspects.annotations.HasAccessToProject;
 import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
+@HasAccessToPerson
+@HasAccessToBudget
+@HasAccessToProject
 @RequestMapping("/people")
 public class PersonController {
   private final GetPeopleInBudgetUseCase getPeopleInBudgetUseCase;
@@ -28,7 +33,6 @@ public class PersonController {
   private final PersonModelMapper personModelMapper;
 
   @GetMapping("/inBudget/{budgetId}")
-  @PreAuthorize("userHasAccessToBudget(#budgetIdModel.value)")
   public List<PersonModel> getPeopleInBudget(
       @PathVariable("budgetId") BudgetIdModel budgetIdModel) {
     return personModelMapper.toPersonModel(
@@ -36,7 +40,6 @@ public class PersonController {
   }
 
   @GetMapping("/inProject/{projectId}")
-  @PreAuthorize("userHasAccessToProject(#projectIdModel.value)")
   public List<PersonModel> getPeopleInProject(
       @PathVariable("projectId") ProjectIdModel projectIdModel) {
     return personModelMapper.toPersonModel(
@@ -44,7 +47,6 @@ public class PersonController {
   }
 
   @GetMapping("/{personId}")
-  @PreAuthorize("userHasAccessToPerson(#personIdModel.value)")
   public Optional<PersonModel> getPerson(@PathVariable("personId") ProjectIdModel personIdModel) {
     return getPersonByIdUseCase
         .getPersonById(personIdModel.getValue())
@@ -52,7 +54,6 @@ public class PersonController {
   }
 
   @GetMapping("/withRates/{personId}")
-  @PreAuthorize("userHasAccessToPerson(#personIdModel.value)")
   public Optional<PersonWithRatesModel> getPersonWithRates(
       @PathVariable("personId") PersonIdModel personIdModel) {
     return Optional.ofNullable(
@@ -62,26 +63,25 @@ public class PersonController {
   }
 
   @DeleteMapping("/{personId}")
-  @PreAuthorize("userHasAccessToPerson(#personIdModel.value)")
   public void deletePerson(@PathVariable("personId") PersonIdModel personIdModel) {
     deletePersonByIdUseCase.deletePersonById(personIdModel.getValue());
   }
 
   @PostMapping
-  @PreAuthorize("userHasAccessToProject(#createPersonModel.projectId)")
-  public PersonModel createPerson(@Valid @RequestBody CreatePersonModel createPersonModel) {
+  public PersonModel createPerson(
+      @RequestParam("projectId") ProjectIdModel projectIdModel,
+      @Valid @RequestBody CreatePersonModel createPersonModel) {
     return personModelMapper.toPersonModel(
         createPersonUseCase.createPerson(
             new CreatePersonUseCase.CreatePersonCommand(
                 createPersonModel.getPersonName(),
                 createPersonModel.getImportKey(),
                 createPersonModel.getDefaultDailyRate(),
-                createPersonModel.getProjectId(),
+                projectIdModel.getValue(),
                 createPersonModel.getRates())));
   }
 
   @PutMapping("/{personId}")
-  @PreAuthorize("userHasAccessToPerson(#personIdModel.value)")
   public PersonModel updatePerson(
       @PathVariable("personId") PersonIdModel personIdModel,
       @Valid @RequestBody CreatePersonModel createPersonModel) {

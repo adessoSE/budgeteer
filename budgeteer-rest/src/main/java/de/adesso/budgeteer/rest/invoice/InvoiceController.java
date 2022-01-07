@@ -7,16 +7,21 @@ import de.adesso.budgeteer.rest.invoice.model.InvoiceIdModel;
 import de.adesso.budgeteer.rest.invoice.model.InvoiceModel;
 import de.adesso.budgeteer.rest.invoice.model.UpdateInvoiceModel;
 import de.adesso.budgeteer.rest.project.model.ProjectIdModel;
+import de.adesso.budgeteer.rest.security.authorization.aspects.annotations.HasAccessToContract;
+import de.adesso.budgeteer.rest.security.authorization.aspects.annotations.HasAccessToInvoice;
+import de.adesso.budgeteer.rest.security.authorization.aspects.annotations.HasAccessToProject;
 import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/invoices")
+@HasAccessToInvoice
+@HasAccessToProject
+@HasAccessToContract
 public class InvoiceController {
   private final GetInvoiceByIdUseCase getInvoiceByIdUseCase;
   private final GetInvoicesInContractUseCase getInvoicesInContractUseCase;
@@ -27,7 +32,6 @@ public class InvoiceController {
   private final InvoiceModelMapper invoiceModelMapper;
 
   @GetMapping("/{invoiceId}")
-  @PreAuthorize("userHasAccessToInvoice(#invoiceIdModel.value)")
   public Optional<InvoiceModel> getInvoice(
       @PathVariable("invoiceId") InvoiceIdModel invoiceIdModel) {
     return getInvoiceByIdUseCase
@@ -36,7 +40,6 @@ public class InvoiceController {
   }
 
   @GetMapping("/byContract/{contractId}")
-  @PreAuthorize("userHasAccessToContract(#contractIdModel.value)")
   public List<InvoiceModel> getInvoicesInContract(
       @PathVariable("contractId") ContractIdModel contractIdModel) {
     return invoiceModelMapper.toModel(
@@ -44,7 +47,6 @@ public class InvoiceController {
   }
 
   @GetMapping("/byProject/{projectId}")
-  @PreAuthorize("userHasAccessToProject(#projectIdModel.value)")
   public List<InvoiceModel> getInvoicesInProject(
       @PathVariable("projectId") ProjectIdModel projectIdModel) {
     return invoiceModelMapper.toModel(
@@ -52,18 +54,18 @@ public class InvoiceController {
   }
 
   @DeleteMapping("/{invoiceId}")
-  @PreAuthorize("userHasAccessToInvoice(#invoiceIdModel.value)")
   public void deleteInvoice(@PathVariable("invoiceId") InvoiceIdModel invoiceIdModel) {
     deleteInvoiceByIdUseCase.deleteInvoiceById(invoiceIdModel.getValue());
   }
 
   @PostMapping
-  @PreAuthorize("userHasAccessToContract(#createInvoiceModel.contractId)")
-  public InvoiceModel createInvoice(@Valid @RequestBody CreateInvoiceModel createInvoiceModel) {
+  public InvoiceModel createInvoice(
+      @RequestParam("contractId") ContractIdModel contractIdModel,
+      @Valid @RequestBody CreateInvoiceModel createInvoiceModel) {
     return invoiceModelMapper.toModel(
         createInvoiceUseCase.createInvoice(
             new CreateInvoiceUseCase.CreateInvoiceCommand(
-                createInvoiceModel.getContractId(),
+                contractIdModel.getValue(),
                 createInvoiceModel.getName(),
                 createInvoiceModel.getAmountOwed(),
                 createInvoiceModel.getTaxRate(),
@@ -77,7 +79,6 @@ public class InvoiceController {
   }
 
   @PutMapping("/{invoiceId}")
-  @PreAuthorize("userHasAccessToInvoice(#invoiceIdModel.value)")
   public InvoiceModel updateInvoice(
       @PathVariable("invoiceId") InvoiceIdModel invoiceIdModel,
       @Valid @RequestBody UpdateInvoiceModel updateInvoiceModel) {

@@ -1,34 +1,26 @@
 package de.adesso.budgeteer.rest.budget.model;
 
-import lombok.Data;
-import org.joda.money.Money;
-
+import java.util.ArrayList;
+import java.util.List;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
-import java.util.ArrayList;
-import java.util.List;
+import lombok.Data;
+import org.joda.money.Money;
 
 @Data
 public class CreateBudgetModel {
-    @Positive
-    long projectId;
+  @Positive Long contractId;
 
-    @Positive
-    Long contractId;
+  @NotEmpty String name;
 
-    @NotEmpty
-    String name;
+  String description;
 
-    String description;
+  @NotEmpty String importKey;
 
-    @NotEmpty
-    String importKey;
+  @NotNull Money total;
 
-    @NotNull
-    Money total;
+  Money limit;
 
-    Money limit;
-
-    List<String> tags = new ArrayList<>();
+  List<String> tags = new ArrayList<>();
 }
