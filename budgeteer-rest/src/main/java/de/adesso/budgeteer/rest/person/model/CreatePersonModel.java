@@ -1,26 +1,19 @@
 package de.adesso.budgeteer.rest.person.model;
 
 import de.adesso.budgeteer.core.person.domain.PersonRate;
+import java.util.ArrayList;
+import java.util.List;
+import javax.validation.constraints.NotEmpty;
 import lombok.Data;
 import org.joda.money.Money;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Positive;
-import java.util.ArrayList;
-import java.util.List;
-
 @Data
 public class CreatePersonModel {
-    @NotEmpty
-    String personName;
+  @NotEmpty String personName;
 
-    @NotEmpty
-    String importKey;
+  @NotEmpty String importKey;
 
-    Money defaultDailyRate;
+  Money defaultDailyRate;
 
-    @Positive
-    long projectId;
-
-    List<PersonRate> rates = new ArrayList<>();
+  List<PersonRate> rates = new ArrayList<>();
 }

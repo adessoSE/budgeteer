@@ -8,11 +8,13 @@ import java.util.Map;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import lombok.Data;
 import org.joda.money.Money;
 
 @Data
-public class CreateInvoiceModel {
+public class UpdateInvoiceModel {
+  @Positive long contractId;
   @NotEmpty String name;
   @NotNull Money amountOwed;
 
