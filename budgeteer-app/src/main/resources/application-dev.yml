@@ -1,0 +1,27 @@
+budgeteer:
+  jwt:
+    issuer: budgeteer
+    secret: budgeteer
+    max-age: 3600
+
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect:
+  datasource:
+    url: jdbc:hsqldb:mem:budgeteer
+    driver-class-name: org.hsqldb.jdbcDriver
+    username: sa
+    password:
+  flyway:
+    enabled: false
+    locations: classpath:db/migration
+    baseline-version: 1_1_3
+    baseline-on-migrate: true
+    check-location: true
+    validate-on-migrate: true
+    user: sa
