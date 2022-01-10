@@ -8,3 +8,9 @@ spring:
     properties:
       hibernate:
         dialect: ''
+
+budgeteer:
+  jwt:
+    secret: budgeteer-test
+    issuer: budgeteer-test
+    maxAge: 3600
