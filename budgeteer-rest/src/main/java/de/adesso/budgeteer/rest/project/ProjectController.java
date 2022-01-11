@@ -136,7 +136,7 @@ public class ProjectController {
   @ExceptionHandler(CreateProjectException.class)
   public ResponseEntity<CreateProjectError> handleCreateProjectException(
       CreateProjectException createProjectException) {
-    var causes = createProjectException.getProjectException().getCauses().getAll();
+    var causes = createProjectException.getProjectException().getCauses();
 
     var createProjectError = new CreateProjectError();
     createProjectError.setNamealreadyInUse(
@@ -148,7 +148,7 @@ public class ProjectController {
   @ExceptionHandler(UpdateProjectException.class)
   public ResponseEntity<UpdateProjectError> handleUpdateProjectException(
       UpdateProjectException updateProjectException) {
-    var causes = updateProjectException.getProjectException().getCauses().getAll();
+    var causes = updateProjectException.getProjectException().getCauses();
 
     var updateProjectError = new UpdateProjectError();
     updateProjectError.setProjectNotFound(
