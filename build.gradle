@@ -31,6 +31,7 @@ subprojects {
     }
 
     test {
+        finalizedBy jacocoTestReport
         useJUnitPlatform()
     }
 
