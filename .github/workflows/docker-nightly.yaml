@@ -20,7 +20,7 @@ jobs:
           echo ::set-output name=should-run::${SHOULD_RUN}
 
     outputs:
-      should-run: ${{ steps.should_run.outputs.should_run }}
+      should-run: ${{ steps.check-commit-dates.outputs.should-run }}
 
   nightly-prepare-version-info:
     needs: check-commit-dates
