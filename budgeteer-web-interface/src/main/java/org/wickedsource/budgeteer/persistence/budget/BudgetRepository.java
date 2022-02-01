@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import org.wickedsource.budgeteer.service.notification.MissingContractForBudgetNotification;
 
 @Repository
 public interface BudgetRepository extends CrudRepository<BudgetEntity, Long> {
@@ -71,11 +70,6 @@ public interface BudgetRepository extends CrudRepository<BudgetEntity, Long> {
   MissingBudgetTotalBean getMissingBudgetTotalForBudget(@Param("budgetId") long budgetId);
 
   @Query(
-      "select new org.wickedsource.budgeteer.service.notification.MissingContractForBudgetNotification(b.id) from BudgetEntity b where b.contract = null and b.id=:budgetId")
-  MissingContractForBudgetNotification getMissingContractForBudget(
-      @Param("budgetId") long budgetId);
-
-  @Query(
       "select new org.wickedsource.budgeteer.persistence.budget.LimitReachedBean(b.id, b.name) from BudgetEntity b where b.limit <= :spent and b.limit > de.adesso.budgeteer.common.old.MoneyUtil.ZERO and b.id=:budgetId order by b.name")
   LimitReachedBean getLimitReachedForBudget(
       @Param("budgetId") long budgetId, @Param("spent") Money spent);
@@ -84,10 +78,8 @@ public interface BudgetRepository extends CrudRepository<BudgetEntity, Long> {
       "select new org.wickedsource.budgeteer.persistence.budget.LimitReachedBean(b.id, b.name) from BudgetEntity b where b.project.id=:projectId order by b.name")
   List<LimitReachedBean> getBudgetsForProject(@Param("projectId") long projectId);
 
-  @Query(
-      "select new org.wickedsource.budgeteer.service.notification.MissingContractForBudgetNotification(b.id) from BudgetEntity b where b.contract = null and b.project.id=:projectId")
-  List<MissingContractForBudgetNotification> getMissingContractForProject(
-      @Param("projectId") long projectId);
+  @Query("select b.id from BudgetEntity b where b.contract is null and b.project.id=:projectId")
+  List<Long> getMissingContractForProject(@Param("projectId") long projectId);
 
   @Modifying
   @Query("delete from BudgetEntity b where b.project.id = :projectId")
