@@ -12,6 +12,7 @@ import org.wickedsource.budgeteer.persistence.invoice.InvoiceRepository;
 import org.wickedsource.budgeteer.persistence.record.*;
 import org.wickedsource.budgeteer.service.DateUtil;
 import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
+import org.wickedsource.budgeteer.service.record.ListJoiner;
 import org.wickedsource.budgeteer.web.pages.contract.details.contractDetailChart.ContractDetailBudgetChart;
 
 @Service

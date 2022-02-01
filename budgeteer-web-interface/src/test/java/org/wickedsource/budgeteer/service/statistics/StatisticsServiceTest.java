@@ -18,6 +18,7 @@ import org.wickedsource.budgeteer.service.DateProvider;
 import org.wickedsource.budgeteer.service.DateUtil;
 import org.wickedsource.budgeteer.service.ServiceTestTemplate;
 import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
+import org.wickedsource.budgeteer.service.record.ListJoiner;
 
 class StatisticsServiceTest extends ServiceTestTemplate {
 

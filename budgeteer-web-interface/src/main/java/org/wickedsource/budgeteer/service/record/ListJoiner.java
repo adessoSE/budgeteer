@@ -1,10 +1,12 @@
-package org.wickedsource.budgeteer.persistence.record;
+package org.wickedsource.budgeteer.service.record;
 
 import de.adesso.budgeteer.common.old.MoneyUtil;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import org.wickedsource.budgeteer.service.record.PlanAndWorkRecord;
+import org.wickedsource.budgeteer.persistence.record.MonthlyAggregatedRecordWithTaxBean;
+import org.wickedsource.budgeteer.persistence.record.WeeklyAggregatedRecordWithTaxBean;
+import org.wickedsource.budgeteer.persistence.record.WeeklyAggregatedRecordWithTitleAndTaxBean;
 
 public class ListJoiner {
   /**
