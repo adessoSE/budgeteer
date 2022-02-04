@@ -4,6 +4,7 @@ import static org.wicketstuff.lazymodel.LazyModel.from;
 import static org.wicketstuff.lazymodel.LazyModel.model;
 
 import de.adesso.budgeteer.common.old.MoneyUtil;
+import de.adesso.budgeteer.persistence.contract.ContractEntity;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
@@ -19,7 +20,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.wickedsource.budgeteer.persistence.contract.ContractEntity;
 import org.wickedsource.budgeteer.service.contract.ContractBaseData;
 import org.wickedsource.budgeteer.service.contract.ContractService;
 import org.wickedsource.budgeteer.service.contract.ContractTotalData;

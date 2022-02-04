@@ -1,15 +1,15 @@
 package org.wickedsource.budgeteer.service.statistics;
 
 import de.adesso.budgeteer.common.old.MoneyUtil;
+import de.adesso.budgeteer.persistence.contract.ContractRepository;
+import de.adesso.budgeteer.persistence.contract.ContractStatisticBean;
+import de.adesso.budgeteer.persistence.invoice.InvoiceRepository;
+import de.adesso.budgeteer.persistence.record.*;
 import java.util.*;
 import javax.transaction.Transactional;
 import org.joda.money.Money;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.wickedsource.budgeteer.persistence.contract.ContractRepository;
-import org.wickedsource.budgeteer.persistence.contract.ContractStatisticBean;
-import org.wickedsource.budgeteer.persistence.invoice.InvoiceRepository;
-import org.wickedsource.budgeteer.persistence.record.*;
 import org.wickedsource.budgeteer.service.DateUtil;
 import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
 import org.wickedsource.budgeteer.service.record.ListJoiner;

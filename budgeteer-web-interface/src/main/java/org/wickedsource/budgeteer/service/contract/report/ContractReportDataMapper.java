@@ -1,14 +1,14 @@
 package org.wickedsource.budgeteer.service.contract.report;
 
 import de.adesso.budgeteer.common.old.MoneyUtil;
+import de.adesso.budgeteer.persistence.contract.ContractEntity;
+import de.adesso.budgeteer.persistence.contract.ContractFieldEntity;
+import de.adesso.budgeteer.persistence.contract.ContractRepository;
+import de.adesso.budgeteer.persistence.contract.ContractStatisticBean;
 import java.time.LocalDate;
 import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.wickedsource.budgeteer.persistence.contract.ContractEntity;
-import org.wickedsource.budgeteer.persistence.contract.ContractFieldEntity;
-import org.wickedsource.budgeteer.persistence.contract.ContractRepository;
-import org.wickedsource.budgeteer.persistence.contract.ContractStatisticBean;
 import org.wickedsource.budgeteer.service.DateRange;
 import org.wickedsource.budgeteer.service.DateUtil;
 import org.wickedsource.budgeteer.service.contract.DynamicAttributeField;

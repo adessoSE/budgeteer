@@ -1,12 +1,12 @@
 package org.wickedsource.budgeteer.service.invoice;
 
 import de.adesso.budgeteer.common.old.MoneyUtil;
+import de.adesso.budgeteer.persistence.contract.ContractInvoiceField;
+import de.adesso.budgeteer.persistence.invoice.InvoiceEntity;
+import de.adesso.budgeteer.persistence.invoice.InvoiceFieldEntity;
 import java.math.BigDecimal;
 import java.util.*;
 import org.springframework.stereotype.Component;
-import org.wickedsource.budgeteer.persistence.contract.ContractInvoiceField;
-import org.wickedsource.budgeteer.persistence.invoice.InvoiceEntity;
-import org.wickedsource.budgeteer.persistence.invoice.InvoiceFieldEntity;
 import org.wickedsource.budgeteer.service.AbstractMapper;
 import org.wickedsource.budgeteer.service.contract.DynamicAttributeField;
 import org.wickedsource.budgeteer.web.components.fileUpload.FileUploadModel;

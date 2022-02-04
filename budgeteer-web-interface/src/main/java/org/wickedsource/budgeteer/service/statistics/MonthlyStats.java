@@ -1,10 +1,10 @@
 package org.wickedsource.budgeteer.service.statistics;
 
 import de.adesso.budgeteer.common.old.MoneyUtil;
+import de.adesso.budgeteer.persistence.record.*;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.wickedsource.budgeteer.persistence.record.*;
 import org.wickedsource.budgeteer.service.budget.BudgetTagFilter;
 
 @Data

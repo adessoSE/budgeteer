@@ -1,5 +1,7 @@
 package org.wickedsource.budgeteer.service.template;
 
+import de.adesso.budgeteer.persistence.template.TemplateEntity;
+import de.adesso.budgeteer.persistence.template.TemplateRepository;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.wickedsource.budgeteer.imports.api.ExampleFile;
 import org.wickedsource.budgeteer.imports.api.ImportFile;
-import org.wickedsource.budgeteer.persistence.template.TemplateEntity;
-import org.wickedsource.budgeteer.persistence.template.TemplateRepository;
 import org.wickedsource.budgeteer.service.ReportType;
 import org.wickedsource.budgeteer.web.pages.templates.TemplateFilter;
 import org.wickedsource.budgeteer.web.pages.templates.templateimport.TemplateFormInputDto;

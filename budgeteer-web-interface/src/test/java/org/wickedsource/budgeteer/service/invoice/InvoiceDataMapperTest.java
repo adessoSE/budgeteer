@@ -4,17 +4,17 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import de.adesso.budgeteer.common.old.MoneyUtil;
+import de.adesso.budgeteer.persistence.contract.ContractEntity;
+import de.adesso.budgeteer.persistence.contract.ContractInvoiceField;
+import de.adesso.budgeteer.persistence.invoice.InvoiceEntity;
+import de.adesso.budgeteer.persistence.invoice.InvoiceFieldEntity;
+import de.adesso.budgeteer.persistence.project.ProjectEntity;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import org.junit.jupiter.api.Test;
-import org.wickedsource.budgeteer.persistence.contract.ContractEntity;
-import org.wickedsource.budgeteer.persistence.contract.ContractInvoiceField;
-import org.wickedsource.budgeteer.persistence.invoice.InvoiceEntity;
-import org.wickedsource.budgeteer.persistence.invoice.InvoiceFieldEntity;
-import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
 
 class InvoiceDataMapperTest {
 
