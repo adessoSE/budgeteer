@@ -1,21 +1,23 @@
 package org.wickedsource.budgeteer.service.notification;
 
 import de.adesso.budgeteer.common.old.MoneyUtil;
+import de.adesso.budgeteer.persistence.budget.BudgetEntity;
+import de.adesso.budgeteer.persistence.budget.BudgetRepository;
+import de.adesso.budgeteer.persistence.budget.LimitReachedBean;
+import de.adesso.budgeteer.persistence.budget.MissingBudgetTotalBean;
+import de.adesso.budgeteer.persistence.record.MissingDailyRateForBudgetBean;
+import de.adesso.budgeteer.persistence.record.PlanRecordRepository;
+import de.adesso.budgeteer.persistence.record.WorkRecordRepository;
+import de.adesso.budgeteer.persistence.user.UserEntity;
+import de.adesso.budgeteer.persistence.user.UserRepository;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import org.joda.money.Money;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.wickedsource.budgeteer.persistence.budget.BudgetRepository;
-import org.wickedsource.budgeteer.persistence.budget.LimitReachedBean;
-import org.wickedsource.budgeteer.persistence.budget.MissingBudgetTotalBean;
-import org.wickedsource.budgeteer.persistence.record.MissingDailyRateForBudgetBean;
-import org.wickedsource.budgeteer.persistence.record.PlanRecordRepository;
-import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
-import org.wickedsource.budgeteer.persistence.user.UserEntity;
-import org.wickedsource.budgeteer.persistence.user.UserRepository;
 
 @Service
 @Transactional
@@ -52,7 +54,10 @@ public class NotificationService {
     if (planRecordRepository.countByProjectId(projectId) == 0) {
       notifications.add(new EmptyPlanRecordsNotification());
     }
-    notifications.addAll(budgetRepository.getMissingContractForProject(projectId));
+    notifications.addAll(
+        budgetRepository.getMissingContractForProject(projectId).stream()
+            .map(MissingContractForBudgetNotification::new)
+            .collect(Collectors.toList()));
     notifications.addAll(
         missingDailyRateMapper.map(workRecordRepository.getMissingDailyRatesForProject(projectId)));
     notifications.addAll(
@@ -81,7 +86,6 @@ public class NotificationService {
         notifications.add(new MailNotVerifiedNotification(user.getId(), user.getMail()));
       }
     }
-
     return notifications;
   }
 
@@ -112,11 +116,13 @@ public class NotificationService {
       result.add(missingBudgetTotalNotificationMapper.map(missingBudgetTotalForBudget));
     }
 
-    MissingContractForBudgetNotification missingContract =
-        budgetRepository.getMissingContractForBudget(budgetId);
-    if (missingContract != null) {
-      result.add(missingContract);
-    }
+    var missingContract =
+        budgetRepository
+            .findById(budgetId)
+            .filter(budget -> budget.getContract() == null)
+            .map(BudgetEntity::getId)
+            .map(MissingContractForBudgetNotification::new);
+    missingContract.ifPresent(result::add);
 
     Double spentDouble = workRecordRepository.getSpentBudget(budgetId);
     if (spentDouble != null) {

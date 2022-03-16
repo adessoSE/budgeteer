@@ -1,8 +1,8 @@
 package org.wickedsource.budgeteer.service.person;
 
 import de.adesso.budgeteer.common.old.MoneyUtil;
+import de.adesso.budgeteer.persistence.person.PersonBaseDataBean;
 import org.springframework.stereotype.Component;
-import org.wickedsource.budgeteer.persistence.person.PersonBaseDataBean;
 import org.wickedsource.budgeteer.service.AbstractMapper;
 
 @Component

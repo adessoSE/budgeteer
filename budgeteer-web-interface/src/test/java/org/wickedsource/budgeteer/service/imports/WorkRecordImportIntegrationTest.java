@@ -5,6 +5,13 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 import com.google.common.collect.Lists;
 import de.adesso.budgeteer.common.old.MoneyUtil;
+import de.adesso.budgeteer.persistence.budget.BudgetRepository;
+import de.adesso.budgeteer.persistence.imports.ImportEntity;
+import de.adesso.budgeteer.persistence.imports.ImportRepository;
+import de.adesso.budgeteer.persistence.person.PersonRepository;
+import de.adesso.budgeteer.persistence.project.ProjectEntity;
+import de.adesso.budgeteer.persistence.record.WorkRecordEntity;
+import de.adesso.budgeteer.persistence.record.WorkRecordRepository;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -19,13 +26,6 @@ import org.wickedsource.budgeteer.importer.aproda.AprodaWorkRecordsImporter;
 import org.wickedsource.budgeteer.imports.api.ImportException;
 import org.wickedsource.budgeteer.imports.api.ImportFile;
 import org.wickedsource.budgeteer.imports.api.InvalidFileFormatException;
-import org.wickedsource.budgeteer.persistence.budget.BudgetRepository;
-import org.wickedsource.budgeteer.persistence.imports.ImportEntity;
-import org.wickedsource.budgeteer.persistence.imports.ImportRepository;
-import org.wickedsource.budgeteer.persistence.person.PersonRepository;
-import org.wickedsource.budgeteer.persistence.project.ProjectEntity;
-import org.wickedsource.budgeteer.persistence.record.WorkRecordEntity;
-import org.wickedsource.budgeteer.persistence.record.WorkRecordRepository;
 
 class WorkRecordImportIntegrationTest extends IntegrationTestTemplate {
 

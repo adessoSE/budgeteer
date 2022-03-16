@@ -24,6 +24,7 @@ dependencies {
     implementation project(':budgeteer-report-exporter')
     implementation project(':budgeteer-core')
     implementation project(':budgeteer-common')
+    implementation project(':budgeteer-persistence')
 
     implementation group: 'org.apache.poi', name: 'poi-ooxml', version: poi_version
 
@@ -51,13 +52,6 @@ dependencies {
 
     implementation group: 'org.joda', name: 'joda-money', version: joda_money_version
     implementation group: 'de.jollyday', name: 'jollyday', version: jollyday_version
-
-    runtimeOnly(
-            [group: 'org.hsqldb', name: 'hsqldb', version: hsqldb_version],
-            [group: 'com.oracle.database.jdbc', name: 'ojdbc10', version: oracle_database_version],
-            [group: 'com.oracle.database.nls', name: 'orai18n', version: oracle_database_version],
-            [group: 'org.postgresql', name: 'postgresql', version: postgresql_version]
-    )
 
     testImplementation(
             [group: 'org.kubek2k', name: 'springockito', version: springockito_version],

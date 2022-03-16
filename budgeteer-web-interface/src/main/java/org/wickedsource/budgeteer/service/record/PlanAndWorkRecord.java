@@ -1,12 +1,12 @@
 package org.wickedsource.budgeteer.service.record;
 
 import de.adesso.budgeteer.common.old.MoneyUtil;
+import de.adesso.budgeteer.persistence.record.MonthlyAggregatedRecordWithTaxBean;
+import de.adesso.budgeteer.persistence.record.WeeklyAggregatedRecordWithTaxBean;
+import de.adesso.budgeteer.persistence.record.WeeklyAggregatedRecordWithTitleAndTaxBean;
 import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.wickedsource.budgeteer.persistence.record.MonthlyAggregatedRecordWithTaxBean;
-import org.wickedsource.budgeteer.persistence.record.WeeklyAggregatedRecordWithTaxBean;
-import org.wickedsource.budgeteer.persistence.record.WeeklyAggregatedRecordWithTitleAndTaxBean;
 
 @Data
 @AllArgsConstructor

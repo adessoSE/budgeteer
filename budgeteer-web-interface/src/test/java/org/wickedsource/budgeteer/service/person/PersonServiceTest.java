@@ -3,15 +3,15 @@ package org.wickedsource.budgeteer.service.person;
 import static org.mockito.Mockito.when;
 
 import de.adesso.budgeteer.common.old.MoneyUtil;
+import de.adesso.budgeteer.persistence.person.PersonBaseDataBean;
+import de.adesso.budgeteer.persistence.person.PersonDetailDataBean;
+import de.adesso.budgeteer.persistence.person.PersonRepository;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.wickedsource.budgeteer.persistence.person.PersonBaseDataBean;
-import org.wickedsource.budgeteer.persistence.person.PersonDetailDataBean;
-import org.wickedsource.budgeteer.persistence.person.PersonRepository;
 import org.wickedsource.budgeteer.service.ServiceTestTemplate;
 
 class PersonServiceTest extends ServiceTestTemplate {

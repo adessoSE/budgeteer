@@ -1,9 +1,9 @@
 package org.wickedsource.budgeteer.service.record;
 
 import de.adesso.budgeteer.common.old.MoneyUtil;
+import de.adesso.budgeteer.persistence.record.*;
 import java.util.*;
 import org.springframework.stereotype.Component;
-import org.wickedsource.budgeteer.persistence.record.*;
 import org.wickedsource.budgeteer.service.statistics.MonthlyStats;
 
 @Component

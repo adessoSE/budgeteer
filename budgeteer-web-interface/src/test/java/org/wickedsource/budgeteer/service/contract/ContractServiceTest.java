@@ -7,6 +7,9 @@ import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 import de.adesso.budgeteer.common.old.MoneyUtil;
+import de.adesso.budgeteer.persistence.contract.ContractEntity;
+import de.adesso.budgeteer.persistence.contract.ContractRepository;
+import de.adesso.budgeteer.persistence.project.ProjectRepository;
 import java.math.BigDecimal;
 import java.util.*;
 import org.apache.commons.lang3.time.DateUtils;
@@ -22,9 +25,6 @@ import org.springframework.test.context.support.DirtiesContextTestExecutionListe
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 import org.wickedsource.budgeteer.IntegrationTestConfiguration;
 import org.wickedsource.budgeteer.ServiceIntegrationTestTemplate;
-import org.wickedsource.budgeteer.persistence.contract.ContractEntity;
-import org.wickedsource.budgeteer.persistence.contract.ContractRepository;
-import org.wickedsource.budgeteer.persistence.project.ProjectRepository;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {IntegrationTestConfiguration.class})
