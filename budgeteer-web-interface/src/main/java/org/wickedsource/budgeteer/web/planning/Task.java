@@ -1,74 +1,75 @@
 package org.wickedsource.budgeteer.web.planning;
 
-import org.joda.money.Money;
-import org.wickedsource.budgeteer.MoneyUtil;
-
+import de.adesso.budgeteer.common.old.MoneyUtil;
 import java.util.ArrayList;
 import java.util.List;
+import org.joda.money.Money;
 
 public class Task {
 
-    private final String name;
+  private final String name;
 
-    private final Money totalBudget;
+  private final Money totalBudget;
 
-    private Money restBudget;
+  private Money restBudget;
 
-    private Money allocatedBudget;
+  private Money allocatedBudget;
 
-    private final List<Allocation> allocations = new ArrayList<>();
+  private final List<Allocation> allocations = new ArrayList<>();
 
-    private boolean isOverspent = false;
+  private boolean isOverspent = false;
 
-    public Task(String name, Money totalBudget) {
-        this.name = name;
-        this.totalBudget = totalBudget;
+  public Task(String name, Money totalBudget) {
+    this.name = name;
+    this.totalBudget = totalBudget;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public Money getTotalBudget() {
+    return totalBudget;
+  }
+
+  public List<Allocation> getAllocations() {
+    return allocations;
+  }
+
+  public boolean isOverspent() {
+    return isOverspent;
+  }
+
+  protected void setOverspent(boolean isOverspent) {
+    this.isOverspent = isOverspent;
+  }
+
+  public synchronized void recalculate(Configuration config) {
+    allocatedBudget = MoneyUtil.ZERO;
+    restBudget = MoneyUtil.ZERO;
+
+    for (Allocation allocation : allocations) {
+      int workingDays =
+          config.getCalendar().getNumberOfWorkingDays(allocation.getPerson().getAbsences());
+      Money spentBudget = MoneyUtil.ZERO;
+      spentBudget =
+          spentBudget.plus(allocation.getPerson().getDailyRate().multipliedBy(workingDays));
+      spentBudget = allocation.getWorkload().of(spentBudget);
+      allocatedBudget = allocatedBudget.plus(spentBudget);
     }
-
-    public String getName() {
-        return name;
+    restBudget = totalBudget.minus(allocatedBudget);
+    if (restBudget.isNegative()) {
+      isOverspent = true;
+    } else {
+      isOverspent = false;
     }
+  }
 
-    public Money getTotalBudget() {
-        return totalBudget;
-    }
+  public Money getRestBudget() {
+    return restBudget;
+  }
 
-    public List<Allocation> getAllocations() {
-        return allocations;
-    }
-
-    public boolean isOverspent() {
-        return isOverspent;
-    }
-
-    protected void setOverspent(boolean isOverspent) {
-        this.isOverspent = isOverspent;
-    }
-
-    public synchronized void recalculate(Configuration config) {
-        allocatedBudget = MoneyUtil.ZERO;
-        restBudget = MoneyUtil.ZERO;
-
-        for (Allocation allocation : allocations) {
-            int workingDays = config.getCalendar().getNumberOfWorkingDays(allocation.getPerson().getAbsences());
-            Money spentBudget = MoneyUtil.ZERO;
-            spentBudget = spentBudget.plus(allocation.getPerson().getDailyRate().multipliedBy(workingDays));
-            spentBudget = allocation.getWorkload().of(spentBudget);
-            allocatedBudget = allocatedBudget.plus(spentBudget);
-        }
-        restBudget = totalBudget.minus(allocatedBudget);
-        if(restBudget.isNegative()){
-            isOverspent = true;
-        }else{
-            isOverspent = false;
-        }
-    }
-
-    public Money getRestBudget() {
-        return restBudget;
-    }
-
-    public Money getAllocatedBudget() {
-        return allocatedBudget;
-    }
+  public Money getAllocatedBudget() {
+    return allocatedBudget;
+  }
 }
