@@ -9,9 +9,7 @@ import de.adesso.budgeteer.persistence.contract.ContractRepository;
 import de.adesso.budgeteer.persistence.project.ProjectRepository;
 import java.sql.Date;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -71,16 +69,22 @@ public class InvoiceEntityAdapter
     invoiceEntity.setMonth(command.getYearMonth().getMonthValue());
     invoiceEntity.setDate(
         Date.valueOf(LocalDate.of(invoiceEntity.getYear(), invoiceEntity.getMonth(), 1)));
-    if (command.getPaidDate() != null)
+    if (command.getPaidDate() != null) {
       invoiceEntity.setPaidDate(Date.valueOf(command.getPaidDate()));
-    if (command.getDueDate() != null) invoiceEntity.setDueDate(Date.valueOf(command.getDueDate()));
+    }
+    if (command.getDueDate() != null) {
+      invoiceEntity.setDueDate(Date.valueOf(command.getDueDate()));
+    }
     if (command.getFile() != null) {
       invoiceEntity.setFileName(command.getFile().getFileName());
       invoiceEntity.setFile(command.getFile().getFile());
     }
     invoiceEntity.setLink(command.getLink());
 
-    addDynamicFields(command.getAttributes(), contractEntity, invoiceEntity);
+    addDynamicFields(
+        Objects.requireNonNullElseGet(command.getAttributes(), HashMap::new),
+        contractEntity,
+        invoiceEntity);
 
     return invoiceMapper.mapToDomain(invoiceRepository.save(invoiceEntity));
   }
