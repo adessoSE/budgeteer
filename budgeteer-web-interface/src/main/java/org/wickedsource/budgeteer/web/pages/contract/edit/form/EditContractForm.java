@@ -15,6 +15,7 @@ import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LambdaModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -114,14 +115,19 @@ public class EditContractForm extends Form<ContractBaseData> {
     table.setOutputMarkupId(true);
     table.setOutputMarkupPlaceholderTag(true);
     table.add(
-        new ListView<DynamicAttributeField>(
-            "contractAttributes", model(from(getModelObject()).getContractAttributes())) {
+        new ListView<>(
+            "contractAttributes", getModel().map(ContractBaseData::getContractAttributes)) {
           @Override
           protected void populateItem(ListItem<DynamicAttributeField> item) {
-            item.add(new Label("attributeTitle", item.getModelObject().getName()));
             item.add(
-                new TextField<String>(
-                    "attributeValue", model(from(item.getModelObject()).getValue())));
+                new Label("attributeTitle", item.getModel().map(DynamicAttributeField::getName)));
+            item.add(
+                new TextField<>(
+                    "attributeValue",
+                    LambdaModel.of(
+                        item.getModel(),
+                        DynamicAttributeField::getValue,
+                        DynamicAttributeField::setValue)));
           }
         });
     add(table);
