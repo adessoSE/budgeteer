@@ -1,11 +1,11 @@
-FROM gradle:4.7.0-jdk8-alpine AS build
-COPY --chown=gradle:gradle . /home/gradle/src
-WORKDIR /home/gradle/src
-RUN gradle bootRepackage --no-daemon
+FROM docker.io/openjdk:11.0.15-jdk AS build
+COPY . /build
+WORKDIR /build
+RUN ./gradlew budgeteer-web-interface:bootWar
 
-FROM openjdk:8-jre-slim
+FROM docker.io/openjdk:11.0.15-jre
 EXPOSE 8080
 
-COPY --from=build /home/gradle/src/budgeteer-web-interface/build/libs/*.war /budgeteer.war
+COPY --from=build /build/budgeteer-web-interface/build/libs/*.war /budgeteer.war
 
 ENTRYPOINT ["java","-jar","/budgeteer.war"]
