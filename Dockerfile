@@ -1,7 +1,7 @@
 FROM docker.io/openjdk:11.0.15-jdk AS build
 COPY . /build
 WORKDIR /build
-RUN ./gradlew budgeteer-web-interface:bootWar
+RUN ./gradlew budgeteer-web-interface:bootWar -DmainBranch=HEAD
 
 FROM docker.io/openjdk:11.0.15-jre
 EXPOSE 8080
