@@ -15,6 +15,7 @@ public class BudgetModelMapper {
                 budget.getName(),
                 budget.getName(),
                 budget.getDescription(),
+                budget.getImportKey(),
                 budget.getTotal(),
                 budget.getSpent(),
                 budget.getRemaining(),

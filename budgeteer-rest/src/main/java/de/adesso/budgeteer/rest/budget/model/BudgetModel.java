@@ -15,6 +15,7 @@ public class BudgetModel {
     String name;
     String contractName;
     String description;
+    String importKey;
     Money total;
     Money spent;
     Money remaining;

@@ -44,6 +44,7 @@ public class BudgetMapper {
         budgetEntity.getName(),
         budgetEntity.getContract() == null ? null : budgetEntity.getContract().getName(),
         budgetEntity.getDescription(),
+        budgetEntity.getImportKey(),
         budgetEntity.getTotal(),
         spent,
         budgetEntity.getTotal().minus(spent),
