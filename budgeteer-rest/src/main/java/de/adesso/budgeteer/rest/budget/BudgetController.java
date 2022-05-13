@@ -2,6 +2,7 @@ package de.adesso.budgeteer.rest.budget;
 
 import de.adesso.budgeteer.core.budget.port.in.*;
 import de.adesso.budgeteer.rest.budget.model.*;
+import de.adesso.budgeteer.rest.contract.model.ContractIdModel;
 import de.adesso.budgeteer.rest.project.model.ProjectIdModel;
 import de.adesso.budgeteer.rest.security.authorization.aspects.annotations.HasAccessToBudget;
 import de.adesso.budgeteer.rest.security.authorization.aspects.annotations.HasAccessToProject;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 public class BudgetController {
 
   private final GetBudgetsInProjectUseCase getBudgetsInProjectUseCase;
+  private final GetBudgetsInContractUseCase getBudgetsInContractUseCase;
   private final GetBudgetByIdUseCase getBudgetByIdUseCase;
   private final CreateBudgetUseCase createBudgetUseCase;
   private final UpdateBudgetUseCase updateBudgetUseCase;
@@ -32,6 +34,13 @@ public class BudgetController {
       @RequestParam("projectId") ProjectIdModel projectIdModel) {
     return budgetModelMapper.toModel(
         getBudgetsInProjectUseCase.getBudgetsInProject(projectIdModel.getValue()));
+  }
+
+  @GetMapping("/byContract")
+  public List<BudgetModel> getBudgetsInContract(
+      @RequestParam("contractId") ContractIdModel contractIdModel) {
+    return budgetModelMapper.toModel(
+        getBudgetsInContractUseCase.getBudgetsInContract(contractIdModel.getValue()));
   }
 
   @GetMapping("/{budgetId}")

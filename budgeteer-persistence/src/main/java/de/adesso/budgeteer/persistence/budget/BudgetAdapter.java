@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class BudgetAdapter
     implements GetBudgetsInProjectPort,
+        GetBudgetsInContractPort,
         GetBudgetByIdPort,
         CreateBudgetEntityPort,
         DeleteBudgetByIdPort,
@@ -140,5 +141,10 @@ public class BudgetAdapter
             .map(BudgetEntity::getContract)
             .map(ContractEntity::getId)
             .orElseThrow());
+  }
+
+  @Override
+  public List<Budget> getBudgetsInContract(long contractId) {
+    return budgetMapper.mapToDomain(budgetRepository.findByContractId(contractId));
   }
 }
