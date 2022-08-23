@@ -10,18 +10,18 @@ import org.apache.wicket.util.tester.WicketTester;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.wickedsource.budgeteer.service.person.PersonService;
 import org.wickedsource.budgeteer.service.person.PersonWithRates;
 import org.wickedsource.budgeteer.web.AbstractWebTestTemplate;
 import org.wickedsource.budgeteer.web.pages.person.overview.PeopleOverviewPage;
 
-public class EditPersonPageTest extends AbstractWebTestTemplate {
-
-  @Autowired private PersonService personService;
+class EditPersonPageTest extends AbstractWebTestTemplate {
 
   @BeforeEach
   void setUpMocks() {
-    when(personService.loadPersonWithRates(anyLong()))
+    when(personServiceMock.loadPersonWithRates(anyLong()))
         .thenReturn(new PersonWithRates(123L, "name", "key", MoneyUtil.ZERO, new ArrayList<>()));
   }
 

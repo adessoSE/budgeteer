@@ -11,18 +11,17 @@ import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.wickedsource.budgeteer.service.ServiceTestTemplate;
 
 class ImportServiceTest extends ServiceTestTemplate {
 
-  @Autowired private ImportRepository importRepository;
-
-  @Autowired private WorkRecordRepository workRecordRepository;
-
+  @MockBean private ImportRepository importRepository;
+  @MockBean private WorkRecordRepository workRecordRepository;
   @Autowired private ImportService importService;
 
   @Test
-  void testLoadImports() throws Exception {
+  void testLoadImports() {
     when(importRepository.findByProjectId(1L)).thenReturn(Arrays.asList(createImportEntity()));
     List<Import> imports = importService.loadImports(1L);
     Assertions.assertEquals(1, imports.size());
@@ -30,7 +29,7 @@ class ImportServiceTest extends ServiceTestTemplate {
   }
 
   @Test
-  void testDeleteImport() throws Exception {
+  void testDeleteImport() {
     importService.deleteImport(1L);
     verify(importRepository, times(1)).deleteById(1L);
     verify(workRecordRepository, times(1)).deleteByImport(1L);

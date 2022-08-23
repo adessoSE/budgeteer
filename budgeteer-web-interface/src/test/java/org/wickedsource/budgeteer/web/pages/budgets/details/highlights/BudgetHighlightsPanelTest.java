@@ -9,19 +9,18 @@ import java.util.Random;
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.wickedsource.budgeteer.service.budget.BudgetDetailData;
 import org.wickedsource.budgeteer.service.budget.BudgetService;
 import org.wickedsource.budgeteer.web.AbstractWebTestTemplate;
 
-public class BudgetHighlightsPanelTest extends AbstractWebTestTemplate {
-
-  @Autowired private BudgetService service;
+class BudgetHighlightsPanelTest extends AbstractWebTestTemplate {
 
   private Random random = new Random();
 
   @Test
   void render() {
-    when(service.loadBudgetDetailData(1L)).thenReturn(createDetailData());
+    when(budgetServiceMock.loadBudgetDetailData(1L)).thenReturn(createDetailData());
     WicketTester tester = getTester();
     BudgetHighlightsModel model = new BudgetHighlightsModel(1L);
     BudgetHighlightsPanel panel = new BudgetHighlightsPanel("panel", model);

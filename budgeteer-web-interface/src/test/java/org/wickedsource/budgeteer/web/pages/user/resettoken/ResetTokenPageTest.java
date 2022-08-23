@@ -8,18 +8,17 @@ import org.apache.wicket.util.tester.WicketTester;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.wickedsource.budgeteer.service.user.UserIdNotFoundException;
 import org.wickedsource.budgeteer.service.user.UserService;
 import org.wickedsource.budgeteer.web.AbstractWebTestTemplate;
 
-public class ResetTokenPageTest extends AbstractWebTestTemplate {
-
-  @Autowired private UserService userService;
+class ResetTokenPageTest extends AbstractWebTestTemplate {
 
   @BeforeEach
   void setUpMocks() {
     try {
-      when(userService.getUserById(1L))
+      when(userServiceMock.getUserById(1L))
           .thenReturn(
               new UserEntity(1L, "test", "password", "test@budgeteer.local", false, null, null));
     } catch (UserIdNotFoundException e) {

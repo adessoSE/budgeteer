@@ -1,64 +1,54 @@
 package org.wickedsource.budgeteer.service.imports;
 
-import com.github.springtestdbunit.annotation.DatabaseOperation;
-import com.github.springtestdbunit.annotation.DatabaseSetup;
-import com.github.springtestdbunit.annotation.DatabaseTearDown;
 import de.adesso.budgeteer.persistence.project.ProjectEntity;
 import de.adesso.budgeteer.persistence.project.ProjectRepository;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.kubek2k.springockito.annotations.SpringockitoContextLoader;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.wickedsource.budgeteer.importer.aproda.AprodaWorkRecordsImporter;
 import org.wickedsource.budgeteer.imports.api.ImportException;
 import org.wickedsource.budgeteer.imports.api.ImportFile;
 import org.wickedsource.budgeteer.imports.api.InvalidFileFormatException;
 
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(
-    loader = SpringockitoContextLoader.class,
-    locations = {"classpath:spring-service.xml", "classpath:spring-repository-mock.xml"})
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+
+@SpringBootTest
+@DirtiesContext
 class WorkRecordImporterTest {
 
   @Autowired private ProjectRepository projectRepository;
-
   @Autowired private ImportService importService;
 
-  private void doImport() throws ImportException, InvalidFileFormatException {
+  private void doImport(long projectId) throws ImportException, InvalidFileFormatException {
     List<ImportFile> importFiles = new ArrayList<ImportFile>();
     importFiles.add(new ImportFile("file1", getClass().getResourceAsStream("testReport3.xlsx")));
-    importService.doImport(1L, new AprodaWorkRecordsImporter(), importFiles);
+    importService.doImport(projectId, new AprodaWorkRecordsImporter(), importFiles);
   }
 
   @Test
-  @DatabaseSetup("doImportWithEmptyDatabase.xml")
-  @DatabaseTearDown(value = "doImportWithEmptyDatabase.xml", type = DatabaseOperation.DELETE_ALL)
   void testGetSkippedRecordsNoSkippedRecords() throws Exception {
-    Mockito.when(projectRepository.findById(Mockito.anyLong()))
-        .thenReturn(Optional.of(new ProjectEntity()));
-    doImport();
+    var project = new ProjectEntity();
+    project.setId(1L);
+    project.setName("project1");
+    projectRepository.save(project);
+    doImport(project.getId());
     List<List<String>> skippedRecords = importService.getSkippedRecords();
     Assertions.assertEquals(3, skippedRecords.size());
   }
 
   @Test
-  @DatabaseSetup("doImportWithEmptyDatabase.xml")
-  @DatabaseTearDown(value = "doImportWithEmptyDatabase.xml", type = DatabaseOperation.DELETE_ALL)
   void testGetSkippedRecordsSomeSkippedRecords() throws Exception {
     SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yy");
     ProjectEntity project = new ProjectEntity();
+    project.setName("project2");
     project.setProjectStart(formatter.parse("02.01.2014"));
     project.setProjectEnd(formatter.parse("12.01.2014"));
-    Mockito.when(projectRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(project));
-    doImport();
+    var savedProject = projectRepository.save(project);
+    doImport(savedProject.getId());
     List<List<String>> skippedRecords = importService.getSkippedRecords();
     Assertions.assertEquals(10, skippedRecords.size());
   }

@@ -4,6 +4,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.wickedsource.budgeteer.service.invoice.InvoiceBaseData;
 import org.wickedsource.budgeteer.service.invoice.InvoiceService;
 import org.wickedsource.budgeteer.web.AbstractWebTestTemplate;
@@ -13,10 +14,9 @@ import org.wickedsource.budgeteer.web.pages.invoice.overview.table.InvoiceOvervi
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
-public class EditInvoicePageTest extends AbstractWebTestTemplate {
+class EditInvoicePageTest extends AbstractWebTestTemplate {
 
-    @Autowired
-    private InvoiceService invoiceServiceMock;
+    @MockBean private InvoiceService invoiceServiceMock;
 
     @Override
     protected void setupTest() {

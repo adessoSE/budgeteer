@@ -6,6 +6,7 @@ import org.apache.wicket.util.tester.WicketTester;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.wickedsource.budgeteer.service.budget.BudgetService;
 import org.wickedsource.budgeteer.service.budget.EditBudgetData;
@@ -20,10 +21,8 @@ import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-public class EditBudgetFormTest extends AbstractWebTestTemplate {
+class EditBudgetFormTest extends AbstractWebTestTemplate {
 
-    @Autowired
-    private BudgetService budgetServiceMock;
     private WicketTester tester;
 
     @Test

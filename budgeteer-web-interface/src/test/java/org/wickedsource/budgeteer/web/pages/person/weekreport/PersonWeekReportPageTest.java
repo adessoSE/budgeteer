@@ -4,7 +4,7 @@ import org.apache.wicket.util.tester.WicketTester;
 import org.junit.jupiter.api.Test;
 import org.wickedsource.budgeteer.web.AbstractWebTestTemplate;
 
-public class PersonWeekReportPageTest extends AbstractWebTestTemplate {
+class PersonWeekReportPageTest extends AbstractWebTestTemplate {
 
     @Test
     void test() {

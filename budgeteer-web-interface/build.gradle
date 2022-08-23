@@ -54,8 +54,6 @@ dependencies {
     implementation group: 'de.jollyday', name: 'jollyday', version: jollyday_version
 
     testImplementation(
-            [group: 'org.kubek2k', name: 'springockito', version: springockito_version],
-            [group: 'org.kubek2k', name: 'springockito-annotations', version: springockito_version],
             [group: 'com.github.springtestdbunit', name: 'spring-test-dbunit', version: spring_dbunit_version],
             [group: 'org.dbunit', name: 'dbunit', version: dbunit_version],
     )

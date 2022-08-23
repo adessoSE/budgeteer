@@ -14,34 +14,42 @@ import org.joda.money.Money;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
 import org.wickedsource.budgeteer.service.budget.BudgetDetailData;
 import org.wickedsource.budgeteer.service.budget.BudgetService;
+import org.wickedsource.budgeteer.service.contract.ContractBaseData;
+import org.wickedsource.budgeteer.service.contract.ContractService;
 import org.wickedsource.budgeteer.service.imports.Import;
 import org.wickedsource.budgeteer.service.imports.ImportService;
+import org.wickedsource.budgeteer.service.notification.NotificationService;
 import org.wickedsource.budgeteer.service.person.PersonDetailData;
 import org.wickedsource.budgeteer.service.person.PersonService;
 import org.wickedsource.budgeteer.service.project.ProjectService;
 import org.wickedsource.budgeteer.service.record.AggregatedRecord;
 import org.wickedsource.budgeteer.service.record.RecordService;
+import org.wickedsource.budgeteer.service.template.Template;
+import org.wickedsource.budgeteer.service.template.TemplateService;
 import org.wickedsource.budgeteer.service.user.User;
 import org.wickedsource.budgeteer.service.user.UserService;
 import org.wickedsource.budgeteer.web.pages.administration.Project;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(locations = {"classpath:spring-web.xml", "classpath:spring-service-mock.xml"})
+@SpringBootTest
 public abstract class AbstractWebTestTemplate {
 
   @Autowired BudgeteerApplication application;
-
-  @Autowired protected ProjectService projectServiceMock;
-  @Autowired protected BudgetService budgetServiceMock;
-  @Autowired protected RecordService recordServiceMock;
-  @Autowired protected UserService userServiceMock;
-  @Autowired protected ImportService importServiceMock;
-  @Autowired protected PersonService personServiceMock;
+  @MockBean protected ProjectService projectServiceMock;
+  @MockBean protected BudgetService budgetServiceMock;
+  @MockBean protected RecordService recordServiceMock;
+  @MockBean protected UserService userServiceMock;
+  @MockBean protected ImportService importServiceMock;
+  @MockBean protected PersonService personServiceMock;
+  @MockBean protected ContractService contractServiceMock;
+  @MockBean protected TemplateService templateService;
+  @MockBean protected NotificationService notificationService;
 
   private static WicketTester tester;
 
@@ -58,6 +66,11 @@ public abstract class AbstractWebTestTemplate {
     when(userServiceMock.getUsersInProject(1L)).thenReturn(getUsersInProject());
     when(importServiceMock.loadImports(1L)).thenReturn(createImports());
     when(personServiceMock.loadPersonDetailData(1L)).thenReturn(createPerson());
+    when(contractServiceMock.getContractById(anyLong())).thenReturn(new ContractBaseData());
+    when(contractServiceMock.getEmptyContractModel(anyLong())).thenReturn(new ContractBaseData());
+    when(templateService.getById(1L))
+        .thenReturn(new Template(1L, null, null, null, null, false, 1L))
+        .thenReturn(null);
 
     if (tester == null) {
       tester = new WicketTester(application);

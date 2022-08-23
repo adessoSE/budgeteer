@@ -1,8 +1,5 @@
 package org.wickedsource.budgeteer.service.budget;
 
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.*;
-
 import de.adesso.budgeteer.common.old.MoneyUtil;
 import de.adesso.budgeteer.persistence.budget.BudgetEntity;
 import de.adesso.budgeteer.persistence.budget.BudgetRepository;
@@ -13,28 +10,34 @@ import de.adesso.budgeteer.persistence.person.DailyRateRepository;
 import de.adesso.budgeteer.persistence.project.ProjectEntity;
 import de.adesso.budgeteer.persistence.record.PlanRecordRepository;
 import de.adesso.budgeteer.persistence.record.WorkRecordRepository;
-import java.util.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.wickedsource.budgeteer.service.ServiceTestTemplate;
 import org.wickedsource.budgeteer.service.contract.ContractBaseData;
 
+import java.util.*;
+
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.*;
+
+@SpringBootTest
 class BudgetServiceTest extends ServiceTestTemplate {
 
-  @Autowired private BudgetRepository budgetRepository;
-
+  @MockBean private BudgetRepository budgetRepository;
+  @MockBean private WorkRecordRepository workRecordRepository;
+  @MockBean private PlanRecordRepository planRecordRepository;
+  @MockBean private DailyRateRepository rateRepository;
+  @MockBean private ContractRepository contractRepository;
   @Autowired private BudgetService budgetService;
-
-  @Autowired private WorkRecordRepository workRecordRepository;
-
-  @Autowired private PlanRecordRepository planRecordRepository;
-
-  @Autowired private DailyRateRepository rateRepository;
-
-  @Autowired private ContractRepository contractRepository;
 
   @Test
   void testLoadBudgetBaseDataForProject() {

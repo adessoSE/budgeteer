@@ -28,7 +28,6 @@ import org.wickedsource.budgeteer.web.pages.base.delete.DeleteDialog;
 import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 import org.wickedsource.budgeteer.web.pages.templates.TemplatesPage;
 import org.wickedsource.budgeteer.web.pages.templates.templateimport.TemplateFormInputDto;
-import org.wicketstuff.lambda.components.ComponentFactory;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
