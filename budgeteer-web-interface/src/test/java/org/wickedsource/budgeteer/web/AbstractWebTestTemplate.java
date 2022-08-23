@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
+
+import de.adesso.budgeteer.core.project.port.in.GetProjectUseCase;
 import org.apache.wicket.util.tester.WicketTester;
 import org.joda.money.CurrencyUnit;
 import org.joda.money.Money;
@@ -50,6 +52,7 @@ public abstract class AbstractWebTestTemplate {
   @MockBean protected ContractService contractServiceMock;
   @MockBean protected TemplateService templateService;
   @MockBean protected NotificationService notificationService;
+  @MockBean protected GetProjectUseCase getProjectUseCase;
 
   private static WicketTester tester;
 
@@ -71,6 +74,8 @@ public abstract class AbstractWebTestTemplate {
     when(templateService.getById(1L))
         .thenReturn(new Template(1L, null, null, null, null, false, 1L))
         .thenReturn(null);
+    when(getProjectUseCase.getProject(anyLong()))
+        .thenReturn(new de.adesso.budgeteer.core.project.domain.Project(1L, "project-name"));
 
     if (tester == null) {
       tester = new WicketTester(application);

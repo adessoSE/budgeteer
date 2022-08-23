@@ -1,19 +1,23 @@
 package org.wickedsource.budgeteer.web.pages.dashboard;
 
+import de.adesso.budgeteer.core.project.domain.Project;
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.jupiter.api.Test;
 import org.wickedsource.budgeteer.web.AbstractWebTestTemplate;
 
-public class DashboardPageTest extends AbstractWebTestTemplate {
+import static org.mockito.Mockito.when;
 
-    @Test
-    public void testRender() {
-        WicketTester tester = getTester();
-        tester.startPage(DashboardPage.class);
-        tester.assertRenderedPage(DashboardPage.class);
-    }
+class DashboardPageTest extends AbstractWebTestTemplate {
 
-    @Override
-    protected void setupTest() {
-    }
+
+  @Test
+  void testRender() {
+    var projectId = 1L;
+    WicketTester tester = getTester();
+    tester.startPage(DashboardPage.class);
+    tester.assertRenderedPage(DashboardPage.class);
+  }
+
+  @Override
+  protected void setupTest() {}
 }

@@ -1,6 +1,6 @@
 package org.wickedsource.budgeteer.web.pages.dashboard;
 
-
+import de.adesso.budgeteer.core.project.port.in.GetProjectUseCase;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -24,41 +24,43 @@ import org.wickedsource.budgeteer.web.pages.templates.TemplatesPage;
 @Mount("dashboard")
 public class DashboardPage extends BasePage {
 
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+  /** */
+  private static final long serialVersionUID = 1L;
 
-	@SpringBean
-    private ProjectService projectService;
+  @SpringBean private GetProjectUseCase getProjectUseCase;
 
-	public DashboardPage() {
-        BurnedBudgetChartModel burnedBudgetModel = new BurnedBudgetChartModel(BudgeteerSession.get().getProjectId(), 8);
-        add(new BurnedBudgetChart("burnedBudgetChart", burnedBudgetModel));
-        
-        add(new Label("username", () -> BudgeteerSession.get().getLoggedInUser().getName()));
+  public DashboardPage() {
+    BurnedBudgetChartModel burnedBudgetModel =
+        new BurnedBudgetChartModel(BudgeteerSession.get().getProjectId(), 8);
+    add(new BurnedBudgetChart("burnedBudgetChart", burnedBudgetModel));
 
-        add(new Label("projectname", () -> projectService.findProjectById(BudgeteerSession.get().getProjectId()).getName()));
+    add(new Label("username", () -> BudgeteerSession.get().getLoggedInUser().getName()));
 
-        AverageDailyRateChartModel avgDailyRateModel = new AverageDailyRateChartModel(BudgeteerSession.get().getProjectId(), 30);
-        add(new AverageDailyRateChart("averageDailyRateChart", avgDailyRateModel));
-        add(new BookmarkablePageLink<PeopleOverviewPage>("peopleLink", PeopleOverviewPage.class));
+    add(
+        new Label(
+            "projectname",
+            () -> getProjectUseCase.getProject(BudgeteerSession.get().getProjectId()).getName()));
 
-        add(new BookmarkablePageLink<HoursPage>("hoursLink", HoursPage.class));
+    AverageDailyRateChartModel avgDailyRateModel =
+        new AverageDailyRateChartModel(BudgeteerSession.get().getProjectId(), 30);
+    add(new AverageDailyRateChart("averageDailyRateChart", avgDailyRateModel));
+    add(new BookmarkablePageLink<PeopleOverviewPage>("peopleLink", PeopleOverviewPage.class));
 
-        add(new BookmarkablePageLink<BudgetsOverviewPage>("budgetsLink", BudgetsOverviewPage.class));
+    add(new BookmarkablePageLink<HoursPage>("hoursLink", HoursPage.class));
 
-        add(new BookmarkablePageLink<BudgetsOverviewPage>("contractsLink", ContractOverviewPage.class));
+    add(new BookmarkablePageLink<BudgetsOverviewPage>("budgetsLink", BudgetsOverviewPage.class));
 
-        add(new BookmarkablePageLink<InvoiceOverviewPage>("invoiceLink", InvoiceOverviewPage.class));
+    add(new BookmarkablePageLink<BudgetsOverviewPage>("contractsLink", ContractOverviewPage.class));
 
-        add(new BookmarkablePageLink<ImportsOverviewPage>("importsLink", ImportsOverviewPage.class));
+    add(new BookmarkablePageLink<InvoiceOverviewPage>("invoiceLink", InvoiceOverviewPage.class));
 
-        add(new BookmarkablePageLink<ImportsOverviewPage>("templatesLink", TemplatesPage.class));
-    }
+    add(new BookmarkablePageLink<ImportsOverviewPage>("importsLink", ImportsOverviewPage.class));
 
-    @Override
-    protected BreadcrumbsModel getBreadcrumbsModel() {
-        return new BreadcrumbsModel(DashboardPage.class);
-    }
+    add(new BookmarkablePageLink<ImportsOverviewPage>("templatesLink", TemplatesPage.class));
+  }
+
+  @Override
+  protected BreadcrumbsModel getBreadcrumbsModel() {
+    return new BreadcrumbsModel(DashboardPage.class);
+  }
 }

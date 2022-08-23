@@ -1,5 +1,6 @@
 package org.wickedsource.budgeteer.service.user;
 
+import de.adesso.budgeteer.core.user.PasswordHasher;
 import de.adesso.budgeteer.persistence.project.ProjectEntity;
 import de.adesso.budgeteer.persistence.project.ProjectRepository;
 import de.adesso.budgeteer.persistence.user.*;
