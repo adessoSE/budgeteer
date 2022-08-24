@@ -2,26 +2,14 @@ package org.wickedsource.budgeteer.web.pages.user.edituser;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.tester.WicketTester;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.wickedsource.budgeteer.service.user.EditUserData;
-import org.wickedsource.budgeteer.service.user.UserService;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.wickedsource.budgeteer.web.AbstractWebTestTemplate;
 import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 import org.wickedsource.budgeteer.web.pages.user.edit.EditUserPage;
 
-import static org.mockito.Mockito.when;
-
+@SpringBootTest
 class EditUserPageTest extends AbstractWebTestTemplate {
-
-  @BeforeEach
-  void setUpMocks() {
-    when(userServiceMock.loadUserToEdit(1L))
-        .thenReturn(new EditUserData(1L, "test", "test@budgeteer.local", "password", null, null));
-  }
-
   @Test
   void test() {
     WicketTester tester = getTester();

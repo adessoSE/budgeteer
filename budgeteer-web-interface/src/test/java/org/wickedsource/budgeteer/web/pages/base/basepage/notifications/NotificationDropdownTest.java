@@ -1,16 +1,15 @@
 package org.wickedsource.budgeteer.web.pages.base.basepage.notifications;
 
+import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.jupiter.api.Test;
 import org.wickedsource.budgeteer.service.notification.MissingDailyRateNotification;
 import org.wickedsource.budgeteer.service.notification.Notification;
 import org.wickedsource.budgeteer.web.AbstractWebTestTemplate;
 import org.wickedsource.budgeteer.web.PropertyLoader;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.mockito.Mockito.when;
 
 class NotificationDropdownTest extends AbstractWebTestTemplate {
 

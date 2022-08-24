@@ -1,133 +1,111 @@
 package org.wickedsource.budgeteer.web.pages.user.edit.edituserform;
 
+import de.adesso.budgeteer.core.user.port.in.UpdateUserUseCase;
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
+import org.apache.wicket.model.LambdaModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.wickedsource.budgeteer.service.user.*;
-import org.wickedsource.budgeteer.web.BudgeteerSession;
-import org.wickedsource.budgeteer.web.ClassAwareWrappingModel;
+import org.wickedsource.budgeteer.service.user.EditUserModel;
 import org.wickedsource.budgeteer.web.components.customFeedback.CustomFeedbackPanel;
 
-import static org.wicketstuff.lazymodel.LazyModel.from;
-import static org.wicketstuff.lazymodel.LazyModel.model;
+public class EditUserForm extends Form<EditUserModel> {
 
-public class EditUserForm extends Form<EditUserData> {
+  @SpringBean private UpdateUserUseCase updateUserUseCase;
 
-    @SpringBean
-    private UserService userService;
+  public EditUserForm(String id, IModel<EditUserModel> model) {
+    super(id, model);
+    Injector.get().inject(this);
+    addComponents();
+  }
 
-    public EditUserForm(String id) {
-        super(id, new ClassAwareWrappingModel<>(Model.of(new EditUserData(BudgeteerSession.get().getLoggedInUser().getId())), EditUserData.class));
-        addComponents();
-    }
+  private void addComponents() {
+    CustomFeedbackPanel feedbackPanel = new CustomFeedbackPanel("feedback");
+    add(feedbackPanel);
 
-    public EditUserForm(String id, IModel<EditUserData> model) {
-        super(id, model);
-        Injector.get().inject(this);
-        addComponents();
-    }
+    var usernameRequiredTextField =
+        new RequiredTextField<>(
+            "username", LambdaModel.of(getModel(), EditUserModel::getName, EditUserModel::setName));
+    var mailTextField =
+        new EmailTextField(
+            "mail", LambdaModel.of(getModel(), EditUserModel::getMail, EditUserModel::setMail));
+    PasswordTextField currentPasswordTextField =
+        new PasswordTextField(
+            "currentPassword",
+            LambdaModel.of(getModel(), EditUserModel::getPassword, EditUserModel::setPassword));
+    PasswordTextField newPasswordTextField =
+        new PasswordTextField(
+            "newPassword",
+            LambdaModel.of(
+                getModel(), EditUserModel::getNewPassword, EditUserModel::setNewPassword));
+    PasswordTextField newPasswordConfirmationTextField =
+        new PasswordTextField(
+            "newPasswordConfirmation",
+            LambdaModel.of(
+                getModel(),
+                EditUserModel::getNewPasswordConfirmation,
+                EditUserModel::setNewPasswordConfirmation));
 
-    private void addComponents() {
-        CustomFeedbackPanel feedbackPanel = new CustomFeedbackPanel("feedback");
-        add(feedbackPanel);
+    usernameRequiredTextField.setRequired(true);
+    mailTextField.setRequired(true);
+    currentPasswordTextField.setRequired(false);
+    newPasswordTextField.setRequired(false);
+    newPasswordConfirmationTextField.setRequired(false);
 
-        RequiredTextField<String> usernameRequiredTextField = new RequiredTextField<>("username", model(from(getModelObject().getName())));
-        EmailTextField mailTextField;
-        if (getModelObject().getMail() == null)
-            mailTextField = new EmailTextField("mail");
-        else
-            mailTextField = new EmailTextField("mail", model(from(getModelObject().getMail())));
-        PasswordTextField currentPasswordTextField = new PasswordTextField("currentPassword");
-        PasswordTextField newPasswordTextField = new PasswordTextField("newPassword");
-        PasswordTextField newPasswordConfirmationTextField = new PasswordTextField("newPasswordConfirmation");
+    add(usernameRequiredTextField);
+    add(mailTextField);
+    add(currentPasswordTextField);
+    add(newPasswordTextField);
+    add(newPasswordConfirmationTextField);
 
-        usernameRequiredTextField.setRequired(true);
-        mailTextField.setRequired(true);
-        currentPasswordTextField.setRequired(false);
-        newPasswordTextField.setRequired(false);
-        newPasswordConfirmationTextField.setRequired(false);
-
-        add(usernameRequiredTextField);
-        add(mailTextField);
-        add(currentPasswordTextField);
-        add(newPasswordTextField);
-        add(newPasswordConfirmationTextField);
-
-        /*
-         * The checks of the input fields must be done manually,
-         * because setDefaultFormProcessing cannot be set to true,
-         * otherwise the following error will be thrown:
-         *
-         * Last cause: Attempt to set a model object on a component without a model! Either pass an IModel to the constructor or use #setDefaultModel(new SomeModel(object)). Component: form:actualPassword
-         */
-        Button submitButton = new Button("submitButton") {
-            @Override
-            public void onSubmit() {
-                boolean changePassword = false;
-
-                if (usernameRequiredTextField.getInput().isEmpty()) {
-                    error(getString("form.username.Required"));
-                    return;
-                }
-
-                if (mailTextField.getInput().isEmpty()) {
-                    error(getString("form.mail.Required"));
-                    return;
-                }
-
-                if (currentPasswordTextField.getInput().isEmpty() && (!newPasswordTextField.getInput().isEmpty() || !newPasswordConfirmationTextField.getInput().isEmpty())) {
-                    error(getString("form.currentPassword.Required"));
-                    return;
-                }
-
-                if (!currentPasswordTextField.getInput().isEmpty()) {
-                    if (newPasswordTextField.getInput().isEmpty()) {
-                        error(getString("form.newPassword.Required"));
-                        return;
-                    }
-
-                    if (newPasswordConfirmationTextField.getInput().isEmpty()) {
-                        error(getString("form.newPasswordConfirmation.Required"));
-                        return;
-                    }
-
-                    if (!userService.checkPassword(EditUserForm.this.getModelObject().getId(), currentPasswordTextField.getInput())) {
-                        error(getString("message.wrongPassword"));
-                        return;
-                    }
-
-                    if (!newPasswordTextField.getInput().equals(newPasswordConfirmationTextField.getInput())) {
-                        error(getString("message.wrongPasswordConfirmation"));
-                        return;
-                    }
-
-                    EditUserForm.this.getModelObject().setPassword(newPasswordTextField.getInput());
-                    changePassword = true;
-                }
-
-                try {
-                    EditUserForm.this.getModelObject().setName(usernameRequiredTextField.getInput());
-                    EditUserForm.this.getModelObject().setMail(mailTextField.getInput());
-
-                    // If the user has changed his mail address, this will be displayed to him.
-                    if (!userService.saveUser(EditUserForm.this.getModelObject(), changePassword)) {
-                        userService.createNewVerificationTokenForUser(userService.getUserById(EditUserForm.this.getModelObject().getId()));
-                        success(getString("message.successVerification"));
-                    } else {
-                        success(getString("message.success"));
-                    }
-                } catch (UsernameAlreadyInUseException e) {
-                    error(getString("message.duplicateUserName"));
-                } catch (MailAlreadyInUseException e) {
-                    error(getString("message.duplicateMail"));
-                } catch (UserIdNotFoundException e) {
-                    error(getString("message.error"));
-                }
+    var submitButton =
+        new Button("submitButton") {
+          @Override
+          public void onSubmit() {
+            if (currentPasswordTextField.getInput().isEmpty()
+                && (!newPasswordTextField.getInput().isEmpty()
+                    || !newPasswordConfirmationTextField.getInput().isEmpty())) {
+              error(getString("form.currentPassword.Required"));
+              return;
             }
+
+            if (!currentPasswordTextField.getInput().isEmpty()) {
+              if (newPasswordTextField.getInput().isEmpty()) {
+                error(getString("form.newPassword.Required"));
+                return;
+              }
+
+              if (newPasswordConfirmationTextField.getInput().isEmpty()) {
+                error(getString("form.newPasswordConfirmation.Required"));
+                return;
+              }
+
+              if (!newPasswordTextField
+                  .getInput()
+                  .equals(newPasswordConfirmationTextField.getInput())) {
+                error(getString("message.wrongPasswordConfirmation"));
+                return;
+              }
+            }
+
+            var editUserModel = EditUserForm.this.getModelObject();
+            try {
+              updateUserUseCase.updateUser(
+                  new UpdateUserUseCase.UpdateUserCommand(
+                      editUserModel.getId(),
+                      editUserModel.getName(),
+                      editUserModel.getMail(),
+                      editUserModel.getPassword(),
+                      editUserModel.getNewPassword()));
+            } catch (de.adesso.budgeteer.core.user.UsernameAlreadyInUseException e) {
+              error(getString("message.duplicateUserName"));
+            } catch (de.adesso.budgeteer.core.user.InvalidLoginCredentialsException e) {
+              error(getString("message.wrongPassword"));
+            } catch (de.adesso.budgeteer.core.user.MailAlreadyInUseException e) {
+              error(getString("message.duplicateMail"));
+            }
+          }
         };
-        submitButton.setDefaultFormProcessing(false);
-        add(submitButton);
-    }
+    add(submitButton);
+  }
 }

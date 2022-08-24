@@ -1,22 +1,18 @@
 package org.wickedsource.budgeteer.web.pages.template.edit;
 
+import static org.assertj.core.api.Java6Assertions.assertThat;
+
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.tester.FormTester;
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.wickedsource.budgeteer.service.template.Template;
-import org.wickedsource.budgeteer.service.template.TemplateService;
 import org.wickedsource.budgeteer.web.AbstractWebTestTemplate;
 import org.wickedsource.budgeteer.web.pages.base.delete.DeleteDialog;
 import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 import org.wickedsource.budgeteer.web.pages.templates.TemplatesPage;
 import org.wickedsource.budgeteer.web.pages.templates.edit.EditTemplatePage;
-
-import static org.assertj.core.api.Java6Assertions.assertThat;
-import static org.mockito.Mockito.when;
 
 @SpringBootTest
 class EditTemplatePageTest extends AbstractWebTestTemplate {

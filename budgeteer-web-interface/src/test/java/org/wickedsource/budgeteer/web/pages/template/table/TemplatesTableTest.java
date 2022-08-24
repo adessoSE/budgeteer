@@ -1,22 +1,18 @@
 package org.wickedsource.budgeteer.web.pages.template.table;
 
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.when;
+
+import java.util.Arrays;
+import java.util.List;
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.wickedsource.budgeteer.service.ReportType;
 import org.wickedsource.budgeteer.service.template.Template;
-import org.wickedsource.budgeteer.service.template.TemplateService;
 import org.wickedsource.budgeteer.web.AbstractWebTestTemplate;
 import org.wickedsource.budgeteer.web.pages.templates.TemplateFilter;
 import org.wickedsource.budgeteer.web.pages.templates.table.TemplateListModel;
 import org.wickedsource.budgeteer.web.pages.templates.table.TemplatesTable;
-
-import java.util.Arrays;
-import java.util.List;
-
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
 
 class TemplatesTableTest extends AbstractWebTestTemplate {
 

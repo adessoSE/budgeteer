@@ -1,6 +1,10 @@
 package de.adesso.budgeteer.core.user.service;
 
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.mockito.Mockito.*;
+
 import de.adesso.budgeteer.core.user.OnEmailChangedEvent;
+import de.adesso.budgeteer.core.user.PasswordHasher;
 import de.adesso.budgeteer.core.user.UserException;
 import de.adesso.budgeteer.core.user.port.in.RegisterUseCase;
 import de.adesso.budgeteer.core.user.port.out.CreateUserPort;
@@ -13,63 +17,64 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
 
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.mockito.Mockito.*;
-
 @ExtendWith(MockitoExtension.class)
 class RegisterServiceTest {
 
-    @InjectMocks private RegisterService registerService;
-    @Mock private UserWithNameExistsPort userWithNameExistsPort;
-    @Mock private UserWithEmailExistsPort userWithEmailExistsPort;
-    @Mock private CreateUserPort createUserPort;
-    @Mock private ApplicationEventPublisher eventPublisher;
+  @InjectMocks private RegisterService registerService;
+  @Mock private UserWithNameExistsPort userWithNameExistsPort;
+  @Mock private UserWithEmailExistsPort userWithEmailExistsPort;
+  @Mock private CreateUserPort createUserPort;
+  @Mock private ApplicationEventPublisher eventPublisher;
+  @Mock private PasswordHasher passwordHasher;
 
-    @Test
-    void shouldThrowUsernameAlreadyInUseExceptionIfUserWithUsernameExists() {
-        var command = new RegisterUseCase.RegisterCommand("test", "test@mail", "test");
-        when(userWithNameExistsPort.userWithNameExists("test")).thenReturn(true);
+  @Test
+  void shouldThrowUsernameAlreadyInUseExceptionIfUserWithUsernameExists() {
+    var command = new RegisterUseCase.RegisterCommand("test", "test@mail", "test");
+    when(userWithNameExistsPort.userWithNameExists("test")).thenReturn(true);
 
-        assertThatExceptionOfType(UserException.class)
-                .isThrownBy(() -> registerService.register(command))
-                .matches(e -> e.getCauses().contains(UserException.UserErrors.USERNAME_ALREADY_IN_USE));
+    assertThatExceptionOfType(UserException.class)
+        .isThrownBy(() -> registerService.register(command))
+        .matches(e -> e.getCauses().contains(UserException.UserErrors.USERNAME_ALREADY_IN_USE));
+  }
 
-    }
+  @Test
+  void shouldThrowMailAlreadyInUseExceptionIfUserWithEmailExists() {
+    var command = new RegisterUseCase.RegisterCommand("test", "test@mail", "test");
+    when(userWithNameExistsPort.userWithNameExists("test")).thenReturn(false);
+    when(userWithEmailExistsPort.userWithEmailExists("test@mail")).thenReturn(true);
 
-    @Test
-    void shouldThrowMailAlreadyInUseExceptionIfUserWithEmailExists() {
-        var command = new RegisterUseCase.RegisterCommand("test", "test@mail", "test");
-        when(userWithNameExistsPort.userWithNameExists("test")).thenReturn(false);
-        when(userWithEmailExistsPort.userWithEmailExists("test@mail")).thenReturn(true);
+    assertThatExceptionOfType(UserException.class)
+        .isThrownBy(() -> registerService.register(command))
+        .matches(e -> e.getCauses().contains(UserException.UserErrors.MAIL_ALREADY_IN_USE));
+  }
 
-        assertThatExceptionOfType(UserException.class)
-                .isThrownBy(() -> registerService.register(command))
-                .matches(e -> e.getCauses().contains(UserException.UserErrors.MAIL_ALREADY_IN_USE));
-    }
+  @Test
+  void shouldCallCreateUserWhenUserIsValid() throws UserException {
+    var hashedPassword = "t3st";
+    var command = new RegisterUseCase.RegisterCommand("test", "test@mail", "test");
+    when(userWithNameExistsPort.userWithNameExists("test")).thenReturn(false);
+    when(userWithEmailExistsPort.userWithEmailExists("test@mail")).thenReturn(false);
+    when(createUserPort.createUser(anyString(), anyString(), anyString())).thenReturn(1L);
+    when(passwordHasher.hash(command.getPassword())).thenReturn(hashedPassword);
+    doNothing().when(eventPublisher).publishEvent(any());
 
-    @Test
-    void shouldCallCreateUserWhenUserIsValid() throws UserException {
-        var command = new RegisterUseCase.RegisterCommand("test", "test@mail", "t3st");
-        when(userWithNameExistsPort.userWithNameExists("test")).thenReturn(false);
-        when(userWithEmailExistsPort.userWithEmailExists("test@mail")).thenReturn(false);
-        when(createUserPort.createUser(anyString(), anyString(), anyString())).thenReturn(1L);
-        doNothing().when(eventPublisher).publishEvent(any());
+    registerService.register(command);
 
-        registerService.register(command);
+    verify(createUserPort).createUser(command.getUsername(), command.getMail(), hashedPassword);
+  }
 
-        verify(createUserPort).createUser(command.getUsername(), command.getMail(), command.getPassword());
-    }
+  @Test
+  void shouldPublishOnEmailChangedEventWhenUserIsCreated() throws UserException {
+    var hashedPassword = "t3st";
+    var command = new RegisterUseCase.RegisterCommand("test", "test@mail", "test");
+    when(userWithNameExistsPort.userWithNameExists("test")).thenReturn(false);
+    when(userWithEmailExistsPort.userWithEmailExists("test@mail")).thenReturn(false);
+    when(createUserPort.createUser(anyString(), anyString(), anyString())).thenReturn(1L);
+    when(passwordHasher.hash(command.getPassword())).thenReturn(hashedPassword);
+    doNothing().when(eventPublisher).publishEvent(any());
 
-    @Test
-    void shouldPublishOnEmailChangedEventWhenUserIsCreated() throws UserException {
-        var command = new RegisterUseCase.RegisterCommand("test", "test@mail", "t3st");
-        when(userWithNameExistsPort.userWithNameExists("test")).thenReturn(false);
-        when(userWithEmailExistsPort.userWithEmailExists("test@mail")).thenReturn(false);
-        when(createUserPort.createUser(anyString(), anyString(), anyString())).thenReturn(1L);
-        doNothing().when(eventPublisher).publishEvent(any());
+    registerService.register(command);
 
-        registerService.register(command);
-
-        verify(eventPublisher).publishEvent(new OnEmailChangedEvent(1, "test", "test@mail"));
-    }
+    verify(eventPublisher).publishEvent(new OnEmailChangedEvent(1, "test", "test@mail"));
+  }
 }

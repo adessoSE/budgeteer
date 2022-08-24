@@ -8,10 +8,7 @@ import java.util.Date;
 import java.util.Random;
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.wickedsource.budgeteer.service.budget.BudgetDetailData;
-import org.wickedsource.budgeteer.service.budget.BudgetService;
 import org.wickedsource.budgeteer.web.AbstractWebTestTemplate;
 
 class BudgetHighlightsPanelTest extends AbstractWebTestTemplate {

@@ -2,6 +2,9 @@ package org.wickedsource.budgeteer.service.imports;
 
 import de.adesso.budgeteer.persistence.project.ProjectEntity;
 import de.adesso.budgeteer.persistence.project.ProjectRepository;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +14,6 @@ import org.wickedsource.budgeteer.importer.resourceplan.ResourcePlanImporter;
 import org.wickedsource.budgeteer.imports.api.ImportException;
 import org.wickedsource.budgeteer.imports.api.ImportFile;
 import org.wickedsource.budgeteer.imports.api.InvalidFileFormatException;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
 
 @SpringBootTest
 @DirtiesContext

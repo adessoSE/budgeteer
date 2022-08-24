@@ -4,21 +4,20 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 import de.adesso.budgeteer.common.old.MoneyUtil;
+import de.adesso.budgeteer.core.project.port.in.GetProjectUseCase;
+import de.adesso.budgeteer.core.user.domain.UserWithEmail;
+import de.adesso.budgeteer.core.user.port.in.GetUserWithEmailUseCase;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
-
-import de.adesso.budgeteer.core.project.port.in.GetProjectUseCase;
 import org.apache.wicket.util.tester.WicketTester;
 import org.joda.money.CurrencyUnit;
 import org.joda.money.Money;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
 import org.wickedsource.budgeteer.service.budget.BudgetDetailData;
 import org.wickedsource.budgeteer.service.budget.BudgetService;
@@ -34,19 +33,17 @@ import org.wickedsource.budgeteer.service.record.AggregatedRecord;
 import org.wickedsource.budgeteer.service.record.RecordService;
 import org.wickedsource.budgeteer.service.template.Template;
 import org.wickedsource.budgeteer.service.template.TemplateService;
-import org.wickedsource.budgeteer.service.user.User;
-import org.wickedsource.budgeteer.service.user.UserService;
+import org.wickedsource.budgeteer.service.user.UserModel;
 import org.wickedsource.budgeteer.web.pages.administration.Project;
 
-@ExtendWith(SpringExtension.class)
 @SpringBootTest
 public abstract class AbstractWebTestTemplate {
-
   @Autowired BudgeteerApplication application;
   @MockBean protected ProjectService projectServiceMock;
+  @MockBean protected GetUserWithEmailUseCase getUserWithEmailUseCase;
+
   @MockBean protected BudgetService budgetServiceMock;
   @MockBean protected RecordService recordServiceMock;
-  @MockBean protected UserService userServiceMock;
   @MockBean protected ImportService importServiceMock;
   @MockBean protected PersonService personServiceMock;
   @MockBean protected ContractService contractServiceMock;
@@ -66,7 +63,6 @@ public abstract class AbstractWebTestTemplate {
     when(budgetServiceMock.loadBudgetDetailData(1L)).thenReturn(createBudget());
     when(recordServiceMock.getWeeklyAggregationForPerson(1L))
         .thenReturn(getWeeklyAggregationForPerson(1L));
-    when(userServiceMock.getUsersInProject(1L)).thenReturn(getUsersInProject());
     when(importServiceMock.loadImports(1L)).thenReturn(createImports());
     when(personServiceMock.loadPersonDetailData(1L)).thenReturn(createPerson());
     when(contractServiceMock.getContractById(anyLong())).thenReturn(new ContractBaseData());
@@ -76,6 +72,8 @@ public abstract class AbstractWebTestTemplate {
         .thenReturn(null);
     when(getProjectUseCase.getProject(anyLong()))
         .thenReturn(new de.adesso.budgeteer.core.project.domain.Project(1L, "project-name"));
+    when(getUserWithEmailUseCase.getUserWithEmail(anyLong()))
+        .thenReturn(new UserWithEmail(1L, "name", "email"));
 
     if (tester == null) {
       tester = new WicketTester(application);
@@ -88,7 +86,7 @@ public abstract class AbstractWebTestTemplate {
   protected abstract void setupTest();
 
   private void loginAndSetProject() {
-    User user = new User();
+    UserModel user = new UserModel();
     user.setId(1L);
     user.setName("username");
     BudgeteerSession.get().login(user);
@@ -111,10 +109,10 @@ public abstract class AbstractWebTestTemplate {
     return list;
   }
 
-  private List<User> getUsersInProject() {
-    List<User> users = new ArrayList<User>();
+  private List<UserModel> getUsersInProject() {
+    List<UserModel> users = new ArrayList<UserModel>();
     for (int i = 1; i <= 5; i++) {
-      User user = new User();
+      UserModel user = new UserModel();
       user.setId(i);
       user.setName("User " + i);
       users.add(user);
