@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.wickedsource.budgeteer.service.DateProvider;
 import org.wickedsource.budgeteer.service.DateUtil;
 import org.wickedsource.budgeteer.service.ServiceTestTemplate;
@@ -24,11 +25,11 @@ class StatisticsServiceTest extends ServiceTestTemplate {
 
   private DateFormat format = new SimpleDateFormat("dd.MM.yyyy");
 
-  @Autowired private WorkRecordRepository workRecordRepository;
+  @MockBean private WorkRecordRepository workRecordRepository;
 
-  @Autowired private PlanRecordRepository planRecordRepository;
+  @MockBean private PlanRecordRepository planRecordRepository;
 
-  @Autowired private DateProvider dateProvider;
+  @MockBean private DateProvider dateProvider;
 
   @Autowired private StatisticsService service;
 

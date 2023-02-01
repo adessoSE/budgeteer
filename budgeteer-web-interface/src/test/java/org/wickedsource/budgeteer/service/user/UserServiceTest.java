@@ -3,6 +3,7 @@ package org.wickedsource.budgeteer.service.user;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
+import de.adesso.budgeteer.core.user.PasswordHasher;
 import de.adesso.budgeteer.persistence.project.ProjectEntity;
 import de.adesso.budgeteer.persistence.project.ProjectRepository;
 import de.adesso.budgeteer.persistence.user.*;

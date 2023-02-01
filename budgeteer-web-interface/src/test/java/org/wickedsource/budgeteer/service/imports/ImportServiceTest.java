@@ -11,13 +11,14 @@ import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.wickedsource.budgeteer.service.ServiceTestTemplate;
 
 class ImportServiceTest extends ServiceTestTemplate {
 
-  @Autowired private ImportRepository importRepository;
+  @MockBean private ImportRepository importRepository;
 
-  @Autowired private WorkRecordRepository workRecordRepository;
+  @MockBean private WorkRecordRepository workRecordRepository;
 
   @Autowired private ImportService importService;
 

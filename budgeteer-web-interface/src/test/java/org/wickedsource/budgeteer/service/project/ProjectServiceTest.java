@@ -11,15 +11,16 @@ import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.wickedsource.budgeteer.service.ServiceTestTemplate;
 
 class ProjectServiceTest extends ServiceTestTemplate {
 
   @Autowired private ProjectService projectService;
 
-  @Autowired private ProjectRepository projectRepository;
+  @MockBean private ProjectRepository projectRepository;
 
-  @Autowired private UserRepository userRepository;
+  @MockBean private UserRepository userRepository;
 
   @Test
   void testCreateProject() throws Exception {

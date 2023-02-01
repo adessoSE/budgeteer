@@ -3,6 +3,7 @@ package org.wickedsource.budgeteer.service.imports;
 import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
+import de.adesso.budgeteer.core.user.PasswordHasher;
 import de.adesso.budgeteer.persistence.project.ProjectEntity;
 import de.adesso.budgeteer.persistence.project.ProjectRepository;
 import java.text.SimpleDateFormat;
@@ -15,6 +16,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.kubek2k.springockito.annotations.SpringockitoContextLoader;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.wickedsource.budgeteer.importer.resourceplan.ResourcePlanImporter;
@@ -23,6 +25,7 @@ import org.wickedsource.budgeteer.imports.api.ImportFile;
 import org.wickedsource.budgeteer.imports.api.InvalidFileFormatException;
 
 @ExtendWith(SpringExtension.class)
+@Import(PasswordHasher.class)
 @ContextConfiguration(
     loader = SpringockitoContextLoader.class,
     locations = {"classpath:spring-service.xml", "classpath:spring-repository-mock.xml"})

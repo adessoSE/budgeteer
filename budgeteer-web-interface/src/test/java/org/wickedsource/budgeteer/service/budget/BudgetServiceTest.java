@@ -18,23 +18,23 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.wickedsource.budgeteer.service.ServiceTestTemplate;
 import org.wickedsource.budgeteer.service.contract.ContractBaseData;
 
 class BudgetServiceTest extends ServiceTestTemplate {
 
-  @Autowired private BudgetRepository budgetRepository;
-
   @Autowired private BudgetService budgetService;
+  @MockBean private BudgetRepository budgetRepository;
 
-  @Autowired private WorkRecordRepository workRecordRepository;
+  @MockBean private WorkRecordRepository workRecordRepository;
 
-  @Autowired private PlanRecordRepository planRecordRepository;
+  @MockBean private PlanRecordRepository planRecordRepository;
 
-  @Autowired private DailyRateRepository rateRepository;
+  @MockBean private DailyRateRepository rateRepository;
 
-  @Autowired private ContractRepository contractRepository;
+  @MockBean private ContractRepository contractRepository;
 
   @Test
   void testLoadBudgetBaseDataForProject() {

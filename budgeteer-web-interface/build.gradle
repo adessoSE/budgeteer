@@ -4,7 +4,6 @@ plugins {
     id 'io.freefair.lombok'
     id 'org.springframework.boot'
     id 'io.spring.dependency-management'
-    id 'war'
 }
 
 processResources {
@@ -65,4 +64,12 @@ dependencies {
 
 jar {
     enabled = true
+}
+
+bootRun {
+    enabled = false
+}
+
+bootJar {
+    enabled = false
 }
