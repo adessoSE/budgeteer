@@ -4,6 +4,8 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 import de.adesso.budgeteer.common.old.MoneyUtil;
+import de.adesso.budgeteer.core.user.port.in.ChangeForgottenPasswordUseCase;
+import de.adesso.budgeteer.core.user.port.in.ResendVerificationTokenUseCase;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -42,6 +44,8 @@ public abstract class AbstractWebTestTemplate {
   @Autowired protected UserService userServiceMock;
   @Autowired protected ImportService importServiceMock;
   @Autowired protected PersonService personServiceMock;
+  @Autowired protected ChangeForgottenPasswordUseCase resetPasswordUseCase;
+  @Autowired protected ResendVerificationTokenUseCase resendVerificationTokenUseCase;
 
   private static WicketTester tester;
 

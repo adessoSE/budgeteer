@@ -1,41 +1,37 @@
 package org.wickedsource.budgeteer.service.user;
 
-import de.adesso.budgeteer.core.user.PasswordHasher;
-import de.adesso.budgeteer.persistence.project.ProjectEntity;
-import de.adesso.budgeteer.persistence.project.ProjectRepository;
-import de.adesso.budgeteer.persistence.user.*;
-import java.time.ZoneId;
-import java.util.Calendar;
-import java.util.Date;
+import de.adesso.budgeteer.core.exception.NotFoundException;
+import de.adesso.budgeteer.core.project.domain.Project;
+import de.adesso.budgeteer.core.project.port.in.AddUserToProjectUseCase;
+import de.adesso.budgeteer.core.project.port.in.RemoveUserFromProjectUseCase;
+import de.adesso.budgeteer.core.user.*;
+import de.adesso.budgeteer.core.user.port.in.*;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import javax.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationEventPublisher;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.wickedsource.budgeteer.service.UnknownEntityException;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class UserService {
 
-  @Autowired private UserRepository userRepository;
-
-  @Autowired private VerificationTokenRepository verificationTokenRepository;
-
-  @Autowired private ForgotPasswordTokenRepository forgotPasswordTokenRepository;
-
-  @Autowired private ProjectRepository projectRepository;
-
-  @Autowired private PasswordHasher passwordHasher;
-
-  @Autowired private UserMapper mapper;
-
-  @Autowired private ApplicationEventPublisher applicationEventPublisher;
-
-  @Value("${budgeteer.mail.activate}")
-  private String mailActivated;
+  private final GetUsersInProjectUseCase getUsersInProjectUseCase;
+  private final GetUsersNotInProjectUseCase getUsersNotInProjectUseCase;
+  private final RemoveUserFromProjectUseCase removeUserFromProjectUseCase;
+  private final AddUserToProjectUseCase addUserToProjectUseCase;
+  private final LoginUseCase loginUseCase;
+  private final RegisterUseCase registerUseCase;
+  private final GetUserWithEmailUseCase getUserWithEmailUseCase;
+  private final UpdateUserUseCase updateUserUseCase;
+  private final VerifyEmailUseCase verifyEmailUseCase;
+  private final ResetPasswordUseCase resetPasswordUseCase;
+  private final PasswordHasher passwordHasher;
+  private final UserMapper mapper;
 
   /**
    * Returns a list of all users that currently have access to the given project.
@@ -45,7 +41,9 @@ public class UserService {
    */
   @PreAuthorize("canReadProject(#projectId)")
   public List<User> getUsersInProject(long projectId) {
-    return mapper.map(userRepository.findInProject(projectId));
+    return getUsersInProjectUseCase.getUsersInProject(projectId).stream()
+        .map(mapper::map)
+        .collect(Collectors.toList());
   }
 
   /**
@@ -56,7 +54,9 @@ public class UserService {
    */
   @PreAuthorize("canReadProject(#projectId)")
   public List<User> getUsersNotInProject(long projectId) {
-    return mapper.map(userRepository.findNotInProject(projectId));
+    return getUsersNotInProjectUseCase.getUsersNotInProject(projectId).stream()
+        .map(mapper::map)
+        .collect(Collectors.toList());
   }
 
   /**
@@ -67,16 +67,12 @@ public class UserService {
    */
   @PreAuthorize("canReadProject(#projectId)")
   public void removeUserFromProject(long projectId, long userId) {
-    ProjectEntity project =
-        projectRepository
-            .findById(projectId)
-            .orElseThrow(() -> new UnknownEntityException(ProjectEntity.class, projectId));
-    UserEntity user =
-        userRepository
-            .findById(userId)
-            .orElseThrow(() -> new UnknownEntityException(UserEntity.class, userId));
-    user.getAuthorizedProjects().remove(project);
-    project.getAuthorizedUsers().remove(user);
+    try {
+      removeUserFromProjectUseCase.removeUserFromProject(userId, projectId);
+    } catch (NotFoundException e) {
+      var id = e.getClazz() == Project.class ? projectId : userId;
+      throw new UnknownEntityException(e.getClazz(), id);
+    }
   }
 
   /**
@@ -87,35 +83,28 @@ public class UserService {
    */
   @PreAuthorize("canReadProject(#projectId)")
   public void addUserToProject(long projectId, long userId) {
-    ProjectEntity project =
-        projectRepository
-            .findById(projectId)
-            .orElseThrow(() -> new UnknownEntityException(ProjectEntity.class, projectId));
-    UserEntity user =
-        userRepository
-            .findById(userId)
-            .orElseThrow(() -> new UnknownEntityException(UserEntity.class, userId));
-    user.getAuthorizedProjects().add(project);
-    project.getAuthorizedUsers().add(user);
+    try {
+      addUserToProjectUseCase.addUserToProject(userId, projectId);
+    } catch (NotFoundException e) {
+      var id = e.getClazz() == Project.class ? projectId : userId;
+      throw new UnknownEntityException(e.getClazz(), id);
+    }
   }
 
   /**
    * Checks a users login credentials.
    *
-   * @param user username or mail of the user to login
+   * @param username username or mail of the user to login
    * @param password plain text password of the user to login
    * @return a User object of the logged in user on successful login.
    * @throws InvalidLoginCredentialsException in case of invalid credentials
    */
-  public User login(String user, String password) throws InvalidLoginCredentialsException {
-    UserEntity entity =
-        userRepository.findByNameOrMailAndPassword(user, passwordHasher.hash(password));
-
-    if (entity == null) throw new InvalidLoginCredentialsException();
-
-    if (entity.getMailVerified() == null) entity.setMailVerified(false);
-
-    return mapper.map(entity);
+  public User login(String username, String password) throws InvalidLoginCredentialsException {
+    try {
+      return mapper.map(loginUseCase.login(username, passwordHasher.hash(password)));
+    } catch (de.adesso.budgeteer.core.user.InvalidLoginCredentialsException e) {
+      throw new InvalidLoginCredentialsException();
+    }
   }
 
   /**
@@ -130,18 +119,16 @@ public class UserService {
    */
   public void registerUser(String username, String mail, String password)
       throws UsernameAlreadyInUseException, MailAlreadyInUseException {
-    if (userRepository.findByName(username) != null) {
-      throw new UsernameAlreadyInUseException();
-    } else if (userRepository.findByMail(mail) != null) {
-      throw new MailAlreadyInUseException();
-    } else {
-      UserEntity user = new UserEntity();
-      user.setName(username);
-      user.setMail(mail);
-      user.setPassword(passwordHasher.hash(password));
-      userRepository.save(user);
-      if (!mail.equals("") && Boolean.valueOf(mailActivated))
-        applicationEventPublisher.publishEvent(new OnRegistrationCompleteEvent(user));
+    try {
+      registerUseCase.register(
+          new RegisterUseCase.RegisterCommand(username, mail, passwordHasher.hash(password)));
+    } catch (UserException e) {
+      if (e.getCauses().contains(UserException.UserErrors.USERNAME_ALREADY_IN_USE)) {
+        throw new UsernameAlreadyInUseException();
+      }
+      if (e.getCauses().contains(UserException.UserErrors.MAIL_ALREADY_IN_USE)) {
+        throw new MailAlreadyInUseException();
+      }
     }
   }
 
@@ -153,8 +140,13 @@ public class UserService {
    * @return true if the password matches the user, false if not
    */
   public boolean checkPassword(long id, String password) {
-    UserEntity entity = userRepository.findById(id).orElseThrow(RuntimeException::new);
-    return entity.getPassword().equals(passwordHasher.hash(password));
+    var user = getUserWithEmailUseCase.getUserWithEmail(id);
+    try {
+      loginUseCase.login(user.getName(), passwordHasher.hash(password));
+    } catch (de.adesso.budgeteer.core.user.InvalidLoginCredentialsException e) {
+      return false;
+    }
+    return true;
   }
 
   /**
@@ -165,14 +157,14 @@ public class UserService {
    * @throws MailNotVerifiedException
    */
   public void resetPassword(String mail) throws MailNotFoundException, MailNotVerifiedException {
-    UserEntity userEntity = userRepository.findByMail(mail);
-
-    if (userEntity == null) {
+    try {
+      resetPasswordUseCase.resetPassword(mail);
+    } catch (de.adesso.budgeteer.core.user.MailNotFoundException e) {
       throw new MailNotFoundException();
-    } else if (!userEntity.getMailVerified()) {
+    } catch (de.adesso.budgeteer.core.user.MailNotVerifiedException e) {
       throw new MailNotVerifiedException();
-    } else if (Boolean.valueOf(mailActivated)) {
-      applicationEventPublisher.publishEvent(new OnForgotPasswordEvent(userEntity));
+    } catch (MailNotEnabledException e) {
+      /* Do nothing */
     }
   }
 
@@ -183,15 +175,13 @@ public class UserService {
    * @return EditUserData for editing the user
    */
   public EditUserData loadUserToEdit(long id) {
-    UserEntity userEntity =
-        userRepository
-            .findById(id)
-            .orElseThrow(() -> new UnknownEntityException(UserEntity.class, id));
+    var user =
+        Optional.ofNullable(getUserWithEmailUseCase.getUserWithEmail(id))
+            .orElseThrow(() -> new UnknownEntityException(User.class, id));
     EditUserData editUserData = new EditUserData();
-    editUserData.setId(userEntity.getId());
-    editUserData.setName(userEntity.getName());
-    editUserData.setMail(userEntity.getMail());
-    editUserData.setPassword(userEntity.getPassword());
+    editUserData.setId(user.getId());
+    editUserData.setName(user.getName());
+    editUserData.setMail(user.getEmail());
     return editUserData;
   }
 
@@ -211,65 +201,24 @@ public class UserService {
    * @throws UsernameAlreadyInUseException
    * @throws MailAlreadyInUseException
    */
-  public boolean saveUser(EditUserData data, boolean changePassword)
+  public boolean saveUser(EditUserData data)
       throws UsernameAlreadyInUseException, MailAlreadyInUseException {
-    assert data != null;
-    UserEntity userEntity = new UserEntity();
-
-    UserEntity testEntity = userRepository.findByName(data.getName());
-    if (testEntity != null)
-      if (testEntity.getId() != data.getId()) throw new UsernameAlreadyInUseException();
-
-    testEntity = userRepository.findByMail(data.getMail());
-    if (testEntity != null)
-      if (testEntity.getId() != data.getId()) throw new MailAlreadyInUseException();
-
-    userEntity = userRepository.findById(data.getId()).orElseThrow(RuntimeException::new);
-
-    testEntity = userRepository.findById(data.getId()).orElse(null);
-    if (testEntity != null)
-      if (testEntity.getMail() == null) userEntity.setMailVerified(false);
-      else if (!testEntity.getMail().equals(data.getMail())) userEntity.setMailVerified(false);
-
-    userEntity.setId(data.getId());
-    userEntity.setName(data.getName());
-    userEntity.setMail(data.getMail());
-
-    if (changePassword) userEntity.setPassword(passwordHasher.hash(data.getPassword()));
-    else userEntity.setPassword(data.getPassword());
-
-    userRepository.save(userEntity);
-
-    return userEntity.getMailVerified();
-  }
-
-  /**
-   * Creates a token for a specific user.
-   *
-   * @param userEntity the specific user
-   * @param token a token, which usually contains a random UUID
-   */
-  public VerificationTokenEntity createVerificationTokenForUser(
-      UserEntity userEntity, String token) {
-    VerificationTokenEntity verificationTokenEntity =
-        new VerificationTokenEntity(userEntity, token);
-    verificationTokenRepository.save(verificationTokenEntity);
-    return verificationTokenEntity;
-  }
-
-  /**
-   * Triggers an OnRegistrationCompleteEvent if an user changes his mail address. An existing token
-   * is deleted to create a new one.
-   *
-   * @param userEntity the specific user
-   */
-  public void createNewVerificationTokenForUser(UserEntity userEntity) {
-    VerificationTokenEntity verificationTokenEntity =
-        verificationTokenRepository.findByUser(userEntity);
-    if (verificationTokenEntity != null)
-      verificationTokenRepository.delete(verificationTokenEntity);
-    if (Boolean.valueOf(mailActivated))
-      applicationEventPublisher.publishEvent(new OnRegistrationCompleteEvent(userEntity));
+    try {
+      updateUserUseCase.updateUser(
+          new UpdateUserUseCase.UpdateUserCommand(
+              data.getId(),
+              data.getName(),
+              data.getMail(),
+              passwordHasher.hash(data.getPassword()),
+              passwordHasher.hash(data.getNewPassword())));
+    } catch (de.adesso.budgeteer.core.user.UsernameAlreadyInUseException e) {
+      throw new UsernameAlreadyInUseException();
+    } catch (de.adesso.budgeteer.core.user.MailAlreadyInUseException e) {
+      throw new MailAlreadyInUseException();
+    } catch (de.adesso.budgeteer.core.user.InvalidLoginCredentialsException e) {
+      /* Do nothing */
+    }
+    return true;
   }
 
   /**
@@ -283,128 +232,13 @@ public class UserService {
    * @return returns a status code (INVALID, EXPIRED, VALID)
    */
   public int validateVerificationToken(String token) {
-    VerificationTokenEntity verificationToken = verificationTokenRepository.findByToken(token);
-
-    if (verificationToken == null) return TokenStatus.INVALID.statusCode();
-
-    UserEntity userEntity = verificationToken.getUserEntity();
-    Calendar calendar = Calendar.getInstance();
-
-    if ((Date.from(verificationToken.getExpiryDate().atZone(ZoneId.systemDefault()).toInstant())
-                .getTime()
-            - calendar.getTime().getTime())
-        <= 0) {
+    try {
+      verifyEmailUseCase.verifyEmail(token);
+    } catch (InvalidVerificationTokenException e) {
+      return TokenStatus.INVALID.statusCode();
+    } catch (ExpiredVerificationTokenException e) {
       return TokenStatus.EXPIRED.statusCode();
     }
-
-    userEntity.setMailVerified(true);
-    userRepository.save(userEntity);
-    verificationTokenRepository.delete(verificationToken);
     return TokenStatus.VALID.statusCode();
-  }
-
-  /**
-   * Searches for a user using a mail address. If not found, a MailNotFoundException is thrown,
-   * otherwise the user is returned.
-   *
-   * @param mail the mail address to look for
-   * @return returns the user found with the mail address
-   * @throws MailNotFoundException
-   */
-  public UserEntity getUserByMail(String mail) throws MailNotFoundException {
-    UserEntity userEntity = userRepository.findByMail(mail);
-
-    if (userEntity == null) throw new MailNotFoundException();
-    else return userEntity;
-  }
-
-  /**
-   * Searches for a user using the ID. If one is found, the user is returned, otherwise a
-   * UserIdNotFoundException is thrown.
-   *
-   * @param id the ID to look for
-   * @return returns the user found with the ID
-   * @throws UserIdNotFoundException
-   */
-  public UserEntity getUserById(long id) throws UserIdNotFoundException {
-    return userRepository.findById(id).orElseThrow(UserIdNotFoundException::new);
-  }
-
-  /**
-   * Deletes an existing token. A new token is then generated for the corresponding user.
-   *
-   * @param userEntity the specific user
-   * @param token a token, which usually contains a random UUID
-   */
-  public ForgotPasswordTokenEntity createForgotPasswordTokenForUser(
-      UserEntity userEntity, String token) {
-    ForgotPasswordTokenEntity oldForgotPasswordTokenEntity =
-        forgotPasswordTokenRepository.findByUser(userEntity);
-    if (oldForgotPasswordTokenEntity != null)
-      forgotPasswordTokenRepository.delete(oldForgotPasswordTokenEntity);
-
-    ForgotPasswordTokenEntity forgotPasswordTokenEntity =
-        new ForgotPasswordTokenEntity(userEntity, token);
-    forgotPasswordTokenRepository.save(forgotPasswordTokenEntity);
-    return forgotPasswordTokenEntity;
-  }
-
-  /**
-   * Looks for a token in the database that matches the passing token.
-   *
-   * <p>If none is available, INVALID (-1) is returned. If it is expired, EXPIRED (-2) is returned.
-   * If it is valid, the mail address of the corresponding user is validated and the token is
-   * deleted. Then VALID (0) is returned.
-   *
-   * @param token the token to look for
-   * @return returns a status code (INVALID, EXPIRED, VALID)
-   */
-  public int validateForgotPasswordToken(String token) {
-    ForgotPasswordTokenEntity forgotPasswordTokenEntity =
-        forgotPasswordTokenRepository.findByToken(token);
-
-    if (forgotPasswordTokenEntity == null) return TokenStatus.INVALID.statusCode();
-
-    Calendar calendar = Calendar.getInstance();
-
-    if ((Date.from(
-                    forgotPasswordTokenEntity
-                        .getExpiryDate()
-                        .atZone(ZoneId.systemDefault())
-                        .toInstant())
-                .getTime()
-            - calendar.getTime().getTime())
-        <= 0) {
-      return TokenStatus.EXPIRED.statusCode();
-    }
-
-    return TokenStatus.VALID.statusCode();
-  }
-
-  /**
-   * Searches for a user using a ForgotPasswordToken. If one is found, the user is returned,
-   * otherwise null is returned.
-   *
-   * @param forgotPasswordTokenString the ForgotPasswordToken to look for
-   * @return returns the user found with the ForgotPasswordToken
-   */
-  public UserEntity getUserByForgotPasswordToken(String forgotPasswordTokenString) {
-    ForgotPasswordTokenEntity forgotPasswordTokenEntity =
-        forgotPasswordTokenRepository.findByToken(forgotPasswordTokenString);
-    if (forgotPasswordTokenEntity != null) return forgotPasswordTokenEntity.getUserEntity();
-    else return null;
-  }
-
-  /**
-   * Deletes the passed token if it exists.
-   *
-   * @param token the token to be deleted
-   */
-  public void deleteForgotPasswordToken(String token) {
-    ForgotPasswordTokenEntity forgotPasswordTokenEntity =
-        forgotPasswordTokenRepository.findByToken(token);
-
-    if (forgotPasswordTokenEntity != null)
-      forgotPasswordTokenRepository.delete(forgotPasswordTokenEntity);
   }
 }

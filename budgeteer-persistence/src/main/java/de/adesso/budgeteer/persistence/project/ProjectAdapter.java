@@ -1,10 +1,12 @@
 package de.adesso.budgeteer.persistence.project;
 
 import de.adesso.budgeteer.common.date.DateRange;
+import de.adesso.budgeteer.core.exception.NotFoundException;
 import de.adesso.budgeteer.core.project.domain.Project;
 import de.adesso.budgeteer.core.project.domain.ProjectWithDate;
 import de.adesso.budgeteer.core.project.port.out.*;
 import de.adesso.budgeteer.core.project.port.out.RemoveUserFromProjectPort;
+import de.adesso.budgeteer.core.user.domain.User;
 import de.adesso.budgeteer.persistence.budget.BudgetRepository;
 import de.adesso.budgeteer.persistence.contract.ContractRepository;
 import de.adesso.budgeteer.persistence.imports.ImportRepository;
@@ -141,18 +143,26 @@ public class ProjectAdapter
 
   @Override
   @Transactional
-  public void addUserToProject(long userId, long projectId) {
-    var projectEntity = projectRepository.findById(projectId).orElseThrow();
-    var userEntity = userRepository.findById(userId).orElseThrow();
+  public void addUserToProject(long userId, long projectId) throws NotFoundException {
+    var projectEntity =
+        projectRepository
+            .findById(projectId)
+            .orElseThrow(() -> new NotFoundException(Project.class));
+    var userEntity =
+        userRepository.findById(userId).orElseThrow(() -> new NotFoundException(User.class));
     projectEntity.getAuthorizedUsers().add(userEntity);
     projectRepository.save(projectEntity);
   }
 
   @Override
   @Transactional
-  public void removeUserFromProject(long userId, long projectId) {
-    var projectEntity = projectRepository.findById(projectId).orElseThrow();
-    var userEntity = userRepository.findById(userId).orElseThrow();
+  public void removeUserFromProject(long userId, long projectId) throws NotFoundException {
+    var projectEntity =
+        projectRepository
+            .findById(projectId)
+            .orElseThrow(() -> new NotFoundException(Project.class));
+    var userEntity =
+        userRepository.findById(userId).orElseThrow(() -> new NotFoundException(User.class));
     projectEntity.getAuthorizedUsers().remove(userEntity);
     projectRepository.save(projectEntity);
   }

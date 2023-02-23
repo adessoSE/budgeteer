@@ -11,6 +11,8 @@
                             http://www.mockito.org/spring/mockito.xsd">
 
     <context:component-scan base-package="org.wickedsource.budgeteer.service"/>
+    <context:component-scan base-package="de.adesso.budgeteer.core"/>
+    <context:component-scan base-package="de.adesso.budgeteer.persistence"/>
 
     <mockito:mock id="dateProvider" class="org.wickedsource.budgeteer.service.DateProvider"/>
 

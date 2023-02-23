@@ -1,5 +1,6 @@
 package de.adesso.budgeteer.rest.project;
 
+import de.adesso.budgeteer.core.exception.NotFoundException;
 import de.adesso.budgeteer.core.project.ProjectException;
 import de.adesso.budgeteer.core.project.port.in.*;
 import de.adesso.budgeteer.rest.project.errors.CreateProjectError;
@@ -88,14 +89,16 @@ public class ProjectController {
   @PostMapping("/{projectId}/user")
   public void addUserToProject(
       @PathVariable("projectId") ProjectIdModel projectIdModel,
-      @RequestParam UserIdModel userIdModel) {
+      @RequestParam UserIdModel userIdModel)
+      throws NotFoundException {
     addUserToProjectUseCase.addUserToProject(userIdModel.getValue(), projectIdModel.getValue());
   }
 
   @DeleteMapping("/{projectId}/user")
   public void removeUserFromProject(
       @PathVariable("projectId") ProjectIdModel projectIdModel,
-      @RequestParam UserIdModel userIdModel) {
+      @RequestParam UserIdModel userIdModel)
+      throws NotFoundException {
     removeUserFromProjectUseCase.removeUserFromProject(
         userIdModel.getValue(), projectIdModel.getValue());
   }

@@ -28,4 +28,9 @@
 
     <mockito:mock id="templateService" class="org.wickedsource.budgeteer.service.template.TemplateService"/>
 
+    <mockito:mock id="changeForgottenPasswordUseCase" class="de.adesso.budgeteer.core.user.port.in.ChangeForgottenPasswordUseCase"/>
+    <mockito:mock id="resendVerificationTokenUseCase" class="de.adesso.budgeteer.core.user.port.in.ResendVerificationTokenUseCase"/>
+    <mockito:mock id="getUserWithEmailUseCase" class="de.adesso.budgeteer.core.user.port.in.GetUserWithEmailUseCase"/>
+
+
 </beans>

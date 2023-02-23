@@ -17,15 +17,18 @@ import org.kubek2k.springockito.annotations.SpringockitoContextLoader;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.wickedsource.budgeteer.JavaMailMock;
 import org.wickedsource.budgeteer.importer.aproda.AprodaWorkRecordsImporter;
 import org.wickedsource.budgeteer.imports.api.ImportException;
 import org.wickedsource.budgeteer.imports.api.ImportFile;
 import org.wickedsource.budgeteer.imports.api.InvalidFileFormatException;
 
 @ExtendWith(SpringExtension.class)
-@Import(PasswordHasher.class)
+@Import({PasswordHasher.class, JavaMailMock.class})
+@PropertySource("classpath:application.properties")
 @ContextConfiguration(
     loader = SpringockitoContextLoader.class,
     locations = {"classpath:spring-service.xml", "classpath:spring-repository-mock.xml"})

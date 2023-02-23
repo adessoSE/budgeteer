@@ -14,4 +14,11 @@ public class UserMapper extends AbstractMapper<UserEntity, User> {
     user.setName(entity.getName());
     return user;
   }
+
+  public User map(de.adesso.budgeteer.core.user.domain.User domainUser) {
+    var user = new User();
+    user.setId(domainUser.getId());
+    user.setName(domainUser.getName());
+    return user;
+  }
 }

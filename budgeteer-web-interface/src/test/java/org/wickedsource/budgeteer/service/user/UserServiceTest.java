@@ -1,11 +1,16 @@
 package org.wickedsource.budgeteer.service.user;
 
-import static org.mockito.BDDMockito.given;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
 import static org.mockito.Mockito.*;
 
-import de.adesso.budgeteer.core.user.PasswordHasher;
-import de.adesso.budgeteer.persistence.project.ProjectEntity;
-import de.adesso.budgeteer.persistence.project.ProjectRepository;
+import de.adesso.budgeteer.core.exception.NotFoundException;
+import de.adesso.budgeteer.core.project.domain.Project;
+import de.adesso.budgeteer.core.project.port.in.AddUserToProjectUseCase;
+import de.adesso.budgeteer.core.project.port.in.RemoveUserFromProjectUseCase;
+import de.adesso.budgeteer.core.user.*;
+import de.adesso.budgeteer.core.user.domain.UserWithEmail;
+import de.adesso.budgeteer.core.user.port.in.*;
 import de.adesso.budgeteer.persistence.user.*;
 import java.util.*;
 import org.junit.jupiter.api.Assertions;
@@ -19,29 +24,47 @@ import org.wickedsource.budgeteer.service.UnknownEntityException;
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
 
-  @Mock private UserRepository userRepository;
-  @Mock private ProjectRepository projectRepository;
-  @Mock private VerificationTokenRepository verificationTokenRepository;
-  @Mock private ForgotPasswordTokenRepository forgotPasswordTokenRepository;
   @Mock private PasswordHasher passwordHasher;
+
+  @Mock private GetUsersInProjectUseCase getUsersInProjectUseCase;
+  @Mock private GetUsersNotInProjectUseCase getUsersNotInProjectUseCase;
+  @Mock private RemoveUserFromProjectUseCase removeUserFromProjectUseCase;
+  @Mock private AddUserToProjectUseCase addUserToProjectUseCase;
+  @Mock private LoginUseCase loginUseCase;
+  @Mock private RegisterUseCase registerUseCase;
+  @Mock private GetUserWithEmailUseCase getUserWithEmailUseCase;
+  @Mock private UpdateUserUseCase updateUserUseCase;
+  @Mock private VerifyEmailUseCase verifyEmailUseCase;
+  @Mock private ResetPasswordUseCase resetPasswordUseCase;
   @Mock UserMapper userMapper;
   @InjectMocks private UserService service;
 
   @Test
   void testRegisterUser() throws Exception {
-    service.registerUser("User", "", "Password");
-    verify(userRepository, times(1)).save(any(UserEntity.class));
+    var username = "User";
+    var password = "Password";
+    var hashedPassword = "asdf;jkas";
+    when(passwordHasher.hash(password)).thenReturn(hashedPassword);
+
+    service.registerUser(username, "", password);
+
+    verify(registerUseCase, times(1))
+        .register(new RegisterUseCase.RegisterCommand(username, "", hashedPassword));
   }
 
   @Test
-  void testDuplicateUsernameDuringRegistration() {
-    Assertions.assertThrows(
-        UsernameAlreadyInUseException.class,
-        () -> {
-          when(userRepository.findByName("User")).thenReturn(null, new UserEntity());
-          service.registerUser("User", "", "Password");
-          service.registerUser("User", "", "Password");
-        });
+  void testDuplicateUsernameDuringRegistration() throws UserException {
+    var exception = new UserException();
+    exception.addCause(UserException.UserErrors.USERNAME_ALREADY_IN_USE);
+    var username = "username";
+    var hashedPassword = ";djaks;df";
+    when(passwordHasher.hash(any())).thenReturn(hashedPassword);
+    doThrow(exception)
+        .when(registerUseCase)
+        .register(new RegisterUseCase.RegisterCommand(username, "", hashedPassword));
+
+    assertThatExceptionOfType(UsernameAlreadyInUseException.class)
+        .isThrownBy(() -> service.registerUser(username, "", "password"));
   }
 
   @Test
@@ -49,351 +72,306 @@ class UserServiceTest {
     var username = "username";
     var password = "password";
     var hashedPassword = "hashed-password";
-    var userEntity = createUserEntity();
-    given(passwordHasher.hash(password)).willReturn(hashedPassword);
-    given(userRepository.findByNameOrMailAndPassword(username, hashedPassword))
-        .willReturn(userEntity);
-    given(userMapper.map(userEntity)).willReturn(new User());
+    var user = new de.adesso.budgeteer.core.user.domain.User(1L, username);
+    when(passwordHasher.hash(password)).thenReturn(hashedPassword);
+    when(loginUseCase.login(username, hashedPassword)).thenReturn(user);
+    when(userMapper.map(user)).thenReturn(new User());
 
-    User user = service.login(username, password);
+    var webUser = service.login(username, password);
 
-    Assertions.assertNotNull(user);
+    Assertions.assertNotNull(webUser);
   }
 
   @Test
-  void testLoginFail() {
-    var user = "username";
+  void testLoginFail() throws de.adesso.budgeteer.core.user.InvalidLoginCredentialsException {
+    var username = "username";
     var password = "password";
     var hashedPassword = "hashed-password";
     when(passwordHasher.hash(password)).thenReturn(hashedPassword);
-    when(userRepository.findByNameOrMailAndPassword(user, hashedPassword)).thenReturn(null);
+    doThrow(de.adesso.budgeteer.core.user.InvalidLoginCredentialsException.class)
+        .when(loginUseCase)
+        .login(username, hashedPassword);
+
     Assertions.assertThrows(
-        InvalidLoginCredentialsException.class, () -> service.login(user, password));
+        InvalidLoginCredentialsException.class, () -> service.login(username, password));
   }
 
   @Test
-  void testAddUserToProjectSuccess() {
-    when(userRepository.findById(1L)).thenReturn(createUserEntityOptional());
-    when(projectRepository.findById(1L)).thenReturn(Optional.of(createProjectEntity()));
-    service.addUserToProject(1L, 1L);
-    // assertion not possible when mocking repository
-  }
-
-  @Test
-  void testAddUserToProjectFailProjectNotFound() {
+  void testAddUserToProjectSuccess() throws NotFoundException {
     var projectId = 1L;
     var userId = 2L;
-    when(projectRepository.findById(projectId)).thenReturn(Optional.empty());
-    Assertions.assertThrows(
-        UnknownEntityException.class, () -> service.addUserToProject(projectId, userId));
+    doNothing().when(addUserToProjectUseCase).addUserToProject(userId, projectId);
+
+    service.addUserToProject(projectId, userId);
+
+    verify(addUserToProjectUseCase).addUserToProject(userId, projectId);
   }
 
   @Test
-  void testAddUserToProjectFailUserNotFound() {
-    Assertions.assertThrows(
-        UnknownEntityException.class,
-        () -> {
-          when(projectRepository.findById(1L)).thenReturn(Optional.of(createProjectEntity()));
-          service.addUserToProject(1L, 1L);
-        });
-  }
-
-  @Test
-  void testRemoveUserFromProjectSuccess() {
-    when(userRepository.findById(1L)).thenReturn(createUserEntityOptional());
-    when(projectRepository.findById(1L)).thenReturn(Optional.of(createProjectEntity()));
-    service.removeUserFromProject(1L, 1L);
-    // assertion not possible when mocking repository
-  }
-
-  @Test
-  void testRemoveUserFromProjectFailProjectNotFound() {
+  void testAddUserToProjectFailProjectNotFound() throws NotFoundException {
     var projectId = 1L;
     var userId = 2L;
-    when(projectRepository.findById(1L)).thenReturn(Optional.empty());
-    Assertions.assertThrows(
-        UnknownEntityException.class, () -> service.removeUserFromProject(projectId, userId));
+    doThrow(new NotFoundException(Project.class))
+        .when(addUserToProjectUseCase)
+        .addUserToProject(userId, projectId);
+
+    assertThatExceptionOfType(UnknownEntityException.class)
+        .isThrownBy(() -> service.addUserToProject(projectId, userId));
   }
 
   @Test
-  void testRemoveUserFromProjectFailUserNotFound() {
-    Assertions.assertThrows(
-        UnknownEntityException.class,
-        () -> {
-          when(projectRepository.findById(1L)).thenReturn(Optional.of(createProjectEntity()));
-          service.removeUserFromProject(1L, 1L);
-        });
+  void testAddUserToProjectFailUserNotFound() throws NotFoundException {
+    var projectId = 1L;
+    var userId = 2L;
+    doThrow(new NotFoundException(de.adesso.budgeteer.core.user.domain.User.class))
+        .when(addUserToProjectUseCase)
+        .addUserToProject(userId, projectId);
+
+    assertThatExceptionOfType(UnknownEntityException.class)
+        .isThrownBy(() -> service.addUserToProject(projectId, userId));
+  }
+
+  @Test
+  void testRemoveUserFromProjectSuccess() throws NotFoundException {
+    var projectId = 1L;
+    var userId = 2L;
+    doNothing().when(removeUserFromProjectUseCase).removeUserFromProject(userId, projectId);
+
+    service.removeUserFromProject(projectId, userId);
+
+    verify(removeUserFromProjectUseCase).removeUserFromProject(userId, projectId);
+  }
+
+  @Test
+  void testRemoveUserFromProjectFailProjectNotFound() throws NotFoundException {
+    var projectId = 1L;
+    var userId = 2L;
+    doThrow(new NotFoundException(Project.class))
+        .when(removeUserFromProjectUseCase)
+        .removeUserFromProject(userId, projectId);
+
+    assertThatExceptionOfType(UnknownEntityException.class)
+        .isThrownBy(() -> service.removeUserFromProject(projectId, userId));
+  }
+
+  @Test
+  void testRemoveUserFromProjectFailUserNotFound() throws NotFoundException {
+    var projectId = 1L;
+    var userId = 2L;
+    doThrow(new NotFoundException(de.adesso.budgeteer.core.user.domain.User.class))
+        .when(removeUserFromProjectUseCase)
+        .removeUserFromProject(userId, projectId);
+
+    assertThatExceptionOfType(UnknownEntityException.class)
+        .isThrownBy(() -> service.removeUserFromProject(projectId, userId));
   }
 
   @Test
   void testGetUsersNotInProject() {
-    var userEntities = List.of(createUserEntity());
+    var projectId = 1L;
+    var user = new de.adesso.budgeteer.core.user.domain.User(1L, "name");
+    var users = List.of(user);
+    when(getUsersNotInProjectUseCase.getUsersNotInProject(projectId)).thenReturn(users);
     var name = "user";
-    var user = new User();
-    user.setName(name);
-    List<User> expectedUsers = List.of(user);
-    when(userRepository.findNotInProject(1L)).thenReturn(userEntities);
-    when(userMapper.map(userEntities)).thenReturn(expectedUsers);
-    List<User> users = service.getUsersNotInProject(1L);
-    Assertions.assertEquals(1, users.size());
-    Assertions.assertEquals(name, users.get(0).getName());
+    var webUser = new User();
+    webUser.setName(name);
+    when(userMapper.map(user)).thenReturn(webUser);
+
+    var result = service.getUsersNotInProject(1L);
+
+    assertThat(result).containsExactly(webUser);
   }
 
   @Test
   void testGetUsersInProject() {
+    var projectId = 1L;
+    var user = new de.adesso.budgeteer.core.user.domain.User(1L, "name");
+    var users = List.of(user);
+    when(getUsersNotInProjectUseCase.getUsersNotInProject(projectId)).thenReturn(users);
     var name = "user";
-    var userEntities = List.of(createUserEntity());
-    var expectedUser = new User();
-    expectedUser.setName(name);
-    when(userRepository.findInProject(1L)).thenReturn(userEntities);
-    when(userMapper.map(userEntities)).thenReturn(List.of(expectedUser));
-    List<User> users = service.getUsersInProject(1L);
-    Assertions.assertEquals(1, users.size());
-    Assertions.assertEquals("user", users.get(0).getName());
+    var webUser = new User();
+    webUser.setName(name);
+    when(userMapper.map(user)).thenReturn(webUser);
+
+    var result = service.getUsersNotInProject(1L);
+
+    assertThat(result).containsExactly(webUser);
   }
 
   @Test
-  void testCheckPassword() {
-    var correctPassword = "password";
-    var incorrectPassword = "PASSWORD";
-    var userEntity = createUserEntityOptional();
-    when(passwordHasher.hash(correctPassword)).thenReturn(correctPassword);
-    when(passwordHasher.hash(incorrectPassword)).thenReturn(incorrectPassword);
-    when(userRepository.findById(1L)).thenReturn(userEntity);
-    Assertions.assertTrue(service.checkPassword(1L, "password"));
-    Assertions.assertFalse(service.checkPassword(1L, "PASSWORD"));
+  void checkPasswordShouldReturnTrueIfPasswordMatches()
+      throws de.adesso.budgeteer.core.user.InvalidLoginCredentialsException {
+    var userId = 1L;
+    var username = "username";
+    var password = "password";
+    when(getUserWithEmailUseCase.getUserWithEmail(userId))
+        .thenReturn(new UserWithEmail(userId, username, ""));
+    when(passwordHasher.hash(password)).thenReturn(password);
+    when(loginUseCase.login(username, password)).thenReturn(null);
+
+    var result = service.checkPassword(userId, password);
+
+    assertThat(result).isTrue();
   }
 
   @Test
-  void testResetPasswordMailNotFoundException() {
+  void checkPasswordShouldReturnFalseIfPasswordIsWrong()
+      throws de.adesso.budgeteer.core.user.InvalidLoginCredentialsException {
+    var userId = 1L;
+    var username = "username";
+    var password = "password";
+    when(getUserWithEmailUseCase.getUserWithEmail(userId))
+        .thenReturn(new UserWithEmail(userId, username, ""));
+    when(passwordHasher.hash(password)).thenReturn(password);
+    doThrow(de.adesso.budgeteer.core.user.InvalidLoginCredentialsException.class)
+        .when(loginUseCase)
+        .login(username, password);
+
+    var result = service.checkPassword(userId, password);
+
+    assertThat(result).isFalse();
+  }
+
+  @Test
+  void testResetPasswordMailNotFoundException()
+      throws de.adesso.budgeteer.core.user.MailNotFoundException, MailNotEnabledException,
+          de.adesso.budgeteer.core.user.MailNotVerifiedException {
     var email = "nonuser@budgeteer.local";
-    when(userRepository.findByMail(email)).thenReturn(null);
+    doThrow(de.adesso.budgeteer.core.user.MailNotFoundException.class)
+        .when(resetPasswordUseCase)
+        .resetPassword(email);
+
     Assertions.assertThrows(MailNotFoundException.class, () -> service.resetPassword(email));
   }
 
   @Test
-  void testResetPasswordMailNotVerifiedException() {
-    Assertions.assertThrows(
-        MailNotVerifiedException.class,
-        () -> {
-          UserEntity user = createUserEntity();
-          user.setMailVerified(false);
-          when(userRepository.findByMail("user@budgeteer.local")).thenReturn(user);
-          service.resetPassword("user@budgeteer.local");
-        });
+  void testResetPasswordMailNotVerifiedException()
+      throws de.adesso.budgeteer.core.user.MailNotFoundException, MailNotEnabledException,
+          de.adesso.budgeteer.core.user.MailNotVerifiedException {
+    var email = "user@budgeteer.local";
+    doThrow(de.adesso.budgeteer.core.user.MailNotVerifiedException.class)
+        .when(resetPasswordUseCase)
+        .resetPassword(email);
+    Assertions.assertThrows(MailNotVerifiedException.class, () -> service.resetPassword(email));
   }
 
   @Test
   void testLoadUserToEdit() {
-    Optional<UserEntity> userMockOptional = createUserEntityOptional();
-    when(userRepository.findById(1L)).thenReturn(userMockOptional);
-    EditUserData user = service.loadUserToEdit(1L);
-    UserEntity userMock = userMockOptional.get();
-    Assertions.assertEquals(userMock.getId(), user.getId());
-    Assertions.assertEquals(userMock.getMail(), user.getMail());
-    Assertions.assertEquals(userMock.getName(), user.getName());
-    Assertions.assertEquals(userMock.getPassword(), user.getPassword());
+    var userWithMail = new UserWithEmail(1L, "username", "");
+    when(getUserWithEmailUseCase.getUserWithEmail(userWithMail.getId())).thenReturn(userWithMail);
+    var expected = new EditUserData();
+    expected.setId(userWithMail.getId());
+    expected.setName(userWithMail.getName());
+    expected.setMail(userWithMail.getEmail());
+
+    var result = service.loadUserToEdit(userWithMail.getId());
+
+    assertThat(result).isEqualTo(expected);
   }
 
   @Test
-  void testSaveUserUsernameAlreadyInUseException() {
-    Assertions.assertThrows(
-        UsernameAlreadyInUseException.class,
-        () -> {
-          Optional<UserEntity> user = createUserEntityOptional();
-          UserEntity user2 = createUserEntity();
-          user2.setId(2L);
-          user2.setName("user2");
-          when(userRepository.findById(1L)).thenReturn(user);
-          EditUserData editUserData = service.loadUserToEdit(1L);
-          when(userRepository.findByName("user2")).thenReturn(user2);
-          editUserData.setName("user2");
-          service.saveUser(editUserData, false);
-        });
+  void testSaveUserUsernameAlreadyInUseException()
+      throws de.adesso.budgeteer.core.user.UsernameAlreadyInUseException,
+          de.adesso.budgeteer.core.user.InvalidLoginCredentialsException,
+          de.adesso.budgeteer.core.user.MailAlreadyInUseException {
+    var editUserData = new EditUserData();
+    editUserData.setId(1L);
+    editUserData.setName("name");
+    editUserData.setMail("mail");
+    editUserData.setPassword("old-password");
+    editUserData.setNewPassword("new-password");
+    when(passwordHasher.hash(any())).thenAnswer(invocation -> invocation.getArgument(0));
+    doThrow(de.adesso.budgeteer.core.user.UsernameAlreadyInUseException.class)
+        .when(updateUserUseCase)
+        .updateUser(
+            new UpdateUserUseCase.UpdateUserCommand(
+                editUserData.getId(),
+                editUserData.getName(),
+                editUserData.getMail(),
+                editUserData.getPassword(),
+                editUserData.getNewPassword()));
+
+    assertThatExceptionOfType(UsernameAlreadyInUseException.class)
+        .isThrownBy(() -> service.saveUser(editUserData));
   }
 
   @Test
-  void testSaveUserMailAlreadyInUseException() {
-    Assertions.assertThrows(
-        MailAlreadyInUseException.class,
-        () -> {
-          Optional<UserEntity> user = createUserEntityOptional();
-          UserEntity user2 = createUserEntity();
-          user2.setId(2L);
-          user2.setMail("user2@budgeteer.local");
-          when(userRepository.findById(1L)).thenReturn(user);
-          EditUserData editUserData = service.loadUserToEdit(1L);
-          when(userRepository.findByMail("user2@budgeteer.local")).thenReturn(user2);
-          editUserData.setMail("user2@budgeteer.local");
-          service.saveUser(editUserData, false);
-        });
+  void testSaveUserMailAlreadyInUseException()
+      throws de.adesso.budgeteer.core.user.UsernameAlreadyInUseException,
+          de.adesso.budgeteer.core.user.InvalidLoginCredentialsException,
+          de.adesso.budgeteer.core.user.MailAlreadyInUseException {
+    var editUserData = new EditUserData();
+    editUserData.setId(1L);
+    editUserData.setName("name");
+    editUserData.setMail("mail");
+    editUserData.setPassword("old-password");
+    editUserData.setNewPassword("new-password");
+    when(passwordHasher.hash(any())).thenAnswer(invocation -> invocation.getArgument(0));
+    doThrow(de.adesso.budgeteer.core.user.MailAlreadyInUseException.class)
+        .when(updateUserUseCase)
+        .updateUser(
+            new UpdateUserUseCase.UpdateUserCommand(
+                editUserData.getId(),
+                editUserData.getName(),
+                editUserData.getMail(),
+                editUserData.getPassword(),
+                editUserData.getNewPassword()));
+
+    assertThatExceptionOfType(MailAlreadyInUseException.class)
+        .isThrownBy(() -> service.saveUser(editUserData));
   }
 
   @Test
-  void testSaveUser() throws MailAlreadyInUseException, UsernameAlreadyInUseException {
-    Optional<UserEntity> user = createUserEntityOptional();
-    when(userRepository.findById(1L)).thenReturn(user);
-    EditUserData editUserData = service.loadUserToEdit(1L);
-    editUserData.setName("user2");
-    service.saveUser(editUserData, false);
-    Assertions.assertEquals(editUserData.getName(), user.get().getName());
+  void testSaveUser()
+      throws de.adesso.budgeteer.core.user.UsernameAlreadyInUseException,
+          de.adesso.budgeteer.core.user.InvalidLoginCredentialsException,
+          de.adesso.budgeteer.core.user.MailAlreadyInUseException, UsernameAlreadyInUseException,
+          MailAlreadyInUseException {
+    var editUserData = new EditUserData();
+    editUserData.setId(1L);
+    editUserData.setName("name");
+    editUserData.setMail("mail");
+    editUserData.setPassword("old-password");
+    editUserData.setNewPassword("new-password");
+    when(passwordHasher.hash(any())).thenAnswer(invocation -> invocation.getArgument(0));
+    var command =
+        new UpdateUserUseCase.UpdateUserCommand(
+            editUserData.getId(),
+            editUserData.getName(),
+            editUserData.getMail(),
+            editUserData.getPassword(),
+            editUserData.getNewPassword());
+    doNothing().when(updateUserUseCase).updateUser(command);
+
+    service.saveUser(editUserData);
+
+    verify(updateUserUseCase).updateUser(command);
   }
 
   @Test
-  void testCreateVerificationTokenForUser() {
-    UserEntity user = createUserEntity();
+  void testValidateVerificationTokenInvalid()
+      throws ExpiredVerificationTokenException, InvalidVerificationTokenException {
     String uuid = UUID.randomUUID().toString();
-    VerificationTokenEntity verificationTokenEntity =
-        service.createVerificationTokenForUser(user, uuid);
-    verify(verificationTokenRepository, times(1)).save(verificationTokenEntity);
-  }
+    doThrow(InvalidVerificationTokenException.class).when(verifyEmailUseCase).verifyEmail(uuid);
 
-  @Test
-  void testValidateVerificationTokenInvalid() {
-    String uuid = UUID.randomUUID().toString();
     Assertions.assertEquals(-1, service.validateVerificationToken(uuid));
   }
 
   @Test
-  void testValidateVerificationTokenExpired() {
-    UserEntity user = createUserEntity();
+  void testValidateVerificationTokenExpired()
+      throws ExpiredVerificationTokenException, InvalidVerificationTokenException {
     String uuid = UUID.randomUUID().toString();
-    VerificationTokenEntity verificationTokenEntity = new VerificationTokenEntity(user, uuid);
-    verificationTokenEntity.setExpiryDate(verificationTokenEntity.getExpiryDate().minusHours(25));
-    when(verificationTokenRepository.findByToken(uuid)).thenReturn(verificationTokenEntity);
+    doThrow(ExpiredVerificationTokenException.class).when(verifyEmailUseCase).verifyEmail(uuid);
+
     Assertions.assertEquals(-2, service.validateVerificationToken(uuid));
   }
 
   @Test
-  void testValidateVerificationTokenValid() {
-    UserEntity user = createUserEntity();
+  void testValidateVerificationTokenValid()
+      throws ExpiredVerificationTokenException, InvalidVerificationTokenException {
     String uuid = UUID.randomUUID().toString();
-    VerificationTokenEntity verificationTokenEntity = new VerificationTokenEntity(user, uuid);
-    when(verificationTokenRepository.findByToken(uuid)).thenReturn(verificationTokenEntity);
+    doNothing().when(verifyEmailUseCase).verifyEmail(uuid);
+
     Assertions.assertEquals(0, service.validateVerificationToken(uuid));
-  }
-
-  @Test
-  void getUserByMailMailNotFoundException() {
-    var email = "nonuser@budgeteer.local";
-    when(userRepository.findByMail(email)).thenReturn(null);
-    Assertions.assertThrows(MailNotFoundException.class, () -> service.getUserByMail(email));
-  }
-
-  @Test
-  void getUserByMail() throws MailNotFoundException {
-    when(userRepository.findByMail("user@budgeteer.local")).thenReturn(createUserEntity());
-    UserEntity user = service.getUserByMail("user@budgeteer.local");
-    Assertions.assertNotNull(user);
-  }
-
-  @Test
-  void getUserByIdUserIdNotFoundException() {
-    var userId = 1L;
-    when(userRepository.findById(userId)).thenReturn(Optional.empty());
-    Assertions.assertThrows(UserIdNotFoundException.class, () -> service.getUserById(userId));
-  }
-
-  @Test
-  void getUserById() throws UserIdNotFoundException {
-    when(userRepository.findById(1L)).thenReturn(createUserEntityOptional());
-    UserEntity user = service.getUserById(1L);
-    Assertions.assertNotNull(user);
-  }
-
-  @Test
-  void testCreateForgotPasswordTokenForUserWithOldToken() {
-    UserEntity user = createUserEntity();
-    String uuid = UUID.randomUUID().toString();
-    ForgotPasswordTokenEntity oldForgotPasswordTokenEntity =
-        new ForgotPasswordTokenEntity(user, uuid);
-    when(forgotPasswordTokenRepository.findByUser(user)).thenReturn(oldForgotPasswordTokenEntity);
-    ForgotPasswordTokenEntity newForgotPasswordTokenEntity =
-        service.createForgotPasswordTokenForUser(user, uuid);
-    verify(forgotPasswordTokenRepository, times(1)).delete(oldForgotPasswordTokenEntity);
-    verify(forgotPasswordTokenRepository, times(1)).save(newForgotPasswordTokenEntity);
-  }
-
-  @Test
-  void testValidateForgotPasswordTokenInvalid() {
-    String uuid = UUID.randomUUID().toString();
-    Assertions.assertEquals(-1, service.validateForgotPasswordToken(uuid));
-  }
-
-  @Test
-  void testValidateForgotPasswordTokenExpired() {
-    UserEntity user = createUserEntity();
-    String uuid = UUID.randomUUID().toString();
-    ForgotPasswordTokenEntity forgotPasswordTokenEntity = new ForgotPasswordTokenEntity(user, uuid);
-    var date = forgotPasswordTokenEntity.getExpiryDate().minusHours(25);
-    forgotPasswordTokenEntity.setExpiryDate(date);
-    when(forgotPasswordTokenRepository.findByToken(uuid)).thenReturn(forgotPasswordTokenEntity);
-    Assertions.assertEquals(-2, service.validateForgotPasswordToken(uuid));
-  }
-
-  @Test
-  void testValidateForgotPasswordTokenValid() {
-    UserEntity user = createUserEntity();
-    String uuid = UUID.randomUUID().toString();
-    ForgotPasswordTokenEntity forgotPasswordTokenEntity = new ForgotPasswordTokenEntity(user, uuid);
-    when(forgotPasswordTokenRepository.findByToken(uuid)).thenReturn(forgotPasswordTokenEntity);
-    Assertions.assertEquals(0, service.validateForgotPasswordToken(uuid));
-  }
-
-  @Test
-  void testGetUserByForgotPasswordTokenNotNull() {
-    UserEntity user = createUserEntity();
-    String uuid = UUID.randomUUID().toString();
-    ForgotPasswordTokenEntity forgotPasswordTokenEntity = new ForgotPasswordTokenEntity(user, uuid);
-    when(forgotPasswordTokenRepository.findByToken(uuid)).thenReturn(forgotPasswordTokenEntity);
-    UserEntity userResult = service.getUserByForgotPasswordToken(uuid);
-    Assertions.assertNotNull(userResult);
-  }
-
-  @Test
-  void testGetUserByForgotPasswordTokenNull() {
-    String uuid = UUID.randomUUID().toString();
-    UserEntity userResult = service.getUserByForgotPasswordToken(uuid);
-    Assertions.assertNull(userResult);
-  }
-
-  @Test
-  void testDeleteForgotPasswordToken() {
-    UserEntity user = createUserEntity();
-    String uuid = UUID.randomUUID().toString();
-    ForgotPasswordTokenEntity forgotPasswordTokenEntity = new ForgotPasswordTokenEntity(user, uuid);
-    when(forgotPasswordTokenRepository.findByToken(uuid)).thenReturn(forgotPasswordTokenEntity);
-    service.deleteForgotPasswordToken(uuid);
-    verify(forgotPasswordTokenRepository, times(1)).delete(forgotPasswordTokenEntity);
-  }
-
-  private UserEntity createUserEntity() {
-    UserEntity user = new UserEntity();
-    user.setId(1L);
-    user.setName("user");
-    user.setMail("user@budgeteer.local");
-    user.setMailVerified(true);
-    user.setPassword("password");
-    user.setAuthorizedProjects(new ArrayList<>());
-    return user;
-  }
-
-  private Optional<UserEntity> createUserEntityOptional() {
-    UserEntity user = new UserEntity();
-    user.setId(1L);
-    user.setName("user");
-    user.setMail("user@budgeteer.local");
-    user.setMailVerified(true);
-    user.setPassword("password");
-    user.setAuthorizedProjects(new ArrayList<>());
-    return Optional.of(user);
-  }
-
-  private ProjectEntity createProjectEntity() {
-    ProjectEntity project = new ProjectEntity();
-    project.setId(1L);
-    project.setName("name");
-    project.setAuthorizedUsers(new ArrayList<>());
-    return project;
   }
 }
