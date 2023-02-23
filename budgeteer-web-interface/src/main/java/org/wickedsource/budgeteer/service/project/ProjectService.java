@@ -1,50 +1,30 @@
 package org.wickedsource.budgeteer.service.project;
 
-import de.adesso.budgeteer.persistence.budget.BudgetRepository;
-import de.adesso.budgeteer.persistence.contract.ContractRepository;
-import de.adesso.budgeteer.persistence.imports.ImportRepository;
-import de.adesso.budgeteer.persistence.invoice.InvoiceRepository;
-import de.adesso.budgeteer.persistence.person.DailyRateRepository;
-import de.adesso.budgeteer.persistence.person.PersonRepository;
-import de.adesso.budgeteer.persistence.project.ProjectEntity;
-import de.adesso.budgeteer.persistence.project.ProjectRepository;
-import de.adesso.budgeteer.persistence.record.PlanRecordRepository;
-import de.adesso.budgeteer.persistence.record.WorkRecordRepository;
-import de.adesso.budgeteer.persistence.user.UserEntity;
-import de.adesso.budgeteer.persistence.user.UserRepository;
+import de.adesso.budgeteer.core.project.ProjectException;
+import de.adesso.budgeteer.core.project.port.in.*;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
-import org.wickedsource.budgeteer.service.DateRange;
+import org.wickedsource.budgeteer.service.DateUtil;
 import org.wickedsource.budgeteer.web.pages.administration.Project;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class ProjectService {
 
-  @Autowired private ProjectRepository projectRepository;
+  private final ProjectBaseDataMapper mapper;
 
-  @Autowired private UserRepository userRepository;
-
-  @Autowired private BudgetRepository budgetRepository;
-
-  @Autowired private PersonRepository personRepository;
-
-  @Autowired private ImportRepository importRepository;
-
-  @Autowired private PlanRecordRepository planRecordRepository;
-
-  @Autowired private WorkRecordRepository workRecordRepository;
-
-  @Autowired private ProjectBaseDataMapper mapper;
-
-  @Autowired private DailyRateRepository dailyRateRepository;
-
-  @Autowired private InvoiceRepository invoiceRepository;
-
-  @Autowired private ContractRepository contractRepository;
+  private final CreateProjectUseCase createProjectUseCase;
+  private final GetUsersProjectsUseCase getUsersProjectsUseCase;
+  private final GetDefaultProjectUseCase getDefaultProjectUseCase;
+  private final DeleteProjectUseCase deleteProjectUseCase;
+  private final UpdateDefaultProjectUseCase updateDefaultProjectUseCase;
+  private final GetProjectWithDateUseCase getProjectWithDateUseCase;
+  private final UpdateProjectUseCase updateProjectUseCase;
 
   /**
    * Creates a new empty project with the given name.
@@ -54,18 +34,16 @@ public class ProjectService {
    */
   public ProjectBaseData createProject(String projectName, long initialUserId)
       throws ProjectNameAlreadyInUseException {
-    UserEntity user = userRepository.findById(initialUserId).orElseThrow(RuntimeException::new);
-    ProjectEntity project = new ProjectEntity();
-    for (ProjectEntity e : projectRepository.findAll()) {
-      if (e.getName().equals(projectName)) {
+    try {
+      return mapper.map(
+          createProjectUseCase.createProject(
+              new CreateProjectUseCase.CreateProjectCommand(projectName, initialUserId)));
+    } catch (ProjectException e) {
+      if (e.contains(ProjectException.ProjectErrors.NAME_ALREADY_IN_USE)) {
         throw new ProjectNameAlreadyInUseException();
       }
+      throw new IllegalStateException(e);
     }
-    project.setName(projectName);
-    project.setAuthorizedUsers(List.of(user));
-    ProjectEntity savedProject = projectRepository.save(project);
-    user.getAuthorizedProjects().add(savedProject);
-    return mapper.map(savedProject);
   }
 
   /**
@@ -75,8 +53,9 @@ public class ProjectService {
    * @return list of all projects the user has access to.
    */
   public List<ProjectBaseData> getProjectsForUser(long userId) {
-    UserEntity user = userRepository.findById(userId).orElseThrow(RuntimeException::new);
-    return mapper.map(user.getAuthorizedProjects());
+    return getUsersProjectsUseCase.getUsersProjects(userId).stream()
+        .map(mapper::map)
+        .collect(Collectors.toList());
   }
 
   /**
@@ -86,12 +65,7 @@ public class ProjectService {
    * @return the default project respectively null if no project is set as default
    */
   public ProjectBaseData getDefaultProjectForUser(long userId) {
-    UserEntity user = userRepository.findById(userId).orElseThrow(RuntimeException::new);
-    ProjectEntity defaultProject = user.getDefaultProject();
-    if (defaultProject == null) {
-      return null;
-    }
-    return mapper.map(defaultProject);
+    return getDefaultProjectUseCase.getDefaultProject(userId).map(mapper::map).orElse(null);
   }
 
   /**
@@ -101,30 +75,7 @@ public class ProjectService {
    */
   @PreAuthorize("canReadProject(#projectId)")
   public void deleteProject(long projectId) {
-    dailyRateRepository.deleteByProjectId(projectId);
-    planRecordRepository.deleteByImportAndProjectId(projectId);
-    workRecordRepository.deleteByImportAndProjectId(projectId);
-    importRepository.deleteByProjectId(projectId);
-    budgetRepository.deleteByProjectId(projectId);
-    personRepository.deleteByProjectId(projectId);
-    invoiceRepository.deleteInvoiceFieldByProjectId(projectId);
-    invoiceRepository.deleteContractInvoiceFieldByProject(projectId);
-    invoiceRepository.deleteByProjectId(projectId);
-    contractRepository.deleteContractFieldByProjectId(projectId);
-    contractRepository.deleteByProjectId(projectId);
-    ProjectEntity projectEntity = projectRepository.findById(projectId).orElse(null);
-    if (projectEntity != null) {
-      List<UserEntity> userList = projectEntity.getAuthorizedUsers();
-      if (userList != null) {
-        for (UserEntity u : userList) {
-          if (u.getDefaultProject() != null && u.getDefaultProject().getId() == projectId) {
-            u.setDefaultProject(null);
-            userRepository.save(u);
-          }
-        }
-      }
-    }
-    projectRepository.deleteById(projectId);
+    deleteProjectUseCase.deleteProject(projectId);
   }
 
   /**
@@ -134,26 +85,29 @@ public class ProjectService {
    * @param projectId ID of the project that should become the default-project
    */
   public void setDefaultProject(long userId, long projectId) {
-    ProjectEntity project =
-        projectRepository.findById(projectId).orElseThrow(RuntimeException::new);
-    UserEntity user = userRepository.findById(userId).orElseThrow(RuntimeException::new);
-    user.setDefaultProject(project);
-    userRepository.save(user);
+    updateDefaultProjectUseCase.updateDefaultProject(userId, projectId);
   }
 
   public Project findProjectById(long projectId) {
-    ProjectEntity entity = projectRepository.findById(projectId).orElseThrow(RuntimeException::new);
+    var project = getProjectWithDateUseCase.getProjectWithDate(projectId);
     return new Project(
-        entity.getId(), entity.getProjectStart(), entity.getProjectEnd(), entity.getName());
+        project.getId(),
+        DateUtil.toDate(project.getDateRange().getStartDate()),
+        DateUtil.toDate(project.getDateRange().getEndDate()),
+        project.getName());
   }
 
   public void save(Project project) {
-    ProjectEntity projectEntity =
-        projectRepository.findById(project.getProjectId()).orElseThrow(RuntimeException::new);
-    projectEntity.setName(project.getName());
-    DateRange dateRange = project.getDateRange();
-    projectEntity.setProjectStart(dateRange == null ? null : dateRange.getStartDate());
-    projectEntity.setProjectEnd(dateRange == null ? null : dateRange.getEndDate());
-    projectRepository.save(projectEntity);
+    try {
+      updateProjectUseCase.updateProject(
+          new UpdateProjectUseCase.UpdateProjectCommand(
+              project.getProjectId(),
+              project.getName(),
+              new de.adesso.budgeteer.common.date.DateRange(
+                  DateUtil.toLocalDate(project.getDateRange().getStartDate()),
+                  DateUtil.toLocalDate(project.getDateRange().getEndDate()))));
+    } catch (ProjectException e) {
+      /* Do nothing */
+    }
   }
 }

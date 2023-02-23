@@ -1,5 +1,6 @@
 package org.wickedsource.budgeteer.service.project;
 
+import de.adesso.budgeteer.core.project.domain.Project;
 import de.adesso.budgeteer.persistence.project.ProjectEntity;
 import org.springframework.stereotype.Component;
 import org.wickedsource.budgeteer.service.AbstractMapper;
@@ -13,5 +14,12 @@ public class ProjectBaseDataMapper extends AbstractMapper<ProjectEntity, Project
     project.setId(entity.getId());
     project.setName(entity.getName());
     return project;
+  }
+
+  public ProjectBaseData map(Project project) {
+    var projectBaseData = new ProjectBaseData();
+    projectBaseData.setId(project.getId());
+    projectBaseData.setName(project.getName());
+    return projectBaseData;
   }
 }

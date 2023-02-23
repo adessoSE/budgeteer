@@ -15,12 +15,13 @@ public class ProjectMapper {
   }
 
   public ProjectWithDate mapToProjectWithDate(ProjectEntity projectEntity) {
-    return new ProjectWithDate(
-        projectEntity.getId(),
-        projectEntity.getName(),
-        new DateRange(
-            new Date(projectEntity.getProjectStart().getTime()).toLocalDate(),
-            new Date(projectEntity.getProjectEnd().getTime()).toLocalDate()));
+    var dateRange =
+        projectEntity.getProjectStart() == null
+            ? new DateRange()
+            : new DateRange(
+                new Date(projectEntity.getProjectStart().getTime()).toLocalDate(),
+                new Date(projectEntity.getProjectEnd().getTime()).toLocalDate());
+    return new ProjectWithDate(projectEntity.getId(), projectEntity.getName(), dateRange);
   }
 
   public List<Project> mapToDomain(List<ProjectEntity> projectEntities) {
