@@ -9,7 +9,6 @@ import static org.wicketstuff.lazymodel.LazyModel.model;
 import de.adesso.budgeteer.persistence.template.TemplateEntity;
 import de.adesso.budgeteer.persistence.template.TemplateRepository;
 import java.io.IOException;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.jupiter.api.Assertions;

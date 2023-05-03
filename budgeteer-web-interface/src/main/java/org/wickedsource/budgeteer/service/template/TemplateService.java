@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.transaction.Transactional;
 import javax.validation.constraints.NotNull;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.wicket.model.IModel;

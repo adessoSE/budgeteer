@@ -4,20 +4,20 @@ import java.util.Date;
 
 public class DateColumn {
 
-    private final Date date;
+  private final Date date;
 
-    private final int columnIndex;
+  private final int columnIndex;
 
-    public DateColumn(Date date, int columnIndex) {
-        this.date = date;
-        this.columnIndex = columnIndex;
-    }
+  public DateColumn(Date date, int columnIndex) {
+    this.date = date;
+    this.columnIndex = columnIndex;
+  }
 
-    public Date getDate() {
-        return date;
-    }
+  public Date getDate() {
+    return date;
+  }
 
-    public int getColumnIndex() {
-        return columnIndex;
-    }
+  public int getColumnIndex() {
+    return columnIndex;
+  }
 }
