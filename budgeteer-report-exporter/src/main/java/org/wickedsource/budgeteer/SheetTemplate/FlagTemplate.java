@@ -31,7 +31,7 @@ public class FlagTemplate {
 	}
 
 	private boolean containsFlag(Cell cell) {
-		if(cell.getCellTypeEnum().equals(CellType.STRING)) {
+		if(cell.getCellType().equals(CellType.STRING)) {
 			return isFlagTag(cell.getStringCellValue());
 		}
 		else {

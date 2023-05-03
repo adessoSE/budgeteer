@@ -132,7 +132,7 @@ class SheetTemplateTest {
 	@Test
 	void testmapCellValueToFieldNamesWithDynamicAttribute() {
 		Cell cellMock = Mockito.mock(Cell.class);
-		when(cellMock.getCellTypeEnum()).thenReturn(CellType.STRING);
+		when(cellMock.getCellType()).thenReturn(CellType.STRING);
 		when(cellMock.getStringCellValue()).thenReturn("{dynamic.Bescha-Nr.}"); // valid
 
 		List<String> fields = st.mapCellValueToFieldNames(cellMock);
@@ -143,7 +143,7 @@ class SheetTemplateTest {
 	@Test
 	void testmapCellValueToFieldNamesWithDynamicAttributeAndNoSpecials() {
 		Cell cellMock = Mockito.mock(Cell.class);
-		when(cellMock.getCellTypeEnum()).thenReturn(CellType.STRING);
+		when(cellMock.getCellType()).thenReturn(CellType.STRING);
 		when(cellMock.getStringCellValue()).thenReturn("{dynamic.Bescha-Nr}"); //  valid
 
 		List<String> fields = st.mapCellValueToFieldNames(cellMock);
@@ -155,7 +155,7 @@ class SheetTemplateTest {
 	@Test
 	void testmapCellValueToFieldNamesWithRawValue() {
 		Cell cellMock = Mockito.mock(Cell.class);
-		when(cellMock.getCellTypeEnum()).thenReturn(CellType.STRING);
+		when(cellMock.getCellType()).thenReturn(CellType.STRING);
 		when(cellMock.getStringCellValue()).thenReturn("{dynamic}"); // valid
 		List<String> fields = st.mapCellValueToFieldNames(cellMock);
 		Assertions.assertThat(fields).contains("dynamic");
@@ -165,7 +165,7 @@ class SheetTemplateTest {
 	@Test
 	void testmapCellValueToFieldNamesWithStartingDot() {
 		Cell cellMock = Mockito.mock(Cell.class);
-		when(cellMock.getCellTypeEnum()).thenReturn(CellType.STRING);
+		when(cellMock.getCellType()).thenReturn(CellType.STRING);
 		when(cellMock.getStringCellValue()).thenReturn("{.test}"); // not valid
 
 		List<String> fields = st.mapCellValueToFieldNames(cellMock);
@@ -177,7 +177,7 @@ class SheetTemplateTest {
 	@Test
 	void testmapCellValueToFieldNamesWithMultipleFields() {
 		Cell cellMock = Mockito.mock(Cell.class);
-		when(cellMock.getCellTypeEnum()).thenReturn(CellType.STRING);
+		when(cellMock.getCellType()).thenReturn(CellType.STRING);
 		when(cellMock.getStringCellValue()).thenReturn("{test} - {dynamic.name}"); // not valid
 
 		List<String> fields = st.mapCellValueToFieldNames(cellMock);
@@ -195,7 +195,7 @@ class SheetTemplateTest {
 		when(st.dtoHasField("veryDynamic")).thenReturn(true);
 
 		Cell cellMock = Mockito.mock(Cell.class);
-		when(cellMock.getCellTypeEnum()).thenReturn(CellType.STRING);
+		when(cellMock.getCellType()).thenReturn(CellType.STRING);
 		when(cellMock.getStringCellValue()).thenReturn("{dynamic.test} - {veryDynamic.attribute}"); // not valid
 
 		List<String> fields = st.mapCellValueToFieldNames(cellMock);
@@ -210,7 +210,7 @@ class SheetTemplateTest {
 		st = spy(st);
 		when(st.dtoHasField("test_name")).thenReturn(true);
 		Cell cellMock = Mockito.mock(Cell.class);
-		when(cellMock.getCellTypeEnum()).thenReturn(CellType.STRING);
+		when(cellMock.getCellType()).thenReturn(CellType.STRING);
 		when(cellMock.getStringCellValue()).thenReturn("{test_name}"); // not valid
 
 		List<String> fields = st.mapCellValueToFieldNames(cellMock);

@@ -102,7 +102,7 @@ public class TemplateWriter<T> {
 
 	private void replaceTemplateTagInCell(String fieldname, Object fieldValue, Cell currentCell) {
 		String fieldValueString = (null != fieldValue) ? fieldValue.toString() : "";
-		if(currentCell.getCellTypeEnum().equals(CellType.FORMULA)) {
+		if(currentCell.getCellType().equals(CellType.FORMULA)) {
 			String formula = currentCell.getCellFormula();
 			String templateTag = String.format(TEMPLATE_TAG_FORMAT, fieldname);
 			String newFormula = formula.replaceAll(templateTag, fieldValueString);
@@ -201,7 +201,7 @@ public class TemplateWriter<T> {
 	}
 	
 	void copyCellValues(Cell copyCell, Cell insertCell) {
-		switch (copyCell.getCellTypeEnum()) {
+		switch (copyCell.getCellType()) {
 		case STRING:
 			insertCell.setCellValue(copyCell.getStringCellValue());
 			break;

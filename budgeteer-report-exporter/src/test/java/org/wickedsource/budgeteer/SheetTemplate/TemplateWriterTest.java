@@ -103,8 +103,8 @@ class TemplateWriterTest {
 		assertNotNull(copiedRow);
 		
 		for(Cell cell : sheet.getRow(4)) {
-			assertEquals(cell.getCellTypeEnum(),cell.getCellTypeEnum());
-			switch(cell.getCellTypeEnum()) {
+			assertEquals(cell.getCellType(),cell.getCellType());
+			switch(cell.getCellType()) {
 			case NUMERIC:
 				assertEquals(cell.getDateCellValue(), copiedRow.getCell(cell.getColumnIndex()).getDateCellValue());
 				assertEquals(cell.getNumericCellValue(), copiedRow.getCell(cell.getColumnIndex()).getNumericCellValue(),10e-8);

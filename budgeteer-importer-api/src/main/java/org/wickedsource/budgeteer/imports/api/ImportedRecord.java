@@ -11,6 +11,14 @@ public class ImportedRecord implements Serializable {
 
     private Date date;
 
+    public ImportedRecord() {}
+
+    public ImportedRecord(String budgetName, String personName, Date date) {
+        this.budgetName = budgetName;
+        this.personName = personName;
+        this.date = date;
+    }
+
     public String getBudgetName() {
         return budgetName;
     }

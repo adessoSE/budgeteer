@@ -10,6 +10,11 @@ public class InvalidFileFormatException extends Exception {
         this.fileName = fileName;
     }
 
+    public InvalidFileFormatException(String message, String fileName, Exception e){
+        super(message, e);
+        this.fileName = fileName;
+    }
+
     public String getFileName(){
         return fileName;
     }

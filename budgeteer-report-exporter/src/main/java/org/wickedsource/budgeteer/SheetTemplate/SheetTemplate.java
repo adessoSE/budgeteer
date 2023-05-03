@@ -86,9 +86,9 @@ public class SheetTemplate {
 
     String getCellValue(Cell cell) {
         String cellValue = null;
-        if (cell.getCellTypeEnum().equals(CellType.FORMULA)) {
+        if (cell.getCellType().equals(CellType.FORMULA)) {
             cellValue = cell.getCellFormula();
-        } else if (cell.getCellTypeEnum().equals(CellType.STRING)) {
+        } else if (cell.getCellType().equals(CellType.STRING)) {
             cellValue = cell.getStringCellValue();
         }
         return cellValue;
