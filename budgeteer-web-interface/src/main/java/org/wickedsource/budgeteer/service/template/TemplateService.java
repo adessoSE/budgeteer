@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.transaction.Transactional;
 import javax.validation.constraints.NotNull;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.wicket.model.IModel;
@@ -175,7 +174,7 @@ public class TemplateService {
                 temModel.getObject().isDefault(),
                 projectId);
         templateRepository.save(temp);
-      } catch (IOException | InvalidFormatException e) {
+      } catch (IOException e) {
         e.printStackTrace();
       }
     } else {
@@ -212,7 +211,7 @@ public class TemplateService {
               projectId);
       resolveDefaults(temp.getId(), temModel);
       templateRepository.save(temp);
-    } catch (IOException | InvalidFormatException e) {
+    } catch (IOException e) {
       e.printStackTrace();
     }
   }

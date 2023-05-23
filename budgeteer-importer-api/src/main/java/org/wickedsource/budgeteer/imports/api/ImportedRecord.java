@@ -5,34 +5,41 @@ import java.util.Date;
 
 public class ImportedRecord implements Serializable {
 
-    private String budgetName;
+  private String budgetName;
 
-    private String personName;
+  private String personName;
 
-    private Date date;
+  private Date date;
 
-    public String getBudgetName() {
-        return budgetName;
-    }
+  public ImportedRecord() {}
 
-    public void setBudgetName(String budgetName) {
-        this.budgetName = budgetName;
-    }
+  public ImportedRecord(String budgetName, String personName, Date date) {
+    this.budgetName = budgetName;
+    this.personName = personName;
+    this.date = date;
+  }
 
-    public String getPersonName() {
-        return personName;
-    }
+  public String getBudgetName() {
+    return budgetName;
+  }
 
-    public void setPersonName(String personName) {
-        this.personName = personName;
-    }
+  public void setBudgetName(String budgetName) {
+    this.budgetName = budgetName;
+  }
 
-    public Date getDate() {
-        return date;
-    }
+  public String getPersonName() {
+    return personName;
+  }
 
-    public void setDate(Date date) {
-        this.date = date;
-    }
+  public void setPersonName(String personName) {
+    this.personName = personName;
+  }
 
+  public Date getDate() {
+    return date;
+  }
+
+  public void setDate(Date date) {
+    this.date = date;
+  }
 }
