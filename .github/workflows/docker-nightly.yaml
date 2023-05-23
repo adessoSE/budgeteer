@@ -1,6 +1,7 @@
 name: Prepare building and publishing nightly to DockerHub
 
 on:
+  workflow_dispatch:
   schedule:
     - cron: '24 3 * * *'
 
