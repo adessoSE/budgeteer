@@ -78,7 +78,9 @@ public class WorkRecordDatabaseImporter extends RecordDatabaseImporter {
         skippedRecords.add(getRecordAsString(budgetName, entity));
 
       } else {
-        BudgetEntity budget = getBudget(budgetName);
+        var budgetProjectId = record.getBudgetProjectId();
+        BudgetEntity budget =
+            getBudget(budgetName, budgetProjectId.isEmpty() ? budgetName : budgetProjectId);
         entity.setBudget(budget);
 
         if (record.getDate().before(earliestRecordDate)) {

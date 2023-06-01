@@ -20,9 +20,9 @@ class PowerBiWorkRecordsImporterTest {
     var workbook =
         new XSSFWorkbook(new FileInputStream("src/test/resources/power-bi-valid-header.xlsx"));
 
-    var result = importer.isValidPowerBiFile(workbook);
+    var result = importer.findPowerBiHeader(workbook);
 
-    assertThat(result).isTrue();
+    assertThat(result).contains(2);
   }
 
   @Test
@@ -31,9 +31,9 @@ class PowerBiWorkRecordsImporterTest {
     var workbook =
         new XSSFWorkbook(new FileInputStream("src/test/resources/power-bi-invalid-header.xlsx"));
 
-    var result = importer.isValidPowerBiFile(workbook);
+    var result = importer.findPowerBiHeader(workbook);
 
-    assertThat(result).isFalse();
+    assertThat(result).isEmpty();
   }
 
   @Test
@@ -44,6 +44,7 @@ class PowerBiWorkRecordsImporterTest {
     var result = importer.importFile(new ImportFile("power-bi-example.xlsx", inputStream));
 
     var expectedImportRecord = new ImportedWorkRecord();
+    expectedImportRecord.setBudgetProjectId("A2");
     expectedImportRecord.setBudgetName("Projekt2");
     expectedImportRecord.setPersonName("Mustermann, Max");
     expectedImportRecord.setDate(DateUtil.parseYYYYMMDDDate("2023/03/23"));
