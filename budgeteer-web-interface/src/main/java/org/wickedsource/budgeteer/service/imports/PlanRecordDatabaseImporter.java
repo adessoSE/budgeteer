@@ -108,7 +108,7 @@ public class PlanRecordDatabaseImporter extends RecordDatabaseImporter {
     Date earliestDate = new Date(Long.MAX_VALUE);
     Date latestDate = new Date(0);
 
-    BudgetEntity budget = getBudget(groupKey.getBudgetName());
+    BudgetEntity budget = getBudget(groupKey.getBudgetName(), groupKey.getBudgetName());
     PersonEntity person = getPerson(groupKey.getPersonName());
     ProjectEntity project = budget.getProject();
 

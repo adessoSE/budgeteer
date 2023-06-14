@@ -92,11 +92,11 @@ public abstract class RecordDatabaseImporter {
    * @param budgetName The technical budget name.
    * @return The budget database record.
    */
-  protected BudgetEntity getBudget(String budgetName) {
-    BudgetEntity budget = budgetsByImportKey.get(budgetName);
+  protected BudgetEntity getBudget(String budgetName, String budgetProjectId) {
+    BudgetEntity budget = budgetsByImportKey.get(budgetProjectId);
     if (budget == null) {
       BudgetEntity newBudget = new BudgetEntity();
-      newBudget.setImportKey(budgetName);
+      newBudget.setImportKey(budgetProjectId);
       newBudget.setName(budgetName);
       newBudget.setProject(project);
       newBudget.setTotal(MoneyUtil.createMoneyFromCents(0L));
