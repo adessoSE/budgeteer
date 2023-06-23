@@ -4,14 +4,10 @@ import java.util.Date;
 
 public class ImportedWorkRecord extends ImportedRecord {
 
-  private String budgetProjectId = "";
+  private String budgetProjectId;
   private int minutesWorked;
 
   public ImportedWorkRecord() {}
-
-  public ImportedWorkRecord(String budgetName, String personName, Date date, int minutesWorked) {
-    this("", budgetName, personName, date, minutesWorked);
-  }
 
   public ImportedWorkRecord(
       String budgetProjectId, String budgetName, String personName, Date date, int minutesWorked) {
@@ -21,6 +17,9 @@ public class ImportedWorkRecord extends ImportedRecord {
   }
 
   public String getBudgetProjectId() {
+    if (budgetProjectId == null) {
+      return getBudgetName();
+    }
     return this.budgetProjectId;
   }
 

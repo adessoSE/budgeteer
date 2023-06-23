@@ -21,7 +21,9 @@ subprojects {
     repositories {
         repositories {
             mavenCentral()
-            jcenter()
+            maven {
+                url = "https://oss.jfrog.org/artifactory/jcenter"
+            }
         }
     }
 
