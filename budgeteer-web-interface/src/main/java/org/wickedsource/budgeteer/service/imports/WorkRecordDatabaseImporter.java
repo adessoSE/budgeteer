@@ -78,9 +78,7 @@ public class WorkRecordDatabaseImporter extends RecordDatabaseImporter {
         skippedRecords.add(getRecordAsString(budgetName, entity));
 
       } else {
-        var budgetProjectId = record.getBudgetProjectId();
-        BudgetEntity budget =
-            getBudget(budgetName, budgetProjectId.isEmpty() ? budgetName : budgetProjectId);
+        BudgetEntity budget = getBudget(budgetName, record.getBudgetProjectId());
         entity.setBudget(budget);
 
         if (record.getDate().before(earliestRecordDate)) {
@@ -191,7 +189,7 @@ public class WorkRecordDatabaseImporter extends RecordDatabaseImporter {
   private Money getDailyRateForRecord(ImportedWorkRecord record) {
     for (DailyRateEntity rate : dailyRates) {
       // TODO: this is far from performant, should be reworked when large data proves to be an issue
-      if (rate.getBudget().getImportKey().equals(record.getBudgetName())
+      if (rate.getBudget().getImportKey().equals(record.getBudgetProjectId())
           && rate.getPerson().getImportKey().equals(record.getPersonName())
           && !rate.getDateStart().after(record.getDate())
           && !rate.getDateEnd().before(record.getDate())) {
