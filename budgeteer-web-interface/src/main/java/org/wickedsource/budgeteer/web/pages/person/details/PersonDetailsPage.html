@@ -1,163 +1,101 @@
 <wicket:extend>
-    <div class="row">
-        <div class="col-md-6">
-            <div class="box box-primary">
-                <div class="box-header">
-                    <i class="fa fa-info-circle"></i>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="box box-primary">
+        <div class="box-header">
+          <i class="fa fa-info-circle"></i>
 
-                    <h3 class="box-title">Highlights</h3>
+          <h3 class="box-title">Highlights</h3>
 
-                    <div class="box-tools pull-right">
-                        <button class="btn btn-default btn-sm" data-widget="collapse"><i
-                                class="fa fa-minus"></i></button>
-                    </div>
-                </div>
-                <div class="box-body personDetails" wicket:id="highlightsPanel">
-
-                </div>
-                <!-- /.box-body -->
-            </div>
+          <div class="box-tools pull-right">
+            <button class="btn btn-default btn-sm" data-widget="collapse"><i
+                class="fa fa-minus"></i></button>
+          </div>
         </div>
-
-        <div class="col-md-6">
-            <div class="box box-primary">
-                <div class="box-header">
-                    <i class="fa fa-info-circle"></i>
-
-                    <h3 class="box-title">Budget Distribution</h3>
-
-                    <div class="box-tools pull-right">
-                        <button class="btn btn-default btn-sm" data-widget="collapse"><i
-                                class="fa fa-minus"></i></button>
-                    </div>
-                </div>
-                <div class="box-body personDetails">
-                	<canvas wicket:id="distributionChart"></canvas>
-                </div>
-            </div>
+        <div class="box-body personDetails" wicket:id="highlightsPanel">
 
         </div>
+        <!-- /.box-body -->
+      </div>
     </div>
+  </div>
 
-    <div class="row">
-        <div class="col-md-12">
-            <div class="box box-primary">
-                <div class="box-header" style="cursor: move;">
-                    <i class="fa fa-cog"></i>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="box box-primary">
+        <div class="box-header" style="cursor: move;">
+          <i class="fa fa-cog"></i>
 
-                    <h3 class="box-title">Options
-                    </h3>
+          <h3 class="box-title">Options
+          </h3>
 
-                    <div class="box-tools pull-right">
-                        <button class="btn btn-default btn-sm" data-widget="collapse"><i
-                                class="fa fa-minus"></i></button>
-                    </div>
-                </div>
-                <div class="box-body">
-                    <div class="row">
-                        <div class="col-lg-4 col-xs-6">
-                            <!-- small box -->
-                            <a wicket:id="weekReportLink">
-                                <div class="small-box bg-aqua">
-                                    <div class="inner">
-                                        <h3>Week Report</h3>
-                                        <br/>
-                                        <br/>
-                                    </div>
-                                    <div class="icon">
-                                        <i class="ion ion-stats-bars"></i>
-                                    </div>
-                                    <div class="small-box-footer">
-                                        Report of budget burned by this person aggregated by week <i
-                                            class="fa fa-arrow-circle-right"></i>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <!-- ./col -->
-                        <div class="col-lg-4 col-xs-6">
-                            <!-- small box -->
-                            <a wicket:id="monthReportLink">
-                                <div class="small-box bg-aqua">
-                                    <div class="inner">
-                                        <h3>Month Report</h3>
-                                        <br/>
-                                        <br/>
-                                    </div>
-                                    <div class="icon">
-                                        <i class="ion ion-stats-bars"></i>
-                                    </div>
-                                    <div class="small-box-footer">
-                                        Report of budget burned by this person aggregated by month<i
-                                            class="fa fa-arrow-circle-right"></i>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <!-- ./col -->
-                        <div class="col-lg-4 col-xs-6">
-                            <!-- small box -->
-                            <a wicket:id="hoursLink">
-                                <div class="small-box bg-aqua">
-                                    <div class="inner">
-                                        <h3>Hours</h3>
-                                        <br/>
-                                        <br/>
-                                    </div>
-                                    <div class="icon">
-                                        <i class="ion ion-clock"></i>
-                                    </div>
-                                    <div class="small-box-footer">
-                                        List all Hours booked by this person <i
-                                            class="fa fa-arrow-circle-right"></i>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-4 col-xs-6">
-                            <!-- small box -->
-                            <a wicket:id="editPersonLink">
-                                <div class="small-box bg-green">
-                                    <div class="inner">
-                                        <h3>Edit Person</h3>
-                                        <br/>
-                                        <br/>
-                                    </div>
-                                    <div class="icon">
-                                        <i class="ion ion-edit"></i>
-                                    </div>
-                                    <div class="small-box-footer">
-                                        Edit the data of this person <i class="fa fa-arrow-circle-right"></i>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <form wicket:id="deleteForm">
-                            <div class="col-lg-4 col-xs-6">
-                                <!-- small box -->
-                                <a wicket:id="deletePersonLink">
-                                    <div class="small-box bg-red">
-                                        <div class="inner">
-                                            <h3>Delete Person</h3>
-                                            <br/>
-                                            <br/>
-                                        </div>
-                                        <div class="icon">
-                                            <i class="ion ion-close"></i>
-                                        </div>
-                                        <div class="small-box-footer">
-                                            Delete the person with all its records <i class="fa fa-arrow-circle-right"></i>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                        </form>
-                    </div>
-                    <!-- ./col -->
-                </div>
-            </div>
+          <div class="box-tools pull-right">
+            <button class="btn btn-default btn-sm" data-widget="collapse"><i
+                class="fa fa-minus"></i></button>
+          </div>
         </div>
+        <div class="box-body">
+          <div class="row">
+            <div class="col-lg-4 col-xs-6">
+              <a wicket:id="hoursLink">
+                <div class="small-box bg-aqua">
+                  <div class="inner">
+                    <h3>Hours</h3>
+                    <br/>
+                    <br/>
+                  </div>
+                  <div class="icon">
+                    <i class="ion ion-clock"></i>
+                  </div>
+                  <div class="small-box-footer">
+                    List all Hours booked by this person <i
+                      class="fa fa-arrow-circle-right"></i>
+                  </div>
+                </div>
+              </a>
+            </div>
+
+            <div class="col-lg-4 col-xs-6">
+              <!-- small box -->
+              <a wicket:id="editPersonLink">
+                <div class="small-box bg-green">
+                  <div class="inner">
+                    <h3>Edit Person</h3>
+                    <br/>
+                    <br/>
+                  </div>
+                  <div class="icon">
+                    <i class="ion ion-edit"></i>
+                  </div>
+                  <div class="small-box-footer">
+                    Edit the data of this person <i class="fa fa-arrow-circle-right"></i>
+                  </div>
+                </div>
+              </a>
+            </div>
+            <form wicket:id="deleteForm">
+              <div class="col-lg-4 col-xs-6">
+                <!-- small box -->
+                <a wicket:id="deletePersonLink">
+                  <div class="small-box bg-red">
+                    <div class="inner">
+                      <h3>Delete Person</h3>
+                      <br/>
+                      <br/>
+                    </div>
+                    <div class="icon">
+                      <i class="ion ion-close"></i>
+                    </div>
+                    <div class="small-box-footer">
+                      Delete the person with all its records <i class="fa fa-arrow-circle-right"></i>
+                    </div>
+                  </div>
+                </a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 </wicket:extend>

@@ -20,7 +20,6 @@ dependencies {
     implementation("org.apache.wicket:wicket-extensions:${project.properties["wicket_version"]}")
     implementation("org.wicketstuff:wicketstuff-tinymce4:${project.properties["wicket_version"]}")
     implementation("org.wicketstuff:wicketstuff-lambda-components:${project.properties["wicket_version"]}")
-    implementation("de.adesso.wicked-charts:wicked-charts-wicket8:${project.properties["wickedcharts_version"]}")
 
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-web")

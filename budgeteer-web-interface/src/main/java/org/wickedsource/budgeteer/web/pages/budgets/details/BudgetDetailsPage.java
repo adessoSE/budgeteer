@@ -21,16 +21,12 @@ import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.Breadcrumb
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
 import org.wickedsource.budgeteer.web.pages.base.delete.DeleteDialog;
 import org.wickedsource.budgeteer.web.pages.budgets.BudgetNameModel;
-import org.wickedsource.budgeteer.web.pages.budgets.details.chart.PeopleDistributionChart;
-import org.wickedsource.budgeteer.web.pages.budgets.details.chart.PeopleDistributionChartModel;
 import org.wickedsource.budgeteer.web.pages.budgets.details.highlights.BudgetHighlightsModel;
 import org.wickedsource.budgeteer.web.pages.budgets.details.highlights.BudgetHighlightsPanel;
 import org.wickedsource.budgeteer.web.pages.budgets.edit.EditBudgetPage;
 import org.wickedsource.budgeteer.web.pages.budgets.hours.BudgetHoursPage;
-import org.wickedsource.budgeteer.web.pages.budgets.monthreport.single.SingleBudgetMonthReportPage;
 import org.wickedsource.budgeteer.web.pages.budgets.notes.BudgetNotesPage;
 import org.wickedsource.budgeteer.web.pages.budgets.overview.BudgetsOverviewPage;
-import org.wickedsource.budgeteer.web.pages.budgets.weekreport.single.SingleBudgetWeekReportPage;
 import org.wickedsource.budgeteer.web.pages.contract.details.ContractDetailsPage;
 import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 
@@ -46,9 +42,6 @@ public class BudgetDetailsPage extends BasePage {
         super(parameters);
         model = () -> budgetService.loadBudgetDetailData(getParameterId());
         add(new BudgetHighlightsPanel("highlightsPanel", new BudgetHighlightsModel(getParameterId())));
-        add(new PeopleDistributionChart("distributionChart", new PeopleDistributionChartModel(getParameterId())));
-        add(new BookmarkablePageLink<SingleBudgetWeekReportPage>("weekReportLink", SingleBudgetWeekReportPage.class, createParameters(getParameterId())));
-        add(new BookmarkablePageLink<SingleBudgetMonthReportPage>("monthReportLink", SingleBudgetMonthReportPage.class, createParameters(getParameterId())));
         addContractLinks();
         add(new BookmarkablePageLink<BudgetHoursPage>("hoursLink", BudgetHoursPage.class, createParameters(getParameterId())));
         add(new BookmarkablePageLink<BudgetNotesPage>("notesLink", BudgetNotesPage.class, createParameters(getParameterId())));

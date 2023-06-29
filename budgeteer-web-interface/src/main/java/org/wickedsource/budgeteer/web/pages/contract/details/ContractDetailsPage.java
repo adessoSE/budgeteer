@@ -14,10 +14,6 @@ import org.wickedsource.budgeteer.web.pages.base.basepage.BasePage;
 import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.BreadcrumbsModel;
 import org.wickedsource.budgeteer.web.pages.base.delete.DeleteDialog;
 import org.wickedsource.budgeteer.web.pages.contract.budgetOverview.BudgetForContractOverviewPage;
-import org.wickedsource.budgeteer.web.pages.contract.details.contractDetailChart.ContractDetailChart;
-import org.wickedsource.budgeteer.web.pages.contract.details.contractDetailChart.ContractDetailChartModel;
-import org.wickedsource.budgeteer.web.pages.contract.details.differenceTable.DifferenceTable;
-import org.wickedsource.budgeteer.web.pages.contract.details.differenceTable.DifferenceTableModel;
 import org.wickedsource.budgeteer.web.pages.contract.details.highlights.ContractHighlightsPanel;
 import org.wickedsource.budgeteer.web.pages.contract.edit.EditContractPage;
 import org.wickedsource.budgeteer.web.pages.contract.overview.ContractOverviewPage;
@@ -39,8 +35,6 @@ public class ContractDetailsPage extends BasePage {
         contractModel = new ContractDetailModel(getParameterId());
 
         add(new ContractHighlightsPanel("highlightsPanel", contractModel));
-        add(new ContractDetailChart("comparisonChart", new ContractDetailChartModel(getParameterId(), numberOfMonths)));
-        add(new DifferenceTable("differenceTable", new DifferenceTableModel(getParameterId(), contractModel.getObject().getStartDate())));
 
         add(new Link("editLink") {
             @Override

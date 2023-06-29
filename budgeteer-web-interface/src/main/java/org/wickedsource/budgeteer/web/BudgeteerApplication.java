@@ -1,12 +1,8 @@
 package org.wickedsource.budgeteer.web;
 
-import de.adesso.wickedcharts.wicket8.JavaScriptResourceRegistry;
 import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.Session;
-import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.ResourceAggregator;
 import org.apache.wicket.markup.head.filter.JavaScriptFilteredIntoFooterHeaderResponse;
-import org.apache.wicket.markup.html.IHeaderResponseDecorator;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.IExceptionMapper;
@@ -50,7 +46,6 @@ public class BudgeteerApplication extends WebApplication implements ApplicationC
 
         getMarkupSettings().setStripWicketTags(true);
         getComponentInstantiationListeners().add(new SpringComponentInjector(this, context));
-        initWickedCharts();
         getJavaScriptLibrarySettings().setJQueryReference(BudgeteerReferences.getJQueryReference());
         mountPages();
 
@@ -92,13 +87,6 @@ public class BudgeteerApplication extends WebApplication implements ApplicationC
                 mountPage(mountUrl, pageClass);
             }
         }
-    }
-
-    private void initWickedCharts() {
-        JavaScriptResourceRegistry.getInstance().setChartJsReference(BudgeteerReferences.getChartjsReference());
-        JavaScriptResourceRegistry.getInstance().setChartJsBundleReference(BudgeteerReferences.getChartjsReference());
-        JavaScriptResourceRegistry.getInstance().setMomentJsReference(BudgeteerReferences.getMomentJsReference());
-        JavaScriptResourceRegistry.getInstance().setJQueryReference(BudgeteerReferences.getJQueryReference());
     }
 
     @Override

@@ -16,15 +16,11 @@ import org.wickedsource.budgeteer.web.pages.base.basepage.breadcrumbs.Breadcrumb
 import org.wickedsource.budgeteer.web.pages.base.delete.DeleteDialog;
 import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 import org.wickedsource.budgeteer.web.pages.person.PersonNameModel;
-import org.wickedsource.budgeteer.web.pages.person.details.chart.BudgetDistributionChart;
-import org.wickedsource.budgeteer.web.pages.person.details.chart.BudgetDistributionChartModel;
 import org.wickedsource.budgeteer.web.pages.person.details.highlights.PersonHighlightsModel;
 import org.wickedsource.budgeteer.web.pages.person.details.highlights.PersonHighlightsPanel;
 import org.wickedsource.budgeteer.web.pages.person.edit.EditPersonPage;
 import org.wickedsource.budgeteer.web.pages.person.hours.PersonHoursPage;
-import org.wickedsource.budgeteer.web.pages.person.monthreport.PersonMonthReportPage;
 import org.wickedsource.budgeteer.web.pages.person.overview.PeopleOverviewPage;
-import org.wickedsource.budgeteer.web.pages.person.weekreport.PersonWeekReportPage;
 
 @Mount("people/details/${id}")
 public class PersonDetailsPage extends BasePage {
@@ -35,11 +31,8 @@ public class PersonDetailsPage extends BasePage {
     public PersonDetailsPage(PageParameters parameters) {
         super(parameters);
         add(new PersonHighlightsPanel("highlightsPanel", new PersonHighlightsModel(getParameterId())));
-        add(new BudgetDistributionChart("distributionChart", new BudgetDistributionChartModel(getParameterId())));
         add(createEditPersonLink("editPersonLink"));
-        add(new BookmarkablePageLink<PersonWeekReportPage>("weekReportLink", PersonWeekReportPage.class, PersonWeekReportPage.createParameters(getParameterId())));
-        add(new BookmarkablePageLink<PersonWeekReportPage>("monthReportLink", PersonMonthReportPage.class, PersonMonthReportPage.createParameters(getParameterId())));
-        add(new BookmarkablePageLink<PersonWeekReportPage>("hoursLink", PersonHoursPage.class, PersonHoursPage.createParameters(getParameterId())));
+        add(new BookmarkablePageLink<PersonHoursPage>("hoursLink", PersonHoursPage.class, PersonHoursPage.createParameters(getParameterId())));
 
         Form<Void> deleteForm = new ConfirmationForm<Void>("deleteForm", this, "confirmation.delete") {
             @Override

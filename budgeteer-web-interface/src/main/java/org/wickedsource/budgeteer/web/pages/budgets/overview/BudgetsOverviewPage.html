@@ -1,148 +1,75 @@
 <wicket:extend xmlns:wicket="http://www.w3.org/1999/xhtml">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="box box-primary">
-                <div class="box-header">
-                    <i class="fa fa-list"></i>
-
-                    <h3 class="box-title">Budget List
-                        <small>click on the labels to filter budgets</small>
-                    </h3>
-                </div>
-                <div class="box-body">
-
-                    <div wicket:id="tagFilter"></div>
-
-                    <div wicket:id="remainingFilter" style="margin-top: 40px; margin-bottom: 0"></div>
-
-                    <span style="right:10px; position:absolute">
-                        <button wicket:id="resetButton" class="btn btn-default btn-sm">Reset Filters</button>
-                    </span>
-
-                    <div wicket:id="budgetTable" style="clear:both"></div>
-
-                </div>
-                <!-- /.box-body -->
-            </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="box box-primary">
+        <div class="box-header">
+          <i class="fa fa-list"></i>
+          <h3 class="box-title">Budget List
+            <small>click on the labels to filter budgets</small>
+          </h3>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="box box-primary">
-                <div class="box-header" style="cursor: move;">
-                    <i class="fa fa-cog"></i>
-
-                    <h3 class="box-title">Options
-                    </h3>
-
-                    <div class="box-tools pull-right">
-                        <button class="btn btn-default btn-sm" data-widget="collapse"><i
-                                class="fa fa-minus"></i></button>
-                    </div>
-                </div>
-                <div class="box-body">
-                    <div class="row">
-                        <div class="col-lg-4 col-xs-6">
-                            <!-- small box -->
-                            <a wicket:id="weekReportLink">
-                                <div class="small-box bg-aqua">
-                                    <div class="inner">
-                                        <h3>Week Report</h3>
-                                        <br/>
-                                        <br/>
-                                    </div>
-                                    <div class="icon">
-                                        <i class="ion ion-stats-bars"></i>
-                                    </div>
-                                    <div class="small-box-footer">
-                                        Monitor all budgets aggregated by week <i
-                                            class="fa fa-arrow-circle-right"></i>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <!-- ./col -->
-                        <div class="col-lg-4 col-xs-6">
-                            <!-- small box -->
-                            <a wicket:id="monthReportLink">
-                                <div class="small-box bg-aqua">
-                                    <div class="inner">
-                                        <h3>Month Report</h3>
-                                        <br/>
-                                        <br/>
-                                    </div>
-                                    <div class="icon">
-                                        <i class="ion ion-stats-bars"></i>
-                                    </div>
-                                    <div class="small-box-footer">
-                                        Monitor all budgets aggregated by month <i
-                                            class="fa fa-arrow-circle-right"></i>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-lg-4 col-xs-6">
-                            <!-- small box -->
-                            <a wicket:id="createBudgetLink">
-                                <div class="small-box bg-green">
-                                    <div class="inner">
-                                        <h3>Create Budget</h3>
-                                        <br/>
-                                        <br/>
-                                    </div>
-                                    <div class="icon">
-                                        <i class="fa fa-pie-chart"></i>
-                                    </div>
-                                    <div class="small-box-footer">
-                                        Create a new budget <i
-                                            class="fa fa-arrow-circle-right"></i>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-4 col-xs-6">
-                            <!-- small box -->
-                            <a wicket:id="createReportLink">
-                                <div class="small-box bg-yellow">
-                                    <div class="inner">
-                                        <h3>Export Report</h3>
-                                        <br/>
-                                        <br/>
-                                    </div>
-                                    <div class="icon">
-                                        <i class="ion ion-stats-bars"></i>
-                                    </div>
-                                    <div class="small-box-footer">
-                                        Create a report<i
-                                            class="fa fa-arrow-circle-right"></i>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-lg-4 col-xs-6" wicket:id="netGrossLink">
-                            <!--
-                            <a wicket:id="netGrossLink">
-                                <div class="small-box bg-aqua">
-                                    <div class="inner">
-                                        <h3><span wicket:id="title">Title</span></h3>
-                                        <br/>
-                                        <br/>
-                                    </div>
-                                    <div class="icon"><i class="fa fa-book"></i></div>
-                                    <div class="small-box-footer">
-                                        Shows the values of this table as net values.
-                                        <i class="fa fa-arrow-circle-right"/>
-                                    </div>
-                                </div>
-                            </a>
-                            !-->
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="box-body">
+          <div wicket:id="tagFilter"></div>
+          <div wicket:id="remainingFilter" style="margin-top: 40px; margin-bottom: 0"></div>
+          <span style="right:10px; position:absolute"><button wicket:id="resetButton" class="btn btn-default btn-sm">Reset Filters</button></span>
+          <div wicket:id="budgetTable" style="clear:both"></div>
         </div>
+      </div>
     </div>
-
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="box box-primary">
+        <div class="box-header" style="cursor: move;">
+          <i class="fa fa-cog"></i>
+          <h3 class="box-title">Options</h3>
+          <div class="box-tools pull-right">
+            <button class="btn btn-default btn-sm" data-widget="collapse"><i
+                class="fa fa-minus"></i></button>
+          </div>
+        </div>
+        <div class="box-body">
+          <div class="row">
+            <div class="col-lg-4 col-xs-6">
+              <a wicket:id="createBudgetLink">
+                <div class="small-box bg-green">
+                  <div class="inner">
+                    <h3>Create Budget</h3>
+                    <br/>
+                    <br/>
+                  </div>
+                  <div class="icon">
+                    <i class="fa fa-pie-chart"></i>
+                  </div>
+                  <div class="small-box-footer">
+                    Create a new budget <i
+                      class="fa fa-arrow-circle-right"></i>
+                  </div>
+                </div>
+              </a>
+            </div>
+            <div class="col-lg-4 col-xs-6">
+              <a wicket:id="createReportLink">
+                <div class="small-box bg-yellow">
+                  <div class="inner">
+                    <h3>Export Report</h3>
+                    <br/>
+                    <br/>
+                  </div>
+                  <div class="icon">
+                    <i class="ion ion-stats-bars"></i>
+                  </div>
+                  <div class="small-box-footer">
+                    Create a report<i
+                      class="fa fa-arrow-circle-right"></i>
+                  </div>
+                </div>
+              </a>
+            </div>
+            <div class="col-lg-4 col-xs-6" wicket:id="netGrossLink"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </wicket:extend>

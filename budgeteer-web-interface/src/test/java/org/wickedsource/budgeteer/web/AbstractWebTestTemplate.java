@@ -23,7 +23,6 @@ import org.wickedsource.budgeteer.service.imports.ImportService;
 import org.wickedsource.budgeteer.service.person.PersonDetailData;
 import org.wickedsource.budgeteer.service.person.PersonService;
 import org.wickedsource.budgeteer.service.project.ProjectService;
-import org.wickedsource.budgeteer.service.record.AggregatedRecord;
 import org.wickedsource.budgeteer.service.record.RecordService;
 import org.wickedsource.budgeteer.service.user.User;
 import org.wickedsource.budgeteer.service.user.UserService;
@@ -51,8 +50,6 @@ public abstract class AbstractWebTestTemplate {
         .thenReturn(new Project(0, new Date(), new Date(), "test"));
     when(budgetServiceMock.loadBudgetBaseData(anyLong())).thenReturn(new BudgetBaseData(0, "test"));
     when(budgetServiceMock.loadBudgetDetailData(1L)).thenReturn(createBudget());
-    when(recordServiceMock.getWeeklyAggregationForPerson(1L))
-        .thenReturn(getWeeklyAggregationForPerson(1L));
     when(userServiceMock.getUsersInProject(1L)).thenReturn(getUsersInProject());
     when(importServiceMock.loadImports(1L)).thenReturn(createImports());
     when(personServiceMock.loadPersonDetailData(1L)).thenReturn(createPerson());
@@ -71,22 +68,6 @@ public abstract class AbstractWebTestTemplate {
     user.setName("username");
     BudgeteerSession.get().login(user);
     BudgeteerSession.get().setProjectSelected(true);
-  }
-
-  private List<AggregatedRecord> getWeeklyAggregationForPerson(long personId) {
-    Random random = new Random();
-    List<AggregatedRecord> list = new ArrayList<AggregatedRecord>();
-    for (int i = 0; i < 20; i++) {
-      AggregatedRecord record = new AggregatedRecord();
-      record.setAggregationPeriodTitle("Week #" + i);
-      record.setAggregationPeriodStart(new Date());
-      record.setAggregationPeriodStart(new Date());
-      record.setBudgetBurned_net(MoneyUtil.createMoneyFromCents(random.nextInt(8000)));
-      record.setBudgetPlanned_net(MoneyUtil.createMoneyFromCents(random.nextInt(4000)));
-      record.setHours(random.nextDouble());
-      list.add(record);
-    }
-    return list;
   }
 
   private List<User> getUsersInProject() {

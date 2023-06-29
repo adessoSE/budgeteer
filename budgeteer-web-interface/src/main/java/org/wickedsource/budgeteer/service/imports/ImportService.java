@@ -101,18 +101,6 @@ public class ImportService implements ApplicationContextAware {
       skippedRecords.addAll(workRecordsImporter.getSkippedRecords());
       skippedRecords.addAll(dbImporter.getSkippedRecords());
       skippedRecords.addAll(dbImporter.findAndRemoveManuallyEditedEntries());
-    } else if (importer instanceof PlanRecordsImporter) {
-      PlanRecordsImporter planRecordsImporter = (PlanRecordsImporter) importer;
-      PlanRecordDatabaseImporter dbImporter =
-          applicationContext.getBean(
-              PlanRecordDatabaseImporter.class, projectId, planRecordsImporter.getDisplayName());
-      for (ImportFile file : importFiles) {
-        List<ImportedPlanRecord> records =
-            planRecordsImporter.importFile(file, MoneyUtil.DEFAULT_CURRENCY);
-        dbImporter.importRecords(records, file.getFilename());
-      }
-      skippedRecords.addAll(planRecordsImporter.getSkippedRecords());
-      skippedRecords.addAll(dbImporter.getSkippedRecords());
     } else {
       throw new IllegalArgumentException(
           String.format("Importer of type %s is not supported!", importer.getClass()));
