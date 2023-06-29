@@ -38,7 +38,6 @@ class GetBudgetByIdServiceTest {
             Money.zero(CurrencyUnit.EUR),
             Money.zero(CurrencyUnit.EUR),
             Money.zero(CurrencyUnit.EUR),
-            Money.zero(CurrencyUnit.EUR),
             new Date(),
             List.of());
     given(getBudgetByIdPort.getBudgetById(id)).willReturn(Optional.of(expectedBudget));

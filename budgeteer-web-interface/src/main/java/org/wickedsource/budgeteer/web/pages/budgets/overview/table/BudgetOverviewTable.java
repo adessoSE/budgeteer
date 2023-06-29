@@ -83,13 +83,6 @@ public class BudgetOverviewTable extends Panel {
                 new BudgetUnitMoneyModel(totalModel.map(BudgetDetailData::getRemaining)),
                 new BudgetUnitMoneyModel(totalModel.map(BudgetDetailData::getRemaining_gross)))));
     table.add(
-        new MoneyLabel(
-            "totalUnplanned",
-            new TaxBudgetUnitMoneyModel(
-                new BudgetUnitMoneyModel(totalModel.map(BudgetDetailData::getUnplanned)),
-                new BudgetUnitMoneyModel(totalModel.map(BudgetDetailData::getUnplanned_gross)))));
-
-    table.add(
         new ProgressBar(
             "totalProgressBar", totalModel.map(BudgetDetailData::getProgressInPercent)));
   }
@@ -238,13 +231,6 @@ public class BudgetOverviewTable extends Panel {
                 new BudgetUnitMoneyModel(item.getModel().map(BudgetDetailData::getRemaining)),
                 new BudgetUnitMoneyModel(
                     item.getModel().map(BudgetDetailData::getRemaining_gross)))));
-    item.add(
-        new MoneyLabel(
-            "unplanned",
-            new TaxBudgetUnitMoneyModel(
-                new BudgetUnitMoneyModel(item.getModel().map(BudgetDetailData::getUnplanned)),
-                new BudgetUnitMoneyModel(
-                    item.getModel().map(BudgetDetailData::getUnplanned_gross)))));
   }
 
   private void createNetGrossOverviewLabels(WebMarkupContainer table) {
@@ -260,10 +246,5 @@ public class BudgetOverviewTable extends Panel {
         new Label(
             "spentLabel",
             new TaxLabelModel(new StringResourceModel("overview.table.budget.spentLabel", this))));
-    table.add(
-        new Label(
-            "unplannedLabel",
-            new TaxLabelModel(
-                new StringResourceModel("overview.table.budget.unplannedLabel", this))));
   }
 }

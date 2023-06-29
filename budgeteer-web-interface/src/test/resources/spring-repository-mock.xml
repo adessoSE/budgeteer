@@ -12,8 +12,6 @@
 
     <mockito:mock id="workRecordRepository" class="de.adesso.budgeteer.persistence.record.WorkRecordRepository"/>
 
-    <mockito:mock id="planRecordRepository" class="de.adesso.budgeteer.persistence.record.PlanRecordRepository"/>
-
     <mockito:mock id="dailyRateRepository" class="de.adesso.budgeteer.persistence.person.DailyRateRepository"/>
 
     <mockito:mock id="importRepository" class="de.adesso.budgeteer.persistence.imports.ImportRepository"/>

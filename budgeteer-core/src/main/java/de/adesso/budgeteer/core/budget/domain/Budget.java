@@ -17,7 +17,6 @@ public class Budget {
   Money spent;
   Money remaining;
   Money averageDailyRate;
-  Money unplanned;
   Money limit;
   Date lastUpdated;
   List<String> tags;

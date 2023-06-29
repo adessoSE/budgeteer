@@ -37,7 +37,6 @@ class GetBudgetsInContractServiceTest {
                 null,
                 null,
                 null,
-                null,
                 new Date(),
                 new ArrayList<>()),
             new Budget(
@@ -47,7 +46,6 @@ class GetBudgetsInContractServiceTest {
                 "contractName2",
                 "description2",
                 "importKey2",
-                null,
                 null,
                 null,
                 null,

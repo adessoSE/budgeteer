@@ -9,7 +9,6 @@ import de.adesso.budgeteer.persistence.contract.ContractRepository;
 import de.adesso.budgeteer.persistence.person.DailyRateRepository;
 import de.adesso.budgeteer.persistence.project.ProjectEntity;
 import de.adesso.budgeteer.persistence.project.ProjectRepository;
-import de.adesso.budgeteer.persistence.record.PlanRecordRepository;
 import de.adesso.budgeteer.persistence.record.WorkRecordRepository;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -37,8 +36,6 @@ public class BudgetService {
   @Autowired private BudgetBaseDataMapper budgetBaseDataMapper;
 
   @Autowired private WorkRecordRepository workRecordRepository;
-
-  @Autowired private PlanRecordRepository planRecordRepository;
 
   @Autowired private DailyRateRepository rateRepository;
 
@@ -123,7 +120,6 @@ public class BudgetService {
   private BudgetDetailData enrichBudgetEntity(BudgetEntity entity) {
     Date lastUpdated = workRecordRepository.getLatestWorkRecordDate(entity.getId());
     Double spentBudgetInCents = workRecordRepository.getSpentBudget(entity.getId());
-    Double plannedBudgetInCents = planRecordRepository.getPlannedBudget(entity.getId());
     Double avgDailyRateInCents = workRecordRepository.getAverageDailyRate(entity.getId());
     Double taxCoefficient = budgetRepository.getTaxCoefficientByBudget(entity.getId());
 
@@ -141,8 +137,6 @@ public class BudgetService {
     data.setAvgDailyRate(MoneyUtil.toMoneyNullsafe(avgDailyRateInCents));
     data.setAvgDailyRate_gross(
         data.getAvgDailyRate().multipliedBy(taxCoefficient, RoundingMode.FLOOR));
-    data.setUnplanned(entity.getTotal().minus(MoneyUtil.toMoneyNullsafe(plannedBudgetInCents)));
-    data.setUnplanned_gross(data.getUnplanned().multipliedBy(taxCoefficient, RoundingMode.FLOOR));
     data.setLimit(MoneyUtil.getMoneyNullsafe(entity.getLimit()));
     // Money end
     data.setContractName(entity.getContract() == null ? null : entity.getContract().getName());

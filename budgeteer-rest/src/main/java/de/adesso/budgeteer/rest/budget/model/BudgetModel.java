@@ -19,7 +19,6 @@ public class BudgetModel {
   Money spent;
   Money remaining;
   Money averageDailyRate;
-  Money unplanned;
   Money limit;
   Date lastUpdated;
   List<String> tags;

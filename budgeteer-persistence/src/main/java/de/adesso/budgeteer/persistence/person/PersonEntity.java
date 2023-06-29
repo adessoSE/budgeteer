@@ -1,7 +1,6 @@
 package de.adesso.budgeteer.persistence.person;
 
 import de.adesso.budgeteer.persistence.project.ProjectEntity;
-import de.adesso.budgeteer.persistence.record.PlanRecordEntity;
 import de.adesso.budgeteer.persistence.record.WorkRecordEntity;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,11 +41,4 @@ public class PersonEntity {
       orphanRemoval = true,
       cascade = CascadeType.ALL)
   private List<WorkRecordEntity> workRecords = new ArrayList<>();
-
-  @OneToMany(
-      fetch = FetchType.LAZY,
-      mappedBy = "person",
-      orphanRemoval = true,
-      cascade = CascadeType.ALL)
-  private List<PlanRecordEntity> planRecords = new ArrayList<>();
 }

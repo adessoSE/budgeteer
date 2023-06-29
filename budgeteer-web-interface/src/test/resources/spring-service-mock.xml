@@ -6,8 +6,6 @@
 
     <mockito:mock id="notificationService" class="org.wickedsource.budgeteer.service.notification.NotificationService"/>
 
-    <mockito:mock id="statisticsService" class="org.wickedsource.budgeteer.service.statistics.StatisticsService"/>
-
     <mockito:mock id="peopleService" class="org.wickedsource.budgeteer.service.person.PersonService"/>
 
     <mockito:mock id="budgetService" class="org.wickedsource.budgeteer.service.budget.BudgetService"/>

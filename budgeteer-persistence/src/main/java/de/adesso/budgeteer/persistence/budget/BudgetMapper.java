@@ -35,9 +35,6 @@ public class BudgetMapper {
         totalMinutes == 0
             ? Money.zero(CurrencyUnit.EUR)
             : totalRate.dividedBy(totalMinutes, RoundingMode.HALF_DOWN);
-    var planned =
-        MoneyUtil.total(
-            budgetEntity.getPlanRecords(), RecordEntity::getActualRate, CurrencyUnit.EUR);
     return new Budget(
         budgetEntity.getId(),
         budgetEntity.getContract() == null ? null : budgetEntity.getContract().getId(),
@@ -49,7 +46,6 @@ public class BudgetMapper {
         spent,
         budgetEntity.getTotal().minus(spent),
         averageDailyRate,
-        budgetEntity.getTotal().minus(planned),
         budgetEntity.getLimit(),
         lastUpdated,
         tags);

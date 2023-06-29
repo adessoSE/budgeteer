@@ -3,17 +3,17 @@ package de.adesso.budgeteer.persistence.budget;
 import de.adesso.budgeteer.persistence.contract.ContractEntity;
 import de.adesso.budgeteer.persistence.person.DailyRateEntity;
 import de.adesso.budgeteer.persistence.project.ProjectEntity;
-import de.adesso.budgeteer.persistence.record.PlanRecordEntity;
 import de.adesso.budgeteer.persistence.record.WorkRecordEntity;
-import java.util.ArrayList;
-import java.util.List;
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.joda.money.Money;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(
@@ -75,13 +75,6 @@ public class BudgetEntity implements Comparable<BudgetEntity> {
       cascade = CascadeType.ALL,
       fetch = FetchType.LAZY,
       orphanRemoval = true)
-  private List<PlanRecordEntity> planRecords = new ArrayList<PlanRecordEntity>();
-
-  @OneToMany(
-      mappedBy = "budget",
-      cascade = CascadeType.ALL,
-      fetch = FetchType.LAZY,
-      orphanRemoval = true)
   private List<DailyRateEntity> dailyRates = new ArrayList<DailyRateEntity>();
 
   @Column(nullable = false, name = "IMPORT_KEY", length = 255)
@@ -108,8 +101,6 @@ public class BudgetEntity implements Comparable<BudgetEntity> {
     if (description != null ? !description.equals(that.description) : that.description != null)
       return false;
     if (note != null ? !note.equals(that.note) : that.note != null) return false;
-    if (planRecords != null ? !planRecords.equals(that.planRecords) : that.planRecords != null)
-      return false;
     if (project != null ? !project.equals(that.project) : that.project != null) return false;
     if (tags != null ? !tags.equals(that.tags) : that.tags != null) return false;
     if (total != null ? !total.equals(that.total) : that.total != null) return false;
@@ -131,7 +122,6 @@ public class BudgetEntity implements Comparable<BudgetEntity> {
     result = 31 * result + (project != null ? project.hashCode() : 0);
     result = 31 * result + (tags != null ? tags.hashCode() : 0);
     result = 31 * result + (workRecords != null ? workRecords.hashCode() : 0);
-    result = 31 * result + (planRecords != null ? planRecords.hashCode() : 0);
     result = 31 * result + (dailyRates != null ? dailyRates.hashCode() : 0);
     result = 31 * result + (importKey != null ? importKey.hashCode() : 0);
     result = 31 * result + (contract != null ? contract.hashCode() : 0);

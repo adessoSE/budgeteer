@@ -20,7 +20,6 @@ public class BudgetModelMapper {
         budget.getSpent(),
         budget.getRemaining(),
         budget.getAverageDailyRate(),
-        budget.getUnplanned(),
         budget.getLimit(),
         budget.getLastUpdated(),
         budget.getTags());

@@ -1,14 +1,8 @@
 package org.wickedsource.budgeteer.service.imports;
 
-import de.adesso.budgeteer.common.old.MoneyUtil;
 import de.adesso.budgeteer.persistence.imports.ImportEntity;
 import de.adesso.budgeteer.persistence.imports.ImportRepository;
-import de.adesso.budgeteer.persistence.record.PlanRecordRepository;
 import de.adesso.budgeteer.persistence.record.WorkRecordRepository;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import javax.transaction.Transactional;
 import lombok.Getter;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +10,11 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Service;
 import org.wickedsource.budgeteer.imports.api.*;
+
+import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 @Service
 @Transactional
@@ -26,8 +25,6 @@ public class ImportService implements ApplicationContextAware {
   @Autowired private ImportRepository importRepository;
 
   @Autowired private WorkRecordRepository workRecordRepository;
-
-  @Autowired private PlanRecordRepository planRecordRepository;
 
   private ApplicationContext applicationContext;
 
@@ -62,7 +59,6 @@ public class ImportService implements ApplicationContextAware {
    */
   public void deleteImport(long importId) {
     workRecordRepository.deleteByImport(importId);
-    planRecordRepository.deleteByImport(importId);
     importRepository.deleteById(importId);
   }
 
@@ -74,7 +70,6 @@ public class ImportService implements ApplicationContextAware {
   public List<? extends Importer> getAvailableImporters() {
     List<Importer> importers = new ArrayList<Importer>();
     importers.addAll(importerRegistry.getWorkingRecordsImporters());
-    importers.addAll(importerRegistry.getPlanRecordsImporters());
     return importers;
   }
 

@@ -21,8 +21,6 @@ public class BudgetDetailData {
     private Date lastUpdated;
     private Money avgDailyRate;
     private Money avgDailyRate_gross;
-    private Money unplanned;
-    private Money unplanned_gross;
     private Money limit;
     private String contractName;
     private long contractId;

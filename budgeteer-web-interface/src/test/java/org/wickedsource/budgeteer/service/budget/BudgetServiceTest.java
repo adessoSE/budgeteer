@@ -11,7 +11,6 @@ import de.adesso.budgeteer.persistence.contract.ContractEntity;
 import de.adesso.budgeteer.persistence.contract.ContractRepository;
 import de.adesso.budgeteer.persistence.person.DailyRateRepository;
 import de.adesso.budgeteer.persistence.project.ProjectEntity;
-import de.adesso.budgeteer.persistence.record.PlanRecordRepository;
 import de.adesso.budgeteer.persistence.record.WorkRecordRepository;
 import java.util.*;
 import org.junit.jupiter.api.Assertions;
@@ -28,7 +27,6 @@ class BudgetServiceTest extends ServiceTestTemplate {
   @Autowired private BudgetService budgetService;
   @MockBean private BudgetRepository budgetRepository;
   @MockBean private WorkRecordRepository workRecordRepository;
-  @MockBean private PlanRecordRepository planRecordRepository;
   @MockBean private DailyRateRepository rateRepository;
   @MockBean private ContractRepository contractRepository;
 
@@ -68,11 +66,9 @@ class BudgetServiceTest extends ServiceTestTemplate {
     when(budgetRepository.findById(1L)).thenReturn(createBudgetEntityOptional());
     when(workRecordRepository.getLatestWorkRecordDate(1L)).thenReturn(date);
     when(workRecordRepository.getSpentBudget(1L)).thenReturn(100000.0);
-    when(planRecordRepository.getPlannedBudget(1L)).thenReturn(200000.0);
     when(workRecordRepository.getAverageDailyRate(1L)).thenReturn(50000.0);
     BudgetDetailData data = budgetService.loadBudgetDetailData(1L);
     Assertions.assertEquals(100000.0d, data.getSpent().getAmountMinor().doubleValue(), 1d);
-    Assertions.assertEquals(-100000.0d, data.getUnplanned().getAmountMinor().doubleValue(), 1d);
     Assertions.assertEquals(50000.0d, data.getAvgDailyRate().getAmountMinor().doubleValue(), 1d);
   }
 
@@ -83,15 +79,12 @@ class BudgetServiceTest extends ServiceTestTemplate {
         .thenReturn(Arrays.asList(createBudgetEntity()));
     when(workRecordRepository.getLatestWorkRecordDate(1L)).thenReturn(date);
     when(workRecordRepository.getSpentBudget(1L)).thenReturn(100000.0);
-    when(planRecordRepository.getPlannedBudget(1L)).thenReturn(200000.0);
     when(workRecordRepository.getAverageDailyRate(1L)).thenReturn(50000.0);
     List<BudgetDetailData> data =
         budgetService.loadBudgetsDetailData(
             1L, new BudgetTagFilter(Arrays.asList("1", "2", "3"), 1L));
     Assertions.assertEquals(1, data.size());
     Assertions.assertEquals(100000.0d, data.get(0).getSpent().getAmountMinor().doubleValue(), 1d);
-    Assertions.assertEquals(
-        -100000.0d, data.get(0).getUnplanned().getAmountMinor().doubleValue(), 1d);
     Assertions.assertEquals(
         50000.0d, data.get(0).getAvgDailyRate().getAmountMinor().doubleValue(), 1d);
   }

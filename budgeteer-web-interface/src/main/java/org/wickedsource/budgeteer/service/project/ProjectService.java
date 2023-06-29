@@ -8,7 +8,6 @@ import de.adesso.budgeteer.persistence.person.DailyRateRepository;
 import de.adesso.budgeteer.persistence.person.PersonRepository;
 import de.adesso.budgeteer.persistence.project.ProjectEntity;
 import de.adesso.budgeteer.persistence.project.ProjectRepository;
-import de.adesso.budgeteer.persistence.record.PlanRecordRepository;
 import de.adesso.budgeteer.persistence.record.WorkRecordRepository;
 import de.adesso.budgeteer.persistence.user.UserEntity;
 import de.adesso.budgeteer.persistence.user.UserRepository;
@@ -33,8 +32,6 @@ public class ProjectService {
   @Autowired private PersonRepository personRepository;
 
   @Autowired private ImportRepository importRepository;
-
-  @Autowired private PlanRecordRepository planRecordRepository;
 
   @Autowired private WorkRecordRepository workRecordRepository;
 
@@ -102,7 +99,6 @@ public class ProjectService {
   @PreAuthorize("canReadProject(#projectId)")
   public void deleteProject(long projectId) {
     dailyRateRepository.deleteByProjectId(projectId);
-    planRecordRepository.deleteByImportAndProjectId(projectId);
     workRecordRepository.deleteByImportAndProjectId(projectId);
     importRepository.deleteByProjectId(projectId);
     budgetRepository.deleteByProjectId(projectId);

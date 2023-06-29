@@ -6,7 +6,6 @@ import de.adesso.budgeteer.persistence.budget.BudgetRepository;
 import de.adesso.budgeteer.persistence.budget.LimitReachedBean;
 import de.adesso.budgeteer.persistence.budget.MissingBudgetTotalBean;
 import de.adesso.budgeteer.persistence.record.MissingDailyRateForBudgetBean;
-import de.adesso.budgeteer.persistence.record.PlanRecordRepository;
 import de.adesso.budgeteer.persistence.record.WorkRecordRepository;
 import de.adesso.budgeteer.persistence.user.UserEntity;
 import de.adesso.budgeteer.persistence.user.UserRepository;
@@ -24,8 +23,6 @@ import org.springframework.stereotype.Service;
 public class NotificationService {
 
   @Autowired private WorkRecordRepository workRecordRepository;
-
-  @Autowired private PlanRecordRepository planRecordRepository;
 
   @Autowired private BudgetRepository budgetRepository;
 
@@ -50,9 +47,6 @@ public class NotificationService {
     List<Notification> notifications = new ArrayList<Notification>();
     if (workRecordRepository.countByProjectId(projectId) == 0) {
       notifications.add(new EmptyWorkRecordsNotification());
-    }
-    if (planRecordRepository.countByProjectId(projectId) == 0) {
-      notifications.add(new EmptyPlanRecordsNotification());
     }
     notifications.addAll(
         budgetRepository.getMissingContractForProject(projectId).stream()

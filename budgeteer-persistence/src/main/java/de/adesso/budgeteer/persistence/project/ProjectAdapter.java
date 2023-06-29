@@ -4,25 +4,24 @@ import de.adesso.budgeteer.common.date.DateRange;
 import de.adesso.budgeteer.core.project.domain.Project;
 import de.adesso.budgeteer.core.project.domain.ProjectWithDate;
 import de.adesso.budgeteer.core.project.port.out.*;
-import de.adesso.budgeteer.core.project.port.out.RemoveUserFromProjectPort;
 import de.adesso.budgeteer.persistence.budget.BudgetRepository;
 import de.adesso.budgeteer.persistence.contract.ContractRepository;
 import de.adesso.budgeteer.persistence.imports.ImportRepository;
 import de.adesso.budgeteer.persistence.invoice.InvoiceRepository;
 import de.adesso.budgeteer.persistence.person.DailyRateRepository;
 import de.adesso.budgeteer.persistence.person.PersonRepository;
-import de.adesso.budgeteer.persistence.record.PlanRecordRepository;
 import de.adesso.budgeteer.persistence.record.WorkRecordRepository;
 import de.adesso.budgeteer.persistence.user.UserEntity;
 import de.adesso.budgeteer.persistence.user.UserRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+
+import javax.transaction.Transactional;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import javax.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
@@ -47,7 +46,6 @@ public class ProjectAdapter
   private final ProjectRepository projectRepository;
   private final UserRepository userRepository;
   private final DailyRateRepository dailyRateRepository;
-  private final PlanRecordRepository planRecordRepository;
   private final WorkRecordRepository workRecordRepository;
   private final ImportRepository importRepository;
   private final BudgetRepository budgetRepository;
@@ -114,7 +112,6 @@ public class ProjectAdapter
   @Transactional
   public void deleteProject(long projectId) {
     dailyRateRepository.deleteByProjectId(projectId);
-    planRecordRepository.deleteByImportAndProjectId(projectId);
     workRecordRepository.deleteByImportAndProjectId(projectId);
     importRepository.deleteByProjectId(projectId);
     budgetRepository.deleteByProjectId(projectId);

@@ -19,9 +19,6 @@
     <WORK_RECORD id="100" person_id="100" budget_id="100" record_date="2015-01-01" record_year="2015" record_month="0" record_week="1" record_day="1" minutes="480" daily_rate="10000" import_id="100" edited_manually="false"/>
     <WORK_RECORD id="200" person_id="100" budget_id="100" record_date="2015-01-02" record_year="2015" record_month="0" record_week="1" record_day="2" minutes="480" daily_rate="20000" import_id="100" edited_manually="false"/>
 
-    <PLAN_RECORD id="100" person_id="100" budget_id="100" record_date="2015-01-01" record_year="2015" record_month="0" record_week="1" record_day="1" minutes="480" daily_rate="10000" import_id="100"/>
-    <PLAN_RECORD id="200" person_id="200" budget_id="100" record_date="2015-01-02" record_year="2015" record_month="0" record_week="1" record_day="2" minutes="480" daily_rate="20000" import_id="100"/>
-
 
     <!-- Add additional fields and information to the contract -->
 
