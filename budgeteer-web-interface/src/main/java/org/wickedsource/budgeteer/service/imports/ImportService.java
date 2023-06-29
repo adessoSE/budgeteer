@@ -3,6 +3,10 @@ package org.wickedsource.budgeteer.service.imports;
 import de.adesso.budgeteer.persistence.imports.ImportEntity;
 import de.adesso.budgeteer.persistence.imports.ImportRepository;
 import de.adesso.budgeteer.persistence.record.WorkRecordRepository;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import javax.transaction.Transactional;
 import lombok.Getter;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,11 +14,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Service;
 import org.wickedsource.budgeteer.imports.api.*;
-
-import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 
 @Service
 @Transactional

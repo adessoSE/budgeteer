@@ -10,6 +10,11 @@ import de.adesso.budgeteer.persistence.imports.ImportRepository;
 import de.adesso.budgeteer.persistence.person.PersonRepository;
 import de.adesso.budgeteer.persistence.record.WorkRecordEntity;
 import de.adesso.budgeteer.persistence.record.WorkRecordRepository;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +24,6 @@ import org.wickedsource.budgeteer.importer.aproda.AprodaWorkRecordsImporter;
 import org.wickedsource.budgeteer.imports.api.ImportException;
 import org.wickedsource.budgeteer.imports.api.ImportFile;
 import org.wickedsource.budgeteer.imports.api.InvalidFileFormatException;
-
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
 
 class WorkRecordImportIntegrationTest extends IntegrationTestTemplate {
 

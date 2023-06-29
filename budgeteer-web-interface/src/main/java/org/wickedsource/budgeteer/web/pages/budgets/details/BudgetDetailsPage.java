@@ -33,95 +33,120 @@ import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 @Mount("budgets/details/${id}")
 public class BudgetDetailsPage extends BasePage {
 
-    @SpringBean
-    private BudgetService budgetService;
+  @SpringBean private BudgetService budgetService;
 
-    private IModel<BudgetDetailData> model;
+  private IModel<BudgetDetailData> model;
 
-    public BudgetDetailsPage(PageParameters parameters) {
-        super(parameters);
-        model = () -> budgetService.loadBudgetDetailData(getParameterId());
-        add(new BudgetHighlightsPanel("highlightsPanel", new BudgetHighlightsModel(getParameterId())));
-        addContractLinks();
-        add(new BookmarkablePageLink<BudgetHoursPage>("hoursLink", BudgetHoursPage.class, createParameters(getParameterId())));
-        add(new BookmarkablePageLink<BudgetNotesPage>("notesLink", BudgetNotesPage.class, createParameters(getParameterId())));
-        add(createEditLink("editLink"));
+  public BudgetDetailsPage(PageParameters parameters) {
+    super(parameters);
+    model = () -> budgetService.loadBudgetDetailData(getParameterId());
+    add(new BudgetHighlightsPanel("highlightsPanel", new BudgetHighlightsModel(getParameterId())));
+    addContractLinks();
+    add(
+        new BookmarkablePageLink<BudgetHoursPage>(
+            "hoursLink", BudgetHoursPage.class, createParameters(getParameterId())));
+    add(
+        new BookmarkablePageLink<BudgetNotesPage>(
+            "notesLink", BudgetNotesPage.class, createParameters(getParameterId())));
+    add(createEditLink("editLink"));
 
-        Form deleteForm = new ConfirmationForm("deleteForm", this, "confirmation.delete") {
-            @Override
-            public void onSubmit() {
-                setResponsePage(new DeleteDialog() {
-                    @Override
-                    protected void onYes() {
-                        budgetService.deleteBudget(getParameterId());
-                        setResponsePage(BudgetsOverviewPage.class);
-                    }
+    Form deleteForm =
+        new ConfirmationForm("deleteForm", this, "confirmation.delete") {
+          @Override
+          public void onSubmit() {
+            setResponsePage(
+                new DeleteDialog() {
+                  @Override
+                  protected void onYes() {
+                    budgetService.deleteBudget(getParameterId());
+                    setResponsePage(BudgetsOverviewPage.class);
+                  }
 
-                    @Override
-                    protected void onNo() {
-                        setResponsePage(new BudgetDetailsPage(BudgetDetailsPage.this.getPageParameters()));
-                    }
+                  @Override
+                  protected void onNo() {
+                    setResponsePage(
+                        new BudgetDetailsPage(BudgetDetailsPage.this.getPageParameters()));
+                  }
 
-                    @Override
-                    protected String confirmationText() {
-                        return BudgetDetailsPage.this.getString("confirmation.delete");
-                    }
+                  @Override
+                  protected String confirmationText() {
+                    return BudgetDetailsPage.this.getString("confirmation.delete");
+                  }
                 });
-            }
+          }
         };
-        if(this.model.getObject().getContractName() != null){
-            deleteForm.setEnabled(false);
-            deleteForm.add(new AttributeAppender("style", "cursor: not-allowed;", " "));
-            deleteForm.add(new AttributeModifier("title", getString("contract.still.exist")));
-        }
-        deleteForm.add(new SubmitLink("deleteLink"));
-        add(deleteForm);
+    if (this.model.getObject().getContractName() != null) {
+      deleteForm.setEnabled(false);
+      deleteForm.add(new AttributeAppender("style", "cursor: not-allowed;", " "));
+      deleteForm.add(new AttributeModifier("title", getString("contract.still.exist")));
     }
+    deleteForm.add(new SubmitLink("deleteLink"));
+    add(deleteForm);
+  }
 
-    public static PageParameters createParameters(long budgetId) {
-        PageParameters parameters = new PageParameters();
-        parameters.add("id", budgetId);
-        return parameters;
-    }
+  public static PageParameters createParameters(long budgetId) {
+    PageParameters parameters = new PageParameters();
+    parameters.add("id", budgetId);
+    return parameters;
+  }
 
-    private void addContractLinks() {
-        BookmarkablePageLink<ContractDetailsPage> contractLinkName = new BookmarkablePageLink<ContractDetailsPage>("contractLink", ContractDetailsPage.class, ContractDetailsPage.createParameters(model.getObject().getContractId())) {
-            @Override
-            protected void onConfigure() {
-                super.onConfigure();
-                if (model.getObject().getContractId() == 0) {
-                    setEnabled(false);
-                    add(new AttributeAppender("style", "cursor: not-allowed;", " "));
-                    add(new AttributeModifier("title", BudgetDetailsPage.this.getString("links.contract.label.no.contract")));
-                }
+  private void addContractLinks() {
+    BookmarkablePageLink<ContractDetailsPage> contractLinkName =
+        new BookmarkablePageLink<ContractDetailsPage>(
+            "contractLink",
+            ContractDetailsPage.class,
+            ContractDetailsPage.createParameters(model.getObject().getContractId())) {
+          @Override
+          protected void onConfigure() {
+            super.onConfigure();
+            if (model.getObject().getContractId() == 0) {
+              setEnabled(false);
+              add(new AttributeAppender("style", "cursor: not-allowed;", " "));
+              add(
+                  new AttributeModifier(
+                      "title",
+                      BudgetDetailsPage.this.getString("links.contract.label.no.contract")));
             }
+          }
         };
-        contractLinkName.add(new Label("contractName", () -> StringUtils.isBlank(model.getObject().getContractName()) ? getString("links.contract.label.no.contract") : model.getObject().getContractName())
-        );
+    contractLinkName.add(
+        new Label(
+            "contractName",
+            () ->
+                StringUtils.isBlank(model.getObject().getContractName())
+                    ? getString("links.contract.label.no.contract")
+                    : model.getObject().getContractName()));
 
-        add(contractLinkName);
-    }
+    add(contractLinkName);
+  }
 
-    private Link createEditLink(String id) {
-        return new Link(id) {
-            @Override
-            public void onClick() {
-                WebPage page = new EditBudgetPage(BasePage.createParameters(getParameterId()), BudgetDetailsPage.class, getPageParameters(), false);
-                setResponsePage(page);
-            }
-        };
-    }
+  private Link createEditLink(String id) {
+    return new Link(id) {
+      @Override
+      public void onClick() {
+        WebPage page =
+            new EditBudgetPage(
+                BasePage.createParameters(getParameterId()),
+                BudgetDetailsPage.class,
+                getPageParameters(),
+                false);
+        setResponsePage(page);
+      }
+    };
+  }
 
-    @Override
-    protected BreadcrumbsModel getBreadcrumbsModel() {
-        BreadcrumbsModel model = new BreadcrumbsModel(DashboardPage.class, BudgetsOverviewPage.class);
-        model.addBreadcrumb(new Breadcrumb(BudgetDetailsPage.class, getPageParameters(), new BudgetNameModel(getParameterId())));
-        return model;
-    }
+  @Override
+  protected BreadcrumbsModel getBreadcrumbsModel() {
+    BreadcrumbsModel model = new BreadcrumbsModel(DashboardPage.class, BudgetsOverviewPage.class);
+    model.addBreadcrumb(
+        new Breadcrumb(
+            BudgetDetailsPage.class, getPageParameters(), new BudgetNameModel(getParameterId())));
+    return model;
+  }
 
-    @Override
-    protected void onDetach() {
-        model.detach();
-        super.onDetach();
-    }
+  @Override
+  protected void onDetach() {
+    model.detach();
+    super.onDetach();
+  }
 }

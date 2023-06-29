@@ -25,58 +25,68 @@ import org.wickedsource.budgeteer.web.pages.person.overview.PeopleOverviewPage;
 @Mount("people/details/${id}")
 public class PersonDetailsPage extends BasePage {
 
-    @SpringBean
-    private PersonService personService;
+  @SpringBean private PersonService personService;
 
-    public PersonDetailsPage(PageParameters parameters) {
-        super(parameters);
-        add(new PersonHighlightsPanel("highlightsPanel", new PersonHighlightsModel(getParameterId())));
-        add(createEditPersonLink("editPersonLink"));
-        add(new BookmarkablePageLink<PersonHoursPage>("hoursLink", PersonHoursPage.class, PersonHoursPage.createParameters(getParameterId())));
+  public PersonDetailsPage(PageParameters parameters) {
+    super(parameters);
+    add(new PersonHighlightsPanel("highlightsPanel", new PersonHighlightsModel(getParameterId())));
+    add(createEditPersonLink("editPersonLink"));
+    add(
+        new BookmarkablePageLink<PersonHoursPage>(
+            "hoursLink",
+            PersonHoursPage.class,
+            PersonHoursPage.createParameters(getParameterId())));
 
-        Form<Void> deleteForm = new ConfirmationForm<Void>("deleteForm", this, "confirmation.delete") {
-            @Override
-            public void onSubmit() {
+    Form<Void> deleteForm =
+        new ConfirmationForm<Void>("deleteForm", this, "confirmation.delete") {
+          @Override
+          public void onSubmit() {
 
-                setResponsePage(new DeleteDialog() {
-                    @Override
-                    protected void onYes() {
-                        personService.deletePerson(getParameterId());
-                        setResponsePage(PeopleOverviewPage.class);
-                    }
+            setResponsePage(
+                new DeleteDialog() {
+                  @Override
+                  protected void onYes() {
+                    personService.deletePerson(getParameterId());
+                    setResponsePage(PeopleOverviewPage.class);
+                  }
 
-                    @Override
-                    protected void onNo() {
-                        setResponsePage(PersonDetailsPage.class, getPageParameters());
-                    }
+                  @Override
+                  protected void onNo() {
+                    setResponsePage(PersonDetailsPage.class, getPageParameters());
+                  }
 
-                    @Override
-                    protected String confirmationText() {
-                        return PersonDetailsPage.this.getString("confirmation.delete");
-                    }
+                  @Override
+                  protected String confirmationText() {
+                    return PersonDetailsPage.this.getString("confirmation.delete");
+                  }
                 });
-            }
+          }
         };
-        deleteForm.add(new SubmitLink("deletePersonLink"));
-        add(deleteForm);
-    }
+    deleteForm.add(new SubmitLink("deletePersonLink"));
+    add(deleteForm);
+  }
 
-    private Link createEditPersonLink(String id) {
-        return new Link<Void>(id) {
-            @Override
-            public void onClick() {
-                WebPage page = new EditPersonPage(EditPersonPage.createParameters(getParameterId()), PersonDetailsPage.class, getPageParameters());
-                setResponsePage(page);
-            }
-        };
-    }
+  private Link createEditPersonLink(String id) {
+    return new Link<Void>(id) {
+      @Override
+      public void onClick() {
+        WebPage page =
+            new EditPersonPage(
+                EditPersonPage.createParameters(getParameterId()),
+                PersonDetailsPage.class,
+                getPageParameters());
+        setResponsePage(page);
+      }
+    };
+  }
 
-    @Override
-    @SuppressWarnings("unchecked")
-    protected BreadcrumbsModel getBreadcrumbsModel() {
-        BreadcrumbsModel model = new BreadcrumbsModel(DashboardPage.class, PeopleOverviewPage.class);
-        model.addBreadcrumb(new Breadcrumb(PersonDetailsPage.class, getPageParameters(), new PersonNameModel(getParameterId())));
-        return model;
-    }
-
+  @Override
+  @SuppressWarnings("unchecked")
+  protected BreadcrumbsModel getBreadcrumbsModel() {
+    BreadcrumbsModel model = new BreadcrumbsModel(DashboardPage.class, PeopleOverviewPage.class);
+    model.addBreadcrumb(
+        new Breadcrumb(
+            PersonDetailsPage.class, getPageParameters(), new PersonNameModel(getParameterId())));
+    return model;
+  }
 }

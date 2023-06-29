@@ -7,7 +7,6 @@ import de.adesso.budgeteer.common.old.MoneyUtil;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 import org.apache.wicket.util.tester.WicketTester;
 import org.joda.money.CurrencyUnit;
 import org.joda.money.Money;

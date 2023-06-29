@@ -7,16 +7,15 @@ import de.adesso.budgeteer.common.old.MoneyUtil;
 import de.adesso.budgeteer.persistence.DbUnitDataJpaTestBase;
 import de.adesso.budgeteer.persistence.budget.BudgetEntity;
 import de.adesso.budgeteer.persistence.person.PersonEntity;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 class WorkRecordRepositoryTest extends DbUnitDataJpaTestBase {
 

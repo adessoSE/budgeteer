@@ -7,7 +7,6 @@ dependencies {
     implementation(project(":budgeteer-importer-api"))
     implementation(project(":importer:budgeteer-aproda-importer"))
     implementation(project(":importer:budgeteer-ubw-importer"))
-    implementation(project(":importer:budgeteer-resourceplan-importer"))
     implementation(project(":importer:budgeteer-powerbi-importer"))
     implementation(project(":budgeteer-report-exporter"))
     implementation(project(":budgeteer-core"))

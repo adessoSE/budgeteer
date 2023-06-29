@@ -4,16 +4,15 @@ import de.adesso.budgeteer.persistence.contract.ContractEntity;
 import de.adesso.budgeteer.persistence.person.DailyRateEntity;
 import de.adesso.budgeteer.persistence.project.ProjectEntity;
 import de.adesso.budgeteer.persistence.record.WorkRecordEntity;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.joda.money.Money;
-
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(

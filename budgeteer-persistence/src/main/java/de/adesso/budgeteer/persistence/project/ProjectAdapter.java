@@ -13,15 +13,14 @@ import de.adesso.budgeteer.persistence.person.PersonRepository;
 import de.adesso.budgeteer.persistence.record.WorkRecordRepository;
 import de.adesso.budgeteer.persistence.user.UserEntity;
 import de.adesso.budgeteer.persistence.user.UserRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
-
-import javax.transaction.Transactional;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import javax.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor

@@ -1,9 +1,8 @@
 package de.adesso.budgeteer.persistence.record;
 
+import java.util.Date;
 import org.joda.money.Money;
 import org.springframework.stereotype.Repository;
-
-import java.util.Date;
 
 @Repository
 public interface RecordRepository {

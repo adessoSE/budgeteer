@@ -2,15 +2,14 @@ package org.wickedsource.budgeteer.service.record;
 
 import de.adesso.budgeteer.persistence.record.WorkRecordEntity;
 import de.adesso.budgeteer.persistence.record.WorkRecordRepository;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.wickedsource.budgeteer.ListUtil;
-
-import javax.transaction.Transactional;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 
 @Service
 @Transactional
