@@ -15,14 +15,9 @@ public class ContractStatisticBean implements Serializable {
 
   private long remainingContractBudget;
   private long spentBudget;
-  private long invoicedBudget;
 
   /** Month is 0-based; */
   private int month;
-
-  public long getDifference() {
-    return spentBudget - invoicedBudget;
-  }
 
   public Double getProgressInPercent() {
     if (progress != null) {

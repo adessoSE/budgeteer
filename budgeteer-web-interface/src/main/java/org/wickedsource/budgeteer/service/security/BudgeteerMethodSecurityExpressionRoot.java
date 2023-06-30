@@ -4,8 +4,6 @@ import de.adesso.budgeteer.persistence.budget.BudgetEntity;
 import de.adesso.budgeteer.persistence.budget.BudgetRepository;
 import de.adesso.budgeteer.persistence.contract.ContractEntity;
 import de.adesso.budgeteer.persistence.contract.ContractRepository;
-import de.adesso.budgeteer.persistence.invoice.InvoiceEntity;
-import de.adesso.budgeteer.persistence.invoice.InvoiceRepository;
 import de.adesso.budgeteer.persistence.person.PersonEntity;
 import de.adesso.budgeteer.persistence.person.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,8 +31,6 @@ public class BudgeteerMethodSecurityExpressionRoot extends SecurityExpressionRoo
   @Autowired private BudgetRepository budgetRepository;
 
   @Autowired private ContractRepository contractRepository;
-
-  @Autowired private InvoiceRepository invoiceRepository;
 
   @Autowired private PersonRepository personRepository;
 
@@ -129,25 +125,6 @@ public class BudgeteerMethodSecurityExpressionRoot extends SecurityExpressionRoo
 
     if (entity != null) {
       long contractProjectId = entity.getProject().getId();
-      long selectedProjectId = getCurrentProjectId();
-
-      return selectedProjectId == contractProjectId;
-    }
-
-    return false;
-  }
-
-  /**
-   * @param invoiceId The id of the invoice.
-   * @return <i>true</i>, if the associated contract's project has the same id as the currently
-   *     selected project by the user, <i>false</i> otherwise.
-   * @see BudgeteerSession#getProjectId()
-   */
-  public boolean canReadInvoice(Long invoiceId) {
-    InvoiceEntity entity = invoiceRepository.findById(invoiceId).orElse(null);
-
-    if (entity != null) {
-      long contractProjectId = entity.getContract().getProject().getId();
       long selectedProjectId = getCurrentProjectId();
 
       return selectedProjectId == contractProjectId;

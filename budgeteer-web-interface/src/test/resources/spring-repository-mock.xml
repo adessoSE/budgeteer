@@ -20,8 +20,6 @@
 
     <mockito:mock id="contractRepository" class="de.adesso.budgeteer.persistence.contract.ContractRepository"/>
 
-    <mockito:mock id="invoiceRepository" class="de.adesso.budgeteer.persistence.invoice.InvoiceRepository"/>
-
     <mockito:mock id="templateRepository" class="de.adesso.budgeteer.persistence.template.TemplateRepository"/>
 
     <mockito:mock id="verificationTokenRepository" class="de.adesso.budgeteer.persistence.user.VerificationTokenRepository"/>

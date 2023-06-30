@@ -1,14 +1,12 @@
 package de.adesso.budgeteer.persistence.contract;
 
 import de.adesso.budgeteer.persistence.budget.BudgetEntity;
-import de.adesso.budgeteer.persistence.invoice.InvoiceEntity;
 import de.adesso.budgeteer.persistence.project.ProjectEntity;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
@@ -70,17 +68,6 @@ public class ContractEntity implements Serializable {
 
   @Column(name = "FILE_NAME")
   private String fileName;
-
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "contract")
-  private List<InvoiceEntity> invoices;
-
-  /** A list of possible dynamic fields that a invoice that belongs to this contract can use */
-  @OneToMany(
-      cascade = CascadeType.ALL,
-      orphanRemoval = true,
-      mappedBy = "contract",
-      fetch = FetchType.LAZY)
-  private Set<ContractInvoiceField> invoiceFields;
 
   @Override
   public String toString() {

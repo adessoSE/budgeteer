@@ -6,7 +6,6 @@ import static org.mockito.Mockito.*;
 import de.adesso.budgeteer.core.contract.domain.Contract;
 import de.adesso.budgeteer.core.contract.port.out.UpdateContractEntityPort;
 import de.adesso.budgeteer.persistence.budget.BudgetRepository;
-import de.adesso.budgeteer.persistence.invoice.InvoiceRepository;
 import de.adesso.budgeteer.persistence.project.ProjectContractField;
 import de.adesso.budgeteer.persistence.project.ProjectEntity;
 import de.adesso.budgeteer.persistence.project.ProjectRepository;
@@ -31,7 +30,6 @@ class ContractAdapterTest {
   @InjectMocks private ContractAdapter contractAdapter;
   @Mock private ContractRepository contractRepository;
   @Mock private ProjectRepository projectRepository;
-  @Mock private InvoiceRepository invoiceRepository;
   @Mock private BudgetRepository budgetRepository;
   @Mock private ContractMapper contractMapper;
 

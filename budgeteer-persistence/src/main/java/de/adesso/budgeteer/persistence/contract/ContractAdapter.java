@@ -4,7 +4,6 @@ import de.adesso.budgeteer.core.contract.domain.Contract;
 import de.adesso.budgeteer.core.contract.domain.ContractSummary;
 import de.adesso.budgeteer.core.contract.port.out.*;
 import de.adesso.budgeteer.persistence.budget.BudgetRepository;
-import de.adesso.budgeteer.persistence.invoice.InvoiceRepository;
 import de.adesso.budgeteer.persistence.project.ProjectAdapter;
 import de.adesso.budgeteer.persistence.project.ProjectContractField;
 import de.adesso.budgeteer.persistence.project.ProjectEntity;
@@ -33,7 +32,6 @@ public class ContractAdapter
 
   private final ContractRepository contractRepository;
   private final ProjectRepository projectRepository;
-  private final InvoiceRepository invoiceRepository;
   private final BudgetRepository budgetRepository;
   private final ContractMapper contractMapper;
   private final ProjectAdapter projectAdapter;
@@ -123,8 +121,6 @@ public class ContractAdapter
   @Transactional
   public void deleteContract(long contractId) {
     budgetRepository.removeReferencesToContract(contractId);
-    invoiceRepository.deleteInvoiceFieldsByContractId(contractId);
-    invoiceRepository.deleteInvoicesByContractId(contractId);
     contractRepository.deleteById(contractId);
   }
 

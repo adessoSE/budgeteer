@@ -40,7 +40,6 @@ public class IntegrationTestConfiguration {
     public BudgeteerMethodSecurityExpressionRoot budgeteerMethodSecurityExpressionRootBean() {
         BudgeteerMethodSecurityExpressionRoot root = Mockito.mock(BudgeteerMethodSecurityExpressionRoot.class);
 
-        Mockito.when(root.canReadInvoice(Mockito.anyLong())).thenReturn(true);
         Mockito.when(root.canReadContract(Mockito.anyLong())).thenReturn(true);
         Mockito.when(root.canReadBudget(Mockito.anyLong())).thenReturn(true);
         Mockito.when(root.canReadPerson(Mockito.anyLong())).thenReturn(true);

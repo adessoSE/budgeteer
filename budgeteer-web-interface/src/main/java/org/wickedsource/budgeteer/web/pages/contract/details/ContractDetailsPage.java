@@ -3,7 +3,6 @@ package org.wickedsource.budgeteer.web.pages.contract.details;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.SubmitLink;
-import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -18,7 +17,6 @@ import org.wickedsource.budgeteer.web.pages.contract.details.highlights.Contract
 import org.wickedsource.budgeteer.web.pages.contract.edit.EditContractPage;
 import org.wickedsource.budgeteer.web.pages.contract.overview.ContractOverviewPage;
 import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
-import org.wickedsource.budgeteer.web.pages.invoice.edit.EditInvoicePage;
 
 @Mount("contracts/details/${id}")
 public class ContractDetailsPage extends BasePage {
@@ -47,21 +45,6 @@ public class ContractDetailsPage extends BasePage {
             setResponsePage(page);
           }
         });
-    add(
-        new Link("addInvoiceLink") {
-          @Override
-          public void onClick() {
-            WebPage page =
-                new EditInvoicePage(
-                    EditInvoicePage.createNewInvoiceParameters(getParameterId()),
-                    ContractDetailsPage.class,
-                    getPageParameters());
-            setResponsePage(page);
-          }
-        });
-    add(
-        new ExternalLink(
-            "showInvoiceLink", "invoices/" + contractModel.getObject().getContractId()));
     add(
         new Link("showContractLink") {
           @Override

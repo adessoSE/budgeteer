@@ -3,7 +3,6 @@ package org.wickedsource.budgeteer.service.project;
 import de.adesso.budgeteer.persistence.budget.BudgetRepository;
 import de.adesso.budgeteer.persistence.contract.ContractRepository;
 import de.adesso.budgeteer.persistence.imports.ImportRepository;
-import de.adesso.budgeteer.persistence.invoice.InvoiceRepository;
 import de.adesso.budgeteer.persistence.person.DailyRateRepository;
 import de.adesso.budgeteer.persistence.person.PersonRepository;
 import de.adesso.budgeteer.persistence.project.ProjectEntity;
@@ -38,8 +37,6 @@ public class ProjectService {
   @Autowired private ProjectBaseDataMapper mapper;
 
   @Autowired private DailyRateRepository dailyRateRepository;
-
-  @Autowired private InvoiceRepository invoiceRepository;
 
   @Autowired private ContractRepository contractRepository;
 
@@ -103,9 +100,6 @@ public class ProjectService {
     importRepository.deleteByProjectId(projectId);
     budgetRepository.deleteByProjectId(projectId);
     personRepository.deleteByProjectId(projectId);
-    invoiceRepository.deleteInvoiceFieldByProjectId(projectId);
-    invoiceRepository.deleteContractInvoiceFieldByProject(projectId);
-    invoiceRepository.deleteByProjectId(projectId);
     contractRepository.deleteContractFieldByProjectId(projectId);
     contractRepository.deleteByProjectId(projectId);
     ProjectEntity projectEntity = projectRepository.findById(projectId).orElse(null);

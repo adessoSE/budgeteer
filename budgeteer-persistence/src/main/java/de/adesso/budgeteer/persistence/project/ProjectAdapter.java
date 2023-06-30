@@ -7,7 +7,6 @@ import de.adesso.budgeteer.core.project.port.out.*;
 import de.adesso.budgeteer.persistence.budget.BudgetRepository;
 import de.adesso.budgeteer.persistence.contract.ContractRepository;
 import de.adesso.budgeteer.persistence.imports.ImportRepository;
-import de.adesso.budgeteer.persistence.invoice.InvoiceRepository;
 import de.adesso.budgeteer.persistence.person.DailyRateRepository;
 import de.adesso.budgeteer.persistence.person.PersonRepository;
 import de.adesso.budgeteer.persistence.record.WorkRecordRepository;
@@ -48,7 +47,6 @@ public class ProjectAdapter
   private final WorkRecordRepository workRecordRepository;
   private final ImportRepository importRepository;
   private final BudgetRepository budgetRepository;
-  private final InvoiceRepository invoiceRepository;
   private final ContractRepository contractRepository;
   private final PersonRepository personRepository;
 
@@ -115,9 +113,6 @@ public class ProjectAdapter
     importRepository.deleteByProjectId(projectId);
     budgetRepository.deleteByProjectId(projectId);
     personRepository.deleteByProjectId(projectId);
-    invoiceRepository.deleteInvoiceFieldByProjectId(projectId);
-    invoiceRepository.deleteContractInvoiceFieldByProject(projectId);
-    invoiceRepository.deleteByProjectId(projectId);
     contractRepository.deleteContractFieldByProjectId(projectId);
     contractRepository.deleteByProjectId(projectId);
     var projectEntity = projectRepository.findById(projectId).orElse(null);

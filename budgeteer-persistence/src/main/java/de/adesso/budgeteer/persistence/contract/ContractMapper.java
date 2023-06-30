@@ -4,7 +4,6 @@ import de.adesso.budgeteer.core.common.Attachment;
 import de.adesso.budgeteer.core.contract.domain.Contract;
 import de.adesso.budgeteer.core.contract.domain.ContractSummary;
 import de.adesso.budgeteer.persistence.budget.BudgetEntity;
-import de.adesso.budgeteer.persistence.invoice.InvoiceEntity;
 import de.adesso.budgeteer.persistence.project.ProjectContractField;
 import de.adesso.budgeteer.persistence.record.WorkRecordEntity;
 import java.time.LocalDate;
@@ -69,19 +68,12 @@ public class ContractMapper {
             .map(WorkRecordEntity::getActualRate)
             .reduce(Money.of(CurrencyUnit.EUR, 0), Money::plus);
     var budgetLeftUpToYearAndMonth = contractEntity.getBudget().minus(budgetBurnedUpToYearAndMonth);
-    var invoicedUpToYearAndMonth =
-        contractEntity.getInvoices().stream()
-            .filter(
-                invoice -> inYearAndMonthRange(invoice.getYear(), invoice.getMonth(), from, until))
-            .map(InvoiceEntity::getInvoiceSum)
-            .reduce(Money.of(CurrencyUnit.EUR, 0), Money::plus);
     return new ContractSummary(
         this.mapToDomain(contractEntity),
         from,
         until,
         budgetBurnedUpToYearAndMonth,
-        budgetLeftUpToYearAndMonth,
-        invoicedUpToYearAndMonth);
+        budgetLeftUpToYearAndMonth);
   }
 
   public List<ContractSummary> mapToContractSummaries(

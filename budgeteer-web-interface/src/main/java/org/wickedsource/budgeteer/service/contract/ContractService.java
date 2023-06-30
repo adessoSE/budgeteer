@@ -5,7 +5,6 @@ import de.adesso.budgeteer.persistence.budget.BudgetRepository;
 import de.adesso.budgeteer.persistence.contract.ContractEntity;
 import de.adesso.budgeteer.persistence.contract.ContractFieldEntity;
 import de.adesso.budgeteer.persistence.contract.ContractRepository;
-import de.adesso.budgeteer.persistence.invoice.InvoiceRepository;
 import de.adesso.budgeteer.persistence.project.ProjectContractField;
 import de.adesso.budgeteer.persistence.project.ProjectEntity;
 import de.adesso.budgeteer.persistence.project.ProjectRepository;
@@ -31,8 +30,6 @@ public class ContractService {
   @Autowired private ProjectRepository projectRepository;
 
   @Autowired private BudgetRepository budgetRepository;
-
-  @Autowired private InvoiceRepository invoiceRepository;
 
   @Autowired private ContractDataMapper mapper;
 
@@ -131,25 +128,7 @@ public class ContractService {
     }
     budgetRepository.saveAll(budgets);
 
-    invoiceRepository.deleteInvoiceFieldsByContractId(contractId);
-    invoiceRepository.deleteInvoicesByContractId(contractId);
-
     contractRepository.deleteById(contractId);
-  }
-
-  @PreAuthorize("canReadContract(#contractId)")
-  public List<Date> getMonthList(long contractId) {
-    List<Date> months = new ArrayList<Date>();
-    ContractEntity contract = contractRepository.findByIdAndFetchInvoiceFields(contractId);
-    Calendar cal = Calendar.getInstance();
-    cal.setTime(DateUtil.toDate(contract.getStartDate()));
-    Calendar currentDate = Calendar.getInstance();
-    currentDate.setTime(new Date());
-    while (cal.before(currentDate)) {
-      months.add(cal.getTime());
-      cal.add(Calendar.MONTH, 1);
-    }
-    return months;
   }
 
   @PreAuthorize("canReadProject(#projectId)")

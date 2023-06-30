@@ -241,14 +241,6 @@ class ContractServiceTest extends ServiceIntegrationTestTemplate {
     assertEquals(ContractEntity.ContractType.FIXED_PRICE, testObject.getType());
   }
 
-  @Test
-  @DatabaseSetup("contractTest.xml")
-  @DatabaseTearDown(value = "contractTest.xml", type = DatabaseOperation.DELETE_ALL)
-  void testGetContractByIdWithInvoices() {
-    ContractBaseData testObject = service.getContractById(600L);
-    assertEquals(2, testObject.getBelongingInvoices().size());
-  }
-
   private List<DynamicAttributeField> getListOfContractFields() {
     List<DynamicAttributeField> result = new LinkedList<DynamicAttributeField>();
     DynamicAttributeField data = new DynamicAttributeField();

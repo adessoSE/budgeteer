@@ -5,7 +5,6 @@ import de.adesso.budgeteer.persistence.budget.BudgetEntity;
 import de.adesso.budgeteer.persistence.contract.ContractEntity;
 import de.adesso.budgeteer.persistence.contract.ContractFieldEntity;
 import de.adesso.budgeteer.persistence.contract.ContractRepository;
-import de.adesso.budgeteer.persistence.invoice.InvoiceEntity;
 import de.adesso.budgeteer.persistence.project.ProjectContractField;
 import java.util.*;
 import org.joda.money.Money;
@@ -14,14 +13,10 @@ import org.springframework.stereotype.Component;
 import org.wickedsource.budgeteer.service.AbstractMapper;
 import org.wickedsource.budgeteer.service.DateUtil;
 import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
-import org.wickedsource.budgeteer.service.invoice.InvoiceBaseData;
-import org.wickedsource.budgeteer.service.invoice.InvoiceDataMapper;
 import org.wickedsource.budgeteer.web.components.fileUpload.FileUploadModel;
 
 @Component
 public class ContractDataMapper extends AbstractMapper<ContractEntity, ContractBaseData> {
-
-  @Autowired private InvoiceDataMapper invoiceDataMapper;
 
   @Autowired private ContractRepository contractRepository;
 
@@ -62,11 +57,6 @@ public class ContractDataMapper extends AbstractMapper<ContractEntity, ContractB
       result
           .getBelongingBudgets()
           .add(new BudgetBaseData(budgetEntity.getId(), budgetEntity.getName()));
-    }
-
-    result.setBelongingInvoices(new LinkedList<InvoiceBaseData>());
-    for (InvoiceEntity invoiceEntity : entity.getInvoices()) {
-      result.getBelongingInvoices().add(invoiceDataMapper.map(invoiceEntity));
     }
 
     return result;

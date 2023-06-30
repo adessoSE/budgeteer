@@ -11,7 +11,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.joda.money.Money;
 import org.wickedsource.budgeteer.service.budget.BudgetBaseData;
-import org.wickedsource.budgeteer.service.invoice.InvoiceBaseData;
 import org.wickedsource.budgeteer.web.components.fileUpload.FileUploadModel;
 
 @Data
@@ -30,8 +29,6 @@ public class ContractBaseData implements Serializable {
   private ContractEntity.ContractType type;
   private List<DynamicAttributeField> contractAttributes;
   private FileUploadModel fileModel = new FileUploadModel();
-  private List<InvoiceBaseData> belongingInvoices;
-
   private List<BudgetBaseData> belongingBudgets;
 
   public ContractBaseData(long projectId) {

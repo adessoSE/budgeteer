@@ -32,18 +32,6 @@
     <PROJECT_CONTRACT_FIELD id="7" FIELD_NAME="test0" PROJECT_ID="6" />
     <PROJECT_CONTRACT_FIELD id="8" FIELD_NAME="test1" PROJECT_ID="6" />
 
-    <CONTRACT_INVOICE_FIELD id="1" FIELD_NAME="Test Contract Field" CONTRACT_ID="6" />
-    <CONTRACT_INVOICE_FIELD id="2" FIELD_NAME="Test Contract Field 2" CONTRACT_ID="6" />
-
-    <INVOICE id="1" CONTRACT_ID="6" NAME="Test Invoice" INVOICE_SUM="2014" INTERNAL_NUMBER="ABC"
-             YEAR="2014" MONTH="2" />
-
-    <INVOICE_FIELD id="1" INVOICE_ID="1" CONTRACT_INVOICE_FIELD_ID="1" INVOICE_FIELD_VALUE="Test" />
-    <INVOICE_FIELD id="2" INVOICE_ID="1" CONTRACT_INVOICE_FIELD_ID="2" INVOICE_FIELD_VALUE="Test" />
-
-    <INVOICE id="2" CONTRACT_ID="6" NAME="Test Invoice2" INVOICE_SUM="2014" INTERNAL_NUMBER="ABC"
-             YEAR="2014" MONTH="2" />
-
     <BUDGET id="6" name="Budget 1" total="100000" import_key="budget1" project_id="6" CONTRACT_ID="6"/>
     <BUDGET id="2" name="Budget 2" total="100000" import_key="budget2" project_id="6" CONTRACT_ID="6"/>
     <BUDGET id="3" name="Budget 3" total="100000" import_key="budget3" project_id="6" CONTRACT_ID="6"/>

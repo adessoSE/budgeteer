@@ -36,8 +36,6 @@ public abstract class ServiceTestTemplate {
   private void setAuthorizationAndMock() {
     // set a placeholder authentication
     SecurityContextHolder.getContext().setAuthentication(new BudgeteerAuthenticationToken("user"));
-
-    Mockito.when(root.canReadInvoice(Mockito.anyLong())).thenReturn(true);
     Mockito.when(root.canReadContract(Mockito.anyLong())).thenReturn(true);
     Mockito.when(root.canReadBudget(Mockito.anyLong())).thenReturn(true);
     Mockito.when(root.canReadPerson(Mockito.anyLong())).thenReturn(true);
