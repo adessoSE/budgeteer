@@ -1,11 +1,5 @@
 plugins {
-    id 'org.springframework.boot'
-    id 'io.spring.dependency-management'
-    id "io.freefair.lombok"
-}
-
-repositories {
-    mavenCentral()
+    id("de.adesso.budgeteer.spring-conventions")
 }
 
 dependencies {
@@ -29,8 +23,4 @@ bootJar {
 
 jar {
     enabled = true
-}
-
-test {
-    useJUnitPlatform()
 }
