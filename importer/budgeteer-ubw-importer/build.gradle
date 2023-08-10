@@ -1,4 +1,12 @@
+plugins {
+    id("de.adesso.budgeteer.java-conventions")
+}
+
 dependencies {
     implementation project(':budgeteer-importer-api')
     implementation 'org.apache.poi:poi-ooxml:5.2.3'
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: junit5_version
+    testImplementation group: 'org.mockito', name: 'mockito-core', version: mockito_version
+    testImplementation group: 'org.assertj', name: 'assertj-core', version: assertj_version
+    testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: junit5_version
 }

@@ -1,9 +1,7 @@
 import org.apache.tools.ant.filters.ReplaceTokens
 
 plugins {
-    id 'io.freefair.lombok'
-    id 'org.springframework.boot'
-    id 'io.spring.dependency-management'
+    id "de.adesso.budgeteer.spring-conventions"
     id 'war'
 }
 

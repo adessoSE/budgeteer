@@ -1,6 +1,5 @@
 plugins {
-    id 'java'
-    id 'io.freefair.lombok'
+    id("de.adesso.budgeteer.java-conventions")
 }
 
 dependencies {
