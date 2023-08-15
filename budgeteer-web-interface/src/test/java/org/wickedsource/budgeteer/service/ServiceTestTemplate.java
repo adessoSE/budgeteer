@@ -13,39 +13,39 @@ import org.wickedsource.budgeteer.service.security.BudgeteerAuthenticationToken;
 import org.wickedsource.budgeteer.service.security.BudgeteerMethodSecurityExpressionRoot;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(loader = SpringockitoContextLoader.class, locations = {"classpath:spring-service.xml", "classpath:spring-repository-mock.xml"})
+@ContextConfiguration(
+    loader = SpringockitoContextLoader.class,
+    locations = {"classpath:spring-service.xml", "classpath:spring-repository-mock.xml"})
 public abstract class ServiceTestTemplate {
 
-    @Autowired
-    private ApplicationContext context;
+  @Autowired private ApplicationContext context;
 
-    @Autowired
-    private BudgeteerMethodSecurityExpressionRoot root;
+  @Autowired private BudgeteerMethodSecurityExpressionRoot root;
 
-    @BeforeEach
-    public void resetMocks() {
-        for (String name : context.getBeanDefinitionNames()) {
-            if (!"workRecordDatabaseImporter".equals(name) && !"planRecordDatabaseImporter".equals(name)) {
-                // excluding prototype beans with constructor arguments
-                Object bean = context.getBean(name);
-                if (Mockito.mockingDetails(bean).isMock()) {
-                    Mockito.reset(bean);
-                }
-            }
+  @BeforeEach
+  public void resetMocks() {
+    for (String name : context.getBeanDefinitionNames()) {
+      if (!"workRecordDatabaseImporter".equals(name)
+          && !"planRecordDatabaseImporter".equals(name)) {
+        // excluding prototype beans with constructor arguments
+        Object bean = context.getBean(name);
+        if (Mockito.mockingDetails(bean).isMock()) {
+          Mockito.reset(bean);
         }
-
-        this.setAuthorizationAndMock();
+      }
     }
 
-    private void setAuthorizationAndMock() {
-        // set a placeholder authentication
-        SecurityContextHolder.getContext().setAuthentication(new BudgeteerAuthenticationToken("user"));
+    this.setAuthorizationAndMock();
+  }
 
-        Mockito.when(root.canReadInvoice(Mockito.anyLong())).thenReturn(true);
-        Mockito.when(root.canReadContract(Mockito.anyLong())).thenReturn(true);
-        Mockito.when(root.canReadBudget(Mockito.anyLong())).thenReturn(true);
-        Mockito.when(root.canReadPerson(Mockito.anyLong())).thenReturn(true);
-        Mockito.when(root.canReadProject(Mockito.anyLong())).thenReturn(true);
-    }
+  private void setAuthorizationAndMock() {
+    // set a placeholder authentication
+    SecurityContextHolder.getContext().setAuthentication(new BudgeteerAuthenticationToken("user"));
 
+    Mockito.when(root.canReadInvoice(Mockito.anyLong())).thenReturn(true);
+    Mockito.when(root.canReadContract(Mockito.anyLong())).thenReturn(true);
+    Mockito.when(root.canReadBudget(Mockito.anyLong())).thenReturn(true);
+    Mockito.when(root.canReadPerson(Mockito.anyLong())).thenReturn(true);
+    Mockito.when(root.canReadProject(Mockito.anyLong())).thenReturn(true);
+  }
 }
