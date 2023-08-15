@@ -1,10 +1,10 @@
 plugins {
-    id 'org.sonarqube' version '3.3'
+    id("org.sonarqube") version "3.3"
 }
 
 allprojects {
-    version = '1.1.4.BETA'
-    group = 'de.adesso'
+    version = "1.1.4.BETA"
+    group = "de.adesso"
 }
 
 subprojects {
@@ -20,8 +20,8 @@ subprojects {
 
 sonarqube {
     properties {
-        property "sonar.projectKey", "adessoAG_budgeteer"
-        property "sonar.organization", "adesso-ag"
-        property "sonar.host.url", "https://sonarcloud.io"
+        property("sonar.projectKey", "adessoAG_budgeteer")
+        property("sonar.organization", "adesso-ag")
+        property("sonar.host.url", "https://sonarcloud.io")
     }
 }
