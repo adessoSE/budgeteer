@@ -2,16 +2,12 @@ package org.wickedsource.budgeteer.service.user;
 
 import de.adesso.budgeteer.persistence.project.ProjectEntity;
 import de.adesso.budgeteer.persistence.project.ProjectRepository;
-import de.adesso.budgeteer.persistence.user.*;
-import java.time.ZoneId;
-import java.util.Calendar;
-import java.util.Date;
+import de.adesso.budgeteer.persistence.user.UserEntity;
+import de.adesso.budgeteer.persistence.user.UserRepository;
 import java.util.List;
 import javax.transaction.Transactional;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,21 +19,9 @@ import org.wickedsource.budgeteer.service.UnknownEntityException;
 public class UserService {
 
   @Autowired private UserRepository userRepository;
-
-  @Autowired private VerificationTokenRepository verificationTokenRepository;
-
-  @Autowired private ForgotPasswordTokenRepository forgotPasswordTokenRepository;
-
   @Autowired private ProjectRepository projectRepository;
-
   @Autowired private PasswordEncoder passwordEncoder;
-
   @Autowired private UserMapper mapper;
-
-  @Autowired private ApplicationEventPublisher applicationEventPublisher;
-
-  @Value("${budgeteer.mail.activate}")
-  private String mailActivated;
 
   /**
    * Returns a list of all users that currently have access to the given project.
@@ -134,24 +118,16 @@ public class UserService {
    * user has been registered.
    *
    * @param username the users name
-   * @param mail the users mail address
    * @param password the users password
    */
-  public void registerUser(String username, String mail, String password)
-      throws UsernameAlreadyInUseException, MailAlreadyInUseException {
+  public void registerUser(String username, String password) throws UsernameAlreadyInUseException {
     if (userRepository.findByName(username) != null) {
       throw new UsernameAlreadyInUseException();
-    } else if (userRepository.findByMail(mail) != null) {
-      throw new MailAlreadyInUseException();
-    } else {
-      UserEntity user = new UserEntity();
-      user.setName(username);
-      user.setMail(mail);
-      user.setPassword(passwordEncoder.encode(password));
-      userRepository.save(user);
-      if (!mail.equals("") && Boolean.valueOf(mailActivated))
-        applicationEventPublisher.publishEvent(new OnRegistrationCompleteEvent(user));
     }
+    UserEntity user = new UserEntity();
+    user.setName(username);
+    user.setPassword(passwordEncoder.encode(password));
+    userRepository.save(user);
   }
 
   /**
@@ -164,25 +140,6 @@ public class UserService {
   public boolean checkPassword(long id, String password) {
     var user = userRepository.findById(id).orElseThrow(RuntimeException::new);
     return passwordEncoder.matches(password, user.getPassword());
-  }
-
-  /**
-   * Triggers an OnForgotPasswordEvent for the given user with the passed mail address.
-   *
-   * @param mail the users mail address
-   * @throws MailNotFoundException
-   * @throws MailNotVerifiedException
-   */
-  public void resetPassword(String mail) throws MailNotFoundException, MailNotVerifiedException {
-    UserEntity userEntity = userRepository.findByMail(mail);
-
-    if (userEntity == null) {
-      throw new MailNotFoundException();
-    } else if (!userEntity.getMailVerified()) {
-      throw new MailNotVerifiedException();
-    } else if (Boolean.valueOf(mailActivated)) {
-      applicationEventPublisher.publishEvent(new OnForgotPasswordEvent(userEntity));
-    }
   }
 
   /**
@@ -199,7 +156,6 @@ public class UserService {
     EditUserData editUserData = new EditUserData();
     editUserData.setId(userEntity.getId());
     editUserData.setName(userEntity.getName());
-    editUserData.setMail(userEntity.getMail());
     editUserData.setPassword(userEntity.getPassword());
     return editUserData;
   }
@@ -216,118 +172,24 @@ public class UserService {
    *
    * @param data the new data for the user
    * @param changePassword specifies if the password should also be changed
-   * @return true if the mail address is verified, otherwise false
    * @throws UsernameAlreadyInUseException
-   * @throws MailAlreadyInUseException
    */
-  public boolean saveUser(EditUserData data, boolean changePassword)
-      throws UsernameAlreadyInUseException, MailAlreadyInUseException {
-    assert data != null;
-    UserEntity userEntity = new UserEntity();
+  public void saveUser(EditUserData data, boolean changePassword)
+      throws UsernameAlreadyInUseException {
+    var testEntity = userRepository.findByName(data.getName());
+    if (testEntity != null && testEntity.getId() != data.getId()) {
+      throw new UsernameAlreadyInUseException();
+    }
 
-    UserEntity testEntity = userRepository.findByName(data.getName());
-    if (testEntity != null)
-      if (testEntity.getId() != data.getId()) throw new UsernameAlreadyInUseException();
-
-    testEntity = userRepository.findByMail(data.getMail());
-    if (testEntity != null)
-      if (testEntity.getId() != data.getId()) throw new MailAlreadyInUseException();
-
-    userEntity = userRepository.findById(data.getId()).orElseThrow(RuntimeException::new);
-
-    testEntity = userRepository.findById(data.getId()).orElse(null);
-    if (testEntity != null)
-      if (testEntity.getMail() == null) userEntity.setMailVerified(false);
-      else if (!testEntity.getMail().equals(data.getMail())) userEntity.setMailVerified(false);
-
+    var userEntity = userRepository.findById(data.getId()).orElseThrow(RuntimeException::new);
     userEntity.setId(data.getId());
     userEntity.setName(data.getName());
-    userEntity.setMail(data.getMail());
 
     if (changePassword) {
       userEntity.setPassword(passwordEncoder.encode(data.getPassword()));
-    } else {
-      userEntity.setPassword(testEntity.getPassword());
     }
 
     userRepository.save(userEntity);
-
-    return userEntity.getMailVerified();
-  }
-
-  /**
-   * Creates a token for a specific user.
-   *
-   * @param userEntity the specific user
-   * @param token a token, which usually contains a random UUID
-   */
-  public VerificationTokenEntity createVerificationTokenForUser(
-      UserEntity userEntity, String token) {
-    VerificationTokenEntity verificationTokenEntity =
-        new VerificationTokenEntity(userEntity, token);
-    verificationTokenRepository.save(verificationTokenEntity);
-    return verificationTokenEntity;
-  }
-
-  /**
-   * Triggers an OnRegistrationCompleteEvent if an user changes his mail address. An existing token
-   * is deleted to create a new one.
-   *
-   * @param userEntity the specific user
-   */
-  public void createNewVerificationTokenForUser(UserEntity userEntity) {
-    VerificationTokenEntity verificationTokenEntity =
-        verificationTokenRepository.findByUser(userEntity);
-    if (verificationTokenEntity != null)
-      verificationTokenRepository.delete(verificationTokenEntity);
-    if (Boolean.valueOf(mailActivated))
-      applicationEventPublisher.publishEvent(new OnRegistrationCompleteEvent(userEntity));
-  }
-
-  /**
-   * Looks for a token in the database that matches the passing token.
-   *
-   * <p>If none is available, INVALID (-1) is returned. If it is, EXPIRED (-2) is returned. If it is
-   * valid, the mail address of the corresponding user is validated and the token is deleted. Then
-   * VALID (0) is returned.
-   *
-   * @param token the token to look for
-   * @return returns a status code (INVALID, EXPIRED, VALID)
-   */
-  public int validateVerificationToken(String token) {
-    VerificationTokenEntity verificationToken = verificationTokenRepository.findByToken(token);
-
-    if (verificationToken == null) return TokenStatus.INVALID.statusCode();
-
-    UserEntity userEntity = verificationToken.getUserEntity();
-    Calendar calendar = Calendar.getInstance();
-
-    if ((Date.from(verificationToken.getExpiryDate().atZone(ZoneId.systemDefault()).toInstant())
-                .getTime()
-            - calendar.getTime().getTime())
-        <= 0) {
-      return TokenStatus.EXPIRED.statusCode();
-    }
-
-    userEntity.setMailVerified(true);
-    userRepository.save(userEntity);
-    verificationTokenRepository.delete(verificationToken);
-    return TokenStatus.VALID.statusCode();
-  }
-
-  /**
-   * Searches for a user using a mail address. If not found, a MailNotFoundException is thrown,
-   * otherwise the user is returned.
-   *
-   * @param mail the mail address to look for
-   * @return returns the user found with the mail address
-   * @throws MailNotFoundException
-   */
-  public UserEntity getUserByMail(String mail) throws MailNotFoundException {
-    UserEntity userEntity = userRepository.findByMail(mail);
-
-    if (userEntity == null) throw new MailNotFoundException();
-    else return userEntity;
   }
 
   /**
@@ -340,90 +202,5 @@ public class UserService {
    */
   public UserEntity getUserById(long id) throws UserIdNotFoundException {
     return userRepository.findById(id).orElseThrow(UserIdNotFoundException::new);
-  }
-
-  /**
-   * Deletes an existing token. A new token is then generated for the corresponding user.
-   *
-   * @param userEntity the specific user
-   * @param token a token, which usually contains a random UUID
-   */
-  public ForgotPasswordTokenEntity createForgotPasswordTokenForUser(
-      UserEntity userEntity, String token) {
-    ForgotPasswordTokenEntity oldForgotPasswordTokenEntity =
-        forgotPasswordTokenRepository.findByUser(userEntity);
-    if (oldForgotPasswordTokenEntity != null)
-      forgotPasswordTokenRepository.delete(oldForgotPasswordTokenEntity);
-
-    ForgotPasswordTokenEntity forgotPasswordTokenEntity =
-        new ForgotPasswordTokenEntity(userEntity, token);
-    forgotPasswordTokenRepository.save(forgotPasswordTokenEntity);
-    return forgotPasswordTokenEntity;
-  }
-
-  /**
-   * Looks for a token in the database that matches the passing token.
-   *
-   * <p>If none is available, INVALID (-1) is returned. If it is expired, EXPIRED (-2) is returned.
-   * If it is valid, the mail address of the corresponding user is validated and the token is
-   * deleted. Then VALID (0) is returned.
-   *
-   * @param token the token to look for
-   * @return returns a status code (INVALID, EXPIRED, VALID)
-   */
-  public int validateForgotPasswordToken(String token) {
-    ForgotPasswordTokenEntity forgotPasswordTokenEntity =
-        forgotPasswordTokenRepository.findByToken(token);
-
-    if (forgotPasswordTokenEntity == null) return TokenStatus.INVALID.statusCode();
-
-    Calendar calendar = Calendar.getInstance();
-
-    if ((Date.from(
-                    forgotPasswordTokenEntity
-                        .getExpiryDate()
-                        .atZone(ZoneId.systemDefault())
-                        .toInstant())
-                .getTime()
-            - calendar.getTime().getTime())
-        <= 0) {
-      return TokenStatus.EXPIRED.statusCode();
-    }
-
-    return TokenStatus.VALID.statusCode();
-  }
-
-  /**
-   * Searches for a user using a ForgotPasswordToken. If one is found, the user is returned,
-   * otherwise null is returned.
-   *
-   * @param forgotPasswordTokenString the ForgotPasswordToken to look for
-   * @return returns the user found with the ForgotPasswordToken
-   */
-  public UserEntity getUserByForgotPasswordToken(String forgotPasswordTokenString) {
-    ForgotPasswordTokenEntity forgotPasswordTokenEntity =
-        forgotPasswordTokenRepository.findByToken(forgotPasswordTokenString);
-    if (forgotPasswordTokenEntity != null) return forgotPasswordTokenEntity.getUserEntity();
-    else return null;
-  }
-
-  /**
-   * Deletes the passed token if it exists.
-   *
-   * @param token the token to be deleted
-   */
-  public void deleteForgotPasswordToken(String token) {
-    ForgotPasswordTokenEntity forgotPasswordTokenEntity =
-        forgotPasswordTokenRepository.findByToken(token);
-
-    if (forgotPasswordTokenEntity != null)
-      forgotPasswordTokenRepository.delete(forgotPasswordTokenEntity);
-  }
-
-  private void updatePasswordEncoding(UserEntity user, String password) {
-    log.info("Updating password encoding for {}", user.getName());
-    var newPassword = passwordEncoder.encode(password);
-    user.setPassword(newPassword);
-    userRepository.save(user);
   }
 }

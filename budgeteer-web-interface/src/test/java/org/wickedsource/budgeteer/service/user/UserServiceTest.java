@@ -21,15 +21,13 @@ class UserServiceTest {
 
   @Mock private UserRepository userRepository;
   @Mock private ProjectRepository projectRepository;
-  @Mock private VerificationTokenRepository verificationTokenRepository;
-  @Mock private ForgotPasswordTokenRepository forgotPasswordTokenRepository;
   @Mock private PasswordEncoder passwordEncoder;
   @Mock UserMapper userMapper;
   @InjectMocks private UserService service;
 
   @Test
   void testRegisterUser() throws Exception {
-    service.registerUser("User", "", "Password");
+    service.registerUser("User", "Password");
     verify(userRepository, times(1)).save(any(UserEntity.class));
   }
 
@@ -39,8 +37,8 @@ class UserServiceTest {
         UsernameAlreadyInUseException.class,
         () -> {
           when(userRepository.findByName("User")).thenReturn(null, new UserEntity());
-          service.registerUser("User", "", "Password");
-          service.registerUser("User", "", "Password");
+          service.registerUser("User", "Password");
+          service.registerUser("User", "Password");
         });
   }
 
@@ -163,32 +161,12 @@ class UserServiceTest {
   }
 
   @Test
-  void testResetPasswordMailNotFoundException() {
-    var email = "nonuser@budgeteer.local";
-    when(userRepository.findByMail(email)).thenReturn(null);
-    Assertions.assertThrows(MailNotFoundException.class, () -> service.resetPassword(email));
-  }
-
-  @Test
-  void testResetPasswordMailNotVerifiedException() {
-    Assertions.assertThrows(
-        MailNotVerifiedException.class,
-        () -> {
-          UserEntity user = createUserEntity();
-          user.setMailVerified(false);
-          when(userRepository.findByMail("user@budgeteer.local")).thenReturn(user);
-          service.resetPassword("user@budgeteer.local");
-        });
-  }
-
-  @Test
   void testLoadUserToEdit() {
     Optional<UserEntity> userMockOptional = createUserEntityOptional();
     when(userRepository.findById(1L)).thenReturn(userMockOptional);
     EditUserData user = service.loadUserToEdit(1L);
     UserEntity userMock = userMockOptional.get();
     Assertions.assertEquals(userMock.getId(), user.getId());
-    Assertions.assertEquals(userMock.getMail(), user.getMail());
     Assertions.assertEquals(userMock.getName(), user.getName());
     Assertions.assertEquals(userMock.getPassword(), user.getPassword());
   }
@@ -211,78 +189,13 @@ class UserServiceTest {
   }
 
   @Test
-  void testSaveUserMailAlreadyInUseException() {
-    Assertions.assertThrows(
-        MailAlreadyInUseException.class,
-        () -> {
-          Optional<UserEntity> user = createUserEntityOptional();
-          UserEntity user2 = createUserEntity();
-          user2.setId(2L);
-          user2.setMail("user2@budgeteer.local");
-          when(userRepository.findById(1L)).thenReturn(user);
-          EditUserData editUserData = service.loadUserToEdit(1L);
-          when(userRepository.findByMail("user2@budgeteer.local")).thenReturn(user2);
-          editUserData.setMail("user2@budgeteer.local");
-          service.saveUser(editUserData, false);
-        });
-  }
-
-  @Test
-  void testSaveUser() throws MailAlreadyInUseException, UsernameAlreadyInUseException {
+  void testSaveUser() throws UsernameAlreadyInUseException {
     Optional<UserEntity> user = createUserEntityOptional();
     when(userRepository.findById(1L)).thenReturn(user);
     EditUserData editUserData = service.loadUserToEdit(1L);
     editUserData.setName("user2");
     service.saveUser(editUserData, false);
     Assertions.assertEquals(editUserData.getName(), user.get().getName());
-  }
-
-  @Test
-  void testCreateVerificationTokenForUser() {
-    UserEntity user = createUserEntity();
-    String uuid = UUID.randomUUID().toString();
-    VerificationTokenEntity verificationTokenEntity =
-        service.createVerificationTokenForUser(user, uuid);
-    verify(verificationTokenRepository, times(1)).save(verificationTokenEntity);
-  }
-
-  @Test
-  void testValidateVerificationTokenInvalid() {
-    String uuid = UUID.randomUUID().toString();
-    Assertions.assertEquals(-1, service.validateVerificationToken(uuid));
-  }
-
-  @Test
-  void testValidateVerificationTokenExpired() {
-    UserEntity user = createUserEntity();
-    String uuid = UUID.randomUUID().toString();
-    VerificationTokenEntity verificationTokenEntity = new VerificationTokenEntity(user, uuid);
-    verificationTokenEntity.setExpiryDate(verificationTokenEntity.getExpiryDate().minusHours(25));
-    when(verificationTokenRepository.findByToken(uuid)).thenReturn(verificationTokenEntity);
-    Assertions.assertEquals(-2, service.validateVerificationToken(uuid));
-  }
-
-  @Test
-  void testValidateVerificationTokenValid() {
-    UserEntity user = createUserEntity();
-    String uuid = UUID.randomUUID().toString();
-    VerificationTokenEntity verificationTokenEntity = new VerificationTokenEntity(user, uuid);
-    when(verificationTokenRepository.findByToken(uuid)).thenReturn(verificationTokenEntity);
-    Assertions.assertEquals(0, service.validateVerificationToken(uuid));
-  }
-
-  @Test
-  void getUserByMailMailNotFoundException() {
-    var email = "nonuser@budgeteer.local";
-    when(userRepository.findByMail(email)).thenReturn(null);
-    Assertions.assertThrows(MailNotFoundException.class, () -> service.getUserByMail(email));
-  }
-
-  @Test
-  void getUserByMail() throws MailNotFoundException {
-    when(userRepository.findByMail("user@budgeteer.local")).thenReturn(createUserEntity());
-    UserEntity user = service.getUserByMail("user@budgeteer.local");
-    Assertions.assertNotNull(user);
   }
 
   @Test
@@ -299,78 +212,10 @@ class UserServiceTest {
     Assertions.assertNotNull(user);
   }
 
-  @Test
-  void testCreateForgotPasswordTokenForUserWithOldToken() {
-    UserEntity user = createUserEntity();
-    String uuid = UUID.randomUUID().toString();
-    ForgotPasswordTokenEntity oldForgotPasswordTokenEntity =
-        new ForgotPasswordTokenEntity(user, uuid);
-    when(forgotPasswordTokenRepository.findByUser(user)).thenReturn(oldForgotPasswordTokenEntity);
-    ForgotPasswordTokenEntity newForgotPasswordTokenEntity =
-        service.createForgotPasswordTokenForUser(user, uuid);
-    verify(forgotPasswordTokenRepository, times(1)).delete(oldForgotPasswordTokenEntity);
-    verify(forgotPasswordTokenRepository, times(1)).save(newForgotPasswordTokenEntity);
-  }
-
-  @Test
-  void testValidateForgotPasswordTokenInvalid() {
-    String uuid = UUID.randomUUID().toString();
-    Assertions.assertEquals(-1, service.validateForgotPasswordToken(uuid));
-  }
-
-  @Test
-  void testValidateForgotPasswordTokenExpired() {
-    UserEntity user = createUserEntity();
-    String uuid = UUID.randomUUID().toString();
-    ForgotPasswordTokenEntity forgotPasswordTokenEntity = new ForgotPasswordTokenEntity(user, uuid);
-    var date = forgotPasswordTokenEntity.getExpiryDate().minusHours(25);
-    forgotPasswordTokenEntity.setExpiryDate(date);
-    when(forgotPasswordTokenRepository.findByToken(uuid)).thenReturn(forgotPasswordTokenEntity);
-    Assertions.assertEquals(-2, service.validateForgotPasswordToken(uuid));
-  }
-
-  @Test
-  void testValidateForgotPasswordTokenValid() {
-    UserEntity user = createUserEntity();
-    String uuid = UUID.randomUUID().toString();
-    ForgotPasswordTokenEntity forgotPasswordTokenEntity = new ForgotPasswordTokenEntity(user, uuid);
-    when(forgotPasswordTokenRepository.findByToken(uuid)).thenReturn(forgotPasswordTokenEntity);
-    Assertions.assertEquals(0, service.validateForgotPasswordToken(uuid));
-  }
-
-  @Test
-  void testGetUserByForgotPasswordTokenNotNull() {
-    UserEntity user = createUserEntity();
-    String uuid = UUID.randomUUID().toString();
-    ForgotPasswordTokenEntity forgotPasswordTokenEntity = new ForgotPasswordTokenEntity(user, uuid);
-    when(forgotPasswordTokenRepository.findByToken(uuid)).thenReturn(forgotPasswordTokenEntity);
-    UserEntity userResult = service.getUserByForgotPasswordToken(uuid);
-    Assertions.assertNotNull(userResult);
-  }
-
-  @Test
-  void testGetUserByForgotPasswordTokenNull() {
-    String uuid = UUID.randomUUID().toString();
-    UserEntity userResult = service.getUserByForgotPasswordToken(uuid);
-    Assertions.assertNull(userResult);
-  }
-
-  @Test
-  void testDeleteForgotPasswordToken() {
-    UserEntity user = createUserEntity();
-    String uuid = UUID.randomUUID().toString();
-    ForgotPasswordTokenEntity forgotPasswordTokenEntity = new ForgotPasswordTokenEntity(user, uuid);
-    when(forgotPasswordTokenRepository.findByToken(uuid)).thenReturn(forgotPasswordTokenEntity);
-    service.deleteForgotPasswordToken(uuid);
-    verify(forgotPasswordTokenRepository, times(1)).delete(forgotPasswordTokenEntity);
-  }
-
   private UserEntity createUserEntity() {
     UserEntity user = new UserEntity();
     user.setId(1L);
     user.setName("user");
-    user.setMail("user@budgeteer.local");
-    user.setMailVerified(true);
     user.setPassword("password");
     user.setAuthorizedProjects(new ArrayList<>());
     return user;
@@ -380,8 +225,6 @@ class UserServiceTest {
     UserEntity user = new UserEntity();
     user.setId(1L);
     user.setName("user");
-    user.setMail("user@budgeteer.local");
-    user.setMailVerified(true);
     user.setPassword("password");
     user.setAuthorizedProjects(new ArrayList<>());
     return Optional.of(user);

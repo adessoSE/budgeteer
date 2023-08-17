@@ -26,8 +26,4 @@
 
     <mockito:mock id="templateRepository" class="de.adesso.budgeteer.persistence.template.TemplateRepository"/>
 
-    <mockito:mock id="verificationTokenRepository" class="de.adesso.budgeteer.persistence.user.VerificationTokenRepository"/>
-
-    <mockito:mock id="forgotPasswordTokenRepository" class="de.adesso.budgeteer.persistence.user.ForgotPasswordTokenRepository"/>
-
 </beans>

@@ -27,7 +27,6 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-logging")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    implementation("org.springframework.boot:spring-boot-starter-mail")
     implementation("org.springframework.boot:spring-boot-starter-validation")
 
     implementation("org.reflections:reflections:${project.properties["reflections_version"]}")
@@ -37,6 +36,8 @@ dependencies {
     implementation("org.joda:joda-money:${project.properties["joda_money_version"]}")
     implementation("de.jollyday:jollyday:${project.properties["jollyday_version"]}")
 
+    testImplementation("org.kubek2k:springockito:${project.properties["springockito_version"]}")
+    testImplementation("org.kubek2k:springockito-annotations:${project.properties["springockito_version"]}")
     testImplementation("com.github.springtestdbunit:spring-test-dbunit:${project.properties["spring_dbunit_version"]}")
     testImplementation("org.dbunit:dbunit:${project.properties["dbunit_version"]}")
 
