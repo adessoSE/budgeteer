@@ -1,15 +1,14 @@
 package org.wickedsource.budgeteer.web.pages.user.login;
 
-import static org.wicketstuff.lazymodel.LazyModel.from;
-import static org.wicketstuff.lazymodel.LazyModel.model;
+import static org.apache.wicket.model.LambdaModel.of;
 
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wickedsource.budgeteer.service.user.InvalidLoginCredentialsException;
-import org.wickedsource.budgeteer.service.user.User;
 import org.wickedsource.budgeteer.service.user.UserService;
 import org.wickedsource.budgeteer.web.BudgeteerSession;
 import org.wickedsource.budgeteer.web.Mount;
@@ -28,16 +27,15 @@ public class LoginPage extends DialogPage {
   }
 
   private void build() {
-    Form<LoginCredentials> form =
-        new Form<LoginCredentials>("loginForm", model(from(new LoginCredentials()))) {
+    var form =
+        new Form<>("loginForm", Model.of((new LoginCredentials()))) {
           @Override
           protected void onSubmit() {
             try {
-              User user =
+              var user =
                   userService.login(getModelObject().getUsername(), getModelObject().getPassword());
               BudgeteerSession.get().login(user);
-              SelectProjectPage nextPage =
-                  new SelectProjectPage(LoginPage.class, getPageParameters());
+              var nextPage = new SelectProjectPage(LoginPage.class, getPageParameters());
               setResponsePage(nextPage);
             } catch (InvalidLoginCredentialsException e) {
               error(getString("message.invalidLogin"));
@@ -47,8 +45,14 @@ public class LoginPage extends DialogPage {
     add(form);
 
     form.add(new CustomFeedbackPanel("feedback"));
-    form.add(new RequiredTextField<String>("username", model(from(form.getModel()).getUsername())));
-    form.add(new PasswordTextField("password", model(from(form.getModel()).getPassword())));
+    form.add(
+        new RequiredTextField<>(
+            "username",
+            of(form.getModel(), LoginCredentials::getUsername, LoginCredentials::setUsername)));
+    form.add(
+        new PasswordTextField(
+            "password",
+            of(form.getModel(), LoginCredentials::getPassword, LoginCredentials::setPassword)));
     form.add(new BookmarkablePageLink<RegisterPage>("registerLink", RegisterPage.class));
   }
 }
