@@ -8,14 +8,17 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.transaction.Transactional;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.wickedsource.budgeteer.service.UnknownEntityException;
 
 @Service
+@Log4j2
 @Transactional
 public class UserService {
 
@@ -27,7 +30,7 @@ public class UserService {
 
   @Autowired private ProjectRepository projectRepository;
 
-  @Autowired private PasswordHasher passwordHasher;
+  @Autowired private PasswordEncoder passwordEncoder;
 
   @Autowired private UserMapper mapper;
 
@@ -101,20 +104,27 @@ public class UserService {
   /**
    * Checks a users login credentials.
    *
-   * @param user username or mail of the user to login
+   * @param userName username or mail of the user to login
    * @param password plain text password of the user to login
    * @return a User object of the logged in user on successful login.
    * @throws InvalidLoginCredentialsException in case of invalid credentials
    */
-  public User login(String user, String password) throws InvalidLoginCredentialsException {
-    UserEntity entity =
-        userRepository.findByNameOrMailAndPassword(user, passwordHasher.hash(password));
-
-    if (entity == null) throw new InvalidLoginCredentialsException();
-
-    if (entity.getMailVerified() == null) entity.setMailVerified(false);
-
-    return mapper.map(entity);
+  public User login(String userName, String password) throws InvalidLoginCredentialsException {
+    var user = userRepository.findByName(userName);
+    if (user == null) {
+      throw new InvalidLoginCredentialsException();
+    }
+    var matches = passwordEncoder.matches(password, user.getPassword());
+    if (!matches) {
+      throw new InvalidLoginCredentialsException();
+    }
+    var upgradeEncoding = passwordEncoder.upgradeEncoding(user.getPassword());
+    if (upgradeEncoding) {
+      var rehashedPassword = passwordEncoder.encode(password);
+      user.setPassword(rehashedPassword);
+      userRepository.save(user);
+    }
+    return mapper.map(user);
   }
 
   /**
@@ -137,7 +147,7 @@ public class UserService {
       UserEntity user = new UserEntity();
       user.setName(username);
       user.setMail(mail);
-      user.setPassword(passwordHasher.hash(password));
+      user.setPassword(passwordEncoder.encode(password));
       userRepository.save(user);
       if (!mail.equals("") && Boolean.valueOf(mailActivated))
         applicationEventPublisher.publishEvent(new OnRegistrationCompleteEvent(user));
@@ -152,8 +162,8 @@ public class UserService {
    * @return true if the password matches the user, false if not
    */
   public boolean checkPassword(long id, String password) {
-    UserEntity entity = userRepository.findById(id).orElseThrow(RuntimeException::new);
-    return entity.getPassword().equals(passwordHasher.hash(password));
+    var user = userRepository.findById(id).orElseThrow(RuntimeException::new);
+    return passwordEncoder.matches(password, user.getPassword());
   }
 
   /**
@@ -234,8 +244,11 @@ public class UserService {
     userEntity.setName(data.getName());
     userEntity.setMail(data.getMail());
 
-    if (changePassword) userEntity.setPassword(passwordHasher.hash(data.getPassword()));
-    else userEntity.setPassword(data.getPassword());
+    if (changePassword) {
+      userEntity.setPassword(passwordEncoder.encode(data.getPassword()));
+    } else {
+      userEntity.setPassword(testEntity.getPassword());
+    }
 
     userRepository.save(userEntity);
 
@@ -405,5 +418,12 @@ public class UserService {
 
     if (forgotPasswordTokenEntity != null)
       forgotPasswordTokenRepository.delete(forgotPasswordTokenEntity);
+  }
+
+  private void updatePasswordEncoding(UserEntity user, String password) {
+    log.info("Updating password encoding for {}", user.getName());
+    var newPassword = passwordEncoder.encode(password);
+    user.setPassword(newPassword);
+    userRepository.save(user);
   }
 }

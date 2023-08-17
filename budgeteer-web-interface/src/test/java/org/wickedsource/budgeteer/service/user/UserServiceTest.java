@@ -13,6 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.wickedsource.budgeteer.service.UnknownEntityException;
 
 @ExtendWith(MockitoExtension.class)
@@ -22,7 +23,7 @@ class UserServiceTest {
   @Mock private ProjectRepository projectRepository;
   @Mock private VerificationTokenRepository verificationTokenRepository;
   @Mock private ForgotPasswordTokenRepository forgotPasswordTokenRepository;
-  @Mock private PasswordHasher passwordHasher;
+  @Mock private PasswordEncoder passwordEncoder;
   @Mock UserMapper userMapper;
   @InjectMocks private UserService service;
 
@@ -49,9 +50,9 @@ class UserServiceTest {
     var password = "password";
     var hashedPassword = "hashed-password";
     var userEntity = createUserEntity();
-    given(passwordHasher.hash(password)).willReturn(hashedPassword);
-    given(userRepository.findByNameOrMailAndPassword(username, hashedPassword))
-        .willReturn(userEntity);
+    userEntity.setPassword(hashedPassword);
+    given(passwordEncoder.matches(password, hashedPassword)).willReturn(true);
+    given(userRepository.findByName(username)).willReturn(userEntity);
     given(userMapper.map(userEntity)).willReturn(new User());
 
     User user = service.login(username, password);
@@ -63,9 +64,6 @@ class UserServiceTest {
   void testLoginFail() {
     var user = "username";
     var password = "password";
-    var hashedPassword = "hashed-password";
-    when(passwordHasher.hash(password)).thenReturn(hashedPassword);
-    when(userRepository.findByNameOrMailAndPassword(user, hashedPassword)).thenReturn(null);
     Assertions.assertThrows(
         InvalidLoginCredentialsException.class, () -> service.login(user, password));
   }
@@ -153,14 +151,15 @@ class UserServiceTest {
 
   @Test
   void testCheckPassword() {
-    var correctPassword = "password";
+    var correctPassword = "hashed-password";
     var incorrectPassword = "PASSWORD";
     var userEntity = createUserEntityOptional();
-    when(passwordHasher.hash(correctPassword)).thenReturn(correctPassword);
-    when(passwordHasher.hash(incorrectPassword)).thenReturn(incorrectPassword);
+    userEntity.ifPresent(user -> user.setPassword(correctPassword));
+    when(passwordEncoder.matches(correctPassword, "hashed-password")).thenReturn(true);
+    when(passwordEncoder.matches(incorrectPassword, "hashed-password")).thenReturn(false);
     when(userRepository.findById(1L)).thenReturn(userEntity);
-    Assertions.assertTrue(service.checkPassword(1L, "password"));
-    Assertions.assertFalse(service.checkPassword(1L, "PASSWORD"));
+    Assertions.assertTrue(service.checkPassword(1L, correctPassword));
+    Assertions.assertFalse(service.checkPassword(1L, incorrectPassword));
   }
 
   @Test
