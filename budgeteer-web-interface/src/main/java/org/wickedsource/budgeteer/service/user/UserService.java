@@ -7,6 +7,7 @@ import de.adesso.budgeteer.persistence.user.UserRepository;
 import java.util.List;
 import javax.transaction.Transactional;
 import lombok.extern.log4j.Log4j2;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -174,8 +175,8 @@ public class UserService {
    * @param changePassword specifies if the password should also be changed
    * @throws UsernameAlreadyInUseException
    */
-  public void saveUser(EditUserData data, boolean changePassword)
-      throws UsernameAlreadyInUseException {
+  public void saveUser(EditUserData data)
+      throws UsernameAlreadyInUseException, InvalidLoginCredentialsException {
     var testEntity = userRepository.findByName(data.getName());
     if (testEntity != null && testEntity.getId() != data.getId()) {
       throw new UsernameAlreadyInUseException();
@@ -185,7 +186,13 @@ public class UserService {
     userEntity.setId(data.getId());
     userEntity.setName(data.getName());
 
-    if (changePassword) {
+    var changePassword =
+        !StringUtils.isEmpty(data.getPassword()) && !StringUtils.isEmpty(data.getNewPassword());
+
+    if (changePassword && testEntity != null) {
+      if (!passwordEncoder.matches(data.getPassword(), testEntity.getPassword())) {
+        throw new InvalidLoginCredentialsException();
+      }
       userEntity.setPassword(passwordEncoder.encode(data.getPassword()));
     }
 
