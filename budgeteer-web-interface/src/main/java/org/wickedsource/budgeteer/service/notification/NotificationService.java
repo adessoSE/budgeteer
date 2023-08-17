@@ -8,8 +8,6 @@ import de.adesso.budgeteer.persistence.budget.MissingBudgetTotalBean;
 import de.adesso.budgeteer.persistence.record.MissingDailyRateForBudgetBean;
 import de.adesso.budgeteer.persistence.record.PlanRecordRepository;
 import de.adesso.budgeteer.persistence.record.WorkRecordRepository;
-import de.adesso.budgeteer.persistence.user.UserEntity;
-import de.adesso.budgeteer.persistence.user.UserRepository;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -28,8 +26,6 @@ public class NotificationService {
   @Autowired private PlanRecordRepository planRecordRepository;
 
   @Autowired private BudgetRepository budgetRepository;
-
-  @Autowired private UserRepository userRepository;
 
   @Autowired private MissingDailyRateNotificationMapper missingDailyRateMapper;
 
@@ -73,17 +69,6 @@ public class NotificationService {
             budgetRepository.getLimitReachedForBudget(bean.getBudgetId(), budgetSpent);
         if (limitReached != null)
           notifications.add(limitReachedNotificationMapper.map(limitReached));
-      }
-    }
-
-    UserEntity user = userRepository.findById(userId).orElse(null);
-    if (user != null) {
-      if (user.getMail() == null) {
-        notifications.add(new MissingMailNotification(user.getId()));
-      }
-
-      if (!user.getMailVerified() && user.getMail() != null) {
-        notifications.add(new MailNotVerifiedNotification(user.getId(), user.getMail()));
       }
     }
     return notifications;

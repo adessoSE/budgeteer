@@ -4,7 +4,7 @@ import de.adesso.budgeteer.core.user.InvalidLoginCredentialsException;
 import de.adesso.budgeteer.core.user.PasswordHasher;
 import de.adesso.budgeteer.core.user.domain.User;
 import de.adesso.budgeteer.core.user.port.in.LoginUseCase;
-import de.adesso.budgeteer.core.user.port.out.GetUserByNameOrEmailAndPasswordPort;
+import de.adesso.budgeteer.core.user.port.out.GetUserByNameAndPasswordPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,12 +12,13 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class LoginService implements LoginUseCase {
 
-    private final PasswordHasher passwordHasher;
-    private final GetUserByNameOrEmailAndPasswordPort getUserByNameOrEmailAndPasswordPort;
+  private final PasswordHasher passwordHasher;
+  private final GetUserByNameAndPasswordPort getUserByNameAndPasswordPort;
 
-    @Override
-    public User login(String usernameOrEmail, String password) throws InvalidLoginCredentialsException {
-        return getUserByNameOrEmailAndPasswordPort.getUserByNameOrEmailAndPassword(usernameOrEmail, passwordHasher.hash(password))
-                .orElseThrow(InvalidLoginCredentialsException::new);
-    }
+  @Override
+  public User login(String username, String password) throws InvalidLoginCredentialsException {
+    return getUserByNameAndPasswordPort
+        .getUserByNameAndPassword(username, passwordHasher.hash(password))
+        .orElseThrow(InvalidLoginCredentialsException::new);
+  }
 }
