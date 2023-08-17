@@ -184,17 +184,17 @@ class UserServiceTest {
           EditUserData editUserData = service.loadUserToEdit(1L);
           when(userRepository.findByName("user2")).thenReturn(user2);
           editUserData.setName("user2");
-          service.saveUser(editUserData, false);
+          service.saveUser(editUserData);
         });
   }
 
   @Test
-  void testSaveUser() throws UsernameAlreadyInUseException {
+  void testSaveUser() throws UsernameAlreadyInUseException, InvalidLoginCredentialsException {
     Optional<UserEntity> user = createUserEntityOptional();
     when(userRepository.findById(1L)).thenReturn(user);
     EditUserData editUserData = service.loadUserToEdit(1L);
     editUserData.setName("user2");
-    service.saveUser(editUserData, false);
+    service.saveUser(editUserData);
     Assertions.assertEquals(editUserData.getName(), user.get().getName());
   }
 
