@@ -24,7 +24,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
+import org.wickedsource.budgeteer.service.DateRange;
 import org.wickedsource.budgeteer.web.components.daterange.DateConverter;
+import org.wickedsource.budgeteer.web.components.daterange.DateRangeConverter;
 import org.wickedsource.budgeteer.web.components.instantiation.BudgeteerRequiresProjectListener;
 import org.wickedsource.budgeteer.web.components.money.MoneyConverter;
 import org.wickedsource.budgeteer.web.components.security.BudgeteerAuthorizationStrategy;
@@ -129,6 +131,7 @@ public class BudgeteerApplication extends WebApplication implements ApplicationC
   protected IConverterLocator newConverterLocator() {
     var converterLocator = new ConverterLocator();
     converterLocator.set(Date.class, new DateConverter());
+    converterLocator.set(DateRange.class, new DateRangeConverter());
     converterLocator.set(Money.class, new MoneyConverter());
     return converterLocator;
   }
