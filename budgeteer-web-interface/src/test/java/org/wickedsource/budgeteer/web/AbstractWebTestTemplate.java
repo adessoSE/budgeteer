@@ -4,10 +4,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 import de.adesso.budgeteer.common.old.MoneyUtil;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import org.apache.wicket.util.tester.WicketTester;
 import org.joda.money.CurrencyUnit;
 import org.joda.money.Money;
@@ -47,6 +44,7 @@ public abstract class AbstractWebTestTemplate {
 
   @BeforeEach
   public void setUp() {
+    Locale.setDefault(Locale.ENGLISH);
     // Provide default recordServiceMock mocks for tests.
     // If required, explicit behavior can be implemented for each test class in setupTest()
     when(projectServiceMock.findProjectById(anyLong()))

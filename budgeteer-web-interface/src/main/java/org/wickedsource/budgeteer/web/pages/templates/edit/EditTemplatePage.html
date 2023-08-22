@@ -1,84 +1,44 @@
 <wicket:extend xmlns:wicket="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/html">
 
-    <div class="form-box wide" id="login-box">
-        <div class="header">Edit Template
-            <div class="box-tools pull-right">
-                <button wicket:id="backlink1" class="btn bg-olive btn-sm"><i class="fa fa-times"></i></button>
-            </div>
-        </div>
-        <form wicket:id="editForm" method="post">
-            <div class="body bg-gray">
-                <div wicket:id="feedback"></div>
-                <div class="box box-primary">
-                    <div class="box-header">
-                        <h3 class="box-title"><wicket:message key="page.file.title">Select Files to Upload</wicket:message></h3>
-                    </div>
-                    <div class="box-body">
-                        <input wicket:id="fileUpload" type="file" multiple>
-                    </div>
-                </div>
-
-                <div>
-                    <label for="titleInput"><wicket:message key="page.template.name">Template Name</wicket:message></label>
-                    <div class="input-group">
-                        <div class="input-group-btn">
-                            <button wicket:id="setAsDefault" style="top: 0"></button>
-                        </div>
-                        <input wicket:id="name" maxlength="128" type="text" class="form-control" placeholder="">
-                    </div>
-                    <p class="help-block"><wicket:message key="page.template.name.hint">The name of the template.</wicket:message></p>
-                </div>
-
-                <div>
-                    <label for="titleInput"><wicket:message key="page.template.description">Template Descripion</wicket:message></label>
-                    <div class="input-group mb-3">
-                        <span class="bg-olive input-group-addon"><i class="bg-olive glyphicon glyphicon-pencil"></i>
-                        </span>
-                        <input wicket:id="description" maxlength="512" type="text" class="form-control" placeholder="">
-                    </div>
-                    <p class="help-block"><wicket:message key="page.template.description.hint">A description of the purpose of the template.</wicket:message></p>
-                </div>
-
-                <div>
-                    <label for="typeInput"><wicket:message key="page.template.type">Type</wicket:message></label>
-                    <div class="input-group">
-                        <span class="bg-olive input-group-addon"><i class="bg-olive glyphicon glyphicon-filter"></i>
-                        </span>
-                        <select id="typeSelect" wicket:id="type" name="name" class="form-control"/>
-                    </div>
-                    <p class="help-block"><wicket:message key="page.template.types.hint">The Type of this template.</wicket:message></p>
-                </div>
-
-            </div>
-            <div class="footer">
-                <div class="row">
-                    <div class="col-lg-3">
-                        <button wicket:id="backlink2" id="cancel" type="button" class="btn bg-olive btn-block">Cancel</button>
-                    </div>
-                    <div class="col-lg-3">
-                        <button wicket:id="deleteButton" class="btn bg-olive btn-block" data-toggle="tooltip" title
-                                data-original-title="Delete the template.">
-                            <i class="fa fa-trash-o"></i>&nbsp;&nbsp;&nbsp;Delete Template
-                        </button>
-                    </div>
-
-                    <div class="col-lg-3">
-                        <button wicket:id="downloadFileButton" class="btn bg-olive btn-block" data-toggle="tooltip" title
-                                data-original-title="Download the template.">
-                            <i class="fa fa-download"></i>&nbsp;&nbsp;&nbsp;Download Template
-                        </button>
-                    </div>
-
-                    <div class="col-lg-3">
-                        <button wicket:id="save" id="submitButton" class="btn bg-olive btn-block">
-                            <i class="fa fa-check"></i>
-                            <wicket:message key="page.button.start">Start import</wicket:message>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </form>
-
+  <div class="form-box wide" id="login-box">
+    <div class="header">Edit Template
+      <div class="box-tools pull-right">
+        <button wicket:id="backlink1" class="btn bg-olive btn-sm"><i class="fa fa-times"></i></button>
+      </div>
     </div>
-    <script src="js/enterAndEscape.js"></script>
+    <form wicket:id="form" method="post">
+      <div class="body bg-gray">
+        <div wicket:id="feedback"></div>
+        <div wicket:id="editTemplate"></div>
+        <div class="footer">
+          <div class="row">
+            <div class="col-lg-3">
+              <button wicket:id="backlink2" id="cancel" type="button" class="btn bg-olive btn-block">Cancel</button>
+            </div>
+            <div class="col-lg-3">
+              <button wicket:id="deleteButton" class="btn bg-olive btn-block" data-toggle="tooltip" title
+                      data-original-title="Delete the template.">
+                <i class="fa fa-trash-o"></i>&nbsp;&nbsp;&nbsp;Delete Template
+              </button>
+            </div>
+
+            <div class="col-lg-3">
+              <button wicket:id="downloadFileButton" class="btn bg-olive btn-block" data-toggle="tooltip" title
+                      data-original-title="Download the template.">
+                <i class="fa fa-download"></i>&nbsp;&nbsp;&nbsp;Download Template
+              </button>
+            </div>
+
+            <div class="col-lg-3">
+              <button wicket:id="save" id="submitButton" type="submit" class="btn bg-olive btn-block">
+                <i class="fa fa-check"></i>
+                <wicket:message key="page.button.start">Start import</wicket:message>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <script src="js/enterAndEscape.js"></script>
 </wicket:extend>
