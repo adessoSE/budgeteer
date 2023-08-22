@@ -1,0 +1,55 @@
+<wicket:panel>
+  <form wicket:id="form">
+    <div class="box box-primary">
+      <div class="box-header" style="cursor: move;">
+        <h3 class="box-title">Basic information of the contract</h3>
+        <div class="box-tools pull-right">
+                            <span class="btn btn-default btn-sm" data-widget="collapse">
+                                <i class="fa fa-minus"></i>
+                            </span>
+        </div>
+      </div>
+      <div class="box-body">
+        <div class="form-group">
+          <label for="contractName">
+            <wicket:message key="page.contract.title">Contract title</wicket:message>
+          </label>
+          <input wicket:id="contractName" type="text" maxlength="255" name="name" id="contractName"
+                 class="form-control"/>
+        </div>
+        <div class="form-group">
+          <label for="internalNumber">
+            <wicket:message key="page.contract.internalNumber">Internal-number</wicket:message>
+          </label>
+          <input wicket:id="internalNumber" type="text" maxlength="255" name="name" id="internalNumber"
+                 class="form-control"/>
+        </div>
+        <div class="form-group">
+          <label for="year">
+            <wicket:message key="page.contract.startDate"></wicket:message>
+          </label>
+          <input wicket:id="startDate" style="width: 100%;" class="form-control" id="startDate" type="text"/>
+        </div>
+        <div class="form-group">
+          <label for="type">
+            <wicket:message key="page.contract.type">Type of the contract</wicket:message>
+          </label>
+          <select wicket:id="type" class="form-control" id="type"/>
+        </div>
+        <div class="form-group">
+          <label for="budget">
+            <wicket:message key="page.contract.budget">Budget</wicket:message>
+          </label>
+          <input wicket:id="budget" style="width: 100%;" type="text" maxlength="15" class="form-control" id="budget"/>
+        </div>
+        <div class="form-group">
+          <label for="taxrate">
+            <wicket:message key="page.contract.taxrate">Taxrate in percent</wicket:message>
+          </label>
+          <input wicket:id="taxrate" style="width: 100%;" type="text" max class="form-control" id="tax"/>
+        </div>
+        <wicket:panel wicket:id="fileUpload"></wicket:panel>
+      </div>
+    </div>
+  </form>
+</wicket:panel>
