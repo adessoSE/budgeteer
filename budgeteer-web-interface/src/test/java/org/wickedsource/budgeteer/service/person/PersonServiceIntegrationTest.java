@@ -29,9 +29,7 @@ class PersonServiceIntegrationTest extends IntegrationTestTemplate {
   private DateFormat format = new SimpleDateFormat("dd.MM.yyyy");
 
   @Autowired private PersonService service;
-
   @Autowired private PersonRepository personRepository;
-
   @Autowired private WorkRecordRepository workRecordRepository;
 
   @Test

@@ -12,6 +12,7 @@ import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.wickedsource.budgeteer.service.ServiceTestTemplate;
 
 class PersonServiceTest extends ServiceTestTemplate {
@@ -19,8 +20,7 @@ class PersonServiceTest extends ServiceTestTemplate {
   private Date fixedDate = new Date();
 
   @Autowired private PersonService personService;
-
-  @Autowired private PersonRepository personRepository;
+  @MockBean private PersonRepository personRepository;
 
   @Test
   void testLoadPeopleBaseData() {
