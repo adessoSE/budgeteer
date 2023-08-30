@@ -9,7 +9,7 @@ jobs:
   check-commit-dates:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - id: check-commit-dates
         run: |
@@ -18,7 +18,7 @@ jobs:
           else
             SHOULD_RUN="true"
           fi
-          echo ::set-output name=should-run::${SHOULD_RUN}
+          echo "should-run=${SHOULD_RUN}" >> $GITHUB_OUTPUT
 
     outputs:
       should-run: ${{ steps.check-commit-dates.outputs.should-run }}
@@ -29,7 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Get git
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: '0'
       - name: Create docker tags
@@ -38,8 +38,8 @@ jobs:
           DOCKER_IMAGE=budgeteerorg/budgeteer
           VERSION=$(git describe --tags)
           TAGS="${DOCKER_IMAGE}:${VERSION},${DOCKER_IMAGE}:nightly"
-          echo ::set-output name=tags::${TAGS}
-          echo ::set-output name=sha::${GITHUB_SHA}
+          echo "tags=${TAGS}" >> $GITHUB_OUTPUT
+          echo "sha=${GITHUB_SHA}" >> $GITHUB_OUTPUT
     outputs:
       tags: ${{ steps.prep.outputs.tags }}
       sha: ${{ steps.prep.outputs.sha }}
