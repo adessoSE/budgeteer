@@ -1,6 +1,6 @@
 package org.wickedsource.budgeteer.service.notification;
 
-import static org.mockito.Matchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 import de.adesso.budgeteer.persistence.budget.BudgetRepository;

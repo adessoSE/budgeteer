@@ -1,7 +1,7 @@
 package org.wickedsource.budgeteer.service.template;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Matchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.times;
 import static org.wicketstuff.lazymodel.LazyModel.from;
 import static org.wicketstuff.lazymodel.LazyModel.model;
