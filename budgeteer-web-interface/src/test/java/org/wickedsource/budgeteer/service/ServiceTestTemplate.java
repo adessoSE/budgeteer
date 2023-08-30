@@ -1,26 +1,21 @@
 package org.wickedsource.budgeteer.service;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.kubek2k.springockito.annotations.SpringockitoContextLoader;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.wickedsource.budgeteer.service.security.BudgeteerAuthenticationToken;
 import org.wickedsource.budgeteer.service.security.BudgeteerMethodSecurityExpressionRoot;
 
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(
-    loader = SpringockitoContextLoader.class,
-    locations = {"classpath:spring-service.xml", "classpath:spring-repository-mock.xml"})
+@SpringBootTest
 public abstract class ServiceTestTemplate {
 
   @Autowired private ApplicationContext context;
 
-  @Autowired private BudgeteerMethodSecurityExpressionRoot root;
+  @MockBean private BudgeteerMethodSecurityExpressionRoot root;
 
   @BeforeEach
   public void resetMocks() {

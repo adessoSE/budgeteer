@@ -14,16 +14,15 @@ import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.wickedsource.budgeteer.service.ServiceTestTemplate;
 
 class NotificationServiceTest extends ServiceTestTemplate {
 
   private Date fixedDate = new Date();
 
-  @Autowired private WorkRecordRepository workRecordRepository;
-
-  @Autowired private BudgetRepository budgetRepository;
-
+  @MockBean private WorkRecordRepository workRecordRepository;
+  @MockBean private BudgetRepository budgetRepository;
   @Autowired private NotificationService service;
 
   @Test

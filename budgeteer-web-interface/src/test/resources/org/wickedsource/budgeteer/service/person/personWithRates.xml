@@ -7,9 +7,9 @@
     <PERSON id="1" name="person1" import_key="person1" project_id="1"/>
     <PERSON id="2" name="person2" import_key="person2" project_id="1"/>
 
-    <DAILY_RATE id="1" date_start="2015-01-01" date_end="2015-08-16" person_id="1" budget_id="1" rate="50000"/>
-    <DAILY_RATE id="2" date_start="2015-01-01" date_end="2015-12-31" person_id="2" budget_id="1" rate="60000"/>
-    <DAILY_RATE id="3" date_start="2016-01-01" date_end="2016-12-31" person_id="2" budget_id="1" rate="50000"/>
+    <DAILY_RATE id="100" date_start="2015-01-01" date_end="2015-08-16" person_id="1" budget_id="1" rate="50000"/>
+    <DAILY_RATE id="200" date_start="2015-01-01" date_end="2015-12-31" person_id="2" budget_id="1" rate="60000"/>
+    <DAILY_RATE id="300" date_start="2016-01-01" date_end="2016-12-31" person_id="2" budget_id="1" rate="50000"/>
 
     <IMPORT id="1" import_date="2015-01-01" start_date="2015-01-01" end_date="2015-12-31" import_type="Testimport" project_id="1"/>
 

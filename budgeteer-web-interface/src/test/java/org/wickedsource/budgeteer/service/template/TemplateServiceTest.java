@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.wickedsource.budgeteer.imports.api.ImportFile;
 import org.wickedsource.budgeteer.service.ReportType;
 import org.wickedsource.budgeteer.service.ServiceTestTemplate;
@@ -23,8 +24,7 @@ import org.wickedsource.budgeteer.web.pages.templates.templateimport.TemplateFor
 class TemplateServiceTest extends ServiceTestTemplate {
 
   @Autowired TemplateService templateService;
-
-  @Autowired TemplateRepository templateRepository;
+  @MockBean TemplateRepository templateRepository;
 
   @Test
   void doImportTest() {
