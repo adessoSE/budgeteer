@@ -1,7 +1,6 @@
 package org.wickedsource.budgeteer.web.pages.contract.edit.form;
 
-import static org.wicketstuff.lazymodel.LazyModel.from;
-import static org.wicketstuff.lazymodel.LazyModel.model;
+import static org.apache.wicket.model.LambdaModel.of;
 
 import de.adesso.budgeteer.persistence.contract.ContractEntity;
 import java.math.BigDecimal;
@@ -15,7 +14,6 @@ import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.LambdaModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -69,22 +67,33 @@ public class EditContractForm extends Form<ContractBaseData> {
     add(feedbackPanel);
 
     TextField<String> nameTextfield =
-        new TextField<>("contractName", model(from(getModelObject()).getContractName()));
+        new TextField<>(
+            "contractName",
+            of(getModel(), ContractBaseData::getContractName, ContractBaseData::setContractName));
     nameTextfield.setRequired(true);
     add(nameTextfield);
 
     TextField<String> internalNumberTextfield =
-        new TextField<>("internalNumber", model(from(getModelObject()).getInternalNumber()));
+        new TextField<>(
+            "internalNumber",
+            of(
+                getModel(),
+                ContractBaseData::getInternalNumber,
+                ContractBaseData::setInternalNumber));
     internalNumberTextfield.setRequired(true);
     add(internalNumberTextfield);
 
     MoneyTextField budgetTextfield =
-        new MoneyTextField("budget", model(from(getModelObject()).getBudget()));
+        new MoneyTextField(
+            "budget", of(getModel(), ContractBaseData::getBudget, ContractBaseData::setBudget));
     budgetTextfield.setRequired(true);
     add(budgetTextfield);
 
-    TextField<BigDecimal> taxrateTextfield =
-        new TextField<>("taxrate", model(from(getModelObject()).getTaxRate()));
+    var taxrateTextfield =
+        new TextField<>(
+                "taxrate",
+                of(getModel(), ContractBaseData::getTaxRate, ContractBaseData::setTaxRate))
+            .setType(BigDecimal.class);
     taxrateTextfield.setRequired(true);
     taxrateTextfield.add(RangeValidator.minimum(BigDecimal.ZERO));
     add(taxrateTextfield);
@@ -95,7 +104,7 @@ public class EditContractForm extends Form<ContractBaseData> {
     DateInputField startDateInputField =
         new DateInputField(
             "startDate",
-            model(from(getModelObject()).getStartDate()),
+            of(getModel(), ContractBaseData::getStartDate, ContractBaseData::setStartDate),
             DateInputField.DROP_LOCATION.UP);
     startDateInputField.setRequired(true);
     add(startDateInputField);
@@ -103,12 +112,14 @@ public class EditContractForm extends Form<ContractBaseData> {
     add(
         new DropDownChoice<ContractEntity.ContractType>(
             "type",
-            model(from(getModelObject()).getType()),
+            of(getModel(), ContractBaseData::getType, ContractBaseData::setType),
             Arrays.asList(ContractEntity.ContractType.values()),
             new EnumChoiceRenderer<ContractEntity.ContractType>(this)));
 
     final CustomFileUpload fileUpload =
-        new CustomFileUpload("fileUpload", model(from(getModelObject()).getFileModel()));
+        new CustomFileUpload(
+            "fileUpload",
+            of(getModel(), ContractBaseData::getFileModel, ContractBaseData::setFileModel));
     add(fileUpload);
 
     table = new WebMarkupContainer("attributeTable");
@@ -124,7 +135,7 @@ public class EditContractForm extends Form<ContractBaseData> {
             item.add(
                 new TextField<>(
                     "attributeValue",
-                    LambdaModel.of(
+                    of(
                         item.getModel(),
                         DynamicAttributeField::getValue,
                         DynamicAttributeField::setValue)));

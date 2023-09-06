@@ -3,14 +3,13 @@ package org.wickedsource.budgeteer.service.template;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.times;
-import static org.wicketstuff.lazymodel.LazyModel.from;
-import static org.wicketstuff.lazymodel.LazyModel.model;
 
 import de.adesso.budgeteer.persistence.template.TemplateEntity;
 import de.adesso.budgeteer.persistence.template.TemplateRepository;
 import java.io.IOException;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.wicket.model.Model;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -39,7 +38,7 @@ class TemplateServiceTest extends ServiceTestTemplate {
         1,
         new ImportFile(
             "exampleTemplate1.xlsx", getClass().getResourceAsStream("exampleTemplate1.xlsx")),
-        model(from(testDto)));
+        Model.of(testDto));
     Mockito.verify(templateRepository, times(1)).save(any(TemplateEntity.class));
   }
 
@@ -58,7 +57,7 @@ class TemplateServiceTest extends ServiceTestTemplate {
         1,
         new ImportFile(
             "exampleTemplate1.xlsx", getClass().getResourceAsStream("exampleTemplate1.xlsx")),
-        model(from(testDto)));
+        Model.of(testDto));
     Mockito.verify(templateRepository, times(1)).save(any(TemplateEntity.class));
   }
 

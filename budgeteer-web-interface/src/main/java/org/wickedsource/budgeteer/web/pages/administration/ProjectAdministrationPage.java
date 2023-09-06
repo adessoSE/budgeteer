@@ -1,5 +1,8 @@
 package org.wickedsource.budgeteer.web.pages.administration;
 
+import static org.apache.wicket.model.LambdaModel.of;
+
+import java.util.List;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
@@ -29,139 +32,152 @@ import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 import org.wickedsource.budgeteer.web.pages.user.login.LoginPage;
 import org.wickedsource.budgeteer.web.pages.user.selectproject.SelectProjectPage;
 
-import java.util.List;
-
-import static org.wicketstuff.lazymodel.LazyModel.from;
-import static org.wicketstuff.lazymodel.LazyModel.model;
-
 @Mount("/administration")
 public class ProjectAdministrationPage extends BasePage {
 
-    @SpringBean
-    private UserService userService;
+  @SpringBean private UserService userService;
 
-    @SpringBean
-    private ProjectService projectService;
+  @SpringBean private ProjectService projectService;
 
-    @SpringBean
-    private BudgeteerSettings settings;
+  @SpringBean private BudgeteerSettings settings;
 
-    public ProjectAdministrationPage() {
-        add(new CustomFeedbackPanel("feedback"));
-        add(createUserList("userList", () -> userService.getUsersInProject(BudgeteerSession.get().getProjectId())));
-        add(createDeleteProjectButton("deleteProjectButton"));
-        add(createAddUserForm("addUserForm"));
-        add(createEditProjectForm("projectChangeForm"));
-    }
+  public ProjectAdministrationPage() {
+    add(new CustomFeedbackPanel("feedback"));
+    add(
+        createUserList(
+            "userList",
+            () -> userService.getUsersInProject(BudgeteerSession.get().getProjectId())));
+    add(createDeleteProjectButton("deleteProjectButton"));
+    add(createAddUserForm("addUserForm"));
+    add(createEditProjectForm("projectChangeForm"));
+  }
 
-    private Form<Project> createEditProjectForm(String formId) {
-        Form<Project> form = new Form<Project>(formId, model(from(projectService.findProjectById(BudgeteerSession.get().getProjectId())))) {
-            @Override
-            protected void onSubmit() {
-                super.onSubmit();
-                if(getModelObject().getName() == null){
-                    error(getString("error.no.name"));
-                }else {
-                    Project ent = getModelObject();
-                    projectService.save(ent);
-                    success(getString("project.saved"));
-                }
+  private Form<Project> createEditProjectForm(String formId) {
+    Form<Project> form =
+        new Form<Project>(
+            formId,
+            Model.of(projectService.findProjectById(BudgeteerSession.get().getProjectId()))) {
+          @Override
+          protected void onSubmit() {
+            super.onSubmit();
+            if (getModelObject().getName() == null) {
+              error(getString("error.no.name"));
+            } else {
+              Project ent = getModelObject();
+              projectService.save(ent);
+              success(getString("project.saved"));
             }
+          }
         };
-        form.add(new TextField<String>("projectTitle", model(from(form.getModelObject()).getName())));
-        DateRange defaultDateRange = new DateRange(DateUtil.getBeginOfYear(), DateUtil.getEndOfYear());
-        form.add(new DateRangeInputField("projectStart", model(from(form.getModelObject()).getDateRange()), defaultDateRange, DateRangeInputField.DROP_LOCATION.DOWN));
-        return form;
-    }
+    form.add(
+        new TextField<String>(
+            "projectTitle", of(form.getModel(), Project::getName, Project::setName)));
+    DateRange defaultDateRange = new DateRange(DateUtil.getBeginOfYear(), DateUtil.getEndOfYear());
+    form.add(
+        new DateRangeInputField(
+            "projectStart",
+            of(form.getModel(), Project::getDateRange, Project::setDateRange),
+            defaultDateRange,
+            DateRangeInputField.DROP_LOCATION.DOWN));
+    return form;
+  }
 
-    private ListView<User> createUserList(String id, IModel<List<User>> model) {
-        User thisUser = BudgeteerSession.get().getLoggedInUser();
-        return new ListView<User>(id, model) {
-            @Override
-            protected void populateItem(final ListItem<User> item) {
-                item.add(new Label("username", model(from(item.getModel()).getName())));
-                Link deleteButton = new Link("deleteButton") {
-                    @Override
-                    public void onClick() {
+  private ListView<User> createUserList(String id, IModel<List<User>> model) {
+    User thisUser = BudgeteerSession.get().getLoggedInUser();
+    return new ListView<User>(id, model) {
+      @Override
+      protected void populateItem(final ListItem<User> item) {
+        item.add(new Label("username", item.getModel().map(User::getName)));
+        Link deleteButton =
+            new Link("deleteButton") {
+              @Override
+              public void onClick() {
 
-                        setResponsePage(new DeleteDialog() {
-                            @Override
-                            protected void onYes() {
-                                userService.removeUserFromProject(BudgeteerSession.get().getProjectId(), item.getModelObject().getId());
-                                setResponsePage(ProjectAdministrationPage.class, getPageParameters());
-                            }
-
-                            @Override
-                            protected void onNo() {
-                                setResponsePage(ProjectAdministrationPage.class, getPageParameters());
-                            }
-
-                            @Override
-                            protected String confirmationText() {
-                                return ProjectAdministrationPage.this.getString("delete.person.confirmation");
-                            }
-                        });
-                    }
-                };
-                // a user may not delete herself/himself
-                if (item.getModelObject().equals(thisUser))
-                    deleteButton.setVisible(false);
-                item.add(deleteButton);
-            }
-
-            @Override
-            protected ListItem<User> newItem(int index, IModel<User> itemModel) {
-                return super.newItem(index, new ClassAwareWrappingModel<>(itemModel, User.class));
-            }
-        };
-    }
-
-    private Form<User> createAddUserForm(String id) {
-        Form<User> form = new Form<User>(id, new Model<>(new User())) {
-            @Override
-            protected void onSubmit() {
-                userService.addUserToProject(BudgeteerSession.get().getProjectId(), getModelObject().getId());
-            }
-        };
-
-        DropDownChoice<User> userChoice = new DropDownChoice<>("userChoice", form.getModel(),
-                () -> userService.getUsersNotInProject(BudgeteerSession.get().getProjectId()),
-                new UserChoiceRenderer());
-        userChoice.setRequired(true);
-        form.add(userChoice);
-        return form;
-    }
-
-    private Link createDeleteProjectButton(String id) {
-        return new Link(id) {
-            @Override
-            public void onClick() {
-                setResponsePage(new DeleteDialog() {
-                    @Override
-                    protected void onYes() {
-                        projectService.deleteProject(BudgeteerSession.get().getProjectId());
-                        BudgeteerSession.get().setProjectSelected(false);
-
-                        setResponsePage(new SelectProjectPage(LoginPage.class, new PageParameters()));
-                    }
-
-                    @Override
-                    protected void onNo() {
+                setResponsePage(
+                    new DeleteDialog() {
+                      @Override
+                      protected void onYes() {
+                        userService.removeUserFromProject(
+                            BudgeteerSession.get().getProjectId(), item.getModelObject().getId());
                         setResponsePage(ProjectAdministrationPage.class, getPageParameters());
-                    }
+                      }
 
-                    @Override
-                    protected String confirmationText() {
-                        return ProjectAdministrationPage.this.getString("delete.project.confirmation");
-                    }
-                });
-            }
+                      @Override
+                      protected void onNo() {
+                        setResponsePage(ProjectAdministrationPage.class, getPageParameters());
+                      }
+
+                      @Override
+                      protected String confirmationText() {
+                        return ProjectAdministrationPage.this.getString(
+                            "delete.person.confirmation");
+                      }
+                    });
+              }
+            };
+        // a user may not delete herself/himself
+        if (item.getModelObject().equals(thisUser)) deleteButton.setVisible(false);
+        item.add(deleteButton);
+      }
+
+      @Override
+      protected ListItem<User> newItem(int index, IModel<User> itemModel) {
+        return super.newItem(index, new ClassAwareWrappingModel<>(itemModel, User.class));
+      }
+    };
+  }
+
+  private Form<User> createAddUserForm(String id) {
+    Form<User> form =
+        new Form<User>(id, new Model<>(new User())) {
+          @Override
+          protected void onSubmit() {
+            userService.addUserToProject(
+                BudgeteerSession.get().getProjectId(), getModelObject().getId());
+          }
         };
-    }
 
-    @Override
-    protected BreadcrumbsModel getBreadcrumbsModel() {
-        return new BreadcrumbsModel(DashboardPage.class, ProjectAdministrationPage.class);
-    }
+    DropDownChoice<User> userChoice =
+        new DropDownChoice<>(
+            "userChoice",
+            form.getModel(),
+            () -> userService.getUsersNotInProject(BudgeteerSession.get().getProjectId()),
+            new UserChoiceRenderer());
+    userChoice.setRequired(true);
+    form.add(userChoice);
+    return form;
+  }
 
+  private Link createDeleteProjectButton(String id) {
+    return new Link(id) {
+      @Override
+      public void onClick() {
+        setResponsePage(
+            new DeleteDialog() {
+              @Override
+              protected void onYes() {
+                projectService.deleteProject(BudgeteerSession.get().getProjectId());
+                BudgeteerSession.get().setProjectSelected(false);
+
+                setResponsePage(new SelectProjectPage(LoginPage.class, new PageParameters()));
+              }
+
+              @Override
+              protected void onNo() {
+                setResponsePage(ProjectAdministrationPage.class, getPageParameters());
+              }
+
+              @Override
+              protected String confirmationText() {
+                return ProjectAdministrationPage.this.getString("delete.project.confirmation");
+              }
+            });
+      }
+    };
+  }
+
+  @Override
+  protected BreadcrumbsModel getBreadcrumbsModel() {
+    return new BreadcrumbsModel(DashboardPage.class, ProjectAdministrationPage.class);
+  }
 }

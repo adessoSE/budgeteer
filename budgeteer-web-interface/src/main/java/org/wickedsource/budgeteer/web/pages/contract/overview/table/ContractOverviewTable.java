@@ -1,8 +1,5 @@
 package org.wickedsource.budgeteer.web.pages.contract.overview.table;
 
-import static org.wicketstuff.lazymodel.LazyModel.from;
-import static org.wicketstuff.lazymodel.LazyModel.model;
-
 import de.adesso.budgeteer.common.old.MoneyUtil;
 import de.adesso.budgeteer.persistence.contract.ContractEntity;
 import java.math.BigDecimal;
@@ -48,14 +45,14 @@ public class ContractOverviewTable extends Panel {
 
     table.add(new DataTableBehavior(DataTableBehavior.getRecommendedOptions()));
     table.add(
-        new ListView<String>("headerRow", model(from(data).getHeadline())) {
+        new ListView<String>("headerRow", Model.ofList(data.getHeadline())) {
           @Override
           protected void populateItem(ListItem<String> item) {
-            item.add(new Label("headerItem", item.getModelObject()));
+            item.add(new Label("headerItem", item.getModel()));
           }
         });
     table.add(
-        new ListView<ContractBaseData>("contractRows", model(from(data).getContracts())) {
+        new ListView<ContractBaseData>("contractRows", Model.ofList(data.getContracts())) {
           @Override
           protected void populateItem(ListItem<ContractBaseData> item) {
             long contractId = item.getModelObject().getContractId();
@@ -74,18 +71,19 @@ public class ContractOverviewTable extends Panel {
                     ContractDetailsPage.class,
                     EditContractPage.createParameters(contractId));
             link.add(
-                new Label("contractName", model(from(item.getModelObject()).getContractName())));
+                new Label("contractName", item.getModel().map(ContractBaseData::getContractName)));
             item.add(link);
             item.add(
                 new Label(
-                    "internalNumber", model(from(item.getModelObject()).getInternalNumber())));
-            item.add(new DateLabel("startDate", model(from(item.getModelObject()).getStartDate())));
+                    "internalNumber", item.getModel().map(ContractBaseData::getInternalNumber)));
+            item.add(
+                new DateLabel("startDate", item.getModel().map(ContractBaseData::getStartDate)));
             item.add(
                 new EnumLabel<ContractEntity.ContractType>(
-                    "type", model(from(item.getModelObject()).getType())));
+                    "type", item.getModel().map(ContractBaseData::getType)));
             item.add(
                 new ListView<DynamicAttributeField>(
-                    "contractRow", model(from(item.getModelObject()).getContractAttributes())) {
+                    "contractRow", item.getModel().map(ContractBaseData::getContractAttributes)) {
                   @Override
                   protected void populateItem(ListItem<DynamicAttributeField> item) {
                     item.add(new Label("contractRowText", item.getModelObject().getValue()));
@@ -124,14 +122,14 @@ public class ContractOverviewTable extends Panel {
         });
 
     table.add(
-        new ListView<String>("footerRow", model(from(data).getFooter())) {
+        new ListView<String>("footerRow", Model.ofList(data.getFooter())) {
           @Override
           protected void populateItem(ListItem<String> item) {
             item.add(new Label("footerItem", item.getModelObject()));
           }
         });
 
-    addTableSummaryLabels(table, model(from(data.getContracts())));
+    addTableSummaryLabels(table, Model.ofList(data.getContracts()));
     add(table);
   }
 
@@ -152,22 +150,20 @@ public class ContractOverviewTable extends Panel {
         new MoneyLabel(
             "totalAmount",
             new TaxBudgetUnitMoneyModel(
-                new BudgetUnitMoneyModel(model(from(totalModel.getObject().getBudget()))),
-                new BudgetUnitMoneyModel(model(from(totalModel.getObject().getBudgetGross()))))));
+                new BudgetUnitMoneyModel(totalModel.map(ContractTotalData::getBudget)),
+                new BudgetUnitMoneyModel(totalModel.map(ContractTotalData::getBudgetGross)))));
     table.add(
         new MoneyLabel(
             "totalSpent",
             new TaxBudgetUnitMoneyModel(
-                new BudgetUnitMoneyModel(model(from(totalModel.getObject().getBudgetSpent()))),
-                new BudgetUnitMoneyModel(
-                    model(from(totalModel.getObject().getBudgetSpentGross()))))));
+                new BudgetUnitMoneyModel(totalModel.map(ContractTotalData::getBudgetSpent)),
+                new BudgetUnitMoneyModel(totalModel.map(ContractTotalData::getBudgetSpentGross)))));
     table.add(
         new MoneyLabel(
             "totalRemaining",
             new TaxBudgetUnitMoneyModel(
-                new BudgetUnitMoneyModel(model(from(totalModel.getObject().getBudgetLeft()))),
-                new BudgetUnitMoneyModel(
-                    model(from(totalModel.getObject().getBudgetLeftGross()))))));
+                new BudgetUnitMoneyModel(totalModel.map(ContractTotalData::getBudgetLeft)),
+                new BudgetUnitMoneyModel(totalModel.map(ContractTotalData::getBudgetLeftGross)))));
   }
 
   private void createNetGrossLabels(WebMarkupContainer table) {

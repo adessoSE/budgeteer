@@ -8,32 +8,34 @@ import org.wickedsource.budgeteer.web.components.datelabel.DateLabel;
 import org.wickedsource.budgeteer.web.components.money.MoneyLabel;
 import org.wickedsource.budgeteer.web.components.nullmodel.NullsafeModel;
 
-import static org.wicketstuff.lazymodel.LazyModel.from;
-import static org.wicketstuff.lazymodel.LazyModel.model;
-
 public class PersonHighlightsPanel extends GenericPanel<PersonDetailData> {
 
-    public PersonHighlightsPanel(String id, IModel<PersonDetailData> model) {
-        super(id, model);
-    }
+  public PersonHighlightsPanel(String id, IModel<PersonDetailData> model) {
+    super(id, model);
+  }
 
-    @Override
-    protected void onInitialize() {
-        super.onInitialize();
-        add(new Label("name", nullsafeModel(model(from(getModel()).getName()))));
-        add(new MoneyLabel("avgDailyRate", model(from(getModel()).getAverageDailyRate()), true));
-        add(new DateLabel("firstBookedDate", model(from(getModel()).getFirstBookedDate())));
-        add(new DateLabel("lastBookedDate", model(from(getModel()).getLastBookedDate())));
-        add(new Label("hoursBooked", nullsafeDoubleModel(model(from(getModel()).getHoursBooked()))));
-        add(new MoneyLabel("budgetBurned_net", model(from(getModel()).getBudgetBurned()), true));
-    }
+  @Override
+  protected void onInitialize() {
+    super.onInitialize();
+    add(new Label("name", nullsafeModel(getModel().map(PersonDetailData::getName))));
+    add(
+        new MoneyLabel(
+            "avgDailyRate", getModel().map(PersonDetailData::getAverageDailyRate), true));
+    add(new DateLabel("firstBookedDate", getModel().map(PersonDetailData::getFirstBookedDate)));
+    add(new DateLabel("lastBookedDate", getModel().map(PersonDetailData::getLastBookedDate)));
+    add(
+        new Label(
+            "hoursBooked", nullsafeDoubleModel(getModel().map(PersonDetailData::getHoursBooked))));
+    add(
+        new MoneyLabel(
+            "budgetBurned_net", getModel().map(PersonDetailData::getBudgetBurned), true));
+  }
 
-    private IModel<String> nullsafeModel(IModel<String> wrappedModel){
-        return new NullsafeModel<>(wrappedModel, getString("nullString"));
-    }
+  private IModel<String> nullsafeModel(IModel<String> wrappedModel) {
+    return new NullsafeModel<>(wrappedModel, getString("nullString"));
+  }
 
-    private IModel<Double> nullsafeDoubleModel(IModel<Double> wrappedModel){
-        return new NullsafeModel<>(wrappedModel, 0d);
-    }
-
+  private IModel<Double> nullsafeDoubleModel(IModel<Double> wrappedModel) {
+    return new NullsafeModel<>(wrappedModel, 0d);
+  }
 }
