@@ -1,8 +1,5 @@
 package org.wickedsource.budgeteer.web.pages.contract.details.highlights;
 
-import static org.wicketstuff.lazymodel.LazyModel.from;
-import static org.wicketstuff.lazymodel.LazyModel.model;
-
 import de.adesso.budgeteer.persistence.contract.ContractEntity;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -26,13 +23,11 @@ public class ContractHighlightsPanel extends Panel {
 
   public ContractHighlightsPanel(String id, final IModel<ContractBaseData> model) {
     super(id, model);
-    add(new Label("name", model(from(model.getObject()).getContractName())));
-    add(new Label("internalNumber", model(from(model.getObject()).getInternalNumber())));
-    add(new DateLabel("startDate", model(from(model.getObject()).getStartDate())));
-    add(
-        new EnumLabel<ContractEntity.ContractType>(
-            "type", model(from(model.getObject()).getType())));
-    add(new Label("budget", model(from(model.getObject()).getBudget())));
+    add(new Label("name", model.map(ContractBaseData::getContractName)));
+    add(new Label("internalNumber", model.map(ContractBaseData::getInternalNumber)));
+    add(new DateLabel("startDate", model.map(ContractBaseData::getStartDate)));
+    add(new EnumLabel<ContractEntity.ContractType>("type", model.map(ContractBaseData::getType)));
+    add(new Label("budget", model.map(ContractBaseData::getBudget)));
 
     WebMarkupContainer linkContainer =
         new WebMarkupContainer("linkContainer") {
@@ -82,11 +77,11 @@ public class ContractHighlightsPanel extends Panel {
 
     add(
         new ListView<DynamicAttributeField>(
-            "additionalInformation", model(from(model.getObject()).getContractAttributes())) {
+            "additionalInformation", model.map(ContractBaseData::getContractAttributes)) {
           @Override
           protected void populateItem(ListItem<DynamicAttributeField> item) {
-            item.add(new Label("value", model(from(item.getModelObject()).getValue())));
-            item.add(new Label("key", model(from(item.getModelObject()).getName())));
+            item.add(new Label("value", item.getModel().map(DynamicAttributeField::getValue)));
+            item.add(new Label("key", item.getModel().map(DynamicAttributeField::getName)));
           }
         });
   }
