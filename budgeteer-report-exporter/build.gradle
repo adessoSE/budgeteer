@@ -1,5 +1,0 @@
-dependencies {
-    implementation group: 'org.apache.poi', name: 'poi', version: poi_version
-    implementation group: 'org.apache.poi', name: 'poi-ooxml', version: poi_version
-    implementation group: 'com.google.guava', name: 'guava', version: '23.0'
-}

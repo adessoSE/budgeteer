@@ -1,4 +1,0 @@
-dependencies {
-    implementation group: 'org.joda', name: 'joda-money', version: joda_money_version
-    implementation group: 'org.apache.poi', name: 'poi-ooxml', version: poi_version
-}
