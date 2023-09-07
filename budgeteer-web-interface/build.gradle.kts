@@ -37,8 +37,6 @@ dependencies {
     implementation("org.joda:joda-money:${project.properties["joda_money_version"]}")
     implementation("de.jollyday:jollyday:${project.properties["jollyday_version"]}")
 
-    testImplementation("org.kubek2k:springockito:${project.properties["springockito_version"]}")
-    testImplementation("org.kubek2k:springockito-annotations:${project.properties["springockito_version"]}")
     testImplementation("com.github.springtestdbunit:spring-test-dbunit:${project.properties["spring_dbunit_version"]}")
     testImplementation("org.dbunit:dbunit:${project.properties["dbunit_version"]}")
 

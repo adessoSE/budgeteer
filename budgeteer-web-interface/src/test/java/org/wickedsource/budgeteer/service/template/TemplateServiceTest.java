@@ -1,7 +1,7 @@
 package org.wickedsource.budgeteer.service.template;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Matchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.times;
 import static org.wicketstuff.lazymodel.LazyModel.from;
 import static org.wicketstuff.lazymodel.LazyModel.model;
@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.wickedsource.budgeteer.imports.api.ImportFile;
 import org.wickedsource.budgeteer.service.ReportType;
 import org.wickedsource.budgeteer.service.ServiceTestTemplate;
@@ -23,8 +24,7 @@ import org.wickedsource.budgeteer.web.pages.templates.templateimport.TemplateFor
 class TemplateServiceTest extends ServiceTestTemplate {
 
   @Autowired TemplateService templateService;
-
-  @Autowired TemplateRepository templateRepository;
+  @MockBean TemplateRepository templateRepository;
 
   @Test
   void doImportTest() {

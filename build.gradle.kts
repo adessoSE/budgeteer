@@ -1,5 +1,5 @@
 plugins {
-    id("org.sonarqube") version "3.3"
+    id("org.sonarqube") version "4.3.0.3225"
 }
 
 allprojects {
@@ -18,10 +18,11 @@ subprojects {
     }
 }
 
-sonarqube {
+sonar {
     properties {
         property("sonar.projectKey", "adessoAG_budgeteer")
         property("sonar.organization", "adesso-ag")
         property("sonar.host.url", "https://sonarcloud.io")
+        property("sonar.exclusions", "**/build.gradle.kts")
     }
 }

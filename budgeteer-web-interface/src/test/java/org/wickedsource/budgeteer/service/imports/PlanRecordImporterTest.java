@@ -3,33 +3,35 @@ package org.wickedsource.budgeteer.service.imports;
 import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
+import de.adesso.budgeteer.persistence.budget.BudgetRepository;
+import de.adesso.budgeteer.persistence.imports.ImportRepository;
+import de.adesso.budgeteer.persistence.person.PersonRepository;
 import de.adesso.budgeteer.persistence.project.ProjectEntity;
 import de.adesso.budgeteer.persistence.project.ProjectRepository;
+import de.adesso.budgeteer.persistence.record.PlanRecordRepository;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.kubek2k.springockito.annotations.SpringockitoContextLoader;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.wickedsource.budgeteer.importer.resourceplan.ResourcePlanImporter;
 import org.wickedsource.budgeteer.imports.api.ImportException;
 import org.wickedsource.budgeteer.imports.api.ImportFile;
 import org.wickedsource.budgeteer.imports.api.InvalidFileFormatException;
 
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(
-    loader = SpringockitoContextLoader.class,
-    locations = {"classpath:spring-service.xml", "classpath:spring-repository-mock.xml"})
+@SpringBootTest
 class PlanRecordImporterTest {
 
-  @Autowired private ProjectRepository projectRepository;
-
+  @MockBean private ProjectRepository projectRepository;
+  @MockBean private BudgetRepository budgetRepository;
+  @MockBean private PlanRecordRepository planRecordRepository;
+  @MockBean private PersonRepository personRepository;
+  @MockBean private ImportRepository importRepository;
   @Autowired private ImportService importService;
 
   private void doImport() throws ImportException, InvalidFileFormatException {
