@@ -1,5 +1,5 @@
 plugins {
-    id ("de.adesso.budgeteer.java-conventions")
+    id("de.adesso.budgeteer.java-conventions")
 }
 
 dependencies {
