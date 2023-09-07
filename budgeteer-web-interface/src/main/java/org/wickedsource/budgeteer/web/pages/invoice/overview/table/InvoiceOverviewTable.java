@@ -1,8 +1,5 @@
 package org.wickedsource.budgeteer.web.pages.invoice.overview.table;
 
-import static org.wicketstuff.lazymodel.LazyModel.from;
-import static org.wicketstuff.lazymodel.LazyModel.model;
-
 import de.adesso.budgeteer.common.old.MoneyUtil;
 import java.math.BigDecimal;
 import org.apache.wicket.Component;
@@ -43,14 +40,14 @@ public class InvoiceOverviewTable extends Panel {
     WebMarkupContainer table = new WebMarkupContainer("table");
     table.add(new DataTableBehavior(DataTableBehavior.getRecommendedOptions()));
     table.add(
-        new ListView<String>("headerRow", model(from(data).getHeadline())) {
+        new ListView<String>("headerRow", Model.ofList(data.getHeadline())) {
           @Override
           protected void populateItem(ListItem<String> item) {
             item.add(new Label("headerItem", item.getModelObject()));
           }
         });
     table.add(
-        new ListView<InvoiceBaseData>("invoiceRows", model(from(data).getInvoices())) {
+        new ListView<InvoiceBaseData>("invoiceRows", Model.ofList(data.getInvoices())) {
           @Override
           protected void populateItem(final ListItem<InvoiceBaseData> item) {
             final long invoiceId = item.getModelObject().getInvoiceId();
@@ -66,17 +63,18 @@ public class InvoiceOverviewTable extends Panel {
 
             contractLink.setContextRelative(false);
             link.setContextRelative(false);
-            link.add(new Label("invoiceName", model(from(item.getModelObject()).getInvoiceName())));
+            link.add(
+                new Label("invoiceName", item.getModel().map(InvoiceBaseData::getInvoiceName)));
 
             item.add(link);
             contractLink.add(
-                new Label("contractName", model(from(item.getModelObject()).getContractName())));
+                new Label("contractName", item.getModel().map(InvoiceBaseData::getContractName)));
             item.add(contractLink);
 
             item.add(
                 new Label(
-                    "internalNumber", model(from(item.getModelObject()).getInternalNumber())));
-            item.add(new Label("year", model(from(item.getModelObject()).getYear())));
+                    "internalNumber", item.getModel().map(InvoiceBaseData::getInternalNumber)));
+            item.add(new Label("year", item.getModel().map(InvoiceBaseData::getYear)));
             item.add(
                 new Label(
                     "month_number", getMonthNumberAsString(item.getModelObject().getMonth())));
@@ -108,13 +106,13 @@ public class InvoiceOverviewTable extends Panel {
                             BudgeteerSession.get().getSelectedBudgetUnit()))));
             item.add(new Label("taxRate", getTaxRateAsString(item.getModelObject().getTaxRate())));
 
-            CheckBox paid = new CheckBox("paid", model(from(item.getModelObject()).isPaid()));
+            CheckBox paid = new CheckBox("paid", item.getModel().map(InvoiceBaseData::isPaid));
             paid.setEnabled(false);
             item.add(paid);
 
             item.add(
                 new ListView<DynamicAttributeField>(
-                    "invoiceRow", model(from(item.getModelObject()).getDynamicInvoiceFields())) {
+                    "invoiceRow", item.getModel().map(InvoiceBaseData::getDynamicInvoiceFields)) {
                   @Override
                   protected void populateItem(ListItem<DynamicAttributeField> item) {
                     item.add(new Label("invoiceRowText", item.getModelObject().getValue()));
@@ -136,7 +134,7 @@ public class InvoiceOverviewTable extends Panel {
           ;
         });
     table.add(
-        new ListView<String>("footerRow", model(from(data).getFooter())) {
+        new ListView<String>("footerRow", Model.ofList(data.getFooter())) {
           @Override
           protected void populateItem(ListItem<String> item) {
             item.add(new Label("footerItem", item.getModelObject()));

@@ -1,7 +1,6 @@
 package org.wickedsource.budgeteer.web.pages.person.edit.personrateform;
 
-import static org.wicketstuff.lazymodel.LazyModel.from;
-import static org.wicketstuff.lazymodel.LazyModel.model;
+import static org.apache.wicket.model.LambdaModel.of;
 
 import de.adesso.budgeteer.common.old.MoneyUtil;
 import de.adesso.budgeteer.persistence.record.MissingDailyRateForBudgetBean;
@@ -90,8 +89,12 @@ public class EditPersonForm extends Form<PersonWithRates> {
     options.put("searching", Boolean.toString(false));
     options.put("order", " [[ 1, \"asc\" ]]");
     table.add(new DataTableBehavior(options));
-    nameTextField = new TextField<>("name", model(from(getModelObject()).getName()));
-    importKeyTextField = new TextField<>("importKey", model(from(getModelObject()).getImportKey()));
+    nameTextField =
+        new TextField<>("name", of(getModel(), PersonWithRates::getName, PersonWithRates::setName));
+    importKeyTextField =
+        new TextField<>(
+            "importKey",
+            of(getModel(), PersonWithRates::getImportKey, PersonWithRates::setImportKey));
     importDefaultDailyRate =
         new MoneyTextField("importDefaultRate", Model.of(getModelObject().getDefaultDailyRate()));
     add(nameTextField, importKeyTextField, importDefaultDailyRate);
@@ -288,7 +291,7 @@ public class EditPersonForm extends Form<PersonWithRates> {
   }
 
   private ListView<PersonRate> createRatesList(String id) {
-    return new ListView<PersonRate>(id, model(from(getModel()).getRates())) {
+    return new ListView<PersonRate>(id, getModel().map(PersonWithRates::getRates)) {
 
       private String infoOrEditPanel = "infoOrEditPanel";
 

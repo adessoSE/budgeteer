@@ -1,13 +1,11 @@
 package org.wickedsource.budgeteer.web.pages.contract.overview.table;
 
-import static org.wicketstuff.lazymodel.LazyModel.from;
-import static org.wicketstuff.lazymodel.LazyModel.model;
-
 import de.adesso.budgeteer.common.old.MoneyUtil;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.Model;
 import org.wickedsource.budgeteer.service.contract.ContractBaseData;
 import org.wickedsource.budgeteer.service.contract.ContractTotalData;
 import org.wickedsource.budgeteer.service.contract.DynamicAttributeField;
@@ -23,10 +21,12 @@ public class TotalContractDetailsModel extends LoadableDetachableModel<ContractT
       totalDataList.add(new ContractTotalData(baseData));
     }
 
-    wrappedModel = model(from(totalDataList));
+    wrappedModel = Model.ofList(totalDataList);
   }
 
-  /** @return Size of the contract attributes in each contract */
+  /**
+   * @return Size of the contract attributes in each contract
+   */
   public int getContractAttributeSize() {
 
     List<DynamicAttributeField> fields = new ArrayList<DynamicAttributeField>();

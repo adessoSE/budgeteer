@@ -1,8 +1,5 @@
 package org.wickedsource.budgeteer.web.pages.contract.details.differenceTable;
 
-import static org.wicketstuff.lazymodel.LazyModel.from;
-import static org.wicketstuff.lazymodel.LazyModel.model;
-
 import de.adesso.budgeteer.common.old.MoneyUtil;
 import de.adesso.budgeteer.persistence.contract.ContractStatisticBean;
 import java.util.List;
@@ -69,7 +66,7 @@ public class DifferenceTable extends GenericPanel<List<ContractStatisticBean>> {
                             BudgeteerSession.get().getSelectedBudgetUnit()))));
             item.add(
                 new ProgressBar(
-                    "progress", model(from(item.getModelObject()).getProgressInPercent())));
+                    "progress", item.getModel().map(ContractStatisticBean::getProgressInPercent)));
           }
         });
 

@@ -18,7 +18,6 @@ dependencies {
 
     implementation("org.apache.wicket:wicket-spring:${project.properties["wicket_version"]}")
     implementation("org.apache.wicket:wicket-extensions:${project.properties["wicket_version"]}")
-    implementation("org.wicketstuff:wicketstuff-lazymodel:${project.properties["wicket_version"]}")
     implementation("org.wicketstuff:wicketstuff-tinymce4:${project.properties["wicket_version"]}")
     implementation("org.wicketstuff:wicketstuff-lambda-components:${project.properties["wicket_version"]}")
     implementation("de.adesso.wicked-charts:wicked-charts-wicket8:${project.properties["wickedcharts_version"]}")
@@ -37,6 +36,8 @@ dependencies {
     implementation("org.joda:joda-money:${project.properties["joda_money_version"]}")
     implementation("de.jollyday:jollyday:${project.properties["jollyday_version"]}")
 
+    implementation("net.bytebuddy:byte-buddy:1.14.7")
+
     testImplementation("com.github.springtestdbunit:spring-test-dbunit:${project.properties["spring_dbunit_version"]}")
     testImplementation("org.dbunit:dbunit:${project.properties["dbunit_version"]}")
 
@@ -51,6 +52,14 @@ tasks {
                 it.replace("@application.version@", project.version.toString())
             }
         }
+    }
+
+    bootRun {
+        systemProperty("wicket.ioc.useByteBuddy", "true")
+    }
+
+    test {
+        systemProperty("wicket.ioc.useByteBuddy", "true")
     }
 
     jar {

@@ -1,8 +1,5 @@
 package org.wickedsource.budgeteer.web.pages.person.overview.table;
 
-import static org.wicketstuff.lazymodel.LazyModel.from;
-import static org.wicketstuff.lazymodel.LazyModel.model;
-
 import java.util.List;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
@@ -45,13 +42,16 @@ public class PeopleOverviewTable extends Panel {
                 "personLink", PersonDetailsPage.class, parameters);
         link.add(new Label("personName", modelObject.getName()));
         item.add(link);
-        item.add(new MoneyLabel("dailyRate", model(from(modelObject).getAverageDailyRate())));
+        item.add(
+            new MoneyLabel("dailyRate", item.getModel().map(PersonBaseData::getAverageDailyRate)));
         item.add(
             modelObject.getDefaultDailyRate() == null
                 ? new Label("defaultDailyRate", getString("nullString"))
                 : new MoneyLabel(
-                    "defaultDailyRate", model(from(modelObject).getDefaultDailyRate())));
-        item.add(new DateLabel("lastBookedDate", model(from(modelObject).getLastBooked()), true));
+                    "defaultDailyRate", item.getModel().map(PersonBaseData::getDefaultDailyRate)));
+        item.add(
+            new DateLabel(
+                "lastBookedDate", item.getModel().map(PersonBaseData::getLastBooked), true));
 
         Link editPersonLink =
             new Link("editPage") {

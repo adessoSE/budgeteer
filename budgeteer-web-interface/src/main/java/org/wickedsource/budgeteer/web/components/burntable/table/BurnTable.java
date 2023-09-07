@@ -1,7 +1,6 @@
 package org.wickedsource.budgeteer.web.components.burntable.table;
 
-import static org.wicketstuff.lazymodel.LazyModel.from;
-import static org.wicketstuff.lazymodel.LazyModel.model;
+import static org.apache.wicket.model.LambdaModel.of;
 
 import de.adesso.budgeteer.common.old.MoneyUtil;
 import java.util.HashMap;
@@ -296,12 +295,14 @@ public class BurnTable extends Panel {
       @Override
       protected void populateItem(Item<WorkRecord> item) {
         item.setOutputMarkupId(true);
-        item.add(new Label("budget", model(from(item.getModel()).getBudgetName())));
-        item.add(new Label("person", model(from(item.getModel()).getPersonName())));
+        item.add(new Label("budget", item.getModel().map(WorkRecord::getBudgetName)));
+        item.add(new Label("person", item.getModel().map(WorkRecord::getPersonName)));
         if (dailyRateIsEditable) {
           final EditableMoneyField editableMoneyField =
               new EditableMoneyField(
-                  "dailyRate", table, model(from(item.getModelObject()).getDailyRate())) {
+                  "dailyRate",
+                  table,
+                  of(item.getModel(), WorkRecord::getDailyRate, WorkRecord::setDailyRate)) {
                 @Override
                 protected void save(AjaxRequestTarget target, Form<Money> form) {
                   item.getModelObject().setEditedManually(true);
@@ -334,7 +335,7 @@ public class BurnTable extends Panel {
               };
           item.add(editableMoneyField);
         } else {
-          item.add(new MoneyLabel("dailyRate", model(from(item.getModel()).getDailyRate())));
+          item.add(new MoneyLabel("dailyRate", item.getModel().map(WorkRecord::getDailyRate)));
         }
         item.add(
             new Label("edited") {
@@ -343,12 +344,12 @@ public class BurnTable extends Panel {
                 return item.getModelObject().isEditedManually();
               }
             });
-        item.add(new Label("date", model(from(item.getModel()).getDate())));
-        item.add(new Label("hours", model(from(item.getModel()).getHours())));
+        item.add(new Label("date", item.getModel().map(WorkRecord::getDate)));
+        item.add(new Label("hours", item.getModel().map(WorkRecord::getHours)));
         item.add(
             new MoneyLabel(
                 "burnedBudget",
-                new BudgetUnitMoneyModel(model(from(item.getModel()).getBudgetBurned()))));
+                new BudgetUnitMoneyModel(item.getModel().map(WorkRecord::getBudgetBurned))));
       }
     };
   }

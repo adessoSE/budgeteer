@@ -1,6 +1,8 @@
 package org.wickedsource.budgeteer.web.pages.budgets.weekreport.multi;
 
+import java.util.List;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.wickedsource.budgeteer.service.record.AggregatedRecord;
 import org.wickedsource.budgeteer.service.statistics.TargetAndActual;
@@ -17,30 +19,29 @@ import org.wickedsource.budgeteer.web.pages.budgets.components.weekreporttable.B
 import org.wickedsource.budgeteer.web.pages.budgets.overview.BudgetsOverviewPage;
 import org.wickedsource.budgeteer.web.pages.dashboard.DashboardPage;
 
-import java.util.List;
-
-import static org.wicketstuff.lazymodel.LazyModel.from;
-import static org.wicketstuff.lazymodel.LazyModel.model;
-
 @Mount("budgets/weeks")
 public class MultiBudgetWeekReportPage extends BasePage {
 
-    public MultiBudgetWeekReportPage(PageParameters parameters) {
-        super(parameters);
+  public MultiBudgetWeekReportPage(PageParameters parameters) {
+    super(parameters);
 
-        IModel<TargetAndActual> model = new BudgetsWeeklyAggregationModel(model(from(BudgeteerSession.get().getBudgetFilter())));
-        add(new TargetAndActualChart("targetAndActualChart", model, TargetAndActualChartConfiguration.Mode.WEEKLY));
+    IModel<TargetAndActual> model =
+        new BudgetsWeeklyAggregationModel(Model.of(BudgeteerSession.get().getBudgetFilter()));
+    add(
+        new TargetAndActualChart(
+            "targetAndActualChart", model, TargetAndActualChartConfiguration.Mode.WEEKLY));
 
-        IModel<List<AggregatedRecord>> tableModel = new BudgetsWeeklyAggregatedRecordsModel(model(from(BudgeteerSession.get().getBudgetFilter())));
-        add(new AggregatedRecordTable("table", tableModel));
+    IModel<List<AggregatedRecord>> tableModel =
+        new BudgetsWeeklyAggregatedRecordsModel(Model.of(BudgeteerSession.get().getBudgetFilter()));
+    add(new AggregatedRecordTable("table", tableModel));
 
-        add(new NetGrossLink("netGrossLink"));
-    }
+    add(new NetGrossLink("netGrossLink"));
+  }
 
-    @Override
-    @SuppressWarnings("unchecked")
-    protected BreadcrumbsModel getBreadcrumbsModel() {
-        return new BreadcrumbsModel(DashboardPage.class, BudgetsOverviewPage.class, MultiBudgetWeekReportPage.class);
-    }
-
+  @Override
+  @SuppressWarnings("unchecked")
+  protected BreadcrumbsModel getBreadcrumbsModel() {
+    return new BreadcrumbsModel(
+        DashboardPage.class, BudgetsOverviewPage.class, MultiBudgetWeekReportPage.class);
+  }
 }
