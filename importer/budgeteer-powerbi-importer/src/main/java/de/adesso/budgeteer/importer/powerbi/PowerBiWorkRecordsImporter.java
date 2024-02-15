@@ -138,7 +138,7 @@ public class PowerBiWorkRecordsImporter implements WorkRecordsImporter {
       int dateColumn,
       int hoursColumn) {
     var prefixedProjectId = row.getCell(projectIdColumn).getStringCellValue();
-    var projectId = prefixedProjectId.substring(prefixedProjectId.indexOf('A'));
+    var projectId = extractProjectId(prefixedProjectId);
     var projectName = row.getCell(projectNameColumn).getStringCellValue();
     var employee = row.getCell(employeeNameColumn).getStringCellValue();
     var date = row.getCell(dateColumn).getDateCellValue();
@@ -159,5 +159,13 @@ public class PowerBiWorkRecordsImporter implements WorkRecordsImporter {
 
   private boolean isInvoiceable(String value) {
     return "KV".equals(value);
+  }
+
+  private String extractProjectId(String prefixedProjectId) {
+    var prefixIndex = prefixedProjectId.indexOf('A');
+    if (prefixIndex == -1) {
+      return prefixedProjectId;
+    }
+    return prefixedProjectId.substring(prefixIndex);
   }
 }
